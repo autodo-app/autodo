@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:autodo/sharedmodels/sharedmodels.dart';
 import 'package:autodo/state.dart';
+import 'package:autodo/maintenance/history.dart';
 
 class HomeScreen extends StatefulWidget {
   final AutodoState autodoState;
+  final addMaintenanceTodo;
 
-  HomeScreen({@required this.autodoState}) /*: super(key: key)*/;
+  HomeScreen(
+      {@required this.autodoState,
+      @required this.addMaintenanceTodo}) /*: super(key: key)*/;
 
   @override
   State<StatefulWidget> createState() => HomeScreenState();
@@ -29,14 +33,15 @@ class HomeScreenState extends State<HomeScreen> {
         ),
         body: TabBarView(
           children: [
-            // MaintenanceToDo(), // TODO: ???
-            Text('Tab 1'),
+            MaintenanceHistory(autodoState: widget.autodoState), // TODO: ???
+            // Text('Tab 1'),
             Text('Tab 2'),
             Text('Tab 3'),
           ],
         ),
         drawer: NavDrawer(),
-        floatingActionButton: CreateEntryButton(),
+        floatingActionButton:
+            CreateEntryButton(addMaintenanceTodo: widget.addMaintenanceTodo),
       ),
     );
   }

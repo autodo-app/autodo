@@ -1,7 +1,13 @@
+import 'package:autodo/items/maintenancetodo.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
+import 'package:autodo/state.dart';
 
 class CreateEntryButton extends StatefulWidget {
+  final addMaintenanceTodo;
+
+  CreateEntryButton({@required this.addMaintenanceTodo});
+
   @override
   State<StatefulWidget> createState() {
     return CreateEntryButtonState();
@@ -51,7 +57,10 @@ class CreateEntryButtonState extends State<CreateEntryButton>
               mini: true,
               child: new Icon(icons[index], color: foregroundColor),
               onPressed: () {
-                // todo.addItem(); // TODO: ???
+                if (index == 1) {
+                  widget.addMaintenanceTodo(
+                      MaintenanceTodoItem(name: 'New Item'));
+                }
               },
             ),
           ),

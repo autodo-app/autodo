@@ -17,6 +17,8 @@ class AutodoAppState extends State<AutodoApp> {
   void initState() {
     super.initState();
 
+    autodoState = AutodoState();
+
     // Eventually put the code for loading an old session's data
   }
 
@@ -27,7 +29,7 @@ class AutodoAppState extends State<AutodoApp> {
       // theme: Theme(),
       home: HomeScreen(
         autodoState: autodoState,
-        // addMaintenanceTodo: addMaintenanceTodo,
+        addMaintenanceTodo: addMaintenanceTodo,
         // removeMaintenanceTodo: removeMaintenanceTodo,
         // updateMaintenanceTodo: updateMaintenanceTodo,
         // appstate, callbacks, etc.
