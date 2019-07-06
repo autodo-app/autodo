@@ -13,9 +13,9 @@ class CreateEntryButtonState extends State<CreateEntryButton>
   static AnimationController _controller;
 
   static const List<IconData> icons = const [
-    Icons.sms,
-    Icons.mail,
-    Icons.phone
+    Icons.local_gas_station,
+    Icons.build,
+    Icons.alarm
   ];
 
   @override

@@ -1,9 +1,9 @@
-import './maintenancetodo.dart';
+import 'package:autodo/items/items.dart';
 
-class CarState {
-  List<MaintenanceTodo> todos;
+class AutodoState {
+  List<MaintenanceTodoItem> todos;
 
-  CarState({this.todos = const []});
+  AutodoState({this.todos = const []});
 
   void completeTodo(index) {
     todos.remove(index);

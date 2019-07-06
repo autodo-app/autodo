@@ -3,9 +3,9 @@ import 'package:autodo/sharedmodels/sharedmodels.dart';
 import 'package:autodo/state.dart';
 
 class HomeScreen extends StatefulWidget {
-  final CarState carState;
+  final AutodoState autodoState;
 
-  HomeScreen({@required this.carState}) /*: super(key: key)*/;
+  HomeScreen({@required this.autodoState}) /*: super(key: key)*/;
 
   @override
   State<StatefulWidget> createState() => HomeScreenState();
@@ -25,7 +25,7 @@ class HomeScreenState extends State<HomeScreen> {
               Tab(icon: Icon(Icons.settings)),
             ],
           ),
-          title: Text('Tabs Demo'),
+          title: Text('auToDo'),
         ),
         body: TabBarView(
           children: [
