@@ -1,6 +1,7 @@
 import 'package:autodo/items/items.dart';
+import 'package:scoped_model/scoped_model.dart';
 
-class AutodoState {
+class AutodoState extends Model {
   List<MaintenanceTodoItem> todos = [];
 
   AutodoState() {

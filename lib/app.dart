@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:autodo/state.dart';
 import 'package:autodo/items/items.dart';
-import 'package:autodo/screens/homescreen.dart';
+import 'package:autodo/screens/screens.dart';
 
 class AutodoApp extends StatefulWidget {
   @override
@@ -26,18 +26,17 @@ class AutodoAppState extends State<AutodoApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'auToDo',
-      // theme: Theme(),
-      home: HomeScreen(
-        autodoState: autodoState,
-        addMaintenanceTodo: addMaintenanceTodo,
-        // removeMaintenanceTodo: removeMaintenanceTodo,
-        // updateMaintenanceTodo: updateMaintenanceTodo,
-        // appstate, callbacks, etc.
-      ),
-      // routes: {
-      //   // '/maintenance': Widget.build(),
-      //   // '/fuel': context,
-      // },
+      initialRoute: '/',
+      routes: {
+        '/': (context) => HomeScreen(
+              autodoState: autodoState,
+              addMaintenanceTodo: addMaintenanceTodo,
+              // removeMaintenanceTodo: removeMaintenanceTodo,
+              //   // updateMaintenanceTodo: updateMaintenanceTodo,
+              //   // appstate, callbacks, etc.
+            ),
+        '/createTodo': (context) => CreateTodoScreen(),
+      },
     );
   }
 

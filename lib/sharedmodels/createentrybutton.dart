@@ -1,4 +1,6 @@
 import 'package:autodo/items/maintenancetodo.dart';
+import 'package:autodo/screens/createmaintenancetodo.dart';
+// import 'package:autodo/sharedmodels/expanding_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'package:autodo/state.dart';
@@ -60,6 +62,12 @@ class CreateEntryButtonState extends State<CreateEntryButton>
                 if (index == 1) {
                   widget.addMaintenanceTodo(
                       MaintenanceTodoItem(name: 'New Item'));
+                } else if (index == 2) {
+                  // CreateMaintenanceTodoPage();
+                  // ExpandingBottomSheet();
+                  // settingModalBottomSheet(context);
+                  // CreateTodoScreen();
+                  Navigator.pushNamed(context, '/createTodo');
                 }
               },
             ),
