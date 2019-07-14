@@ -33,8 +33,7 @@ class HomeScreenState extends State<HomeScreen> {
         ),
         body: TabBarView(
           children: [
-            MaintenanceHistory(autodoState: widget.autodoState), // TODO: ???
-            // Text('Tab 1'),
+            MaintenanceHistory(),
             Text('Tab 2'),
             Text('Tab 3'),
           ],

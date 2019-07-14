@@ -6,4 +6,6 @@ class MaintenanceTodoItem {
   int dueMileage;
 
   MaintenanceTodoItem({@required this.name, this.dueDate, this.dueMileage});
+
+  MaintenanceTodoItem.empty();
 }

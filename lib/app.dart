@@ -35,7 +35,9 @@ class AutodoAppState extends State<AutodoApp> {
               //   // updateMaintenanceTodo: updateMaintenanceTodo,
               //   // appstate, callbacks, etc.
             ),
-        '/createTodo': (context) => CreateTodoScreen(),
+        '/createTodo': (context) =>
+            // CreateTodoScreen(addMaintenanceTodo: addMaintenanceTodo),
+            CreateTodoScreen(),
       },
     );
   }

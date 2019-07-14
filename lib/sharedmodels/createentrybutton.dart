@@ -60,13 +60,6 @@ class CreateEntryButtonState extends State<CreateEntryButton>
               child: new Icon(icons[index], color: foregroundColor),
               onPressed: () {
                 if (index == 1) {
-                  widget.addMaintenanceTodo(
-                      MaintenanceTodoItem(name: 'New Item'));
-                } else if (index == 2) {
-                  // CreateMaintenanceTodoPage();
-                  // ExpandingBottomSheet();
-                  // settingModalBottomSheet(context);
-                  // CreateTodoScreen();
                   Navigator.pushNamed(context, '/createTodo');
                 }
               },
