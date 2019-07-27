@@ -105,7 +105,7 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
                         border: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.teal),
                         ),
-                        labelText: "Action Name",
+                        labelText: "Action Name *",
                         contentPadding: EdgeInsets.only(
                             left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
                       ),
@@ -118,7 +118,7 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
                       ),
                       keyboardType: TextInputType.text,
                       textCapitalization: TextCapitalization.sentences,
-                      maxLength: 20,
+                      // maxLength: 20,
                       validator: (value) {},
                       onSaved: (val) => setState(() => todoItem.name = val),
                     ),
@@ -126,13 +126,28 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
                       padding: EdgeInsets.only(bottom: 10.0),
                     ),
                     Divider(),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 10.0),
+                    ),
                     Row(children: <Widget>[
                       new Expanded(
                         child: new TextFormField(
                           decoration: new InputDecoration(
-                            icon: const Icon(Icons.calendar_today),
-                            hintText: 'Enter your date of birth',
-                            labelText: 'Dob',
+                            hintText: 'Enter the Todo\'s Due Date',
+                            labelText: 'Due Date',
+                            contentPadding: EdgeInsets.only(
+                                left: 16.0,
+                                top: 20.0,
+                                right: 16.0,
+                                bottom: 5.0),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.teal),
+                            ),
+                          ),
+                          style: TextStyle(
+                            fontSize: 22.0,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500,
                           ),
                           controller: _controller,
                           keyboardType: TextInputType.datetime,
@@ -146,7 +161,7 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
                         ),
                       ),
                       new IconButton(
-                        icon: new Icon(Icons.more_horiz),
+                        icon: new Icon(Icons.calendar_today),
                         tooltip: 'Choose date',
                         onPressed: (() {
                           _chooseDate(context, _controller.text);
@@ -154,36 +169,7 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
                       )
                     ]),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 10.0),
-                    ),
-                    Card(
-                      elevation: 1.0,
-                      shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(3.0),
-                      ),
-                      margin: EdgeInsets.all(0.0),
-                      color: Theme.of(context).primaryColor,
-                      child: InkWell(
-                        splashColor:
-                            Theme.of(context).primaryColor.withAlpha(30),
-                        onTap: () {
-                          _selectDate(context);
-                          FocusScope.of(context).requestFocus(focusNode);
-                        },
-                        child: Container(
-                          color: Colors.transparent,
-                          width: MediaQuery.of(context).size.width,
-                          height: 60,
-                          child: Center(
-                            child: Text('Other Date',
-                                style:
-                                    Theme.of(context).primaryTextTheme.button),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 20.0),
+                      padding: EdgeInsets.only(bottom: 16.0),
                     ),
                     TextFormField(
                       decoration: InputDecoration(
@@ -208,25 +194,11 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
                             }
                           }),
                     ),
-                    // InkWell(
-                    //   onTap: () {
-                    //     _selectDate(
-                    //         context); // Call Function that has showDatePicker()
-                    //   },
-                    //   child: IgnorePointer(
-                    //     child: new TextFormField(
-                    //       decoration: new InputDecoration(hintText: 'DOB'),
-                    //       maxLength: 10,
-                    //       // validator: validateDob,
-                    //       onSaved: (String val) {},
-                    //     ),
-                    //   ),
-                    // ),
                   ],
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(top: 50.0),
+                padding: EdgeInsets.only(top: 32.0),
                 child: Column(
                   children: <Widget>[
                     RaisedButton(
