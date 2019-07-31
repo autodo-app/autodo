@@ -61,6 +61,8 @@ class CreateEntryButtonState extends State<CreateEntryButton>
               onPressed: () {
                 if (index == 1) {
                   Navigator.pushNamed(context, '/createTodo');
+                } else if (index == 0) {
+                  Navigator.pushNamed(context, '/createRefueling');
                 }
               },
             ),

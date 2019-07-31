@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:autodo/sharedmodels/sharedmodels.dart';
 import 'package:autodo/state.dart';
 import 'package:autodo/maintenance/history.dart';
+import 'package:autodo/refueling/history.dart';
 
 class HomeScreen extends StatefulWidget {
   final AutodoState autodoState;
@@ -34,7 +35,7 @@ class HomeScreenState extends State<HomeScreen> {
         body: TabBarView(
           children: [
             MaintenanceHistory(),
-            Text('Tab 2'),
+            RefuelingHistory(),
             Text('Tab 3'),
           ],
         ),
