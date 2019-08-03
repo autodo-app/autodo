@@ -133,7 +133,11 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
                       new Expanded(
                         child: new TextFormField(
                           decoration: new InputDecoration(
-                            hintText: 'Enter the Todo\'s Due Date',
+                            hintText: 'Optional if Mileage Entered',
+                            hintStyle: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.w400,
+                            ),
                             labelText: 'Due Date',
                             contentPadding: EdgeInsets.only(
                                 left: 16.0,
@@ -173,6 +177,11 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
                     ),
                     TextFormField(
                       decoration: InputDecoration(
+                        hintText: 'Optional if Due Date Entered',
+                        hintStyle: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w400,
+                        ),
                         border: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.teal),
                         ),

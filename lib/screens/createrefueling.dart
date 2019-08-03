@@ -103,6 +103,10 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                     TextFormField(
                       decoration: InputDecoration(
                         hintText: 'Required',
+                        hintStyle: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w400,
+                        ),
                         border: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.teal),
                         ),
@@ -130,6 +134,10 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                     TextFormField(
                       decoration: InputDecoration(
                         hintText: 'Required',
+                        hintStyle: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w400,
+                        ),
                         border: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.teal),
                         ),
@@ -157,6 +165,10 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                     TextFormField(
                       decoration: InputDecoration(
                         hintText: 'Required',
+                        hintStyle: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w400,
+                        ),
                         border: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.teal),
                         ),
@@ -190,6 +202,10 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                         child: new TextFormField(
                           decoration: new InputDecoration(
                             hintText: 'Optional',
+                            hintStyle: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.w400,
+                            ),
                             labelText: 'Refueling Date',
                             contentPadding: EdgeInsets.only(
                                 left: 16.0,
