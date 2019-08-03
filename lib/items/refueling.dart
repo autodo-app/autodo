@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class RefuelingItem {
-  String name;
-  DateTime dueDate;
-  int dueMileage;
+  DateTime date;
+  int odom;
+  double cost, amount;
 
-  RefuelingItem({@required this.name, this.dueDate, this.dueMileage});
+  RefuelingItem({@required this.odom, this.cost, this.amount});
 
   RefuelingItem.empty();
 }

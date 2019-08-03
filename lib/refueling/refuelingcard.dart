@@ -24,10 +24,9 @@ class RefuelingCardState extends State<RefuelingCard> {
             child: ListTile(
               leading: FlatButton(
                   child: const Icon(Icons.check_box), onPressed: () {}),
-              title: Text(widget.item.name),
-              subtitle: Text(widget.item.dueDate == null
-                  ? ''
-                  : widget.item.dueDate.toString()),
+              title: Text(widget.item.odom.toString()),
+              subtitle: Text(
+                  widget.item.date == null ? '' : widget.item.date.toString()),
             ),
           ),
           Align(

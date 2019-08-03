@@ -102,10 +102,11 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                   children: <Widget>[
                     TextFormField(
                       decoration: InputDecoration(
+                        hintText: 'Required',
                         border: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.teal),
                         ),
-                        labelText: "Action Name *",
+                        labelText: "Odometer Reading (mi)",
                         contentPadding: EdgeInsets.only(
                             left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
                       ),
@@ -116,12 +117,66 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                         color: Colors.black,
                         fontWeight: FontWeight.w500,
                       ),
-                      keyboardType: TextInputType.text,
-                      textCapitalization: TextCapitalization.sentences,
-                      // maxLength: 20,
-                      validator: (value) {},
-                      onSaved: (val) =>
-                          setState(() => refuelingItem.name = val),
+                      keyboardType: TextInputType.number,
+                      onSaved: (val) => setState(() {
+                            if (val != null && val != '') {
+                              refuelingItem.odom = int.parse(val);
+                            }
+                          }),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16.0),
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        hintText: 'Required',
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.teal),
+                        ),
+                        labelText: "Amount of Fuel (gal)",
+                        contentPadding: EdgeInsets.only(
+                            left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
+                      ),
+                      // controller: listNameController,
+                      autofocus: true,
+                      style: TextStyle(
+                        fontSize: 22.0,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      keyboardType: TextInputType.number,
+                      onSaved: (val) => setState(() {
+                            if (val != null && val != '') {
+                              refuelingItem.amount = double.parse(val);
+                            }
+                          }),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16.0),
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        hintText: 'Required',
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.teal),
+                        ),
+                        labelText: "Total Price (USD)",
+                        contentPadding: EdgeInsets.only(
+                            left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
+                      ),
+                      // controller: listNameController,
+                      autofocus: true,
+                      style: TextStyle(
+                        fontSize: 22.0,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      keyboardType: TextInputType.number,
+                      onSaved: (val) => setState(() {
+                            if (val != null && val != '') {
+                              refuelingItem.cost = double.parse(val);
+                            }
+                          }),
                     ),
                     Padding(
                       padding: EdgeInsets.only(bottom: 10.0),
@@ -134,8 +189,8 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                       new Expanded(
                         child: new TextFormField(
                           decoration: new InputDecoration(
-                            hintText: 'Enter the Todo\'s Due Date',
-                            labelText: 'Due Date',
+                            hintText: 'Optional',
+                            labelText: 'Refueling Date',
                             contentPadding: EdgeInsets.only(
                                 left: 16.0,
                                 top: 20.0,
@@ -156,7 +211,7 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                               isValidDob(val) ? null : 'Not a valid date',
                           onSaved: (val) => setState(() {
                                 if (val != null && val != '') {
-                                  refuelingItem.dueDate = convertToDate(val);
+                                  refuelingItem.date = convertToDate(val);
                                 }
                               }),
                         ),
@@ -169,32 +224,6 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                         }),
                       )
                     ]),
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 16.0),
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.teal),
-                        ),
-                        labelText: "Due Mileage",
-                        contentPadding: EdgeInsets.only(
-                            left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
-                      ),
-                      // controller: listNameController,
-                      autofocus: true,
-                      style: TextStyle(
-                        fontSize: 22.0,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      keyboardType: TextInputType.number,
-                      onSaved: (val) => setState(() {
-                            if (val != null && val != '') {
-                              refuelingItem.dueMileage = int.parse(val);
-                            }
-                          }),
-                    ),
                   ],
                 ),
               ),
