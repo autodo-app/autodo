@@ -6,10 +6,10 @@ class RefuelingBLoC {
   StreamController<RefuelingItem> ctrl;
 
   Function(RefuelingItem) get push => ctrl.sink.add;
-  pushNew(String name, int mileage, DateTime date) {
-    var item = RefuelingItem(name: name, dueDate: date, dueMileage: mileage);
-    push(item);
-  }
+  // pushNew(String name, int mileage, DateTime date) {
+  //   var item = RefuelingItem(name: name, dueDate: date, dueMileage: mileage);
+  //   push(item);
+  // }
 
   Stream<RefuelingItem> get stream => ctrl.stream;
 
