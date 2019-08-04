@@ -4,6 +4,8 @@ class MaintenanceTodoItem {
   String name;
   DateTime dueDate;
   int dueMileage;
+  bool complete = false;
+  List<String> tags = ['Example Tag'];
 
   MaintenanceTodoItem({@required this.name, this.dueDate, this.dueMileage});
 
