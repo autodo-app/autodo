@@ -1,11 +1,53 @@
 import 'dart:async';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:autodo/items/items.dart';
+import 'package:flutter/material.dart';
+
+class FirebaseTodoBLoC {
+  Widget _buildItem(BuildContext context, DocumentSnapshot snapshot) {
+    return Text(snapshot.data.toString());
+  }
+
+  StreamBuilder buildList(BuildContext context) {
+    return StreamBuilder(
+      stream: Firestore.instance.collection('todos').snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return const Text('Loading...');
+        return ListView.builder(
+          itemCount: snapshot.data.documents.length,
+          itemBuilder: (context, index) =>
+              _buildItem(context, snapshot.data.documents[index]),
+        );
+      },
+    );
+  }
+
+  void transact() {
+    MaintenanceTodoItem item; // todo: replace this with an actual item
+    Firestore.instance.runTransaction((transaction) async {
+      DocumentSnapshot freshSnap = await transaction.get(item.reference);
+      await transaction.update(freshSnap.reference, {
+        'name': freshSnap['name'] + 'suffix',
+      });
+    });
+  }
+}
 
 class TodoBLoC {
   StreamController<MaintenanceTodoItem> ctrl;
+  final DocumentReference postRef = Firestore.instance.document('todos');
 
-  Function(MaintenanceTodoItem) get push => ctrl.sink.add;
+  void push(MaintenanceTodoItem item) {
+    ctrl.sink.add;
+    // Firestore.instance.runTransaction((transaction) async {
+    //   await transaction.set(item.reference, item.toMap());
+    //   // final freshSnapshot = await transaction.get(item.reference);
+    //   // final fresh = MaintenanceTodoItem.fromSnapshot(freshSnapshot);
+
+    //   // await transaction.update(item.reference, {'votes': fresh.votes + 1});
+    // });
+  }
+
   pushNew(String name, int mileage, DateTime date) {
     var item =
         MaintenanceTodoItem(name: name, dueDate: date, dueMileage: mileage);

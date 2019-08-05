@@ -32,16 +32,19 @@ class MaintenanceHistoryState extends State<MaintenanceHistory> {
     super.dispose();
   }
 
+  FirebaseTodoBLoC fb = FirebaseTodoBLoC();
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: ListView.builder(
-          itemCount: todos.length,
-          itemBuilder: (BuildContext context, int index) {
-            final todo = todos[index];
+      // child: ListView.builder(
+      //     itemCount: todos.length,
+      //     itemBuilder: (BuildContext context, int index) {
+      //       final todo = todos[index];
 
-            return MaintenanceTodoCard(item: todo);
-          }),
+      //       return MaintenanceTodoCard(item: todo);
+      //     }),
+      child: fb.buildList(context),
     );
   }
 }
