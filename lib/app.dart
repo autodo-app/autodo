@@ -39,6 +39,7 @@ class AutodoAppState extends State<AutodoApp> {
             // CreateTodoScreen(addMaintenanceTodo: addMaintenanceTodo),
             CreateTodoScreen(),
         '/createRefueling': (context) => CreateRefuelingScreen(),
+        '/settings': (context) => SettingsScreen(),
       },
     );
   }

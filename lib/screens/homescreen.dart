@@ -16,27 +16,46 @@ class HomeScreen extends StatefulWidget {
   State<StatefulWidget> createState() => HomeScreenState();
 }
 
+enum dropdown { settings }
+
 class HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: new Scaffold(
         appBar: AppBar(
           bottom: TabBar(
             tabs: [
               Tab(icon: Icon(Icons.alarm)),
               Tab(icon: Icon(Icons.list)),
-              Tab(icon: Icon(Icons.settings)),
             ],
           ),
           title: Text('auToDo'),
+          actions: <Widget>[
+            PopupMenuButton<dropdown>(
+              icon: Icon(Icons.more_vert),
+              onSelected: (dropdown res) {
+                if (res == dropdown.settings) {
+                  Navigator.pushNamed(context, '/settings');
+                }
+              },
+              itemBuilder: (BuildContext context) => <PopupMenuEntry<dropdown>>[
+                    const PopupMenuItem<dropdown>(
+                      value: dropdown.settings,
+                      child: Text('Settings'),
+                    ),
+                  ],
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5.0),
+            ),
+          ],
         ),
         body: TabBarView(
           children: [
             MaintenanceHistory(),
             RefuelingHistory(),
-            Text('Tab 3'),
           ],
         ),
         drawer: NavDrawer(),
