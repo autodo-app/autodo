@@ -20,6 +20,9 @@ class RefuelingHistoryState extends State<RefuelingHistory> {
   void initState() {
     subscription = refuelingBLoC.stream.listen((value) {
       setState(() {
+        if (todos.length != 0) {
+          value.addPrevOdom(todos.last.odom);
+        }
         todos.add(value);
       });
     });
@@ -38,7 +41,8 @@ class RefuelingHistoryState extends State<RefuelingHistory> {
       child: ListView.builder(
           itemCount: todos.length,
           itemBuilder: (BuildContext context, int index) {
-            final todo = todos[index];
+            // reverses the list so that the most recent shows up first
+            final todo = todos[todos.length - 1 - index];
 
             return RefuelingCard(item: todo);
           }),
