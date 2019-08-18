@@ -222,7 +222,6 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
                         if (_formKey.currentState.validate()) {
                           _formKey.currentState.save();
 
-                          // todoBLoC.push(todoItem);
                           FirebaseTodoBLoC().push(todoItem);
 
                           Navigator.of(context).pop();
