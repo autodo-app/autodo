@@ -259,7 +259,8 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                         if (_formKey.currentState.validate()) {
                           _formKey.currentState.save();
 
-                          refuelingBLoC.push(refuelingItem);
+                          // refuelingBLoC.push(refuelingItem);
+                          FirebaseRefuelingBLoC().push(refuelingItem);
 
                           Navigator.of(context).pop();
                         }

@@ -38,14 +38,12 @@ class RefuelingHistoryState extends State<RefuelingHistory> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: ListView.builder(
-          itemCount: todos.length,
-          itemBuilder: (BuildContext context, int index) {
-            // reverses the list so that the most recent shows up first
-            final todo = todos[todos.length - 1 - index];
-
-            return RefuelingCard(item: todo);
-          }),
+      // child: ListView.builder(
+      //     itemCount: todos.length,
+      //     itemBuilder: (BuildContext context, int index) {
+      //       // reverses the list so that the most recent shows up first
+      //       final todo = todos[todos.length - 1 - index];
+      child: FirebaseRefuelingBLoC().buildList(context),
     );
   }
 }
