@@ -6,6 +6,8 @@
 .pub/
 .idea/
 .metadata
+.gradle/
+**.bin
 build/
 # If you're building an application, you may want to check-in your pubspec.lock
 pubspec.lock
@@ -13,5 +15,18 @@ pubspec.lock
 # Directory created by dartdoc
 # If you don't generate documentation locally you can remove this line.
 doc/api/
-android/.gradle/*
+
+# android stuff
+**/android/**/gradle-wrapper.jar
+**/android/.gradle/
+**/android/captures/
+**/android/gradlew
+**/android/gradlew.bat
+**/android/local.properties
+**/android/**/GeneratedPluginRegistrant.java
+**/android/key.properties
+*.jks
+
+
+
 google-services.json
