@@ -2,10 +2,16 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:autodo/items/items.dart';
 import 'package:flutter/material.dart';
+import 'package:autodo/maintenance/todocard.dart';
 
 class FirebaseTodoBLoC {
   Widget _buildItem(BuildContext context, DocumentSnapshot snapshot) {
-    return Text(snapshot.data.toString());
+    var name = snapshot.data['name'];
+    var date = snapshot.data['dueDate'].toDate();
+    var mileage = snapshot.data['dueMileage'];
+    var item =
+        MaintenanceTodoItem(name: name, dueDate: date, dueMileage: mileage);
+    return MaintenanceTodoCard(item: item);
   }
 
   StreamBuilder buildList(BuildContext context) {
@@ -22,6 +28,23 @@ class FirebaseTodoBLoC {
     );
   }
 
+  void push(MaintenanceTodoItem item) {
+    Firestore.instance.runTransaction((transaction) async {
+      // DocumentSnapshot freshSnap = await transaction.get(item.reference);
+
+      // creates a new unique identifier for the item
+      DocumentReference ref = Firestore.instance.collection('todos').document(
+          item.name.toString() +
+              item.dueDate.toString() +
+              item.dueMileage.toString());
+      await transaction.set(ref, {
+        'name': item.name,
+        'dueDate': item.dueDate,
+        'dueMileage': item.dueMileage
+      });
+    });
+  }
+
   void transact() {
     MaintenanceTodoItem item; // todo: replace this with an actual item
     Firestore.instance.runTransaction((transaction) async {
@@ -31,6 +54,13 @@ class FirebaseTodoBLoC {
       });
     });
   }
+
+  // Make the object a Singleton
+  static final FirebaseTodoBLoC _bloc = FirebaseTodoBLoC._internal();
+  factory FirebaseTodoBLoC() {
+    return _bloc;
+  }
+  FirebaseTodoBLoC._internal() {}
 }
 
 class TodoBLoC {
