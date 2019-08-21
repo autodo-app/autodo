@@ -27,14 +27,13 @@ class AutodoAppState extends State<AutodoApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'auToDo',
-      initialRoute: userExists ? '/' : '/welcome',
+      initialRoute: userExists ? '/' : '/welcomescroll',
       routes: {
         '/': (context) => HomeScreen(
               autodoState: autodoState,
               addMaintenanceTodo: addMaintenanceTodo,
             ),
-        '/welcome': (context) => WelcomeScreen(),
-        '/tutorial': (context) => TutorialScreen(),
+        '/welcomescroll': (context) => WelcomePage(),
         '/createTodo': (context) =>
             // CreateTodoScreen(addMaintenanceTodo: addMaintenanceTodo),
             CreateTodoScreen(),
