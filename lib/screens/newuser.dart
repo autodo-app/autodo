@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
+const double BOTTOM_ROW_HEIGHT = 20.0;
+
 BoxDecoration bgGradient() {
   return BoxDecoration(
     gradient: LinearGradient(
@@ -41,6 +43,38 @@ class SkipButton extends StatelessWidget {
   }
 }
 
+class FinishButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 100.0),
+        child: RaisedButton(
+          onPressed: () {},
+          textColor: Colors.white,
+          padding: const EdgeInsets.all(0.0),
+          color: Colors.blue,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(15.0),
+            ),
+          ),
+          child: Container(
+            padding: EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 10.0),
+            child: Text(
+              "Let's Get Started!",
+              style: TextStyle(
+                fontSize: 20.0,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class NextButton extends StatelessWidget {
   final PageController controller;
   NextButton({@required this.controller});
@@ -50,7 +84,7 @@ class NextButton extends StatelessWidget {
     return Align(
       alignment: Alignment.bottomRight,
       child: Padding(
-        padding: EdgeInsets.fromLTRB(0.0, 0.0, 20.0, 30.0),
+        padding: EdgeInsets.fromLTRB(0.0, 0.0, 20.0, BOTTOM_ROW_HEIGHT),
         child: FlatButton(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -83,47 +117,39 @@ class NextButton extends StatelessWidget {
   }
 }
 
-Widget nextButton(PageController controller) {
-  return Padding(
-    padding: EdgeInsets.fromLTRB(0.0, 0.0, 20.0, 30.0),
-    child: FlatButton(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Text(
-            'next',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20.0,
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(3.0),
-          ),
-          Icon(
-            Icons.arrow_forward,
-            color: Colors.white,
-            size: 20.0,
-          ),
-        ],
-      ),
-      onPressed: () => controller.nextPage(
-            duration: const Duration(milliseconds: 400),
-            curve: Curves.easeInOut,
-          ),
-    ),
-  );
-}
-
 class Welcome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text(
-        'Welcome to auToDo!',
-        style: TextStyle(
-            fontSize: 30.0, fontWeight: FontWeight.bold, color: Colors.white),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          FlutterLogo(
+            size: 200.0,
+          ),
+          Padding(
+            padding: EdgeInsets.all(10.0),
+          ),
+          Text(
+            'Welcome to auToDo!',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontSize: 30.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.white),
+          ),
+          Padding(
+            padding: EdgeInsets.all(5.0),
+          ),
+          Text(
+            "App's tagline should go here.",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.normal,
+                color: Colors.white),
+          ),
+        ],
       ),
     );
   }
@@ -133,10 +159,38 @@ class Tutorial1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text(
-        'auToDo has two main focuses:\nOrganizing Maintenance ToDo Items,\nand keeping track of your car\'s refuelings.',
-        style: TextStyle(
-            fontSize: 30.0, fontWeight: FontWeight.bold, color: Colors.white),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          FlutterLogo(
+            size: 200.0,
+          ),
+          Padding(
+            padding: EdgeInsets.all(10.0),
+          ),
+          Text(
+            "Track Maintenance",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontSize: 24.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.white),
+          ),
+          Padding(
+            padding: EdgeInsets.all(5.0),
+          ),
+          Container(
+            padding: EdgeInsets.fromLTRB(40.0, 0, 40.0, 0),
+            child: Text(
+              "Create todo items and recurring events that notify you on your terms.",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.normal,
+                  color: Colors.white),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -186,12 +240,16 @@ class DotsIndicator extends AnimatedWidget {
   }) : super(listenable: controller);
 
   Widget build(BuildContext context) {
-    return new Padding(
-        padding: EdgeInsets.only(bottom: 12.0),
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Padding(
+        padding: EdgeInsets.only(bottom: BOTTOM_ROW_HEIGHT + 14.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: new List<Widget>.generate(itemCount, _buildDot),
-        ));
+        ),
+      ),
+    );
   }
 
   Widget _buildDot(int index) {
@@ -204,16 +262,14 @@ class DotsIndicator extends AnimatedWidget {
     double zoom = 1.0 + (_kMaxZoom - 1.0) * selectedness;
     return new Container(
       width: _kDotSpacing,
-      child: new Center(
-        child: new Material(
-          color: color,
-          type: MaterialType.circle,
-          child: new Container(
-            width: _kDotSize * zoom,
-            height: _kDotSize * zoom,
-            child: new InkWell(
-              onTap: () => onPageSelected(index),
-            ),
+      child: new Material(
+        color: color,
+        type: MaterialType.circle,
+        child: new Container(
+          width: _kDotSize * zoom,
+          height: _kDotSize * zoom,
+          child: new InkWell(
+            onTap: () => onPageSelected(index),
           ),
         ),
       ),
@@ -224,6 +280,15 @@ class DotsIndicator extends AnimatedWidget {
 class WelcomePageScroller extends StatefulWidget {
   final VoidCallback lastPageNotifier;
   final PageController controller = PageController();
+  final List<Widget> screens = [
+    Welcome(),
+    Tutorial1(),
+    Tutorial2(),
+  ];
+
+  List<Widget> get screenList {
+    return this.screens;
+  }
 
   PageController get ctrl {
     return this.controller;
@@ -235,11 +300,6 @@ class WelcomePageScroller extends StatefulWidget {
 }
 
 class WelcomePageScrollerState extends State<WelcomePageScroller> {
-  final List<Widget> screens = [
-    Welcome(),
-    Tutorial1(),
-    Tutorial2(),
-  ];
   Timer debounceTimer;
   var debounceDelta = const Duration(milliseconds: 400);
   var prevVal = 0;
@@ -249,13 +309,14 @@ class WelcomePageScrollerState extends State<WelcomePageScroller> {
     super.initState();
     debounceTimer = Timer(debounceDelta, () {});
     VoidCallback scrollListener = () {
-      if (widget.controller.page.round() == (screens.length - 1) &&
+      if (widget.controller.page.round() == (widget.screens.length - 1) &&
           !debounceTimer.isActive &&
           prevVal != 2) {
         widget.lastPageNotifier();
         debounceTimer = Timer(debounceDelta, () {});
         prevVal = widget.controller.page.round();
-      } else if (widget.controller.page.round() == (screens.length - 2) &&
+      } else if (widget.controller.page.round() ==
+              (widget.screens.length - 2) &&
           !debounceTimer.isActive &&
           prevVal == 2) {
         widget.lastPageNotifier();
@@ -272,7 +333,7 @@ class WelcomePageScrollerState extends State<WelcomePageScroller> {
   Widget build(BuildContext context) {
     return PageView(
       controller: widget.controller,
-      children: screens,
+      children: widget.screens,
     );
   }
 }
@@ -284,26 +345,22 @@ class WelcomePage extends StatefulWidget {
 
 class WelcomePageState extends State<WelcomePage> {
   WelcomePageScroller scroller;
-  Widget skipButton, nextButton;
+  Widget nextButton, finishButton;
+  AnimatedOpacity skipButton;
+  bool buttonsShown = true;
 
   @override
   void initState() {
     super.initState();
     scroller = WelcomePageScroller(lastPageNotifier: this.onPageChanged);
-    skipButton = SkipButton();
     nextButton = NextButton(controller: scroller.ctrl);
+    finishButton = Container();
   }
 
   void onPageChanged() {
     setState(() {
       // toggle the buttons here
-      if (skipButton is Container) {
-        skipButton = SkipButton();
-        nextButton = NextButton(controller: scroller.ctrl);
-      } else {
-        skipButton = Container();
-        nextButton = Container();
-      }
+      buttonsShown = !buttonsShown;
     });
   }
 
@@ -316,8 +373,32 @@ class WelcomePageState extends State<WelcomePage> {
           child: Stack(
             children: <Widget>[
               scroller,
-              skipButton,
-              nextButton,
+              AnimatedOpacity(
+                opacity: buttonsShown ? 1.0 : 0.0,
+                duration: Duration(milliseconds: 200),
+                child: SkipButton(),
+              ),
+              AnimatedOpacity(
+                opacity: buttonsShown ? 1.0 : 0.0,
+                duration: Duration(milliseconds: 200),
+                child: NextButton(controller: scroller.ctrl),
+              ),
+              AnimatedOpacity(
+                opacity: buttonsShown ? 0.0 : 1.0,
+                duration: Duration(milliseconds: 200),
+                child: FinishButton(),
+              ),
+              AnimatedOpacity(
+                opacity: buttonsShown
+                    ? 1.0
+                    : 1.0, // ignoring the opacity for now, always present
+                duration: Duration(milliseconds: 200),
+                child: DotsIndicator(
+                  controller: scroller.ctrl,
+                  itemCount: scroller.screenList.length,
+                  onPageSelected: (int val) {},
+                ),
+              ),
             ],
           ),
         ),
