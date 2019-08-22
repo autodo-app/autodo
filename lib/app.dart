@@ -33,7 +33,7 @@ class AutodoAppState extends State<AutodoApp> {
               autodoState: autodoState,
               addMaintenanceTodo: addMaintenanceTodo,
             ),
-        '/welcomescroll': (context) => WelcomePage(),
+        '/welcomescroll': (context) => LoginPage(), // Was WelcomePage()
         '/createTodo': (context) =>
             // CreateTodoScreen(addMaintenanceTodo: addMaintenanceTodo),
             CreateTodoScreen(),
