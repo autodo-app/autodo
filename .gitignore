@@ -28,6 +28,8 @@ doc/api/
 **/android/key.properties
 *.jks
 
+google-services.json
+
 
 
 google-services.json
