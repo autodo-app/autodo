@@ -12,7 +12,6 @@ class AutodoApp extends StatefulWidget {
 
 class AutodoAppState extends State<AutodoApp> {
   static AutodoState autodoState;
-  static bool userExists = false;
 
   @override
   void initState() {
@@ -27,12 +26,13 @@ class AutodoAppState extends State<AutodoApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'auToDo',
-      initialRoute: userExists ? '/' : '/loginpage',
+      initialRoute: '/load',
       routes: {
         '/': (context) => HomeScreen(
               autodoState: autodoState,
               addMaintenanceTodo: addMaintenanceTodo,
             ),
+        '/load': (context) => LoadingPage(),
         '/loginpage': (context) => LoginPage(),
         '/signuppage': (context) => SignUpScreen(),
         '/createTodo': (context) =>

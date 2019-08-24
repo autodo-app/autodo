@@ -1,3 +1,4 @@
+import 'package:autodo/blocs/userauth.dart';
 import 'package:flutter/material.dart';
 
 class NavDrawer extends StatelessWidget {
@@ -21,9 +22,11 @@ class NavDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            title: Text('Item 2'),
+            title: Text('Sign Out'),
             onTap: () {
-              Navigator.pop(context);
+              Auth userAuth = Auth();
+              userAuth.signOut();
+              Navigator.pushNamed(context, '/loginpage');
             },
           ),
         ],

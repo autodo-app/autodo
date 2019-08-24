@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import '../blocs/userauth.dart';
 
 class SignUpScreen extends StatefulWidget {
+  final Auth userAuth = Auth();
   @override
   SignUpScreenState createState() => SignUpScreenState();
 }
 
 class SignUpScreenState extends State<SignUpScreen> {
+  void handleError() {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,11 +18,12 @@ class SignUpScreenState extends State<SignUpScreen> {
           tag: "SignupButton",
           transitionOnUserGestures: true,
           child: SafeArea(
-            child: Text(
-              "SIGN UP",
-              style: TextStyle(
-                fontSize: 18.0,
-              ),
+            child: RaisedButton(
+              onPressed: () async {
+                await widget.userAuth
+                    .signUp("baylessjonathan@gmail.com", "test123")
+                    .catchError(handleError);
+              },
             ),
           ),
         ),
