@@ -16,49 +16,17 @@ LinearGradient blue = LinearGradient(
 BoxDecoration bgGradient() {
   return BoxDecoration(
     gradient: LinearGradient.lerp(blueGrey, blue, 0.4),
-    // gradient: LinearGradient(
-    //   begin: Alignment.topCenter,
-    //   end: Alignment.bottomCenter,
-    //   colors: [Colors.blueGrey, Colors.blue[900]],
-    // ),
   );
-}
-
-class FinishButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 20.0),
-        child: RaisedButton(
-          onPressed: () {},
-          textColor: Colors.white,
-          padding: const EdgeInsets.all(0.0),
-          color: Colors.blue,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(15.0),
-            ),
-          ),
-          child: Container(
-            padding: EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 10.0),
-            child: Text(
-              "Let's Get Started!",
-              style: TextStyle(
-                fontSize: 20.0,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 }
 
 const BUTTON_PADDING = 8.0;
 
-class SignupButton extends StatelessWidget {
+class SignupButton extends StatefulWidget {
+  @override
+  SignupButtonState createState() => SignupButtonState();
+}
+
+class SignupButtonState extends State<SignupButton> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -66,22 +34,26 @@ class SignupButton extends StatelessWidget {
       child: Padding(
         padding:
             EdgeInsets.fromLTRB(16.0, BUTTON_PADDING, 16.0, BUTTON_PADDING),
-        child: RaisedButton(
-          onPressed: () {},
-          textColor: Colors.white,
-          padding: const EdgeInsets.all(0.0),
-          color: Colors.blue,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(15.0),
+        child: Hero(
+          tag: 'SignupButton',
+          transitionOnUserGestures: true,
+          child: RaisedButton(
+            onPressed: () => Navigator.pushNamed(context, '/signuppage'),
+            textColor: Colors.white,
+            padding: const EdgeInsets.all(0.0),
+            color: Colors.blue,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(15.0),
+              ),
             ),
-          ),
-          child: Container(
-            padding: EdgeInsets.fromLTRB(40.0, 14.0, 40.0, 14.0),
-            child: Text(
-              "SIGN UP",
-              style: TextStyle(
-                fontSize: 18.0,
+            child: Container(
+              padding: EdgeInsets.fromLTRB(40.0, 14.0, 40.0, 14.0),
+              child: Text(
+                "SIGN UP",
+                style: TextStyle(
+                  fontSize: 18.0,
+                ),
               ),
             ),
           ),
@@ -188,7 +160,7 @@ class Welcome extends StatelessWidget {
             padding: EdgeInsets.all(5.0),
           ),
           Text(
-            "App's tagline should go here.",
+            "Car maintenance made simple.",
             textAlign: TextAlign.center,
             style: TextStyle(
                 fontSize: 16.0,
@@ -246,10 +218,38 @@ class Tutorial2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text(
-        'other tutorial junk',
-        style: TextStyle(
-            fontSize: 30.0, fontWeight: FontWeight.bold, color: Colors.white),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          FlutterLogo(
+            size: 200.0,
+          ),
+          Padding(
+            padding: EdgeInsets.all(10.0),
+          ),
+          Text(
+            "Simplify Your Tasks",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontSize: 24.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.white),
+          ),
+          Padding(
+            padding: EdgeInsets.all(5.0),
+          ),
+          Container(
+            padding: EdgeInsets.fromLTRB(40.0, 0, 20.0, 0),
+            child: Text(
+              "Set recurring tasks to never worry about forgetting a maintenance task again.",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.normal,
+                  color: Colors.white),
+            ),
+          ),
+        ],
       ),
     );
   }
