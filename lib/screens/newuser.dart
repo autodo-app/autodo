@@ -8,7 +8,7 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class SignUpScreenState extends State<SignUpScreen> {
-  void handleError() {}
+  void handleError(Object exception, StackTrace trace) {}
 
   @override
   Widget build(BuildContext context) {

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 // import './localstorage.dart';
 
 abstract class BaseAuth {
@@ -21,8 +22,16 @@ class Auth implements BaseAuth {
   }
 
   Future<String> signUp(String email, String password) async {
-    AuthResult res = await _firebaseAuth.createUserWithEmailAndPassword(
-        email: email, password: password);
+    AuthResult res;
+    try {
+      res = await _firebaseAuth.createUserWithEmailAndPassword(
+          email: email, password: password);
+    } on PlatformException {
+      print(
+          "PlatformException: Cannot create a user with an email that already exists");
+      return "";
+    }
+
     FirebaseUser user = res.user;
     // if (user.uid != null) LocalStorage.save("uuid", user.uid);
     return user.uid;
