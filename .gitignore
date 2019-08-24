@@ -7,6 +7,7 @@
 .idea/
 .metadata
 .gradle/
+.gradle
 **.bin
 build/
 # If you're building an application, you may want to check-in your pubspec.lock
