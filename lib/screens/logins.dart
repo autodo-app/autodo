@@ -53,7 +53,7 @@ class SignInScreenState extends State<SignInScreen> {
         print("error: $e");
         setState(() {
           _isLoading = false;
-          _errorMessage = e;
+          _errorMessage = e.toString();
         });
       }
     } else {

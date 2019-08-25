@@ -1,15 +1,7 @@
-import 'package:autodo/items/maintenancetodo.dart';
-import 'package:autodo/screens/createmaintenancetodo.dart';
-// import 'package:autodo/sharedmodels/expanding_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
-import 'package:autodo/state.dart';
 
 class CreateEntryButton extends StatefulWidget {
-  final addMaintenanceTodo;
-
-  CreateEntryButton({@required this.addMaintenanceTodo});
-
   @override
   State<StatefulWidget> createState() {
     return CreateEntryButtonState();
