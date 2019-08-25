@@ -33,8 +33,11 @@ class AutodoAppState extends State<AutodoApp> {
               addMaintenanceTodo: addMaintenanceTodo,
             ),
         '/load': (context) => LoadingPage(),
-        '/loginpage': (context) => LoginPage(),
-        '/signuppage': (context) => SignUpScreen(),
+        '/welcomepage': (context) => LoginPage(),
+        '/loginpage': (context) => SignInScreen(
+              formMode: FormMode.LOGIN,
+            ),
+        '/signuppage': (context) => SignInScreen(formMode: FormMode.SIGNUP),
         '/createTodo': (context) =>
             // CreateTodoScreen(addMaintenanceTodo: addMaintenanceTodo),
             CreateTodoScreen(),

@@ -72,7 +72,9 @@ class TrialButton extends StatelessWidget {
         padding:
             EdgeInsets.fromLTRB(16.0, BUTTON_PADDING, 16.0, BUTTON_PADDING),
         child: RaisedButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushNamed(context, '/');
+          },
           textColor: Colors.white,
           padding: const EdgeInsets.all(0.0),
           color: Colors.blue,
@@ -116,7 +118,7 @@ class LoginButton extends StatelessWidget {
               ),
             ),
             FlatButton(
-              onPressed: () {},
+              onPressed: () => Navigator.pushNamed(context, '/loginpage'),
               textColor: Colors.white,
               padding: const EdgeInsets.all(0.0),
               child: Text(

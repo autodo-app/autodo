@@ -26,7 +26,7 @@ class NavDrawer extends StatelessWidget {
             onTap: () {
               Auth userAuth = Auth();
               userAuth.signOut();
-              Navigator.pushNamed(context, '/loginpage');
+              Navigator.pushNamed(context, '/welcomepage');
             },
           ),
         ],

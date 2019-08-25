@@ -109,7 +109,6 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
                         contentPadding: EdgeInsets.only(
                             left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
                       ),
-                      // controller: listNameController,
                       autofocus: true,
                       style: TextStyle(
                         fontSize: 22.0,
