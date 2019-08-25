@@ -38,7 +38,10 @@ class SignInScreenState extends State<SignInScreen> {
     if (_validateAndSave()) {
       String userId = "";
       try {
-        userId = await widget.userAuth.signUp(_email, _password);
+        if (widget.formMode == FormMode.SIGNUP)
+          userId = await widget.userAuth.signUp(_email, _password);
+        else
+          userId = await widget.userAuth.signIn(_email, _password);
         // widget.userAuth.sendEmailVerification();
         setState(() {
           _isLoading = false;
@@ -120,12 +123,11 @@ class SignInScreenState extends State<SignInScreen> {
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
-          title: new Text("Verify your account"),
-          content:
-              new Text("Link to verify account has been sent to your email"),
+          title: Text("Verify your account"),
+          content: Text("Link to verify account has been sent to your email"),
           actions: <Widget>[
-            new FlatButton(
-              child: new Text("Dismiss"),
+            FlatButton(
+              child: Text("Dismiss"),
               onPressed: () {
                 // _changeFormToLogin();
                 Navigator.of(context).pop();
@@ -158,7 +160,7 @@ class SignInScreenState extends State<SignInScreen> {
 
   Widget _showErrorMessage() {
     if (_errorMessage.length > 0 && _errorMessage != null) {
-      return new Text(
+      return Text(
         _errorMessage,
         style: TextStyle(
             fontSize: 13.0,
@@ -167,7 +169,7 @@ class SignInScreenState extends State<SignInScreen> {
             fontWeight: FontWeight.w300),
       );
     } else {
-      return new Container(
+      return Container(
         height: 0.0,
       );
     }
@@ -186,9 +188,9 @@ class SignInScreenState extends State<SignInScreen> {
       maxLines: 1,
       keyboardType: TextInputType.emailAddress,
       autofocus: true,
-      decoration: new InputDecoration(
+      decoration: InputDecoration(
           hintText: 'Email',
-          icon: new Icon(
+          icon: Icon(
             Icons.mail,
             color: Colors.grey,
           )),
@@ -208,13 +210,13 @@ class SignInScreenState extends State<SignInScreen> {
   Widget _showPasswordInput() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
-      child: new TextFormField(
+      child: TextFormField(
         maxLines: 1,
         obscureText: true,
         autofocus: false,
-        decoration: new InputDecoration(
+        decoration: InputDecoration(
             hintText: 'Password',
-            icon: new Icon(
+            icon: Icon(
               Icons.lock,
               color: Colors.grey,
             )),
@@ -225,13 +227,20 @@ class SignInScreenState extends State<SignInScreen> {
   }
 
   Widget _showSecondaryButton() {
-    return new FlatButton(
+    return FlatButton(
       child: widget.formMode == FormMode.LOGIN
-          ? new Text('Create an account',
-              style: new TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300))
+          ? Text('Create an account',
+              style: TextStyle(
+                  decoration: TextDecoration.underline,
+                  decorationStyle: TextDecorationStyle.solid,
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w300))
           : Text('Have an account? Sign in',
-              style:
-                  new TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300)),
+              style: TextStyle(
+                  decoration: TextDecoration.underline,
+                  decorationStyle: TextDecorationStyle.solid,
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w300)),
       onPressed: () {
         widget.formMode == FormMode.LOGIN
             ? setState(() => widget.formMode = FormMode.SIGNUP)
@@ -241,21 +250,24 @@ class SignInScreenState extends State<SignInScreen> {
   }
 
   Widget _showPrimaryButton() {
-    return new Padding(
+    return Padding(
       padding: EdgeInsets.fromLTRB(0.0, 45.0, 0.0, 0.0),
       child: SizedBox(
         height: 40.0,
-        child: new RaisedButton(
+        child: RaisedButton(
           elevation: 5.0,
-          shape: new RoundedRectangleBorder(
-              borderRadius: new BorderRadius.circular(30.0)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(15.0),
+            ),
+          ),
           color: Colors.blue,
           child: widget.formMode == FormMode.LOGIN
-              ? new Text('Login',
-                  style: new TextStyle(fontSize: 20.0, color: Colors.white))
-              : new Text('Create account',
-                  style: new TextStyle(fontSize: 20.0, color: Colors.white)),
-          onPressed: _submit,
+              ? Text('Login',
+                  style: TextStyle(fontSize: 20.0, color: Colors.white))
+              : Text('Create account',
+                  style: TextStyle(fontSize: 20.0, color: Colors.white)),
+          onPressed: () => _submit(),
         ),
       ),
     );
