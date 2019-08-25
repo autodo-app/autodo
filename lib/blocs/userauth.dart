@@ -39,8 +39,15 @@ class Auth implements BaseAuth {
 
   Future<String> getCurrentUser() async {
     FirebaseUser user = await _firebaseAuth.currentUser();
-    print("$user");
     if (user != null) return user.uid;
+    return "NO_USER";
+  }
+
+  Future<String> getCurrentUserName() async {
+    FirebaseUser user = await _firebaseAuth.currentUser();
+    if (user != null && user.displayName != "")
+      return user.displayName;
+    else if (user != null) return user.email;
     return "NO_USER";
   }
 
@@ -48,3 +55,5 @@ class Auth implements BaseAuth {
     return _firebaseAuth.signOut();
   }
 }
+
+Auth globalAuth = Auth();
