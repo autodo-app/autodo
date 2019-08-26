@@ -1,6 +1,6 @@
 // This is a generated file; do not edit or check into version control.
 FLUTTER_ROOT=/home/bayle/Documents/flutter_linux_v1.5.4-hotfix.2-stable/flutter
-FLUTTER_APPLICATION_PATH=/home/bayle/Documents/git/autodo
+FLUTTER_APPLICATION_PATH=/home/bayle/Documents/git/tmp3/autodo
 FLUTTER_TARGET=lib/main.dart
 FLUTTER_BUILD_DIR=build
 SYMROOT=${SOURCE_ROOT}/../build/ios
