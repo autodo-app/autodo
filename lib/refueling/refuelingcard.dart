@@ -16,55 +16,118 @@ class RefuelingCard extends StatefulWidget {
 }
 
 class RefuelingCardState extends State<RefuelingCard> {
+  bool expanded = false;
+
   Widget checkbox(RefuelingCard widget) {
     return Row();
   }
 
-  // Row dueDate(DateTime date) {
-  //   bool isDate = date != null;
-  //   if (isDate) {
-  //     return Row(
-  //       children: <Widget>[
-  //         Icon(Icons.alarm, size: 30.0),
-  //         Text('Due on ' + DateFormat("MM/dd/yyyy").format(date)),
-  //       ],
-  //     );
-  //   } else {
-  //     return Row();
-  //   }
-  // }
+  List<Widget> additionalStats() {
+    Color textColor = Theme.of(context).iconTheme.color.withAlpha(200);
 
-  // Row dueMileage(int mileage) {
-  //   bool isMileage = mileage != null;
-  //   if (isMileage) {
-  //     return Row(
-  //       children: <Widget>[
-  //         Icon(Icons.directions_car, size: 30.0),
-  //         Text('Due at ' + mileage.toString() + ' miles'),
-  //       ],
-  //     );
-  //   } else {
-  //     return Row();
-  //   }
-  // }
+    if (expanded) {
+      return [
+        Row(
+          children: <Widget>[
+            Text(
+              'Fuel Efficiency: ',
+              style: TextStyle(
+                color: textColor,
+              ),
+            ),
+            Text(
+              widget.item.mpg.toStringAsFixed(3),
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 16.0,
+              ),
+            ),
+            Text(
+              ' mpg',
+              style: TextStyle(
+                color: textColor,
+              ),
+            ),
+          ],
+        ),
+        Row(
+          children: <Widget>[
+            Text(
+              'Cost per ' + 'gal: ',
+              style: TextStyle(
+                color: textColor,
+              ),
+            ),
+            Text(
+              widget.item.costpergal.toStringAsFixed(3),
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 16.0,
+              ),
+            ),
+            Text(
+              ' USD/gal',
+              style: TextStyle(
+                color: textColor,
+              ),
+            ),
+          ],
+        ),
+      ];
+    } else {
+      return [];
+    }
+  }
 
   Container stats(RefuelingCard widget) {
+    Color textColor = Theme.of(context).iconTheme.color.withAlpha(200);
+
     return Container(
+      padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
+        children: [
           Row(
-            children: <Widget>[
-              Icon(Icons.wb_auto),
-              Text(widget.item.mpg.toString() + ' mpg'),
+            children: [
+              Text(
+                'Total Cost: ',
+                style: TextStyle(
+                  color: textColor,
+                ),
+              ),
+              Text(
+                '\$' + widget.item.cost.toStringAsFixed(2),
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16.0,
+                ),
+              ),
             ],
           ),
           Row(
             children: <Widget>[
-              Icon(Icons.attach_money),
-              Text(widget.item.costpergal.toString() + ' USD/gal'),
+              Text(
+                'Total Amount: ',
+                style: TextStyle(
+                  color: textColor,
+                ),
+              ),
+              Text(
+                widget.item.amount.toStringAsFixed(2),
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16.0,
+                ),
+              ),
+              Text(
+                ' gal',
+                style: TextStyle(
+                  color: textColor,
+                ),
+              ),
             ],
-          )
+          ),
+          ...additionalStats(),
         ],
       ),
     );
@@ -77,18 +140,32 @@ class RefuelingCardState extends State<RefuelingCard> {
     return Column(
       children: <Widget>[
         Container(
-          padding: EdgeInsets.fromLTRB(0.0, 10.0, 0, 0.0),
-          alignment: Alignment.center,
-          child: Text(
-            'Refueling' +
-                dateStr +
-                ' at ' +
-                widget.item.odom.toString() +
+          padding: EdgeInsets.fromLTRB(10.0, 10.0, 0, 0.0),
+          alignment: Alignment.centerLeft,
+          child: Row(
+            children: <Widget>[
+              Text(
+                'Refueling' + dateStr + ' at ',
+                style: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: dateStr == '' ? 18.0 : 16.0,
+                ),
+              ),
+              Text(
+                widget.item.odom.toString(),
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: dateStr == '' ? 20.0 : 18.0,
+                ),
+              ),
+              Text(
                 ' miles',
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: dateStr == '' ? 24.0 : 18.0,
-            ),
+                style: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: dateStr == '' ? 18.0 : 16.0,
+                ),
+              ),
+            ],
           ),
         ),
         Divider(),
@@ -98,7 +175,6 @@ class RefuelingCardState extends State<RefuelingCard> {
 
   Container body(RefuelingCard widget) {
     return Container(
-      padding: EdgeInsets.fromLTRB(0, 16.0, 0, 16.0),
       child: Row(
         children: <Widget>[
           checkbox(widget),
@@ -176,14 +252,21 @@ class RefuelingCardState extends State<RefuelingCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Container(
-        child: Column(
-          children: <Widget>[
-            title(widget),
-            body(widget),
-            footer(widget),
-          ],
+    print(expanded);
+    return Padding(
+      padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 0.0),
+      child: InkWell(
+        onTap: () => setState(() => expanded = !expanded),
+        child: Card(
+          child: Container(
+            child: Column(
+              children: <Widget>[
+                title(widget),
+                body(widget),
+                footer(widget),
+              ],
+            ),
+          ),
         ),
       ),
     );

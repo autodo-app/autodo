@@ -13,6 +13,7 @@ class AutodoAppState extends State<AutodoApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // theme: ThemeData.dark(),
       title: 'auToDo',
       initialRoute: '/load',
       routes: {
