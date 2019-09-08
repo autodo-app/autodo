@@ -18,13 +18,16 @@ class CreateRefuelingScreen extends StatefulWidget {
 class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
   DateTime selectedDate = DateTime.now();
   FocusNode focusNode;
-  RefuelingItem refuelingItem = RefuelingItem.empty();
+  RefuelingItem refuelingItem;
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
     focusNode = FocusNode();
+    refuelingItem = (widget.mode == RefuelingEditMode.EDIT)
+        ? widget.existing
+        : RefuelingItem.empty();
   }
 
   @override
@@ -85,6 +88,7 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.existing != null) print(widget.existing.ref);
     return Scaffold(
       resizeToAvoidBottomPadding:
           false, // used to avoid overflow when keyboard is viewable
@@ -122,7 +126,7 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                       // controller: listNameController,
                       autofocus: true,
                       initialValue: (widget.mode == RefuelingEditMode.EDIT)
-                          ? widget.existing.odom
+                          ? widget.existing.odom.toString()
                           : '',
                       style: TextStyle(
                         fontSize: 22.0,
@@ -155,7 +159,7 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                       ),
                       // controller: listNameController,
                       initialValue: (widget.mode == RefuelingEditMode.EDIT)
-                          ? widget.existing.amount
+                          ? widget.existing.amount.toString()
                           : '',
                       autofocus: true,
                       style: TextStyle(
@@ -189,7 +193,7 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                       ),
                       // controller: listNameController,
                       initialValue: (widget.mode == RefuelingEditMode.EDIT)
-                          ? widget.existing.cost
+                          ? widget.existing.cost.toString()
                           : '',
                       autofocus: true,
                       style: TextStyle(
@@ -275,7 +279,10 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                       onPressed: () {
                         if (_formKey.currentState.validate()) {
                           _formKey.currentState.save();
-                          FirebaseRefuelingBLoC().push(refuelingItem);
+                          if (widget.mode == RefuelingEditMode.CREATE)
+                            FirebaseRefuelingBLoC().push(refuelingItem);
+                          else
+                            FirebaseRefuelingBLoC().edit(refuelingItem);
                           Navigator.of(context).pop();
                         }
                       },

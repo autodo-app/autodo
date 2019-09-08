@@ -8,12 +8,11 @@ class FirebaseRefuelingBLoC {
   final Firestore _db = Firestore.instance;
 
   Widget _buildItem(BuildContext context, DocumentSnapshot snapshot) {
-    print(snapshot.documentID);
     var odom = snapshot.data['odom'].toInt();
     var cost = snapshot.data['cost'].toDouble();
     var amount = snapshot.data['amount'].toDouble();
     var item = RefuelingItem(
-        key: snapshot.documentID,
+        ref: snapshot.documentID,
         uuid: Auth().getCurrentUser(),
         odom: odom,
         cost: cost,
@@ -47,9 +46,20 @@ class FirebaseRefuelingBLoC {
           .document(Auth().getCurrentUser())
           .collection('refuelings')
           .add(item.toJSON());
-      item.key = ref.documentID;
-      // Firestore.instance.collection('refuelings').document(item.toString());
+      item.ref = ref.documentID;
       await transaction.set(ref, item.toJSON());
+    });
+  }
+
+  void edit(RefuelingItem item) {
+    _db.runTransaction((transaction) async {
+      // Grab the item's existing identifier
+      DocumentReference ref = _db
+          .collection('users')
+          .document(Auth().getCurrentUser())
+          .collection('refuelings')
+          .document(item.ref);
+      await transaction.update(ref, item.toJSON());
     });
   }
 

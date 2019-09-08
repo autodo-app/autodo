@@ -50,12 +50,18 @@ class Auth implements BaseAuth {
     }
 
     FirebaseUser user = res.user;
-    // if (user.uid != null) LocalStorage.save("uuid", user.uid);
     return user.uid;
   }
 
   String getCurrentUser() {
     return currentUser;
+  }
+
+  Future<String> fetchUser() async {
+    FirebaseUser user = await _firebaseAuth.currentUser();
+    currentUser = user.uid;
+    if (user == null) return "NO_USER";
+    return user.uid;
   }
 
   Future<String> getCurrentUserName() async {

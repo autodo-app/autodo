@@ -8,8 +8,6 @@ class LoadingPage extends StatefulWidget {
 }
 
 class LoadingPageState extends State<LoadingPage> {
-  final Auth userAuth = Auth();
-
   @override
   void initState() {
     loadingSequence();
@@ -17,7 +15,7 @@ class LoadingPageState extends State<LoadingPage> {
   }
 
   Future<Null> loadingSequence() async {
-    String uuid = await userAuth.getCurrentUser();
+    String uuid = await Auth().fetchUser();
     if (uuid == "NO_USER")
       Navigator.pushNamed(context, '/loginpage');
     else

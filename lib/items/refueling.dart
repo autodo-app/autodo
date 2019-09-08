@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 class RefuelingItem {
-  String key, uuid;
+  String ref, uuid;
   DateTime date;
   int odom;
   double cost, amount, mpg = double.infinity, costpergal = double.infinity;
   List<String> tags = [];
 
   RefuelingItem(
-      {@required this.key,
+      {@required this.ref,
       @required this.uuid,
       @required this.odom,
       @required this.cost,
@@ -22,11 +22,6 @@ class RefuelingItem {
 
   void addPrevOdom(int prevOdom) {
     this.mpg = (this.odom - prevOdom) / this.amount;
-  }
-
-  @override
-  String toString() {
-    return this.odom.toString() + this.cost.toString() + this.amount.toString();
   }
 
   toJSON() {
