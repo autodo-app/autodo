@@ -5,3 +5,5 @@ export './settings.dart';
 export './welcome.dart';
 export './logins.dart';
 export './loadingpage.dart';
+export './statistics.dart';
+export './editcarlist.dart';

@@ -1,4 +1,5 @@
 import 'package:autodo/refueling/history.dart';
+import 'package:autodo/screens/statistics.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/screens/screens.dart';
 
@@ -28,6 +29,8 @@ class AutodoAppState extends State<AutodoApp> {
         '/createTodo': (context) => CreateTodoScreen(),
         '/createRefueling': (context) => CreateRefuelingScreen(),
         '/settings': (context) => SettingsScreen(),
+        '/statistics': (context) => StatisticsScreen(),
+        '/editcarlist': (context) => EditCarListScreen(),
       },
       debugShowCheckedModeBanner: false,
     );
