@@ -6,6 +6,7 @@ import 'package:autodo/maintenance/todocard.dart';
 
 class FirebaseTodoBLoC {
   final Firestore _db = Firestore.instance;
+  MaintenanceTodoItem _past;
 
   Widget _buildItem(BuildContext context, DocumentSnapshot snapshot) {
     var name = snapshot.data['name'];
@@ -60,6 +61,24 @@ class FirebaseTodoBLoC {
           .document(item.ref);
       await transaction.update(ref, item.toJSON());
     });
+  }
+
+  void delete(MaintenanceTodoItem item) {
+    _past = item;
+    _db.runTransaction((transaction) async {
+      // Grab the item's existing identifier
+      DocumentReference ref = _db
+          .collection('users')
+          .document(Auth().getCurrentUser())
+          .collection('todos')
+          .document(item.ref);
+      await transaction.delete(ref);
+    });
+  }
+
+  void undo() {
+    if (_past != null) push(_past);
+    _past = null;
   }
 
   // Make the object a Singleton

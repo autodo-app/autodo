@@ -1,3 +1,4 @@
+import 'package:autodo/blocs/todo.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/items/items.dart';
 import 'package:intl/intl.dart';
@@ -162,7 +163,17 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
           ),
           child: FlatButton(
             child: const Icon(Icons.delete),
-            onPressed: () {},
+            onPressed: () {
+              FirebaseTodoBLoC().delete(widget.item);
+              final snackbar = SnackBar(
+                content: Text('Deleted ' + widget.item.name),
+                action: SnackBarAction(
+                  label: 'Undo',
+                  onPressed: () => FirebaseTodoBLoC().undo(),
+                ),
+              );
+              Scaffold.of(context).showSnackBar(snackbar);
+            },
           ),
         ),
       ],

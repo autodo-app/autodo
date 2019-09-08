@@ -6,6 +6,7 @@ import 'package:autodo/blocs/userauth.dart';
 
 class FirebaseRefuelingBLoC {
   final Firestore _db = Firestore.instance;
+  RefuelingItem _past;
 
   Widget _buildItem(BuildContext context, DocumentSnapshot snapshot) {
     var odom = snapshot.data['odom'].toInt();
@@ -57,6 +58,24 @@ class FirebaseRefuelingBLoC {
           .document(item.ref);
       await transaction.update(ref, item.toJSON());
     });
+  }
+
+  void delete(RefuelingItem item) {
+    _past = item;
+    _db.runTransaction((transaction) async {
+      // Grab the item's existing identifier
+      DocumentReference ref = _db
+          .collection('users')
+          .document(Auth().getCurrentUser())
+          .collection('refuelings')
+          .document(item.ref);
+      await transaction.delete(ref);
+    });
+  }
+
+  void undo() {
+    if (_past != null) push(_past);
+    _past = null;
   }
 
   // Make the object a Singleton

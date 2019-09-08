@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:autodo/items/items.dart';
 import 'package:intl/intl.dart';
 import 'package:autodo/screens/screens.dart';
+import 'package:autodo/blocs/refueling.dart';
 
 class RefuelingCard extends StatefulWidget {
   final RefuelingItem item;
@@ -242,7 +243,17 @@ class RefuelingCardState extends State<RefuelingCard> {
           ),
           child: FlatButton(
             child: const Icon(Icons.delete),
-            onPressed: () {},
+            onPressed: () {
+              FirebaseRefuelingBLoC().delete(widget.item);
+              final snackbar = SnackBar(
+                content: Text('Deleted Refueling.'),
+                action: SnackBarAction(
+                  label: 'Undo',
+                  onPressed: () => FirebaseRefuelingBLoC().undo(),
+                ),
+              );
+              Scaffold.of(context).showSnackBar(snackbar);
+            },
           ),
         ),
       ],
