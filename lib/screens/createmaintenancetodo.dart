@@ -4,7 +4,13 @@ import 'package:intl/intl.dart';
 import 'package:autodo/blocs/todo.dart';
 import 'package:autodo/items/items.dart';
 
+enum TodoEditMode { CREATE, EDIT }
+
 class CreateTodoScreen extends StatefulWidget {
+  final TodoEditMode mode;
+  final MaintenanceTodoItem existing;
+  CreateTodoScreen({@required this.mode, this.existing});
+
   @override
   CreateTodoScreenState createState() => CreateTodoScreenState();
 }
@@ -12,21 +18,22 @@ class CreateTodoScreen extends StatefulWidget {
 class CreateTodoScreenState extends State<CreateTodoScreen> {
   DateTime selectedDate = DateTime.now();
   FocusNode focusNode;
-  MaintenanceTodoItem todoItem = MaintenanceTodoItem.empty();
+  MaintenanceTodoItem todoItem;
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
+    todoItem = (widget.mode == TodoEditMode.EDIT)
+        ? widget.existing
+        : MaintenanceTodoItem.empty();
     focusNode = FocusNode();
-    // todoItem = MaintenanceTodoItem();
   }
 
   @override
   void dispose() {
     // Clean up the focus node when the Form is disposed.
     focusNode.dispose();
-
     super.dispose();
   }
 
@@ -109,6 +116,9 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
                         contentPadding: EdgeInsets.only(
                             left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
                       ),
+                      initialValue: (widget.mode == TodoEditMode.EDIT)
+                          ? widget.existing.name.toString()
+                          : '',
                       autofocus: true,
                       style: TextStyle(
                         fontSize: 22.0,
@@ -189,6 +199,9 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
                             left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
                       ),
                       // controller: listNameController,
+                      initialValue: (widget.mode == TodoEditMode.EDIT)
+                          ? widget.existing.dueMileage.toString()
+                          : '',
                       autofocus: true,
                       style: TextStyle(
                         fontSize: 22.0,
@@ -220,9 +233,10 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
                       onPressed: () {
                         if (_formKey.currentState.validate()) {
                           _formKey.currentState.save();
-
-                          FirebaseTodoBLoC().push(todoItem);
-
+                          if (widget.mode == TodoEditMode.CREATE)
+                            FirebaseTodoBLoC().push(todoItem);
+                          else
+                            FirebaseTodoBLoC().edit(todoItem);
                           Navigator.of(context).pop();
                         }
                       },

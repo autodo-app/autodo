@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MaintenanceTodoItem {
-  String name;
+  String name, ref;
   DateTime dueDate;
   int dueMileage;
   bool complete = false;
   List<String> tags = ['Example Tag'];
   DocumentReference reference;
 
-  MaintenanceTodoItem({@required this.name, this.dueDate, this.dueMileage});
+  MaintenanceTodoItem(
+      {@required this.ref, @required this.name, this.dueDate, this.dueMileage});
 
   MaintenanceTodoItem.empty();
 
@@ -31,7 +32,7 @@ class MaintenanceTodoItem {
   MaintenanceTodoItem.fromSnapshot(DocumentSnapshot snapshot)
       : this.fromMap(snapshot.data, reference: snapshot.reference);
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJSON() {
     return {
       'name': this.name,
       'dueDate': this.dueDate,

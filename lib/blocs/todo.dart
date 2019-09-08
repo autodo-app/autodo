@@ -1,22 +1,31 @@
-import 'dart:async';
+import 'package:autodo/blocs/userauth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:autodo/items/items.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/maintenance/todocard.dart';
 
 class FirebaseTodoBLoC {
+  final Firestore _db = Firestore.instance;
+
   Widget _buildItem(BuildContext context, DocumentSnapshot snapshot) {
     var name = snapshot.data['name'];
     var date = snapshot.data['dueDate'].toDate();
     var mileage = snapshot.data['dueMileage'];
-    var item =
-        MaintenanceTodoItem(name: name, dueDate: date, dueMileage: mileage);
+    var item = MaintenanceTodoItem(
+        ref: snapshot.documentID,
+        name: name,
+        dueDate: date,
+        dueMileage: mileage);
     return MaintenanceTodoCard(item: item);
   }
 
   StreamBuilder buildList(BuildContext context) {
     return StreamBuilder(
-      stream: Firestore.instance.collection('todos').snapshots(),
+      stream: _db
+          .collection('users')
+          .document(Auth().getCurrentUser())
+          .collection('todos')
+          .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return const Text('Loading...');
         return ListView.builder(
@@ -29,29 +38,27 @@ class FirebaseTodoBLoC {
   }
 
   void push(MaintenanceTodoItem item) {
-    Firestore.instance.runTransaction((transaction) async {
-      // DocumentSnapshot freshSnap = await transaction.get(item.reference);
-
+    _db.runTransaction((transaction) async {
       // creates a new unique identifier for the item
-      DocumentReference ref = Firestore.instance.collection('todos').document(
-          item.name.toString() +
-              item.dueDate.toString() +
-              item.dueMileage.toString());
-      await transaction.set(ref, {
-        'name': item.name,
-        'dueDate': item.dueDate,
-        'dueMileage': item.dueMileage
-      });
+      DocumentReference ref = await _db
+          .collection('users')
+          .document(Auth().getCurrentUser())
+          .collection('todos')
+          .add(item.toJSON());
+      item.ref = ref.documentID;
+      await transaction.set(ref, item.toJSON());
     });
   }
 
-  void transact() {
-    MaintenanceTodoItem item; // todo: replace this with an actual item
-    Firestore.instance.runTransaction((transaction) async {
-      DocumentSnapshot freshSnap = await transaction.get(item.reference);
-      await transaction.update(freshSnap.reference, {
-        'name': freshSnap['name'] + 'suffix',
-      });
+  void edit(MaintenanceTodoItem item) {
+    _db.runTransaction((transaction) async {
+      // Grab the item's existing identifier
+      DocumentReference ref = _db
+          .collection('users')
+          .document(Auth().getCurrentUser())
+          .collection('todos')
+          .document(item.ref);
+      await transaction.update(ref, item.toJSON());
     });
   }
 
@@ -62,42 +69,3 @@ class FirebaseTodoBLoC {
   }
   FirebaseTodoBLoC._internal() {}
 }
-
-class TodoBLoC {
-  StreamController<MaintenanceTodoItem> ctrl;
-  final DocumentReference postRef = Firestore.instance.document('todos');
-
-  void push(MaintenanceTodoItem item) {
-    ctrl.sink.add;
-    // Firestore.instance.runTransaction((transaction) async {
-    //   await transaction.set(item.reference, item.toMap());
-    //   // final freshSnapshot = await transaction.get(item.reference);
-    //   // final fresh = MaintenanceTodoItem.fromSnapshot(freshSnapshot);
-
-    //   // await transaction.update(item.reference, {'votes': fresh.votes + 1});
-    // });
-  }
-
-  pushNew(String name, int mileage, DateTime date) {
-    var item =
-        MaintenanceTodoItem(name: name, dueDate: date, dueMileage: mileage);
-    push(item);
-  }
-
-  Stream<MaintenanceTodoItem> get stream => ctrl.stream;
-
-  // Make the object a Singleton
-  static final TodoBLoC _bloc = new TodoBLoC._internal();
-  factory TodoBLoC() {
-    return _bloc;
-  }
-  TodoBLoC._internal() {
-    ctrl = StreamController<MaintenanceTodoItem>.broadcast();
-  }
-
-  dispose() {
-    ctrl.close();
-  }
-}
-
-TodoBLoC todoBLoC = TodoBLoC();

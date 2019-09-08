@@ -12,11 +12,7 @@ class FirebaseRefuelingBLoC {
     var cost = snapshot.data['cost'].toDouble();
     var amount = snapshot.data['amount'].toDouble();
     var item = RefuelingItem(
-        ref: snapshot.documentID,
-        uuid: Auth().getCurrentUser(),
-        odom: odom,
-        cost: cost,
-        amount: amount);
+        ref: snapshot.documentID, odom: odom, cost: cost, amount: amount);
     return RefuelingCard(item: item);
   }
 

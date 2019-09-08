@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:autodo/items/items.dart';
 import 'package:intl/intl.dart';
+import 'package:autodo/screens/screens.dart';
 
 class MaintenanceTodoCard extends StatefulWidget {
   final MaintenanceTodoItem item;
-
-  MaintenanceTodoCard({
-    @required this.item,
-  });
+  MaintenanceTodoCard({@required this.item});
 
   @override
   State<MaintenanceTodoCard> createState() {
@@ -147,7 +145,15 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
           ),
           child: FlatButton(
             child: const Icon(Icons.edit),
-            onPressed: () {},
+            onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CreateTodoScreen(
+                          mode: TodoEditMode.EDIT,
+                          existing: widget.item,
+                        ),
+                  ),
+                ),
           ),
         ),
         ButtonTheme.fromButtonThemeData(

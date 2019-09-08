@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class RefuelingItem {
-  String ref, uuid;
+  String ref;
   DateTime date;
   int odom;
   double cost, amount, mpg = double.infinity, costpergal = double.infinity;
@@ -9,7 +9,6 @@ class RefuelingItem {
 
   RefuelingItem(
       {@required this.ref,
-      @required this.uuid,
       @required this.odom,
       @required this.cost,
       @required this.amount}) {
