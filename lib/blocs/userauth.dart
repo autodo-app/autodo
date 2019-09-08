@@ -1,23 +1,37 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
-// import './localstorage.dart';
 
 abstract class BaseAuth {
   Future<String> signIn(String email, String password);
   Future<String> signUp(String email, String password);
-  Future<String> getCurrentUser();
+  // Future<String> getCurrentUser();
+  String getCurrentUser();
   Future<void> signOut();
 }
 
 class Auth implements BaseAuth {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final Firestore _db = Firestore.instance;
+  String currentUser = "", currentUserName = "NO_USER_DATA";
+
+  Future<void> _createUserDocument() async {
+    await _db.runTransaction((transaction) async {
+      DocumentReference ref = _db.collection('users').document(currentUser);
+      await transaction.set(ref, Map<String, Object>());
+    });
+  }
 
   Future<String> signIn(String email, String password) async {
     AuthResult res = await _firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
     FirebaseUser user = res.user;
     // if (user.uid != null) LocalStorage.save("uuid", user.uid);
+    currentUser = user.uid;
+    // currentUserName = user.displayName == "" ? user.email : user.displayName;
+    currentUserName = user.email;
+    await _createUserDocument();
     return user.uid;
   }
 
@@ -26,6 +40,9 @@ class Auth implements BaseAuth {
     try {
       res = await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
+      currentUser = res.user.uid;
+      currentUserName = res.user.email;
+      await _createUserDocument();
     } on PlatformException {
       print(
           "PlatformException: Cannot create a user with an email that already exists");
@@ -37,23 +54,27 @@ class Auth implements BaseAuth {
     return user.uid;
   }
 
-  Future<String> getCurrentUser() async {
-    FirebaseUser user = await _firebaseAuth.currentUser();
-    if (user != null) return user.uid;
-    return "NO_USER";
+  String getCurrentUser() {
+    return currentUser;
   }
 
   Future<String> getCurrentUserName() async {
-    FirebaseUser user = await _firebaseAuth.currentUser();
-    if (user != null && user.displayName != "")
-      return user.displayName;
-    else if (user != null) return user.email;
-    return "NO_USER";
+    // FirebaseUser user = await _firebaseAuth.currentUser();
+    // if (user != null && user.displayName != "")
+    //   return user.displayName;
+    // else if (user != null) return user.email;
+    // return "NO_USER";
+    return currentUserName;
   }
 
   Future<void> signOut() async {
     return _firebaseAuth.signOut();
   }
-}
 
-Auth globalAuth = Auth();
+  // Make the object a Singleton
+  static final Auth _auth = Auth._internal();
+  factory Auth() {
+    return _auth;
+  }
+  Auth._internal();
+}

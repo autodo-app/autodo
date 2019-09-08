@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:autodo/items/items.dart';
 import 'package:intl/intl.dart';
+import 'package:autodo/screens/screens.dart';
 
 class RefuelingCard extends StatefulWidget {
   final RefuelingItem item;
@@ -224,7 +225,15 @@ class RefuelingCardState extends State<RefuelingCard> {
           ),
           child: FlatButton(
             child: const Icon(Icons.edit),
-            onPressed: () {},
+            onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CreateRefuelingScreen(
+                          mode: RefuelingEditMode.EDIT,
+                          existing: widget.item,
+                        ),
+                  ),
+                ),
           ),
         ),
         ButtonTheme.fromButtonThemeData(
@@ -252,7 +261,6 @@ class RefuelingCardState extends State<RefuelingCard> {
 
   @override
   Widget build(BuildContext context) {
-    print(expanded);
     return Padding(
       padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 0.0),
       child: InkWell(

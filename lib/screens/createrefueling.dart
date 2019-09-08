@@ -4,7 +4,13 @@ import 'package:intl/intl.dart';
 import 'package:autodo/blocs/refueling.dart';
 import 'package:autodo/items/items.dart';
 
+enum RefuelingEditMode { CREATE, EDIT }
+
 class CreateRefuelingScreen extends StatefulWidget {
+  final RefuelingEditMode mode;
+  final RefuelingItem existing;
+  CreateRefuelingScreen({@required this.mode, this.existing});
+
   @override
   CreateRefuelingScreenState createState() => CreateRefuelingScreenState();
 }
@@ -19,7 +25,6 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
   void initState() {
     super.initState();
     focusNode = FocusNode();
-    // todoItem = MaintenanceTodoItem();
   }
 
   @override
@@ -116,6 +121,9 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                       ),
                       // controller: listNameController,
                       autofocus: true,
+                      initialValue: (widget.mode == RefuelingEditMode.EDIT)
+                          ? widget.existing.odom
+                          : '',
                       style: TextStyle(
                         fontSize: 22.0,
                         color: Colors.black,
@@ -146,6 +154,9 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                             left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
                       ),
                       // controller: listNameController,
+                      initialValue: (widget.mode == RefuelingEditMode.EDIT)
+                          ? widget.existing.amount
+                          : '',
                       autofocus: true,
                       style: TextStyle(
                         fontSize: 22.0,
@@ -177,6 +188,9 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                             left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
                       ),
                       // controller: listNameController,
+                      initialValue: (widget.mode == RefuelingEditMode.EDIT)
+                          ? widget.existing.cost
+                          : '',
                       autofocus: true,
                       style: TextStyle(
                         fontSize: 22.0,
@@ -222,6 +236,9 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                             fontWeight: FontWeight.w500,
                           ),
                           controller: _controller,
+                          // initialValue: (widget.mode == RefuelingEditMode.EDIT)
+                          //     ? widget.existing.date
+                          //     : '',
                           keyboardType: TextInputType.datetime,
                           validator: (val) =>
                               isValidDob(val) ? null : 'Not a valid date',
@@ -258,10 +275,7 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                       onPressed: () {
                         if (_formKey.currentState.validate()) {
                           _formKey.currentState.save();
-
-                          // refuelingBLoC.push(refuelingItem);
                           FirebaseRefuelingBLoC().push(refuelingItem);
-
                           Navigator.of(context).pop();
                         }
                       },

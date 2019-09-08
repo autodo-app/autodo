@@ -84,7 +84,7 @@ class NavDrawerState extends State<NavDrawer> {
                 child: DrawerHeader(
                   // child: Text('User information here?'),
                   child: FutureBuilder<String>(
-                    future: globalAuth.getCurrentUserName(),
+                    future: Auth().getCurrentUserName(),
                     builder:
                         (BuildContext context, AsyncSnapshot<String> snapshot) {
                       switch (snapshot.connectionState) {

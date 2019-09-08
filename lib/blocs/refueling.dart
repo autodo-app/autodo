@@ -1,21 +1,33 @@
-import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/refueling/refuelingcard.dart';
 import 'package:autodo/items/items.dart';
+import 'package:autodo/blocs/userauth.dart';
 
 class FirebaseRefuelingBLoC {
+  final Firestore _db = Firestore.instance;
+
   Widget _buildItem(BuildContext context, DocumentSnapshot snapshot) {
+    print(snapshot.documentID);
     var odom = snapshot.data['odom'].toInt();
     var cost = snapshot.data['cost'].toDouble();
     var amount = snapshot.data['amount'].toDouble();
-    var item = RefuelingItem(odom: odom, cost: cost, amount: amount);
+    var item = RefuelingItem(
+        key: snapshot.documentID,
+        uuid: Auth().getCurrentUser(),
+        odom: odom,
+        cost: cost,
+        amount: amount);
     return RefuelingCard(item: item);
   }
 
   StreamBuilder buildList(BuildContext context) {
     return StreamBuilder(
-      stream: Firestore.instance.collection('refuelings').snapshots(),
+      stream: Firestore.instance
+          .collection('users')
+          .document(Auth().getCurrentUser())
+          .collection('refuelings')
+          .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return const Text('Loading...');
         return ListView.builder(
@@ -28,17 +40,16 @@ class FirebaseRefuelingBLoC {
   }
 
   void push(RefuelingItem item) {
-    Firestore.instance.runTransaction((transaction) async {
-      // DocumentSnapshot freshSnap = await transaction.get(item.reference);
-
+    _db.runTransaction((transaction) async {
       // creates a new unique identifier for the item
-      DocumentReference ref = Firestore.instance
+      DocumentReference ref = await _db
+          .collection('users')
+          .document(Auth().getCurrentUser())
           .collection('refuelings')
-          .document(item.odom.toString() +
-              item.cost.toString() +
-              item.amount.toString());
-      await transaction.set(
-          ref, {'odom': item.odom, 'cost': item.cost, 'amount': item.amount});
+          .add(item.toJSON());
+      item.key = ref.documentID;
+      // Firestore.instance.collection('refuelings').document(item.toString());
+      await transaction.set(ref, item.toJSON());
     });
   }
 
@@ -47,28 +58,5 @@ class FirebaseRefuelingBLoC {
   factory FirebaseRefuelingBLoC() {
     return _bloc;
   }
-  FirebaseRefuelingBLoC._internal() {}
+  FirebaseRefuelingBLoC._internal();
 }
-
-class RefuelingBLoC {
-  StreamController<RefuelingItem> ctrl;
-
-  Function(RefuelingItem) get push => ctrl.sink.add;
-
-  Stream<RefuelingItem> get stream => ctrl.stream;
-
-  // Make the object a Singleton
-  static final RefuelingBLoC _bloc = new RefuelingBLoC._internal();
-  factory RefuelingBLoC() {
-    return _bloc;
-  }
-  RefuelingBLoC._internal() {
-    ctrl = StreamController<RefuelingItem>.broadcast();
-  }
-
-  dispose() {
-    ctrl.close();
-  }
-}
-
-RefuelingBLoC refuelingBLoC = RefuelingBLoC();

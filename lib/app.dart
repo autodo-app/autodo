@@ -27,7 +27,8 @@ class AutodoAppState extends State<AutodoApp> {
             ),
         '/signuppage': (context) => SignInScreen(formMode: FormMode.SIGNUP),
         '/createTodo': (context) => CreateTodoScreen(),
-        '/createRefueling': (context) => CreateRefuelingScreen(),
+        '/createRefueling': (context) =>
+            CreateRefuelingScreen(mode: RefuelingEditMode.CREATE),
         '/settings': (context) => SettingsScreen(),
         '/statistics': (context) => StatisticsScreen(),
         '/editcarlist': (context) => EditCarListScreen(),
