@@ -24,6 +24,7 @@ class Auth implements BaseAuth {
   }
 
   Future<String> signIn(String email, String password) async {
+    print("here");
     AuthResult res = await _firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
     FirebaseUser user = res.user;
@@ -59,8 +60,8 @@ class Auth implements BaseAuth {
 
   Future<String> fetchUser() async {
     FirebaseUser user = await _firebaseAuth.currentUser();
-    currentUser = user.uid;
     if (user == null) return "NO_USER";
+    currentUser = user.uid;
     return user.uid;
   }
 

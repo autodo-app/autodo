@@ -15,8 +15,8 @@ class AutodoAppState extends State<AutodoApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       // theme: ThemeData.dark(),
-      title: 'auToDo',
       initialRoute: '/load',
+      title: 'auToDo',
       routes: {
         '/': (context) => HomeScreen(),
         '/refuelinghistory': (context) => RefuelingHistory(),

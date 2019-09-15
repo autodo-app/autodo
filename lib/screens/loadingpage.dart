@@ -16,6 +16,7 @@ class LoadingPageState extends State<LoadingPage> {
 
   Future<Null> loadingSequence() async {
     String uuid = await Auth().fetchUser();
+    print(uuid);
     if (uuid == "NO_USER")
       Navigator.pushNamed(context, '/loginpage');
     else
