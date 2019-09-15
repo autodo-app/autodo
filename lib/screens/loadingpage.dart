@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:autodo/blocs/userauth.dart';
+import 'package:autodo/blocs/repeating.dart';
 
 class LoadingPage extends StatefulWidget {
   @override
@@ -16,11 +17,12 @@ class LoadingPageState extends State<LoadingPage> {
 
   Future<Null> loadingSequence() async {
     String uuid = await Auth().fetchUser();
-    print(uuid);
-    if (uuid == "NO_USER")
+    if (uuid == "NO_USER") {
       Navigator.pushNamed(context, '/loginpage');
-    else
+    } else {
+      await RepeatingBLoC().updateUpcomingTodos();
       Navigator.pushNamed(context, '/');
+    }
   }
 
   @override

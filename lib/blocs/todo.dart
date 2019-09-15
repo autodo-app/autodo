@@ -10,7 +10,9 @@ class FirebaseTodoBLoC {
 
   Widget _buildItem(BuildContext context, DocumentSnapshot snapshot) {
     var name = snapshot.data['name'];
-    var date = snapshot.data['dueDate'].toDate();
+    var date;
+    if (snapshot.data.containsKey('dueDate') && snapshot.data['dueDate'] != null)
+      date = snapshot.data['dueDate'].toDate();
     var mileage = snapshot.data['dueMileage'];
     var item = MaintenanceTodoItem(
         ref: snapshot.documentID,

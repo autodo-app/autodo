@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MaintenanceTodoItem {
   String name, ref;
-  DateTime dueDate;
+  DateTime dueDate, completeDate;
   int dueMileage;
   bool complete = false;
   List<String> tags = ['Example Tag'];
@@ -26,6 +26,9 @@ class MaintenanceTodoItem {
     if (map['complete'] != null) {
       complete = map['complete'];
     }
+    if (map['completeDate'] != null) {
+      completeDate = map['completeDate'];
+    }
     tags = map['tags'];
   }
 
@@ -36,6 +39,7 @@ class MaintenanceTodoItem {
     return {
       'name': this.name,
       'dueDate': this.dueDate,
+      'completeDate': this.completeDate,
       'dueMileage': this.dueMileage,
       'complete': this.complete,
       'tags': this.tags
