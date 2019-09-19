@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:autodo/refueling/refuelingcard.dart';
 import 'package:autodo/items/items.dart';
 import 'package:autodo/blocs/userauth.dart';
+import 'dart:collection';
 
 const Map<String, dynamic> defaults = {
   "oil": 3500,
@@ -43,6 +44,12 @@ class RepeatingBLoC {
   /// }
   Map<String, Map<String, dynamic>> upcomingRepeatTodos = Map();
   Map<String, Map<String, dynamic>> latestCompletedRepeatTodos = Map();
+
+  /// Kudos to the SO post here:
+  /// https://stackoverflow.com/questions/50875873/sort-maps-in-dart-by-key-or-by-value
+  Map<String, dynamic> orderedRepeats() {
+    return SplayTreeMap.from(repeats, (a, b) => repeats[a].compareTo(repeats[b]));
+  }
 
   /// Checks to see if the user has repeat intervals in their db collection
   /// If not, push the defaults

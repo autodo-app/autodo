@@ -18,9 +18,6 @@ class NavDrawerState extends State<NavDrawer> {
   ];
   static Random rand = Random();
 
-  // TODO: add an entry for the home page
-  // TODO: add a blank page for the statistics and edit car list;
-
   Widget userHeader(String username) {
     return Align(
       alignment: Alignment.centerLeft,
@@ -64,6 +61,10 @@ class NavDrawerState extends State<NavDrawer> {
         onPressed: () => Navigator.pushNamed(context, '/statistics'),
       ),
       Divider(),
+      FlatButton(
+        child: Text('Edit Repeating ToDos'),
+        onPressed: () => Navigator.pushNamed(context, '/editrepeats'),
+      ),
       FlatButton(
         child: Text('Edit Car List'),
         onPressed: () => Navigator.pushNamed(context, '/editcarlist'),
