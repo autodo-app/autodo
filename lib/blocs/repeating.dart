@@ -1,11 +1,10 @@
 import 'package:autodo/blocs/todo.dart';
 import 'package:autodo/blocs/carstats.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:autodo/refueling/refuelingcard.dart';
 import 'package:autodo/items/items.dart';
 import 'package:autodo/blocs/userauth.dart';
 import 'dart:collection';
+import 'package:autodo/blocs/firestore.dart';
 
 const Map<String, dynamic> defaults = {
   "oil": 3500,
@@ -27,10 +26,6 @@ const Map<String, dynamic> defaults = {
 
 class RepeatingBLoC {
   static final Firestore _db = Firestore.instance;
-  static final CollectionReference todosCollection = _db
-      .collection('users')
-      .document(Auth().getCurrentUser())
-      .collection('todos');
 
   Map<String, dynamic> repeats = defaults;
   /// Maps containing the related tasks for each repeating task type.
@@ -56,9 +51,8 @@ class RepeatingBLoC {
   Future<void> checkRepeats() async {
     // Determine if the repeating intervals are saved in the user's data
     // Currently hard-coded to have one car named default
-    DocumentSnapshot snap = await _db
-        .collection('users')
-        .document(Auth().getCurrentUser())
+    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    DocumentSnapshot snap = await userDoc
         .collection('repeats')
         .document('default')
         .get();
@@ -72,7 +66,9 @@ class RepeatingBLoC {
   /// Finds a Map of the last completed todo in the repeating
   /// task categories.
   Future<void> findLatestCompletedTodos() async {
-    Query completes = todosCollection
+    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    Query completes = userDoc
+                        .collection('todos')
                         .where("complete", isEqualTo: true)
                         .orderBy("completeDate");
     QuerySnapshot docs = await completes.getDocuments();
@@ -90,7 +86,9 @@ class RepeatingBLoC {
   /// Finds a Map of upcoming todo items in the repeating
   /// task categories.
   Future<void> findUpcomingRepeatTodos() async {
-    Query completes = todosCollection.where("complete", isEqualTo: false).orderBy("completeDate");
+    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    Query completes = userDoc
+                        .collection('todos').where("complete", isEqualTo: false).orderBy("completeDate");
     QuerySnapshot docs = await completes.getDocuments();
     List<DocumentSnapshot> snaps = docs.documents;
 
@@ -139,19 +137,19 @@ class RepeatingBLoC {
   void pushRepeats(String carName, Map<String, dynamic> repeat) {
     _db.runTransaction((transaction) async {
       // creates a new unique identifier for the item
-      DocumentReference ref = _db
-          .collection('users')
-          .document(Auth().getCurrentUser())
+      DocumentReference doc = await FirestoreBLoC.fetchUserDocument();
+      DocumentReference ref = doc
           .collection('repeats')
           .document(carName);
       await transaction.set(ref, repeats);
     });
   }
 
-  void pushNewTodo(String carName, String taskName, int dueMileage) {
+  void pushNewTodo(String carName, String taskName, int dueMileage) async {
     MaintenanceTodoItem newTodo = MaintenanceTodoItem.empty();
     newTodo.name = taskName;
     newTodo.dueMileage = dueMileage;
+    await Auth().fetchUser();
     FirebaseTodoBLoC().push(newTodo);
   }
 

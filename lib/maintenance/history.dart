@@ -16,8 +16,12 @@ class MaintenanceHistoryState extends State<MaintenanceHistory> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    if (fb.isLoading()) {
+      return Center(child: CircularProgressIndicator(),);
+    } else {
+      return Container(
       child: fb.buildList(context),
     );
+    }
   }
 }

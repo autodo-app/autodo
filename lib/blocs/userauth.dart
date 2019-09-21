@@ -9,6 +9,7 @@ abstract class BaseAuth {
   // Future<String> getCurrentUser();
   String getCurrentUser();
   Future<void> signOut();
+  bool isLoading();
 }
 
 class Auth implements BaseAuth {
@@ -76,6 +77,11 @@ class Auth implements BaseAuth {
 
   Future<void> signOut() async {
     return _firebaseAuth.signOut();
+  }
+
+  bool isLoading() {
+    if (getCurrentUser() == '') return true;
+    else return false;
   }
 
   // Make the object a Singleton

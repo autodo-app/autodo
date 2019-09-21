@@ -1,8 +1,8 @@
+import 'package:autodo/blocs/firestore.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/refueling/refuelingcard.dart';
 import 'package:autodo/items/items.dart';
-import 'package:autodo/blocs/userauth.dart';
 
 class FirebaseRefuelingBLoC {
   final Firestore _db = Firestore.instance;
@@ -18,10 +18,9 @@ class FirebaseRefuelingBLoC {
   }
 
   StreamBuilder buildList(BuildContext context) {
+    if (FirestoreBLoC.isLoading()) return StreamBuilder();
     return StreamBuilder(
-      stream: Firestore.instance
-          .collection('users')
-          .document(Auth().getCurrentUser())
+      stream: FirestoreBLoC.getUserDocument()
           .collection('refuelings')
           .snapshots(),
       builder: (context, snapshot) {
@@ -38,9 +37,8 @@ class FirebaseRefuelingBLoC {
   void push(RefuelingItem item) {
     _db.runTransaction((transaction) async {
       // creates a new unique identifier for the item
-      DocumentReference ref = await _db
-          .collection('users')
-          .document(Auth().getCurrentUser())
+      DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+      DocumentReference ref = await userDoc
           .collection('refuelings')
           .add(item.toJSON());
       item.ref = ref.documentID;
@@ -51,9 +49,8 @@ class FirebaseRefuelingBLoC {
   void edit(RefuelingItem item) {
     _db.runTransaction((transaction) async {
       // Grab the item's existing identifier
-      DocumentReference ref = _db
-          .collection('users')
-          .document(Auth().getCurrentUser())
+      DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+      DocumentReference ref = userDoc
           .collection('refuelings')
           .document(item.ref);
       await transaction.update(ref, item.toJSON());
@@ -64,9 +61,8 @@ class FirebaseRefuelingBLoC {
     _past = item;
     _db.runTransaction((transaction) async {
       // Grab the item's existing identifier
-      DocumentReference ref = _db
-          .collection('users')
-          .document(Auth().getCurrentUser())
+      DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+      DocumentReference ref = userDoc
           .collection('refuelings')
           .document(item.ref);
       await transaction.delete(ref);
