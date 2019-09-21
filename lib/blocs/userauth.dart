@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 abstract class BaseAuth {
   Future<String> signIn(String email, String password);
   Future<String> signUp(String email, String password);
-  // Future<String> getCurrentUser();
   String getCurrentUser();
   Future<void> signOut();
   bool isLoading();
