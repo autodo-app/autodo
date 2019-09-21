@@ -47,6 +47,10 @@ class FirebaseTodoBLoC {
       DocumentReference ref = await userDoc
           .collection('todos')
           .add(item.toJSON());
+      if (ref == null) {
+        print("Error, push failed");
+        return;
+      }
       item.ref = ref.documentID;
       await transaction.set(ref, item.toJSON());
     });

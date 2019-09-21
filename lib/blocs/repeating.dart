@@ -5,29 +5,32 @@ import 'package:autodo/items/items.dart';
 import 'package:autodo/blocs/userauth.dart';
 import 'dart:collection';
 import 'package:autodo/blocs/firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:autodo/items/repeateditor.dart';
+import 'package:autodo/items/repeat.dart';
 
-const Map<String, dynamic> defaults = {
-  "oil": 3500,
-  "tireRotation": 7500,
-  "engineFilter": 45000,
-  "wiperBlades": 30000,
-  "alignmentCheck": 40000,
-  "cabinFilter": 45000,
-  "tires": 50000,
-  "brakes": 60000,
-  "sparkPlugs": 60000,
-  "frontStruts": 75000,
-  "rearStruts": 75000,
-  "battery": 75000,
-  "serpentineBelt": 150000,
-  "transmissionFluid": 100000,
-  "coolantChange": 100000
-};
+List<Repeat> defaults = [
+  Repeat("oil", 3500),
+  Repeat("tireRotation", 7500),
+  Repeat("engineFilter", 45000),
+  Repeat("wiperBlades", 30000),
+  Repeat("alignmentCheck", 40000),
+  Repeat("cabinFilter", 45000),
+  Repeat("tires", 50000),
+  Repeat("brakes", 60000),
+  Repeat("sparkPlugs", 60000),
+  Repeat("frontStruts", 75000),
+  Repeat("rearStruts", 75000),
+  Repeat("battery", 75000),
+  Repeat("serpentineBelt", 150000),
+  Repeat("transmissionFluid", 100000),
+  Repeat("coolantChange", 100000)
+];
 
 class RepeatingBLoC {
   static final Firestore _db = Firestore.instance;
-
-  Map<String, dynamic> repeats = defaults;
+  Repeat _past;
+  List<Repeat> repeats = defaults;
   /// Maps containing the related tasks for each repeating task type.
   /// Example Map:
   /// "repeatKey": {
@@ -42,8 +45,57 @@ class RepeatingBLoC {
 
   /// Kudos to the SO post here:
   /// https://stackoverflow.com/questions/50875873/sort-maps-in-dart-by-key-or-by-value
-  Map<String, dynamic> orderedRepeats() {
-    return SplayTreeMap.from(repeats, (a, b) => repeats[a].compareTo(repeats[b]));
+  // Map<String, dynamic> orderedRepeats() {
+  //   return SplayTreeMap.from(repeats, (a, b) => repeats[a].compareTo(repeats[b]));
+  // }
+
+  Widget _buildItem(BuildContext context, DocumentSnapshot snapshot) {
+    print(snapshot.data);
+    return RepeatEditor(item: Repeat.fromJSON(snapshot.data));
+  }
+
+  StreamBuilder buildList(BuildContext context) {
+    if (FirestoreBLoC.isLoading()) return StreamBuilder();
+    return StreamBuilder(
+      stream: FirestoreBLoC.getUserDocument()
+          .collection('repeats')
+          .document('default')
+          .collection('repeats')
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return const Text('Loading...');
+        print(snapshot.data.documents);
+        return ListView.builder(
+          itemCount: snapshot.data.documents.length,
+          itemBuilder: (context, index) =>
+              _buildItem(context, snapshot.data.documents[index]),
+        );
+      },
+    );
+  }
+
+  List<Repeat> _convertDocuments(List<DocumentSnapshot> docs) {
+    List<Repeat> out = [];
+    docs.forEach((doc) {
+      out.add(Repeat(
+          doc.data['name'], 
+          doc.data['interval'], 
+          ref: doc.documentID,
+        ),
+      );
+    });
+    return out;
+  }
+
+  bool _keyInRepeats(String key) {
+    var out = false;
+    repeats.forEach((repeat) {
+      if (repeat.name == key) {
+        out = true;
+        return;
+      }
+    });
+    return out; 
   }
 
   /// Checks to see if the user has repeat intervals in their db collection
@@ -52,13 +104,18 @@ class RepeatingBLoC {
     // Determine if the repeating intervals are saved in the user's data
     // Currently hard-coded to have one car named default
     DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
-    DocumentSnapshot snap = await userDoc
+    QuerySnapshot snap = await userDoc
         .collection('repeats')
         .document('default')
-        .get();
-    if (snap.data != null) {
-      repeats = snap.data;
+        .collection('repeats')
+        .getDocuments();
+    List<DocumentSnapshot> docs = snap.documents;
+    print(docs);
+    if (docs.isNotEmpty) {
+      print('there');
+      repeats = _convertDocuments(docs);
     } else {
+      print('here');
       pushRepeats('default', repeats);
     }
   }
@@ -76,7 +133,7 @@ class RepeatingBLoC {
 
     snaps.forEach((snap) {
       String taskType = snap.data['repeatingType'];
-      if (!repeats.containsKey(taskType))
+      if (!_keyInRepeats(taskType))
         return;
       if (!latestCompletedRepeatTodos.containsKey(taskType))
         latestCompletedRepeatTodos[taskType] = snap.data;
@@ -94,7 +151,7 @@ class RepeatingBLoC {
 
     snaps.forEach((snap) {
       String taskType = snap.data['repeatingType'];
-      if (!repeats.containsKey(taskType))
+      if (!_keyInRepeats(taskType))
         return;
       if (!upcomingRepeatTodos.containsKey(taskType))
         upcomingRepeatTodos[taskType] = snap.data;
@@ -106,17 +163,18 @@ class RepeatingBLoC {
   // if not, find the interval for the todo and add that to the mileage where the completed todo ocurred
   // create new todo with that information
   Future<void> updateUpcomingTodos() async {
+    await checkRepeats();
     await findLatestCompletedTodos();
     await findUpcomingRepeatTodos();
 
-    repeats.forEach((name, interval) {
+    repeats.forEach((repeat) {
       // Check if the upcoming ToDo for this category already exists
-      if (!upcomingRepeatTodos.containsKey(name)) {
-        int newDueMileage = interval;
-        if (latestCompletedRepeatTodos.keys.contains(name)) {
+      if (!upcomingRepeatTodos.containsKey(repeat.name)) {
+        int newDueMileage = repeat.interval;
+        if (latestCompletedRepeatTodos.keys.contains(repeat.name)) {
           // If a ToDo in this category has already been completed, use that as
           // the base for extrapolating the dueMileage for the new ToDo
-          newDueMileage += latestCompletedRepeatTodos[name]['completedMileage'];
+          newDueMileage += latestCompletedRepeatTodos[repeat.name]['completedMileage'];
         } else if (newDueMileage > CarStatsBLoC().getCurrentMileage()) {
           // Add the repeat interval to the car's current mileage if the small
           // interval and high mileage makes it seem unlikely that the car
@@ -124,7 +182,7 @@ class RepeatingBLoC {
           // TODO: referenced in #36
           newDueMileage += CarStatsBLoC().getCurrentMileage();
         }
-        pushNewTodo('default', name, newDueMileage);
+        pushNewTodo('default', repeat.name, newDueMileage);
       }
     });
   }
@@ -134,14 +192,19 @@ class RepeatingBLoC {
     // add in any maintenance todo items that aren't included in the repeating set here
   }
 
-  void pushRepeats(String carName, Map<String, dynamic> repeat) {
-    _db.runTransaction((transaction) async {
+  Future<void> pushRepeats(String carName, List<Repeat> repeats) async {
       // creates a new unique identifier for the item
       DocumentReference doc = await FirestoreBLoC.fetchUserDocument();
-      DocumentReference ref = doc
-          .collection('repeats')
-          .document(carName);
-      await transaction.set(ref, repeats);
+      repeats.forEach( (repeat) async {
+        _db.runTransaction((transaction) async {
+          DocumentReference ref = await doc
+            .collection('repeats')
+            .document(carName)
+            .collection('repeats')
+            .add(repeat.toJSON());
+          await transaction.set(ref, repeat.toJSON());
+        }
+      );
     });
   }
 
@@ -151,6 +214,23 @@ class RepeatingBLoC {
     newTodo.dueMileage = dueMileage;
     await Auth().fetchUser();
     FirebaseTodoBLoC().push(newTodo);
+  }
+
+  void delete(Repeat repeat) {
+    _past = repeat;
+    _db.runTransaction((transaction) async {
+      // Grab the item's existing identifier
+      DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+      DocumentReference ref = userDoc
+          .collection('repeats')
+          .document('default');
+      await transaction.delete(ref);
+    });
+  }
+
+  void undo() {
+    if (_past != null) pushRepeats('default', [_past]);
+    _past = null;
   }
 
   // Make the object a Singleton
