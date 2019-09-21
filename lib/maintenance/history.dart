@@ -17,6 +17,7 @@ class MaintenanceHistoryState extends State<MaintenanceHistory> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.fromLTRB(8.0, 5.0, 8.0, 5.0),
       child: fb.buildList(context),
     );
   }

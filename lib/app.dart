@@ -3,6 +3,7 @@ import 'package:autodo/screens/editrepeats.dart';
 import 'package:autodo/screens/statistics.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/screens/screens.dart';
+import 'package:autodo/theme.dart';
 
 class AutodoApp extends StatefulWidget {
   @override
@@ -15,7 +16,7 @@ class AutodoAppState extends State<AutodoApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // theme: ThemeData.dark(),
+      theme: theme,
       initialRoute: '/load',
       title: 'auToDo',
       routes: {
