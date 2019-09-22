@@ -3,7 +3,6 @@ import 'package:autodo/blocs/carstats.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:autodo/items/items.dart';
 import 'package:autodo/blocs/userauth.dart';
-import 'dart:collection';
 import 'package:autodo/blocs/firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/items/repeateditor.dart';
@@ -49,10 +48,8 @@ class RepeatingBLoC {
   //   return SplayTreeMap.from(repeats, (a, b) => repeats[a].compareTo(repeats[b]));
   // }
 
-  Widget _buildItem(BuildContext context, DocumentSnapshot snapshot) {
-    print(snapshot.data);
-    return RepeatEditor(item: Repeat.fromJSON(snapshot.data));
-  }
+  Widget _buildItem(BuildContext context, DocumentSnapshot snapshot) => RepeatEditor(item: Repeat.fromJSON(snapshot.data, snapshot.documentID));
+
 
   StreamBuilder buildList(BuildContext context) {
     if (FirestoreBLoC.isLoading()) return StreamBuilder();
@@ -64,7 +61,6 @@ class RepeatingBLoC {
           .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return const Text('Loading...');
-        print(snapshot.data.documents);
         return ListView.builder(
           itemCount: snapshot.data.documents.length,
           itemBuilder: (context, index) =>
@@ -110,12 +106,9 @@ class RepeatingBLoC {
         .collection('repeats')
         .getDocuments();
     List<DocumentSnapshot> docs = snap.documents;
-    print(docs);
     if (docs.isNotEmpty) {
-      print('there');
       repeats = _convertDocuments(docs);
     } else {
-      print('here');
       pushRepeats('default', repeats);
     }
   }
@@ -223,7 +216,9 @@ class RepeatingBLoC {
       DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
       DocumentReference ref = userDoc
           .collection('repeats')
-          .document('default');
+          .document('default')
+          .collection('repeats')
+          .document(repeat.ref);
       await transaction.delete(ref);
     });
   }

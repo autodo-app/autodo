@@ -89,7 +89,9 @@ class EditRepeatsScreenState extends State<EditRepeatsScreen> {
           ),
           title: Text("Edit Repeated Tasks"),
         ),
-        body: RepeatingBLoC().buildList(context),
+        body: Container(
+          child: RepeatingBLoC().buildList(context),
+        ),
       ),
     );
   }
