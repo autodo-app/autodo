@@ -89,7 +89,7 @@ ThemeData theme = ThemeData(
   hintColor: mainPallette.shade800,
   errorColor: errorColor,
   toggleableActiveColor: mainPallette.shade300,
-  // fontFamily: ,
+  fontFamily: 'IBM Plex Sans',
   // textTheme: ,
   // primaryTextTheme: ,
   // accentTextTheme: ,
@@ -118,9 +118,9 @@ ThemeData theme = ThemeData(
   // colorScheme: prefix0.ColorScheme.fromSwatch(primarySwatch: mainPallette, ), // this sets a lot of defaults, avoiding for now
   // dialogTheme: ,
   // floatingActionButtonTheme: ,
-  typography: Typography(
-    platform: TargetPlatform.android, black: Typography.blackCupertino, white: Typography.whiteCupertino,
-  ),
+  // typography: Typography(
+  //   platform: TargetPlatform.android, black: Typography.blackCupertino, white: Typography.whiteCupertino,
+  // ),
   // snackBarTheme: ,
   // bottomSheetTheme: ,
   // popupMenuTheme: ,
