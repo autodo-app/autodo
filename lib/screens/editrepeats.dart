@@ -20,7 +20,12 @@ class EditRepeatsScreenState extends State<EditRepeatsScreen> {
         appBar: AppBar(
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              if (_formKey.currentState.validate()) {
+                _formKey.currentState.save();
+                Navigator.pop(context);
+              }
+            },
           ),
           title: Text("Edit Repeated Tasks"),
         ),

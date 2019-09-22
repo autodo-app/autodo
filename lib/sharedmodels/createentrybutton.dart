@@ -29,6 +29,14 @@ class CreateEntryButtonState extends State<CreateEntryButton>
     );
   }
 
+  void switchState() {
+    if (_controller.isDismissed) {
+      _controller.forward();
+    } else {
+      _controller.reverse();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Color backgroundColor = Theme.of(context).cardColor;
@@ -52,6 +60,7 @@ class CreateEntryButtonState extends State<CreateEntryButton>
               mini: true,
               child: new Icon(icons[index], color: foregroundColor),
               onPressed: () {
+                switchState();
                 if (index == 1) {
                   Navigator.pushNamed(context, '/createTodo');
                 } else if (index == 0) {
@@ -79,13 +88,7 @@ class CreateEntryButtonState extends State<CreateEntryButton>
                 );
               },
             ),
-            onPressed: () {
-              if (_controller.isDismissed) {
-                _controller.forward();
-              } else {
-                _controller.reverse();
-              }
-            },
+            onPressed: () => switchState(),
           ),
         ),
     );

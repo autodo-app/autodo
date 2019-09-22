@@ -217,6 +217,24 @@ class RepeatingBLoC {
     );
   }
 
+  Future<void> edit(Repeat item) async {
+    await _db.runTransaction((transaction) async {
+      // Grab the item's existing identifier
+      DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+      DocumentReference ref = userDoc
+          .collection('todos')
+          .document('default')
+          .collection('repeats')
+          .document(item.ref);
+      if (ref == null || item.ref == null) {
+        print('here');
+        return;
+      }
+      print(item.ref);
+      await transaction.update(ref, item.toJSON());
+    });
+  }
+
   void pushNewTodo(String carName, String taskName, int dueMileage) async {
     MaintenanceTodoItem newTodo = MaintenanceTodoItem.empty();
     newTodo.name = taskName;

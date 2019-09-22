@@ -47,12 +47,14 @@ class RepeatEditorState extends State<RepeatEditor> {
       ),
       keyboardType: TextInputType.text,
       textCapitalization: TextCapitalization.sentences,
-      validator: (value) {},
-      onSaved: (val) => setState(() {
-        if (val != null && val != '')
-          // Replace the entry for the old key with the new key
-          widget.item.name = val;
-      }),
+      validator: (val) {
+        if (val != null && val != '') return null;
+        else return "Name must not be empty";
+      },
+      onSaved: (val) {
+        widget.item.name = val;
+        // not editing the value here, going to do that in the value part
+      },
     );
   }
 
@@ -76,11 +78,23 @@ class RepeatEditorState extends State<RepeatEditor> {
       keyboardType: TextInputType.text,
       textCapitalization: TextCapitalization.sentences,
       maxLength: 6,
-      validator: (value) {},
-      onSaved: (val) => setState(() {
-        if (val != null && val != '')
-          widget.item.interval = int.parse(val);
-      }),
+      validator: (val) {
+        int interval;
+        try {
+          interval = int.parse(val);
+        } catch (e) {
+          return e;
+        }
+        if (interval == 0) {  
+          return "Interval must not be zero";
+        }
+        return null;
+      },
+      onSaved: (val) {
+        if (int.parse(val) == widget.item.interval) return;
+        widget.item.interval = int.parse(val);
+        RepeatingBLoC().edit(widget.item);
+      },
     );
   }
 
