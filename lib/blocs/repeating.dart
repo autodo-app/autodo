@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:autodo/blocs/todo.dart';
 import 'package:autodo/blocs/carstats.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -41,6 +43,8 @@ class RepeatingBLoC {
   /// }
   Map<String, Map<String, dynamic>> upcomingRepeatTodos = Map();
   Map<String, Map<String, dynamic>> latestCompletedRepeatTodos = Map();
+
+  final StreamController editStream = StreamController();
 
   /// Kudos to the SO post here:
   /// https://stackoverflow.com/questions/50875873/sort-maps-in-dart-by-key-or-by-value
@@ -217,22 +221,31 @@ class RepeatingBLoC {
     );
   }
 
-  Future<void> edit(Repeat item) async {
-    await _db.runTransaction((transaction) async {
+  void edit(Repeat item) {
+    _db.runTransaction((transaction) async {
       // Grab the item's existing identifier
       DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+      if (item.ref == null) return;
       DocumentReference ref = userDoc
-          .collection('todos')
+          .collection('repeats')
           .document('default')
           .collection('repeats')
           .document(item.ref);
-      if (ref == null || item.ref == null) {
-        print('here');
-        return;
-      }
-      print(item.ref);
+      if (ref == null) return;
+
       await transaction.update(ref, item.toJSON());
     });
+  }
+
+  void editRunner(dynamic item) {
+    edit(item);
+  }
+
+  void queueEdit(Repeat item) {
+    if (!editStream.hasListener) {
+      editStream.stream.listen(editRunner);
+    }
+    editStream.add(item);
   }
 
   void pushNewTodo(String carName, String taskName, int dueMileage) async {

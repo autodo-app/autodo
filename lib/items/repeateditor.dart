@@ -13,26 +13,12 @@ class RepeatEditor extends StatefulWidget {
 }
 
 class RepeatEditorState extends State<RepeatEditor> {
-  final _nameCtrl = TextEditingController();
-  final _valCtrl = TextEditingController();
-
-  @override
-  void initState() {
-    _nameCtrl.text = widget.item.name;
-    _valCtrl.text = widget.item.interval.toString();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _nameCtrl.dispose();
-    _valCtrl.dispose();
-    super.dispose();
-  }
+  String valInit = '', nameInit = '';
+  bool oneValSaved = false;
 
   TextFormField repeatNameField() {
     return TextFormField(
-      controller: _nameCtrl,
+      initialValue: nameInit,
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.teal),
@@ -53,15 +39,19 @@ class RepeatEditorState extends State<RepeatEditor> {
       },
       onSaved: (val) {
         widget.item.name = val;
-        // not editing the value here, going to do that in the value part
+        // If the other half has saved its value to the widget's item, then
+        // push the item to the server
+        if (oneValSaved)
+          RepeatingBLoC().queueEdit(widget.item);
+        else
+          oneValSaved = true;
       },
     );
   }
 
   TextFormField repeatValueField() {
     return TextFormField(
-      // key: createKey(),
-      controller: _valCtrl,
+      initialValue: valInit,
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.teal),
@@ -75,8 +65,7 @@ class RepeatEditorState extends State<RepeatEditor> {
         color: Colors.black,
         fontWeight: FontWeight.w500,
       ),
-      keyboardType: TextInputType.text,
-      textCapitalization: TextCapitalization.sentences,
+      keyboardType: TextInputType.number,
       maxLength: 6,
       validator: (val) {
         int interval;
@@ -91,9 +80,16 @@ class RepeatEditorState extends State<RepeatEditor> {
         return null;
       },
       onSaved: (val) {
-        if (int.parse(val) == widget.item.interval) return;
         widget.item.interval = int.parse(val);
-        RepeatingBLoC().edit(widget.item);
+        // If the other half has saved its value to the widget's item, then
+        // push the item to the server
+        if (oneValSaved)
+          RepeatingBLoC().queueEdit(widget.item);
+        else
+          oneValSaved = true;
+      },
+      onChanged: (val) {
+        
       },
     );
   }
@@ -103,8 +99,8 @@ class RepeatEditorState extends State<RepeatEditor> {
   Widget build(BuildContext context) {
     // Setting the controller text values here ensures that the textfields
     // actually get updated when another repeat is deleted
-    _nameCtrl.text = widget.item.name;
-    _valCtrl.text = widget.item.interval.toString();
+    valInit = widget.item.interval.toString();
+    nameInit = widget.item.name;
     return Container(
       padding: EdgeInsets.all(10),
       constraints: BoxConstraints(maxHeight: 300),
