@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:autodo/items/items.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/maintenance/todocard.dart';
+import 'package:autodo/blocs/firestore.dart';
 
 class FirebaseTodoBLoC {
   final Firestore _db = Firestore.instance;
@@ -23,10 +24,9 @@ class FirebaseTodoBLoC {
   }
 
   StreamBuilder buildList(BuildContext context) {
+    if (FirestoreBLoC.isLoading()) return StreamBuilder();
     return StreamBuilder(
-      stream: _db
-          .collection('users')
-          .document(Auth().getCurrentUser())
+      stream: FirestoreBLoC.getUserDocument()
           .collection('todos')
           .snapshots(),
       builder: (context, snapshot) {
@@ -43,11 +43,14 @@ class FirebaseTodoBLoC {
   void push(MaintenanceTodoItem item) {
     _db.runTransaction((transaction) async {
       // creates a new unique identifier for the item
-      DocumentReference ref = await _db
-          .collection('users')
-          .document(Auth().getCurrentUser())
+      DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+      DocumentReference ref = await userDoc
           .collection('todos')
           .add(item.toJSON());
+      if (ref == null || item.ref == null) {
+        print("Error, push failed");
+        return;
+      }
       item.ref = ref.documentID;
       await transaction.set(ref, item.toJSON());
     });
@@ -56,9 +59,8 @@ class FirebaseTodoBLoC {
   void edit(MaintenanceTodoItem item) {
     _db.runTransaction((transaction) async {
       // Grab the item's existing identifier
-      DocumentReference ref = _db
-          .collection('users')
-          .document(Auth().getCurrentUser())
+      DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+      DocumentReference ref = userDoc
           .collection('todos')
           .document(item.ref);
       await transaction.update(ref, item.toJSON());
@@ -69,9 +71,8 @@ class FirebaseTodoBLoC {
     _past = item;
     _db.runTransaction((transaction) async {
       // Grab the item's existing identifier
-      DocumentReference ref = _db
-          .collection('users')
-          .document(Auth().getCurrentUser())
+      DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+      DocumentReference ref = userDoc
           .collection('todos')
           .document(item.ref);
       await transaction.delete(ref);
@@ -83,10 +84,14 @@ class FirebaseTodoBLoC {
     _past = null;
   }
 
+  bool isLoading() {
+    return Auth().isLoading();
+  }
+
   // Make the object a Singleton
   static final FirebaseTodoBLoC _bloc = FirebaseTodoBLoC._internal();
   factory FirebaseTodoBLoC() {
     return _bloc;
   }
-  FirebaseTodoBLoC._internal() {}
+  FirebaseTodoBLoC._internal();
 }

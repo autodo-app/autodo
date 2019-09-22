@@ -91,7 +91,14 @@ ThemeData theme = ThemeData(
   toggleableActiveColor: mainPallette.shade300,
   fontFamily: 'IBM Plex Sans',
   // textTheme: ,
-  // primaryTextTheme: ,
+  primaryTextTheme: TextTheme(  
+    body1: TextStyle(  
+      color: mainPallette.shade50,
+      fontSize: 14,
+      fontWeight: FontWeight.w300,
+      fontFamily: 'IBM Plex Sans',
+    ),
+  ),
   // accentTextTheme: ,
   // inputDecorationTheme: ,
   // iconTheme: ,
@@ -104,7 +111,8 @@ ThemeData theme = ThemeData(
   // chipTheme: ,
   platform: TargetPlatform.android,
   materialTapTargetSize: ThemeData.fallback().materialTapTargetSize,
-  applyElevationOverlayColor: true, // used with dark themes to add elevation status, check this
+  // applyElevationOverlayColor: true, // used with dark themes to add elevation status, check this
+  applyElevationOverlayColor: false,
   // pageTransitionsTheme: ,
   appBarTheme: AppBarTheme(
     brightness: Brightness.dark, 

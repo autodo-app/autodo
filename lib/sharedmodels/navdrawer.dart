@@ -50,28 +50,28 @@ class NavDrawerState extends State<NavDrawer> {
     List<Widget> buttons = [
       FlatButton(
         child: Text('Home Page'),
-        onPressed: () => Navigator.pushNamed(context, '/'),
+        onPressed: () => Navigator.popAndPushNamed(context, '/'),
       ),
       FlatButton(
         child: Text('Refueling History'),
-        onPressed: () => Navigator.pushNamed(context, '/refuelinghistory'),
+        onPressed: () => Navigator.popAndPushNamed(context, '/refuelinghistory'),
       ),
       FlatButton(
         child: Text('Statistics'),
-        onPressed: () => Navigator.pushNamed(context, '/statistics'),
+        onPressed: () => Navigator.popAndPushNamed(context, '/statistics'),
       ),
       Divider(),
       FlatButton(
         child: Text('Edit Repeating ToDos'),
-        onPressed: () => Navigator.pushNamed(context, '/editrepeats'),
+        onPressed: () => Navigator.popAndPushNamed(context, '/editrepeats'),
       ),
       FlatButton(
         child: Text('Edit Car List'),
-        onPressed: () => Navigator.pushNamed(context, '/editcarlist'),
+        onPressed: () => Navigator.popAndPushNamed(context, '/editcarlist'),
       ),
       FlatButton(
         child: Text('Settings'),
-        onPressed: () => Navigator.pushNamed(context, '/settings'),
+        onPressed: () => Navigator.popAndPushNamed(context, '/settings'),
       ),
     ];
 
@@ -131,7 +131,7 @@ class NavDrawerState extends State<NavDrawer> {
                       onPressed: () {
                         Auth userAuth = Auth();
                         userAuth.signOut();
-                        Navigator.pushNamed(context, '/welcomepage');
+                        Navigator.popAndPushNamed(context, '/welcomepage');
                       },
                     ),
                   ),
@@ -148,22 +148,6 @@ class NavDrawerState extends State<NavDrawer> {
           ),
         ],
       ),
-      // child: ListView(
-      //   padding: EdgeInsets.zero,
-      //   children: <Widget>[
-      //     DrawerHeader(
-      //       child: Text('Drawer Header'),
-      //       decoration: BoxDecoration(
-      //         color: Theme.of(context).primaryColor,
-      //       ),
-      //     ),
-      //     ListTile(
-      //       title: Text('Item 1'),
-      //       onTap: () {
-      //         Navigator.pop(
-      //             context); // This causes the drawer to go away when an item is clicked
-      //       },
-      //     ),
     );
   }
 }

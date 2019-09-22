@@ -97,12 +97,6 @@ class SignInScreenState extends State<SignInScreen> {
               _showCircularProgress(),
             ],
           ),
-          // child: RaisedButton(
-          //   onPressed: () async {
-          //     await widget.userAuth
-          //         .signUp("baylessjonathan@gmail.com", "test123");
-          //   },
-          // ),
         ),
       ),
     );
@@ -117,27 +111,27 @@ class SignInScreenState extends State<SignInScreen> {
     return Container();
   }
 
-  void _showVerifyEmailSentDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return AlertDialog(
-          title: Text("Verify your account"),
-          content: Text("Link to verify account has been sent to your email"),
-          actions: <Widget>[
-            FlatButton(
-              child: Text("Dismiss"),
-              onPressed: () {
-                // _changeFormToLogin();
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+  // void _showVerifyEmailSentDialog() {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       // return object of type Dialog
+  //       return AlertDialog(
+  //         title: Text("Verify your account"),
+  //         content: Text("Link to verify account has been sent to your email"),
+  //         actions: <Widget>[
+  //           FlatButton(
+  //             child: Text("Dismiss"),
+  //             onPressed: () {
+  //               // _changeFormToLogin();
+  //               Navigator.of(context).pop();
+  //             },
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 
   Widget _showBody() {
     return Container(

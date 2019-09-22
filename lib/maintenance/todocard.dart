@@ -9,9 +9,7 @@ class MaintenanceTodoCard extends StatefulWidget {
   MaintenanceTodoCard({@required this.item});
 
   @override
-  State<MaintenanceTodoCard> createState() {
-    return MaintenanceTodoCardState();
-  }
+  State<MaintenanceTodoCard> createState() => MaintenanceTodoCardState();
 }
 
 class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
