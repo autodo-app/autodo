@@ -22,6 +22,7 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
         padding: EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
         child: Checkbox(
           value: isChecked,
+          checkColor: Theme.of(context).primaryIconTheme.color,
           onChanged: (bool val) {
             setState(() {
               isChecked = val;
@@ -39,7 +40,10 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
       return Row(
         children: <Widget>[
           Icon(Icons.alarm, size: 30.0),
-          Text('Due on ' + DateFormat("MM/dd/yyyy").format(date)),
+          Text(
+            'Due on ' + DateFormat("MM/dd/yyyy").format(date),
+            style: Theme.of(context).primaryTextTheme.body1,
+          ),
         ],
       );
     } else {
@@ -53,7 +57,10 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
       return Row(
         children: <Widget>[
           Icon(Icons.directions_car, size: 30.0),
-          Text('Due at ' + mileage.toString() + ' miles'),
+          Text(
+            'Due at ' + mileage.toString() + ' miles',
+            style: Theme.of(context).primaryTextTheme.body1,
+          ),
         ],
       );
     } else {
@@ -81,10 +88,7 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
           alignment: Alignment.center,
           child: Text(
             widget.item.name,
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 24.0,
-            ),
+            style: Theme.of(context).primaryTextTheme.title,
           ),
         ),
         Divider(),
@@ -143,7 +147,10 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
             minWidth: 0,
           ),
           child: FlatButton(
-            child: const Icon(Icons.edit),
+            child: Icon(
+              Icons.edit,
+              color: Theme.of(context).primaryIconTheme.color,
+            ),
             onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -160,7 +167,10 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
             minWidth: 0,
           ),
           child: FlatButton(
-            child: const Icon(Icons.delete),
+            child: Icon(
+              Icons.delete,
+              color: Theme.of(context).primaryIconTheme.color,
+            ),
             onPressed: () {
               FirebaseTodoBLoC().delete(widget.item);
               final snackbar = SnackBar(
@@ -190,7 +200,9 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return Padding(
+      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+      child: Card(
       child: Container(
         child: Column(
           children: <Widget>[
@@ -199,6 +211,7 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
             footer(widget),
           ],
         ),
+      ),
       ),
     );
   }

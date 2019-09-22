@@ -38,26 +38,55 @@ Map<String, Color> tagPallette =
 
 const Color errorColor = Color(0xffcf6679);
 
-// const ColorScheme.dark({
-// Color primary: const Color(0xffbb86fc),
-// Color primaryVariant: const Color(0xff3700B3),
-// Color secondary: const Color(0xff03dac6),
-// Color secondaryVariant: const Color(0xff03dac6),
-// Color surface: const Color(0xff121212),
-// Color background: const Color(0xff121212),
-// Color error: const Color(0xffcf6679),
-// Color onPrimary: Colors.black,
-// Color onSecondary: Colors.black,
-// Color onSurface: Colors.white,
-// Color onBackground: Colors.white,
-// Color onError: Colors.black,
-// Brightness brightness: Brightness.dark
-// })
+Decoration scaffoldBackgroundGradient() {
+  LinearGradient blueGrey = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    // colors: [Colors.blueGrey[200], Colors.blueGrey[800]],
+    colors: [mainPallette.shade700, mainPallette.shade900, mainPallette.shade900, Colors.black],
+  );
+  BoxDecoration bgGradient() {
+    return BoxDecoration(
+      // gradient: LinearGradient.lerp(blueGrey, blue, 0.4),
+      gradient: blueGrey,
+    );
+  }
+  return bgGradient();
+}
+
+TextTheme primaryTextTheme = TextTheme(  
+    body1: TextStyle(  
+      color: Colors.white.withAlpha(230),
+      fontSize: 16,
+      fontWeight: FontWeight.w300,
+      fontFamily: 'IBM Plex Sans',
+    ),
+    button: TextStyle(  
+      color: Colors.white.withAlpha(230),
+      fontSize: 14,
+      fontWeight: FontWeight.w500,
+      fontFamily: 'IBM Plex Sans',
+      letterSpacing: 0.2,
+    ),
+    title: TextStyle(
+      color: Colors.white.withAlpha(230),
+      fontSize: 24,
+      fontWeight: FontWeight.w500,
+      fontFamily: 'IBM Plex Sans',
+      letterSpacing: 1.0,
+    ),
+    subtitle: TextStyle(  
+      color: Colors.white.withAlpha(230),
+      fontSize: 18,
+      fontWeight: FontWeight.w400,
+      fontFamily: 'IBM Plex Sans',
+    ),
+  );
 
 ThemeData theme = ThemeData( 
   brightness: Brightness.dark,
   primarySwatch: mainPallette,
-  primaryColor: mainPallette.shade400, // one darker than before
+  primaryColor: mainPallette.shade500, // one darker than before
   primaryColorBrightness: Brightness.light,
   primaryColorLight: mainPallette.shade300,
   primaryColorDark: mainPallette.shade500,
@@ -77,7 +106,9 @@ ThemeData theme = ThemeData(
   unselectedWidgetColor: mainPallette.shade200, // check this
   disabledColor: mainPallette.shade200,
   buttonColor: mainPallette.shade100,
-  buttonTheme: ThemeData.fallback().buttonTheme, // TODO: modify this
+  buttonTheme: ButtonThemeData(
+    buttonColor: Colors.white.withAlpha(230),
+  ),
   toggleButtonsTheme: ThemeData.fallback().toggleButtonsTheme, // same
   secondaryHeaderColor: mainPallette.shade300,
   textSelectionColor: mainPallette.shade400,
@@ -91,18 +122,15 @@ ThemeData theme = ThemeData(
   toggleableActiveColor: mainPallette.shade300,
   fontFamily: 'IBM Plex Sans',
   // textTheme: ,
-  primaryTextTheme: TextTheme(  
-    body1: TextStyle(  
-      color: mainPallette.shade50,
-      fontSize: 14,
-      fontWeight: FontWeight.w300,
-      fontFamily: 'IBM Plex Sans',
-    ),
-  ),
+  primaryTextTheme: primaryTextTheme,
   // accentTextTheme: ,
   // inputDecorationTheme: ,
-  // iconTheme: ,
-  // primaryIconTheme: ,
+  iconTheme: IconThemeData(
+    color: Colors.white.withAlpha(230),
+  ),
+  primaryIconTheme: IconThemeData(  
+    color: Colors.white.withAlpha(230),
+  ),
   // accentIconTheme: ,
   // sliderTheme: ,
   // tabBarTheme: ,
@@ -111,16 +139,16 @@ ThemeData theme = ThemeData(
   // chipTheme: ,
   platform: TargetPlatform.android,
   materialTapTargetSize: ThemeData.fallback().materialTapTargetSize,
-  // applyElevationOverlayColor: true, // used with dark themes to add elevation status, check this
-  applyElevationOverlayColor: false,
+  applyElevationOverlayColor: true, // used with dark themes to add elevation status, check this
+  // applyElevationOverlayColor: false,
   // pageTransitionsTheme: ,
   appBarTheme: AppBarTheme(
     brightness: Brightness.dark, 
-    color: mainPallette.shade900, 
+    color: Colors.transparent, 
     elevation: 0.0, 
     iconTheme: ThemeData.dark().iconTheme,
     actionsIconTheme: ThemeData.dark().iconTheme, 
-    textTheme: Typography.whiteCupertino,
+    textTheme: primaryTextTheme,
   ),
   // bottomAppBarTheme: ,
   // colorScheme: prefix0.ColorScheme.fromSwatch(primarySwatch: mainPallette, ), // this sets a lot of defaults, avoiding for now
@@ -133,5 +161,7 @@ ThemeData theme = ThemeData(
   // bottomSheetTheme: ,
   // popupMenuTheme: ,
   // bannerTheme: ,
-  // dividerTheme: , 
+  dividerTheme: DividerThemeData(  
+    color: Colors.white24,
+  ), 
 );
