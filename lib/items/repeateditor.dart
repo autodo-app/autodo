@@ -4,7 +4,9 @@ import 'package:autodo/items/repeat.dart';
 
 class RepeatEditor extends StatefulWidget {
   final Repeat item;
-  RepeatEditor({@required this.item});
+  RepeatEditor({@required this.item}) {
+    if (this.item.name == '') this.item.name = 'New Repeat';
+  }
 
   @override 
   State<StatefulWidget> createState() => RepeatEditorState();
@@ -28,7 +30,7 @@ class RepeatEditorState extends State<RepeatEditor> {
     super.dispose();
   }
 
-  TextFormField repeatNameField(String key) {
+  TextFormField repeatNameField() {
     return TextFormField(
       controller: _nameCtrl,
       decoration: InputDecoration(
@@ -54,7 +56,7 @@ class RepeatEditorState extends State<RepeatEditor> {
     );
   }
 
-  TextFormField repeatValueField(String key) {
+  TextFormField repeatValueField() {
     return TextFormField(
       // key: createKey(),
       controller: _valCtrl,
@@ -104,7 +106,7 @@ class RepeatEditorState extends State<RepeatEditor> {
                 ),
                 Expanded(
                   flex: 7,
-                  child: repeatNameField(widget.item.name),
+                  child: repeatNameField(),
                 ),
               ],
             ),
@@ -120,7 +122,7 @@ class RepeatEditorState extends State<RepeatEditor> {
                 ),
                 Expanded(
                   flex: 7,
-                  child: repeatValueField(widget.item.name),
+                  child: repeatValueField(),
                 ),
                 FlatButton(
                     onPressed: () {

@@ -58,9 +58,11 @@ class RepeatingBLoC {
           .collection('repeats')
           .document('default')
           .collection('repeats')
+          .orderBy('name')
           .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return const Text('Loading...');
+        // sort data alphabetically by name
         return ListView.builder(
           itemCount: snapshot.data.documents.length,
           itemBuilder: (context, index) =>
@@ -199,6 +201,20 @@ class RepeatingBLoC {
         }
       );
     });
+  }
+
+  Future<void> push(String carName, Repeat repeat) async {
+      // creates a new unique identifier for the item
+      DocumentReference doc = await FirestoreBLoC.fetchUserDocument();
+      _db.runTransaction((transaction) async {
+        DocumentReference ref = await doc
+          .collection('repeats')
+          .document(carName)
+          .collection('repeats')
+          .add(repeat.toJSON());
+        await transaction.set(ref, repeat.toJSON());
+      }
+    );
   }
 
   void pushNewTodo(String carName, String taskName, int dueMileage) async {

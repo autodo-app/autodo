@@ -10,7 +10,10 @@ class Repeat {
     ref = documentID;
   }
 
-  Repeat.empty();
+  Repeat.empty() {
+    name = '';
+    interval = 0;
+  }
 
   Map<String, dynamic> toJSON() {
     return {
