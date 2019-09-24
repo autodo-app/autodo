@@ -37,71 +37,87 @@ Map<String, Color> tagPallette =
 };
 
 const Color errorColor = Color(0xffcf6679);
+final Color cardColor = Color.lerp(mainPallette.shade800, Colors.grey[700], 0.7);
 
 Decoration scaffoldBackgroundGradient() {
   LinearGradient blueGrey = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    // colors: [Colors.blueGrey[200], Colors.blueGrey[800]],
-    colors: [mainPallette.shade700, mainPallette.shade900, mainPallette.shade900, Colors.black],
+    colors: [Colors.blueGrey[200], Colors.blueGrey[900]],
+  );
+  LinearGradient darken = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [Colors.blueGrey[900], Colors.black],
   );
   BoxDecoration bgGradient() {
     return BoxDecoration(
-      // gradient: LinearGradient.lerp(blueGrey, blue, 0.4),
-      gradient: blueGrey,
+      gradient: LinearGradient.lerp(blueGrey, darken, 0.4),
     );
   }
   return bgGradient();
 }
 
 TextTheme primaryTextTheme = TextTheme(  
-    body1: TextStyle(  
-      color: Colors.white.withAlpha(230),
-      fontSize: 16,
-      fontWeight: FontWeight.w300,
-      fontFamily: 'IBM Plex Sans',
-    ),
-    button: TextStyle(  
-      color: Colors.white.withAlpha(230),
-      fontSize: 14,
-      fontWeight: FontWeight.w500,
-      fontFamily: 'IBM Plex Sans',
-      letterSpacing: 0.2,
-    ),
-    title: TextStyle(
-      color: Colors.white.withAlpha(230),
-      fontSize: 24,
-      fontWeight: FontWeight.w500,
-      fontFamily: 'IBM Plex Sans',
-      letterSpacing: 1.0,
-    ),
-    subtitle: TextStyle(  
-      color: Colors.white.withAlpha(230),
-      fontSize: 18,
-      fontWeight: FontWeight.w400,
-      fontFamily: 'IBM Plex Sans',
-    ),
-  );
+  body1: TextStyle(  
+    color: Colors.white.withAlpha(230),
+    fontSize: 16,
+    fontWeight: FontWeight.w300,
+    fontFamily: 'IBM Plex Sans',
+  ),
+  button: TextStyle(  
+    color: Colors.white.withAlpha(230),
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    fontFamily: 'IBM Plex Sans',
+    letterSpacing: 0.2,
+  ),
+  title: TextStyle(
+    color: Colors.white.withAlpha(230),
+    fontSize: 24,
+    fontWeight: FontWeight.w500,
+    fontFamily: 'IBM Plex Sans',
+    letterSpacing: 1.0,
+  ),
+  subtitle: TextStyle(  
+    color: Colors.white.withAlpha(230),
+    fontSize: 18,
+    fontWeight: FontWeight.w400,
+    fontFamily: 'IBM Plex Sans',
+  ),
+
+);
+
+// Like the primary text theme, but dark.
+TextTheme accentTextTheme = TextTheme( 
+  button: TextStyle(  
+    color: Colors.black.withAlpha(230),
+    fontSize: 18,
+    fontWeight: FontWeight.w500,
+    fontFamily: 'IBM Plex Sans',
+    letterSpacing: 0.2,
+  ),
+);
 
 ThemeData theme = ThemeData( 
   brightness: Brightness.dark,
   primarySwatch: mainPallette,
   primaryColor: mainPallette.shade500, // one darker than before
   primaryColorBrightness: Brightness.light,
-  primaryColorLight: mainPallette.shade300,
-  primaryColorDark: mainPallette.shade500,
+  primaryColorLight: mainPallette.shade400,
+  primaryColorDark: mainPallette.shade600,
   accentColor: mainPallette.shade600, // same here 
   accentColorBrightness: Brightness.light,
   canvasColor: mainPallette.shade900,
   scaffoldBackgroundColor: mainPallette.shade900,
   bottomAppBarColor: mainPallette.shade800,
-  cardColor: mainPallette.shade800,
-  dividerColor: ThemeData.fallback().dividerColor,
-  focusColor: ThemeData.fallback().focusColor,
-  hoverColor: ThemeData.fallback().hoverColor,
-  highlightColor: ThemeData.fallback().highlightColor,
-  splashColor: ThemeData.fallback().splashColor,
-  splashFactory: ThemeData.fallback().splashFactory,
+  cardColor: cardColor,
+  dividerColor: Colors.white24,
+  focusColor: ThemeData.dark().focusColor,
+  hoverColor: ThemeData.dark().hoverColor,
+  highlightColor: ThemeData.dark().highlightColor,
+  splashColor: ThemeData.dark().splashColor,
+  splashFactory: ThemeData.dark().splashFactory,
   selectedRowColor: mainPallette.shade100, // check this
   unselectedWidgetColor: mainPallette.shade200, // check this
   disabledColor: mainPallette.shade200,
@@ -123,7 +139,7 @@ ThemeData theme = ThemeData(
   fontFamily: 'IBM Plex Sans',
   // textTheme: ,
   primaryTextTheme: primaryTextTheme,
-  // accentTextTheme: ,
+  accentTextTheme: accentTextTheme,
   // inputDecorationTheme: ,
   iconTheme: IconThemeData(
     color: Colors.white.withAlpha(230),
@@ -139,8 +155,8 @@ ThemeData theme = ThemeData(
   // chipTheme: ,
   platform: TargetPlatform.android,
   materialTapTargetSize: ThemeData.fallback().materialTapTargetSize,
-  applyElevationOverlayColor: true, // used with dark themes to add elevation status, check this
-  // applyElevationOverlayColor: false,
+  // applyElevationOverlayColor: true, // used with dark themes to add elevation status, check this
+  applyElevationOverlayColor: false,
   // pageTransitionsTheme: ,
   appBarTheme: AppBarTheme(
     brightness: Brightness.dark, 
@@ -153,15 +169,13 @@ ThemeData theme = ThemeData(
   // bottomAppBarTheme: ,
   // colorScheme: prefix0.ColorScheme.fromSwatch(primarySwatch: mainPallette, ), // this sets a lot of defaults, avoiding for now
   // dialogTheme: ,
-  // floatingActionButtonTheme: ,
-  // typography: Typography(
-  //   platform: TargetPlatform.android, black: Typography.blackCupertino, white: Typography.whiteCupertino,
-  // ),
+  floatingActionButtonTheme: FloatingActionButtonThemeData(  
+    backgroundColor: mainPallette.shade500,
+    foregroundColor: Colors.black.withAlpha(230),
+  ),
+  // TODO: snackbars are white right now for some reason
   // snackBarTheme: ,
   // bottomSheetTheme: ,
   // popupMenuTheme: ,
   // bannerTheme: ,
-  dividerTheme: DividerThemeData(  
-    color: Colors.white24,
-  ), 
 );

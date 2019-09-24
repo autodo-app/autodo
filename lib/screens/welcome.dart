@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:autodo/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -38,10 +39,12 @@ class SignupButtonState extends State<SignupButton> {
           tag: 'SignupButton',
           transitionOnUserGestures: true,
           child: RaisedButton(
+            elevation: 24.0,
             onPressed: () => Navigator.pushNamed(context, '/signuppage'),
             textColor: Colors.white,
             padding: const EdgeInsets.all(0.0),
-            color: Colors.blue,
+            // color: Colors.blue,
+            color: Theme.of(context).primaryColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(
                 Radius.circular(15.0),
@@ -51,9 +54,7 @@ class SignupButtonState extends State<SignupButton> {
               padding: EdgeInsets.fromLTRB(40.0, 14.0, 40.0, 14.0),
               child: Text(
                 "SIGN UP",
-                style: TextStyle(
-                  fontSize: 18.0,
-                ),
+                style: Theme.of(context).accentTextTheme.button,
               ),
             ),
           ),
@@ -72,12 +73,13 @@ class TrialButton extends StatelessWidget {
         padding:
             EdgeInsets.fromLTRB(16.0, BUTTON_PADDING, 16.0, BUTTON_PADDING),
         child: RaisedButton(
+          elevation: 12.0,
           onPressed: () {
             Navigator.pushNamed(context, '/');
           },
           textColor: Colors.white,
           padding: const EdgeInsets.all(0.0),
-          color: Colors.blue,
+          color: Theme.of(context).primaryColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(
               Radius.circular(15.0),
@@ -87,9 +89,7 @@ class TrialButton extends StatelessWidget {
             padding: EdgeInsets.fromLTRB(40.0, 14.0, 40.0, 14.0),
             child: Text(
               "TRY WITHOUT AN ACCOUNT",
-              style: TextStyle(
-                fontSize: 18.0,
-              ),
+              style: Theme.of(context).accentTextTheme.button,
             ),
           ),
         ),
@@ -400,7 +400,7 @@ class LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: Center(
         child: Container(
-          decoration: bgGradient(),
+          decoration: scaffoldBackgroundGradient(),
           child: SafeArea(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,

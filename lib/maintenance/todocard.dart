@@ -98,7 +98,7 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
 
   Container body(MaintenanceTodoCard widget) {
     return Container(
-      padding: EdgeInsets.fromLTRB(0, 16.0, 0, 16.0),
+      padding: EdgeInsets.fromLTRB(0, 36.0, 0, 36.0),
       child: Row(
         children: <Widget>[
           checkbox(widget),
@@ -203,15 +203,17 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
     return Padding(
       padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
       child: Card(
-      child: Container(
-        child: Column(
-          children: <Widget>[
-            title(widget),
-            body(widget),
-            footer(widget),
-          ],
+        elevation: 8.0,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+        child: Container(
+          child: Column(
+            children: <Widget>[
+              title(widget),
+              body(widget),
+              footer(widget),
+            ],
+          ),
         ),
-      ),
       ),
     );
   }

@@ -96,7 +96,7 @@ class NavDrawerState extends State<NavDrawer> {
     return Drawer(
       child: Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).backgroundColor.withOpacity(0.1),
+          color: Theme.of(context).cardColor.withAlpha(200),
         ),
         child: CustomScrollView(
           slivers: <Widget>[

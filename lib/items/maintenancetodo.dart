@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:autodo/util.dart';
 
 class MaintenanceTodoItem {
   String name, ref;
@@ -10,7 +11,9 @@ class MaintenanceTodoItem {
   DocumentReference reference;
 
   MaintenanceTodoItem(
-      {@required this.ref, @required this.name, this.dueDate, this.dueMileage});
+      {@required this.ref, @required this.name, this.dueDate, this.dueMileage}) {
+    this.name = titleCase(this.name);
+  }
 
   MaintenanceTodoItem.empty();
 
