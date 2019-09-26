@@ -20,21 +20,21 @@ const MaterialColor mainPallette = MaterialColor(500, mainColors);
 
 /// tag palette:
 /// https://www.colorbox.io/#steps=11#hue_start=7#hue_end=140#hue_curve=easeInOutQuad#sat_start=47#sat_end=38#sat_curve=linear#sat_rate=130#lum_start=89#lum_end=53#lum_curve=easeOutSine#minor_steps_map=0
-Map<String, Color> tagPallette =
+const Map<int, Color> tagColors =
 {
-    "0": Color(0xffe36858),
-    "5": Color(0xffe36d59),
-    "10": Color(0xffe2715b),
-    "20": Color(0xffe0845c),
-    "30": Color(0xffdba05d),
-    "40": Color(0xffd4c45c),
-    "50": Color(0xffaecb5b),
-    "60": Color(0xff7dbf58),
-    "70": Color(0xff59b154),
-    "80": Color(0xff4fa35c),
-    "90": Color(0xff4a955f),
-    "100": Color(0xff44875b)
+    50: Color(0xffe36d59),
+    100: Color(0xffe2715b),
+    200: Color(0xffe0845c),
+    300: Color(0xffdba05d),
+    400: Color(0xffd4c45c),
+    500: Color(0xffaecb5b),
+    600: Color(0xff7dbf58),
+    700: Color(0xff59b154),
+    800: Color(0xff4fa35c),
+    900: Color(0xff4a955f),
 };
+
+const MaterialColor tagPallette = MaterialColor(500, tagColors);
 
 const Color errorColor = Color(0xffcf6679);
 final Color cardColor = Color.lerp(mainPallette.shade800, Colors.grey[700], 0.7);
@@ -97,6 +97,14 @@ TextTheme accentTextTheme = TextTheme(
     fontFamily: 'IBM Plex Sans',
     letterSpacing: 0.2,
   ),
+  body2: TextStyle(  
+    // This is used for the car tags
+    color: Colors.black.withAlpha(230),
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    fontFamily: 'IBM Plex Sans',
+    letterSpacing: 0.2,
+  ),
 );
 
 ThemeData theme = ThemeData( 
@@ -147,7 +155,9 @@ ThemeData theme = ThemeData(
   primaryIconTheme: IconThemeData(  
     color: Colors.white.withAlpha(230),
   ),
-  // accentIconTheme: ,
+  accentIconTheme: IconThemeData(  
+    color: Colors.black.withAlpha(230),
+  ),
   // sliderTheme: ,
   // tabBarTheme: ,
   // tooltipTheme: ,

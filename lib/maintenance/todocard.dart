@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:autodo/items/items.dart';
 import 'package:intl/intl.dart';
 import 'package:autodo/screens/screens.dart';
+import 'package:autodo/sharedmodels/cartag.dart';
 
 class MaintenanceTodoCard extends StatefulWidget {
   final MaintenanceTodoItem item;
@@ -22,7 +23,7 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
         padding: EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
         child: Checkbox(
           value: isChecked,
-          checkColor: Theme.of(context).primaryIconTheme.color,
+          checkColor: Theme.of(context).accentIconTheme.color,
           onChanged: (bool val) {
             setState(() {
               isChecked = val;
@@ -116,19 +117,7 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
     ];
     for (var tag in widget.item.tags) {
       tags.add(
-        ButtonTheme.fromButtonThemeData(
-          data: ButtonThemeData(
-            minWidth: 0,
-            padding: EdgeInsets.fromLTRB(5.0, 0, 5.0, 0),
-          ),
-          child: FlatButton(
-            child: Chip(
-              backgroundColor: Colors.lightGreen,
-              label: Text(tag),
-            ),
-            onPressed: () {},
-          ),
-        ),
+        CarTag(tag),
       );
     }
     return Row(
