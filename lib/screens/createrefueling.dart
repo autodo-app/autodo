@@ -99,7 +99,6 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
         ),
         title: Text('Refueling'),
       ),
-      // key: _scaffoldKey,
       body: Container(
         child: Form(
           key: _formKey,
@@ -119,7 +118,6 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                         contentPadding: EdgeInsets.only(
                             left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
                       ),
-                      // controller: listNameController,
                       autofocus: true,
                       initialValue: (widget.mode == RefuelingEditMode.EDIT)
                           ? widget.existing.odom.toString()
@@ -144,7 +142,6 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                         contentPadding: EdgeInsets.only(
                             left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
                       ),
-                      // controller: listNameController,
                       initialValue: (widget.mode == RefuelingEditMode.EDIT)
                           ? widget.existing.amount.toString()
                           : '',

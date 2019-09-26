@@ -117,7 +117,7 @@ ThemeData theme = ThemeData(
   accentColor: mainPallette.shade600, // same here 
   accentColorBrightness: Brightness.light,
   canvasColor: mainPallette.shade900,
-  scaffoldBackgroundColor: mainPallette.shade900,
+  scaffoldBackgroundColor: cardColor,
   bottomAppBarColor: mainPallette.shade800,
   cardColor: cardColor,
   dividerColor: Colors.white24,
@@ -138,7 +138,7 @@ ThemeData theme = ThemeData(
   textSelectionColor: mainPallette.shade400,
   cursorColor: mainPallette.shade300,
   textSelectionHandleColor: mainPallette.shade300,
-  backgroundColor: mainPallette.shade900,
+  backgroundColor: cardColor,
   dialogBackgroundColor: mainPallette.shade800,
   indicatorColor: mainPallette.shade700,
   hintColor: mainPallette.shade800,

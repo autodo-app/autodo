@@ -97,7 +97,6 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
         ),
         title: Text('Maintenance ToDo'),
       ),
-      // key: _scaffoldKey,
       body: Container(
         child: Form(
           key: _formKey,

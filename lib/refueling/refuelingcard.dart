@@ -277,6 +277,8 @@ class RefuelingCardState extends State<RefuelingCard> {
       child: InkWell(
         onTap: () => setState(() => expanded = !expanded),
         child: Card(
+          elevation: 8.0,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           child: Container(
             child: Column(
               children: <Widget>[
