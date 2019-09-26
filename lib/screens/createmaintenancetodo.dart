@@ -109,7 +109,7 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
                     TextFormField(
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.teal),
+                          borderSide: BorderSide(color: Theme.of(context).primaryColor),
                         ),
                         labelText: "Action Name *",
                         contentPadding: EdgeInsets.only(
@@ -143,7 +143,7 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
                                 right: 16.0,
                                 bottom: 5.0),
                             border: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.teal),
+                              borderSide: BorderSide(color: Theme.of(context).primaryColor),
                             ),
                           ),
                           controller: _controller,
@@ -172,7 +172,7 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
                       decoration: InputDecoration(
                         hintText: 'Optional if Due Date Entered',
                         border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.teal),
+                          borderSide: BorderSide(color: Theme.of(context).primaryColor),
                         ),
                         labelText: "Due Mileage",
                         contentPadding: EdgeInsets.only(

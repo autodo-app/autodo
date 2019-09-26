@@ -112,7 +112,7 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                       decoration: InputDecoration(
                         hintText: 'Required',
                         border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.teal),
+                          borderSide: BorderSide(color: Theme.of(context).primaryColor),
                         ),
                         labelText: "Odometer Reading (mi)",
                         contentPadding: EdgeInsets.only(
@@ -136,7 +136,7 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                       decoration: InputDecoration(
                         hintText: 'Required',
                         border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.teal),
+                          borderSide: BorderSide(color: Theme.of(context).primaryColor),
                         ),
                         labelText: "Amount of Fuel (gal)",
                         contentPadding: EdgeInsets.only(
@@ -160,7 +160,7 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                       decoration: InputDecoration(
                         hintText: 'Required',
                         border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.teal),
+                          borderSide: BorderSide(color: Theme.of(context).primaryColor),
                         ),
                         labelText: "Total Price (USD)",
                         contentPadding: EdgeInsets.only(
@@ -197,7 +197,7 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                                 right: 16.0,
                                 bottom: 5.0),
                             border: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.teal),
+                              borderSide: BorderSide(color: Theme.of(context).primaryColor),
                             ),
                           ),
                           controller: _controller,
