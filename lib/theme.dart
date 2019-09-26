@@ -148,7 +148,11 @@ ThemeData theme = ThemeData(
   // textTheme: ,
   primaryTextTheme: primaryTextTheme,
   accentTextTheme: accentTextTheme,
-  // inputDecorationTheme: ,
+  inputDecorationTheme: InputDecorationTheme(  
+    hintStyle: primaryTextTheme.body1.copyWith(color: Colors.grey),
+    labelStyle: primaryTextTheme.body1,
+    helperStyle: primaryTextTheme.body1,
+  ),
   iconTheme: IconThemeData(
     color: Colors.white.withAlpha(230),
   ),

@@ -120,14 +120,8 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
                           ? widget.existing.name.toString()
                           : '',
                       autofocus: true,
-                      style: TextStyle(
-                        fontSize: 22.0,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500,
-                      ),
                       keyboardType: TextInputType.text,
                       textCapitalization: TextCapitalization.sentences,
-                      // maxLength: 20,
                       validator: (value) {},
                       onSaved: (val) => setState(() => todoItem.name = val),
                     ),
@@ -143,10 +137,6 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
                         child: new TextFormField(
                           decoration: new InputDecoration(
                             hintText: 'Optional if Mileage Entered',
-                            hintStyle: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.w400,
-                            ),
                             labelText: 'Due Date',
                             contentPadding: EdgeInsets.only(
                                 left: 16.0,
@@ -156,11 +146,6 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
                             border: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.teal),
                             ),
-                          ),
-                          style: TextStyle(
-                            fontSize: 22.0,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500,
                           ),
                           controller: _controller,
                           keyboardType: TextInputType.datetime,
@@ -187,10 +172,6 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
                     TextFormField(
                       decoration: InputDecoration(
                         hintText: 'Optional if Due Date Entered',
-                        hintStyle: TextStyle(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.w400,
-                        ),
                         border: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.teal),
                         ),
@@ -198,16 +179,10 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
                         contentPadding: EdgeInsets.only(
                             left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
                       ),
-                      // controller: listNameController,
                       initialValue: (widget.mode == TodoEditMode.EDIT)
                           ? widget.existing.dueMileage.toString()
                           : '',
-                      autofocus: true,
-                      style: TextStyle(
-                        fontSize: 22.0,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500,
-                      ),
+                      autofocus: false,
                       keyboardType: TextInputType.number,
                       onSaved: (val) => setState(() {
                             if (val != null && val != '') {
@@ -223,11 +198,11 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
                 child: Column(
                   children: <Widget>[
                     RaisedButton(
-                      child: const Text(
-                        'Add',
-                        style: TextStyle(color: Colors.white),
+                      child: Text(
+                        'ADD',
+                        style: Theme.of(context).accentTextTheme.button,
                       ),
-                      color: Colors.blue,
+                      color: Theme.of(context).primaryColor,
                       elevation: 4.0,
                       splashColor: Colors.deepPurple,
                       onPressed: () {
