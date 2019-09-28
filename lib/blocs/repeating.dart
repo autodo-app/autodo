@@ -46,12 +46,6 @@ class RepeatingBLoC {
 
   final StreamController editStream = StreamController();
 
-  /// Kudos to the SO post here:
-  /// https://stackoverflow.com/questions/50875873/sort-maps-in-dart-by-key-or-by-value
-  // Map<String, dynamic> orderedRepeats() {
-  //   return SplayTreeMap.from(repeats, (a, b) => repeats[a].compareTo(repeats[b]));
-  // }
-
   Widget _buildItem(BuildContext context, DocumentSnapshot snapshot) => RepeatEditor(item: Repeat.fromJSON(snapshot.data, snapshot.documentID));
 
 
@@ -166,6 +160,7 @@ class RepeatingBLoC {
     await findLatestCompletedTodos();
     await findUpcomingRepeatTodos();
 
+
     repeats.forEach((repeat) {
       // Check if the upcoming ToDo for this category already exists
       if (!upcomingRepeatTodos.containsKey(repeat.name)) {
@@ -249,9 +244,11 @@ class RepeatingBLoC {
   }
 
   void pushNewTodo(String carName, String taskName, int dueMileage) async {
-    MaintenanceTodoItem newTodo = MaintenanceTodoItem.empty();
-    newTodo.name = taskName;
-    newTodo.dueMileage = dueMileage;
+    MaintenanceTodoItem newTodo = MaintenanceTodoItem(  
+      name: taskName,
+      dueMileage: dueMileage,
+      repeatingType: taskName,
+    );
     await Auth().fetchUser();
     FirebaseTodoBLoC().push(newTodo);
   }

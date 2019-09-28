@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MaintenanceTodoItem {
-  String name, ref;
+  String name, ref, repeatingType;
   DateTime dueDate, completeDate;
   int dueMileage;
   bool complete = false;
@@ -10,7 +10,7 @@ class MaintenanceTodoItem {
   DocumentReference reference;
 
   MaintenanceTodoItem(
-      {@required this.ref, @required this.name, this.dueDate, this.dueMileage});
+      {this.ref, @required this.name, this.dueDate, this.dueMileage, this.repeatingType});
 
   MaintenanceTodoItem.empty();
 
@@ -29,6 +29,9 @@ class MaintenanceTodoItem {
     if (map['completeDate'] != null) {
       completeDate = map['completeDate'];
     }
+    if (map['repeatingType'] != null) {
+      repeatingType = map['repeatingType'];
+    }
     tags = map['tags'];
   }
 
@@ -42,6 +45,7 @@ class MaintenanceTodoItem {
       'completeDate': this.completeDate,
       'dueMileage': this.dueMileage,
       'complete': this.complete,
+      'repeatingType': this.repeatingType,
       'tags': this.tags
     };
   }
