@@ -1,3 +1,4 @@
+import 'package:autodo/sharedmodels/autoscrollfield.dart';
 import 'package:autodo/sharedmodels/ensurevisiblewidget.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -98,6 +99,7 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
         ? widget.existing.repeatingType
         : '',
     autofocus: false,
+    focusNode: _repeatNode,
     style: TextStyle(
       fontSize: 22.0,
       color: Colors.black,
@@ -250,59 +252,60 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
       body: Container(
         child: Form(
           key: _formKey,
-          child: Padding(
+          child: ListView(
             padding: EdgeInsets.only(top: 24.0, left: 20.0, right: 20.0),
-            child: ListView(
-              controller: scrollCtrl,
-              children: <Widget>[
-                EnsureVisibleWhenFocused(  
-                  child: nameField(),
-                  focusNode: _nameNode,
-                ),
-                Padding(  
-                  padding: EdgeInsets.only(bottom: 10),
-                ),
-                Divider(),
-                Padding(  
-                  padding: EdgeInsets.only(bottom: 10),
-                ),
-                Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: EnsureVisibleWhenFocused(  
-                        child: dateField(),
-                        focusNode: _dateNode,
-                      ),
+            controller: scrollCtrl,
+            children: <Widget>[
+              EnsureVisibleWhenFocused(  
+                child: nameField(),
+                focusNode: _nameNode,
+              ),
+              Padding(  
+                padding: EdgeInsets.only(bottom: 15),
+              ),
+              Divider(),
+              Padding(  
+                padding: EdgeInsets.only(bottom: 15),
+              ),
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: EnsureVisibleWhenFocused(  
+                      child: dateField(),
+                      focusNode: _dateNode,
                     ),
-                    IconButton(
-                      icon: Icon(Icons.calendar_today),
-                      tooltip: 'Choose date',
-                      onPressed: (() {
-                        _chooseDate(context, _controller.text);
-                      }),
-                    ),
-                  ],
-                ),
-                Padding(  
-                  padding: EdgeInsets.only(bottom: 10),
-                ),
-                EnsureVisibleWhenFocused(  
-                  child: mileageField(),
-                  focusNode: _mileageNode,
-                ),
-                Padding(  
-                  padding: EdgeInsets.only(bottom: 10),
-                ),
-                EnsureVisibleWhenFocused(  
-                  child: repeatField(),
-                  focusNode: _repeatNode,
-                ),
-                Padding(  
-                  padding: EdgeInsets.only(bottom: 10),
-                ),
-                addButton(),
-              ],
-            ),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.calendar_today),
+                    tooltip: 'Choose date',
+                    onPressed: (() {
+                      _chooseDate(context, _controller.text);
+                    }),
+                  ),
+                ],
+              ),
+              Padding(  
+                padding: EdgeInsets.only(bottom: 15),
+              ),
+              EnsureVisibleWhenFocused(  
+                child: mileageField(),
+                focusNode: _mileageNode,
+              ),
+              Padding(  
+                padding: EdgeInsets.only(bottom: 15),
+              ),
+              AutoScrollField(
+                controller: scrollCtrl,
+                focusNode: _repeatNode,
+                position: 240,
+                child: repeatField(),
+              ),
+              Padding(  
+                padding: EdgeInsets.only(bottom: 10),
+              ),
+              addButton(),
+              Container(height: 10000,),
+            ],
           ),
         ),
       ),
