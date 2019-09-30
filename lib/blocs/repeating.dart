@@ -272,6 +272,17 @@ class RepeatingBLoC {
     _past = null;
   }
 
+  List<Repeat> getSuggestions(String pattern) {
+    RegExp regex = RegExp('*$pattern*'); // match anything with the pattern in it
+    List<Repeat> out = [];
+    for (var r in repeats) {
+      if (regex.hasMatch(r.name)) out.add(r);
+    }
+    // return out;
+    print(repeats);
+    return repeats;
+  }
+
   // Make the object a Singleton
   static final RepeatingBLoC _self = RepeatingBLoC._internal();
   factory RepeatingBLoC() {
