@@ -32,22 +32,8 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
 
   @override
   void dispose() {
-    // Clean up the focus node when the Form is disposed.
     focusNode.dispose();
-
     super.dispose();
-  }
-
-  Future<Null> _selectDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
-    if (picked != null && picked != selectedDate)
-      setState(() {
-        selectedDate = picked;
-      });
   }
 
   final TextEditingController _controller = new TextEditingController();

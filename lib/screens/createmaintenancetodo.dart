@@ -25,6 +25,9 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
   MaintenanceTodoItem todoItem;
   final _formKey = GlobalKey<FormState>();
   ScrollController scrollCtrl;
+  Repeat selectedRepeat;
+  final _autocompleteKey = GlobalKey<AutoCompleteTextFieldState<Repeat>>();
+  TextEditingController _autocompleteController;
 
   @override
   void initState() {
@@ -37,6 +40,7 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
     _mileageNode = FocusNode();
     _repeatNode = FocusNode();
     scrollCtrl = ScrollController();
+    _autocompleteController = TextEditingController();
   }
 
   @override
@@ -86,6 +90,19 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
     return d != null && d.isBefore(DateTime.now());
   }
 
+  InputDecoration defaultInputDecoration(String hintText, String labelText) {
+    return InputDecoration(
+      hintText: hintText,
+      hintStyle: Theme.of(context).primaryTextTheme.body1,
+      border: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.teal),
+      ),
+      labelText: labelText,
+      contentPadding: EdgeInsets.only(
+          left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
+    );
+  }
+
   Widget repeatField() {
     return TextFormField(
       decoration: InputDecoration(
@@ -107,7 +124,7 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
       fontWeight: FontWeight.w500,
     ),
     keyboardType: TextInputType.text,
-    validator: (value) {},
+    validator: (value) { return null;},
     onSaved: (val) => setState(() => todoItem.repeatingType = val),
     );
   }
@@ -134,7 +151,7 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
       ),
       keyboardType: TextInputType.text,
       textCapitalization: TextCapitalization.sentences,
-      validator: (value) {},
+      validator: (value) { return null; },
       onSaved: (val) => setState(() => todoItem.name = val),
     );
   }
@@ -177,19 +194,7 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
 
   Widget mileageField() {
     return TextFormField(
-      decoration: InputDecoration(
-        hintText: 'Optional if Due Date Entered',
-        hintStyle: TextStyle(
-          fontSize: 18.0,
-          fontWeight: FontWeight.w400,
-        ),
-        border: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.teal),
-        ),
-        labelText: "Due Mileage",
-        contentPadding: EdgeInsets.only(
-            left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
-      ),
+      decoration: defaultInputDecoration('Optional if Due Date Entered', 'DueMileage'),
       initialValue: (widget.mode == TodoEditMode.EDIT)
           ? widget.existing.dueMileage.toString()
           : '',
@@ -238,26 +243,44 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
     );
   }
 
-  Widget autoComplete() {
-    Repeat selected;
-    GlobalKey key =
-    //   GlobalKey<AutoCompleteTextFieldState<ArbitrarySuggestionType>>();
-      GlobalKey<AutoCompleteTextFieldState<Repeat>>();
-    // return AutoCompleteTextField<ArbitrarySuggestionType>(
+  Widget autoComplete(FormFieldState<String> input) {
+    var txt = _autocompleteController.text;
+    if ((txt == null || txt == '') && widget.mode == TodoEditMode.EDIT)
+      _autocompleteController.text = widget.existing.repeatingType;
     return AutoCompleteTextField<Repeat>(
-      decoration: InputDecoration(
-          hintText: "Search Resturant:", suffixIcon: Icon(Icons.search)),
-      itemSubmitted: (item) => setState(() => selected = item),
-      key: key,
+      focusNode: _repeatNode,
+      controller: _autocompleteController,
+      decoration: defaultInputDecoration('Repeating Task', 'Optional'),
+      itemSubmitted: (item) => setState(() {
+        _autocompleteController.text = item.name;
+        selectedRepeat = item;
+      }),
+      key: _autocompleteKey,
       suggestions: RepeatingBLoC().repeats,
       itemBuilder: (context, suggestion) => Padding(
-          child: ListTile(
-              title: Text(suggestion.name),
-              trailing: Text("Interval: ${suggestion.interval}")),
-          padding: EdgeInsets.all(8.0)),
+        child: ListTile(
+          title: Text(suggestion.name),
+          trailing: Text("Interval: ${suggestion.interval}")
+        ),
+        padding: EdgeInsets.all(5.0),
+      ),
       itemSorter: (a, b) => a.name.length == b.name.length ? 0 : a.name.length < b.name.length ? -1 : 1,
+      // returns a match anytime that the input is anywhere in the repeat name
       itemFilter: (suggestion, input) =>
-          suggestion.name.toLowerCase().startsWith(input.toLowerCase()),
+          suggestion.name.toLowerCase().contains(input.toLowerCase()),
+    );
+  }
+
+  Widget repeatForm() {
+    return FormField<String>( 
+      builder: autoComplete,
+      initialValue: (widget.mode == TodoEditMode.EDIT) ? widget.existing.repeatingType : 'alksjd',
+      onSaved: (val) => setState(() {
+        if (selectedRepeat != null) todoItem.repeatingType = selectedRepeat.name;
+        else if (val != null && RepeatingBLoC().repeats.any((element) => element.name == val)) {
+          todoItem.repeatingType = val;
+        }
+      }),
     );
   }
 
@@ -322,7 +345,8 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
                 controller: scrollCtrl,
                 focusNode: _repeatNode,
                 position: 240,
-                child: repeatField(),
+                // child: repeatField(),
+                child: repeatForm(),
               ),
               Padding(  
                 padding: EdgeInsets.only(bottom: 10),

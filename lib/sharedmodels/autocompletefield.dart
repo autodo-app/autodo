@@ -62,7 +62,7 @@ class AutoCompleteTextField<T> extends StatefulWidget {
           5, //The amount of suggestions to show, larger values may result in them going off screen
       this.submitOnSuggestionTap:
           true, //Call textSubmitted on suggestion tap, itemSubmitted will be called no matter what
-      this.clearOnSubmit: true, //Clear autoCompleteTextfield on submit
+      this.clearOnSubmit: false, //Clear autoCompleteTextfield on submit
       this.textInputAction: TextInputAction.done,
       this.textCapitalization: TextCapitalization.sentences,
       this.minLength = 1,
@@ -406,7 +406,7 @@ class SimpleAutoCompleteTextField extends AutoCompleteTextField<String> {
       @required List<String> suggestions,
       int suggestionsAmount: 5,
       bool submitOnSuggestionTap: true,
-      bool clearOnSubmit: true,
+      bool clearOnSubmit: false,
       TextInputAction textInputAction: TextInputAction.done,
       TextCapitalization textCapitalization: TextCapitalization.sentences})
       : super(

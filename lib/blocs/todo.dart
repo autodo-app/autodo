@@ -19,7 +19,8 @@ class FirebaseTodoBLoC {
         ref: snapshot.documentID,
         name: name,
         dueDate: date,
-        dueMileage: mileage);
+        dueMileage: mileage,
+        repeatingType: snapshot.data['repeatingType']);
     return MaintenanceTodoCard(item: item);
   }
 
