@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:intl/intl.dart';
 import 'package:autodo/blocs/todo.dart';
 import 'package:autodo/blocs/repeating.dart';
+import 'package:autodo/sharedmodels/autocompletefield.dart';
 import 'package:autodo/items/items.dart';
 
 enum TodoEditMode { CREATE, EDIT }
@@ -234,6 +235,29 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget autoComplete() {
+    Repeat selected;
+    GlobalKey key =
+    //   GlobalKey<AutoCompleteTextFieldState<ArbitrarySuggestionType>>();
+      GlobalKey<AutoCompleteTextFieldState<Repeat>>();
+    // return AutoCompleteTextField<ArbitrarySuggestionType>(
+    return AutoCompleteTextField<Repeat>(
+      decoration: InputDecoration(
+          hintText: "Search Resturant:", suffixIcon: Icon(Icons.search)),
+      itemSubmitted: (item) => setState(() => selected = item),
+      key: key,
+      suggestions: RepeatingBLoC().repeats,
+      itemBuilder: (context, suggestion) => Padding(
+          child: ListTile(
+              title: Text(suggestion.name),
+              trailing: Text("Interval: ${suggestion.interval}")),
+          padding: EdgeInsets.all(8.0)),
+      itemSorter: (a, b) => a.name.length == b.name.length ? 0 : a.name.length < b.name.length ? -1 : 1,
+      itemFilter: (suggestion, input) =>
+          suggestion.name.toLowerCase().startsWith(input.toLowerCase()),
     );
   }
 
