@@ -57,8 +57,8 @@ class FirebaseTodoBLoC {
     });
   }
 
-  void edit(MaintenanceTodoItem item) {
-    _db.runTransaction((transaction) async {
+  Future<void> edit(MaintenanceTodoItem item) async {
+    await _db.runTransaction((transaction) async {
       // Grab the item's existing identifier
       DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
       DocumentReference ref = userDoc
