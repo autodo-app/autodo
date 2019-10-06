@@ -247,8 +247,9 @@ class RepeatingBLoC {
                         .collection('todos').where("complete", isEqualTo: false).orderBy("completeDate");
     QuerySnapshot docs = await completes.getDocuments();
     List<DocumentSnapshot> snaps = docs.documents;
+    WriteBatch _batch = _db.batch();
 
-    snaps.forEach((snap) async {
+    for (var snap in snaps) {
       var todo = snap.data;
       String taskType = snap.data['repeatingType'];
       if (taskType == item.name) {
@@ -258,11 +259,14 @@ class RepeatingBLoC {
         if (!todo.containsKey('dueMileage') || todo['dueMileage'] == null || prevInterval == curInterval)
           return;
         int curMileage = todo['dueMileage'] as int;
-        todo['dueMileage'] = (curMileage + (prevInterval - curInterval)); 
+        todo['dueMileage'] = curMileage + (curInterval - prevInterval); 
       } 
-      await FirebaseTodoBLoC().edit(MaintenanceTodoItem.fromMap(todo, 
-        reference: userDoc.collection('todos').document(snap.documentID)));
-    });
+      var updatedItem = MaintenanceTodoItem.fromMap(
+        todo, 
+        reference: userDoc.collection('todos').document(snap.documentID));
+      _batch = await FirebaseTodoBLoC().addUpdate(_batch, updatedItem);
+    }
+    _batch.commit();
   }
 
   void editRunner(dynamic item) {

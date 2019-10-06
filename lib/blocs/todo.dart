@@ -89,6 +89,15 @@ class FirebaseTodoBLoC {
     return Auth().isLoading();
   }
 
+  Future<WriteBatch> addUpdate(WriteBatch batch, MaintenanceTodoItem item) async {
+    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    DocumentReference ref = userDoc
+        .collection('todos')
+        .document(item.ref);
+    batch.setData(ref, item.toJSON());
+    return batch;
+  }
+
   // Make the object a Singleton
   static final FirebaseTodoBLoC _bloc = FirebaseTodoBLoC._internal();
   factory FirebaseTodoBLoC() {
