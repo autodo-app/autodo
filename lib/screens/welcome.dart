@@ -4,22 +4,6 @@ import 'package:autodo/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-LinearGradient blueGrey = LinearGradient(
-  begin: Alignment.topCenter,
-  end: Alignment.bottomCenter,
-  colors: [Colors.blueGrey[200], Colors.blueGrey[800]],
-);
-LinearGradient blue = LinearGradient(
-  begin: Alignment.topCenter,
-  end: Alignment.bottomCenter,
-  colors: [Colors.blue[300], Colors.blue[900]],
-);
-BoxDecoration bgGradient() {
-  return BoxDecoration(
-    gradient: LinearGradient.lerp(blueGrey, blue, 0.4),
-  );
-}
-
 const BUTTON_PADDING = 8.0;
 
 class SignupButton extends StatefulWidget {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:autodo/blocs/userauth.dart';
+import 'package:autodo/theme.dart';
 
 class SignInScreen extends StatefulWidget {
   final Auth userAuth = Auth();
@@ -72,32 +73,30 @@ class SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.grey[300]),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Hero(
-          tag: "SignupButton",
-          transitionOnUserGestures: true,
-          child: Text(
-            widget.formMode == FormMode.LOGIN ? 'LOG IN' : 'SIGN UP',
-            style: TextStyle(color: Colors.grey[300]),
+    return Container(
+      decoration: scaffoldBackgroundGradient(),
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.grey[300]),
+            onPressed: () => Navigator.pop(context),
           ),
+          title: Hero(
+            tag: "SignupButton",
+            transitionOnUserGestures: true,
+            child: Text(
+              widget.formMode == FormMode.LOGIN ? 'LOG IN' : 'SIGN UP',
+              style: TextStyle(color: Colors.grey[300]),
+            ),
+          ),
+        ),
+        body: Stack(
+          children: <Widget>[
+            _showBody(),
+            _showCircularProgress(),
+          ],
         ),
         backgroundColor: Colors.transparent,
-        elevation: 0.0,
-      ),
-      body: Container(
-        child: Material(
-          child: Stack(
-            children: <Widget>[
-              _showBody(),
-              _showCircularProgress(),
-            ],
-          ),
-        ),
       ),
     );
   }
