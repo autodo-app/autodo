@@ -21,7 +21,7 @@ class MaintenanceTodoItem {
       dueDate = map['dueDate'];
     }
     if (map['dueMileage'] != null) {
-      dueDate = map['dueMileage'];
+      dueMileage = map['dueMileage'];
     }
     if (map['complete'] != null) {
       complete = map['complete'];
@@ -32,7 +32,7 @@ class MaintenanceTodoItem {
     if (map['repeatingType'] != null) {
       repeatingType = map['repeatingType'];
     }
-    tags = map['tags'];
+    tags = List<String>.from(map['tags']);
   }
 
   MaintenanceTodoItem.fromSnapshot(DocumentSnapshot snapshot)
