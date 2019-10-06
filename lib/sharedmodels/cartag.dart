@@ -15,7 +15,8 @@ class CarTag extends StatelessWidget {
       ),
       child: FlatButton(
         child: Chip(
-          backgroundColor: tagPallette.shade500,
+          // backgroundColor: tagPallette.shade500,
+          backgroundColor: Colors.blue,
           label: Text(
             text,
             style: Theme.of(context).accentTextTheme.body2,

@@ -37,22 +37,24 @@ const Map<int, Color> tagColors =
 const MaterialColor tagPallette = MaterialColor(500, tagColors);
 
 const Color errorColor = Color(0xffcf6679);
-final Color cardColor = Color.lerp(mainPallette.shade800, Colors.grey[700], 0.7);
+final Color cardColor = Color.lerp(mainPallette.shade900, Colors.grey[800], 0.7);
+// final Color cardColor = Colors.grey[800];
+// final Color cardColor = 
 
 Decoration scaffoldBackgroundGradient() {
   LinearGradient blueGrey = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    colors: [Colors.blueGrey[200], Colors.blueGrey[900]],
+    colors: [Colors.blueGrey[200], Colors.blueGrey[700], Colors.blueGrey[700], Colors.blueGrey[700], Colors.blueGrey[900]],
   );
   LinearGradient darken = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    colors: [Colors.blueGrey[900], Colors.black],
+    colors: [Colors.blueGrey[900], Colors.black87, Colors.black],
   );
   BoxDecoration bgGradient() {
     return BoxDecoration(
-      gradient: LinearGradient.lerp(blueGrey, darken, 0.4),
+      gradient: LinearGradient.lerp(blueGrey, darken, 0.7),
     );
   }
   return bgGradient();
