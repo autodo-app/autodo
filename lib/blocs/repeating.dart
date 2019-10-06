@@ -46,12 +46,6 @@ class RepeatingBLoC {
 
   final StreamController editStream = StreamController();
 
-  /// Kudos to the SO post here:
-  /// https://stackoverflow.com/questions/50875873/sort-maps-in-dart-by-key-or-by-value
-  // Map<String, dynamic> orderedRepeats() {
-  //   return SplayTreeMap.from(repeats, (a, b) => repeats[a].compareTo(repeats[b]));
-  // }
-
   Widget _buildItem(BuildContext context, DocumentSnapshot snapshot) => RepeatEditor(item: Repeat.fromJSON(snapshot.data, snapshot.documentID));
 
 
@@ -98,6 +92,15 @@ class RepeatingBLoC {
       }
     });
     return out; 
+  }
+
+  Repeat _repeatByName(String name) {
+    List<Repeat> matches = List.from(repeats.where((repeat) => repeat.name == name));
+    if (matches.length == 1) return matches[0];
+    else {
+      print("multiple repeats with the same name");
+      return matches[0];
+    }
   }
 
   /// Checks to see if the user has repeat intervals in their db collection
@@ -165,6 +168,7 @@ class RepeatingBLoC {
     await checkRepeats();
     await findLatestCompletedTodos();
     await findUpcomingRepeatTodos();
+
 
     repeats.forEach((repeat) {
       // Check if the upcoming ToDo for this category already exists
@@ -236,8 +240,38 @@ class RepeatingBLoC {
       await transaction.update(ref, item.toJSON());
     });
   }
+  
+  void updateTodos(Repeat item) async {
+    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    Query completes = userDoc
+                        .collection('todos').where("complete", isEqualTo: false).orderBy("completeDate");
+    QuerySnapshot docs = await completes.getDocuments();
+    List<DocumentSnapshot> snaps = docs.documents;
+    WriteBatch _batch = _db.batch();
+
+    for (var snap in snaps) {
+      var todo = snap.data;
+      String taskType = snap.data['repeatingType'];
+      if (taskType == item.name) {
+        // use the difference in the previous and new intervals to update the dueMileage
+        int prevInterval = _repeatByName(taskType).interval ?? 0; // prevent exception on null value
+        int curInterval = item.interval ?? 0;
+        if (!todo.containsKey('dueMileage') || todo['dueMileage'] == null || prevInterval == curInterval)
+          return;
+        int curMileage = todo['dueMileage'] as int;
+        todo['dueMileage'] = curMileage + (curInterval - prevInterval); 
+      } 
+      var updatedItem = MaintenanceTodoItem.fromMap(
+        todo, 
+        reference: userDoc.collection('todos').document(snap.documentID));
+      _batch = await FirebaseTodoBLoC().addUpdate(_batch, updatedItem);
+    }
+    _batch.commit();
+  }
 
   void editRunner(dynamic item) {
+    if (item.ref == null) return;
+    updateTodos(item);
     edit(item);
   }
 
@@ -249,9 +283,11 @@ class RepeatingBLoC {
   }
 
   void pushNewTodo(String carName, String taskName, int dueMileage) async {
-    MaintenanceTodoItem newTodo = MaintenanceTodoItem.empty();
-    newTodo.name = taskName;
-    newTodo.dueMileage = dueMileage;
+    MaintenanceTodoItem newTodo = MaintenanceTodoItem(  
+      name: taskName,
+      dueMileage: dueMileage,
+      repeatingType: taskName,
+    );
     await Auth().fetchUser();
     FirebaseTodoBLoC().push(newTodo);
   }
@@ -273,6 +309,17 @@ class RepeatingBLoC {
   void undo() {
     if (_past != null) pushRepeats('default', [_past]);
     _past = null;
+  }
+
+  List<Repeat> getSuggestions(String pattern) {
+    RegExp regex = RegExp('*$pattern*'); // match anything with the pattern in it
+    List<Repeat> out = [];
+    for (var r in repeats) {
+      if (regex.hasMatch(r.name)) out.add(r);
+    }
+    // return out;
+    print(repeats);
+    return repeats;
   }
 
   // Make the object a Singleton

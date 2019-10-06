@@ -19,7 +19,8 @@ class FirebaseTodoBLoC {
         ref: snapshot.documentID,
         name: name,
         dueDate: date,
-        dueMileage: mileage);
+        dueMileage: mileage,
+        repeatingType: snapshot.data['repeatingType']);
     return MaintenanceTodoCard(item: item);
   }
 
@@ -56,8 +57,8 @@ class FirebaseTodoBLoC {
     });
   }
 
-  void edit(MaintenanceTodoItem item) {
-    _db.runTransaction((transaction) async {
+  Future<void> edit(MaintenanceTodoItem item) async {
+    await _db.runTransaction((transaction) async {
       // Grab the item's existing identifier
       DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
       DocumentReference ref = userDoc
@@ -86,6 +87,15 @@ class FirebaseTodoBLoC {
 
   bool isLoading() {
     return Auth().isLoading();
+  }
+
+  Future<WriteBatch> addUpdate(WriteBatch batch, MaintenanceTodoItem item) async {
+    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    DocumentReference ref = userDoc
+        .collection('todos')
+        .document(item.ref);
+    batch.setData(ref, item.toJSON());
+    return batch;
   }
 
   // Make the object a Singleton
