@@ -25,13 +25,17 @@ class FirebaseTodoBLoC {
   }
 
   StreamBuilder buildList(BuildContext context) {
-    if (FirestoreBLoC.isLoading()) return StreamBuilder();
+    if (FirestoreBLoC.isLoading()) return StreamBuilder(
+      builder: (context, snapshot) {
+        return Text('Loading...');
+      }
+    );
     return StreamBuilder(
       stream: FirestoreBLoC.getUserDocument()
           .collection('todos')
           .snapshots(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) return const Text('Loading...');
+        if (!snapshot.hasData) return Text('Loading...');
         return ListView.builder(
           itemCount: snapshot.data.documents.length,
           itemBuilder: (context, index) =>
