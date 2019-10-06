@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:autodo/items/items.dart';
 import 'package:intl/intl.dart';
 import 'package:autodo/screens/screens.dart';
+import 'package:autodo/sharedmodels/cartag.dart';
 
 class MaintenanceTodoCard extends StatefulWidget {
   final MaintenanceTodoItem item;
@@ -22,6 +23,7 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
         padding: EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
         child: Checkbox(
           value: isChecked,
+          checkColor: Theme.of(context).accentIconTheme.color,
           onChanged: (bool val) {
             setState(() {
               isChecked = val;
@@ -39,7 +41,10 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
       return Row(
         children: <Widget>[
           Icon(Icons.alarm, size: 30.0),
-          Text('Due on ' + DateFormat("MM/dd/yyyy").format(date)),
+          Text(
+            'Due on ' + DateFormat("MM/dd/yyyy").format(date),
+            style: Theme.of(context).primaryTextTheme.body1,
+          ),
         ],
       );
     } else {
@@ -53,7 +58,10 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
       return Row(
         children: <Widget>[
           Icon(Icons.directions_car, size: 30.0),
-          Text('Due at ' + mileage.toString() + ' miles'),
+          Text(
+            'Due at ' + mileage.toString() + ' miles',
+            style: Theme.of(context).primaryTextTheme.body1,
+          ),
         ],
       );
     } else {
@@ -81,10 +89,7 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
           alignment: Alignment.center,
           child: Text(
             widget.item.name,
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 24.0,
-            ),
+            style: Theme.of(context).primaryTextTheme.title,
           ),
         ),
         Divider(),
@@ -94,7 +99,7 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
 
   Container body(MaintenanceTodoCard widget) {
     return Container(
-      padding: EdgeInsets.fromLTRB(0, 16.0, 0, 16.0),
+      padding: EdgeInsets.fromLTRB(0, 36.0, 0, 36.0),
       child: Row(
         children: <Widget>[
           checkbox(widget),
@@ -112,19 +117,7 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
     ];
     for (var tag in widget.item.tags) {
       tags.add(
-        ButtonTheme.fromButtonThemeData(
-          data: ButtonThemeData(
-            minWidth: 0,
-            padding: EdgeInsets.fromLTRB(5.0, 0, 5.0, 0),
-          ),
-          child: FlatButton(
-            child: Chip(
-              backgroundColor: Colors.lightGreen,
-              label: Text(tag),
-            ),
-            onPressed: () {},
-          ),
-        ),
+        CarTag(tag),
       );
     }
     return Row(
@@ -143,7 +136,10 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
             minWidth: 0,
           ),
           child: FlatButton(
-            child: const Icon(Icons.edit),
+            child: Icon(
+              Icons.edit,
+              color: Theme.of(context).primaryIconTheme.color,
+            ),
             onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -160,7 +156,10 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
             minWidth: 0,
           ),
           child: FlatButton(
-            child: const Icon(Icons.delete),
+            child: Icon(
+              Icons.delete,
+              color: Theme.of(context).primaryIconTheme.color,
+            ),
             onPressed: () {
               FirebaseTodoBLoC().delete(widget.item);
               final snackbar = SnackBar(
@@ -190,14 +189,19 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Container(
-        child: Column(
-          children: <Widget>[
-            title(widget),
-            body(widget),
-            footer(widget),
-          ],
+    return Padding(
+      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+      child: Card(
+        elevation: 8.0,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+        child: Container(
+          child: Column(
+            children: <Widget>[
+              title(widget),
+              body(widget),
+              footer(widget),
+            ],
+          ),
         ),
       ),
     );

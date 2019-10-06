@@ -85,7 +85,6 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
         ),
         title: Text('Refueling'),
       ),
-      // key: _scaffoldKey,
       body: Container(
         child: Form(
           key: _formKey,
@@ -98,27 +97,17 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                     TextFormField(
                       decoration: InputDecoration(
                         hintText: 'Required',
-                        hintStyle: TextStyle(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.w400,
-                        ),
                         border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.teal),
+                          borderSide: BorderSide(color: Theme.of(context).primaryColor),
                         ),
                         labelText: "Odometer Reading (mi)",
                         contentPadding: EdgeInsets.only(
                             left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
                       ),
-                      // controller: listNameController,
                       autofocus: true,
                       initialValue: (widget.mode == RefuelingEditMode.EDIT)
                           ? widget.existing.odom.toString()
                           : '',
-                      style: TextStyle(
-                        fontSize: 22.0,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500,
-                      ),
                       keyboardType: TextInputType.number,
                       onSaved: (val) => setState(() {
                             if (val != null && val != '') {
@@ -132,27 +121,17 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                     TextFormField(
                       decoration: InputDecoration(
                         hintText: 'Required',
-                        hintStyle: TextStyle(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.w400,
-                        ),
                         border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.teal),
+                          borderSide: BorderSide(color: Theme.of(context).primaryColor),
                         ),
                         labelText: "Amount of Fuel (gal)",
                         contentPadding: EdgeInsets.only(
                             left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
                       ),
-                      // controller: listNameController,
                       initialValue: (widget.mode == RefuelingEditMode.EDIT)
                           ? widget.existing.amount.toString()
                           : '',
-                      autofocus: true,
-                      style: TextStyle(
-                        fontSize: 22.0,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500,
-                      ),
+                      autofocus: false,
                       keyboardType: TextInputType.number,
                       onSaved: (val) => setState(() {
                             if (val != null && val != '') {
@@ -166,12 +145,8 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                     TextFormField(
                       decoration: InputDecoration(
                         hintText: 'Required',
-                        hintStyle: TextStyle(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.w400,
-                        ),
                         border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.teal),
+                          borderSide: BorderSide(color: Theme.of(context).primaryColor),
                         ),
                         labelText: "Total Price (USD)",
                         contentPadding: EdgeInsets.only(
@@ -181,12 +156,7 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                       initialValue: (widget.mode == RefuelingEditMode.EDIT)
                           ? widget.existing.cost.toString()
                           : '',
-                      autofocus: true,
-                      style: TextStyle(
-                        fontSize: 22.0,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500,
-                      ),
+                      autofocus: false,
                       keyboardType: TextInputType.number,
                       onSaved: (val) => setState(() {
                             if (val != null && val != '') {
@@ -206,10 +176,6 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                         child: new TextFormField(
                           decoration: new InputDecoration(
                             hintText: 'Optional',
-                            hintStyle: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.w400,
-                            ),
                             labelText: 'Refueling Date',
                             contentPadding: EdgeInsets.only(
                                 left: 16.0,
@@ -217,18 +183,10 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                                 right: 16.0,
                                 bottom: 5.0),
                             border: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.teal),
+                              borderSide: BorderSide(color: Theme.of(context).primaryColor),
                             ),
                           ),
-                          style: TextStyle(
-                            fontSize: 22.0,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500,
-                          ),
                           controller: _controller,
-                          // initialValue: (widget.mode == RefuelingEditMode.EDIT)
-                          //     ? widget.existing.date
-                          //     : '',
                           keyboardType: TextInputType.datetime,
                           validator: (val) =>
                               isValidDob(val) ? null : 'Not a valid date',
@@ -255,11 +213,11 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                 child: Column(
                   children: <Widget>[
                     RaisedButton(
-                      child: const Text(
-                        'Add',
-                        style: TextStyle(color: Colors.white),
+                      child: Text(
+                        'ADD',
+                        style: Theme.of(context).accentTextTheme.button,
                       ),
-                      color: Colors.blue,
+                      color: Theme.of(context).primaryColor,
                       elevation: 4.0,
                       splashColor: Colors.deepPurple,
                       onPressed: () {

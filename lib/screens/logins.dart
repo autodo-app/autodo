@@ -75,7 +75,7 @@ class SignInScreenState extends State<SignInScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.grey),
+          icon: Icon(Icons.arrow_back, color: Colors.grey[300]),
           onPressed: () => Navigator.pop(context),
         ),
         title: Hero(
@@ -83,7 +83,7 @@ class SignInScreenState extends State<SignInScreen> {
           transitionOnUserGestures: true,
           child: Text(
             widget.formMode == FormMode.LOGIN ? 'LOG IN' : 'SIGN UP',
-            style: TextStyle(color: Colors.grey),
+            style: TextStyle(color: Colors.grey[300]),
           ),
         ),
         backgroundColor: Colors.transparent,
@@ -184,9 +184,12 @@ class SignInScreenState extends State<SignInScreen> {
       autofocus: true,
       decoration: InputDecoration(
           hintText: 'Email',
+          hintStyle: TextStyle(
+              color: Colors.grey[400],
+            ),
           icon: Icon(
             Icons.mail,
-            color: Colors.grey,
+            color: Colors.grey[300],
           )),
       validator: (value) => _emailValidator(value),
       onSaved: (value) => _email = value.trim(),
@@ -210,9 +213,12 @@ class SignInScreenState extends State<SignInScreen> {
         autofocus: false,
         decoration: InputDecoration(
             hintText: 'Password',
+            hintStyle: TextStyle(
+              color: Colors.grey[400],
+            ),
             icon: Icon(
               Icons.lock,
-              color: Colors.grey,
+              color: Colors.grey[300],
             )),
         validator: (value) => _passwordValidator(value),
         onSaved: (value) => _password = value.trim(),
@@ -255,12 +261,16 @@ class SignInScreenState extends State<SignInScreen> {
               Radius.circular(15.0),
             ),
           ),
-          color: Colors.blue,
+          color: Theme.of(context).primaryColor,
           child: widget.formMode == FormMode.LOGIN
-              ? Text('Login',
-                  style: TextStyle(fontSize: 20.0, color: Colors.white))
-              : Text('Create account',
-                  style: TextStyle(fontSize: 20.0, color: Colors.white)),
+              ? Text(
+                'Login',
+                style: Theme.of(context).accentTextTheme.button,
+              )
+              : Text( 
+                'Create account',
+                style: Theme.of(context).accentTextTheme.button,
+          ),
           onPressed: () => _submit(),
         ),
       ),

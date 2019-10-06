@@ -49,104 +49,128 @@ class NavDrawerState extends State<NavDrawer> {
   Widget build(BuildContext context) {
     List<Widget> buttons = [
       FlatButton(
-        child: Text('Home Page'),
+        child: Text(
+          'Home Page',
+          style: Theme.of(context).primaryTextTheme.button,
+        ),
         onPressed: () => Navigator.popAndPushNamed(context, '/'),
       ),
       FlatButton(
-        child: Text('Refueling History'),
+        child: Text(
+          'Refueling History',
+          style: Theme.of(context).primaryTextTheme.button,
+        ),
         onPressed: () => Navigator.popAndPushNamed(context, '/refuelinghistory'),
       ),
       FlatButton(
-        child: Text('Statistics'),
+        child: Text(
+          'Statistics',
+          style: Theme.of(context).primaryTextTheme.button,
+        ),
         onPressed: () => Navigator.popAndPushNamed(context, '/statistics'),
       ),
       Divider(),
       FlatButton(
-        child: Text('Edit Repeating ToDos'),
+        child: Text(
+          'Edit Repeating ToDos',
+          style: Theme.of(context).primaryTextTheme.button,
+        ),
         onPressed: () => Navigator.popAndPushNamed(context, '/editrepeats'),
       ),
       FlatButton(
-        child: Text('Edit Car List'),
+        child: Text(
+          'Edit Car List',
+          style: Theme.of(context).primaryTextTheme.button,
+        ),
         onPressed: () => Navigator.popAndPushNamed(context, '/editcarlist'),
       ),
       FlatButton(
-        child: Text('Settings'),
+        child: Text(
+          'Settings',
+          style: Theme.of(context).primaryTextTheme.button,
+        ),
         onPressed: () => Navigator.popAndPushNamed(context, '/settings'),
       ),
     ];
 
     return Drawer(
-      child: CustomScrollView(
-        slivers: <Widget>[
-          SliverFixedExtentList(
-            itemExtent: 140.0,
-            delegate: SliverChildBuilderDelegate((context, index) {
-              return SizedBox.expand(
-                child: DrawerHeader(
-                  // child: Text('User information here?'),
-                  child: FutureBuilder<String>(
-                    future: Auth().getCurrentUserName(),
-                    builder:
-                        (BuildContext context, AsyncSnapshot<String> snapshot) {
-                      switch (snapshot.connectionState) {
-                        case ConnectionState.none:
-                          return Text('here');
-                        case ConnectionState.waiting:
-                        case ConnectionState.active:
-                          return Text('...');
-                        case ConnectionState.done:
-                          if (snapshot.hasError)
-                            return Text('Error: ${snapshot.error}');
-                          return userHeader('${snapshot.data}');
-                      }
-                    },
-                  ),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                  ),
-                ),
-              );
-            }, childCount: 1),
-          ),
-          SliverFixedExtentList(
-            itemExtent: 35.0,
-            delegate: SliverChildBuilderDelegate((context, index) {
-              return SizedBox.expand(
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: buttons[index],
-                ),
-              );
-            }, childCount: buttons.length),
-          ),
-          SliverFooter(
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Column(
-                children: <Widget>[
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: FlatButton(
-                      child: Text('Sign Out'),
-                      onPressed: () {
-                        Auth userAuth = Auth();
-                        userAuth.signOut();
-                        Navigator.popAndPushNamed(context, '/welcomepage');
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardColor.withAlpha(200),
+        ),
+        child: CustomScrollView(
+          slivers: <Widget>[
+            SliverFixedExtentList(
+              itemExtent: 140.0,
+              delegate: SliverChildBuilderDelegate((context, index) {
+                return SizedBox.expand(
+                  child: DrawerHeader(
+                    child: FutureBuilder<String>(
+                      future: Auth().getCurrentUserName(),
+                      builder:
+                          (BuildContext context, AsyncSnapshot<String> snapshot) {
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.none:
+                            return Text('here');
+                          case ConnectionState.waiting:
+                          case ConnectionState.active:
+                            return Text('...');
+                          case ConnectionState.done:
+                            if (snapshot.hasError)
+                              return Text('Error: ${snapshot.error}');
+                            return userHeader('${snapshot.data}');
+                          default:
+                            return Container();
+                        }
                       },
                     ),
-                  ),
-                  // TODO: replace this with a flat button too.
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: AboutListTile(
-                      applicationIcon: Icon(Icons.access_alarm),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
-                ],
+                );
+              }, childCount: 1),
+            ),
+            SliverFixedExtentList(
+              itemExtent: 35.0,
+              delegate: SliverChildBuilderDelegate((context, index) {
+                return SizedBox.expand(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: buttons[index],
+                  ),
+                );
+              }, childCount: buttons.length),
+            ),
+            SliverFooter(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Column(
+                  children: <Widget>[
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: FlatButton(
+                        child: Text('Sign Out'),
+                        onPressed: () {
+                          Auth userAuth = Auth();
+                          userAuth.signOut();
+                          Navigator.popAndPushNamed(context, '/welcomepage');
+                        },
+                      ),
+                    ),
+                    // TODO: replace this with a flat button too.
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: AboutListTile(
+                        applicationIcon: Icon(Icons.access_alarm),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -23,7 +23,7 @@ class CreateEntryButtonState extends State<CreateEntryButton>
   void initState() {
     super.initState();
 
-    _controller = new AnimationController(
+    _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 200),
     );
@@ -39,26 +39,26 @@ class CreateEntryButtonState extends State<CreateEntryButton>
 
   @override
   Widget build(BuildContext context) {
-    Color backgroundColor = Theme.of(context).cardColor;
-    Color foregroundColor = Theme.of(context).accentColor;
+    Color backgroundColor = Theme.of(context).primaryColor;
+    Color foregroundColor = Theme.of(context).cardColor;
     return Column(
       mainAxisSize: MainAxisSize.min,
-      children: new List.generate(icons.length, (int index) {
-        Widget child = new Container(
+      children: List.generate(icons.length, (int index) {
+        Widget child = Container(
           height: 70.0,
           width: 56.0,
           alignment: FractionalOffset.topCenter,
-          child: new ScaleTransition(
-            scale: new CurvedAnimation(
+          child: ScaleTransition(
+            scale: CurvedAnimation(
               parent: _controller,
-              curve: new Interval(0.0, 1.0 - index / icons.length / 2.0,
+              curve: Interval(0.0, 1.0 - index / icons.length / 2.0,
                   curve: Curves.easeOut),
             ),
-            child: new FloatingActionButton(
+            child: FloatingActionButton(
               heroTag: null,
               backgroundColor: backgroundColor,
               mini: true,
-              child: new Icon(icons[index], color: foregroundColor),
+              child: Icon(icons[index], color: foregroundColor),
               onPressed: () {
                 switchState();
                 if (index == 1) {
@@ -75,20 +75,30 @@ class CreateEntryButtonState extends State<CreateEntryButton>
         return child;
       }).toList()
         ..add(
-          new FloatingActionButton(
-            heroTag: null,
-            child: new AnimatedBuilder(
-              animation: _controller,
-              builder: (BuildContext context, Widget child) {
-                return new Transform(
+          AnimatedBuilder(
+            animation: _controller,
+            builder: (BuildContext context, Widget child) {
+              return FloatingActionButton(
+                heroTag: null,
+                backgroundColor: ColorTween(  
+                  begin: Theme.of(context).primaryColor,
+                  end: Theme.of(context).cardColor,
+                ).evaluate(_controller),
+                child: Transform(
                   transform:
-                      new Matrix4.rotationZ(_controller.value * 0.25 * math.pi),
+                      Matrix4.rotationZ(_controller.value * 0.75 * math.pi),
                   alignment: FractionalOffset.center,
-                  child: new Icon(Icons.add),
-                );
-              },
-            ),
-            onPressed: () => switchState(),
+                  child: Icon(
+                    Icons.add,
+                    color: ColorTween(  
+                      begin: Theme.of(context).accentIconTheme.color,
+                      end: Theme.of(context).primaryColor,
+                    ).evaluate(_controller),
+                  ),
+                ),
+                onPressed: () => switchState(),
+              );
+            },
           ),
         ),
     );

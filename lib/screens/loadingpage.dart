@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:autodo/blocs/userauth.dart';
 import 'package:autodo/blocs/repeating.dart';
 import 'package:autodo/blocs/firestore.dart';
+import 'package:autodo/theme.dart';
 
 class LoadingPage extends StatefulWidget {
   @override
@@ -10,22 +11,6 @@ class LoadingPage extends StatefulWidget {
 }
 
 class LoadingPageState extends State<LoadingPage> {
-  LinearGradient blueGrey = LinearGradient(
-    begin: Alignment.topCenter,
-    end: Alignment.bottomCenter,
-    colors: [Colors.blueGrey[200], Colors.blueGrey[800]],
-  );
-  LinearGradient blue = LinearGradient(
-    begin: Alignment.topCenter,
-    end: Alignment.bottomCenter,
-    colors: [Colors.blue[300], Colors.blue[900]],
-  );
-  BoxDecoration bgGradient() {
-    return BoxDecoration(
-      gradient: LinearGradient.lerp(blueGrey, blue, 0.4),
-    );
-  }
-
   @override
   void initState() {
     loadingSequence();
@@ -36,7 +21,7 @@ class LoadingPageState extends State<LoadingPage> {
     String uuid = await Auth().fetchUser();
     FirestoreBLoC.fetchUserDocument();
     if (uuid == "NO_USER") {
-      Navigator.pushNamed(context, '/loginpage');
+      Navigator.pushNamed(context, '/welcomepage');
     } else {
       await RepeatingBLoC().updateUpcomingTodos();
       Navigator.pushNamed(context, '/');
@@ -48,7 +33,7 @@ class LoadingPageState extends State<LoadingPage> {
     return Scaffold(
       body: Center(
         child: Container(
-          decoration: bgGradient(),
+          decoration: scaffoldBackgroundGradient(),
         ),
       ),
     );

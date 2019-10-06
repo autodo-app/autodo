@@ -21,16 +21,12 @@ class RepeatEditorState extends State<RepeatEditor> {
       initialValue: nameInit,
       decoration: InputDecoration(
         border: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.teal),
+          borderSide: BorderSide(color: Theme.of(context).primaryColor),
         ),
         contentPadding: EdgeInsets.fromLTRB(15, 10, 15, 5),
       ),
       autofocus: false,
-      style: TextStyle(
-        fontSize: 22.0,
-        color: Colors.black,
-        fontWeight: FontWeight.w500,
-      ),
+      style: Theme.of(context).primaryTextTheme.subtitle,
       keyboardType: TextInputType.text,
       textCapitalization: TextCapitalization.sentences,
       validator: (val) {
@@ -54,17 +50,13 @@ class RepeatEditorState extends State<RepeatEditor> {
       initialValue: valInit,
       decoration: InputDecoration(
         border: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.teal),
+          borderSide: BorderSide(color: Theme.of(context).primaryColor),
         ),
         counterText: '', // removes the text showing the number of characters out of max length entered
         contentPadding: EdgeInsets.fromLTRB(15, 10, 15, 5),
       ),
       autofocus: false,
-      style: TextStyle(
-        fontSize: 22.0,
-        color: Colors.black,
-        fontWeight: FontWeight.w500,
-      ),
+      style: Theme.of(context).primaryTextTheme.body1,
       keyboardType: TextInputType.number,
       maxLength: 6,
       validator: (val) {
