@@ -250,7 +250,7 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
     return AutoCompleteTextField<Repeat>(
       focusNode: _repeatNode,
       controller: _autocompleteController,
-      decoration: defaultInputDecoration('Repeating Task', 'Optional'),
+      decoration: defaultInputDecoration('Optional', 'Repeating Task'),
       itemSubmitted: (item) => setState(() {
         _autocompleteController.text = item.name;
         selectedRepeat = item;
@@ -274,7 +274,7 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
   Widget repeatForm() {
     return FormField<String>( 
       builder: autoComplete,
-      initialValue: (widget.mode == TodoEditMode.EDIT) ? widget.existing.repeatingType : 'alksjd',
+      initialValue: (widget.mode == TodoEditMode.EDIT) ? widget.existing.repeatingType : '',
       onSaved: (val) => setState(() {
         if (selectedRepeat != null) todoItem.repeatingType = selectedRepeat.name;
         else if (val != null && RepeatingBLoC().repeats.any((element) => element.name == val)) {
