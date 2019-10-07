@@ -17,7 +17,12 @@ class HomeScreenState extends State<HomeScreen> {
       decoration: scaffoldBackgroundGradient(),
       child: Scaffold(
         appBar: AppBar(
-          title: Text('auToDo'),
+          title: Center(
+            child: Text(
+              'auToDo',
+              style: logoStyle,
+            ),
+          ),
           actions: <Widget>[
             PopupMenuButton<dropdown>(
               icon: Icon(Icons.more_vert),

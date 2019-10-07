@@ -58,6 +58,14 @@ Decoration scaffoldBackgroundGradient() {
   return bgGradient();
 }
 
+TextStyle logoStyle = TextStyle( 
+  color: Colors.white.withAlpha(230),
+  fontSize: 24,
+  fontWeight: FontWeight.w800,
+  fontFamily: 'Ubuntu',
+  letterSpacing: 0.2,
+);
+
 TextTheme primaryTextTheme = TextTheme(  
   body1: TextStyle(  
     color: Colors.white.withAlpha(230),

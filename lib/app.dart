@@ -1,5 +1,6 @@
 import 'package:autodo/refueling/history.dart';
 import 'package:autodo/screens/editrepeats.dart';
+import 'package:autodo/screens/newuser.dart';
 import 'package:autodo/screens/statistics.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/screens/screens.dart';
@@ -21,6 +22,7 @@ class AutodoAppState extends State<AutodoApp> {
       title: 'auToDo',
       routes: {
         '/': (context) => HomeScreen(),
+        // '/': (context) => NewUserScreen(),
         '/refuelinghistory': (context) => RefuelingHistory(),
         '/load': (context) => LoadingPage(),
         '/welcomepage': (context) => LoginPage(),

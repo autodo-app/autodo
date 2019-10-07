@@ -138,7 +138,32 @@ flutter:
       - asset: fonts/ibm-plex/IBMPlexSerif-BoldItalic.otf
         weight: 800
         style: italic
-      
+    - family: Ubuntu
+      fonts:
+      - asset: fonts/ubuntu/Ubuntu-B.ttf
+        weight: 800
+      - asset: fonts/ubuntu/Ubuntu-BI.ttf
+        weight: 800
+        style: italic
+      - asset: fonts/ubuntu/Ubuntu-L.ttf
+        weight: 300
+      - asset: fonts/ubuntu/Ubuntu-LI.ttf
+        weight: 300
+        style: italic
+      - asset: fonts/ubuntu/Ubuntu-M.ttf
+        weight: 600
+      - asset: fonts/ubuntu/Ubuntu-MI.ttf
+        weight: 600
+        style: italic
+      - asset: fonts/ubuntu/Ubuntu-R.ttf
+        weight: 400
+        style: italic
+      - asset: fonts/ubuntu/Ubuntu-RI.ttf
+        weight: 400
+        style: italic
+      - asset: fonts/ubuntu/Ubuntu-Th.ttf
+        weight: 900
+
     # - family: Montserrat
     # - family: Raleway
 
