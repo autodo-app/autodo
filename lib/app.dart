@@ -16,13 +16,14 @@ class AutodoApp extends StatefulWidget {
 class AutodoAppState extends State<AutodoApp> {
   @override
   Widget build(BuildContext context) {
+    var theme = createTheme();
     return MaterialApp(
       theme: theme,
       initialRoute: '/load',
       title: 'auToDo',
       routes: {
-        // '/': (context) => HomeScreen(),
-        '/': (context) => NewUserScreen(),
+        '/': (context) => HomeScreen(),
+        // '/': (context) => NewUserScreen(),
         '/refuelinghistory': (context) => RefuelingHistory(),
         '/load': (context) => LoadingPage(),
         '/welcomepage': (context) => LoginPage(),

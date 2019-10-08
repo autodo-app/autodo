@@ -16,6 +16,8 @@ const Map<int, Color> mainColors =
     900: Color(0xff0e292e),
 };
 
+// color used on logo: 77dea1
+
 const MaterialColor mainPallette = MaterialColor(500, mainColors);
 
 /// tag palette:
@@ -66,151 +68,164 @@ TextStyle logoStyle = TextStyle(
   letterSpacing: 0.2,
 );
 
-TextTheme primaryTextTheme = TextTheme(  
-  body1: TextStyle(  
-    color: Colors.white.withAlpha(230),
-    fontSize: 16,
-    fontWeight: FontWeight.w300,
-    fontFamily: 'IBM Plex Sans',
-  ),
-  button: TextStyle(  
-    color: Colors.white.withAlpha(230),
-    fontSize: 14,
-    fontWeight: FontWeight.w500,
-    fontFamily: 'IBM Plex Sans',
-    letterSpacing: 0.2,
-  ),
-  title: TextStyle(
-    color: Colors.white.withAlpha(230),
-    fontSize: 24,
-    fontWeight: FontWeight.w500,
-    fontFamily: 'IBM Plex Sans',
-    letterSpacing: 1.0,
-  ),
-  subtitle: TextStyle(  
-    color: Colors.white.withAlpha(230),
-    fontSize: 18,
-    fontWeight: FontWeight.w400,
-    fontFamily: 'IBM Plex Sans',
-  ),
-
-);
-
-// Like the primary text theme, but dark.
-TextTheme accentTextTheme = TextTheme( 
-  button: TextStyle(  
-    color: Colors.black.withAlpha(230),
-    fontSize: 18,
-    fontWeight: FontWeight.w500,
-    fontFamily: 'IBM Plex Sans',
-    letterSpacing: 0.2,
-  ),
-  body2: TextStyle(  
-    // This is used for the car tags
-    color: Colors.black.withAlpha(230),
-    fontSize: 14,
-    fontWeight: FontWeight.w500,
-    fontFamily: 'IBM Plex Sans',
-    letterSpacing: 0.2,
-  ),
-);
-
 InputDecoration defaultInputDecoration(String hintText, String labelText) {
-  return InputDecoration(
-    hintText: hintText,
-    hintStyle: primaryTextTheme.body1,
-    border: OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.teal),
+    return InputDecoration(
+      hintText: hintText,
+      hintStyle: TextStyle(  
+        color: Colors.white.withAlpha(230),
+        fontSize: 16,
+        fontWeight: FontWeight.w300,
+        fontFamily: 'IBM Plex Sans',
+      ),
+      border: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.teal),
+      ),
+      labelText: labelText,
+      contentPadding: EdgeInsets.only(
+          left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
+    );
+  }
+
+createTheme() {
+  TextTheme primaryText = TextTheme(  
+    body1: TextStyle(  
+      color: Colors.white.withAlpha(230),
+      fontSize: 16,
+      fontWeight: FontWeight.w300,
+      fontFamily: 'IBM Plex Sans',
     ),
-    labelText: labelText,
-    contentPadding: EdgeInsets.only(
-        left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
+    button: TextStyle(  
+      color: Colors.white.withAlpha(230),
+      fontSize: 14,
+      fontWeight: FontWeight.w500,
+      fontFamily: 'IBM Plex Sans',
+      letterSpacing: 0.2,
+    ),
+    display1: TextStyle(
+      fontSize: 30,
+      fontFamily: 'Ubuntu',
+      fontWeight: FontWeight.w600,
+      color: Colors.white.withAlpha(230),
+    ),
+    title: TextStyle(
+      color: Colors.white.withAlpha(230),
+      fontSize: 24,
+      fontWeight: FontWeight.w500,
+      fontFamily: 'IBM Plex Sans',
+      letterSpacing: 1.0,
+    ),
+    subtitle: TextStyle(  
+      color: Colors.white.withAlpha(230),
+      fontSize: 18,
+      fontWeight: FontWeight.w400,
+      fontFamily: 'IBM Plex Sans',
+    ),
+
+  );
+
+  // Like the primary text theme, but dark.
+  TextTheme accentTextTheme = TextTheme( 
+    button: TextStyle(  
+      color: Colors.black.withAlpha(230),
+      fontSize: 18,
+      fontWeight: FontWeight.w500,
+      fontFamily: 'IBM Plex Sans',
+      letterSpacing: 0.2,
+    ),
+    body2: TextStyle(  
+      // This is used for the car tags
+      color: Colors.black.withAlpha(230),
+      fontSize: 14,
+      fontWeight: FontWeight.w500,
+      fontFamily: 'IBM Plex Sans',
+      letterSpacing: 0.2,
+    ),
+  );
+
+  return ThemeData( 
+    brightness: Brightness.dark,
+    primarySwatch: mainPallette,
+    primaryColor: mainPallette.shade500, // one darker than before
+    primaryColorBrightness: Brightness.light,
+    primaryColorLight: mainPallette.shade400,
+    primaryColorDark: mainPallette.shade600,
+    accentColor: mainPallette.shade600, // same here 
+    accentColorBrightness: Brightness.light,
+    canvasColor: mainPallette.shade900,
+    scaffoldBackgroundColor: cardColor,
+    bottomAppBarColor: mainPallette.shade800,
+    cardColor: cardColor,
+    dividerColor: Colors.white24,
+    focusColor: ThemeData.dark().focusColor,
+    hoverColor: ThemeData.dark().hoverColor,
+    highlightColor: ThemeData.dark().highlightColor,
+    splashColor: ThemeData.dark().splashColor,
+    splashFactory: ThemeData.dark().splashFactory,
+    selectedRowColor: mainPallette.shade100, // check this
+    unselectedWidgetColor: mainPallette.shade200, // check this
+    disabledColor: mainPallette.shade200,
+    buttonColor: mainPallette.shade100,
+    buttonTheme: ButtonThemeData(
+      buttonColor: Colors.white.withAlpha(230),
+    ),
+    toggleButtonsTheme: ThemeData.fallback().toggleButtonsTheme, // same
+    secondaryHeaderColor: mainPallette.shade300,
+    textSelectionColor: mainPallette.shade400,
+    cursorColor: mainPallette.shade300,
+    textSelectionHandleColor: mainPallette.shade300,
+    backgroundColor: cardColor,
+    dialogBackgroundColor: mainPallette.shade800,
+    indicatorColor: mainPallette.shade700,
+    hintColor: mainPallette.shade800,
+    errorColor: errorColor,
+    toggleableActiveColor: mainPallette.shade300,
+    fontFamily: 'IBM Plex Sans',
+    // textTheme: ,
+    primaryTextTheme: primaryText,
+    accentTextTheme: accentTextTheme,
+    inputDecorationTheme: InputDecorationTheme(  
+      hintStyle: primaryText.body1.copyWith(color: Colors.grey),
+      labelStyle: primaryText.body1,
+      helperStyle: primaryText.body1,
+    ),
+    iconTheme: IconThemeData(
+      color: Colors.white.withAlpha(230),
+    ),
+    primaryIconTheme: IconThemeData(  
+      color: Colors.white.withAlpha(230),
+    ),
+    accentIconTheme: IconThemeData(  
+      color: Colors.black.withAlpha(230),
+    ),
+    // sliderTheme: ,
+    // tabBarTheme: ,
+    // tooltipTheme: ,
+    // cardTheme: ,
+    // chipTheme: ,
+    platform: TargetPlatform.android,
+    materialTapTargetSize: ThemeData.fallback().materialTapTargetSize,
+    // applyElevationOverlayColor: true, // used with dark themes to add elevation status, check this
+    applyElevationOverlayColor: false,
+    // pageTransitionsTheme: ,
+    appBarTheme: AppBarTheme(
+      brightness: Brightness.dark, 
+      color: Colors.transparent, 
+      elevation: 0.0, 
+      iconTheme: ThemeData.dark().iconTheme,
+      actionsIconTheme: ThemeData.dark().iconTheme, 
+      textTheme: primaryText,
+    ),
+    // bottomAppBarTheme: ,
+    // colorScheme: prefix0.ColorScheme.fromSwatch(primarySwatch: mainPallette, ), // this sets a lot of defaults, avoiding for now
+    // dialogTheme: ,
+    floatingActionButtonTheme: FloatingActionButtonThemeData(  
+      backgroundColor: mainPallette.shade500,
+      foregroundColor: Colors.black.withAlpha(230),
+    ),
+    // TODO: snackbars are white right now for some reason
+    // snackBarTheme: ,
+    // bottomSheetTheme: ,
+    // popupMenuTheme: ,
+    // bannerTheme: ,
   );
 }
-
-ThemeData theme = ThemeData( 
-  brightness: Brightness.dark,
-  primarySwatch: mainPallette,
-  primaryColor: mainPallette.shade500, // one darker than before
-  primaryColorBrightness: Brightness.light,
-  primaryColorLight: mainPallette.shade400,
-  primaryColorDark: mainPallette.shade600,
-  accentColor: mainPallette.shade600, // same here 
-  accentColorBrightness: Brightness.light,
-  canvasColor: mainPallette.shade900,
-  scaffoldBackgroundColor: cardColor,
-  bottomAppBarColor: mainPallette.shade800,
-  cardColor: cardColor,
-  dividerColor: Colors.white24,
-  focusColor: ThemeData.dark().focusColor,
-  hoverColor: ThemeData.dark().hoverColor,
-  highlightColor: ThemeData.dark().highlightColor,
-  splashColor: ThemeData.dark().splashColor,
-  splashFactory: ThemeData.dark().splashFactory,
-  selectedRowColor: mainPallette.shade100, // check this
-  unselectedWidgetColor: mainPallette.shade200, // check this
-  disabledColor: mainPallette.shade200,
-  buttonColor: mainPallette.shade100,
-  buttonTheme: ButtonThemeData(
-    buttonColor: Colors.white.withAlpha(230),
-  ),
-  toggleButtonsTheme: ThemeData.fallback().toggleButtonsTheme, // same
-  secondaryHeaderColor: mainPallette.shade300,
-  textSelectionColor: mainPallette.shade400,
-  cursorColor: mainPallette.shade300,
-  textSelectionHandleColor: mainPallette.shade300,
-  backgroundColor: cardColor,
-  dialogBackgroundColor: mainPallette.shade800,
-  indicatorColor: mainPallette.shade700,
-  hintColor: mainPallette.shade800,
-  errorColor: errorColor,
-  toggleableActiveColor: mainPallette.shade300,
-  fontFamily: 'IBM Plex Sans',
-  // textTheme: ,
-  primaryTextTheme: primaryTextTheme,
-  accentTextTheme: accentTextTheme,
-  inputDecorationTheme: InputDecorationTheme(  
-    hintStyle: primaryTextTheme.body1.copyWith(color: Colors.grey),
-    labelStyle: primaryTextTheme.body1,
-    helperStyle: primaryTextTheme.body1,
-  ),
-  iconTheme: IconThemeData(
-    color: Colors.white.withAlpha(230),
-  ),
-  primaryIconTheme: IconThemeData(  
-    color: Colors.white.withAlpha(230),
-  ),
-  accentIconTheme: IconThemeData(  
-    color: Colors.black.withAlpha(230),
-  ),
-  // sliderTheme: ,
-  // tabBarTheme: ,
-  // tooltipTheme: ,
-  // cardTheme: ,
-  // chipTheme: ,
-  platform: TargetPlatform.android,
-  materialTapTargetSize: ThemeData.fallback().materialTapTargetSize,
-  // applyElevationOverlayColor: true, // used with dark themes to add elevation status, check this
-  applyElevationOverlayColor: false,
-  // pageTransitionsTheme: ,
-  appBarTheme: AppBarTheme(
-    brightness: Brightness.dark, 
-    color: Colors.transparent, 
-    elevation: 0.0, 
-    iconTheme: ThemeData.dark().iconTheme,
-    actionsIconTheme: ThemeData.dark().iconTheme, 
-    textTheme: primaryTextTheme,
-  ),
-  // bottomAppBarTheme: ,
-  // colorScheme: prefix0.ColorScheme.fromSwatch(primarySwatch: mainPallette, ), // this sets a lot of defaults, avoiding for now
-  // dialogTheme: ,
-  floatingActionButtonTheme: FloatingActionButtonThemeData(  
-    backgroundColor: mainPallette.shade500,
-    foregroundColor: Colors.black.withAlpha(230),
-  ),
-  // TODO: snackbars are white right now for some reason
-  // snackBarTheme: ,
-  // bottomSheetTheme: ,
-  // popupMenuTheme: ,
-  // bannerTheme: ,
-);

@@ -27,7 +27,6 @@ class SignupButtonState extends State<SignupButton> {
             onPressed: () => Navigator.pushNamed(context, '/signuppage'),
             textColor: Colors.white,
             padding: const EdgeInsets.all(0.0),
-            // color: Colors.blue,
             color: Theme.of(context).primaryColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(
@@ -128,8 +127,13 @@ class Welcome extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          FlutterLogo(
-            size: 200.0,
+          Padding( 
+            padding: EdgeInsets.all(20), 
+            child: Image.asset(
+              'img/icon.png',
+              height: 140,
+              fit: BoxFit.contain,
+            ),
           ),
           Padding(
             padding: EdgeInsets.all(10.0),
@@ -138,9 +142,11 @@ class Welcome extends StatelessWidget {
             'Welcome to auToDo!',
             textAlign: TextAlign.center,
             style: TextStyle(
-                fontSize: 30.0,
-                fontWeight: FontWeight.bold,
-                color: Colors.white),
+      fontSize: 30,
+      fontFamily: 'Ubuntu',
+      fontWeight: FontWeight.w600,
+      color: Colors.white.withAlpha(230),
+    ),
           ),
           Padding(
             padding: EdgeInsets.all(5.0),
