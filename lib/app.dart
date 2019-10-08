@@ -21,8 +21,8 @@ class AutodoAppState extends State<AutodoApp> {
       initialRoute: '/load',
       title: 'auToDo',
       routes: {
-        '/': (context) => HomeScreen(),
-        // '/': (context) => NewUserScreen(),
+        // '/': (context) => HomeScreen(),
+        '/': (context) => NewUserScreen(),
         '/refuelinghistory': (context) => RefuelingHistory(),
         '/load': (context) => LoadingPage(),
         '/welcomepage': (context) => LoginPage(),

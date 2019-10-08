@@ -7,22 +7,58 @@ class NewUserScreen extends StatefulWidget {
   NewUserScreenState createState() => NewUserScreenState();
 }
 
-class NewUserScreenState extends State<NewUserScreen> {
-  Widget field = TextFormField(
+enum NewUserScreenPage {
+  MILEAGE,
+  REPEATS
+}
+
+class MileageScreen extends StatefulWidget {
+  final String mileageEntry;
+  final mileageKey;
+
+  MileageScreen(this.mileageEntry, this.mileageKey);
+
+  @override 
+  MileageScreenState createState() => MileageScreenState(this.mileageEntry);
+}
+
+class MileageScreenState extends State<MileageScreen> {
+  FocusNode mileageNode;
+  var mileageEntry;
+
+  MileageScreenState(this.mileageEntry);
+
+  @override 
+  void initState() {
+    mileageNode = FocusNode();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    mileageNode.dispose();
+    super.dispose();
+  }
+
+  @override 
+  Widget build(BuildContext context) {
+    Widget field = TextFormField(
       maxLines: 1,
-      obscureText: true,
-      autofocus: false,
-      decoration: InputDecoration(
-          hintText: 'Car Mileage',
-          hintStyle: TextStyle(
-            color: Colors.grey[400],
-          ),
-      ),
-      validator: (value) =>  null,
-      onSaved: (value) => CarStatsBLoC().setCurrentMileage(int.parse(value.trim())),
+      // focusNode: mileageNode,
+      autofocus: true,
+      decoration: defaultInputDecoration('', 'Car Mileage'),
+      validator: (value) {
+        if (value == null || value == '')
+          return 'Field must not be empty';
+        return null;
+      },
+      initialValue: mileageEntry,
+      onSaved: (value) {
+        mileageEntry = value;
+        CarStatsBLoC().setCurrentMileage(int.parse(value.trim()));
+      },
     );
-    
-  Widget initCarMileage() {
+
     Widget headerText = Padding(
       padding: EdgeInsets.fromLTRB(0, 20, 0, 40),
       child: Center(
@@ -72,7 +108,13 @@ class NewUserScreenState extends State<NewUserScreen> {
                       'Next',
                       style: Theme.of(context).primaryTextTheme.button,
                     ),
-                    onPressed: () => Navigator.popAndPushNamed(context, '/'),
+                    onPressed: () {
+                      if (widget.mileageKey.currentState.validate()) {
+                        widget.mileageKey.currentState.save();
+                        // setState(() => page = NewUserScreenPage.REPEATS);
+                        // TODO: figure out how to signal to the parent that it needs to switch states
+                      }
+                    },
                   ),
                 ],
               ),
@@ -83,18 +125,51 @@ class NewUserScreenState extends State<NewUserScreen> {
     );  
 
     return SafeArea(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          headerText,
-          card,
-        ],
+      child: Form(
+        key: widget.mileageKey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            headerText,
+            card,
+          ],
+        ),
       ),
     );
-  } 
+  }
+}
+class NewUserScreenState extends State<NewUserScreen> {
+  NewUserScreenPage page = NewUserScreenPage.MILEAGE;
+  final mileageKey = GlobalKey<FormState>();
+  FocusNode mileageNode, repeatNode;
+  final repeatsKey = GlobalKey<FormState>();
+  String mileageEntry = '';
+
+  @override
+  void initState() {
+    mileageNode = FocusNode();
+    repeatNode = FocusNode();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    mileageNode.dispose();
+    repeatNode.dispose();
+    super.dispose();
+  }
 
   Widget initRepeats() {
+    Widget field = TextFormField(
+      maxLines: 1,
+      focusNode: repeatNode,
+      // autofocus: true,
+      decoration: defaultInputDecoration('', 'Car Mileage'),
+      validator: (value) =>  null,
+      onSaved: (value) => CarStatsBLoC().setCurrentMileage(int.parse(value.trim())),
+    );
+
     Widget headerText = Padding(
       padding: EdgeInsets.fromLTRB(0, 20, 0, 40),
       child: Center(
@@ -155,29 +230,55 @@ class NewUserScreenState extends State<NewUserScreen> {
     );  
 
     return SafeArea(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          headerText,
-          card,
-        ],
+      child: Form(
+        key: repeatsKey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            headerText,
+            card,
+          ],
+        ),
       ),
     );
   }
 
+  Widget currentPage() {
+    if (page == NewUserScreenPage.MILEAGE)
+      return MileageScreen(mileageEntry, mileageKey);
+    else if (page == NewUserScreenPage.REPEATS)
+      return initRepeats();
+    else 
+      return Container();
+  }
+
+  void backAction() {
+    if (page == NewUserScreenPage.MILEAGE) {
+      Navigator.pop(context);
+    }
+    else if (page == NewUserScreenPage.REPEATS)
+      setState(() => page = NewUserScreenPage.MILEAGE);
+  }
+
+  void requestFieldFocus() {
+    // if (!mileageNode.hasFocus)
+      // FocusScope.of(context).requestFocus(mileageNode);
+  }
+
   @override 
   Widget build(BuildContext context) {
+    requestFieldFocus();
     return Container(
       decoration: scaffoldBackgroundGradient(),
       child: Scaffold(
         appBar: AppBar(  
           leading: IconButton( 
             icon: Icon(Icons.arrow_back),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => backAction(),
           ),
         ),
-        body: initCarMileage(),
+        body: currentPage(),
         backgroundColor: Colors.transparent,
       ),
     );

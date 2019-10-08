@@ -7,6 +7,7 @@ import 'package:autodo/blocs/todo.dart';
 import 'package:autodo/blocs/repeating.dart';
 import 'package:autodo/sharedmodels/autocompletefield.dart';
 import 'package:autodo/items/items.dart';
+import 'package:autodo/theme.dart';
 
 enum TodoEditMode { CREATE, EDIT }
 
@@ -88,19 +89,6 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
     if (dob.isEmpty) return true;
     var d = convertToDate(dob);
     return d != null && d.isBefore(DateTime.now());
-  }
-
-  InputDecoration defaultInputDecoration(String hintText, String labelText) {
-    return InputDecoration(
-      hintText: hintText,
-      hintStyle: Theme.of(context).primaryTextTheme.body1,
-      border: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.teal),
-      ),
-      labelText: labelText,
-      contentPadding: EdgeInsets.only(
-          left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
-    );
   }
 
   Widget repeatField() {

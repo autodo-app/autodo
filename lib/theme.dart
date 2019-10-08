@@ -115,6 +115,19 @@ TextTheme accentTextTheme = TextTheme(
   ),
 );
 
+InputDecoration defaultInputDecoration(String hintText, String labelText) {
+  return InputDecoration(
+    hintText: hintText,
+    hintStyle: primaryTextTheme.body1,
+    border: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.teal),
+    ),
+    labelText: labelText,
+    contentPadding: EdgeInsets.only(
+        left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
+  );
+}
+
 ThemeData theme = ThemeData( 
   brightness: Brightness.dark,
   primarySwatch: mainPallette,
