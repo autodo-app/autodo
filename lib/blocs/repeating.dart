@@ -97,6 +97,14 @@ class RepeatingBLoC {
   Repeat repeatByName(String name) {
     List<Repeat> matches = List.from(repeats.where((repeat) => repeat.name == name));
     if (matches.length == 1) return matches[0];
+    else if (matches.length == 0) {
+      try {
+        return List.from(defaults.where((repeat) => repeat.name == name))[0];
+      } catch (e) {
+        print(e);
+        return Repeat.empty();
+      }
+    }
     else {
       print("multiple repeats with the same name");
       return matches[0];

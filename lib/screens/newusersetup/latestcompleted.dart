@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:autodo/theme.dart';
 import 'package:autodo/blocs/blocs.dart';
+import 'dart:math';
 
 class LatestRepeatsScreen extends StatefulWidget {
   final GlobalKey<FormState> repeatKey;
@@ -12,12 +13,21 @@ class LatestRepeatsScreen extends StatefulWidget {
   LatestRepeatsScreenState createState() => LatestRepeatsScreenState();
 }
 
-class LatestRepeatsScreenState extends State<LatestRepeatsScreen> {
+class LatestRepeatsScreenState extends State<LatestRepeatsScreen> with TickerProviderStateMixin{
+  bool expanded;
+
+  @override 
+  void initState() {
+    expanded = false;
+    super.initState();
+  }
+
   @override 
   Widget build(BuildContext context) {
     Widget oilMileage = TextFormField(
       maxLines: 1,
       autofocus: true,
+      onTap: () => setState(() => expanded = false),
       decoration: defaultInputDecoration('(miles)', 'Last Oil Change (miles)'),
       validator: (value) =>  null,
       onSaved: (value) => CarStatsBLoC().setCurrentMileage(int.parse(value.trim())),
@@ -25,7 +35,7 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen> {
 
     Widget tireRotationMileage = TextFormField(
       maxLines: 1,
-      autofocus: false,
+      onTap: () => setState(() => expanded = true),
       decoration: defaultInputDecoration('(miles)', 'Last Tire Rotation (miles)'),
       validator: (value) =>  null,
       onSaved: (value) => CarStatsBLoC().setCurrentMileage(int.parse(value.trim())),
@@ -33,7 +43,7 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen> {
 
     Widget newTiresMileageField = TextFormField(
       maxLines: 1,
-      autofocus: false,
+      onTap: () => setState(() => expanded = true),
       decoration: defaultInputDecoration('(miles)', 'Last Tire Replacement (miles)'),
       validator: (value) =>  null,
       onSaved: (value) => CarStatsBLoC().setCurrentMileage(int.parse(value.trim())),
@@ -44,35 +54,42 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen> {
       (CarStatsBLoC().getCurrentMileage() > RepeatingBLoC().repeatByName('tires').interval) 
       ? newTiresMileageField : Container();
 
-    Widget headerText = Padding(
-      padding: EdgeInsets.fromLTRB(0, 0, 0, 30),
-      child: Center(
-        child: Column(  
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-              child: Text( 
-                'Before you get started,\n let\'s get some info about your car.',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontFamily: 'Ubuntu',
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white.withAlpha(230),
+    Widget headerText = AnimatedContainer(
+      duration: Duration(milliseconds: 400),
+      curve: Curves.fastOutSlowIn,
+      height: (expanded) ? 0 : 110,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(0, 0, 0, 30),
+        child: Center(
+          child: Column(  
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                child: Text( 
+                  'Before you get started,\n let\'s get some info about your car.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontFamily: 'Ubuntu',
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white.withAlpha(230),
+                  ),
                 ),
               ),
-            ),
-            Text(  
-              'When was the last time you did these tasks?',
-              style: Theme.of(context).primaryTextTheme.body1,
-            ),
-          ],
-        )
+              Text(  
+                'When was the last time you did these tasks?',
+                style: Theme.of(context).primaryTextTheme.body1,
+              ),
+            ],
+          )
+        ),
       ),
     );
 
-    Widget card = Expanded( 
-      child: Container( 
+
+    Widget card(var viewportSize) {
+      return Container(
+        height: viewportSize.maxHeight,
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(  
           borderRadius: BorderRadius.only(
@@ -125,21 +142,32 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen> {
             ),
           ],
         ),
-      ),
-    );  
+      );  
+    }
 
     return SafeArea(
       child: Form(
-        key: widget.repeatKey,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            headerText,
-            card,
-          ],
-        ),
-      ),
+      key: widget.repeatKey,
+      child: LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints viewportConstraints) {
+        return SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: viewportConstraints.maxHeight,
+            ), 
+            child: SafeArea(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  headerText,
+                  card(viewportConstraints),
+                ],
+              ),
+            ),
+          ),
+        );}
+      ),),
     );
   }
 }
