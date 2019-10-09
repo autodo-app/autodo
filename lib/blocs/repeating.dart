@@ -94,7 +94,7 @@ class RepeatingBLoC {
     return out; 
   }
 
-  Repeat _repeatByName(String name) {
+  Repeat repeatByName(String name) {
     List<Repeat> matches = List.from(repeats.where((repeat) => repeat.name == name));
     if (matches.length == 1) return matches[0];
     else {
@@ -254,7 +254,7 @@ class RepeatingBLoC {
       String taskType = snap.data['repeatingType'];
       if (taskType == item.name) {
         // use the difference in the previous and new intervals to update the dueMileage
-        int prevInterval = _repeatByName(taskType).interval ?? 0; // prevent exception on null value
+        int prevInterval = repeatByName(taskType).interval ?? 0; // prevent exception on null value
         int curInterval = item.interval ?? 0;
         if (!todo.containsKey('dueMileage') || todo['dueMileage'] == null || prevInterval == curInterval)
           return;
