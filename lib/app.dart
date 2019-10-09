@@ -23,13 +23,13 @@ class AutodoAppState extends State<AutodoApp> {
       title: 'auToDo',
       routes: {
         '/': (context) => HomeScreen(),
-        // '/': (context) => NewUserScreen(),
         '/refuelinghistory': (context) => RefuelingHistory(),
         '/load': (context) => LoadingPage(),
         '/welcomepage': (context) => LoginPage(),
         '/loginpage': (context) => SignInScreen(
               formMode: FormMode.LOGIN,
             ),
+        '/newuser': (context) => NewUserScreen(),
         '/signuppage': (context) => SignInScreen(formMode: FormMode.SIGNUP),
         '/createTodo': (context) => CreateTodoScreen(mode: TodoEditMode.CREATE),
         '/createRefueling': (context) =>

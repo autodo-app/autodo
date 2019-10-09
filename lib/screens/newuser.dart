@@ -15,8 +15,9 @@ enum NewUserScreenPage {
 class MileageScreen extends StatefulWidget {
   final String mileageEntry;
   final mileageKey;
+  final Function() onNext;
 
-  MileageScreen(this.mileageEntry, this.mileageKey);
+  MileageScreen(this.mileageEntry, this.mileageKey, this.onNext);
 
   @override 
   MileageScreenState createState() => MileageScreenState(this.mileageEntry);
@@ -44,7 +45,6 @@ class MileageScreenState extends State<MileageScreen> {
   Widget build(BuildContext context) {
     Widget field = TextFormField(
       maxLines: 1,
-      // focusNode: mileageNode,
       autofocus: true,
       decoration: defaultInputDecoration('', 'Car Mileage'),
       validator: (value) {
@@ -60,12 +60,29 @@ class MileageScreenState extends State<MileageScreen> {
     );
 
     Widget headerText = Padding(
-      padding: EdgeInsets.fromLTRB(0, 20, 0, 40),
+      padding: EdgeInsets.fromLTRB(0, 0, 0, 30),
       child: Center(
-        child: Text(  
-          'How many miles are currently on your car?',
-          style: Theme.of(context).primaryTextTheme.body1,
-        ),
+        child: Column(  
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+              child: Text( 
+                'Before you get started,\n let\'s get some info about your car.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'Ubuntu',
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white.withAlpha(230),
+                ),
+              ),
+            ),
+            Text(  
+              'How many miles are currently on your car?',
+              style: Theme.of(context).primaryTextTheme.body1,
+            ),
+          ],
+        )
       ),
     );
 
@@ -88,7 +105,7 @@ class MileageScreenState extends State<MileageScreen> {
               child: field,
             ),
             Padding( 
-              padding: const EdgeInsets.fromLTRB(0.0, 25.0, 0.0, 0.0),
+              padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,  
                 children: <Widget>[
@@ -111,6 +128,7 @@ class MileageScreenState extends State<MileageScreen> {
                     onPressed: () {
                       if (widget.mileageKey.currentState.validate()) {
                         widget.mileageKey.currentState.save();
+                        widget.onNext();
                         // setState(() => page = NewUserScreenPage.REPEATS);
                         // TODO: figure out how to signal to the parent that it needs to switch states
                       }
@@ -127,13 +145,16 @@ class MileageScreenState extends State<MileageScreen> {
     return SafeArea(
       child: Form(
         key: widget.mileageKey,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            headerText,
-            card,
-          ],
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              headerText,
+              card,
+            ],
+          ),
         ),
       ),
     );
@@ -171,12 +192,29 @@ class NewUserScreenState extends State<NewUserScreen> {
     );
 
     Widget headerText = Padding(
-      padding: EdgeInsets.fromLTRB(0, 20, 0, 40),
+      padding: EdgeInsets.fromLTRB(0, 0, 0, 30),
       child: Center(
-        child: Text(  
-          'How often do you want to do these tasks?',
-          style: Theme.of(context).primaryTextTheme.body1,
-        ),
+        child: Column(  
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+              child: Text( 
+                'Before you get started,\n let\'s get some info about your car.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'Ubuntu',
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white.withAlpha(230),
+                ),
+              ),
+            ),
+            Text(  
+              'How often do you want to do these tasks?',
+              style: Theme.of(context).primaryTextTheme.body1,
+            ),
+          ],
+        )
       ),
     );
 
@@ -244,9 +282,11 @@ class NewUserScreenState extends State<NewUserScreen> {
     );
   }
 
+  void mileageOnNext() => setState(() => page = NewUserScreenPage.REPEATS);
+
   Widget currentPage() {
     if (page == NewUserScreenPage.MILEAGE)
-      return MileageScreen(mileageEntry, mileageKey);
+      return MileageScreen(mileageEntry, mileageKey, mileageOnNext);
     else if (page == NewUserScreenPage.REPEATS)
       return initRepeats();
     else 

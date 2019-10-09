@@ -48,7 +48,10 @@ class SignInScreenState extends State<SignInScreen> {
           _isLoading = false;
         });
         if (userId.length > 0 && userId != null) {
-          Navigator.pushNamed(context, '/');
+          if (widget.formMode == FormMode.SIGNUP)
+            Navigator.popAndPushNamed(context, '/newuser');
+          else
+            Navigator.pushNamed(context, '/');
         }
       } catch (e) {
         print("error: $e");
