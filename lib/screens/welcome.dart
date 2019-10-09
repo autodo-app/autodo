@@ -127,12 +127,14 @@ class Welcome extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Padding( 
-            padding: EdgeInsets.all(20), 
-            child: Image.asset(
-              'img/icon.png',
-              height: 140,
-              fit: BoxFit.contain,
+          Container( 
+            height: 180,
+            child: Center(
+              child: Image.asset(
+                'img/icon-only-green.png',
+                height: 180,
+                fit: BoxFit.contain,
+              ),
             ),
           ),
           Padding(
@@ -142,11 +144,11 @@ class Welcome extends StatelessWidget {
             'Welcome to auToDo!',
             textAlign: TextAlign.center,
             style: TextStyle(
-      fontSize: 30,
-      fontFamily: 'Ubuntu',
-      fontWeight: FontWeight.w600,
-      color: Colors.white.withAlpha(230),
-    ),
+              fontSize: 30,
+              fontFamily: 'Ubuntu',
+              fontWeight: FontWeight.w600,
+              color: Colors.white.withAlpha(230),
+            ),
           ),
           Padding(
             padding: EdgeInsets.all(5.0),
@@ -165,15 +167,22 @@ class Welcome extends StatelessWidget {
   }
 }
 
-class Tutorial1 extends StatelessWidget {
+class Tutorial2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          FlutterLogo(
-            size: 200.0,
+          Container(
+            height: 180,
+            child: Center(
+              child: Icon(
+                Icons.done_all,
+                size: 140,
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
           ),
           Padding(
             padding: EdgeInsets.all(10.0),
@@ -182,9 +191,11 @@ class Tutorial1 extends StatelessWidget {
             "Track Maintenance",
             textAlign: TextAlign.center,
             style: TextStyle(
-                fontSize: 24.0,
-                fontWeight: FontWeight.bold,
-                color: Colors.white),
+              fontSize: 30,
+              fontFamily: 'Ubuntu',
+              fontWeight: FontWeight.w600,
+              color: Colors.white.withAlpha(230),
+            ),
           ),
           Padding(
             padding: EdgeInsets.all(5.0),
@@ -206,15 +217,22 @@ class Tutorial1 extends StatelessWidget {
   }
 }
 
-class Tutorial2 extends StatelessWidget {
+class Tutorial1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          FlutterLogo(
-            size: 200.0,
+          Container(
+            height: 180,
+            child: Center(
+              child: Icon(
+                Icons.filter_list,
+                size: 160,
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
           ),
           Padding(
             padding: EdgeInsets.all(10.0),
@@ -222,10 +240,12 @@ class Tutorial2 extends StatelessWidget {
           Text(
             "Simplify Your Tasks",
             textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: 24.0,
-                fontWeight: FontWeight.bold,
-                color: Colors.white),
+            style: TextStyle(  
+              fontSize: 30,
+              fontFamily: 'Ubuntu',
+              fontWeight: FontWeight.w600,
+              color: Colors.white.withAlpha(230),
+            ),
           ),
           Padding(
             padding: EdgeInsets.all(5.0),
