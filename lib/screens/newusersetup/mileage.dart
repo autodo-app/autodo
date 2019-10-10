@@ -49,8 +49,8 @@ class MileageScreenState extends State<MileageScreen> {
       },
     );
 
-    Widget headerText = Padding(
-      padding: EdgeInsets.fromLTRB(0, 0, 0, 30),
+    Widget headerText = Container(
+      height: 110,
       child: Center(
         child: Column(  
           children: <Widget>[
@@ -76,8 +76,9 @@ class MileageScreenState extends State<MileageScreen> {
       ),
     );
 
-    Widget card = Expanded( 
-      child: Container( 
+    Widget card(var viewportSize) {
+      return Container( 
+        height: viewportSize.maxHeight - 110,
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(  
           borderRadius: BorderRadius.only(
@@ -95,7 +96,7 @@ class MileageScreenState extends State<MileageScreen> {
               child: field,
             ),
             Padding( 
-              padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
+              padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,  
                 children: <Widget>[
@@ -115,9 +116,12 @@ class MileageScreenState extends State<MileageScreen> {
                       'Next',
                       style: Theme.of(context).primaryTextTheme.button,
                     ),
-                    onPressed: () {
+                    onPressed: () async {
                       if (widget.mileageKey.currentState.validate()) {
                         widget.mileageKey.currentState.save();
+                        // hide the keyboard
+                        FocusScope.of(context).requestFocus(new FocusNode());
+                        await Future.delayed(Duration(milliseconds: 400));
                         widget.onNext();
                         // setState(() => page = NewUserScreenPage.REPEATS);
                         // TODO: figure out how to signal to the parent that it needs to switch states
@@ -129,22 +133,32 @@ class MileageScreenState extends State<MileageScreen> {
             ),
           ],
         ),
-      ),
-    );  
+      );
+    }  
 
     return SafeArea(
       child: Form(
         key: widget.mileageKey,
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              headerText,
-              card,
-            ],
-          ),
+        child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints viewportConstraints) {
+            return SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: viewportConstraints.maxHeight,
+                ), 
+                child: SafeArea(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      headerText,
+                      card(viewportConstraints),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }
         ),
       ),
     );

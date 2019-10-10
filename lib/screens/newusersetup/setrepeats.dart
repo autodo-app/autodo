@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:autodo/theme.dart';
 import 'package:autodo/blocs/blocs.dart';
 
+const int cardAppearDuration = 200; // in ms
+
 class SetRepeatsScreen extends StatefulWidget {
   final GlobalKey<FormState> repeatKey;
   final page;
@@ -16,35 +18,29 @@ class SetRepeatsScreen extends StatefulWidget {
 class SetRepeatsScreenState extends State<SetRepeatsScreen> with SingleTickerProviderStateMixin{
   bool pageWillBeVisible;
   AnimationController _ctrl;
+  Animation _val;
 
-  SetRepeatsScreenState(vis) {
-    if (vis) {
-      pageWillBeVisible = true;
-    } else {
-      pageWillBeVisible = false;
-    }
-  }
+  SetRepeatsScreenState(this.pageWillBeVisible);
 
   @override
   void initState() {
-    _ctrl = AnimationController(  
+    _ctrl= AnimationController(  
       vsync: this,
-      duration: Duration(milliseconds: 400),
-    );
+      duration: Duration(milliseconds: cardAppearDuration),
+    )..addListener(() => setState(() {}));
     super.initState();
   }
 
   @override 
   Widget build(BuildContext context) {
     if (pageWillBeVisible) {
-      print('khjlkj');
-      _ctrl.forward();
+      _ctrl.animateTo(1.0, curve: Curves.bounceOut);
       pageWillBeVisible = false;
     }
 
     Widget oilInterval = TextFormField(
       maxLines: 1,
-      autofocus: true,
+      autofocus: false,
       initialValue: RepeatingBLoC().repeatByName('oil').interval.toString(),
       decoration: defaultInputDecoration('(miles)', 'Oil Change Interval (miles)'),
       validator: (value) =>  null,

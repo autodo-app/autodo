@@ -81,6 +81,12 @@ InputDecoration defaultInputDecoration(String hintText, String labelText) {
         borderSide: BorderSide(color: Colors.teal),
       ),
       labelText: labelText,
+      labelStyle: TextStyle(
+        color: Colors.white.withAlpha(230),
+        fontFamily: 'IBM Plex Sans',
+        fontWeight: FontWeight.w300,
+        fontSize: 18,
+      ),
       contentPadding: EdgeInsets.only(
           left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
     );

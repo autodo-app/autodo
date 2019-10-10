@@ -1,3 +1,4 @@
+import 'package:autodo/screens/newuser.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/theme.dart';
 import 'package:autodo/blocs/blocs.dart';
@@ -6,28 +7,41 @@ import 'dart:math';
 class LatestRepeatsScreen extends StatefulWidget {
   final GlobalKey<FormState> repeatKey;
   final Function() onNext;
+  final page;
 
-  LatestRepeatsScreen(this.repeatKey, this.onNext);
+  LatestRepeatsScreen(this.repeatKey, this.onNext, this.page);
 
   @override 
-  LatestRepeatsScreenState createState() => LatestRepeatsScreenState();
+  LatestRepeatsScreenState createState() => LatestRepeatsScreenState(page == NewUserScreenPage.LATEST);
 }
 
 class LatestRepeatsScreenState extends State<LatestRepeatsScreen> with TickerProviderStateMixin{
-  bool expanded, pageTransition;
+  bool expanded, pageTransition, pageWillBeVisible;
+  AnimationController openCtrl;
+
+  LatestRepeatsScreenState(this.pageWillBeVisible);
 
   @override 
   void initState() {
     expanded = false;
     pageTransition = false;
+    openCtrl = AnimationController(  
+      vsync: this,
+      duration: Duration(milliseconds: 600),
+    )..addListener(() => setState(() {}));
     super.initState();
   }
 
   @override 
   Widget build(BuildContext context) {
+    if (pageWillBeVisible) {
+      openCtrl.forward();
+      pageWillBeVisible = false;
+    }
+
     Widget oilMileage = TextFormField(
       maxLines: 1,
-      autofocus: true,
+      autofocus: false,
       onTap: () => setState(() => expanded = false),
       decoration: defaultInputDecoration('(miles)', 'Last Oil Change (miles)'),
       validator: (value) =>  null,
@@ -89,9 +103,8 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen> with TickerPro
 
 
     Widget card(var viewportSize) {
-      return AnimatedContainer(
-        duration: Duration(milliseconds: 400),
-        height: (pageTransition) ? 0 : viewportSize.maxHeight,
+      return Container(
+        height: openCtrl.value * viewportSize.maxHeight,
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(  
           borderRadius: BorderRadius.only(
@@ -117,7 +130,7 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen> with TickerPro
               child: newTiresMileage,
             ),
             Padding( 
-              padding: const EdgeInsets.fromLTRB(0.0, 25.0, 0.0, 0.0),
+              padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,  
                 children: <Widget>[
@@ -125,7 +138,7 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen> with TickerPro
                     padding: EdgeInsets.all(0),
                     materialTapTargetSize: MaterialTapTargetSize.padded,
                     child: Text(
-                      'Skip',
+                      'Skip',     
                       style: Theme.of(context).primaryTextTheme.button,
                     ),
                     onPressed: () => Navigator.popAndPushNamed(context, '/'),
@@ -139,7 +152,7 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen> with TickerPro
                     ),
                     onPressed: () async {
                       setState(() => pageTransition = true);
-                      await Future.delayed(Duration(milliseconds: 600)); // wait for the animation to finish
+                      await Future.delayed(Duration(milliseconds: 200)); // wait for the animation to finish
                       widget.onNext();
                     }
                   ),
@@ -153,27 +166,29 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen> with TickerPro
 
     return SafeArea(
       child: Form(
-      key: widget.repeatKey,
-      child: LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints viewportConstraints) {
-        return SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              minHeight: viewportConstraints.maxHeight,
-            ), 
-            child: SafeArea(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  headerText,
-                  card(viewportConstraints),
-                ],
+        key: widget.repeatKey,
+        child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints viewportConstraints) {
+            return SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: viewportConstraints.maxHeight,
+                ), 
+                child: SafeArea(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      headerText,
+                      card(viewportConstraints),
+                    ],
+                  ),
+                ),
               ),
-            ),
-          ),
-        );}
-      ),),
+            );
+          }
+        ),
+      ),
     );
   }
 }

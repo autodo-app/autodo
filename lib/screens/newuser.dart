@@ -42,7 +42,7 @@ class NewUserScreenState extends State<NewUserScreen> {
       return ValueListenableBuilder(
         valueListenable: page,
         builder: (BuildContext context, NewUserScreenPage val, Widget child) {
-          return LatestRepeatsScreen(latestKey, latestOnNext);
+          return LatestRepeatsScreen(latestKey, latestOnNext, val);
         },
       );
     } else if (page.value == NewUserScreenPage.REPEATS) {
