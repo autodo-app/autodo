@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:autodo/theme.dart';
 import 'package:autodo/screens/newusersetup/newusersetup.dart';
@@ -14,33 +16,54 @@ enum NewUserScreenPage {
 }
 
 class NewUserScreenState extends State<NewUserScreen> {
-  NewUserScreenPage page = NewUserScreenPage.MILEAGE;
+  final page = ValueNotifier<NewUserScreenPage>(NewUserScreenPage.MILEAGE);
   final mileageKey = GlobalKey<FormState>();
   final latestKey = GlobalKey<FormState>();
   final repeatsKey = GlobalKey<FormState>();
   String mileageEntry = '';
 
-  void mileageOnNext() => setState(() => page = NewUserScreenPage.LATEST);
-  void latestOnNext() => setState(() => page = NewUserScreenPage.REPEATS);
+  void mileageOnNext() {
+    setState(() => page.value = NewUserScreenPage.LATEST);
+  }
+
+  void latestOnNext() {
+    setState(() => page.value = NewUserScreenPage.REPEATS);
+  }
 
   Widget currentPage() {
-    if (page == NewUserScreenPage.MILEAGE)
-      return MileageScreen(mileageEntry, mileageKey, mileageOnNext);
-    else if (page == NewUserScreenPage.LATEST)
-      return LatestRepeatsScreen(latestKey, latestOnNext);
-    else if (page == NewUserScreenPage.REPEATS)
-      return SetRepeatsScreen(repeatsKey);
-    else 
+    if (page.value == NewUserScreenPage.MILEAGE) {
+      return ValueListenableBuilder(
+        valueListenable: page,
+        builder: (BuildContext context, NewUserScreenPage val, Widget child) {
+          return MileageScreen(mileageEntry, mileageKey, mileageOnNext);
+        },
+      );
+    } else if (page.value == NewUserScreenPage.LATEST) {
+      return ValueListenableBuilder(
+        valueListenable: page,
+        builder: (BuildContext context, NewUserScreenPage val, Widget child) {
+          return LatestRepeatsScreen(latestKey, latestOnNext);
+        },
+      );
+    } else if (page.value == NewUserScreenPage.REPEATS) {
+      return ValueListenableBuilder(
+        valueListenable: page,
+        builder: (BuildContext context, NewUserScreenPage val, Widget child) {
+          return SetRepeatsScreen(repeatsKey, val);
+        },
+      );
+    } else {
       return Container();
+    }
   }
 
   void backAction() {
-    if (page == NewUserScreenPage.MILEAGE)
+    if (page.value == NewUserScreenPage.MILEAGE)
       Navigator.pop(context);
-    else if (page == NewUserScreenPage.LATEST)
-      setState(() => page = NewUserScreenPage.MILEAGE);
-    else if (page == NewUserScreenPage.REPEATS)
-      setState(() => page = NewUserScreenPage.LATEST);
+    else if (page.value == NewUserScreenPage.LATEST)
+      setState(() => page.value = NewUserScreenPage.MILEAGE);
+    else if (page.value == NewUserScreenPage.REPEATS)
+      setState(() => page.value = NewUserScreenPage.LATEST);
   }
 
   @override 

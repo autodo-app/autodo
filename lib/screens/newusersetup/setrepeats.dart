@@ -1,19 +1,47 @@
+import 'package:autodo/screens/newuser.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/theme.dart';
 import 'package:autodo/blocs/blocs.dart';
 
 class SetRepeatsScreen extends StatefulWidget {
   final GlobalKey<FormState> repeatKey;
+  final page;
 
-  SetRepeatsScreen(this.repeatKey);
+  SetRepeatsScreen(this.repeatKey, this.page);
 
   @override 
-  SetRepeatsScreenState createState() => SetRepeatsScreenState();
+  SetRepeatsScreenState createState() => SetRepeatsScreenState(this.page == NewUserScreenPage.REPEATS);
 }
 
-class SetRepeatsScreenState extends State<SetRepeatsScreen> {
+class SetRepeatsScreenState extends State<SetRepeatsScreen> with SingleTickerProviderStateMixin{
+  bool pageWillBeVisible;
+  AnimationController _ctrl;
+
+  SetRepeatsScreenState(vis) {
+    if (vis) {
+      pageWillBeVisible = true;
+    } else {
+      pageWillBeVisible = false;
+    }
+  }
+
+  @override
+  void initState() {
+    _ctrl = AnimationController(  
+      vsync: this,
+      duration: Duration(milliseconds: 400),
+    );
+    super.initState();
+  }
+
   @override 
   Widget build(BuildContext context) {
+    if (pageWillBeVisible) {
+      print('khjlkj');
+      _ctrl.forward();
+      pageWillBeVisible = false;
+    }
+
     Widget oilInterval = TextFormField(
       maxLines: 1,
       autofocus: true,
@@ -32,8 +60,9 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen> {
       onSaved: (value) => CarStatsBLoC().setCurrentMileage(int.parse(value.trim())),
     );
 
-    Widget headerText = Padding(
+    Widget headerText = Container(
       padding: EdgeInsets.fromLTRB(0, 0, 0, 30),
+      height: 110,
       child: Center(
         child: Column(  
           children: <Widget>[
@@ -59,8 +88,10 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen> {
       ),
     );
 
-    Widget card = Expanded( 
-      child: Container( 
+    Widget card(var viewportSize) {
+      return AnimatedContainer( 
+        duration: Duration(milliseconds: 400),
+        height: (viewportSize.maxHeight - 110) * _ctrl.value,
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(  
           borderRadius: BorderRadius.only(
@@ -109,21 +140,32 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen> {
             ),
           ],
         ),
-      ),
-    );  
+      );  
+    }
 
     return SafeArea(
       child: Form(
-        key: widget.repeatKey,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            headerText,
-            card,
-          ],
-        ),
-      ),
+      key: widget.repeatKey,
+      child: LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints viewportConstraints) {
+        return SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: viewportConstraints.maxHeight,
+            ), 
+            child: SafeArea(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  headerText,
+                  card(viewportConstraints),
+                ],
+              ),
+            ),
+          ),
+        );}
+      ),),
     );
   }
 }

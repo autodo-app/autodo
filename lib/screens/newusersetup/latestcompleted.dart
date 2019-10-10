@@ -14,11 +14,12 @@ class LatestRepeatsScreen extends StatefulWidget {
 }
 
 class LatestRepeatsScreenState extends State<LatestRepeatsScreen> with TickerProviderStateMixin{
-  bool expanded;
+  bool expanded, pageTransition;
 
   @override 
   void initState() {
     expanded = false;
+    pageTransition = false;
     super.initState();
   }
 
@@ -88,8 +89,9 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen> with TickerPro
 
 
     Widget card(var viewportSize) {
-      return Container(
-        height: viewportSize.maxHeight,
+      return AnimatedContainer(
+        duration: Duration(milliseconds: 400),
+        height: (pageTransition) ? 0 : viewportSize.maxHeight,
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(  
           borderRadius: BorderRadius.only(
@@ -135,7 +137,11 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen> with TickerPro
                       'Next',
                       style: Theme.of(context).primaryTextTheme.button,
                     ),
-                    onPressed: () => widget.onNext(),
+                    onPressed: () async {
+                      setState(() => pageTransition = true);
+                      await Future.delayed(Duration(milliseconds: 600)); // wait for the animation to finish
+                      widget.onNext();
+                    }
                   ),
                 ],
               ),
