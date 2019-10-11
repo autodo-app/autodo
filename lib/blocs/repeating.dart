@@ -32,15 +32,17 @@ class RepeatingBLoC {
   static final Firestore _db = Firestore.instance;
   Repeat _past;
   List<Repeat> repeats = defaults;
-  /// Maps containing the related tasks for each repeating task type.
-  /// Example Map:
-  /// "repeatKey": {
-  ///   {
-  ///     // MaintenanceTodoItem contents
-  ///     "name": "todoName",
-  ///     "dueMileage": xxx  
-  ///   }
-  /// }
+  /**
+   * Maps containing the related tasks for each repeating task type.
+   * Example Map:
+   * "repeatKey": {
+   *   {
+   *     // MaintenanceTodoItem contents
+   *    "name": "todoName",
+   *    "dueMileage": xxx  
+   *  }
+   * }
+   */
   Map<String, Map<String, dynamic>> upcomingRepeatTodos = Map();
   Map<String, Map<String, dynamic>> latestCompletedRepeatTodos = Map();
 
@@ -328,6 +330,19 @@ class RepeatingBLoC {
     // return out;
     print(repeats);
     return repeats;
+  }
+
+  Future<void> editByName(String name, int interval) async {
+    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    if (!_keyInRepeats(name)) return;
+    var item = repeatByName(name);
+    item.interval = interval;
+    DocumentReference ref = userDoc
+          .collection('repeats')
+          .document('default')
+          .collection('repeats')
+          .document(item.ref);
+    ref.updateData(item.toJSON());
   }
 
   // Make the object a Singleton

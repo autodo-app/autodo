@@ -21,6 +21,15 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen> with TickerPro
 
   LatestRepeatsScreenState(this.pageWillBeVisible);
 
+  String intValidator(String value) {
+    try { 
+      int.parse(value);
+      return null;
+    } catch (e) { 
+      return 'Value must be an integer.'; 
+    }
+  }
+
   @override 
   void initState() {
     expanded = false;
@@ -51,24 +60,33 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen> with TickerPro
       autofocus: false,
       onTap: () => setState(() => expanded = false),
       decoration: defaultInputDecoration('(miles)', 'Last Oil Change (miles)'),
-      validator: (value) =>  null,
-      onSaved: (value) => CarStatsBLoC().setCurrentMileage(int.parse(value.trim())),
+      validator: (value) => intValidator(value),
+      onSaved: (value) {
+        if (value != null && value != '')
+          CarStatsBLoC().setLastCompleted('oil', int.parse(value.trim()));
+      },
     );
 
     Widget tireRotationMileage = TextFormField(
       maxLines: 1,
       onTap: () => setState(() => expanded = true),
       decoration: defaultInputDecoration('(miles)', 'Last Tire Rotation (miles)'),
-      validator: (value) =>  null,
-      onSaved: (value) => CarStatsBLoC().setCurrentMileage(int.parse(value.trim())),
+      validator: (value) => intValidator(value),
+      onSaved: (value) {
+        if (value != null && value != '')
+          CarStatsBLoC().setLastCompleted('tireRotation', int.parse(value.trim()));
+      },
     );
 
     Widget newTiresMileageField = TextFormField(
       maxLines: 1,
       onTap: () => setState(() => expanded = true),
       decoration: defaultInputDecoration('(miles)', 'Last Tire Replacement (miles)'),
-      validator: (value) =>  null,
-      onSaved: (value) => CarStatsBLoC().setCurrentMileage(int.parse(value.trim())),
+      validator: (value) => intValidator(value),
+      onSaved: (value) {
+        if (value != null && value != '')
+          CarStatsBLoC().setLastCompleted('tires', int.parse(value.trim()));
+      },
     );
 
     // Only display the new tires field if the car is old enough to have needed new tires

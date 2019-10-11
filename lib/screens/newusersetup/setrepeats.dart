@@ -51,7 +51,7 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen> with SingleTickerPro
       initialValue: RepeatingBLoC().repeatByName('oil').interval.toString(),
       decoration: defaultInputDecoration('(miles)', 'Oil Change Interval (miles)'),
       validator: (value) =>  null,
-      onSaved: (value) => CarStatsBLoC().setCurrentMileage(int.parse(value.trim())),
+      onSaved: (value) => RepeatingBLoC().editByName('oil', int.parse(value.trim())),
     );
 
     Widget tireRotationInterval = TextFormField(
@@ -60,7 +60,7 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen> with SingleTickerPro
       initialValue: RepeatingBLoC().repeatByName('tireRotation').interval.toString(),
       decoration: defaultInputDecoration('(miles)', 'Tire Rotation Interval (miles)'),
       validator: (value) =>  null,
-      onSaved: (value) => CarStatsBLoC().setCurrentMileage(int.parse(value.trim())),
+      onSaved: (value) => RepeatingBLoC().editByName('tireRotation', int.parse(value.trim())),
     );
 
     Widget headerText = Container(
