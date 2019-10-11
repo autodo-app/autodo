@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 abstract class BaseAuth {
   Future<String> signIn(String email, String password);
   Future<String> signUp(String email, String password);
+  Future<void> deleteCurrentUser();
   String getCurrentUser();
   Future<void> signOut();
   bool isLoading();
@@ -52,6 +53,17 @@ class Auth implements BaseAuth {
 
     FirebaseUser user = res.user;
     return user.uid;
+  }
+
+  Future<void> deleteCurrentUser() async {
+    FirebaseUser cur = await  _firebaseAuth.currentUser();
+    if (cur != null) {
+      try {
+        await cur.delete();
+      } catch (e) {
+        print(e);
+      }
+    }
   }
 
   String getCurrentUser() {

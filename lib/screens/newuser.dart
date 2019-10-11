@@ -1,7 +1,6 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:autodo/theme.dart';
+import 'package:autodo/blocs/userauth.dart';
 import 'package:autodo/screens/newusersetup/newusersetup.dart';
 
 class NewUserScreen extends StatefulWidget {
@@ -58,8 +57,10 @@ class NewUserScreenState extends State<NewUserScreen> {
   }
 
   void backAction() {
-    if (page.value == NewUserScreenPage.MILEAGE)
+    if (page.value == NewUserScreenPage.MILEAGE) {
+      Auth().deleteCurrentUser();
       Navigator.pop(context);
+    }
     else if (page.value == NewUserScreenPage.LATEST)
       setState(() => page.value = NewUserScreenPage.MILEAGE);
     else if (page.value == NewUserScreenPage.REPEATS)
