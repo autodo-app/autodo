@@ -2,7 +2,6 @@ import 'package:autodo/screens/newuser.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/theme.dart';
 import 'package:autodo/blocs/blocs.dart';
-import 'dart:math';
 
 class LatestRepeatsScreen extends StatefulWidget {
   final GlobalKey<FormState> repeatKey;
@@ -18,6 +17,7 @@ class LatestRepeatsScreen extends StatefulWidget {
 class LatestRepeatsScreenState extends State<LatestRepeatsScreen> with TickerProviderStateMixin{
   bool expanded, pageTransition, pageWillBeVisible;
   AnimationController openCtrl;
+  var openCurve;
 
   LatestRepeatsScreenState(this.pageWillBeVisible);
 
@@ -29,6 +29,13 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen> with TickerPro
       vsync: this,
       duration: Duration(milliseconds: 600),
     )..addListener(() => setState(() {}));
+    openCurve = Tween(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: openCtrl,
+      curve: Curves.easeOutCubic
+    ));
     super.initState();
   }
 
@@ -104,7 +111,7 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen> with TickerPro
 
     Widget card(var viewportSize) {
       return Container(
-        height: openCtrl.value * viewportSize.maxHeight,
+        height: openCurve.value * (viewportSize.maxHeight - 110),
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(  
           borderRadius: BorderRadius.only(

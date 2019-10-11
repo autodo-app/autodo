@@ -17,24 +17,31 @@ class SetRepeatsScreen extends StatefulWidget {
 
 class SetRepeatsScreenState extends State<SetRepeatsScreen> with SingleTickerProviderStateMixin{
   bool pageWillBeVisible;
-  AnimationController _ctrl;
-  Animation _val;
+  AnimationController openCtrl;
+  var openCurve;
 
   SetRepeatsScreenState(this.pageWillBeVisible);
 
   @override
   void initState() {
-    _ctrl= AnimationController(  
+    openCtrl = AnimationController(  
       vsync: this,
-      duration: Duration(milliseconds: cardAppearDuration),
+      duration: Duration(milliseconds: 600),
     )..addListener(() => setState(() {}));
+    openCurve = Tween(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: openCtrl,
+      curve: Curves.easeOutCubic
+    ));
     super.initState();
   }
 
   @override 
   Widget build(BuildContext context) {
     if (pageWillBeVisible) {
-      _ctrl.animateTo(1.0, curve: Curves.bounceOut);
+      openCtrl.forward();
       pageWillBeVisible = false;
     }
 
@@ -85,9 +92,8 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen> with SingleTickerPro
     );
 
     Widget card(var viewportSize) {
-      return AnimatedContainer( 
-        duration: Duration(milliseconds: 400),
-        height: (viewportSize.maxHeight - 110) * _ctrl.value,
+      return Container( 
+        height: (viewportSize.maxHeight - 110) * openCurve.value,
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(  
           borderRadius: BorderRadius.only(
