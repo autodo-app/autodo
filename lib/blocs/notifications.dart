@@ -1,10 +1,21 @@
 import 'dart:async';
+import 'package:autodo/blocs/firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class NotificationBLoC {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+  static final channelID = 'com.jonathanbayless.autodo';
+  static final channelName =  'auToDo';
+  static final channelDescription = 'Task reminders from the auToDo app';
+  static final androidPlatformChannelSpecifics = AndroidNotificationDetails(
+        channelID, channelName, channelDescription,
+        importance: Importance.Max, priority: Priority.High, ticker: 'auToDo notification');
+  static final iOSPlatformChannelSpecifics = IOSNotificationDetails();
+  static final platformChannelSpecifics = NotificationDetails(
+        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
 
   Future onSelectNotification(String payload) async {
     if (payload != null) {
@@ -16,52 +27,54 @@ class NotificationBLoC {
     // );
   }
 
-  Future<void> pushBasicNotification({title, content}) async {
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        'your channel id', 'your channel name', 'your channel description',
-        importance: Importance.Max, priority: Priority.High, ticker: 'ticker');
-    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
-    var platformChannelSpecifics = NotificationDetails(
-        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+  Future<void> pushBasicNotification({title, body}) async {
     await flutterLocalNotificationsPlugin.show(
-        0, 'plain title', 'plain body', platformChannelSpecifics,
-        payload: 'item x');
+        0, title, body, platformChannelSpecifics,
+        payload: 'TODO: item name');
   }
 
-  Future<void> scheduleNotification() async {
-    var scheduledNotificationDateTime =
-        new DateTime.now().add(new Duration(seconds: 5));
-    var androidPlatformChannelSpecifics =
-        new AndroidNotificationDetails('your other channel id',
-            'your other channel name', 'your other channel description');
-    var iOSPlatformChannelSpecifics =
-        new IOSNotificationDetails();
-    NotificationDetails platformChannelSpecifics = new NotificationDetails(
-        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+  Future<int> getNextNotificationID() async {
+    var userDoc = await FirestoreBLoC.fetchUserDocument();
+    var userData = await userDoc.get();
+    if (!userData.data.containsKey('lastNotificationID')) {
+      var lastID = 0;
+      var userJSON = userData.data;
+      userJSON['lastNotificationID'] = lastID;
+      userDoc.updateData(userJSON);
+      return lastID;
+    }
+    int lastID = userData.data['lastNotificationID'];
+    lastID++;
+    var userJSON = userData.data;
+    userJSON['lastNotificationID'] = lastID;
+    userDoc.updateData(userJSON);
+    return lastID;
+  }
+
+  Future<void> scheduleNotification({@required DateTime datetime, @required String title, @required String body}) async {
+    // Set a value in the user's db with the id value corresponding to this notification?
+    var lastID = await getNextNotificationID();
     await flutterLocalNotificationsPlugin.schedule(
-        0,
-        'scheduled title',
-        'scheduled body',
-        scheduledNotificationDateTime,
+        lastID,
+        title,
+        body,
+        datetime,
         platformChannelSpecifics);
   }
 
   Future<void> repeatedlyNotify() async {
     // Show a notification every minute with the first appearance happening a minute after invoking the method
-    var androidPlatformChannelSpecifics =
-        new AndroidNotificationDetails('repeating channel id',
-            'repeating channel name', 'repeating description');
-    var iOSPlatformChannelSpecifics =
-        new IOSNotificationDetails();
-    var platformChannelSpecifics = new NotificationDetails(
-        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.periodicallyShow(0, 'repeating title',
         'repeating body', RepeatInterval.EveryMinute, platformChannelSpecifics);
   }
 
   Future<void> cancel({id}) async {
     // cancel the notification with id value of zero
-    await flutterLocalNotificationsPlugin.cancel(0);
+    try {
+      await flutterLocalNotificationsPlugin.cancel(id);
+    } catch (e) {
+      print(e);
+    }
   }
   
   Future<void> cancelAll() async {
@@ -84,7 +97,6 @@ class NotificationBLoC {
   NotificationBLoC._internal() {
     // Initialize the plugin's settings
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
     var initializationSettingsAndroid =
         AndroidInitializationSettings('@drawable/app_icon');
     var initializationSettingsIOS = IOSInitializationSettings(

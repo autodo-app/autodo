@@ -66,7 +66,13 @@ class CreateEntryButtonState extends State<CreateEntryButton>
                 } else if (index == 0) {
                   Navigator.pushNamed(context, '/createRefueling');
                 } else if (index == 2) {
-                  NotificationBLoC().pushBasicNotification();
+                  // NotificationBLoC().repeatedlyNotify();
+                  // NotificationBLoC().cancelAll();
+                  NotificationBLoC().scheduleNotification(
+                    datetime: DateTime.now().add(Duration(seconds: 10)),
+                    title: 'Here',
+                    body: 'there',
+                  );
                 }
               },
             ),
