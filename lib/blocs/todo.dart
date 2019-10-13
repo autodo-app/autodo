@@ -4,6 +4,7 @@ import 'package:autodo/items/items.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/maintenance/todocard.dart';
 import 'package:autodo/blocs/firestore.dart';
+import 'package:autodo/blocs/notifications.dart';
 
 class FirebaseTodoBLoC {
   final Firestore _db = Firestore.instance;
@@ -45,14 +46,27 @@ class FirebaseTodoBLoC {
     );
   }
 
-  void push(MaintenanceTodoItem item) {
+  Future<void> scheduleNotification(MaintenanceTodoItem item) async {
+    if (item.dueDate != null) {
+      var id = await NotificationBLoC().scheduleNotification(
+        datetime: item.dueDate,
+        title: 'Maintenance ToDo Due Soon: ${item.name}',
+        body: ''
+      );
+      item.notificationID = id;
+    }
+  }
+
+  Future<void> push(MaintenanceTodoItem item) async {
+    await scheduleNotification(item);
+
     _db.runTransaction((transaction) async {
       // creates a new unique identifier for the item
       DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
       DocumentReference ref = await userDoc
           .collection('todos')
           .add(item.toJSON());
-      if (ref == null || item.ref == null) {
+      if (ref == null) {
         print("Error, push failed");
         return;
       }

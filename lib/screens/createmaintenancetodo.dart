@@ -59,15 +59,15 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
   Future _chooseDate(BuildContext context, String initialDateString) async {
     var now = DateTime.now();
     var initialDate = convertToDate(initialDateString) ?? now;
-    initialDate = (initialDate.year >= 1900 && initialDate.isBefore(now)
+    initialDate = (initialDate.year <= 2100 && initialDate.isAfter(now)
         ? initialDate
         : now);
 
     var result = await showDatePicker(
         context: context,
         initialDate: initialDate,
-        firstDate: DateTime(1900),
-        lastDate: DateTime.now());
+        firstDate: initialDate,
+        lastDate: DateTime(2100));
 
     if (result == null) return;
 
@@ -85,10 +85,10 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
     }
   }
 
-  bool isValidDob(String dob) {
-    if (dob.isEmpty) return true;
-    var d = convertToDate(dob);
-    return d != null && d.isBefore(DateTime.now());
+  bool isValidDate(String date) {
+    if (date.isEmpty) return true;
+    var d = convertToDate(date);
+    return d != null && d.isAfter(DateTime.now().subtract(Duration(days: 1)));
   }
 
   Widget repeatField() {
@@ -171,7 +171,7 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
       controller: _controller,
       keyboardType: TextInputType.datetime,
       validator: (val) =>
-          isValidDob(val) ? null : 'Not a valid date',
+          isValidDate(val) ? null : 'Not a valid date',
       onSaved: (val) => setState(() {
             if (val != null && val != '') {
               todoItem.dueDate = convertToDate(val);

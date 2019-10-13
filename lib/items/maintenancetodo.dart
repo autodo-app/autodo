@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:autodo/util.dart';
 
 class MaintenanceTodoItem {
   String name, ref, repeatingType;
   DateTime dueDate, completeDate;
-  int dueMileage;
+  int dueMileage, notificationID;
   bool complete = false;
   List<String> tags = ['Example Tag'];
   DocumentReference reference;

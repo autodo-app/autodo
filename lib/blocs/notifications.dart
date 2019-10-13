@@ -51,15 +51,16 @@ class NotificationBLoC {
     return lastID;
   }
 
-  Future<void> scheduleNotification({@required DateTime datetime, @required String title, @required String body}) async {
+  Future<int> scheduleNotification({@required DateTime datetime, @required String title, @required String body}) async {
     // Set a value in the user's db with the id value corresponding to this notification?
-    var lastID = await getNextNotificationID();
+    var id = await getNextNotificationID();
     await flutterLocalNotificationsPlugin.schedule(
-        lastID,
+        id,
         title,
         body,
         datetime,
         platformChannelSpecifics);
+    return id;
   }
 
   Future<void> repeatedlyNotify() async {
@@ -88,6 +89,13 @@ class NotificationBLoC {
   }
 
   Future<dynamic> onDidReceiveLocalNotification(int ign1, String ign2, String ign3, String ign4) async {}
+
+  Future<void> printPendingNotifications() async {
+    var requests = await flutterLocalNotificationsPlugin.pendingNotificationRequests();
+    requests.forEach((f) {
+      print(f.title);
+    });
+  }
   
   // Make the object a Singleton
   static final NotificationBLoC _bloc = NotificationBLoC._internal();
