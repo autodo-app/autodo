@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:autodo/blocs/userauth.dart';
 import 'package:autodo/theme.dart';
+import 'package:flutter/gestures.dart';
 
 class SignInScreen extends StatefulWidget {
   final Auth userAuth = Auth();
@@ -113,6 +114,22 @@ class SignInScreenState extends State<SignInScreen> {
     return Container();
   }
 
+  TextStyle linkStyle() {
+    return TextStyle(
+      decoration: TextDecoration.underline,
+      decorationStyle: TextDecorationStyle.solid,
+      fontSize: 13.0,
+      fontWeight: FontWeight.w300
+    );
+  }
+
+  TextStyle finePrint() {
+    return TextStyle(
+      fontSize: 13.0,
+      fontWeight: FontWeight.w300
+    );
+  }
+
   // void _showVerifyEmailSentDialog() {
   //   showDialog(
   //     context: context,
@@ -135,6 +152,56 @@ class SignInScreenState extends State<SignInScreen> {
   //   );
   // }
 
+  Widget tacDialog() {
+    return SimpleDialog(
+      children: <Widget>[
+        AboutDialog()                                                                                                                                                                                                                                                                                                                                                                                                
+      ],
+    );
+  }
+
+  Widget legal() {
+    return Padding(  
+      padding: EdgeInsets.fromLTRB(5, 15, 5, 0),
+      child: Center(
+          child: RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: 'By signing up, you agree to the ',
+                  style: finePrint(),
+                ),
+                TextSpan(
+                  text: 'terms and conditions',
+                  style: linkStyle(),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {},
+                ),
+                TextSpan(
+                  text: ' and ',
+                  style: finePrint(),
+                ),
+                TextSpan(
+                  text: 'privacy policy',
+                  style: linkStyle(),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      print('olkajs');
+                      showDialog<Widget>(context: context, builder: (ctx) => tacDialog());
+                    },
+                ),
+                TextSpan(
+                  text: ' of the auToDo app.',
+                  style: finePrint(),
+                ),
+              ]
+            ),
+          )
+      )
+    );
+  }
+
   Widget _showBody() {
     return Container(
       padding: EdgeInsets.all(16.0),
@@ -145,6 +212,7 @@ class SignInScreenState extends State<SignInScreen> {
           children: <Widget>[
             _showEmailInput(),
             _showPasswordInput(),
+            legal(),
             _showPrimaryButton(),
             _showSecondaryButton(),
             _showErrorMessage(),
@@ -253,7 +321,7 @@ class SignInScreenState extends State<SignInScreen> {
 
   Widget _showPrimaryButton() {
     return Padding(
-      padding: EdgeInsets.fromLTRB(0.0, 45.0, 0.0, 0.0),
+      padding: EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
       child: SizedBox(
         height: 40.0,
         child: RaisedButton(
