@@ -1,3 +1,4 @@
+import 'package:autodo/sharedmodels/legal.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/blocs/userauth.dart';
 import 'package:autodo/theme.dart';
@@ -72,6 +73,8 @@ class SignInScreenState extends State<SignInScreen> {
   void initState() {
     _errorMessage = "";
     _isLoading = false;
+    var tmp = PrivacyPolicy();
+    tmp.build(context);
     super.initState();
   }
 
