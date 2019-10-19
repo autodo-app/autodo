@@ -14,7 +14,7 @@ Create recurring maintenance tasks that will remind you to keep your vehicle in 
 
 ## License 
 
-auToDo is licensed under the [Apache License Version 2.0]() with the notable addition of the [Commons Clause]().
+auToDo is licensed under the [Apache License Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt) with the notable addition of the [Commons Clause](https://commonsclause.com/).
 
 You are welcome to use this project locally, modify it, redistribute it, and contribute to it per the typical Apache License terms, but with the stipulation that you do not sell this software in binary or source form. 
 
