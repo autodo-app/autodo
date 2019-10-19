@@ -1,13 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:autodo/blocs/blocs.dart';
+import 'package:autodo/theme.dart';
 
-class PrivacyPolicy extends StatelessWidget {
-  Future<String> loadAsset(context) async {
+class PrivacyPolicy {
+  static Future<String> loadAsset(context) async {
     return await DefaultAssetBundle.of(context).loadString('legal/privacy-policy.md');
   }
 
-  @override 
-  Widget build(BuildContext context) {
-    loadAsset(context);
-    return Text('hs');
+  static RichText txt;
+
+  static void init(BuildContext context) async {
+    var text = await loadAsset(context);
+    txt = RichText(
+      text: MarkdownParser.parse(text)
+    );
+  }
+  
+  static Widget text() {
+    return txt;
+  }
+
+  static Widget dialog(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: cardColor,
+      title: Text('Privacy Policy'),
+      titleTextStyle: Theme.of(context).primaryTextTheme.title,
+      content: SingleChildScrollView(  
+        child: Container(  
+          child: PrivacyPolicy.text()    
+        ),
+      ),
+      contentPadding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+      actions: <Widget>[ 
+        FlatButton(
+          child: Text(
+            'Got it!',
+            style: Theme.of(context).primaryTextTheme.button,
+          ),
+          onPressed: () => Navigator.pop(context),
+        )
+      ],
+    );
   }
 }

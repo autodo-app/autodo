@@ -73,8 +73,7 @@ class SignInScreenState extends State<SignInScreen> {
   void initState() {
     _errorMessage = "";
     _isLoading = false;
-    var tmp = PrivacyPolicy();
-    tmp.build(context);
+    PrivacyPolicy.init(context);
     super.initState();
   }
 
@@ -155,14 +154,6 @@ class SignInScreenState extends State<SignInScreen> {
   //   );
   // }
 
-  Widget tacDialog() {
-    return SimpleDialog(
-      children: <Widget>[
-        AboutDialog()                                                                                                                                                                                                                                                                                                                                                                                                
-      ],
-    );
-  }
-
   Widget legal() {
     return Padding(  
       padding: EdgeInsets.fromLTRB(5, 15, 5, 0),
@@ -190,8 +181,7 @@ class SignInScreenState extends State<SignInScreen> {
                   style: linkStyle(),
                   recognizer: TapGestureRecognizer()
                     ..onTap = () {
-                      print('olkajs');
-                      showDialog<Widget>(context: context, builder: (ctx) => tacDialog());
+                      showDialog<Widget>(context: context, builder: (ctx) => PrivacyPolicy.dialog(ctx));
                     },
                 ),
                 TextSpan(
