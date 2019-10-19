@@ -8,17 +8,17 @@ class _Parser {
 }
 
 class MarkdownParser {
-  // static _list(String item) {
-  //   if (listTag == 'ul')
-  //     return Text(
-  //       '•',
-  //       textAlign: TextAlign.center,
-  //       style: styleSheet.styles['li'],
-  //     );
-  // }
+  static String _list(String line) {
+    if (RegExp(r'^- ').hasMatch(line)) {
+      List<String> pieces = line.split(RegExp(r'^- '));
+      return '•   ' + pieces[1];
+    }
+    return null;      
+  }
+
   static String _h2(String line) {
-    if (RegExp(r'##').hasMatch(line)) {
-        List<String> pieces = line.split(RegExp(r'## '));
+    if (RegExp(r'^## ').hasMatch(line)) {
+        List<String> pieces = line.split(RegExp(r'^## '));
         return pieces[1];
     }
     return null;
@@ -32,8 +32,8 @@ class MarkdownParser {
   );
 
   static String _h3(String line) {
-    if (RegExp(r'### ').hasMatch(line)) {
-        List<String> pieces = line.split(RegExp(r'### '));
+    if (RegExp(r'^### ').hasMatch(line)) {
+        List<String> pieces = line.split(RegExp(r'^### '));
         return pieces[1];
     }
     return null;
@@ -46,17 +46,17 @@ class MarkdownParser {
     fontFamily: 'Ubuntu',
   );
 
-  static List<_Parser> parsers = [
-    _Parser(_h3, _h3Style),
-    _Parser(_h2, _h2Style),
-  ];
-
   static TextStyle defaultStyle = TextStyle( 
     color: Colors.white.withAlpha(230),
     fontSize: 12,
     fontWeight: FontWeight.w300,
     fontFamily: 'IBM Plex Sans',
   );
+
+  static List<_Parser> parsers = [
+    _Parser(_h3, _h3Style),
+    _Parser(_h2, _h2Style),
+  ];
 
   static List<TextSpan> addLine(List<TextSpan> spans, String txt, TextStyle style) {
     txt += '\n';
@@ -102,7 +102,7 @@ class MarkdownParser {
     }
 
     // italics could be dealt with by a second regex, but that's a problem for later
-    
+
     out.add(TextSpan(text: '\n')); // make sure that the line ends with a newline character
 
     return spans + out;
@@ -141,6 +141,7 @@ class MarkdownParser {
 
       if (!parsed) {
         // line is not special, add with normal style
+        line = _list(line) ?? line;
         spans = _inlineMarkup(spans, line);
       }
     });
