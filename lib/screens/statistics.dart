@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart';
+import 'package:autodo/util.dart';
 
 class FuelMileagePoint {
-  final double date, mpg;
+  double date, mpg;
 
-  FuelMileagePoint(this.date, this.mpg);
+  FuelMileagePoint({this.date, this.mpg});
 }
 
 class FuelMileageChart extends StatelessWidget {
@@ -114,37 +115,51 @@ class StatisticsScreen extends StatefulWidget {
 class StatisticsScreenState extends State<StatisticsScreen> {
   static List<Series<FuelMileagePoint, double>> _createSampleData() {
     final data = [
-      FuelMileagePoint(0, 5),
-      FuelMileagePoint(10, 25),
-      FuelMileagePoint(12, 75),
-      FuelMileagePoint(13, 225),
-      FuelMileagePoint(16, 50),
-      FuelMileagePoint(24, 75),
-      FuelMileagePoint(25, 100),
-      FuelMileagePoint(34, 150),
-      FuelMileagePoint(37, 10),
-      FuelMileagePoint(45, 300),
-      FuelMileagePoint(52, 15),
-      FuelMileagePoint(56, 200),
+      FuelMileagePoint(date: 0, mpg: 5),
+      FuelMileagePoint(date: 10, mpg: 25),
+      FuelMileagePoint(date: 12, mpg: 75),
+      FuelMileagePoint(date: 13, mpg: 225),
+      FuelMileagePoint(date: 16, mpg: 50),
+      FuelMileagePoint(date: 24, mpg: 75),
+      FuelMileagePoint(date: 25, mpg: 100),
+      FuelMileagePoint(date: 34, mpg: 150),
+      FuelMileagePoint(date: 37, mpg: 10),
+      FuelMileagePoint(date: 45, mpg: 300),
+      FuelMileagePoint(date: 52, mpg: 15),
+      FuelMileagePoint(date: 56, mpg: 200),
     ];
 
-    final maxMeasure = 300;
+    final List<FuelMileagePoint> emaData = [];
+    for (var point in data) {
+      if (emaData.length == 0) {
+        emaData.add(point);
+        continue;
+      }
+      FuelMileagePoint newPoint = FuelMileagePoint();
+      FuelMileagePoint interpolate = FuelMileagePoint();
+      FuelMileagePoint last = emaData[emaData.length - 1];
+      newPoint.date = point.date;
+      newPoint.mpg = last.mpg * 0.8 + point.mpg * 0.2;
+      interpolate.date = (point.date + last.date) / 2;
+      interpolate.mpg = last.mpg * 0.8 + newPoint.mpg * 0.2;
+      emaData.add(interpolate);
+      emaData.add(newPoint);
+    }
+
+    final double maxMeasure = 300, minMeasure = 5;
+    print(rgb2Hsl(255, 0, 0));
+    print(hslToRgb(0.3333, 1.0, 0.5));
 
     return [
       Series<FuelMileagePoint, double>(
         id: 'Fuel Mileage vs Time',
         // Providing a color function is optional.
         colorFn: (FuelMileagePoint point, _) {
-          // Bucket the measure column value into 3 distinct colors.
-          final bucket = point.mpg / maxMeasure;
-
-          if (bucket < 1 / 3) {
-            return MaterialPalette.blue.shadeDefault;
-          } else if (bucket < 2 / 3) {
-            return MaterialPalette.red.shadeDefault;
-          } else {
-            return MaterialPalette.green.shadeDefault;
-          }
+          // Shade the point from red to green depending on its position relative to min/max
+          final scale = scaleToUnit(point.mpg, minMeasure, maxMeasure);
+          final hue = scale * 0.3333;
+          final rgb = hslToRgb(hue, 1.0, 0.5);
+          return Color(r: rgb['r'], g: rgb['g'], b: rgb['b']);
         },
         domainFn: (FuelMileagePoint point, _) => point.date,
         measureFn: (FuelMileagePoint point, _) => point.mpg,
@@ -155,10 +170,10 @@ class StatisticsScreenState extends State<StatisticsScreen> {
       // Configure our custom line renderer for this series.
       Series<FuelMileagePoint, double>(
           id: 'Mobile',
-          colorFn: (_, __) => MaterialPalette.purple.shadeDefault,
+          colorFn: (_, __) => MaterialPalette.blue.shadeDefault,
           domainFn: (FuelMileagePoint point, _) => point.date,
           measureFn: (FuelMileagePoint point, _) => point.mpg,
-          data: data
+          data: emaData
       )..setAttribute(rendererIdKey, 'customLine'),
     ];
   }
