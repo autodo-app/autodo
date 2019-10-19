@@ -1,4 +1,6 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart' as launcher;
 
 class _Parser {
   final String Function(String) fn;
@@ -69,6 +71,10 @@ class MarkdownParser {
   }
 
   static TextStyle bold = defaultStyle.copyWith(fontWeight: FontWeight.w600);
+  static TextStyle _linkStyle = defaultStyle.copyWith( 
+    decoration: TextDecoration.underline,
+    color: Colors.blue
+  );
 
   static List<TextSpan> _inlineMarkup(List<TextSpan> spans, String txt) {
     List<TextSpan> out = [];
@@ -101,7 +107,57 @@ class MarkdownParser {
       odd = !odd;
     }
 
-    // italics could be dealt with by a second regex, but that's a problem for later
+    RegExp isLink = RegExp(r'\[(.*?)\]\((.*?)\)');
+    // List containing entries with the past text span and the new text span
+    List<List<TextSpan>> toRemove = [];
+    for (var span in out) {
+      var txt = span.text;
+      // dynamically resizing the list is bad
+      TextSpan t = TextSpan(
+        text: '',
+        children: []
+      );
+      var pieces = isLink.allMatches(txt);
+      for (var piece in pieces) {
+        var fullMatch = piece.group(0);
+        print(fullMatch);
+        var splitString = txt.split(fullMatch);
+        bool odd = false;
+        for (var s in splitString) {
+          if (odd) {
+            var url = piece.group(2);
+            var linkText = piece.group(1);
+            var tap = TapGestureRecognizer()..onTap = () => launcher.launch(url);
+            t.children.add(
+              TextSpan(
+                text: linkText,
+                recognizer: tap,
+                style: _linkStyle,
+              )
+            );
+          } 
+          t.children.add(
+            TextSpan( 
+              text: s,
+              style: defaultStyle,
+            )
+          );
+          odd = !odd;
+        }
+      }
+      if (isLink.hasMatch(txt)) {
+        toRemove.add([
+          span,
+          t
+        ]);
+      }
+    }
+    for (var pair in toRemove) {
+      var idx = out.indexOf(pair[0]);
+      out[idx] = pair[1];
+    }
+
+    // italics could be dealt with by another regex, but that's a problem for later
 
     out.add(TextSpan(text: '\n')); // make sure that the line ends with a newline character
 
