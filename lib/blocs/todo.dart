@@ -25,6 +25,31 @@ class FirebaseTodoBLoC {
     return MaintenanceTodoCard(item: item);
   }
 
+  List _sortItems(List items) {
+    return items..sort((a, b) {
+      var aDate = a.data['dueDate'] ?? 0;
+      var bDate = b.data['dueDate'] ?? 0;
+      var aMileage = a.data['dueMileage'] ?? 0;
+      var bMileage = b.data['dueMileage'] ?? 0;
+      print('$aMileage   $bMileage');
+       
+      if (aDate == 0 && bDate == 0) {
+        // both don't have a date, so only consider the mileages
+        if (aMileage > bMileage) return 1;
+        else if (aMileage < bMileage) return -1;
+        else return 0;
+      } else if (aMileage == 0 && bMileage == 0) {
+        // both don't have a mileage, so only consider the dates
+        if (aDate < bDate) return 1;
+        else if (aDate > bDate) return -1;
+        else return 0;
+      } else {
+        // there should be a function here to translate mileage to dates
+        return 0;
+      }
+    });
+  }
+
   StreamBuilder buildList(BuildContext context) {
     if (FirestoreBLoC.isLoading()) return StreamBuilder(
       builder: (context, snapshot) {
@@ -37,10 +62,11 @@ class FirebaseTodoBLoC {
           .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return Text('Loading...');
+        var data = _sortItems(snapshot.data.documents);
         return ListView.builder(
-          itemCount: snapshot.data.documents.length,
+          itemCount: data.length,
           itemBuilder: (context, index) =>
-              _buildItem(context, snapshot.data.documents[index]),
+              _buildItem(context, data[index]),
         );
       },
     );
