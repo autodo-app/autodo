@@ -57,6 +57,10 @@ class FirebaseTodoBLoC {
         return Text('Loading...');
       }
     );
+    Widget upcomingDivider = Container( 
+      padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+      child: Divider()
+    );
     return StreamBuilder(
       stream: FirestoreBLoC.getUserDocument()
           .collection('todos')
@@ -66,7 +70,7 @@ class FirebaseTodoBLoC {
         var data = _sortItems(snapshot.data.documents);
         return ListView.separated(
           itemCount: data.length,
-          separatorBuilder: (context, index) => (index == 0) ? Divider(indent: 10, endIndent: 10) : Container(),
+          separatorBuilder: (context, index) => (index == 0) ? upcomingDivider : Container(),
           itemBuilder: (context, index) =>
               _buildItem(context, data[index], index == 0),
         );
