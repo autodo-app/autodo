@@ -10,8 +10,9 @@ class FirebaseTodoBLoC {
   final Firestore _db = Firestore.instance;
   MaintenanceTodoItem _past;
 
-  Widget _buildItem(BuildContext context, DocumentSnapshot snapshot) {
-    var name = snapshot.data['name'];
+  Widget _buildItem(BuildContext context, DocumentSnapshot snapshot, bool first) {
+    var name = (first) ? 'Upcoming: ' : ''; // TODO: move this logic to the card
+    name += snapshot.data['name'];
     var date;
     if (snapshot.data.containsKey('dueDate') && snapshot.data['dueDate'] != null)
       date = snapshot.data['dueDate'].toDate();
@@ -22,7 +23,7 @@ class FirebaseTodoBLoC {
         dueDate: date,
         dueMileage: mileage,
         repeatingType: snapshot.data['repeatingType']);
-    return MaintenanceTodoCard(item: item);
+    return MaintenanceTodoCard(item: item, emphasized: first);
   }
 
   List _sortItems(List items) {
@@ -63,10 +64,11 @@ class FirebaseTodoBLoC {
       builder: (context, snapshot) {
         if (!snapshot.hasData) return Text('Loading...');
         var data = _sortItems(snapshot.data.documents);
-        return ListView.builder(
+        return ListView.separated(
           itemCount: data.length,
+          separatorBuilder: (context, index) => (index == 0) ? Divider(indent: 10, endIndent: 10) : Container(),
           itemBuilder: (context, index) =>
-              _buildItem(context, data[index]),
+              _buildItem(context, data[index], index == 0),
         );
       },
     );
