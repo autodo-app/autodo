@@ -16,15 +16,20 @@ enum dropdown { settings }
 class HomeScreenState extends State<HomeScreen> {
   int tabIndex = 0;
 
-  List<Widget> bodies = [
-    MaintenanceHistory(),
-    RefuelingHistory(),
-    StatisticsScreen(),
-    EditRepeatsScreen(),
-  ];
-  
   @override
   Widget build(BuildContext context) {
+    List<Widget> bodies = [
+      MaintenanceHistory(),
+      RefuelingHistory(),
+      StatisticsScreen(),
+      EditRepeatsScreen(),
+    ];
+
+    IndexedStack bodyStack = IndexedStack(  
+      index: tabIndex,
+      children: bodies,
+    );
+    
     return Container(
       decoration: scaffoldBackgroundGradient(),
       child: Scaffold(
@@ -53,7 +58,8 @@ class HomeScreenState extends State<HomeScreen> {
           ],
         ),
         // body: MaintenanceHistory(),
-        body: bodies[tabIndex],
+        // body: bodies[tabIndex],
+        body: bodyStack,
         bottomNavigationBar: BottomNavigationBar(  
           type: BottomNavigationBarType.fixed,
           showSelectedLabels: true,

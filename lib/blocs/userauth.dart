@@ -27,9 +27,7 @@ class Auth implements BaseAuth {
     AuthResult res = await _firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
     FirebaseUser user = res.user;
-    // if (user.uid != null) LocalStorage.save("uuid", user.uid);
     currentUser = user.uid;
-    // currentUserName = user.displayName == "" ? user.email : user.displayName;
     currentUserName = user.email;
     await _createUserDocument();
     return user.uid;
