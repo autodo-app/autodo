@@ -8,11 +8,12 @@ class MaintenanceHistory extends StatefulWidget {
   }
 }
 
-class MaintenanceHistoryState extends State<MaintenanceHistory> {
+class MaintenanceHistoryState extends State<MaintenanceHistory> with AutomaticKeepAliveClientMixin {
   FirebaseTodoBLoC fb = FirebaseTodoBLoC();
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     if (fb.isLoading()) {
       return Center(child: CircularProgressIndicator(),);
     } else {
@@ -21,4 +22,8 @@ class MaintenanceHistoryState extends State<MaintenanceHistory> {
     );
     }
   }
+
+  @override 
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
