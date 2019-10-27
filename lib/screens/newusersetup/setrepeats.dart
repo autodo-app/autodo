@@ -126,7 +126,7 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen> with SingleTickerPro
                       'Skip',
                       style: Theme.of(context).primaryTextTheme.button,
                     ),
-                    onPressed: () => Navigator.popAndPushNamed(context, '/'),
+                    onPressed: () => Navigator.popAndPushNamed(context, '/load'),
                   ),
                   FlatButton( 
                     padding: EdgeInsets.all(0),
@@ -135,7 +135,7 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen> with SingleTickerPro
                       'Next',
                       style: Theme.of(context).primaryTextTheme.button,
                     ),
-                    onPressed: () => Navigator.popAndPushNamed(context, '/'),
+                    onPressed: () => Navigator.popAndPushNamed(context, '/load'),
                   ),
                 ],
               ),

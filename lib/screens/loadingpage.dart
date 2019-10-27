@@ -24,6 +24,7 @@ class LoadingPageState extends State<LoadingPage> {
     if (uuid == "NO_USER") {
       Navigator.pushNamed(context, '/welcomepage');
     } else {
+      print('loadingSequence');
       await RepeatingBLoC().updateUpcomingTodos();
       Navigator.pushNamed(context, '/');
     }
