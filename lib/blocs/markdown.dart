@@ -120,7 +120,6 @@ class MarkdownParser {
       var pieces = isLink.allMatches(txt);
       for (var piece in pieces) {
         var fullMatch = piece.group(0);
-        print(fullMatch);
         var splitString = txt.split(fullMatch);
         bool odd = false;
         for (var s in splitString) {

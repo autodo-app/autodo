@@ -39,6 +39,7 @@ class Auth implements BaseAuth {
       res = await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
       currentUser = res.user.uid;
+      print('sign up $currentUser');
       currentUserName = res.user.email;
       await _createUserDocument();
     } on PlatformException {
@@ -89,6 +90,10 @@ class Auth implements BaseAuth {
   bool isLoading() {
     if (getCurrentUser() == '') return true;
     else return false;
+  }
+
+  StreamSubscription<FirebaseUser> listen(Function(FirebaseUser) fn) {
+    return _firebaseAuth.onAuthStateChanged.listen(fn);
   }
 
   // Make the object a Singleton

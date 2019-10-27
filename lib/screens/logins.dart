@@ -53,7 +53,7 @@ class SignInScreenState extends State<SignInScreen> {
           if (widget.formMode == FormMode.SIGNUP)
             Navigator.popAndPushNamed(context, '/newuser');
           else
-            Navigator.pushNamed(context, '/');
+            Navigator.pushNamed(context, '/load');
         }
       } catch (e) {
         print("error: $e");

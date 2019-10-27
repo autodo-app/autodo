@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:autodo/refueling/history.dart';
 import 'package:autodo/screens/editrepeats.dart';
 import 'package:autodo/screens/screens.dart';
@@ -5,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:autodo/sharedmodels/sharedmodels.dart';
 import 'package:autodo/maintenance/history.dart';
 import 'package:autodo/theme.dart';
+import 'package:autodo/blocs/userauth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -15,20 +19,48 @@ enum dropdown { settings }
 
 class HomeScreenState extends State<HomeScreen> {
   int tabIndex = 0;
+  StreamSubscription authStream;
+  bool signedIn = false;
+
+  void onAuthChange(FirebaseUser user) {
+    if (user!= null && user.uid != null) {
+      setState(() {
+        signedIn = true;
+      });
+    } else {
+      setState(() {
+        signedIn = false;
+      });
+    }
+  }
+
+  HomeScreenState() {
+    authStream = Auth().listen(onAuthChange);
+  }
+
+  @override 
+  void dispose() {
+    authStream.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> bodies = [
-      MaintenanceHistory(),
-      RefuelingHistory(),
-      StatisticsScreen(),
-      EditRepeatsScreen(),
-    ];
+    IndexedStack bodyStack;
 
-    IndexedStack bodyStack = IndexedStack(  
-      index: tabIndex,
-      children: bodies,
-    );
+    if (signedIn) {
+      List<Widget> bodies = [
+        MaintenanceHistory(),
+        RefuelingHistory(),
+        StatisticsScreen(),
+        EditRepeatsScreen(),
+      ];
+
+      bodyStack = IndexedStack(  
+        index: tabIndex,
+        children: bodies,
+      );
+    }
     
     return Container(
       decoration: scaffoldBackgroundGradient(),
@@ -57,9 +89,7 @@ class HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
-        // body: MaintenanceHistory(),
-        // body: bodies[tabIndex],
-        body: bodyStack,
+        body: (signedIn) ? bodyStack : Container(),
         bottomNavigationBar: BottomNavigationBar(  
           type: BottomNavigationBarType.fixed,
           showSelectedLabels: true,

@@ -32,7 +32,6 @@ class FirebaseTodoBLoC {
       var bDate = b.data['dueDate'] ?? 0;
       var aMileage = a.data['dueMileage'] ?? 0;
       var bMileage = b.data['dueMileage'] ?? 0;
-      print('$aMileage   $bMileage');
        
       if (aDate == 0 && bDate == 0) {
         // both don't have a date, so only consider the mileages

@@ -58,7 +58,7 @@ class RepeatingBLoC {
           .collection('repeats')
           .document('default')
           .collection('repeats')
-          .orderBy('name')
+          // .orderBy('name')
           .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return const Text('Loading...');
@@ -192,7 +192,6 @@ class RepeatingBLoC {
           // Add the repeat interval to the car's current mileage if the small
           // interval and high mileage makes it seem unlikely that the car
           // has not had this operation done at some point
-          // TODO: referenced in #36
           newDueMileage += CarStatsBLoC().getCurrentMileage();
         }
         pushNewTodo('default', repeat.name, newDueMileage);
@@ -242,31 +241,31 @@ class RepeatingBLoC {
   }
   
   void updateTodos(Repeat item) async {
-    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
-    Query completes = userDoc
-                        .collection('todos').where("complete", isEqualTo: false).orderBy("completeDate");
-    QuerySnapshot docs = await completes.getDocuments();
-    List<DocumentSnapshot> snaps = docs.documents;
-    WriteBatch _batch = _db.batch();
+    // DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    // Query completes = userDoc
+    //                     .collection('todos').where("complete", isEqualTo: false).orderBy("completeDate");
+    // QuerySnapshot docs = await completes.getDocuments();
+    // List<DocumentSnapshot> snaps = docs.documents;
+    // WriteBatch _batch = _db.batch();
 
-    for (var snap in snaps) {
-      var todo = snap.data;
-      String taskType = snap.data['repeatingType'];
-      if (taskType == item.name) {
-        // use the difference in the previous and new intervals to update the dueMileage
-        int prevInterval = repeatByName(taskType).interval ?? 0; // prevent exception on null value
-        int curInterval = item.interval ?? 0;
-        if (!todo.containsKey('dueMileage') || todo['dueMileage'] == null || prevInterval == curInterval)
-          return;
-        int curMileage = todo['dueMileage'] as int;
-        todo['dueMileage'] = curMileage + (curInterval - prevInterval); 
-      } 
-      var updatedItem = MaintenanceTodoItem.fromMap(
-        todo, 
-        reference: userDoc.collection('todos').document(snap.documentID));
-      _batch = await FirebaseTodoBLoC().addUpdate(_batch, updatedItem);
-    }
-    _batch.commit();
+    // for (var snap in snaps) {
+    //   var todo = snap.data;
+    //   String taskType = snap.data['repeatingType'];
+    //   if (taskType == item.name) {
+    //     // use the difference in the previous and new intervals to update the dueMileage
+    //     int prevInterval = repeatByName(taskType).interval ?? 0; // prevent exception on null value
+    //     int curInterval = item.interval ?? 0;
+    //     if (!todo.containsKey('dueMileage') || todo['dueMileage'] == null || prevInterval == curInterval)
+    //       return;
+    //     int curMileage = todo['dueMileage'] as int;
+    //     todo['dueMileage'] = curMileage + (curInterval - prevInterval); 
+    //   } 
+    //   var updatedItem = MaintenanceTodoItem.fromMap(
+    //     todo, 
+    //     reference: userDoc.collection('todos').document(snap.documentID));
+    //   _batch = await FirebaseTodoBLoC().addUpdate(_batch, updatedItem);
+    // }
+    // _batch.commit();
   }
 
   void editRunner(dynamic item) {
@@ -314,9 +313,7 @@ class RepeatingBLoC {
     for (var r in repeats) {
       if (regex.hasMatch(r.name)) out.add(r);
     }
-    // return out;
-    print(repeats);
-    return repeats;
+    return repeats; 
   }
 
   Future<void> editByName(String name, int interval) async {
