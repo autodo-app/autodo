@@ -10,7 +10,11 @@ class FirebaseRefuelingBLoC {
 
   Widget _buildItem(BuildContext context, DocumentSnapshot snapshot) {
     var odom = snapshot.data['odom'].toInt();
-    var cost = snapshot.data['cost'].toDouble();
+    var cost;
+    if (snapshot.data['cost'] != null)
+      cost = snapshot.data['cost'].toDouble();
+    else
+      cost = 0.0;
     var amount = snapshot.data['amount'].toDouble();
     var item = RefuelingItem(
         ref: snapshot.documentID, odom: odom, cost: cost, amount: amount);
@@ -34,39 +38,29 @@ class FirebaseRefuelingBLoC {
     );
   }
 
-  void push(RefuelingItem item) {
-    _db.runTransaction((transaction) async {
-      // creates a new unique identifier for the item
-      DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
-      DocumentReference ref = await userDoc
-          .collection('refuelings')
-          .add(item.toJSON());
-      item.ref = ref.documentID;
-      await transaction.set(ref, item.toJSON());
-    });
+  Future<void> push(RefuelingItem item) async {
+    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    DocumentReference ref = await userDoc
+        .collection('refuelings')
+        .add(item.toJSON());
+    item.ref = ref.documentID;
   }
 
-  void edit(RefuelingItem item) {
-    _db.runTransaction((transaction) async {
-      // Grab the item's existing identifier
-      DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
-      DocumentReference ref = userDoc
-          .collection('refuelings')
-          .document(item.ref);
-      await transaction.update(ref, item.toJSON());
-    });
+  Future<void> edit(RefuelingItem item) async {
+    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    DocumentReference ref = userDoc
+        .collection('refuelings')
+        .document(item.ref);
+    ref.updateData(item.toJSON());
   }
 
-  void delete(RefuelingItem item) {
+  Future<void> delete(RefuelingItem item) async {
     _past = item;
-    _db.runTransaction((transaction) async {
-      // Grab the item's existing identifier
-      DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
-      DocumentReference ref = userDoc
-          .collection('refuelings')
-          .document(item.ref);
-      await transaction.delete(ref);
-    });
+    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    DocumentReference ref = userDoc
+      .collection('refuelings')
+      .document(item.ref);
+    ref.delete();
   }
 
   void undo() {

@@ -206,49 +206,39 @@ class RepeatingBLoC {
   }
 
   Future<void> pushRepeats(String carName, List<Repeat> repeats) async {
-      // creates a new unique identifier for the item
-      DocumentReference doc = await FirestoreBLoC.fetchUserDocument();
-      repeats.forEach( (repeat) async {
-        _db.runTransaction((transaction) async {
-          DocumentReference ref = await doc
-            .collection('repeats')
-            .document(carName)
-            .collection('repeats')
-            .add(repeat.toJSON());
-          await transaction.set(ref, repeat.toJSON());
-        }
-      );
+    // creates a new unique identifier for the item
+    DocumentReference doc = await FirestoreBLoC.fetchUserDocument();
+    repeats.forEach( (repeat) async {
+      DocumentReference ref = await doc
+          .collection('repeats')
+          .document(carName)
+          .collection('repeats')
+          .add(repeat.toJSON());
+      ref.setData(repeat.toJSON());
     });
   }
 
   Future<void> push(String carName, Repeat repeat) async {
       // creates a new unique identifier for the item
       DocumentReference doc = await FirestoreBLoC.fetchUserDocument();
-      _db.runTransaction((transaction) async {
-        DocumentReference ref = await doc
+      DocumentReference ref = await doc
           .collection('repeats')
           .document(carName)
           .collection('repeats')
           .add(repeat.toJSON());
-        await transaction.set(ref, repeat.toJSON());
-      }
-    );
+      ref.setData(repeat.toJSON());
   }
 
-  void edit(Repeat item) {
-    _db.runTransaction((transaction) async {
-      // Grab the item's existing identifier
-      DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
-      if (item.ref == null) return;
-      DocumentReference ref = userDoc
-          .collection('repeats')
-          .document('default')
-          .collection('repeats')
-          .document(item.ref);
-      if (ref == null) return;
-
-      await transaction.update(ref, item.toJSON());
-    });
+  Future<void> edit(Repeat item) async {
+    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    if (item.ref == null) return;
+    DocumentReference ref = userDoc
+        .collection('repeats')
+        .document('default')
+        .collection('repeats')
+        .document(item.ref);
+    if (ref == null) return;
+    ref.updateData(item.toJSON());
   }
   
   void updateTodos(Repeat item) async {
@@ -302,18 +292,15 @@ class RepeatingBLoC {
     FirebaseTodoBLoC().push(newTodo);
   }
 
-  void delete(Repeat repeat) {
+  Future<void> delete(Repeat repeat) async {
     _past = repeat;
-    _db.runTransaction((transaction) async {
-      // Grab the item's existing identifier
-      DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
-      DocumentReference ref = userDoc
-          .collection('repeats')
-          .document('default')
-          .collection('repeats')
-          .document(repeat.ref);
-      await transaction.delete(ref);
-    });
+    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    DocumentReference ref = userDoc
+        .collection('repeats')
+        .document('default')
+        .collection('repeats')
+        .document(repeat.ref);
+    ref.delete();
   }
 
   void undo() {
