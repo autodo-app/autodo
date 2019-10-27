@@ -41,6 +41,8 @@ const MaterialColor tagPallette = MaterialColor(500, tagColors);
 const Color errorColor = Color(0xffcf6679);
 final Color cardColor = Color.lerp(mainPallette.shade900, Colors.grey[800], 0.7);
 
+const splashColor = Color(0xff454f51);
+
 Decoration scaffoldBackgroundGradient() {
   LinearGradient blueGrey = LinearGradient(
     begin: Alignment.topCenter,
