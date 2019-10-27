@@ -7,7 +7,6 @@ import 'package:autodo/blocs/firestore.dart';
 import 'package:autodo/blocs/notifications.dart';
 
 class FirebaseTodoBLoC {
-  final Firestore _db = Firestore.instance;
   MaintenanceTodoItem _past;
 
   Widget _buildItem(BuildContext context, DocumentSnapshot snapshot, bool first) {
@@ -18,11 +17,13 @@ class FirebaseTodoBLoC {
       date = snapshot.data['dueDate'].toDate();
     var mileage = snapshot.data['dueMileage'];
     var item = MaintenanceTodoItem(
-        ref: snapshot.documentID,
-        name: name,
-        dueDate: date,
-        dueMileage: mileage,
-        repeatingType: snapshot.data['repeatingType']);
+      ref: snapshot.documentID,
+      name: name,
+      dueDate: date,
+      dueMileage: mileage,
+      repeatingType: snapshot.data['repeatingType'],
+      tags: snapshot.data['tags']
+    );
     return MaintenanceTodoCard(item: item, emphasized: first);
   }
 

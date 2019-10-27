@@ -6,11 +6,11 @@ class MaintenanceTodoItem {
   DateTime dueDate, completeDate;
   int dueMileage, notificationID;
   bool complete = false;
-  List<String> tags = ['Example Tag'];
+  List tags;
   DocumentReference reference;
 
   MaintenanceTodoItem(
-      {this.ref, @required this.name, this.dueDate, this.dueMileage, this.repeatingType});
+      {this.ref, @required this.name, this.dueDate, this.dueMileage, this.repeatingType, this.tags});
 
   MaintenanceTodoItem.empty();
 
@@ -32,7 +32,11 @@ class MaintenanceTodoItem {
     if (map['repeatingType'] != null) {
       repeatingType = map['repeatingType'];
     }
-    tags = List<String>.from(map['tags']);
+    if (map['tags'] != null) {
+      tags = map['tags'];
+    } else {
+      tags = [];
+    }
   }
 
   MaintenanceTodoItem.fromSnapshot(DocumentSnapshot snapshot)
