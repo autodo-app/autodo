@@ -1,4 +1,5 @@
 import 'package:autodo/blocs/todo.dart';
+import 'package:autodo/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/items/items.dart';
 import 'package:intl/intl.dart';
@@ -7,23 +8,28 @@ import 'package:autodo/sharedmodels/cartag.dart';
 
 class MaintenanceTodoCard extends StatefulWidget {
   final MaintenanceTodoItem item;
-  MaintenanceTodoCard({@required this.item});
+  final bool emphasized;
+
+  MaintenanceTodoCard({@required this.item, this.emphasized});
 
   @override
-  State<MaintenanceTodoCard> createState() => MaintenanceTodoCardState();
+  State<MaintenanceTodoCard> createState() => MaintenanceTodoCardState(emphasized: this.emphasized ?? false);
 }
 
 class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
   bool isChecked = false;
+  final bool emphasized;
+  MaintenanceTodoCardState({@required this.emphasized});
 
   Transform checkbox(MaintenanceTodoCard widget) {
     return Transform.scale(
       scale: 1.5,
       child: Padding(
-        padding: EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
+        padding: EdgeInsets.fromLTRB(5.0, 0, 5.0, 0),
         child: Checkbox(
           value: isChecked,
-          checkColor: Theme.of(context).accentIconTheme.color,
+          checkColor: Theme.of(context).primaryColor,
+          activeColor: Colors.white,
           onChanged: (bool val) {
             setState(() {
               isChecked = val;
@@ -55,12 +61,31 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
   Row dueMileage(int mileage) {
     bool isMileage = mileage != null;
     if (isMileage) {
+      var mileageString = mileage.toString();
+      mileageString = mileageString.replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => "${m[1]},");
       return Row(
         children: <Widget>[
-          Icon(Icons.directions_car, size: 30.0),
-          Text(
-            'Due at ' + mileage.toString() + ' miles',
-            style: Theme.of(context).primaryTextTheme.body1,
+          Icon(Icons.pin_drop, size: 30.0),
+          Padding(  
+            padding: EdgeInsets.all(5),
+          ),
+          RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(  
+                  text: 'Due at ',
+                  style: Theme.of(context).primaryTextTheme.body1,
+                ),
+                TextSpan(  
+                  text: mileageString,
+                  style: Theme.of(context).primaryTextTheme.subtitle,
+                ),
+                TextSpan(  
+                  text: ' miles',
+                  style: Theme.of(context).primaryTextTheme.body1,
+                )
+              ]
+            ),
           ),
         ],
       );
@@ -69,13 +94,38 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
     }
   }
 
+  Row lastCompleted() {
+    // TODO: change this based on past historical data
+    return Row(  
+      children: <Widget>[
+        Icon(Icons.new_releases, size: 30.0),
+        Padding(  
+          padding: EdgeInsets.all(5),
+        ),
+        Text(
+          'First time doing this task\non this vehicle.',
+          style: Theme.of(context).primaryTextTheme.body1,
+        ),
+      ],
+    );
+  }
+
   Container due(MaintenanceTodoCard widget) {
     return Container(
+      padding: EdgeInsets.fromLTRB(5.0, 0, 5.0, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           dueDate(widget.item.dueDate),
+          Padding( 
+            padding: EdgeInsets.all(5),
+          ),
           dueMileage(widget.item.dueMileage),
+          Padding( 
+            padding: EdgeInsets.all(5),
+          ),
+          lastCompleted(),
         ],
       ),
     );
@@ -99,10 +149,16 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
 
   Container body(MaintenanceTodoCard widget) {
     return Container(
-      padding: EdgeInsets.fromLTRB(0, 36.0, 0, 36.0),
+      padding: EdgeInsets.fromLTRB(10.0, 25.0, 10.0, 25.0),
       child: Row(
         children: <Widget>[
           checkbox(widget),
+          Container(
+            height: 100, 
+            child: VerticalDivider(
+              color: Colors.white.withAlpha(230),
+            )
+          ),
           due(widget),
         ],
       ),
@@ -189,12 +245,29 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
 
   @override
   Widget build(BuildContext context) {
+    var grad1 = LinearGradient(
+      begin: Alignment.centerLeft,
+      end: Alignment.centerRight,
+      colors: [mainColors[300], mainColors[400]]
+    );
+    var grad2 = LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: [mainColors[700], mainColors[900]]
+    );
+    BoxDecoration emphasizedDecoration = BoxDecoration(  
+      borderRadius: BorderRadius.circular(25),
+      gradient: LinearGradient.lerp(grad1, grad2, 0.5)
+    );
+
     return Padding(
       padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
       child: Card(
-        elevation: 8.0,
+        elevation: (emphasized) ? 16.0 : 4.0,
+        color: (emphasized) ? Colors.transparent : cardColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
         child: Container(
+          decoration: (emphasized) ? emphasizedDecoration : BoxDecoration(),
           child: Column(
             children: <Widget>[
               title(widget),

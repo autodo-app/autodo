@@ -161,15 +161,15 @@ createTheme() {
     scaffoldBackgroundColor: cardColor,
     bottomAppBarColor: mainPallette.shade800,
     cardColor: cardColor,
-    dividerColor: Colors.white24,
+    dividerColor: Colors.white.withAlpha(200),
     focusColor: ThemeData.dark().focusColor,
     hoverColor: ThemeData.dark().hoverColor,
     highlightColor: ThemeData.dark().highlightColor,
     splashColor: ThemeData.dark().splashColor,
     splashFactory: ThemeData.dark().splashFactory,
     selectedRowColor: mainPallette.shade100, // check this
-    unselectedWidgetColor: mainPallette.shade200, // check this
-    disabledColor: mainPallette.shade200,
+    unselectedWidgetColor: Colors.white.withAlpha(230), // check this
+    disabledColor: Colors.grey,
     buttonColor: mainPallette.shade100,
     buttonTheme: ButtonThemeData(
       buttonColor: Colors.white.withAlpha(230),

@@ -29,6 +29,11 @@ class FirebaseRefuelingBLoC {
           .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return const Text('Loading...');
+        if (snapshot.data == null || snapshot.data.documents.length == 0) {
+          return Center( 
+            child: Text('No Refuelings recorded yet.')
+          );
+        }
         return ListView.builder(
           itemCount: snapshot.data.documents.length,
           itemBuilder: (context, index) =>
