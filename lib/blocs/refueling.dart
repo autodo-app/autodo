@@ -28,8 +28,16 @@ class FirebaseRefuelingBLoC {
           .collection('refuelings')
           .snapshots(),
       builder: (context, snapshot) {
-        if (snapshot.connectionState != ConnectionState.done)
-          return const Text('Loading...');
+        if (snapshot.hasError) {
+          return Center( 
+            child: Text('Error getting data from database.')
+          );
+        }
+        if (snapshot.data == null) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
         if (snapshot.data.documents.length == 0) {
           return Center( 
             child: Text('No Refuelings recorded yet.')
