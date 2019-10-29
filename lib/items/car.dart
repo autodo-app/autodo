@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Car {
-  final String name;
-  final double mileage;
+  String name;
+  double mileage;
   Color color;
   String ref;
 
@@ -15,6 +15,8 @@ class Car {
 
   Car({@required this.name, @required this.mileage, this.color, this.ref});
 
+  Car.empty();
+  
   Map<String, dynamic> toJSON() {
     return {};
   }

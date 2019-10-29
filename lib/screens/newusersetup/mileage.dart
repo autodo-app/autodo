@@ -1,6 +1,77 @@
 import 'package:flutter/material.dart';
 import 'package:autodo/theme.dart';
 import 'package:autodo/blocs/blocs.dart';
+import 'package:autodo/items/items.dart';
+
+class CarEntryField extends StatefulWidget {
+  final Car car;
+  CarEntryField(this.car);
+
+  @override
+  State<CarEntryField> createState() => CarEntryFieldState(car);
+}
+
+class CarEntryFieldState extends State<CarEntryField> {
+  Car car;
+  CarEntryFieldState(this.car);
+  
+  @override 
+  Widget build(BuildContext context) {
+    Widget nameField() {
+      return TextFormField(
+        maxLines: 1,
+        autofocus: true,
+        decoration: defaultInputDecoration('', 'Car Name'),
+        validator: (value) {
+          if (value == null || value == '')
+            return 'Field must not be empty';
+          return null;
+        },
+        initialValue: car.name ?? '',
+        onSaved: (value) {
+          car.name = value.trim();
+        },
+      );
+    }
+
+    Widget mileageField() {
+      return TextFormField(
+        maxLines: 1,
+        autofocus: true,
+        decoration: defaultInputDecoration('', 'Mileage'),
+        validator: (value) {
+          if (value == null || value == '')
+            return 'Field must not be empty';
+          return null;
+        },
+        initialValue: car.mileage ?? '',
+        onSaved: (value) {
+          car.mileage = double.parse(value.trim());
+        },
+      );
+    }
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        Expanded(
+          flex: 2,
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(5, 0, 5, 0),  
+            child: nameField(),
+          ),
+        ),
+        Expanded(
+          flex: 1,
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(5, 0, 5, 0),  
+            child: mileageField(),
+          ),
+        ),
+      ],
+    );
+  }
+}
 
 class MileageScreen extends StatefulWidget {
   final String mileageEntry;
@@ -16,6 +87,7 @@ class MileageScreen extends StatefulWidget {
 class MileageScreenState extends State<MileageScreen> {
   FocusNode mileageNode;
   var mileageEntry;
+  List<Car> cars = [Car.empty()];
 
   MileageScreenState(this.mileageEntry);
 
@@ -33,22 +105,6 @@ class MileageScreenState extends State<MileageScreen> {
 
   @override 
   Widget build(BuildContext context) {
-    Widget field = TextFormField(
-      maxLines: 1,
-      autofocus: true,
-      decoration: defaultInputDecoration('', 'Car Mileage'),
-      validator: (value) {
-        if (value == null || value == '')
-          return 'Field must not be empty';
-        return null;
-      },
-      initialValue: mileageEntry,
-      onSaved: (value) {
-        mileageEntry = value;
-        CarStatsBLoC().setCurrentMileage(int.parse(value.trim()));
-      },
-    );
-
     Widget headerText = Container(
       height: 110,
       child: Center(
@@ -57,7 +113,7 @@ class MileageScreenState extends State<MileageScreen> {
             Padding(
               padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
               child: Text( 
-                'Before you get started,\n let\'s get some info about your car.',
+                'Before you get started,\n let\'s get some info about your car(s).',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 20,
@@ -68,7 +124,7 @@ class MileageScreenState extends State<MileageScreen> {
               ),
             ),
             Text(  
-              'How many miles are currently on your car?',
+              'Tap "Add" to configure multiple cars.',
               style: Theme.of(context).primaryTextTheme.body1,
             ),
           ],
@@ -77,6 +133,11 @@ class MileageScreenState extends State<MileageScreen> {
     );
 
     Widget card(var viewportSize) {
+      List<Widget> carFields = [];
+      for (var car in cars) {
+        carFields.add(CarEntryField(car));
+      }
+
       return Container( 
         height: viewportSize.maxHeight - 110,
         padding: EdgeInsets.all(20),
@@ -89,12 +150,13 @@ class MileageScreenState extends State<MileageScreen> {
         ),
         child: Column(  
           mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[  
             Padding(
               padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
-              child: field,
             ),
+            ...carFields,
             Padding( 
               padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
               child: Row(
@@ -123,8 +185,6 @@ class MileageScreenState extends State<MileageScreen> {
                         FocusScope.of(context).requestFocus(new FocusNode());
                         await Future.delayed(Duration(milliseconds: 400));
                         widget.onNext();
-                        // setState(() => page = NewUserScreenPage.REPEATS);
-                        // TODO: figure out how to signal to the parent that it needs to switch states
                       }
                     },
                   ),
