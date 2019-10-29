@@ -32,7 +32,6 @@ class FirebaseTodoBLoC {
       var bDate = b.data['dueDate'] ?? 0;
       var aMileage = a.data['dueMileage'] ?? 0;
       var bMileage = b.data['dueMileage'] ?? 0;
-      print('$aMileage   $bMileage');
        
       if (aDate == 0 && bDate == 0) {
         // both don't have a date, so only consider the mileages
@@ -91,43 +90,33 @@ class FirebaseTodoBLoC {
 
   Future<void> push(MaintenanceTodoItem item) async {
     await scheduleNotification(item);
-
-    _db.runTransaction((transaction) async {
-      // creates a new unique identifier for the item
-      DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
-      DocumentReference ref = await userDoc
-          .collection('todos')
-          .add(item.toJSON());
-      if (ref == null) {
-        print("Error, push failed");
-        return;
-      }
-      item.ref = ref.documentID;
-      await transaction.set(ref, item.toJSON());
-    });
+    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    DocumentReference ref = await userDoc
+        .collection('todos')
+        .add(item.toJSON());
+    if (ref == null) {
+      print("Error, push failed");
+      return;
+    }
+    item.ref = ref.documentID;
+    ref.setData(item.toJSON());
   }
 
   Future<void> edit(MaintenanceTodoItem item) async {
-    await _db.runTransaction((transaction) async {
-      // Grab the item's existing identifier
-      DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
-      DocumentReference ref = userDoc
-          .collection('todos')
-          .document(item.ref);
-      await transaction.update(ref, item.toJSON());
-    });
+    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    DocumentReference ref = userDoc
+      .collection('todos')
+      .document(item.ref);
+    ref.updateData(item.toJSON());
   }
 
-  void delete(MaintenanceTodoItem item) {
+  Future<void> delete(MaintenanceTodoItem item) async {
     _past = item;
-    _db.runTransaction((transaction) async {
-      // Grab the item's existing identifier
-      DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
-      DocumentReference ref = userDoc
-          .collection('todos')
-          .document(item.ref);
-      await transaction.delete(ref);
-    });
+    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    DocumentReference ref = userDoc
+      .collection('todos')
+      .document(item.ref);
+    ref.delete();
   }
 
   void undo() {

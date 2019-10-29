@@ -166,7 +166,7 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen> with TickerPro
                       'Skip',     
                       style: Theme.of(context).primaryTextTheme.button,
                     ),
-                    onPressed: () => Navigator.popAndPushNamed(context, '/'),
+                    onPressed: () => Navigator.popAndPushNamed(context, '/load'),
                   ),
                   FlatButton( 
                     padding: EdgeInsets.all(0),
