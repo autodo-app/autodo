@@ -1,7 +1,9 @@
+import 'package:autodo/blocs/cars.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/theme.dart';
-import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/items/items.dart';
+
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class CarEntryField extends StatefulWidget {
   final Car car;
@@ -13,6 +15,8 @@ class CarEntryField extends StatefulWidget {
 
 class CarEntryFieldState extends State<CarEntryField> {
   Car car;
+  bool firstWritten = false;
+
   CarEntryFieldState(this.car);
   
   @override 
@@ -30,6 +34,9 @@ class CarEntryFieldState extends State<CarEntryField> {
         initialValue: car.name ?? '',
         onSaved: (value) {
           car.name = value.trim();
+          if (firstWritten)
+            CarsBLoC().push(car);
+          firstWritten = !firstWritten;
         },
       );
     }
@@ -47,28 +54,34 @@ class CarEntryFieldState extends State<CarEntryField> {
         initialValue: car.mileage ?? '',
         onSaved: (value) {
           car.mileage = double.parse(value.trim());
+          if (firstWritten)
+            CarsBLoC().push(car);
+          firstWritten = !firstWritten;
         },
       );
     }
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        Expanded(
-          flex: 2,
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(5, 0, 5, 0),  
-            child: nameField(),
+    return Container( 
+      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Expanded(
+            flex: 2,
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(5, 0, 5, 0),  
+              child: nameField(),
+            ),
           ),
-        ),
-        Expanded(
-          flex: 1,
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(5, 0, 5, 0),  
-            child: mileageField(),
+          Expanded(
+            flex: 1,
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(5, 0, 5, 0),  
+              child: mileageField(),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -139,8 +152,8 @@ class MileageScreenState extends State<MileageScreen> {
       }
 
       return Container( 
-        height: viewportSize.maxHeight - 110,
-        padding: EdgeInsets.all(20),
+        // height: viewportSize.maxHeight - 110,
+        padding: EdgeInsets.fromLTRB(10, 10, 10, 20),
         decoration: BoxDecoration(  
           borderRadius: BorderRadius.only(
             topRight:  Radius.circular(30),
@@ -153,8 +166,16 @@ class MileageScreenState extends State<MileageScreen> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[  
+            Container(
+              width: 50,
+              height: 5,
+              decoration: BoxDecoration(
+                color: Colors.black.withAlpha(140),
+                borderRadius: BorderRadius.all(Radius.circular(12.0))
+              ),
+            ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
+              padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
             ),
             ...carFields,
             Padding( 
@@ -162,14 +183,25 @@ class MileageScreenState extends State<MileageScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,  
                 children: <Widget>[
-                  FlatButton( 
-                    padding: EdgeInsets.all(0),
-                    materialTapTargetSize: MaterialTapTargetSize.padded,
-                    child: Text(
-                      'Skip',
-                      style: Theme.of(context).primaryTextTheme.button,
-                    ),
-                    onPressed: () => Navigator.popAndPushNamed(context, '/'),
+                  Row(  
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      FlatButton.icon( 
+                        padding: EdgeInsets.all(0),
+                        icon: Icon(Icons.add),
+                        label: Text('Add'),
+                        onPressed: () => setState(() => cars.add(Car.empty())),
+                      ),
+                      FlatButton.icon( 
+                        padding: EdgeInsets.all(0),
+                        icon: Icon(Icons.delete),
+                        label: Text('Remove'),
+                        onPressed: () {
+                          if (cars.length < 2) return;
+                          setState(() => cars.removeAt(cars.length - 1));
+                        },
+                      ),
+                    ],
                   ),
                   FlatButton( 
                     padding: EdgeInsets.all(0),
@@ -201,20 +233,21 @@ class MileageScreenState extends State<MileageScreen> {
         key: widget.mileageKey,
         child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints viewportConstraints) {
-            return SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: viewportConstraints.maxHeight,
-                ), 
-                child: SafeArea(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      headerText,
-                      card(viewportConstraints),
-                    ],
-                  ),
+            return ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: viewportConstraints.maxHeight,
+              ), 
+              child: SafeArea(
+                child: SlidingUpPanel(
+                  maxHeight: viewportConstraints.maxHeight,
+                  minHeight: viewportConstraints.maxHeight - 110,
+                  parallaxEnabled: true,
+                  parallaxOffset: .5,
+                  body: headerText,
+                  color: cardColor,
+                  panel: card(viewportConstraints),
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0)),
+                  onPanelSlide: (double pos) => setState((){}),
                 ),
               ),
             );
