@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:autodo/theme.dart';
 import 'package:autodo/items/items.dart';
 
-import 'package:sliding_up_panel/sliding_up_panel.dart';
+import './accountsetuptemplate.dart';
 
 class CarEntryField extends StatefulWidget {
   final Car car;
@@ -98,23 +98,10 @@ class MileageScreen extends StatefulWidget {
 }
 
 class MileageScreenState extends State<MileageScreen> {
-  FocusNode mileageNode;
   var mileageEntry;
   List<Car> cars = [Car.empty()];
 
   MileageScreenState(this.mileageEntry);
-
-  @override 
-  void initState() {
-    mileageNode = FocusNode();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    mileageNode.dispose();
-    super.dispose();
-  }
 
   @override 
   Widget build(BuildContext context) {
@@ -145,7 +132,7 @@ class MileageScreenState extends State<MileageScreen> {
       ),
     );
 
-    Widget card(var viewportSize) {
+    Widget card() {
       List<Widget> carFields = [];
       for (var car in cars) {
         carFields.add(CarEntryField(car));
@@ -153,33 +140,14 @@ class MileageScreenState extends State<MileageScreen> {
 
       return Container( 
         // height: viewportSize.maxHeight - 110,
-        padding: EdgeInsets.fromLTRB(10, 10, 10, 20),
-        decoration: BoxDecoration(  
-          borderRadius: BorderRadius.only(
-            topRight:  Radius.circular(30),
-            topLeft:  Radius.circular(30),
-          ),
-          color: Theme.of(context).cardColor,
-        ),
+        padding: EdgeInsets.all(10),
         child: Column(  
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[  
-            Container(
-              width: 50,
-              height: 5,
-              decoration: BoxDecoration(
-                color: Colors.black.withAlpha(140),
-                borderRadius: BorderRadius.all(Radius.circular(12.0))
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
-            ),
             ...carFields,
-            Padding( 
-              padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+            Container(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,  
                 children: <Widget>[
@@ -228,32 +196,9 @@ class MileageScreenState extends State<MileageScreen> {
       );
     }  
 
-    return SafeArea(
-      child: Form(
-        key: widget.mileageKey,
-        child: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints viewportConstraints) {
-            return ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight: viewportConstraints.maxHeight,
-              ), 
-              child: SafeArea(
-                child: SlidingUpPanel(
-                  maxHeight: viewportConstraints.maxHeight,
-                  minHeight: viewportConstraints.maxHeight - 110,
-                  parallaxEnabled: true,
-                  parallaxOffset: .5,
-                  body: headerText,
-                  color: cardColor,
-                  panel: card(viewportConstraints),
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0)),
-                  onPanelSlide: (double pos) => setState((){}),
-                ),
-              ),
-            );
-          }
-        ),
-      ),
+    return Form(
+      key: widget.mileageKey,
+      child: AccountSetupScreen(header: headerText, panel: card())
     );
   }
 }
