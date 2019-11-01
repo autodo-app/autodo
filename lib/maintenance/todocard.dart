@@ -174,7 +174,6 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
     ];
     
     for (var tag in widget.item.tags) {
-      print(tag);
       tags.add(
         FutureBuilder(
           future: CarsBLoC().getCarByName(tag),

@@ -54,11 +54,9 @@ class RepeatingBLoC {
   StreamBuilder buildList(BuildContext context) {
     if (FirestoreBLoC.isLoading()) return StreamBuilder();
     return StreamBuilder(
+      // TODO: tag each repeat as being for a particular car, then filter them with a query later
       stream: FirestoreBLoC.getUserDocument()
           .collection('repeats')
-          .document('default')
-          .collection('repeats')
-          // .orderBy('name')
           .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return const Text('Loading...');

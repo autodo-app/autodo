@@ -13,7 +13,10 @@ class EditRepeatsScreenState extends State<EditRepeatsScreen> {
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
-      child: RepeatingBLoC().buildList(context),
+      child: FutureBuilder(
+        future: RepeatingBLoC().buildList(context),
+        builder: (context, snapshot) => snapshot.data ?? Container(),
+      ),
     );
   }
 }
