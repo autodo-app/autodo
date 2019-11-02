@@ -1,3 +1,4 @@
+import 'package:autodo/blocs/filtering.dart';
 import 'package:autodo/blocs/userauth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:autodo/items/items.dart';
@@ -7,7 +8,6 @@ import 'package:autodo/blocs/firestore.dart';
 import 'package:autodo/blocs/notifications.dart';
 
 class FirebaseTodoBLoC {
-  final Firestore _db = Firestore.instance;
   MaintenanceTodoItem _past;
 
   Widget _buildItem(BuildContext context, DocumentSnapshot snapshot, bool first) {
@@ -18,11 +18,13 @@ class FirebaseTodoBLoC {
       date = snapshot.data['dueDate'].toDate();
     var mileage = snapshot.data['dueMileage'];
     var item = MaintenanceTodoItem(
-        ref: snapshot.documentID,
-        name: name,
-        dueDate: date,
-        dueMileage: mileage,
-        repeatingType: snapshot.data['repeatingType']);
+      ref: snapshot.documentID,
+      name: name,
+      dueDate: date,
+      dueMileage: mileage,
+      repeatingType: snapshot.data['repeatingType'],
+      tags: snapshot.data['tags']
+    );
     return MaintenanceTodoCard(item: item, emphasized: first);
   }
 
@@ -67,11 +69,18 @@ class FirebaseTodoBLoC {
       builder: (context, snapshot) {
         if (!snapshot.hasData) return Text('Loading...');
         var data = _sortItems(snapshot.data.documents);
+        var filteredData = [];
+        data.forEach((item) {
+          item.data['tags'].forEach((tag) {
+            if (!FilteringBLoC().containsKey(tag) || FilteringBLoC().value(tag) == true)
+              filteredData.add(item);
+          });          
+        });
         return ListView.separated(
-          itemCount: data.length,
+          itemCount: filteredData.length,
           separatorBuilder: (context, index) => (index == 0) ? upcomingDivider : Container(),
           itemBuilder: (context, index) =>
-              _buildItem(context, data[index], index == 0),
+              _buildItem(context, filteredData[index], index == 0),
         );
       },
     );

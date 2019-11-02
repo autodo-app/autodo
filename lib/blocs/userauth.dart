@@ -39,7 +39,6 @@ class Auth implements BaseAuth {
       res = await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
       currentUser = res.user.uid;
-      print('sign up $currentUser');
       currentUserName = res.user.email;
       await _createUserDocument();
     } on PlatformException {

@@ -1,3 +1,4 @@
+import 'package:autodo/blocs/cars.dart';
 import 'package:autodo/blocs/todo.dart';
 import 'package:autodo/theme.dart';
 import 'package:flutter/material.dart';
@@ -171,11 +172,19 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
         padding: EdgeInsets.only(left: 5.0),
       ),
     ];
+    
     for (var tag in widget.item.tags) {
       tags.add(
-        CarTag(tag),
+        FutureBuilder(
+          future: CarsBLoC().getCarByName(tag),
+          builder: (context, tag) {
+            if (tag.data == null) return Container();
+            return CarTag(text: tag.data.name, color: tag.data.color);
+          }
+        )
       );
     }
+
     return Row(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.start,

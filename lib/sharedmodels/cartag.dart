@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:autodo/theme.dart';
 
-// TODO: save this color data in a 'cars' document
 class CarTag extends StatelessWidget {
   final String text;
-  CarTag(this.text);
+  final Color color;
+
+  CarTag({@required this.text, this.color = Colors.blue});
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +15,7 @@ class CarTag extends StatelessWidget {
       ),
       child: FlatButton(
         child: Chip(
-          // backgroundColor: tagPallette.shade500,
-          backgroundColor: Colors.blue,
+          backgroundColor: color,
           label: Text(
             text,
             style: Theme.of(context).accentTextTheme.body2,

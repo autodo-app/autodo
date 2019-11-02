@@ -15,7 +15,7 @@ class HomeScreen extends StatefulWidget {
   State<StatefulWidget> createState() => HomeScreenState();
 }
 
-enum dropdown { settings }
+enum dropdown { filter }
 
 class HomeScreenState extends State<HomeScreen> {
   int tabIndex = 0;
@@ -76,16 +76,19 @@ class HomeScreenState extends State<HomeScreen> {
             PopupMenuButton<dropdown>(
               icon: Icon(Icons.more_vert),
               onSelected: (dropdown res) {
-                if (res == dropdown.settings) {
-                  Navigator.pushNamed(context, '/settings');
+                if (res == dropdown.filter) {
+                  showDialog(
+                    context: context,
+                    builder: (context) => CarFilters(() => setState(() {})),
+                  );
                 }
               },
               itemBuilder: (BuildContext context) => <PopupMenuEntry<dropdown>>[
-                    const PopupMenuItem<dropdown>(
-                      value: dropdown.settings,
-                      child: Text('Settings'),
-                    ),
-                  ],
+                const PopupMenuItem<dropdown>(
+                  value: dropdown.filter,
+                  child: Text('filter'),
+                ),
+              ],
             ),
           ],
         ),
