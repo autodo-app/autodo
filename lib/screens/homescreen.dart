@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:autodo/blocs/cars.dart';
 import 'package:autodo/refueling/history.dart';
 import 'package:autodo/screens/editrepeats.dart';
 import 'package:autodo/screens/screens.dart';
@@ -15,12 +16,13 @@ class HomeScreen extends StatefulWidget {
   State<StatefulWidget> createState() => HomeScreenState();
 }
 
-enum dropdown { settings }
+enum dropdown { filter }
 
 class HomeScreenState extends State<HomeScreen> {
   int tabIndex = 0;
   StreamSubscription authStream;
   bool signedIn = false;
+  Map<String, bool> filters = {};
 
   void onAuthChange(FirebaseUser user) {
     if (user!= null && user.uid != null) {
@@ -76,16 +78,55 @@ class HomeScreenState extends State<HomeScreen> {
             PopupMenuButton<dropdown>(
               icon: Icon(Icons.more_vert),
               onSelected: (dropdown res) {
-                if (res == dropdown.settings) {
-                  Navigator.pushNamed(context, '/settings');
+                if (res == dropdown.filter) {
+                  showDialog(
+                    context: context,
+                    builder: (context) => SimpleDialog(
+                      title: Text('Filter Contents'),
+                      children: [
+                        FutureBuilder( 
+                          future: CarsBLoC().getCars(),
+                          builder: (context, cars) {
+                            if (cars.data != null) {
+                              print('here ${cars.data}');
+                              cars.data.forEach((car) {
+                                if (!filters.containsKey(car.name)) {
+                                  print('here');
+                                  filters[car.name] = true;
+                                }
+                              });
+                            } else return Container();
+
+                            print(filters);
+                            return Container(
+                              height: 100,
+                              child: ListView.builder(
+                                itemCount: cars.data == null ? 0 : cars.data.length,
+                                itemBuilder: (context, index) => ListTile(
+                                  leading: Checkbox( 
+                                    value: filters[cars.data[index].name],
+                                    onChanged: (state) {
+                                      setState(() => filters[cars.data[index].name] = state);
+                                    },
+                                    materialTapTargetSize: MaterialTapTargetSize.padded,
+                                  ),
+                                  title: Text(cars.data[index].name)
+                                ),
+                              ),
+                            );
+                          }
+                        ),
+                      ],
+                    ),
+                  );
                 }
               },
               itemBuilder: (BuildContext context) => <PopupMenuEntry<dropdown>>[
-                    const PopupMenuItem<dropdown>(
-                      value: dropdown.settings,
-                      child: Text('Settings'),
-                    ),
-                  ],
+                const PopupMenuItem<dropdown>(
+                  value: dropdown.filter,
+                  child: Text('filter'),
+                ),
+              ],
             ),
           ],
         ),
