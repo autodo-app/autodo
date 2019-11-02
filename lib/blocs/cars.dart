@@ -75,14 +75,18 @@ class CarsBLoC {
   int currentCarMileage = 0;
   Map<String, int> lastCompletedRepeatTodos;
 
-  void setCurrentMileage(int update){
-    currentCarMileage = update;
+  Future<void> setCurrentMileage(String name, int update) async {
+    Car car = await getCarByName(name);
+    car.mileage = update;
+    push(car);
   }
 
-  int getCurrentMileage() {
-    return currentCarMileage;
-  }
+  Future<int> getCurrentMileage(String name) async {
+    Car car = await getCarByName(name);
+    return car.mileage;
+  } 
 
+  // this is a problem for later probably
   void setLastCompleted(String key, int val) {
     lastCompletedRepeatTodos[key] = val;
   }

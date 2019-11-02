@@ -64,7 +64,7 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen> with TickerPro
       validator: (value) => intValidator(value),
       onSaved: (value) {
         if (value != null && value != '')
-          CarStatsBLoC().setLastCompleted('oil', int.parse(value.trim()));
+          CarsBLoC().setLastCompleted('oil', int.parse(value.trim()));
       },
     );
 
@@ -75,28 +75,9 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen> with TickerPro
       validator: (value) => intValidator(value),
       onSaved: (value) {
         if (value != null && value != '')
-          CarStatsBLoC().setLastCompleted('tireRotation', int.parse(value.trim()));
+          CarsBLoC().setLastCompleted('tireRotation', int.parse(value.trim()));
       },
     );
-
-    Widget newTiresMileageField = Padding(
-      padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-      child: TextFormField(
-        maxLines: 1,
-        onTap: () => setState(() => expanded = true),
-        decoration: defaultInputDecoration('(miles)', 'Last Tire Replacement (miles)'),
-        validator: (value) => intValidator(value),
-        onSaved: (value) {
-          if (value != null && value != '')
-            CarStatsBLoC().setLastCompleted('tires', int.parse(value.trim()));
-        },
-      ),
-    );
-
-    // Only display the new tires field if the car is old enough to have needed new tires
-    Widget newTiresMileage = 
-      (CarStatsBLoC().getCurrentMileage() > RepeatingBLoC().repeatByName('tires').interval) 
-      ? newTiresMileageField : Container();
 
     Widget headerText = AnimatedContainer(
       duration: Duration(milliseconds: 400),
@@ -148,7 +129,6 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen> with TickerPro
               padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
               child: tireRotationMileage,
             ),
-            newTiresMileage,
             Container(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,  

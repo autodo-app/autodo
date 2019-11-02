@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class Car {
   String name;
-  double mileage;
+  int mileage;
   Color color;
   String ref;
 

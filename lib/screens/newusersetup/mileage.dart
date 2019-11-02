@@ -53,7 +53,7 @@ class CarEntryFieldState extends State<CarEntryField> {
         },
         initialValue: car.mileage ?? '',
         onSaved: (value) {
-          car.mileage = double.parse(value.trim());
+          car.mileage = int.parse(value.trim());
           if (firstWritten)
             CarsBLoC().push(car);
           firstWritten = !firstWritten;
