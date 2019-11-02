@@ -14,7 +14,7 @@ class CarFiltersState extends State<CarFilters> {
   CarFiltersState() {
     filterList = FilteringBLoC().getFiltersAsList();
   }
-  
+
   Future<void> updateFilters(filter) async {
     FilteringBLoC().setFilter(filter);
     widget.callback();
@@ -27,7 +27,7 @@ class CarFiltersState extends State<CarFilters> {
       contentPadding: EdgeInsets.fromLTRB(0, 10, 0, 0),
       title: Text('Filter Contents'),
       content: Container(
-        height: 100, // todo: stop hard-coding this
+        height: 100, 
         child: ListView.builder(
           itemCount: FilteringBLoC().getFilters().keys.length,
           itemBuilder: (context, index) => ListTile(

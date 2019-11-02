@@ -13,7 +13,6 @@ class MaintenanceHistoryState extends State<MaintenanceHistory> {
     if (fb.isLoading()) {
       return Center(child: CircularProgressIndicator(),);
     } else {
-      print('list');
       return Container(
         child: fb.buildList(context),
     );

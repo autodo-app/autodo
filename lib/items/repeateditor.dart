@@ -128,7 +128,6 @@ class RepeatEditorState extends State<RepeatEditor> {
                 ),
                 FlatButton(
                     onPressed: () {
-                      print("deleting ${widget.item.name}");
                       RepeatingBLoC().delete(widget.item);
                       final snackbar = SnackBar(
                         content: Text('Deleted ${widget.item.name}'),

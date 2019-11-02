@@ -186,7 +186,6 @@ class RepeatingBLoC {
     cars.forEach((car) async {
       await _findLatestCompletedTodos(car.name);
       await _findUpcomingRepeatTodos(car.name);
-      print(car.name);
       repeats.forEach((repeat) {
         if (repeat == null) return;
         // Check if the upcoming ToDo for this category already exists
@@ -244,7 +243,6 @@ class RepeatingBLoC {
     DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
     Query completes = userDoc
                         .collection('todos').where("complete", isEqualTo: false).orderBy("completeDate");
-    print(completes);
     QuerySnapshot docs = await completes.getDocuments();
     List<DocumentSnapshot> snaps = docs.documents;
     WriteBatch _batch = _db.batch();

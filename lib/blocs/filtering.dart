@@ -18,7 +18,6 @@ class FilteringBLoC {
     if (cars != null) {
       cars.forEach((car) {
         if (!filters.containsKey(car.name)) {
-          print(filters);
           filters[car.name] = true; // default to showing all content
         }
       });
