@@ -5,7 +5,6 @@ import 'package:autodo/refueling/refuelingcard.dart';
 import 'package:autodo/items/items.dart';
 
 class FirebaseRefuelingBLoC {
-  final Firestore _db = Firestore.instance;
   RefuelingItem _past;
 
   Widget _buildItem(BuildContext context, DocumentSnapshot snapshot) {
@@ -16,8 +15,9 @@ class FirebaseRefuelingBLoC {
     else
       cost = 0.0;
     var amount = snapshot.data['amount'].toDouble();
+    var carName = snapshot.data['carName'];
     var item = RefuelingItem(
-        ref: snapshot.documentID, odom: odom, cost: cost, amount: amount);
+        ref: snapshot.documentID, odom: odom, cost: cost, amount: amount, carName: carName);
     return RefuelingCard(item: item);
   }
 
