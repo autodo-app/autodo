@@ -69,7 +69,6 @@ class FirebaseTodoBLoC {
       builder: (context, snapshot) {
         if (!snapshot.hasData) return Text('Loading...');
         var data = _sortItems(snapshot.data.documents);
-        print('filtering');
         var filteredData = [];
         data.forEach((item) {
           item.data['tags'].forEach((tag) {

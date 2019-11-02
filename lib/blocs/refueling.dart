@@ -1,4 +1,5 @@
 import 'package:autodo/blocs/firestore.dart';
+import 'package:autodo/blocs/filtering.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/refueling/refuelingcard.dart';
@@ -43,10 +44,17 @@ class FirebaseRefuelingBLoC {
             child: Text('No Refuelings recorded yet.')
           );
         }
+        var filteredData = [];
+        snapshot.data.documents.forEach((item) {
+          print(item['carName']);
+          if (!FilteringBLoC().containsKey(item['carName']) || 
+              FilteringBLoC().value(item['carName']) == true)
+            filteredData.add(item);
+        });
         return ListView.builder(
-          itemCount: snapshot.data.documents.length,
+          itemCount: filteredData.length,
           itemBuilder: (context, index) =>
-              _buildItem(context, snapshot.data.documents[index]),
+              _buildItem(context, filteredData[index]),
         );
       },
     );

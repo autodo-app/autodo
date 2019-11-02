@@ -29,7 +29,10 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
   List<Car> cars;
 
   void setCars() async {
-    cars = await CarsBLoC().getCars();
+    var carList = await CarsBLoC().getCars();
+    // update the autocomplete field
+    _autocompleteKey.currentState.updateSuggestions(carList);
+    setState(() => cars = carList);
   }
 
   @override
@@ -97,7 +100,8 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
         selectedCar = item;
       }),
       key: _autocompleteKey,
-      suggestions: cars ?? [],
+      focusNode: focusNode,
+      suggestions: cars,
       itemBuilder: (context, suggestion) => Padding(
         child: ListTile(
           title: Text(suggestion.name),
@@ -107,8 +111,10 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
       ),
       itemSorter: (a, b) => a.name.length == b.name.length ? 0 : a.name.length < b.name.length ? -1 : 1,
       // returns a match anytime that the input is anywhere in the repeat name
-      itemFilter: (suggestion, input) =>
-          suggestion.name.toLowerCase().contains(input.toLowerCase()),
+      itemFilter: (suggestion, input) {
+        print('there $input');
+        return suggestion.name.toLowerCase().contains(input.toLowerCase());
+      },
     );
   }
 
@@ -117,6 +123,7 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
       builder: autoComplete,
       initialValue: (widget.mode == RefuelingEditMode.EDIT) ? widget.existing.carName : '',
       onSaved: (val) => setState(() {
+        print('saving');
         if (selectedCar != null) refuelingItem.carName = selectedCar.name;
         else if (val != null && cars.any((element) => element.name == val)) {
           refuelingItem.carName = val;
