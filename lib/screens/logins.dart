@@ -1,10 +1,8 @@
 import 'package:autodo/blocs/init.dart';
 import 'package:autodo/sharedmodels/legal.dart';
 import 'package:flutter/material.dart';
-import 'package:autodo/blocs/userauth.dart';
 import 'package:autodo/theme.dart';
 import 'package:flutter/gestures.dart';
-import 'package:autodo/blocs/init.dart';
 
 class SignInScreen extends StatefulWidget { // ignore: must_be_immutable
   FormMode formMode;
@@ -41,16 +39,10 @@ class SignInScreenState extends State<SignInScreen> {
     });
     if (_validateAndSave()) {
       try {
-        if (widget.formMode == FormMode.SIGNUP) {
-          try {
-            await initNewUser(_email, _password);
-          } catch (e) {
-            print(e);
-            return;
-          }
-        }
-        else
-          await Auth().signIn(_email, _password);
+        if (widget.formMode == FormMode.SIGNUP)
+          await initNewUser(_email, _password);
+        else 
+          await initExistingUser(_email, _password);
         // widget.userAuth.sendEmailVerification();
         setState(() {
           _isLoading = false;

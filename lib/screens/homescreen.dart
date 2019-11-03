@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:autodo/sharedmodels/sharedmodels.dart';
 import 'package:autodo/maintenance/history.dart';
 import 'package:autodo/theme.dart';
-import 'package:autodo/blocs/userauth.dart';
+import 'package:autodo/blocs/subcomponents/subcomponents.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class HomeScreen extends StatefulWidget {

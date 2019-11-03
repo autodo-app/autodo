@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:autodo/sharedmodels/sliverfooter.dart';
-import 'package:autodo/blocs/userauth.dart';
+import 'package:autodo/blocs/subcomponents/userauth.dart';
 import 'dart:math';
 
 class NavDrawer extends StatefulWidget {

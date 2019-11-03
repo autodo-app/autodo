@@ -1,8 +1,7 @@
 import 'dart:async';
-import 'package:autodo/blocs/firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:autodo/blocs/subcomponents/subcomponents.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class NotificationBLoC {

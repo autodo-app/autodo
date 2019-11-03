@@ -1,4 +1,4 @@
-import 'package:autodo/blocs/firestore.dart';
+import 'package:autodo/blocs/subcomponents/firestore.dart';
 import 'package:autodo/blocs/filtering.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,7 +10,7 @@ class BLoC {
 
   List sortItems(List items) => items;
 
-  StreamBuilder buildList(String collection, String filteringKey) {
+  StreamBuilder buildList(String collection) {
     return StreamBuilder(  
       stream: FirestoreBLoC().getUserDocument()
         .collection(collection)
@@ -33,7 +33,7 @@ class BLoC {
         var filteredData = [];
         snapshot.data.documents.forEach((item) {
           if (!item.data.containsKey('tags')) {
-            print('item without tags');
+            filteredData.add(item);
             return;
           }
 

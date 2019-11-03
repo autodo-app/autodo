@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:autodo/items/items.dart';
-import 'package:autodo/blocs/firestore.dart';
+import 'package:autodo/blocs/subcomponents/subcomponents.dart';
 
 class CarsBLoC {
   Car _past;

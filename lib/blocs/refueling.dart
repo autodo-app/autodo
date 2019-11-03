@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:autodo/refueling/refuelingcard.dart';
 import 'package:autodo/items/items.dart';
-import 'package:autodo/blocs/base.dart';
+import 'package:autodo/blocs/subcomponents/subcomponents.dart';
 
 class RefuelingBLoC extends BLoC {
   @override
@@ -20,7 +20,7 @@ class RefuelingBLoC extends BLoC {
   }
 
   StreamBuilder items() {
-    return buildList('refuelings', 'carName');
+    return buildList('refuelings');
   }
 
   Future<void> push(RefuelingItem item) async {

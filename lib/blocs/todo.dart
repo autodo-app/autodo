@@ -1,12 +1,9 @@
-import 'package:autodo/blocs/filtering.dart';
-import 'package:autodo/blocs/userauth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:autodo/items/items.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/maintenance/todocard.dart';
-import 'package:autodo/blocs/firestore.dart';
+import 'package:autodo/blocs/subcomponents/subcomponents.dart';
 import 'package:autodo/blocs/notifications.dart';
-import 'package:autodo/blocs/base.dart';
 
 class TodoBLoC extends BLoC {
   @override
@@ -55,7 +52,7 @@ class TodoBLoC extends BLoC {
   }
 
   StreamBuilder items() {
-    return buildList('todos', 'tags');
+    return buildList('todos');
   }
 
   Future<void> scheduleNotification(MaintenanceTodoItem item) async {
@@ -84,10 +81,6 @@ class TodoBLoC extends BLoC {
 
   void undo() {
     undoItem('todos');
-  }
-
-  bool isLoading() {
-    return Auth().isLoading();
   }
 
   Future<WriteBatch> addUpdate(WriteBatch batch, MaintenanceTodoItem item) async {

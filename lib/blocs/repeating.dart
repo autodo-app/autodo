@@ -4,8 +4,7 @@ import 'package:autodo/blocs/todo.dart';
 import 'package:autodo/blocs/cars.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:autodo/items/items.dart';
-import 'package:autodo/blocs/userauth.dart';
-import 'package:autodo/blocs/firestore.dart';
+import 'package:autodo/blocs/subcomponents/subcomponents.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/items/repeateditor.dart';
 import 'package:autodo/items/repeat.dart';
@@ -28,7 +27,7 @@ List<Repeat> defaults = [
   Repeat("coolantChange", 100000)
 ];
 
-class RepeatingBLoC {
+class RepeatingBLoC extends BLoC {
   static final Firestore _db = Firestore.instance;
   Repeat _past;
   List<Repeat> repeats = defaults;
@@ -49,24 +48,11 @@ class RepeatingBLoC {
 
   final StreamController editStream = StreamController();
 
-  Widget _buildItem(BuildContext context, DocumentSnapshot snapshot) => RepeatEditor(item: Repeat.fromJSON(snapshot.data, snapshot.documentID));
+  @override
+  Widget buildItem(dynamic snapshot, int index) => RepeatEditor(item: Repeat.fromJSON(snapshot.data, snapshot.documentID));
 
-  StreamBuilder buildList(BuildContext context) {
-    // if (FirestoreBLoC.isLoading()) return StreamBuilder();
-    return StreamBuilder(
-      stream: FirestoreBLoC().getUserDocument()
-          .collection('repeats')
-          .snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) return const Text('Loading...');
-        // sort data alphabetically by name
-        return ListView.builder(
-          itemCount: snapshot.data.documents.length,
-          itemBuilder: (context, index) =>
-              _buildItem(context, snapshot.data.documents[index]),
-        );
-      },
-    );
+  StreamBuilder items() {
+    return buildList('repeats');
   }
 
   List<Repeat> _convertDocuments(List<DocumentSnapshot> docs) {
@@ -211,32 +197,25 @@ class RepeatingBLoC {
 
   Future<void> pushRepeats(List<Repeat> repeats) async {
     // creates a new unique identifier for the item
-    DocumentReference doc = FirestoreBLoC().getUserDocument();
     repeats.forEach( (repeat) async {
-      DocumentReference ref = await doc
-          .collection('repeats')
-          .add(repeat.toJSON());
-      ref.setData(repeat.toJSON());
+      await pushItem('repeats', repeat);
     });
   }
 
-  Future<void> push(Repeat repeat) async {
-      // creates a new unique identifier for the item
-      DocumentReference doc = FirestoreBLoC().getUserDocument();
-      DocumentReference ref = await doc
-          .collection('repeats')
-          .add(repeat.toJSON());
-      ref.setData(repeat.toJSON());
+  Future<void> push(Repeat item) async {
+    await pushItem('repeats', item);
   }
 
-  Future<void> edit(Repeat item) async {
-    DocumentReference userDoc = FirestoreBLoC().getUserDocument();
-    if (item.ref == null) return;
-    DocumentReference ref = userDoc
-        .collection('repeats')
-        .document(item.ref);
-    if (ref == null) return;
-    ref.updateData(item.toJSON());
+  void edit(Repeat item) {
+    editItem('repeats', item);
+  }
+
+  void delete(Repeat item) {
+    deleteItem('repeats', item);
+  }
+
+  void undo() {
+    undoItem('repeats');
   }
   
   void updateTodos(Repeat item) async {
@@ -287,31 +266,8 @@ class RepeatingBLoC {
       repeatingType: taskName,
       tags: [carName],
     );
-    await Auth().fetchUser();
+    // await Auth().fetchUser();
     TodoBLoC().push(newTodo);
-  }
-
-  Future<void> delete(Repeat repeat) async {
-    _past = repeat;
-    DocumentReference userDoc = FirestoreBLoC().getUserDocument();
-    DocumentReference ref = userDoc
-        .collection('repeats')
-        .document(repeat.ref);
-    ref.delete();
-  }
-
-  void undo() {
-    if (_past != null) push(_past);
-    _past = null;
-  }
-
-  List<Repeat> getSuggestions(String pattern) {
-    RegExp regex = RegExp('*$pattern*'); // match anything with the pattern in it
-    List<Repeat> out = [];
-    for (var r in repeats) {
-      if (regex.hasMatch(r.name)) out.add(r);
-    }
-    return repeats; 
   }
 
   Future<void> editByName(String name, int interval) async {
