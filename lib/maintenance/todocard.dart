@@ -226,12 +226,12 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
               color: Theme.of(context).primaryIconTheme.color,
             ),
             onPressed: () {
-              FirebaseTodoBLoC().delete(widget.item);
+              TodoBLoC().delete(widget.item);
               final snackbar = SnackBar(
                 content: Text('Deleted ' + widget.item.name),
                 action: SnackBarAction(
                   label: 'Undo',
-                  onPressed: () => FirebaseTodoBLoC().undo(),
+                  onPressed: () => TodoBLoC().undo(),
                 ),
               );
               Scaffold.of(context).showSnackBar(snackbar);

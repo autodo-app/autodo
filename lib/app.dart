@@ -1,4 +1,3 @@
-import 'package:autodo/blocs/firestore.dart';
 import 'package:autodo/refueling/history.dart';
 import 'package:autodo/screens/editrepeats.dart';
 import 'package:autodo/screens/newuser.dart';
@@ -18,7 +17,6 @@ class AutodoApp extends StatefulWidget {
         apiKey: 'AIzaSyAAYhwsJVyiYywUFORBgaUuyXqXFiFpbZo',
       )
     );
-    FirestoreBLoC.startListen();
   }
 
   @override

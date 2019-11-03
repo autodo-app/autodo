@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:autodo/items/items.dart';
-import 'package:autodo/blocs/firestore.dart';
+import 'package:autodo/blocs/subcomponents/subcomponents.dart';
 
 class CarsBLoC {
   Car _past;
 
   Future<void> push(Car car) async {
-    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    DocumentReference userDoc = FirestoreBLoC().getUserDocument();
     DocumentReference ref = await userDoc
       .collection('cars')
       .add(car.toJSON());
@@ -19,7 +19,7 @@ class CarsBLoC {
   }
 
   Future<void> edit(Car car) async {
-    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    DocumentReference userDoc = FirestoreBLoC().getUserDocument();
     DocumentReference ref = userDoc
       .collection('cars')
       .document(car.ref);
@@ -31,7 +31,7 @@ class CarsBLoC {
   }
 
   Future<void> delete(Car car) async {
-    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    DocumentReference userDoc = FirestoreBLoC().getUserDocument();
     DocumentReference ref = userDoc
       .collection('cars')
       .document(car.ref);
@@ -49,7 +49,7 @@ class CarsBLoC {
   }
 
   Future<Car> getCarByName(String name) async {
-    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    DocumentReference userDoc = FirestoreBLoC().getUserDocument();
     QuerySnapshot cars = await userDoc
       .collection('cars')
       .getDocuments();
@@ -62,7 +62,7 @@ class CarsBLoC {
 
   Future<List<Car>> getCars() async {
     List<Car> out = []; // assign it so that .add() works
-    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    DocumentReference userDoc = FirestoreBLoC().getUserDocument();
     QuerySnapshot cars = await userDoc
       .collection('cars')
       .getDocuments();
