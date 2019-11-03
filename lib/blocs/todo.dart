@@ -6,11 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:autodo/maintenance/todocard.dart';
 import 'package:autodo/blocs/firestore.dart';
 import 'package:autodo/blocs/notifications.dart';
+import 'package:autodo/blocs/base.dart';
 
-class FirebaseTodoBLoC {
-  MaintenanceTodoItem _past;
-
-  Widget _buildItem(BuildContext context, DocumentSnapshot snapshot, bool first) {
+class TodoBLoC extends BLoC {
+  @override
+  Widget buildItem(dynamic snapshot, int index) {
+    bool first = index == 0;
     var name = (first) ? 'Upcoming: ' : ''; // TODO: move this logic to the card
     name += snapshot.data['name'];
     var date;
@@ -28,7 +29,8 @@ class FirebaseTodoBLoC {
     return MaintenanceTodoCard(item: item, emphasized: first);
   }
 
-  List _sortItems(List items) {
+  @override
+  List sortItems(List items) {
     return items..sort((a, b) {
       var aDate = a.data['dueDate'] ?? 0;
       var bDate = b.data['dueDate'] ?? 0;
@@ -52,33 +54,8 @@ class FirebaseTodoBLoC {
     });
   }
 
-  StreamBuilder buildList(BuildContext context) {
-    Widget upcomingDivider = Container( 
-      padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-      child: Divider()
-    );
-    return StreamBuilder(
-      stream: FirestoreBLoC().getUserDocument()
-          .collection('todos')
-          .snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) return Text('Loading...');
-        var data = _sortItems(snapshot.data.documents);
-        var filteredData = [];
-        data.forEach((item) {
-          item.data['tags'].forEach((tag) {
-            if (!FilteringBLoC().containsKey(tag) || FilteringBLoC().value(tag) == true)
-              filteredData.add(item);
-          });          
-        });
-        return ListView.separated(
-          itemCount: filteredData.length,
-          separatorBuilder: (context, index) => (index == 0) ? upcomingDivider : Container(),
-          itemBuilder: (context, index) =>
-              _buildItem(context, filteredData[index], index == 0),
-        );
-      },
-    );
+  StreamBuilder items() {
+    return buildList('todos', 'tags');
   }
 
   Future<void> scheduleNotification(MaintenanceTodoItem item) async {
@@ -94,38 +71,19 @@ class FirebaseTodoBLoC {
 
   Future<void> push(MaintenanceTodoItem item) async {
     await scheduleNotification(item);
-    DocumentReference userDoc = FirestoreBLoC().getUserDocument();
-    DocumentReference ref = await userDoc
-        .collection('todos')
-        .add(item.toJSON());
-    if (ref == null) {
-      print("Error, push failed");
-      return;
-    }
-    item.ref = ref.documentID;
-    ref.setData(item.toJSON());
+    pushItem('todos', item);
   }
 
-  Future<void> edit(MaintenanceTodoItem item) async {
-    DocumentReference userDoc = FirestoreBLoC().getUserDocument();
-    DocumentReference ref = userDoc
-      .collection('todos')
-      .document(item.ref);
-    ref.updateData(item.toJSON());
+  void edit(MaintenanceTodoItem item) {
+    editItem('todos', item);
   }
 
-  Future<void> delete(MaintenanceTodoItem item) async {
-    _past = item;
-    DocumentReference userDoc = FirestoreBLoC().getUserDocument();
-    DocumentReference ref = userDoc
-      .collection('todos')
-      .document(item.ref);
-    ref.delete();
+  void delete(MaintenanceTodoItem item) {
+    deleteItem('todos', item);
   }
 
   void undo() {
-    if (_past != null) push(_past);
-    _past = null;
+    undoItem('todos');
   }
 
   bool isLoading() {
@@ -142,9 +100,9 @@ class FirebaseTodoBLoC {
   }
 
   // Make the object a Singleton
-  static final FirebaseTodoBLoC _bloc = FirebaseTodoBLoC._internal();
-  factory FirebaseTodoBLoC() {
+  static final TodoBLoC _bloc = TodoBLoC._internal();
+  factory TodoBLoC() {
     return _bloc;
   }
-  FirebaseTodoBLoC._internal();
+  TodoBLoC._internal();
 }

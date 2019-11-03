@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class BLoC {
   var _past;
 
-  Widget buildItem(dynamic item) => Container();
+  Widget buildItem(dynamic item, int index) => Container();
 
   List sortItems(List items) => items;
 
@@ -32,16 +32,23 @@ class BLoC {
 
         var filteredData = [];
         snapshot.data.documents.forEach((item) {
-          if (!FilteringBLoC().containsKey(item[filteringKey]) || 
-              FilteringBLoC().value(item[filteringKey]) == true)
+          if (!item.data.containsKey('tags')) {
+            print('item without tags');
+            return;
+          }
+
+          item.data['tags'].forEach((tag) {
+            if (!FilteringBLoC().containsKey(tag) || 
+              FilteringBLoC().value(tag) == true)
             filteredData.add(item);
+          });
         });
 
         filteredData = sortItems(filteredData);
 
         return ListView.builder(
           itemCount: filteredData.length,
-          itemBuilder: (context, index) => buildItem(filteredData[index])
+          itemBuilder: (context, index) => buildItem(filteredData[index], index)
         );
       }
     );

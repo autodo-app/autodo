@@ -25,7 +25,7 @@ class RefuelingItem {
   }
 
   toJSON() {
-    return {'odom': this.odom, 'cost': this.cost, 'amount': this.amount, 'carName': this.carName};
+    return {'odom': this.odom, 'cost': this.cost, 'amount': this.amount, 'tags': [this.carName]};
   }
 
   RefuelingItem.empty();

@@ -219,9 +219,9 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
               if (_formKey.currentState.validate()) {
                 _formKey.currentState.save();
                 if (widget.mode == TodoEditMode.CREATE)
-                  FirebaseTodoBLoC().push(todoItem);
+                  TodoBLoC().push(todoItem);
                 else
-                  FirebaseTodoBLoC().edit(todoItem);
+                  TodoBLoC().edit(todoItem);
                 Navigator.of(context).pop();
               }
             },

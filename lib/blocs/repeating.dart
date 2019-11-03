@@ -262,7 +262,7 @@ class RepeatingBLoC {
       var updatedItem = MaintenanceTodoItem.fromMap(
         todo, 
         reference: userDoc.collection('todos').document(snap.documentID));
-      _batch = await FirebaseTodoBLoC().addUpdate(_batch, updatedItem);
+      _batch = await TodoBLoC().addUpdate(_batch, updatedItem);
     }
     _batch.commit();
   }
@@ -288,7 +288,7 @@ class RepeatingBLoC {
       tags: [carName],
     );
     await Auth().fetchUser();
-    FirebaseTodoBLoC().push(newTodo);
+    TodoBLoC().push(newTodo);
   }
 
   Future<void> delete(Repeat repeat) async {

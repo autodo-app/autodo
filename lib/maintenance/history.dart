@@ -7,15 +7,6 @@ class MaintenanceHistory extends StatefulWidget {
 }
 
 class MaintenanceHistoryState extends State<MaintenanceHistory> {
-  FirebaseTodoBLoC fb = FirebaseTodoBLoC();
   @override
-  Widget build(BuildContext context) {
-    if (fb.isLoading()) {
-      return Center(child: CircularProgressIndicator(),);
-    } else {
-      return Container(
-        child: fb.buildList(context),
-    );
-    }
-  }
+  Widget build(BuildContext context) => TodoBLoC().items();
 }
