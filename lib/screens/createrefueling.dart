@@ -123,7 +123,6 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
       builder: autoComplete,
       initialValue: (widget.mode == RefuelingEditMode.EDIT) ? widget.existing.carName : '',
       onSaved: (val) => setState(() {
-        print('saving');
         if (selectedCar != null) refuelingItem.carName = selectedCar.name;
         else if (val != null && cars.any((element) => element.name == val)) {
           refuelingItem.carName = val;

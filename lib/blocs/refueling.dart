@@ -1,3 +1,4 @@
+import 'package:autodo/blocs/cars.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/refueling/refuelingcard.dart';
 import 'package:autodo/items/items.dart';
@@ -24,6 +25,7 @@ class RefuelingBLoC extends BLoC {
   }
 
   Future<void> push(RefuelingItem item) async {
+    await CarsBLoC().updateMileage(item.carName, item.odom);
     await pushItem('refuelings', item);
   }
 
