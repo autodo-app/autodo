@@ -53,11 +53,6 @@ class FirebaseTodoBLoC {
   }
 
   StreamBuilder buildList(BuildContext context) {
-    // if (FirestoreBLoC.isLoading()) return StreamBuilder(
-    //   builder: (context, snapshot) {
-    //     return Text('Loading...');
-    //   }
-    // );
     Widget upcomingDivider = Container( 
       padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
       child: Divider()

@@ -288,9 +288,9 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                         if (_formKey.currentState.validate()) {
                           _formKey.currentState.save();
                           if (widget.mode == RefuelingEditMode.CREATE)
-                            FirebaseRefuelingBLoC().push(refuelingItem);
+                            RefuelingBLoC().push(refuelingItem);
                           else
-                            FirebaseRefuelingBLoC().edit(refuelingItem);
+                            RefuelingBLoC().edit(refuelingItem);
                           Navigator.of(context).pop();
                         }
                       },
