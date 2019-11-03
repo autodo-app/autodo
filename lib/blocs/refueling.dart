@@ -23,9 +23,9 @@ class FirebaseRefuelingBLoC {
   }
 
   StreamBuilder buildList(BuildContext context) {
-    if (FirestoreBLoC.isLoading()) return StreamBuilder();
+    // if (FirestoreBLoC.isLoading()) return StreamBuilder();
     return StreamBuilder(
-      stream: FirestoreBLoC.getUserDocument()
+      stream: FirestoreBLoC().getUserDocument()
           .collection('refuelings')
           .snapshots(),
       builder: (context, snapshot) {
@@ -61,7 +61,7 @@ class FirebaseRefuelingBLoC {
   }
 
   Future<void> push(RefuelingItem item) async {
-    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    DocumentReference userDoc = FirestoreBLoC().getUserDocument();
     DocumentReference ref = await userDoc
         .collection('refuelings')
         .add(item.toJSON());
@@ -69,7 +69,7 @@ class FirebaseRefuelingBLoC {
   }
 
   Future<void> edit(RefuelingItem item) async {
-    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    DocumentReference userDoc = FirestoreBLoC().getUserDocument();
     DocumentReference ref = userDoc
         .collection('refuelings')
         .document(item.ref);
@@ -78,7 +78,7 @@ class FirebaseRefuelingBLoC {
 
   Future<void> delete(RefuelingItem item) async {
     _past = item;
-    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    DocumentReference userDoc = FirestoreBLoC().getUserDocument();
     DocumentReference ref = userDoc
       .collection('refuelings')
       .document(item.ref);

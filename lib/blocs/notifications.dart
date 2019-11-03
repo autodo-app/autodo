@@ -34,7 +34,7 @@ class NotificationBLoC {
   }
 
   Future<int> getNextNotificationID() async {
-    var userDoc = await FirestoreBLoC.fetchUserDocument();
+    var userDoc = FirestoreBLoC().getUserDocument();
     var userData = await userDoc.get();
     if (!userData.data.containsKey('lastNotificationID')) {
       var lastID = 0;

@@ -1,44 +1,27 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:autodo/blocs/userauth.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class FirestoreBLoC {
   static final Firestore _db = Firestore.instance;
   static DocumentReference userDoc;
-  static StreamSubscription authState;
 
-  static void onAuthChanged(FirebaseUser user) {
-    print('firestore bloc');
-    if (user != null && user.uid != null) {
-      userDoc = _db.collection('users').document(user.uid);
-    }
+  Future<void> createUserDocument(String uuid) async {
+    userDoc = _db.collection('users').document(uuid);
+    await userDoc.setData(Map<String, Object>());
   }
 
-  static void startListen() {
-    authState = FirebaseAuth.instance.onAuthStateChanged.listen(onAuthChanged);
+  void setUserDocument(String uuid) {
+    userDoc = _db.collection('users').document(uuid);
   }
 
-  static void stopListen() {
-    authState.cancel();
-  }  
-
-  static Future<DocumentReference> fetchUserDocument() async {
-    await Auth().fetchUser();
-    if (Auth().getCurrentUser() == '') return null;
-    userDoc = _db
-          .collection('users')
-          .document(Auth().getCurrentUser());
+  DocumentReference getUserDocument() {
     return userDoc;
   }
 
-  static DocumentReference getUserDocument() {
-    return userDoc;
+  // Make the object a Singleton
+  static final FirestoreBLoC _auth = FirestoreBLoC._internal();
+  factory FirestoreBLoC() {
+    return _auth;
   }
-
-  static bool isLoading() {
-    if (userDoc == null) return true;
-    return false;
-  }
+  FirestoreBLoC._internal();
 }

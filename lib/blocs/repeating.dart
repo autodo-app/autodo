@@ -52,9 +52,9 @@ class RepeatingBLoC {
   Widget _buildItem(BuildContext context, DocumentSnapshot snapshot) => RepeatEditor(item: Repeat.fromJSON(snapshot.data, snapshot.documentID));
 
   StreamBuilder buildList(BuildContext context) {
-    if (FirestoreBLoC.isLoading()) return StreamBuilder();
+    // if (FirestoreBLoC.isLoading()) return StreamBuilder();
     return StreamBuilder(
-      stream: FirestoreBLoC.getUserDocument()
+      stream: FirestoreBLoC().getUserDocument()
           .collection('repeats')
           .snapshots(),
       builder: (context, snapshot) {
@@ -115,7 +115,7 @@ class RepeatingBLoC {
   Future<void> _checkForRepeats() async {
     // Determine if the repeating intervals are saved in the user's data
     // Currently hard-coded to have one car named default
-    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    DocumentReference userDoc = FirestoreBLoC().getUserDocument();
     QuerySnapshot snap = await userDoc
         .collection('repeats')
         .getDocuments();
@@ -130,7 +130,7 @@ class RepeatingBLoC {
   /// Finds a Map of the last completed todo in the repeating
   /// task categories.
   Future<void> _findLatestCompletedTodos(String car) async {
-    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    DocumentReference userDoc = FirestoreBLoC().getUserDocument();
     Query completes = userDoc
                         .collection('todos')
                         .where("complete", isEqualTo: true)
@@ -154,7 +154,7 @@ class RepeatingBLoC {
   /// Finds a Map of upcoming todo items in the repeating
   /// task categories.
   Future<void> _findUpcomingRepeatTodos(String car) async {
-    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    DocumentReference userDoc = FirestoreBLoC().getUserDocument();
     Query completes = userDoc
       .collection('todos')
       .where("complete", isEqualTo: false)
@@ -211,7 +211,7 @@ class RepeatingBLoC {
 
   Future<void> pushRepeats(List<Repeat> repeats) async {
     // creates a new unique identifier for the item
-    DocumentReference doc = await FirestoreBLoC.fetchUserDocument();
+    DocumentReference doc = FirestoreBLoC().getUserDocument();
     repeats.forEach( (repeat) async {
       DocumentReference ref = await doc
           .collection('repeats')
@@ -222,7 +222,7 @@ class RepeatingBLoC {
 
   Future<void> push(Repeat repeat) async {
       // creates a new unique identifier for the item
-      DocumentReference doc = await FirestoreBLoC.fetchUserDocument();
+      DocumentReference doc = FirestoreBLoC().getUserDocument();
       DocumentReference ref = await doc
           .collection('repeats')
           .add(repeat.toJSON());
@@ -230,7 +230,7 @@ class RepeatingBLoC {
   }
 
   Future<void> edit(Repeat item) async {
-    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    DocumentReference userDoc = FirestoreBLoC().getUserDocument();
     if (item.ref == null) return;
     DocumentReference ref = userDoc
         .collection('repeats')
@@ -240,7 +240,7 @@ class RepeatingBLoC {
   }
   
   void updateTodos(Repeat item) async {
-    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    DocumentReference userDoc = FirestoreBLoC().getUserDocument();
     Query completes = userDoc
                         .collection('todos').where("complete", isEqualTo: false).orderBy("completeDate");
     QuerySnapshot docs = await completes.getDocuments();
@@ -293,7 +293,7 @@ class RepeatingBLoC {
 
   Future<void> delete(Repeat repeat) async {
     _past = repeat;
-    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    DocumentReference userDoc = FirestoreBLoC().getUserDocument();
     DocumentReference ref = userDoc
         .collection('repeats')
         .document(repeat.ref);
@@ -315,7 +315,7 @@ class RepeatingBLoC {
   }
 
   Future<void> editByName(String name, int interval) async {
-    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    DocumentReference userDoc = FirestoreBLoC().getUserDocument();
     if (!_keyInRepeats(name)) return;
     var item = repeatByName(name);
     item.interval = interval;

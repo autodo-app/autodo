@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:autodo/blocs/userauth.dart';
 import 'package:autodo/blocs/init.dart';
-import 'package:autodo/blocs/firestore.dart';
 import 'package:autodo/theme.dart';
 
 class LoadingPage extends StatefulWidget {
@@ -19,11 +18,10 @@ class LoadingPageState extends State<LoadingPage> {
 
   Future<Null> loadingSequence() async {
     String uuid = await Auth().fetchUser();
-    FirestoreBLoC.fetchUserDocument();
     if (uuid == "NO_USER") {
       Navigator.pushNamed(context, '/welcomepage');
     } else {
-      await initBLoCs();
+      await initBLoCs(uuid);
       Navigator.pushNamed(context, '/');
     }
   }

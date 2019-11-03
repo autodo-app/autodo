@@ -53,17 +53,17 @@ class FirebaseTodoBLoC {
   }
 
   StreamBuilder buildList(BuildContext context) {
-    if (FirestoreBLoC.isLoading()) return StreamBuilder(
-      builder: (context, snapshot) {
-        return Text('Loading...');
-      }
-    );
+    // if (FirestoreBLoC.isLoading()) return StreamBuilder(
+    //   builder: (context, snapshot) {
+    //     return Text('Loading...');
+    //   }
+    // );
     Widget upcomingDivider = Container( 
       padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
       child: Divider()
     );
     return StreamBuilder(
-      stream: FirestoreBLoC.getUserDocument()
+      stream: FirestoreBLoC().getUserDocument()
           .collection('todos')
           .snapshots(),
       builder: (context, snapshot) {
@@ -99,7 +99,7 @@ class FirebaseTodoBLoC {
 
   Future<void> push(MaintenanceTodoItem item) async {
     await scheduleNotification(item);
-    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    DocumentReference userDoc = FirestoreBLoC().getUserDocument();
     DocumentReference ref = await userDoc
         .collection('todos')
         .add(item.toJSON());
@@ -112,7 +112,7 @@ class FirebaseTodoBLoC {
   }
 
   Future<void> edit(MaintenanceTodoItem item) async {
-    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    DocumentReference userDoc = FirestoreBLoC().getUserDocument();
     DocumentReference ref = userDoc
       .collection('todos')
       .document(item.ref);
@@ -121,7 +121,7 @@ class FirebaseTodoBLoC {
 
   Future<void> delete(MaintenanceTodoItem item) async {
     _past = item;
-    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    DocumentReference userDoc = FirestoreBLoC().getUserDocument();
     DocumentReference ref = userDoc
       .collection('todos')
       .document(item.ref);
@@ -138,7 +138,7 @@ class FirebaseTodoBLoC {
   }
 
   Future<WriteBatch> addUpdate(WriteBatch batch, MaintenanceTodoItem item) async {
-    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    DocumentReference userDoc = FirestoreBLoC().getUserDocument();
     DocumentReference ref = userDoc
         .collection('todos')
         .document(item.ref);
