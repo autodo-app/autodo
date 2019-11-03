@@ -5,12 +5,12 @@ class MaintenanceTodoItem {
   String name, ref, repeatingType;
   DateTime dueDate, completeDate;
   int dueMileage, notificationID;
-  bool complete = false;
+  bool complete;
   List tags;
   DocumentReference reference;
 
   MaintenanceTodoItem(
-      {this.ref, @required this.name, this.dueDate, this.dueMileage, this.repeatingType, this.tags});
+      {this.ref, @required this.name, this.dueDate, this.dueMileage, this.repeatingType, this.tags, this.complete = false});
 
   MaintenanceTodoItem.empty();
 

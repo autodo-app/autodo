@@ -64,7 +64,7 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen> with TickerPro
       validator: (value) => intValidator(value),
       onSaved: (value) {
         if (value != null && value != '')
-          CarsBLoC().setLastCompleted('oil', int.parse(value.trim()));
+          RepeatingBLoC().setLastCompleted('oil', int.parse(value.trim()));
       },
     );
 
@@ -75,7 +75,7 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen> with TickerPro
       validator: (value) => intValidator(value),
       onSaved: (value) {
         if (value != null && value != '')
-          CarsBLoC().setLastCompleted('tireRotation', int.parse(value.trim()));
+          RepeatingBLoC().setLastCompleted('tireRotation', int.parse(value.trim()));
       },
     );
 

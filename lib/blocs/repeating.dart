@@ -189,7 +189,7 @@ class RepeatingBLoC extends BLoC {
             // has not had this operation done at some point
             newDueMileage += car.mileage;
           }
-          pushNewTodo(car.name, repeat.name, newDueMileage);
+          pushNewTodo(car.name, repeat.name, newDueMileage, false);
         }
       });
     });
@@ -259,12 +259,13 @@ class RepeatingBLoC extends BLoC {
     editStream.add(item);
   }
 
-  void pushNewTodo(String carName, String taskName, int dueMileage) async {
+  void pushNewTodo(String carName, String taskName, int dueMileage, bool complete) async {
     MaintenanceTodoItem newTodo = MaintenanceTodoItem(  
       name: taskName,
       dueMileage: dueMileage,
       repeatingType: taskName,
       tags: [carName],
+      complete: complete,
     );
     // await Auth().fetchUser();
     TodoBLoC().push(newTodo);
@@ -279,6 +280,15 @@ class RepeatingBLoC extends BLoC {
           .collection('repeats')
           .document(item.ref);
     ref.updateData(item.toJSON());
+  }
+
+  Future<void> setLastCompleted(String repeat, int mileage) async {
+    if (!_keyInRepeats(repeat)) return;
+    // XXX: currently defaulting to using the first car for the new user,
+    // not sure if that's ideal
+    List<Car> cars = await CarsBLoC().getCars();
+    var car = cars[0];
+    pushNewTodo(car.name, repeat, mileage, true);
   }
 
   // Make the object a Singleton
