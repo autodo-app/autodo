@@ -1,19 +1,24 @@
 import 'package:autodo/blocs/firestore.dart';
+import 'package:autodo/blocs/filtering.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/refueling/refuelingcard.dart';
 import 'package:autodo/items/items.dart';
 
 class FirebaseRefuelingBLoC {
-  final Firestore _db = Firestore.instance;
   RefuelingItem _past;
 
   Widget _buildItem(BuildContext context, DocumentSnapshot snapshot) {
     var odom = snapshot.data['odom'].toInt();
-    var cost = snapshot.data['cost'].toDouble();
+    var cost;
+    if (snapshot.data['cost'] != null)
+      cost = snapshot.data['cost'].toDouble();
+    else
+      cost = 0.0;
     var amount = snapshot.data['amount'].toDouble();
+    var carName = snapshot.data['carName'];
     var item = RefuelingItem(
-        ref: snapshot.documentID, odom: odom, cost: cost, amount: amount);
+        ref: snapshot.documentID, odom: odom, cost: cost, amount: amount, carName: carName);
     return RefuelingCard(item: item);
   }
 
@@ -24,49 +29,60 @@ class FirebaseRefuelingBLoC {
           .collection('refuelings')
           .snapshots(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) return const Text('Loading...');
+        if (snapshot.hasError) {
+          return Center( 
+            child: Text('Error getting data from database.')
+          );
+        }
+        if (snapshot.data == null) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        if (snapshot.data.documents.length == 0) {
+          return Center( 
+            child: Text('No Refuelings recorded yet.')
+          );
+        }
+        var filteredData = [];
+        snapshot.data.documents.forEach((item) {
+          print(item['carName']);
+          if (!FilteringBLoC().containsKey(item['carName']) || 
+              FilteringBLoC().value(item['carName']) == true)
+            filteredData.add(item);
+        });
         return ListView.builder(
-          itemCount: snapshot.data.documents.length,
+          itemCount: filteredData.length,
           itemBuilder: (context, index) =>
-              _buildItem(context, snapshot.data.documents[index]),
+              _buildItem(context, filteredData[index]),
         );
       },
     );
   }
 
-  void push(RefuelingItem item) {
-    _db.runTransaction((transaction) async {
-      // creates a new unique identifier for the item
-      DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
-      DocumentReference ref = await userDoc
-          .collection('refuelings')
-          .add(item.toJSON());
-      item.ref = ref.documentID;
-      await transaction.set(ref, item.toJSON());
-    });
+  Future<void> push(RefuelingItem item) async {
+    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    DocumentReference ref = await userDoc
+        .collection('refuelings')
+        .add(item.toJSON());
+    item.ref = ref.documentID;
   }
 
-  void edit(RefuelingItem item) {
-    _db.runTransaction((transaction) async {
-      // Grab the item's existing identifier
-      DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
-      DocumentReference ref = userDoc
-          .collection('refuelings')
-          .document(item.ref);
-      await transaction.update(ref, item.toJSON());
-    });
+  Future<void> edit(RefuelingItem item) async {
+    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    DocumentReference ref = userDoc
+        .collection('refuelings')
+        .document(item.ref);
+    ref.updateData(item.toJSON());
   }
 
-  void delete(RefuelingItem item) {
+  Future<void> delete(RefuelingItem item) async {
     _past = item;
-    _db.runTransaction((transaction) async {
-      // Grab the item's existing identifier
-      DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
-      DocumentReference ref = userDoc
-          .collection('refuelings')
-          .document(item.ref);
-      await transaction.delete(ref);
-    });
+    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    DocumentReference ref = userDoc
+      .collection('refuelings')
+      .document(item.ref);
+    ref.delete();
   }
 
   void undo() {

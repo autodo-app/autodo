@@ -2,6 +2,7 @@ import 'package:autodo/screens/newuser.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/theme.dart';
 import 'package:autodo/blocs/blocs.dart';
+import './accountsetuptemplate.dart';
 
 const int cardAppearDuration = 200; // in ms
 
@@ -91,31 +92,24 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen> with SingleTickerPro
       ),
     );
 
-    Widget card(var viewportSize) {
+    Widget card() {
       return Container( 
-        height: (viewportSize.maxHeight - 110) * openCurve.value,
-        padding: EdgeInsets.all(20),
-        decoration: BoxDecoration(  
-          borderRadius: BorderRadius.only(
-            topRight:  Radius.circular(30),
-            topLeft:  Radius.circular(30),
-          ),
-          color: Theme.of(context).cardColor,
-        ),
+        // height: (viewportSize.maxHeight - 110) * openCurve.value,
+        padding: EdgeInsets.all(10),
         child: Column(  
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[  
             Padding(
-              padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
+              padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
               child: oilInterval,
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
+              padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
               child: tireRotationInterval,
             ),
-            Padding( 
-              padding: const EdgeInsets.fromLTRB(0.0, 25.0, 0.0, 0.0),
+            Container(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,  
                 children: <Widget>[
@@ -126,7 +120,7 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen> with SingleTickerPro
                       'Skip',
                       style: Theme.of(context).primaryTextTheme.button,
                     ),
-                    onPressed: () => Navigator.popAndPushNamed(context, '/'),
+                    onPressed: () => Navigator.popAndPushNamed(context, '/load'),
                   ),
                   FlatButton( 
                     padding: EdgeInsets.all(0),
@@ -135,7 +129,7 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen> with SingleTickerPro
                       'Next',
                       style: Theme.of(context).primaryTextTheme.button,
                     ),
-                    onPressed: () => Navigator.popAndPushNamed(context, '/'),
+                    onPressed: () => Navigator.popAndPushNamed(context, '/load'),
                   ),
                 ],
               ),
@@ -145,29 +139,9 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen> with SingleTickerPro
       );  
     }
 
-    return SafeArea(
-      child: Form(
+    return Form(
       key: widget.repeatKey,
-      child: LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints viewportConstraints) {
-        return SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              minHeight: viewportConstraints.maxHeight,
-            ), 
-            child: SafeArea(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  headerText,
-                  card(viewportConstraints),
-                ],
-              ),
-            ),
-          ),
-        );}
-      ),),
+      child: AccountSetupScreen(header: headerText, panel: card())
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:autodo/screens/newuser.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/theme.dart';
 import 'package:autodo/blocs/blocs.dart';
+import './accountsetuptemplate.dart';
 
 class LatestRepeatsScreen extends StatefulWidget {
   final GlobalKey<FormState> repeatKey;
@@ -63,7 +64,7 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen> with TickerPro
       validator: (value) => intValidator(value),
       onSaved: (value) {
         if (value != null && value != '')
-          CarStatsBLoC().setLastCompleted('oil', int.parse(value.trim()));
+          CarsBLoC().setLastCompleted('oil', int.parse(value.trim()));
       },
     );
 
@@ -74,25 +75,9 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen> with TickerPro
       validator: (value) => intValidator(value),
       onSaved: (value) {
         if (value != null && value != '')
-          CarStatsBLoC().setLastCompleted('tireRotation', int.parse(value.trim()));
+          CarsBLoC().setLastCompleted('tireRotation', int.parse(value.trim()));
       },
     );
-
-    Widget newTiresMileageField = TextFormField(
-      maxLines: 1,
-      onTap: () => setState(() => expanded = true),
-      decoration: defaultInputDecoration('(miles)', 'Last Tire Replacement (miles)'),
-      validator: (value) => intValidator(value),
-      onSaved: (value) {
-        if (value != null && value != '')
-          CarStatsBLoC().setLastCompleted('tires', int.parse(value.trim()));
-      },
-    );
-
-    // Only display the new tires field if the car is old enough to have needed new tires
-    Widget newTiresMileage = 
-      (CarStatsBLoC().getCurrentMileage() > RepeatingBLoC().repeatByName('tires').interval) 
-      ? newTiresMileageField : Container();
 
     Widget headerText = AnimatedContainer(
       duration: Duration(milliseconds: 400),
@@ -127,35 +112,24 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen> with TickerPro
     );
 
 
-    Widget card(var viewportSize) {
+    Widget card() {
       return Container(
-        height: openCurve.value * (viewportSize.maxHeight - 110),
-        padding: EdgeInsets.all(20),
-        decoration: BoxDecoration(  
-          borderRadius: BorderRadius.only(
-            topRight:  Radius.circular(30),
-            topLeft:  Radius.circular(30),
-          ),
-          color: Theme.of(context).cardColor,
-        ),
+        // height: openCurve.value * (viewportSize.maxHeight - 110),
+        padding: EdgeInsets.all(10),
         child: Column(  
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[  
             Padding(
-              padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
+              padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
               child: oilMileage,
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
+              padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
               child: tireRotationMileage,
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
-              child: newTiresMileage,
-            ),
-            Padding( 
-              padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+            Container(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,  
                 children: <Widget>[
@@ -166,7 +140,7 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen> with TickerPro
                       'Skip',     
                       style: Theme.of(context).primaryTextTheme.button,
                     ),
-                    onPressed: () => Navigator.popAndPushNamed(context, '/'),
+                    onPressed: () => Navigator.popAndPushNamed(context, '/load'),
                   ),
                   FlatButton( 
                     padding: EdgeInsets.all(0),
@@ -189,31 +163,9 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen> with TickerPro
       );  
     }
 
-    return SafeArea(
-      child: Form(
-        key: widget.repeatKey,
-        child: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints viewportConstraints) {
-            return SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: viewportConstraints.maxHeight,
-                ), 
-                child: SafeArea(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      headerText,
-                      card(viewportConstraints),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          }
-        ),
-      ),
+    return Form(
+      key: widget.repeatKey,
+      child: AccountSetupScreen(header: headerText, panel: card())
     );
   }
 }

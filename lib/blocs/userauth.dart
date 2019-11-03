@@ -18,20 +18,16 @@ class Auth implements BaseAuth {
   String currentUser = "", currentUserName = "NO_USER_DATA";
 
   Future<void> _createUserDocument() async {
-    await _db.runTransaction((transaction) async {
-      DocumentReference ref = _db.collection('users').document(currentUser);
-      await transaction.set(ref, Map<String, Object>());
-    });
+    currentUser = await fetchUser();
+    DocumentReference ref = _db.collection('users').document(currentUser);
+    ref.setData(Map<String, Object>());
   }
 
   Future<String> signIn(String email, String password) async {
-    print("here");
     AuthResult res = await _firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
     FirebaseUser user = res.user;
-    // if (user.uid != null) LocalStorage.save("uuid", user.uid);
     currentUser = user.uid;
-    // currentUserName = user.displayName == "" ? user.email : user.displayName;
     currentUserName = user.email;
     await _createUserDocument();
     return user.uid;
@@ -93,6 +89,10 @@ class Auth implements BaseAuth {
   bool isLoading() {
     if (getCurrentUser() == '') return true;
     else return false;
+  }
+
+  StreamSubscription<FirebaseUser> listen(Function(FirebaseUser) fn) {
+    return _firebaseAuth.onAuthStateChanged.listen(fn);
   }
 
   // Make the object a Singleton

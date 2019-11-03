@@ -1,6 +1,90 @@
+import 'package:autodo/blocs/cars.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/theme.dart';
-import 'package:autodo/blocs/blocs.dart';
+import 'package:autodo/items/items.dart';
+
+import './accountsetuptemplate.dart';
+
+class CarEntryField extends StatefulWidget {
+  final Car car;
+  CarEntryField(this.car);
+
+  @override
+  State<CarEntryField> createState() => CarEntryFieldState(car);
+}
+
+class CarEntryFieldState extends State<CarEntryField> {
+  Car car;
+  bool firstWritten = false;
+
+  CarEntryFieldState(this.car);
+  
+  @override 
+  Widget build(BuildContext context) {
+    Widget nameField() {
+      return TextFormField(
+        maxLines: 1,
+        autofocus: true,
+        decoration: defaultInputDecoration('', 'Car Name'),
+        validator: (value) {
+          if (value == null || value == '')
+            return 'Field must not be empty';
+          return null;
+        },
+        initialValue: car.name ?? '',
+        onSaved: (value) {
+          car.name = value.trim();
+          if (firstWritten)
+            CarsBLoC().push(car);
+          firstWritten = !firstWritten;
+        },
+      );
+    }
+
+    Widget mileageField() {
+      return TextFormField(
+        maxLines: 1,
+        autofocus: true,
+        decoration: defaultInputDecoration('', 'Mileage'),
+        validator: (value) {
+          if (value == null || value == '')
+            return 'Field must not be empty';
+          return null;
+        },
+        initialValue: car.mileage ?? '',
+        onSaved: (value) {
+          car.mileage = int.parse(value.trim());
+          if (firstWritten)
+            CarsBLoC().push(car);
+          firstWritten = !firstWritten;
+        },
+      );
+    }
+
+    return Container( 
+      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Expanded(
+            flex: 2,
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(5, 0, 5, 0),  
+              child: nameField(),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(5, 0, 5, 0),  
+              child: mileageField(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
 
 class MileageScreen extends StatefulWidget {
   final String mileageEntry;
@@ -14,41 +98,13 @@ class MileageScreen extends StatefulWidget {
 }
 
 class MileageScreenState extends State<MileageScreen> {
-  FocusNode mileageNode;
   var mileageEntry;
+  List<Car> cars = [Car.empty()];
 
   MileageScreenState(this.mileageEntry);
 
   @override 
-  void initState() {
-    mileageNode = FocusNode();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    mileageNode.dispose();
-    super.dispose();
-  }
-
-  @override 
   Widget build(BuildContext context) {
-    Widget field = TextFormField(
-      maxLines: 1,
-      autofocus: true,
-      decoration: defaultInputDecoration('', 'Car Mileage'),
-      validator: (value) {
-        if (value == null || value == '')
-          return 'Field must not be empty';
-        return null;
-      },
-      initialValue: mileageEntry,
-      onSaved: (value) {
-        mileageEntry = value;
-        CarStatsBLoC().setCurrentMileage(int.parse(value.trim()));
-      },
-    );
-
     Widget headerText = Container(
       height: 110,
       child: Center(
@@ -57,7 +113,7 @@ class MileageScreenState extends State<MileageScreen> {
             Padding(
               padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
               child: Text( 
-                'Before you get started,\n let\'s get some info about your car.',
+                'Before you get started,\n let\'s get some info about your car(s).',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 20,
@@ -68,7 +124,7 @@ class MileageScreenState extends State<MileageScreen> {
               ),
             ),
             Text(  
-              'How many miles are currently on your car?',
+              'Tap "Add" to configure multiple cars.',
               style: Theme.of(context).primaryTextTheme.body1,
             ),
           ],
@@ -76,38 +132,44 @@ class MileageScreenState extends State<MileageScreen> {
       ),
     );
 
-    Widget card(var viewportSize) {
+    Widget card() {
+      List<Widget> carFields = [];
+      for (var car in cars) {
+        carFields.add(CarEntryField(car));
+      }
+
       return Container( 
-        height: viewportSize.maxHeight - 110,
-        padding: EdgeInsets.all(20),
-        decoration: BoxDecoration(  
-          borderRadius: BorderRadius.only(
-            topRight:  Radius.circular(30),
-            topLeft:  Radius.circular(30),
-          ),
-          color: Theme.of(context).cardColor,
-        ),
+        // height: viewportSize.maxHeight - 110,
+        padding: EdgeInsets.all(10),
         child: Column(  
           mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[  
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
-              child: field,
-            ),
-            Padding( 
-              padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+            ...carFields,
+            Container(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,  
                 children: <Widget>[
-                  FlatButton( 
-                    padding: EdgeInsets.all(0),
-                    materialTapTargetSize: MaterialTapTargetSize.padded,
-                    child: Text(
-                      'Skip',
-                      style: Theme.of(context).primaryTextTheme.button,
-                    ),
-                    onPressed: () => Navigator.popAndPushNamed(context, '/'),
+                  Row(  
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      FlatButton.icon( 
+                        padding: EdgeInsets.all(0),
+                        icon: Icon(Icons.add),
+                        label: Text('Add'),
+                        onPressed: () => setState(() => cars.add(Car.empty())),
+                      ),
+                      FlatButton.icon( 
+                        padding: EdgeInsets.all(0),
+                        icon: Icon(Icons.delete),
+                        label: Text('Remove'),
+                        onPressed: () {
+                          if (cars.length < 2) return;
+                          setState(() => cars.removeAt(cars.length - 1));
+                        },
+                      ),
+                    ],
                   ),
                   FlatButton( 
                     padding: EdgeInsets.all(0),
@@ -123,8 +185,6 @@ class MileageScreenState extends State<MileageScreen> {
                         FocusScope.of(context).requestFocus(new FocusNode());
                         await Future.delayed(Duration(milliseconds: 400));
                         widget.onNext();
-                        // setState(() => page = NewUserScreenPage.REPEATS);
-                        // TODO: figure out how to signal to the parent that it needs to switch states
                       }
                     },
                   ),
@@ -136,31 +196,9 @@ class MileageScreenState extends State<MileageScreen> {
       );
     }  
 
-    return SafeArea(
-      child: Form(
-        key: widget.mileageKey,
-        child: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints viewportConstraints) {
-            return SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: viewportConstraints.maxHeight,
-                ), 
-                child: SafeArea(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      headerText,
-                      card(viewportConstraints),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          }
-        ),
-      ),
+    return Form(
+      key: widget.mileageKey,
+      child: AccountSetupScreen(header: headerText, panel: card())
     );
   }
 }

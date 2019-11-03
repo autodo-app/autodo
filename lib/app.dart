@@ -1,3 +1,4 @@
+import 'package:autodo/blocs/firestore.dart';
 import 'package:autodo/refueling/history.dart';
 import 'package:autodo/screens/editrepeats.dart';
 import 'package:autodo/screens/newuser.dart';
@@ -5,12 +6,23 @@ import 'package:autodo/screens/statistics.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/screens/screens.dart';
 import 'package:autodo/theme.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class AutodoApp extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    return AutodoAppState();
+  AutodoApp() {
+    FirebaseApp.configure(
+      name: 'autodo',
+      options: FirebaseOptions(  
+        googleAppID: '1:617460744396:android:400cbb86de167047',
+        projectID: 'autodo-49f21',
+        apiKey: 'AIzaSyAAYhwsJVyiYywUFORBgaUuyXqXFiFpbZo',
+      )
+    );
+    FirestoreBLoC.startListen();
   }
+
+  @override
+  State<StatefulWidget> createState() => AutodoAppState();
 }
 
 class AutodoAppState extends State<AutodoApp> {

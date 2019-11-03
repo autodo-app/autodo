@@ -1,3 +1,5 @@
+import 'package:autodo/blocs/cars.dart';
+import 'package:autodo/sharedmodels/cartag.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/items/items.dart';
 import 'package:intl/intl.dart';
@@ -186,33 +188,13 @@ class RefuelingCardState extends State<RefuelingCard> {
     );
   }
 
-  Row tags(RefuelingCard widget) {
-    List<Widget> tags = [
-      Padding(
-        padding: EdgeInsets.only(left: 5.0),
-      ),
-    ];
-    for (var tag in widget.item.tags) {
-      tags.add(
-        ButtonTheme.fromButtonThemeData(
-          data: ButtonThemeData(
-            minWidth: 0,
-            padding: EdgeInsets.fromLTRB(5.0, 0, 5.0, 0),
-          ),
-          child: FlatButton(
-            child: Chip(
-              backgroundColor: Colors.lightGreen,
-              label: Text(tag),
-            ),
-            onPressed: () {},
-          ),
-        ),
-      );
-    }
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: tags,
+  Widget tags(RefuelingCard widget) {
+    return FutureBuilder( 
+      future: CarsBLoC().getCarByName(widget.item.carName),
+      builder: (context, tag) {
+        if (tag.data == null) return Container();
+        return CarTag(text: tag.data.name, color: tag.data.color);
+      } 
     );
   }
 
