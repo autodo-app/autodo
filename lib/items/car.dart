@@ -18,7 +18,11 @@ class Car {
   Car.empty();
   
   Map<String, dynamic> toJSON() {
-    return {};
+    return {
+      'name': name,
+      'mileage': mileage,
+      'color': color.value,
+    };
   }
 
   

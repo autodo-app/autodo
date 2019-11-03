@@ -72,6 +72,15 @@ class CarsBLoC {
     return out;
   }
 
+  Future<void> updateMileage(String carName, int mileage) async {
+    print(mileage);
+    Car car = await getCarByName(carName);
+    if (car.mileage > mileage)
+      throw Exception();
+    car.mileage = mileage;
+    edit(car);
+  }
+
   int currentCarMileage = 0;
   Map<String, int> lastCompletedRepeatTodos;
 
