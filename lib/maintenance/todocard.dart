@@ -7,6 +7,8 @@ import 'package:intl/intl.dart';
 import 'package:autodo/screens/screens.dart';
 import 'package:autodo/sharedmodels/cartag.dart';
 
+const int DUE_SOON_INTERVAL = 100; 
+
 class MaintenanceTodoCard extends StatefulWidget {
   final MaintenanceTodoItem item;
   final bool emphasized;
@@ -132,15 +134,30 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
     );
   }
 
+  Future<String> getNamePreface() async {
+    var car = await CarsBLoC().getCarByName(widget.item.tags[0]);
+    var distUntilToDo = widget.item.dueMileage - car.mileage;
+    if (distUntilToDo < 0)
+      return "Past Due: " + widget.item.name;
+    else if (distUntilToDo < DUE_SOON_INTERVAL)
+      return "Due Soon: " + widget.item.name;
+    else 
+      return "Upcoming: " + widget.item.name;
+  }
+
   Column title(MaintenanceTodoCard widget) {
     return Column(
       children: <Widget>[
         Container(
           padding: EdgeInsets.fromLTRB(0.0, 10.0, 0, 0.0),
           alignment: Alignment.center,
-          child: Text(
-            widget.item.name,
-            style: Theme.of(context).primaryTextTheme.title,
+          child: FutureBuilder(
+            future: (emphasized) ? getNamePreface() : null,
+            initialData: widget.item.name, 
+            builder: (context, snap) => Text(
+              snap.data,
+              style: Theme.of(context).primaryTextTheme.title,
+            ),
           ),
         ),
         Divider(),
