@@ -9,15 +9,13 @@ class TodoBLoC extends BLoC {
   @override
   Widget buildItem(dynamic snapshot, int index) {
     bool first = index == 0;
-    var name = (first) ? 'Upcoming: ' : ''; // TODO: move this logic to the card
-    name += snapshot.data['name'];
     var date;
     if (snapshot.data.containsKey('dueDate') && snapshot.data['dueDate'] != null)
       date = snapshot.data['dueDate'].toDate();
     var mileage = snapshot.data['dueMileage'];
     var item = MaintenanceTodoItem(
       ref: snapshot.documentID,
-      name: name,
+      name: snapshot.data['name'],
       dueDate: date,
       dueMileage: mileage,
       repeatingType: snapshot.data['repeatingType'],
