@@ -255,6 +255,7 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
                 ),
               );
               Scaffold.of(context).showSnackBar(snackbar);
+              setState(() {});
             },
           ),
         ),
