@@ -168,11 +168,19 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                           ? widget.existing.odom.toString()
                           : '',
                       keyboardType: TextInputType.number,
+                      validator: (val) {
+                        try {
+                          int.parse(val);
+                        } catch (e) {
+                          return "Car Mileage must be an integer.";
+                        }
+                        return null;
+                      },
                       onSaved: (val) => setState(() {
-                            if (val != null && val != '') {
-                              refuelingItem.odom = int.parse(val);
-                            }
-                          }),
+                        if (val != null && val != '') {
+                          refuelingItem.odom = int.parse(val);
+                        }
+                      }),
                     ),
                     Padding(
                       padding: EdgeInsets.only(bottom: 16.0),
