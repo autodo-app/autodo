@@ -153,11 +153,13 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
           alignment: Alignment.center,
           child: FutureBuilder(
             future: (emphasized) ? getNamePreface() : null,
-            initialData: widget.item.name, 
+            initialData: widget.item.name ?? "", 
             builder: (context, snap) {
-              if (!snap.hasData) return Container();
               return Text(
-                snap.data,
+                // making sure that the text isn't null.
+                // creating a todo without an attached car causes
+                // a weird set of behavior upon initial widget creation
+                snap.data ?? widget.item.name ?? "",
                 style: Theme.of(context).primaryTextTheme.title,
               );
             }
