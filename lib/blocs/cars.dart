@@ -47,7 +47,7 @@ class CarsBLoC extends BLoC {
     print(mileage);
     Car car = await getCarByName(carName);
     if (car.mileage > mileage)
-      throw Exception();
+      return; // allow adding past refuelings, but odometers don't go backwards
     car.mileage = mileage;
     edit(car);
   }
