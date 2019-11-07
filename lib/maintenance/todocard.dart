@@ -154,10 +154,13 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
           child: FutureBuilder(
             future: (emphasized) ? getNamePreface() : null,
             initialData: widget.item.name, 
-            builder: (context, snap) => Text(
-              snap.data,
-              style: Theme.of(context).primaryTextTheme.title,
-            ),
+            builder: (context, snap) {
+              if (!snap.hasData) return Container();
+              return Text(
+                snap.data,
+                style: Theme.of(context).primaryTextTheme.title,
+              );
+            }
           ),
         ),
         Divider(),

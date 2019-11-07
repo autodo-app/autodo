@@ -32,7 +32,7 @@ class BLoC {
 
         var filteredData = [];
         snapshot.data.documents.forEach((item) {
-          if (!item.data.containsKey('tags')) {
+          if (!item.data.containsKey('tags') || item.data['tags'] == null) {
             filteredData.add(item);
             return;
           }
