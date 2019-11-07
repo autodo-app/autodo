@@ -8,6 +8,7 @@ import 'package:autodo/blocs/repeating.dart';
 import 'package:autodo/sharedmodels/autocompletefield.dart';
 import 'package:autodo/items/items.dart';
 import 'package:autodo/theme.dart';
+import 'package:autodo/util.dart';
 
 enum TodoEditMode { CREATE, EDIT }
 
@@ -132,7 +133,7 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
       style: Theme.of(context).primaryTextTheme.subtitle,
       keyboardType: TextInputType.text,
       textCapitalization: TextCapitalization.sentences,
-      validator: (value) { return null; },
+      validator: requiredValidator,
       onSaved: (val) => setState(() => todoItem.name = val),
     );
   }

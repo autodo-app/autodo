@@ -5,6 +5,7 @@ import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/items/items.dart';
 import 'package:autodo/sharedmodels/sharedmodels.dart';
 import 'package:autodo/theme.dart';
+import 'package:autodo/util.dart';
 
 enum RefuelingEditMode { CREATE, EDIT }
 
@@ -122,6 +123,7 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
     return FormField<String>( 
       builder: autoComplete,
       initialValue: (widget.mode == RefuelingEditMode.EDIT) ? widget.existing.carName : '',
+      validator: requiredValidator,
       onSaved: (val) => setState(() {
         if (selectedCar != null) refuelingItem.carName = selectedCar.name;
         else if (val != null && cars.any((element) => element.name == val)) {
@@ -162,25 +164,15 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                         labelText: "Odometer Reading (mi)",
                         contentPadding: EdgeInsets.only(
                             left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
+                        ),
+                        autofocus: true,
+                        initialValue: (widget.mode == RefuelingEditMode.EDIT)
+                            ? widget.existing.odom.toString()
+                            : '',
+                        keyboardType: TextInputType.number,
+                        validator: intValidator,
+                        onSaved: (val) => setState(() => refuelingItem.odom = int.parse(val)
                       ),
-                      autofocus: true,
-                      initialValue: (widget.mode == RefuelingEditMode.EDIT)
-                          ? widget.existing.odom.toString()
-                          : '',
-                      keyboardType: TextInputType.number,
-                      validator: (val) {
-                        try {
-                          int.parse(val);
-                        } catch (e) {
-                          return "Car Mileage must be an integer.";
-                        }
-                        return null;
-                      },
-                      onSaved: (val) => setState(() {
-                        if (val != null && val != '') {
-                          refuelingItem.odom = int.parse(val);
-                        }
-                      }),
                     ),
                     Padding(
                       padding: EdgeInsets.only(bottom: 16.0),
@@ -197,18 +189,16 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                         ),
                         labelText: "Amount of Fuel (gal)",
                         contentPadding: EdgeInsets.only(
-                            left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
+                          left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
+                        ),
+                        initialValue: (widget.mode == RefuelingEditMode.EDIT)
+                            ? widget.existing.amount.toString()
+                            : '',
+                        autofocus: false,
+                        keyboardType: TextInputType.number,
+                        validator: doubleValidator,
+                        onSaved: (val) => setState(() => refuelingItem.amount = double.parse(val)
                       ),
-                      initialValue: (widget.mode == RefuelingEditMode.EDIT)
-                          ? widget.existing.amount.toString()
-                          : '',
-                      autofocus: false,
-                      keyboardType: TextInputType.number,
-                      onSaved: (val) => setState(() {
-                            if (val != null && val != '') {
-                              refuelingItem.amount = double.parse(val);
-                            }
-                          }),
                     ),
                     Padding(
                       padding: EdgeInsets.only(bottom: 16.0),
@@ -222,18 +212,15 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                         labelText: "Total Price (USD)",
                         contentPadding: EdgeInsets.only(
                             left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
+                        ),
+                        initialValue: (widget.mode == RefuelingEditMode.EDIT)
+                            ? widget.existing.cost.toString()
+                            : '',
+                        autofocus: false,
+                        keyboardType: TextInputType.number,
+                        validator: doubleValidator,
+                        onSaved: (val) => setState(() => refuelingItem.cost = double.parse(val)
                       ),
-                      // controller: listNameController,
-                      initialValue: (widget.mode == RefuelingEditMode.EDIT)
-                          ? widget.existing.cost.toString()
-                          : '',
-                      autofocus: false,
-                      keyboardType: TextInputType.number,
-                      onSaved: (val) => setState(() {
-                            if (val != null && val != '') {
-                              refuelingItem.cost = double.parse(val);
-                            }
-                          }),
                     ),
                     Padding(
                       padding: EdgeInsets.only(bottom: 10.0),
