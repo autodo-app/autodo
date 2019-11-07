@@ -9,8 +9,16 @@ class MaintenanceTodoItem {
   List tags;
   DocumentReference reference;
 
-  MaintenanceTodoItem(
-      {this.ref, @required this.name, this.dueDate, this.dueMileage, this.repeatingType, this.tags, this.complete = false});
+  MaintenanceTodoItem({
+        this.ref, 
+        @required this.name, 
+        this.dueDate, 
+        this.dueMileage, 
+        this.repeatingType, 
+        tags, 
+        this.complete = false}) {
+    this.tags = tags ?? [];
+  }
 
   MaintenanceTodoItem.empty();
 

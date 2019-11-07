@@ -153,11 +153,16 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
           alignment: Alignment.center,
           child: FutureBuilder(
             future: (emphasized) ? getNamePreface() : null,
-            initialData: widget.item.name, 
-            builder: (context, snap) => Text(
-              snap.data,
-              style: Theme.of(context).primaryTextTheme.title,
-            ),
+            initialData: widget.item.name ?? "", 
+            builder: (context, snap) {
+              return Text(
+                // making sure that the text isn't null.
+                // creating a todo without an attached car causes
+                // a weird set of behavior upon initial widget creation
+                snap.data ?? widget.item.name ?? "",
+                style: Theme.of(context).primaryTextTheme.title,
+              );
+            }
           ),
         ),
         Divider(),
@@ -252,6 +257,7 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
                 ),
               );
               Scaffold.of(context).showSnackBar(snackbar);
+              setState(() {});
             },
           ),
         ),
