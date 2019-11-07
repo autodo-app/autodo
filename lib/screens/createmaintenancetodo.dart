@@ -64,10 +64,11 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
         : now);
 
     var result = await showDatePicker(
-        context: context,
-        initialDate: initialDate,
-        firstDate: initialDate,
-        lastDate: DateTime(2100));
+      context: context,
+      initialDate: initialDate,
+      firstDate: initialDate,
+      lastDate: DateTime(2100),
+    );
 
     if (result == null) return;
 
@@ -100,20 +101,16 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
       labelText: "Repeating Task",
       contentPadding: EdgeInsets.only(
           left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
-    ),
-    initialValue: (widget.mode == TodoEditMode.EDIT)
-        ? widget.existing.repeatingType
-        : '',
-    autofocus: false,
-    focusNode: _repeatNode,
-    style: TextStyle(
-      fontSize: 22.0,
-      color: Colors.black,
-      fontWeight: FontWeight.w500,
-    ),
-    keyboardType: TextInputType.text,
-    validator: (value) { return null;},
-    onSaved: (val) => setState(() => todoItem.repeatingType = val),
+      ),
+      initialValue: (widget.mode == TodoEditMode.EDIT)
+          ? widget.existing.repeatingType
+          : '',
+      autofocus: false,
+      focusNode: _repeatNode,
+      style: Theme.of(context).primaryTextTheme.subtitle,
+      keyboardType: TextInputType.text,
+      validator: (value) { return null;},
+      onSaved: (val) => setState(() => todoItem.repeatingType = val),
     );
   }
 
@@ -132,11 +129,7 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
           : '',
       autofocus: true,
       focusNode: _nameNode,
-      style: TextStyle(
-        fontSize: 22.0,
-        color: Colors.black,
-        fontWeight: FontWeight.w500,
-      ),
+      style: Theme.of(context).primaryTextTheme.subtitle,
       keyboardType: TextInputType.text,
       textCapitalization: TextCapitalization.sentences,
       validator: (value) { return null; },
@@ -163,11 +156,7 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
         ),
       ),
       focusNode: _dateNode,
-      style: TextStyle(
-        fontSize: 22.0,
-        color: Colors.black,
-        fontWeight: FontWeight.w500,
-      ),
+      style: Theme.of(context).primaryTextTheme.subtitle,
       controller: _controller,
       keyboardType: TextInputType.datetime,
       validator: (val) =>
@@ -188,11 +177,7 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
           : '',
       autofocus: false,
       focusNode: _mileageNode,
-      style: TextStyle(
-        fontSize: 22.0,
-        color: Colors.black,
-        fontWeight: FontWeight.w500,
-      ),
+      style: Theme.of(context).primaryTextTheme.subtitle,
       keyboardType: TextInputType.number,
       onSaved: (val) => setState(() {
             if (val != null && val != '') {
@@ -208,13 +193,12 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
       child: Column(
         children: <Widget>[
           RaisedButton(
-            child: const Text(
-              'Add',
-              style: TextStyle(color: Colors.white),
+            child: Text(
+              'ADD',
+              style: Theme.of(context).primaryTextTheme.button,
             ),
-            color: Colors.blue,
+            color: Theme.of(context).accentColor,
             elevation: 4.0,
-            splashColor: Colors.deepPurple,
             onPressed: () {
               if (_formKey.currentState.validate()) {
                 _formKey.currentState.save();
