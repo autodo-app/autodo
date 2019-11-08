@@ -90,6 +90,23 @@ class TodoBLoC extends BLoC {
     return batch;
   }
 
+  Future<void> repeatUpdated(Repeat item, Repeat prevItem) async {
+    DocumentReference userDoc = FirestoreBLoC().getUserDocument();
+    QuerySnapshot snap = await userDoc.collection('todos').getDocuments();
+    List thisRepeatsTodos = [];
+    snap.documents.forEach((doc) {
+      if (doc.data['repeatingType'] == item.name) {
+        var todo = MaintenanceTodoItem.fromSnapshot(doc);
+        thisRepeatsTodos.add(todo);
+      }
+    });
+    var mileageDiff = item.interval - prevItem.interval;
+    thisRepeatsTodos.forEach((todo) {
+      todo.dueMileage += mileageDiff;
+      edit(todo);
+    });
+  }
+
   // Make the object a Singleton
   static final TodoBLoC _bloc = TodoBLoC._internal();
   factory TodoBLoC() {
