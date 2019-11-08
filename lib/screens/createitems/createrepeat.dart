@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:autodo/util.dart';
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/items/items.dart';
+import 'package:autodo/sharedmodels/sharedmodels.dart';
 
 enum RepeatEditMode { CREATE, EDIT }
 
@@ -21,6 +22,13 @@ class CreateRepeatScreen extends StatefulWidget {
 class CreateRepeatScreenState extends State<CreateRepeatScreen> {
   Repeat repeat = Repeat.empty();
   final _formKey = GlobalKey<FormState>();
+  var filterList;
+
+  CreateRepeatScreenState() {
+    filterList = FilteringBLoC().getFiltersAsList();
+  }
+
+  Future<void> updateFilters(filter) async => FilteringBLoC().setFilter(filter);
 
   Widget mileageField() {
     return TextFormField( 
@@ -50,7 +58,7 @@ class CreateRepeatScreenState extends State<CreateRepeatScreen> {
     );
   }
 
-  
+  // checkboxes for which cars the task applies to
 
    Widget addButton() {
     return Padding(
@@ -67,6 +75,9 @@ class CreateRepeatScreenState extends State<CreateRepeatScreen> {
             onPressed: () {
               if (_formKey.currentState.validate()) {
                 _formKey.currentState.save();
+                filterList.forEach((f) {
+                  if (f.enabled) repeat.cars.add(f.carName);
+                });
                 if (widget.mode == RepeatEditMode.CREATE)
                   RepeatingBLoC().push(repeat);
                 else
@@ -76,6 +87,27 @@ class CreateRepeatScreenState extends State<CreateRepeatScreen> {
             },
           ),
         ],
+      ),
+    );
+  }
+
+  Widget cars() {
+    return Container(
+      height: 120, 
+      child: ListView.builder(
+        itemCount: FilteringBLoC().getFilters().keys.length,
+        itemBuilder: (context, index) => ListTile(
+          leading: Checkbox( 
+            value: filterList[index].enabled,
+            onChanged: (state) {
+              filterList[index].enabled = state; 
+              updateFilters(filterList[index]);
+              setState(() {});
+            },
+            materialTapTargetSize: MaterialTapTargetSize.padded,
+          ),
+          title: Text(filterList[index].carName)
+        ),
       ),
     );
   }
@@ -102,6 +134,10 @@ class CreateRepeatScreenState extends State<CreateRepeatScreen> {
                 padding: EdgeInsets.only(bottom: 15),
               ),
               mileageField(),
+              Padding( 
+                padding: EdgeInsets.only(bottom: 15),
+              ),
+              cars(),
               addButton()
             ],
           )
