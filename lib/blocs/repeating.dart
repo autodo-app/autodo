@@ -203,6 +203,11 @@ class RepeatingBLoC extends BLoC {
   }
 
   Future<void> push(Repeat item) async {
+    item.cars.forEach((carName) async {
+      var car = await CarsBLoC().getCarByName(carName);
+      var dueMileage = car.mileage + item.interval;
+      pushNewTodo(carName, item.name, dueMileage, false);
+    });
     await pushItem('repeats', item);
   }
 
