@@ -44,6 +44,7 @@ class AutodoAppState extends State<AutodoApp> {
         '/createTodo': (context) => CreateTodoScreen(mode: TodoEditMode.CREATE),
         '/createRefueling': (context) =>
             CreateRefuelingScreen(mode: RefuelingEditMode.CREATE),
+        '/createRepeat': (context) => CreateRepeatScreen(mode: RepeatEditMode.CREATE),
         '/settings': (context) => SettingsScreen(),
         '/statistics': (context) => StatisticsScreen(),
         '/editcarlist': (context) => EditCarListScreen(),

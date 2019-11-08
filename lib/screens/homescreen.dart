@@ -113,7 +113,7 @@ class HomeScreenState extends State<HomeScreen> {
               title: Text('Statistics')
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.repeat),
+              icon: Icon(Icons.autorenew),
               title: Text('Repeats')
             ),
           ]
