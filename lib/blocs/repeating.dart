@@ -208,10 +208,13 @@ class RepeatingBLoC extends BLoC {
       var dueMileage = car.mileage + item.interval;
       pushNewTodo(carName, item.name, dueMileage, false);
     });
+
     await pushItem('repeats', item);
   }
 
   void edit(Repeat item) {
+    var prevItem = repeatByName(item.name);
+    TodoBLoC().repeatUpdated(item, prevItem);
     editItem('repeats', item);
   }
 

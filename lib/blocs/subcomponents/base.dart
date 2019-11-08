@@ -63,6 +63,10 @@ class BLoC {
   }
 
   void editItem(String collection, dynamic item) {
+    if (item.ref == null) {
+      print('Cannot update an item without a reference key');
+      return;
+    }
     DocumentReference userDoc = FirestoreBLoC().getUserDocument();
     DocumentReference ref = userDoc
         .collection(collection)
