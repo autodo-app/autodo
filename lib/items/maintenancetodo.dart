@@ -7,7 +7,6 @@ class MaintenanceTodoItem {
   int dueMileage, notificationID;
   bool complete;
   List tags;
-  DocumentReference reference;
 
   MaintenanceTodoItem({
         this.ref, 
@@ -22,7 +21,7 @@ class MaintenanceTodoItem {
 
   MaintenanceTodoItem.empty();
 
-  MaintenanceTodoItem.fromMap(Map<String, dynamic> map, {this.reference})
+  MaintenanceTodoItem.fromMap(Map<String, dynamic> map, {this.ref})
       : assert(map['name'] != null),
         name = map['name'] {
     if (map['dueDate'] != null) {
@@ -48,7 +47,7 @@ class MaintenanceTodoItem {
   }
 
   MaintenanceTodoItem.fromSnapshot(DocumentSnapshot snapshot)
-      : this.fromMap(snapshot.data, reference: snapshot.reference);
+      : this.fromMap(snapshot.data, ref: snapshot.documentID);
 
   Map<String, dynamic> toJSON() {
     return {
