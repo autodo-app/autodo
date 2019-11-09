@@ -29,20 +29,17 @@ List<Repeat> defaults = [
 
 class RepeatingBLoC extends BLoC {
   static final Firestore _db = Firestore.instance;
-  Repeat _past;
   List<Repeat> repeats = defaults;
-  /**
-   * Maps containing the related tasks for each repeating task type.
-   * Example Map:
-   * 
-   * "carName": {
-   *   "repeatKey": {
-   *     // MaintenanceTodoItem contents
-   *     "name": "todoName",
-   *     "dueMileage": xxx  
-   *   }
-   * }
-   */
+  /// Maps containing the related tasks for each repeating task type.
+  /// Example Map:
+  /// 
+  /// "carName": {
+  ///   "repeatKey": {
+  ///     // MaintenanceTodoItem contents
+  ///     "name": "todoName",
+  ///     "dueMileage": xxx  
+  ///   }
+  /// }
   Map<String, Map<String, Map<String, dynamic>>> upcomingRepeatTodos = Map();
   Map<String, Map<String, dynamic>> latestCompletedRepeatTodos = Map();
 
@@ -208,13 +205,10 @@ class RepeatingBLoC extends BLoC {
       var dueMileage = car.mileage + item.interval;
       pushNewTodo(carName, item.name, dueMileage, false);
     });
-
     await pushItem('repeats', item);
   }
 
   void edit(Repeat item) {
-    var prevItem = repeatByName(item.name);
-    TodoBLoC().repeatUpdated(item, prevItem);
     editItem('repeats', item);
   }
 
@@ -234,21 +228,27 @@ class RepeatingBLoC extends BLoC {
     List<DocumentSnapshot> snaps = docs.documents;
     WriteBatch _batch = _db.batch();
 
+    var prevRepeat = repeats.firstWhere((r) => r.name == item.name);
+    var repeatIndex = repeats.indexOf(prevRepeat);
+    int prevInterval = repeats[repeatIndex].interval ?? 0; // prevent exception on null value
+    int curInterval = item.interval ?? 0;
+    repeats[repeatIndex] = item;
+
     for (var snap in snaps) {
       var todo = snap.data;
       String taskType = snap.data['repeatingType'];
       if (taskType == item.name) {
         // use the difference in the previous and new intervals to update the dueMileage
-        int prevInterval = repeatByName(taskType).interval ?? 0; // prevent exception on null value
-        int curInterval = item.interval ?? 0;
         if (!todo.containsKey('dueMileage') || todo['dueMileage'] == null || prevInterval == curInterval)
           return;
         int curMileage = todo['dueMileage'] as int;
         todo['dueMileage'] = curMileage + (curInterval - prevInterval); 
+        // print('askjl ${todo['dueMileage']}');
+        print('askjl ${curMileage}');
       } 
       var updatedItem = MaintenanceTodoItem.fromMap(
         todo, 
-        reference: userDoc.collection('todos').document(snap.documentID));
+        ref: snap.documentID);
       _batch = await TodoBLoC().addUpdate(_batch, updatedItem);
     }
     _batch.commit();
@@ -275,7 +275,6 @@ class RepeatingBLoC extends BLoC {
       tags: [carName],
       complete: complete,
     );
-    // await Auth().fetchUser();
     TodoBLoC().push(newTodo);
   }
 
