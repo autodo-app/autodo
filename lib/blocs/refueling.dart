@@ -5,6 +5,8 @@ import 'package:autodo/items/items.dart';
 import 'package:autodo/blocs/subcomponents/subcomponents.dart';
 
 class RefuelingBLoC extends BLoC {
+  static const int MAX_MPG = 0xffff;
+
   @override
   Widget buildItem(dynamic snap, int index) {
     var odom = snap.data['odom'].toInt();
@@ -39,6 +41,25 @@ class RefuelingBLoC extends BLoC {
 
   void undo() {
     undoItem('refuelings');
+  }
+
+  Future<int> calculateEfficiency(RefuelingItem item) async {
+    var car = (item.carName != null) ? item.carName : '';
+    var doc = FirestoreBLoC().getUserDocument();
+    var refuelings = await doc.collection('refuelings').getDocuments();
+    
+    int nearestMileage = MAX_MPG;
+    for (var r in refuelings.documents) {
+      if (r.data['tags'] != null && r.data['tags'][0] == car) {
+        var mileage = r.data['odom'];
+        var diff = item.odom - mileage;
+        if (diff <= 0) continue; // only looking for past refuelings
+        if (diff < nearestMileage) {
+          nearestMileage = diff;
+        }
+      } 
+    }
+    return nearestMileage;
   }
 
   // Make the object a Singleton

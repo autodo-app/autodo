@@ -1,3 +1,4 @@
+import 'package:autodo/blocs/refueling.dart';
 import 'package:flutter/material.dart';
 
 class RefuelingItem {
@@ -18,14 +19,19 @@ class RefuelingItem {
     } else {
       print('Error, refueling item created with null values');
     }
-  }
-
-  void addPrevOdom(int prevOdom) {
-    this.mpg = (this.odom - prevOdom) / this.amount;
+    RefuelingBLoC().calculateEfficiency(this)
+      .then((diff) {
+        if (diff != RefuelingBLoC.MAX_MPG)
+          this.mpg = diff / this.amount;
+      });
   }
 
   toJSON() {
-    return {'odom': this.odom, 'cost': this.cost, 'amount': this.amount, 'tags': [this.carName]};
+    return {
+      'odom': this.odom, 
+      'cost': this.cost, 
+      'amount': this.amount, 
+      'tags': [this.carName]};
   }
 
   RefuelingItem.empty();
