@@ -99,6 +99,7 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
       itemSubmitted: (item) => setState(() {
         _autocompleteController.text = item.name;
         selectedCar = item;
+        print(item.name);
       }),
       key: _autocompleteKey,
       focusNode: focusNode,
@@ -113,7 +114,6 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
       itemSorter: (a, b) => a.name.length == b.name.length ? 0 : a.name.length < b.name.length ? -1 : 1,
       // returns a match anytime that the input is anywhere in the repeat name
       itemFilter: (suggestion, input) {
-        print('there $input');
         return suggestion.name.toLowerCase().contains(input.toLowerCase());
       },
     );
@@ -123,7 +123,8 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
     return FormField<String>( 
       builder: autoComplete,
       initialValue: (widget.mode == RefuelingEditMode.EDIT) ? widget.existing.carName : '',
-      validator: requiredValidator,
+      // validator: requiredValidator,
+      // for some reason the validator is never given the value?
       onSaved: (val) => setState(() {
         if (selectedCar != null) refuelingItem.carName = selectedCar.name;
         else if (val != null && cars.any((element) => element.name == val)) {
@@ -277,7 +278,6 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                       ),
                       color: Theme.of(context).primaryColor,
                       elevation: 4.0,
-                      splashColor: Colors.deepPurple,
                       onPressed: () {
                         if (_formKey.currentState.validate()) {
                           _formKey.currentState.save();
