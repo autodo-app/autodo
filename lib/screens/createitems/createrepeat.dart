@@ -16,8 +16,6 @@ class CreateRepeatScreen extends StatefulWidget {
   CreateRepeatScreenState createState() => CreateRepeatScreenState();
 }
 
-
-
 class CreateRepeatScreenState extends State<CreateRepeatScreen> {
   Repeat repeat = Repeat.empty();
   final _formKey = GlobalKey<FormState>();

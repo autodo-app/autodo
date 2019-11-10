@@ -43,8 +43,6 @@ class RepeatingBLoC extends BLoC {
   Map<String, Map<String, Map<String, dynamic>>> upcomingRepeatTodos = Map();
   Map<String, Map<String, dynamic>> latestCompletedRepeatTodos = Map();
 
-  final StreamController editStream = StreamController();
-
   @override
   Widget buildItem(dynamic snapshot, int index) => RepeatEditor(item: Repeat.fromJSON(snapshot.data, snapshot.documentID));
 
@@ -209,6 +207,8 @@ class RepeatingBLoC extends BLoC {
   }
 
   void edit(Repeat item) {
+    if (item.ref == null) return;
+    updateTodos(item);
     editItem('repeats', item);
   }
 
@@ -243,8 +243,6 @@ class RepeatingBLoC extends BLoC {
           return;
         int curMileage = todo['dueMileage'] as int;
         todo['dueMileage'] = curMileage + (curInterval - prevInterval); 
-        // print('askjl ${todo['dueMileage']}');
-        print('askjl ${curMileage}');
       } 
       var updatedItem = MaintenanceTodoItem.fromMap(
         todo, 
@@ -252,19 +250,6 @@ class RepeatingBLoC extends BLoC {
       _batch = await TodoBLoC().addUpdate(_batch, updatedItem);
     }
     _batch.commit();
-  }
-
-  void editRunner(dynamic item) {
-    if (item.ref == null) return;
-    updateTodos(item);
-    edit(item);
-  }
-
-  void queueEdit(Repeat item) {
-    if (!editStream.hasListener) {
-      editStream.stream.listen(editRunner);
-    }
-    editStream.add(item);
   }
 
   void pushNewTodo(String carName, String taskName, int dueMileage, bool complete) async {
