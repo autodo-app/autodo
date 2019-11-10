@@ -23,6 +23,76 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
   bool isChecked = false;
   final bool emphasized;
   MaintenanceTodoCardState({@required this.emphasized});
+  String preface;
+  BoxDecoration emphasizedDecoration;
+
+  static var grad1 = LinearGradient(
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+    colors: [mainColors[300], mainColors[400]]
+  );
+  static var grad2 = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [mainColors[700], mainColors[900]]
+  );
+  BoxDecoration upcomingDecoration = BoxDecoration(  
+    borderRadius: BorderRadius.circular(25),
+    gradient: LinearGradient.lerp(grad1, grad2, 0.5)
+  );
+
+  static var grad3 = LinearGradient(
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+    colors: [Colors.yellow.shade700, Colors.yellow.shade800]
+  );
+  static var grad4 = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [Colors.yellow.shade800, Colors.orange.shade300]
+  );
+  BoxDecoration duesoonDecoration = BoxDecoration(  
+    borderRadius: BorderRadius.circular(25),
+    gradient: LinearGradient.lerp(grad3, grad4, 0.5)
+  );
+
+  static var grad5 = LinearGradient(
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+    colors: [Colors.red.shade300, Colors.red.shade600]
+  );
+  static var grad6 = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [Colors.orange.shade800, Colors.red.shade500]
+  );
+  BoxDecoration pastdueDecoration = BoxDecoration(  
+    borderRadius: BorderRadius.circular(25),
+    gradient: LinearGradient.lerp(grad5, grad6, 0.4)
+  );
+
+  Future<void> emphasis() async {
+    if (!emphasized) return; 
+    var car = await CarsBLoC().getCarByName(widget.item.tags[0]);
+    var distUntilToDo = widget.item.dueMileage - car.mileage;
+    if (distUntilToDo < 0) {
+      emphasizedDecoration = pastdueDecoration;
+      preface = "Past Due: " + widget.item.name;
+    } else if (distUntilToDo < DUE_SOON_INTERVAL) {
+      emphasizedDecoration = duesoonDecoration;
+      preface = "Due Soon: " + widget.item.name;
+    } else {
+      emphasizedDecoration = upcomingDecoration;
+      preface = "Upcoming: " + widget.item.name;
+    } 
+    setState(() {});
+  }
+
+  @override 
+  void initState() {
+    emphasis();
+    super.initState();
+  }
 
   Transform checkbox(MaintenanceTodoCard widget) {
     return Transform.scale(
@@ -65,6 +135,7 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
     bool isMileage = mileage != null;
     if (isMileage) {
       var mileageString = mileage.toString();
+      // Add commas to the mileage number
       mileageString = mileageString.replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => "${m[1]},");
       return Row(
         children: <Widget>[
@@ -134,35 +205,18 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
     );
   }
 
-  Future<String> getNamePreface() async {
-    var car = await CarsBLoC().getCarByName(widget.item.tags[0]);
-    var distUntilToDo = widget.item.dueMileage - car.mileage;
-    if (distUntilToDo < 0)
-      return "Past Due: " + widget.item.name;
-    else if (distUntilToDo < DUE_SOON_INTERVAL)
-      return "Due Soon: " + widget.item.name;
-    else 
-      return "Upcoming: " + widget.item.name;
-  }
-
   Column title(MaintenanceTodoCard widget) {
     return Column(
       children: <Widget>[
         Container(
           padding: EdgeInsets.fromLTRB(0.0, 10.0, 0, 0.0),
           alignment: Alignment.center,
-          child: FutureBuilder(
-            future: (emphasized) ? getNamePreface() : null,
-            initialData: widget.item.name ?? "", 
-            builder: (context, snap) {
-              return Text(
-                // making sure that the text isn't null.
-                // creating a todo without an attached car causes
-                // a weird set of behavior upon initial widget creation
-                snap.data ?? widget.item.name ?? "",
-                style: Theme.of(context).primaryTextTheme.title,
-              );
-            }
+          child: Text(
+            // making sure that the text isn't null.
+            // creating a todo without an attached car causes
+            // a weird set of behavior upon initial widget creation
+            preface ?? widget.item.name ?? "",
+            style: Theme.of(context).primaryTextTheme.title,
           ),
         ),
         Divider(),
@@ -277,21 +331,6 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
 
   @override
   Widget build(BuildContext context) {
-    var grad1 = LinearGradient(
-      begin: Alignment.centerLeft,
-      end: Alignment.centerRight,
-      colors: [mainColors[300], mainColors[400]]
-    );
-    var grad2 = LinearGradient(
-      begin: Alignment.topCenter,
-      end: Alignment.bottomCenter,
-      colors: [mainColors[700], mainColors[900]]
-    );
-    BoxDecoration emphasizedDecoration = BoxDecoration(  
-      borderRadius: BorderRadius.circular(25),
-      gradient: LinearGradient.lerp(grad1, grad2, 0.5)
-    );
-
     return Padding(
       padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
       child: Card(
