@@ -21,7 +21,7 @@ class Car {
     return {
       'name': name,
       'mileage': mileage,
-      'color': color.value,
+      'color': (color == null) ? Colors.blue.value : color.value,
     };
   }
 

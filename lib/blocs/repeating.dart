@@ -161,10 +161,10 @@ class RepeatingBLoC extends BLoC {
   // create new todo with that information
   Future<void> updateUpcomingTodos() async {
     await _checkForRepeats();
-    
 
     List<Car> cars = await CarsBLoC().getCars();
     cars.forEach((car) async {
+      print('here');
       await _findLatestCompletedTodos(car.name);
       await _findUpcomingRepeatTodos(car.name);
       repeats.forEach((repeat) {
