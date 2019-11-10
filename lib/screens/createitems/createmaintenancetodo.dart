@@ -3,8 +3,7 @@ import 'package:autodo/sharedmodels/ensurevisiblewidget.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:intl/intl.dart';
-import 'package:autodo/blocs/todo.dart';
-import 'package:autodo/blocs/repeating.dart';
+import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/sharedmodels/autocompletefield.dart';
 import 'package:autodo/items/items.dart';
 import 'package:autodo/theme.dart';
@@ -30,6 +29,13 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
   Repeat selectedRepeat;
   final _autocompleteKey = GlobalKey<AutoCompleteTextFieldState<Repeat>>();
   TextEditingController _autocompleteController;
+  var filterList;
+
+  CreateTodoScreenState() {
+    filterList = FilteringBLoC().getFiltersAsList();
+  }
+
+  Future<void> updateFilters(filter) async => FilteringBLoC().setFilter(filter);
 
   @override
   void initState() {
@@ -187,10 +193,31 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
           }),
     );
   }
+  Widget cars() {
+    return Column( 
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: List.generate(
+        FilteringBLoC().getFilters().keys.length,
+        (index) => ListTile(
+          leading: Checkbox( 
+            value: filterList[index].enabled,
+            onChanged: (state) {
+              filterList[index].enabled = state; 
+              updateFilters(filterList[index]);
+              setState(() {});
+            },
+            materialTapTargetSize: MaterialTapTargetSize.padded,
+          ),
+          title: Text(filterList[index].carName)
+        )
+      )
+    );
+  }
 
   Widget addButton() {
     return Padding(
-      padding: EdgeInsets.only(top: 32.0),
+      padding: EdgeInsets.only(top: 20.0),
       child: Column(
         children: <Widget>[
           RaisedButton(
@@ -203,10 +230,19 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
             onPressed: () {
               if (_formKey.currentState.validate()) {
                 _formKey.currentState.save();
-                if (widget.mode == TodoEditMode.CREATE)
-                  TodoBLoC().push(todoItem);
-                else
-                  TodoBLoC().edit(todoItem);
+                var todoItems = [];
+                filterList.forEach((f) {
+                  if (f.enabled) {
+                    todoItem.tags.add(f.carName);
+                    todoItems.add(todoItem);
+                  }
+                });
+                for (var todo in todoItems) {
+                  if (widget.mode == TodoEditMode.CREATE)
+                    TodoBLoC().push(todo);
+                  else
+                    TodoBLoC().edit(todo);
+                }
                 Navigator.of(context).pop();
               }
             },
@@ -325,6 +361,7 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
               Padding(  
                 padding: EdgeInsets.only(bottom: 10),
               ),
+              cars(),
               addButton(),
               Container(height: 10000,),
             ],

@@ -19,7 +19,9 @@ class MaintenanceTodoItem {
     this.tags = tags ?? [];
   }
 
-  MaintenanceTodoItem.empty();
+  MaintenanceTodoItem.empty() {
+    this.tags = [];
+  }
 
   MaintenanceTodoItem.fromMap(Map<String, dynamic> map, {this.ref})
       : assert(map['name'] != null),
