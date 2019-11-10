@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:autodo/blocs/subcomponents/subcomponents.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 
@@ -49,6 +50,7 @@ class Auth implements BaseAuth {
     FirebaseUser cur = await  _firebaseAuth.currentUser();
     if (cur != null) {
       try {
+        FirestoreBLoC().deleteUserDocument();
         await cur.delete();
       } catch (e) {
         print(e);
