@@ -16,76 +16,49 @@ class RepeatEditorState extends State<RepeatEditor> {
   String valInit = '', nameInit = '';
   bool oneValSaved = false;
 
-  TextFormField repeatNameField() {
-    return TextFormField(
-      initialValue: nameInit,
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-          borderSide: BorderSide(color: Theme.of(context).primaryColor),
-        ),
-        contentPadding: EdgeInsets.fromLTRB(15, 10, 15, 5),
-      ),
-      autofocus: false,
-      style: Theme.of(context).primaryTextTheme.subtitle,
-      keyboardType: TextInputType.text,
-      textCapitalization: TextCapitalization.sentences,
-      validator: (val) {
-        if (val != null && val != '') return null;
-        else return "Name must not be empty";
-      },
-      onSaved: (val) {
-        widget.item.name = val;
-        // If the other half has saved its value to the widget's item, then
-        // push the item to the server
-        if (oneValSaved)
-          RepeatingBLoC().queueEdit(widget.item);
-        else
-          oneValSaved = true;
-      },
+  Widget name() {
+    return Align(
+      alignment: Alignment.centerLeft, 
+      child: RichText(  
+        textAlign: TextAlign.left,
+        text: TextSpan(  
+          children: [ 
+            TextSpan(  
+              text: 'Task Name:  ',
+              style: Theme.of(context).primaryTextTheme.subtitle
+            ),
+            TextSpan(
+              text: nameInit,
+              style: Theme.of(context).primaryTextTheme.subtitle
+                .copyWith(fontWeight: FontWeight.w600)
+            ),
+          ]
+        )
+      )
     );
   }
 
-  TextFormField repeatValueField() {
-    return TextFormField(
-      initialValue: valInit,
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-          borderSide: BorderSide(color: Theme.of(context).primaryColor),
-        ),
-        counterText: '', // removes the text showing the number of characters out of max length entered
-        contentPadding: EdgeInsets.fromLTRB(15, 10, 15, 5),
-      ),
-      autofocus: false,
-      style: Theme.of(context).primaryTextTheme.body1,
-      keyboardType: TextInputType.number,
-      maxLength: 6,
-      validator: (val) {
-        int interval;
-        try {
-          interval = int.parse(val);
-        } catch (e) {
-          return e;
-        }
-        if (interval == 0) {  
-          return "Interval must not be zero";
-        }
-        return null;
-      },
-      onSaved: (val) {
-        widget.item.interval = int.parse(val);
-        // If the other half has saved its value to the widget's item, then
-        // push the item to the server
-        if (oneValSaved)
-          RepeatingBLoC().queueEdit(widget.item);
-        else
-          oneValSaved = true;
-      },
-      onChanged: (val) {
-        
-      },
+  Widget value() {
+    return Align(
+      alignment: Alignment.centerLeft, 
+      child: RichText(  
+        textAlign: TextAlign.left,
+        text: TextSpan(  
+          children: [ 
+            TextSpan(  
+              text: 'Interval:  ',
+              style: Theme.of(context).primaryTextTheme.body1
+            ),
+            TextSpan(
+              text: valInit,
+              style: Theme.of(context).primaryTextTheme.body1
+                .copyWith(fontWeight: FontWeight.w600)
+            ),
+          ]
+        )
+      )
     );
   }
-
 
   @override 
   Widget build(BuildContext context) {
@@ -94,54 +67,78 @@ class RepeatEditorState extends State<RepeatEditor> {
     valInit = widget.item.interval.toString();
     nameInit = widget.item.name;
     return Container(
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.all(15),
       constraints: BoxConstraints(maxHeight: 300),
       child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Row(
-              children: <Widget>[
-                Container(
-                  width: 100,
-                  padding: EdgeInsets.fromLTRB(5, 0, 10, 0),
-                  child: Text("Todo Name:", style: TextStyle(fontWeight: FontWeight.bold),),
-                ),
-                Expanded(
+            name(),
+            Flex( 
+              direction: Axis.horizontal,
+              children: <Widget>[ 
+                Expanded( 
                   flex: 7,
-                  child: repeatNameField(),
+                  child: value(),
                 ),
-              ],
-            ),
-            Padding(
-              padding: EdgeInsets.all(10),
-            ),
-            Row(
-              children: <Widget>[
-                Container(
-                  width: 100,
-                  padding: EdgeInsets.fromLTRB(5, 0, 10, 0),
-                  child: Text("Interval:"),
-                ),
-                Expanded(
-                  flex: 7,
-                  child: repeatValueField(),
-                ),
-                FlatButton(
-                    onPressed: () {
-                      RepeatingBLoC().delete(widget.item);
-                      final snackbar = SnackBar(
-                        content: Text('Deleted ${widget.item.name}'),
-                        action: SnackBarAction(
-                          label: 'Undo',
-                          onPressed: () => RepeatingBLoC().undo(),
+                Expanded( 
+                  flex: 3,
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Row( 
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        IconButton(  
+                          onPressed: () {},
+                          icon: Icon(Icons.edit)
                         ),
-                      );
-                      Scaffold.of(context).showSnackBar(snackbar);
-                    },
-                    child: Icon(Icons.delete),
-                  ),
+                        IconButton(
+                          onPressed: () {
+                            RepeatingBLoC().delete(widget.item);
+                            final snackbar = SnackBar(
+                              content: Text('Deleted ${widget.item.name}'),
+                              action: SnackBarAction(
+                                label: 'Undo',
+                                onPressed: () => RepeatingBLoC().undo(),
+                              ),
+                            );
+                            Scaffold.of(context).showSnackBar(snackbar);
+                          },
+                          icon: Icon(Icons.delete),
+                        ),
+                      ]
+                    )
+                  )
+                )
               ],
-            ),
+            )
+            // Row(
+            //   children: <Widget>[
+            //     Container(
+            //       width: 80,
+            //       padding: EdgeInsets.fromLTRB(5, 0, 10, 0),
+            //       child: Text("Interval:"),
+            //     ),
+            //     Expanded(
+            //       flex: 7,
+            //       child: repeatValueField(),
+            //     ),
+            //     FlatButton(
+            //         onPressed: () {
+            //           RepeatingBLoC().delete(widget.item);
+            //           final snackbar = SnackBar(
+            //             content: Text('Deleted ${widget.item.name}'),
+            //             action: SnackBarAction(
+            //               label: 'Undo',
+            //               onPressed: () => RepeatingBLoC().undo(),
+            //             ),
+            //           );
+            //           Scaffold.of(context).showSnackBar(snackbar);
+            //         },
+            //         child: Icon(Icons.delete),
+            //       ),
+            //   ],
+            // ),
           ],
         ),
     );
