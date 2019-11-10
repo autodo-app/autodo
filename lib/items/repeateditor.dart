@@ -1,3 +1,4 @@
+import 'package:autodo/screens/createitems/createrepeat.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/blocs/repeating.dart';
 import 'package:autodo/items/repeat.dart';
@@ -89,7 +90,15 @@ class RepeatEditorState extends State<RepeatEditor> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         IconButton(  
-                          onPressed: () {},
+                          onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CreateRepeatScreen(
+                                mode: RepeatEditMode.EDIT,
+                                existing: widget.item,
+                              ),
+                            ),
+                          ),
                           icon: Icon(Icons.edit)
                         ),
                         IconButton(
@@ -112,33 +121,6 @@ class RepeatEditorState extends State<RepeatEditor> {
                 )
               ],
             )
-            // Row(
-            //   children: <Widget>[
-            //     Container(
-            //       width: 80,
-            //       padding: EdgeInsets.fromLTRB(5, 0, 10, 0),
-            //       child: Text("Interval:"),
-            //     ),
-            //     Expanded(
-            //       flex: 7,
-            //       child: repeatValueField(),
-            //     ),
-            //     FlatButton(
-            //         onPressed: () {
-            //           RepeatingBLoC().delete(widget.item);
-            //           final snackbar = SnackBar(
-            //             content: Text('Deleted ${widget.item.name}'),
-            //             action: SnackBarAction(
-            //               label: 'Undo',
-            //               onPressed: () => RepeatingBLoC().undo(),
-            //             ),
-            //           );
-            //           Scaffold.of(context).showSnackBar(snackbar);
-            //         },
-            //         child: Icon(Icons.delete),
-            //       ),
-            //   ],
-            // ),
           ],
         ),
     );

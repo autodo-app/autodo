@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:autodo/util.dart';
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/items/items.dart';
-import 'package:autodo/sharedmodels/sharedmodels.dart';
 
 enum RepeatEditMode { CREATE, EDIT }
 
@@ -58,16 +57,14 @@ class CreateRepeatScreenState extends State<CreateRepeatScreen> {
     );
   }
 
-  // checkboxes for which cars the task applies to
-
-   Widget addButton() {
+  Widget addButton() {
     return Padding(
       padding: EdgeInsets.only(top: 32.0),
       child: Column(
         children: <Widget>[
           RaisedButton(
             child: Text(
-              'ADD',
+              (widget.mode == RepeatEditMode.CREATE) ? 'ADD' : 'SAVE',
               style: Theme.of(context).primaryTextTheme.button,
             ),
             color: Theme.of(context).accentColor,
@@ -80,8 +77,10 @@ class CreateRepeatScreenState extends State<CreateRepeatScreen> {
                 });
                 if (widget.mode == RepeatEditMode.CREATE)
                   RepeatingBLoC().push(repeat);
-                else
+                else {
+                  repeat.ref = widget.existing.ref;
                   RepeatingBLoC().edit(repeat);
+                }
                 Navigator.of(context).pop();
               }
             },
@@ -121,7 +120,9 @@ class CreateRepeatScreenState extends State<CreateRepeatScreen> {
           icon: Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text('New Repeating Task'),
+        title: Text(
+          (widget.mode == RepeatEditMode.CREATE) ? 'New Repeating Task' : 'Edit Repeating Task'
+        ),
       ),
       body: Container(  
         child: Form(  
