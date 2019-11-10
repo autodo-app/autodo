@@ -213,11 +213,17 @@ class RepeatingBLoC extends BLoC {
   }
 
   void delete(Repeat item) {
+    deleteRelatedTodos(item);
     deleteItem('repeats', item);
   }
 
   void undo() {
-    undoItem('repeats');
+    var item = undoItem('repeats');
+    item.cars.forEach((carName) async {
+      var car = await CarsBLoC().getCarByName(carName);
+      var dueMileage = car.mileage + item.interval;
+      pushNewTodo(carName, item.name, dueMileage, false);
+    });
   }
   
   void updateTodos(Repeat item) async {
@@ -250,6 +256,25 @@ class RepeatingBLoC extends BLoC {
       _batch = await TodoBLoC().addUpdate(_batch, updatedItem);
     }
     _batch.commit();
+  }
+
+  void deleteRelatedTodos(Repeat item) async {
+    DocumentReference userDoc = FirestoreBLoC().getUserDocument();
+    Query completes = userDoc
+                        .collection('todos').where("complete", isEqualTo: false).orderBy("completeDate");
+    QuerySnapshot docs = await completes.getDocuments();
+    List<DocumentSnapshot> snaps = docs.documents;
+    for (var snap in snaps) {
+      var todo = MaintenanceTodoItem.fromMap(
+        snap.data,
+        ref: snap.documentID
+      );
+      String taskType = snap.data['repeatingType'];
+      if (taskType == item.name) {
+        print('here');
+        TodoBLoC().delete(todo);
+      }
+    }
   }
 
   void pushNewTodo(String carName, String taskName, int dueMileage, bool complete) async {
