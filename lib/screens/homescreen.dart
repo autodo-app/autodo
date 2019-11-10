@@ -95,6 +95,7 @@ class HomeScreenState extends State<HomeScreen> {
         ),
         body: (signedIn) ? bodyStack : Container(),
         bottomNavigationBar: BottomNavigationBar(  
+          backgroundColor: bottomControllerColor,
           type: BottomNavigationBarType.fixed,
           showSelectedLabels: true,
           showUnselectedLabels: false,

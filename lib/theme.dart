@@ -40,7 +40,7 @@ const MaterialColor tagPallette = MaterialColor(500, tagColors);
 
 const Color errorColor = Color(0xffcf6679);
 final Color cardColor = Color.lerp(mainPallette.shade900, Colors.grey[800], 0.7);
-final Color bottomControllerColor = Color.lerp(mainPallette.shade900, Colors.grey[900], 0.3);
+final Color bottomControllerColor = Color.lerp(mainPallette.shade900, Colors.grey[900], 0.7);
 
 const splashColor = Color(0xff454f51);
 
@@ -162,7 +162,6 @@ createTheme() {
     accentColorBrightness: Brightness.dark,
     canvasColor: cardColor,
     scaffoldBackgroundColor: cardColor,
-    bottomAppBarColor: bottomControllerColor,
     cardColor: cardColor,
     dividerColor: Colors.white.withAlpha(200),
     focusColor: ThemeData.dark().focusColor,
