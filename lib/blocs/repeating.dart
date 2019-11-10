@@ -43,8 +43,6 @@ class RepeatingBLoC extends BLoC {
   Map<String, Map<String, Map<String, dynamic>>> upcomingRepeatTodos = Map();
   Map<String, Map<String, dynamic>> latestCompletedRepeatTodos = Map();
 
-  final StreamController editStream = StreamController();
-
   @override
   Widget buildItem(dynamic snapshot, int index) => RepeatEditor(item: Repeat.fromJSON(snapshot.data, snapshot.documentID));
 
@@ -209,15 +207,23 @@ class RepeatingBLoC extends BLoC {
   }
 
   void edit(Repeat item) {
+    if (item.ref == null) return;
+    updateTodos(item);
     editItem('repeats', item);
   }
 
   void delete(Repeat item) {
+    deleteRelatedTodos(item);
     deleteItem('repeats', item);
   }
 
   void undo() {
-    undoItem('repeats');
+    var item = undoItem('repeats');
+    item.cars.forEach((carName) async {
+      var car = await CarsBLoC().getCarByName(carName);
+      var dueMileage = car.mileage + item.interval;
+      pushNewTodo(carName, item.name, dueMileage, false);
+    });
   }
   
   void updateTodos(Repeat item) async {
@@ -243,8 +249,6 @@ class RepeatingBLoC extends BLoC {
           return;
         int curMileage = todo['dueMileage'] as int;
         todo['dueMileage'] = curMileage + (curInterval - prevInterval); 
-        // print('askjl ${todo['dueMileage']}');
-        print('askjl ${curMileage}');
       } 
       var updatedItem = MaintenanceTodoItem.fromMap(
         todo, 
@@ -254,17 +258,23 @@ class RepeatingBLoC extends BLoC {
     _batch.commit();
   }
 
-  void editRunner(dynamic item) {
-    if (item.ref == null) return;
-    updateTodos(item);
-    edit(item);
-  }
-
-  void queueEdit(Repeat item) {
-    if (!editStream.hasListener) {
-      editStream.stream.listen(editRunner);
+  void deleteRelatedTodos(Repeat item) async {
+    DocumentReference userDoc = FirestoreBLoC().getUserDocument();
+    Query completes = userDoc
+                        .collection('todos').where("complete", isEqualTo: false).orderBy("completeDate");
+    QuerySnapshot docs = await completes.getDocuments();
+    List<DocumentSnapshot> snaps = docs.documents;
+    for (var snap in snaps) {
+      var todo = MaintenanceTodoItem.fromMap(
+        snap.data,
+        ref: snap.documentID
+      );
+      String taskType = snap.data['repeatingType'];
+      if (taskType == item.name) {
+        print('here');
+        TodoBLoC().delete(todo);
+      }
     }
-    editStream.add(item);
   }
 
   void pushNewTodo(String carName, String taskName, int dueMileage, bool complete) async {

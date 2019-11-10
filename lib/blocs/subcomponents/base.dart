@@ -83,8 +83,10 @@ class BLoC {
     ref.delete();
   }
 
-  void undoItem(String collection) {
+  dynamic undoItem(String collection) {
     if (_past != null) pushItem(collection, _past);
+    var out = _past;
     _past = null;
+    return out;
   }
 }
