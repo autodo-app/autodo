@@ -1,6 +1,7 @@
 import 'package:autodo/blocs/filtering.dart';
 import 'package:autodo/blocs/repeating.dart';
 import 'package:autodo/blocs/subcomponents/subcomponents.dart';
+import 'package:autodo/blocs/userauth.dart';
 import 'package:flutter/material.dart';
 
 /// Initializes the content for all of the BLoCs

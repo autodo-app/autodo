@@ -271,7 +271,6 @@ class RepeatingBLoC extends BLoC {
       );
       String taskType = snap.data['repeatingType'];
       if (taskType == item.name) {
-        print('here');
         TodoBLoC().delete(todo);
       }
     }

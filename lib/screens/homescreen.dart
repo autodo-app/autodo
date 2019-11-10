@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:autodo/sharedmodels/sharedmodels.dart';
 import 'package:autodo/maintenance/history.dart';
 import 'package:autodo/theme.dart';
-import 'package:autodo/blocs/subcomponents/subcomponents.dart';
+import 'package:autodo/blocs/userauth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -24,7 +24,7 @@ class HomeScreenState extends State<HomeScreen> {
   var repeatsScreen = EditRepeatsScreen();
 
   void onAuthChange(FirebaseUser user) {
-    if (user!= null && user.uid != null) {
+    if (user != null && user.uid != null) {
       setState(() {
         signedIn = true;
       });

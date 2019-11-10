@@ -18,6 +18,10 @@ class FirestoreBLoC {
     return userDoc;
   }
 
+  void deleteUserDocument() {
+    userDoc.delete();
+  }
+
   // Make the object a Singleton
   static final FirestoreBLoC _auth = FirestoreBLoC._internal();
   factory FirestoreBLoC() {
