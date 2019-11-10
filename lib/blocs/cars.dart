@@ -1,55 +1,26 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:autodo/items/items.dart';
-import 'package:autodo/blocs/firestore.dart';
+import 'package:autodo/blocs/subcomponents/subcomponents.dart';
 
-class CarsBLoC {
-  Car _past;
-
-  Future<void> push(Car car) async {
-    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
-    DocumentReference ref = await userDoc
-      .collection('cars')
-      .add(car.toJSON());
-    if (ref == null) {
-      print('Cars BLoC: push failed');
-      return;
-    }
-    car.ref = ref.documentID;
-    ref.setData(car.toJSON());
+class CarsBLoC extends BLoC {
+  Future<void> push(Car item) async {
+    pushItem('cars', item);
   }
 
-  Future<void> edit(Car car) async {
-    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
-    DocumentReference ref = userDoc
-      .collection('cars')
-      .document(car.ref);
-    if (ref == null) {
-      print('Cars BLoC: edit failed');
-      return;
-    }
-    ref.updateData(car.toJSON());
+  void edit(Car item) {
+    editItem('cars', item);
   }
 
-  Future<void> delete(Car car) async {
-    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
-    DocumentReference ref = userDoc
-      .collection('cars')
-      .document(car.ref);
-    if (ref == null) {
-      print('Cars BLoC: delete failed');
-      return;
-    }
-    _past = car;
-    ref.delete();
+  void delete(Car item) {
+    deleteItem('cars', item);
   }
 
   void undo() {
-    if (_past != null) push(_past);
-    _past = null;
+    undoItem('cars');
   }
 
   Future<Car> getCarByName(String name) async {
-    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    DocumentReference userDoc = FirestoreBLoC().getUserDocument();
     QuerySnapshot cars = await userDoc
       .collection('cars')
       .getDocuments();
@@ -62,7 +33,7 @@ class CarsBLoC {
 
   Future<List<Car>> getCars() async {
     List<Car> out = []; // assign it so that .add() works
-    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    DocumentReference userDoc = FirestoreBLoC().getUserDocument();
     QuerySnapshot cars = await userDoc
       .collection('cars')
       .getDocuments();
@@ -72,23 +43,13 @@ class CarsBLoC {
     return out;
   }
 
-  int currentCarMileage = 0;
-  Map<String, int> lastCompletedRepeatTodos;
-
-  Future<void> setCurrentMileage(String name, int update) async {
-    Car car = await getCarByName(name);
-    car.mileage = update;
-    push(car);
-  }
-
-  Future<int> getCurrentMileage(String name) async {
-    Car car = await getCarByName(name);
-    return car.mileage;
-  } 
-
-  // this is a problem for later probably
-  void setLastCompleted(String key, int val) {
-    lastCompletedRepeatTodos[key] = val;
+  Future<void> updateMileage(String carName, int mileage) async {
+    print(mileage);
+    Car car = await getCarByName(carName);
+    if (car.mileage > mileage)
+      return; // allow adding past refuelings, but odometers don't go backwards
+    car.mileage = mileage;
+    edit(car);
   }
 
   static final CarsBLoC _self = CarsBLoC._internal();

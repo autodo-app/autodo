@@ -21,9 +21,10 @@ class HomeScreenState extends State<HomeScreen> {
   int tabIndex = 0;
   StreamSubscription authStream;
   bool signedIn = false;
+  var repeatsScreen = EditRepeatsScreen();
 
   void onAuthChange(FirebaseUser user) {
-    if (user!= null && user.uid != null) {
+    if (user != null && user.uid != null) {
       setState(() {
         signedIn = true;
       });
@@ -53,7 +54,7 @@ class HomeScreenState extends State<HomeScreen> {
         MaintenanceHistory(),
         RefuelingHistory(),
         StatisticsScreen(),
-        EditRepeatsScreen(),
+        repeatsScreen,
       ];
 
       bodyStack = IndexedStack(  
@@ -94,10 +95,15 @@ class HomeScreenState extends State<HomeScreen> {
         ),
         body: (signedIn) ? bodyStack : Container(),
         bottomNavigationBar: BottomNavigationBar(  
+          backgroundColor: bottomControllerColor,
           type: BottomNavigationBarType.fixed,
           showSelectedLabels: true,
           showUnselectedLabels: false,
-          onTap: (index) => setState(() => tabIndex = index),
+          onTap: (index) => setState(() {
+            if (tabIndex == 3)
+              repeatsScreen.save();
+            tabIndex = index;
+          }),
           currentIndex: tabIndex,
           items: [
             BottomNavigationBarItem(
@@ -113,7 +119,7 @@ class HomeScreenState extends State<HomeScreen> {
               title: Text('Statistics')
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.repeat),
+              icon: Icon(Icons.autorenew),
               title: Text('Repeats')
             ),
           ]

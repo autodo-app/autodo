@@ -1,7 +1,5 @@
-import 'package:autodo/items/items.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/blocs/refueling.dart';
-import 'package:autodo/blocs/userauth.dart';
 
 class RefuelingHistory extends StatefulWidget {
   @override
@@ -10,13 +8,10 @@ class RefuelingHistory extends StatefulWidget {
   }
 }
 
-enum dropdown { settings }
-
 class RefuelingHistoryState extends State<RefuelingHistory> {
-  List<RefuelingItem> todos = [];
 
   @override
   Widget build(BuildContext context) {
-    return (Auth().isLoading()) ? Container() : FirebaseRefuelingBLoC().buildList(context);
+    return RefuelingBLoC().items();
   }
 }

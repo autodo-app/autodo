@@ -1,7 +1,11 @@
 import 'dart:async';
+import 'package:autodo/blocs/subcomponents/subcomponents.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
+
+class SignInFailure implements Exception {
+  String errMsg() => "Firebase Auth rejected attempt to register new user";
+}
 
 abstract class BaseAuth {
   Future<String> signIn(String email, String password);
@@ -14,14 +18,7 @@ abstract class BaseAuth {
 
 class Auth implements BaseAuth {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  final Firestore _db = Firestore.instance;
   String currentUser = "", currentUserName = "NO_USER_DATA";
-
-  Future<void> _createUserDocument() async {
-    currentUser = await fetchUser();
-    DocumentReference ref = _db.collection('users').document(currentUser);
-    ref.setData(Map<String, Object>());
-  }
 
   Future<String> signIn(String email, String password) async {
     AuthResult res = await _firebaseAuth.signInWithEmailAndPassword(
@@ -29,7 +26,6 @@ class Auth implements BaseAuth {
     FirebaseUser user = res.user;
     currentUser = user.uid;
     currentUserName = user.email;
-    await _createUserDocument();
     return user.uid;
   }
 
@@ -40,7 +36,6 @@ class Auth implements BaseAuth {
           email: email, password: password);
       currentUser = res.user.uid;
       currentUserName = res.user.email;
-      await _createUserDocument();
     } on PlatformException {
       print(
           "PlatformException: Cannot create a user with an email that already exists");
@@ -55,6 +50,7 @@ class Auth implements BaseAuth {
     FirebaseUser cur = await  _firebaseAuth.currentUser();
     if (cur != null) {
       try {
+        FirestoreBLoC().deleteUserDocument();
         await cur.delete();
       } catch (e) {
         print(e);

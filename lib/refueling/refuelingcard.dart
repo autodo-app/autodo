@@ -226,12 +226,12 @@ class RefuelingCardState extends State<RefuelingCard> {
           child: FlatButton(
             child: const Icon(Icons.delete),
             onPressed: () {
-              FirebaseRefuelingBLoC().delete(widget.item);
+              RefuelingBLoC().delete(widget.item);
               final snackbar = SnackBar(
                 content: Text('Deleted Refueling.'),
                 action: SnackBarAction(
                   label: 'Undo',
-                  onPressed: () => FirebaseRefuelingBLoC().undo(),
+                  onPressed: () => RefuelingBLoC().undo(),
                 ),
               );
               Scaffold.of(context).showSnackBar(snackbar);

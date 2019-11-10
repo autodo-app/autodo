@@ -1,4 +1,3 @@
-import 'package:autodo/blocs/firestore.dart';
 import 'package:autodo/refueling/history.dart';
 import 'package:autodo/screens/editrepeats.dart';
 import 'package:autodo/screens/newuser.dart';
@@ -18,7 +17,6 @@ class AutodoApp extends StatefulWidget {
         apiKey: 'AIzaSyAAYhwsJVyiYywUFORBgaUuyXqXFiFpbZo',
       )
     );
-    FirestoreBLoC.startListen();
   }
 
   @override
@@ -46,6 +44,7 @@ class AutodoAppState extends State<AutodoApp> {
         '/createTodo': (context) => CreateTodoScreen(mode: TodoEditMode.CREATE),
         '/createRefueling': (context) =>
             CreateRefuelingScreen(mode: RefuelingEditMode.CREATE),
+        '/createRepeat': (context) => CreateRepeatScreen(mode: RepeatEditMode.CREATE),
         '/settings': (context) => SettingsScreen(),
         '/statistics': (context) => StatisticsScreen(),
         '/editcarlist': (context) => EditCarListScreen(),

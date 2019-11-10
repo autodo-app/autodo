@@ -3,11 +3,11 @@ import 'package:autodo/sharedmodels/ensurevisiblewidget.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:intl/intl.dart';
-import 'package:autodo/blocs/todo.dart';
-import 'package:autodo/blocs/repeating.dart';
+import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/sharedmodels/autocompletefield.dart';
 import 'package:autodo/items/items.dart';
 import 'package:autodo/theme.dart';
+import 'package:autodo/util.dart';
 
 enum TodoEditMode { CREATE, EDIT }
 
@@ -29,6 +29,13 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
   Repeat selectedRepeat;
   final _autocompleteKey = GlobalKey<AutoCompleteTextFieldState<Repeat>>();
   TextEditingController _autocompleteController;
+  var filterList;
+
+  CreateTodoScreenState() {
+    filterList = FilteringBLoC().getFiltersAsList();
+  }
+
+  Future<void> updateFilters(filter) async => FilteringBLoC().setFilter(filter);
 
   @override
   void initState() {
@@ -64,10 +71,11 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
         : now);
 
     var result = await showDatePicker(
-        context: context,
-        initialDate: initialDate,
-        firstDate: initialDate,
-        lastDate: DateTime(2100));
+      context: context,
+      initialDate: initialDate,
+      firstDate: initialDate,
+      lastDate: DateTime(2100),
+    );
 
     if (result == null) return;
 
@@ -100,20 +108,16 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
       labelText: "Repeating Task",
       contentPadding: EdgeInsets.only(
           left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
-    ),
-    initialValue: (widget.mode == TodoEditMode.EDIT)
-        ? widget.existing.repeatingType
-        : '',
-    autofocus: false,
-    focusNode: _repeatNode,
-    style: TextStyle(
-      fontSize: 22.0,
-      color: Colors.black,
-      fontWeight: FontWeight.w500,
-    ),
-    keyboardType: TextInputType.text,
-    validator: (value) { return null;},
-    onSaved: (val) => setState(() => todoItem.repeatingType = val),
+      ),
+      initialValue: (widget.mode == TodoEditMode.EDIT)
+          ? widget.existing.repeatingType
+          : '',
+      autofocus: false,
+      focusNode: _repeatNode,
+      style: Theme.of(context).primaryTextTheme.subtitle,
+      keyboardType: TextInputType.text,
+      validator: (value) { return null;},
+      onSaved: (val) => setState(() => todoItem.repeatingType = val),
     );
   }
 
@@ -132,14 +136,10 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
           : '',
       autofocus: true,
       focusNode: _nameNode,
-      style: TextStyle(
-        fontSize: 22.0,
-        color: Colors.black,
-        fontWeight: FontWeight.w500,
-      ),
+      style: Theme.of(context).primaryTextTheme.subtitle,
       keyboardType: TextInputType.text,
       textCapitalization: TextCapitalization.sentences,
-      validator: (value) { return null; },
+      validator: requiredValidator,
       onSaved: (val) => setState(() => todoItem.name = val),
     );
   }
@@ -163,11 +163,7 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
         ),
       ),
       focusNode: _dateNode,
-      style: TextStyle(
-        fontSize: 22.0,
-        color: Colors.black,
-        fontWeight: FontWeight.w500,
-      ),
+      style: Theme.of(context).primaryTextTheme.subtitle,
       controller: _controller,
       keyboardType: TextInputType.datetime,
       validator: (val) =>
@@ -188,11 +184,7 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
           : '',
       autofocus: false,
       focusNode: _mileageNode,
-      style: TextStyle(
-        fontSize: 22.0,
-        color: Colors.black,
-        fontWeight: FontWeight.w500,
-      ),
+      style: Theme.of(context).primaryTextTheme.subtitle,
       keyboardType: TextInputType.number,
       onSaved: (val) => setState(() {
             if (val != null && val != '') {
@@ -201,27 +193,56 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
           }),
     );
   }
+  Widget cars() {
+    return Column( 
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: List.generate(
+        FilteringBLoC().getFilters().keys.length,
+        (index) => ListTile(
+          leading: Checkbox( 
+            value: filterList[index].enabled,
+            onChanged: (state) {
+              filterList[index].enabled = state; 
+              updateFilters(filterList[index]);
+              setState(() {});
+            },
+            materialTapTargetSize: MaterialTapTargetSize.padded,
+          ),
+          title: Text(filterList[index].carName)
+        )
+      )
+    );
+  }
 
   Widget addButton() {
     return Padding(
-      padding: EdgeInsets.only(top: 32.0),
+      padding: EdgeInsets.only(top: 20.0),
       child: Column(
         children: <Widget>[
           RaisedButton(
-            child: const Text(
-              'Add',
-              style: TextStyle(color: Colors.white),
+            child: Text(
+              'ADD',
+              style: Theme.of(context).primaryTextTheme.button,
             ),
-            color: Colors.blue,
+            color: Theme.of(context).accentColor,
             elevation: 4.0,
-            splashColor: Colors.deepPurple,
             onPressed: () {
               if (_formKey.currentState.validate()) {
                 _formKey.currentState.save();
-                if (widget.mode == TodoEditMode.CREATE)
-                  FirebaseTodoBLoC().push(todoItem);
-                else
-                  FirebaseTodoBLoC().edit(todoItem);
+                var todoItems = [];
+                filterList.forEach((f) {
+                  if (f.enabled) {
+                    todoItem.tags.add(f.carName);
+                    todoItems.add(todoItem);
+                  }
+                });
+                for (var todo in todoItems) {
+                  if (widget.mode == TodoEditMode.CREATE)
+                    TodoBLoC().push(todo);
+                  else
+                    TodoBLoC().edit(todo);
+                }
                 Navigator.of(context).pop();
               }
             },
@@ -340,6 +361,7 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
               Padding(  
                 padding: EdgeInsets.only(bottom: 10),
               ),
+              cars(),
               addButton(),
               Container(height: 10000,),
             ],

@@ -5,16 +5,25 @@ class MaintenanceTodoItem {
   String name, ref, repeatingType;
   DateTime dueDate, completeDate;
   int dueMileage, notificationID;
-  bool complete = false;
+  bool complete;
   List tags;
-  DocumentReference reference;
 
-  MaintenanceTodoItem(
-      {this.ref, @required this.name, this.dueDate, this.dueMileage, this.repeatingType, this.tags});
+  MaintenanceTodoItem({
+        this.ref, 
+        @required this.name, 
+        this.dueDate, 
+        this.dueMileage, 
+        this.repeatingType, 
+        tags, 
+        this.complete = false}) {
+    this.tags = tags ?? [];
+  }
 
-  MaintenanceTodoItem.empty();
+  MaintenanceTodoItem.empty() {
+    this.tags = [];
+  }
 
-  MaintenanceTodoItem.fromMap(Map<String, dynamic> map, {this.reference})
+  MaintenanceTodoItem.fromMap(Map<String, dynamic> map, {this.ref})
       : assert(map['name'] != null),
         name = map['name'] {
     if (map['dueDate'] != null) {
@@ -40,7 +49,7 @@ class MaintenanceTodoItem {
   }
 
   MaintenanceTodoItem.fromSnapshot(DocumentSnapshot snapshot)
-      : this.fromMap(snapshot.data, reference: snapshot.reference);
+      : this.fromMap(snapshot.data, ref: snapshot.documentID);
 
   Map<String, dynamic> toJSON() {
     return {

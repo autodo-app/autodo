@@ -1,15 +1,15 @@
 class Repeat {
   String name, ref;
   int interval;
-  List<String> cars = [];
+  List<dynamic> cars = [];
 
   Repeat(this.name, this.interval, {this.ref, this.cars});
 
   Repeat.fromJSON(Map<String, dynamic> json, String documentID) {
-    name = json['name'];
-    interval = json['interval'];
-    ref = documentID;
-    cars = json['cars'] ?? [];
+    this.name = json['name'];
+    this.interval = json['interval'];
+    this.ref = documentID;
+    this.cars = json['cars'] ?? [];
   }
 
   Repeat.empty() {

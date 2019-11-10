@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:autodo/blocs/userauth.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -6,6 +7,60 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class SettingsScreenState extends State<SettingsScreen> {
+  Widget deleteAccountDialog() {
+    return AlertDialog(  
+      title: Text('Delete Account'),
+      content: Text(
+        'Deleting your account will permanently remove all data associated with your account.\n\n Are you sure you want to proceed?',
+        style: Theme.of(context).primaryTextTheme.body1
+      ),
+      actions: <Widget>[ 
+        FlatButton(  
+          onPressed: () {
+            Auth().deleteCurrentUser()
+            .then((val) => Navigator.pushNamed(context, '/welcomepage'));
+          },
+          child: Text(
+            'Yes',
+            style: Theme.of(context).primaryTextTheme.button
+              .copyWith(color: Colors.red)
+          )
+        ),
+        FlatButton(  
+          onPressed: () => Navigator.pop(context),
+          child: Text(
+            'No',
+            style: Theme.of(context).primaryTextTheme.button 
+              .copyWith(color: Theme.of(context).accentColor)
+          )
+        ),
+      ],
+    );
+  }
+
+  Widget deleteAccountButton() {
+    return FlatButton(
+      child: Text(
+        'Delete Account',
+        style: Theme.of(context).primaryTextTheme.button.copyWith(color: Colors.red)
+      ),
+      onPressed: () => showDialog(
+        context: context, 
+        builder: (context) => deleteAccountDialog(),
+      ),
+    );
+  }
+
+  Widget body() {
+    return Container( 
+      child: ListView(
+        children: <Widget>[
+          deleteAccountButton(),
+        ],
+      )  
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,8 +73,7 @@ class SettingsScreenState extends State<SettingsScreen> {
         ),
         title: Text('Settings'),
       ),
-      // key: _scaffoldKey,
-      body: Text('Content to come later'),
+      body: body(),
     );
   }
 }

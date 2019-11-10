@@ -40,6 +40,7 @@ const MaterialColor tagPallette = MaterialColor(500, tagColors);
 
 const Color errorColor = Color(0xffcf6679);
 final Color cardColor = Color.lerp(mainPallette.shade900, Colors.grey[800], 0.7);
+final Color bottomControllerColor = Color.lerp(mainPallette.shade900, Colors.grey[900], 0.7);
 
 const splashColor = Color(0xff454f51);
 
@@ -153,15 +154,14 @@ createTheme() {
   return ThemeData( 
     brightness: Brightness.dark,
     primarySwatch: mainPallette,
-    primaryColor: mainPallette.shade500, // one darker than before
-    primaryColorBrightness: Brightness.light,
+    primaryColor: mainPallette.shade500,
+    primaryColorBrightness: Brightness.dark,
     primaryColorLight: mainPallette.shade400,
     primaryColorDark: mainPallette.shade600,
     accentColor: mainPallette.shade600, // same here 
-    accentColorBrightness: Brightness.light,
-    canvasColor: mainPallette.shade900,
+    accentColorBrightness: Brightness.dark,
+    canvasColor: cardColor,
     scaffoldBackgroundColor: cardColor,
-    bottomAppBarColor: mainPallette.shade800,
     cardColor: cardColor,
     dividerColor: Colors.white.withAlpha(200),
     focusColor: ThemeData.dark().focusColor,
@@ -182,13 +182,13 @@ createTheme() {
     cursorColor: mainPallette.shade300,
     textSelectionHandleColor: mainPallette.shade300,
     backgroundColor: cardColor,
-    dialogBackgroundColor: mainPallette.shade800,
+    dialogBackgroundColor: cardColor,
     indicatorColor: mainPallette.shade700,
     hintColor: mainPallette.shade800,
     errorColor: errorColor,
     toggleableActiveColor: mainPallette.shade300,
     fontFamily: 'IBM Plex Sans',
-    // textTheme: ,
+    textTheme: primaryText,
     primaryTextTheme: primaryText,
     accentTextTheme: accentTextTheme,
     inputDecorationTheme: InputDecorationTheme(  
@@ -207,8 +207,9 @@ createTheme() {
     ),
     // sliderTheme: ,
     // tabBarTheme: ,
-    // tooltipTheme: ,
-    // cardTheme: ,
+    tooltipTheme: TooltipThemeData( 
+      textStyle: primaryText.title,
+    ),
     // chipTheme: ,
     platform: TargetPlatform.android,
     materialTapTargetSize: ThemeData.fallback().materialTapTargetSize,
@@ -225,7 +226,11 @@ createTheme() {
     ),
     // bottomAppBarTheme: ,
     // colorScheme: prefix0.ColorScheme.fromSwatch(primarySwatch: mainPallette, ), // this sets a lot of defaults, avoiding for now
-    // dialogTheme: ,
+    dialogTheme: DialogTheme( 
+      backgroundColor: cardColor,
+      titleTextStyle: primaryText.title,
+      contentTextStyle: primaryText.body1
+    ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(  
       backgroundColor: mainPallette.shade500,
       foregroundColor: Colors.black.withAlpha(230),
@@ -234,6 +239,8 @@ createTheme() {
     // snackBarTheme: ,
     // bottomSheetTheme: ,
     // popupMenuTheme: ,
-    // bannerTheme: ,
+    bannerTheme: MaterialBannerThemeData(  
+      contentTextStyle: primaryText.title
+    ),
   );
 }

@@ -16,7 +16,7 @@ class CreateEntryButtonState extends State<CreateEntryButton>
   static const List<IconData> icons = const [
     Icons.local_gas_station,
     Icons.build,
-    Icons.alarm
+    Icons.autorenew
   ];
 
   @override
@@ -66,7 +66,7 @@ class CreateEntryButtonState extends State<CreateEntryButton>
                 } else if (index == 0) {
                   Navigator.pushNamed(context, '/createRefueling');
                 } else if (index == 2) {
-                  NotificationBLoC().printPendingNotifications();
+                  Navigator.pushNamed(context, '/createRepeat');
                 }
               },
             ),
