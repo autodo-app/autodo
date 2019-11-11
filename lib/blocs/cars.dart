@@ -44,9 +44,8 @@ class CarsBLoC extends BLoC {
   }
 
   Future<void> updateMileage(String carName, int mileage) async {
-    print(mileage);
     Car car = await getCarByName(carName);
-    if (car.mileage > mileage)
+    if (car == null || car.mileage > mileage)
       return; // allow adding past refuelings, but odometers don't go backwards
     car.mileage = mileage;
     edit(car);
