@@ -12,9 +12,9 @@ String doubleValidator(String val) {
   if (val == null || val == "")
     return "This field is required.";
   try {
-    int.parse(val);
+    double.parse(val);
   } catch (e) {
-    return "Car Mileage must be an integer.";
+    return "Car Mileage must be a valid number.";
   }
   return null;
 }
