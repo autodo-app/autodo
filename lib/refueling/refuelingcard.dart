@@ -40,14 +40,14 @@ class RefuelingCardState extends State<RefuelingCard> {
               ),
             ),
             Text(
-              (widget.item.mpg == double.infinity) ? "N/A" : widget.item.mpg.toStringAsFixed(3),
+              (widget.item.efficiency == double.infinity) ? "N/A" : widget.item.efficiency.toStringAsFixed(3),
               style: TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: 16.0,
               ),
             ),
             Text(
-              (widget.item.mpg == double.infinity) ? "" : ' mpg',
+              (widget.item.efficiency == double.infinity) ? "" : ' mpg',
               style: TextStyle(
                 color: textColor,
               ),

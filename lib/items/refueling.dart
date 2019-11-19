@@ -5,7 +5,7 @@ class RefuelingItem {
   String ref, carName;
   DateTime date;
   int odom;
-  double cost, amount, mpg = double.infinity, costpergal = double.infinity;
+  double cost, amount, efficiency = double.infinity, costpergal = double.infinity;
   List<String> tags = [];
 
   RefuelingItem(
@@ -19,10 +19,10 @@ class RefuelingItem {
     } else {
       print('Error, refueling item created with null values');
     }
-    RefuelingBLoC().calculateEfficiency(this)
+    RefuelingBLoC().calcDistFromLatestRefueling(this)
       .then((diff) {
         if (diff != RefuelingBLoC.MAX_MPG)
-          this.mpg = diff / this.amount;
+          this.efficiency = diff / this.amount;
       });
   }
 

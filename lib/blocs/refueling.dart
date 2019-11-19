@@ -27,7 +27,13 @@ class RefuelingBLoC extends BLoC {
   }
 
   Future<void> push(RefuelingItem item) async {
+    if (item.efficiency == double.infinity) {
+      // efficiency has not yet been calculated
+      var dist = await calcDistFromLatestRefueling(item);
+      item.efficiency = dist / item.amount;
+    }
     await CarsBLoC().updateMileage(item.carName, item.odom);
+    await CarsBLoC().updateEfficiency(item.carName, item.efficiency);
     await pushItem('refuelings', item);
   }
 
@@ -43,23 +49,23 @@ class RefuelingBLoC extends BLoC {
     undoItem('refuelings');
   }
 
-  Future<int> calculateEfficiency(RefuelingItem item) async {
+  Future<int> calcDistFromLatestRefueling(RefuelingItem item) async {
     var car = (item.carName != null) ? item.carName : '';
     var doc = FirestoreBLoC().getUserDocument();
     var refuelings = await doc.collection('refuelings').getDocuments();
     
-    int nearestMileage = MAX_MPG;
+    int smallestDiff = MAX_MPG;
     for (var r in refuelings.documents) {
       if (r.data['tags'] != null && r.data['tags'][0] == car) {
         var mileage = r.data['odom'];
         var diff = item.odom - mileage;
         if (diff <= 0) continue; // only looking for past refuelings
-        if (diff < nearestMileage) {
-          nearestMileage = diff;
+        if (diff < smallestDiff) {
+          smallestDiff = diff;
         }
       } 
     }
-    return nearestMileage;
+    return smallestDiff;
   }
 
   // Make the object a Singleton
