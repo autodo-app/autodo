@@ -1,10 +1,11 @@
+import 'package:autodo/blocs/refueling.dart';
 import 'package:flutter/material.dart';
 
 class RefuelingItem {
   String ref, carName;
   DateTime date;
   int odom;
-  double cost, amount, mpg = double.infinity, costpergal = double.infinity;
+  double cost, amount, efficiency = double.infinity, costpergal = double.infinity;
   List<String> tags = [];
 
   RefuelingItem(
@@ -18,14 +19,19 @@ class RefuelingItem {
     } else {
       print('Error, refueling item created with null values');
     }
-  }
-
-  void addPrevOdom(int prevOdom) {
-    this.mpg = (this.odom - prevOdom) / this.amount;
+    RefuelingBLoC().calcDistFromLatestRefueling(this)
+      .then((diff) {
+        if (diff != RefuelingBLoC.MAX_MPG)
+          this.efficiency = diff / this.amount;
+      });
   }
 
   toJSON() {
-    return {'odom': this.odom, 'cost': this.cost, 'amount': this.amount, 'tags': [this.carName]};
+    return {
+      'odom': this.odom, 
+      'cost': this.cost, 
+      'amount': this.amount, 
+      'tags': [this.carName]};
   }
 
   RefuelingItem.empty();
