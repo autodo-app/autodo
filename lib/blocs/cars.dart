@@ -5,6 +5,8 @@ import 'package:autodo/blocs/subcomponents/subcomponents.dart';
 class CarsBLoC extends BLoC {
   static const double EMA_GAIN = 0.9;
   static const double EMA_CUTOFF = 8;
+  // don't know why anyone would enter this many, but preventing overflow here
+  static const int MAX_NUM_REFUELINGS = 0xffff;
 
   Future<void> push(Car item) async {
     pushItem('cars', item);
@@ -68,14 +70,14 @@ class CarsBLoC extends BLoC {
     Car car = await getCarByName(carName);
     if (car == null) return;
 
-    car.numRefuelings++;
+    if (car.numRefuelings < MAX_NUM_REFUELINGS)
+      car.numRefuelings++;
     if (car.numRefuelings == 1) {
       // first refueling for this car
       car.averageEfficiency = eff;
     } else {
       car.averageEfficiency = filter(car.numRefuelings, car.averageEfficiency, eff);
     }
-    print(car.averageEfficiency);
     edit(car);
   }
 

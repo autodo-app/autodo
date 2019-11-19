@@ -5,6 +5,7 @@ import 'package:autodo/items/items.dart';
 import 'package:intl/intl.dart';
 import 'package:autodo/screens/screens.dart';
 import 'package:autodo/blocs/refueling.dart';
+import 'package:autodo/util.dart';
 
 class RefuelingCard extends StatefulWidget {
   final RefuelingItem item;
@@ -39,11 +40,16 @@ class RefuelingCardState extends State<RefuelingCard> {
                 color: textColor,
               ),
             ),
-            Text(
-              (widget.item.efficiency == double.infinity) ? "N/A" : widget.item.efficiency.toStringAsFixed(3),
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 16.0,
+            FutureBuilder(
+              future: RefuelingBLoC().hsv(widget.item),
+              initialData: HSV(0.0, 0.0, 1.0), // use white as the default color
+              builder: (context, snap) => Text(
+                (widget.item.efficiency == double.infinity) ? "N/A" : widget.item.efficiency.toStringAsFixed(3),
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16.0,
+                  color: Color(hsv2rgb(snap.data).toValue())
+                ),
               ),
             ),
             Text(

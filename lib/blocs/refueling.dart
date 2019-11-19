@@ -3,9 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:autodo/refueling/refuelingcard.dart';
 import 'package:autodo/items/items.dart';
 import 'package:autodo/blocs/subcomponents/subcomponents.dart';
+import 'package:autodo/util.dart';
 
 class RefuelingBLoC extends BLoC {
   static const int MAX_MPG = 0xffff;
+  static const int HUE_RANGE = 60; // range of usable hues is 0-120, or +- 60
+  static const double EFF_VAR = 5.0;
+  static const double HUE_MAX = 360.0;
 
   @override
   Widget buildItem(dynamic snap, int index) {
@@ -68,10 +72,20 @@ class RefuelingBLoC extends BLoC {
     return smallestDiff;
   }
 
+  Future<HSV> hsv(RefuelingItem item) async {
+    if (item.efficiency == double.infinity)
+      return HSV(1.0, 1.0, 1.0); 
+    var car = await CarsBLoC().getCarByName(item.carName);
+    var avgEff = car.averageEfficiency;
+    // range is 0 to 120
+    var diff = item.efficiency - avgEff;
+    dynamic hue = (diff * HUE_RANGE) / EFF_VAR;
+    hue = clamp(hue, 0, HUE_RANGE * 2);
+    return HSV(hue.toDouble(), 1.0, 1.0);
+  }
+
   // Make the object a Singleton
   static final RefuelingBLoC _bloc = RefuelingBLoC._internal();
-  factory RefuelingBLoC() {
-    return _bloc;
-  }
+  factory RefuelingBLoC() => _bloc;
   RefuelingBLoC._internal();
 }
