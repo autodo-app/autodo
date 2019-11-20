@@ -10,6 +10,8 @@ class RefuelingBLoC extends BLoC {
   static const int HUE_RANGE = 60; // range of usable hues is 0-120, or +- 60
   static const double EFF_VAR = 5.0;
   static const double HUE_MAX = 360.0;
+  // don't know why anyone would enter this many, but preventing overflow here
+  static const int MAX_NUM_REFUELINGS = 0xffff;
 
   @override
   Widget buildItem(dynamic snap, int index) {
@@ -31,13 +33,21 @@ class RefuelingBLoC extends BLoC {
   }
 
   Future<void> push(RefuelingItem item) async {
+    var prev = await findLatestRefueling(item);
+    var dist = (prev == null) ? 0 : item.odom - prev.odom;
     if (item.efficiency == double.infinity) {
       // efficiency has not yet been calculated
-      var dist = await calcDistFromLatestRefueling(item);
       item.efficiency = dist / item.amount;
     }
-    await CarsBLoC().updateMileage(item.carName, item.odom);
-    await CarsBLoC().updateEfficiency(item.carName, item.efficiency);
+
+    Car car = await CarsBLoC().getCarByName(item.carName);
+    if (car.numRefuelings < MAX_NUM_REFUELINGS)
+      car.numRefuelings++;
+    car.updateMileage(item.odom);
+    car.updateEfficiency(item.efficiency);
+    car.updateDistanceRate((prev == null) ? null : prev.date, item.date, dist);
+    CarsBLoC().edit(car);
+
     await pushItem('refuelings', item);
   }
 
@@ -53,12 +63,13 @@ class RefuelingBLoC extends BLoC {
     undoItem('refuelings');
   }
 
-  Future<int> calcDistFromLatestRefueling(RefuelingItem item) async {
+  Future<RefuelingItem> findLatestRefueling(RefuelingItem item) async {
     var car = (item.carName != null) ? item.carName : '';
     var doc = FirestoreBLoC().getUserDocument();
     var refuelings = await doc.collection('refuelings').getDocuments();
     
     int smallestDiff = MAX_MPG;
+    RefuelingItem out;
     for (var r in refuelings.documents) {
       if (r.data['tags'] != null && r.data['tags'][0] == car) {
         var mileage = r.data['odom'];
@@ -66,10 +77,11 @@ class RefuelingBLoC extends BLoC {
         if (diff <= 0) continue; // only looking for past refuelings
         if (diff < smallestDiff) {
           smallestDiff = diff;
+          out = RefuelingItem.fromJSON(r.data, r.documentID);
         }
       } 
     }
-    return smallestDiff;
+    return out;
   }
 
   Future<HSV> hsv(RefuelingItem item) async {
