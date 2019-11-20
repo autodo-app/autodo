@@ -171,6 +171,7 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
       onSaved: (val) => setState(() {
             if (val != null && val != '') {
               todoItem.dueDate = convertToDate(val);
+              todoItem.estimatedDueDate = false;
             }
           }),
     );
