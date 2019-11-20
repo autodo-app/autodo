@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:autodo/blocs/blocs.dart';
 
 class Car {
   static const double EMA_GAIN = 0.9;
@@ -8,6 +9,7 @@ class Car {
   int mileage, numRefuelings; 
   Color color;
   double averageEfficiency, distanceRate;
+  DateTime lastMileageUpdate; // add date that the car's mileage was last updated?
 
   factory Car.fromJSON(Map input, String ref) {
     var out = Car(name: input['name'], mileage: input['mileage'], ref: ref);
@@ -86,5 +88,6 @@ class Car {
     var elapsedDuration = cur.difference(prev);
     var curDistRate = distance.toDouble() / elapsedDuration.inDays.toDouble();
     this.distanceRate = _distanceFilter(this.numRefuelings, this.distanceRate, curDistRate);
+    TodoBLoC().updateDueDates(this);
   }
 }
