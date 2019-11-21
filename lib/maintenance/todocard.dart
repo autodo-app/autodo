@@ -74,6 +74,7 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
   Future<void> emphasis() async {
     if (!emphasized) return; 
     var car = await CarsBLoC().getCarByName(widget.item.tags[0]);
+    if (car == null) return;
     var distUntilToDo = widget.item.dueMileage - car.mileage;
     if (distUntilToDo < 0) {
       emphasizedDecoration = pastdueDecoration;

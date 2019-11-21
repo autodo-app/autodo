@@ -151,3 +151,12 @@ RGB hsv2rgb(HSV hsv) {
 }
 
 clamp(input, lo, hi) { return (input < lo) ? lo : (input > hi) ? hi : input; }
+
+/// This will always round down for now
+roundToDay(DateTime date) {
+  var hours = Duration(hours: date.hour);
+  var mins = Duration(minutes: date.minute);
+  var secs = Duration(seconds: date.second);
+  var millis = Duration(milliseconds: date.millisecond);
+  return date.subtract(hours).subtract(mins).subtract(secs).subtract(millis);
+}

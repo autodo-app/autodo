@@ -6,6 +6,7 @@ class MaintenanceTodoItem {
   DateTime dueDate, completeDate;
   int dueMileage, notificationID;
   bool complete;
+  bool estimatedDueDate; // true if the user set this value, false if generated
   List tags;
 
   MaintenanceTodoItem({
@@ -14,7 +15,8 @@ class MaintenanceTodoItem {
         this.dueDate, 
         this.dueMileage, 
         this.repeatingType, 
-        tags, 
+        tags,
+        this.estimatedDueDate = true, 
         this.complete = false}) {
     this.tags = tags ?? [];
   }
@@ -27,7 +29,7 @@ class MaintenanceTodoItem {
       : assert(map['name'] != null),
         name = map['name'] {
     if (map['dueDate'] != null) {
-      dueDate = map['dueDate'];
+      dueDate = map['dueDate'].toDate();
     }
     if (map['dueMileage'] != null) {
       dueMileage = map['dueMileage'];
@@ -46,6 +48,7 @@ class MaintenanceTodoItem {
     } else {
       tags = [];
     }
+    this.estimatedDueDate = map['estimatedDueDate'] ?? true;
   }
 
   MaintenanceTodoItem.fromSnapshot(DocumentSnapshot snapshot)
@@ -59,6 +62,7 @@ class MaintenanceTodoItem {
       'dueMileage': this.dueMileage,
       'complete': this.complete,
       'repeatingType': this.repeatingType,
+      'estimatedDueDate': this.estimatedDueDate,
       'tags': this.tags
     };
   }

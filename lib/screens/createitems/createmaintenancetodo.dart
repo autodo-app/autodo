@@ -171,6 +171,7 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
       onSaved: (val) => setState(() {
             if (val != null && val != '') {
               todoItem.dueDate = convertToDate(val);
+              todoItem.estimatedDueDate = false;
             }
           }),
     );
@@ -233,6 +234,7 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
                 var todoItems = [];
                 filterList.forEach((f) {
                   if (f.enabled) {
+                    todoItem.tags  = [];
                     todoItem.tags.add(f.carName);
                     todoItems.add(todoItem);
                   }
