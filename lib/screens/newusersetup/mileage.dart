@@ -51,9 +51,11 @@ class CarEntryFieldState extends State<CarEntryField> {
             return 'Field must not be empty';
           return null;
         },
-        initialValue: car.mileage ?? '',
+        initialValue: '',
         onSaved: (value) {
-          car.mileage = int.parse(value.trim());
+          int mileage = int.parse(value.trim());
+          print(mileage);
+          car.updateMileage(mileage, DateTime.now());
           if (firstWritten)
             CarsBLoC().push(car);
           firstWritten = !firstWritten;

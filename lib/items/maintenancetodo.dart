@@ -29,7 +29,7 @@ class MaintenanceTodoItem {
       : assert(map['name'] != null),
         name = map['name'] {
     if (map['dueDate'] != null) {
-      dueDate = map['dueDate'];
+      dueDate = map['dueDate'].toDate();
     }
     if (map['dueMileage'] != null) {
       dueMileage = map['dueMileage'];

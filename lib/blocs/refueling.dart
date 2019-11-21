@@ -43,7 +43,7 @@ class RefuelingBLoC extends BLoC {
     Car car = await CarsBLoC().getCarByName(item.carName);
     if (car.numRefuelings < MAX_NUM_REFUELINGS)
       car.numRefuelings++;
-    car.updateMileage(item.odom);
+    car.updateMileage(item.odom, item.date);
     car.updateEfficiency(item.efficiency);
     car.updateDistanceRate((prev == null) ? null : prev.date, item.date, dist);
     CarsBLoC().edit(car);

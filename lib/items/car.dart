@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:autodo/blocs/blocs.dart';
+import 'package:autodo/util.dart';
 
 class Car {
   static const double EMA_GAIN = 0.9;
   static const double EMA_CUTOFF = 8;
 
   String name, ref;
-  int mileage, numRefuelings; 
+  int mileage = 0, numRefuelings = 0; 
   Color color;
   double averageEfficiency, distanceRate;
   DateTime lastMileageUpdate; // add date that the car's mileage was last updated?
@@ -21,7 +22,14 @@ class Car {
     return out;
   }
 
-  Car({@required this.name, @required this.mileage, this.color, this.numRefuelings, this.averageEfficiency, this.distanceRate, this.ref});
+  Car({
+    @required this.name, 
+    @required this.mileage, 
+    this.color, 
+    this.numRefuelings, 
+    this.averageEfficiency, 
+    this.distanceRate, 
+    this.ref});
 
   Car.empty();
   
@@ -36,11 +44,11 @@ class Car {
     };
   }
 
-  void updateMileage(int mileage) {
-    if (this.mileage > mileage)
+  void updateMileage(int newMileage, DateTime updateDate) {
+    if (this.mileage > newMileage)
       return; // allow adding past refuelings, but odometers don't go backwards
     this.mileage = mileage;
-    // edit(car);
+    this.lastMileageUpdate = roundToDay(updateDate);
   }
 
   double _efficiencyFilter(int numRefuelings, double prev, double cur) {
@@ -60,7 +68,6 @@ class Car {
     } else {
       this.averageEfficiency = _efficiencyFilter(this.numRefuelings, this.averageEfficiency, eff);
     }
-    // edit(car);
   } 
 
   double _distanceFilter(int numItems, double prev, double cur) {

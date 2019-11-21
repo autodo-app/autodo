@@ -91,24 +91,27 @@ class TodoBLoC extends BLoC {
   }
 
   Future<void> updateDueDates(Car car) async {
-    WriteBatch batch;
+    WriteBatch batch = Firestore.instance.batch();
     QuerySnapshot snap = await FirestoreBLoC().getUserDocument()
         .collection('todos')
         .getDocuments();
     for (var todo in snap.documents) {
-      if (!todo.data['tags'].contains(car.name) || !todo.data['estimatedDueDate'])
+      if (!todo.data['tags'].contains(car.name) || 
+          todo.data['estimatedDueDate'] == null || 
+          !todo.data['estimatedDueDate'])
         continue;
       MaintenanceTodoItem item = MaintenanceTodoItem.fromMap(todo.data);
 
       var distanceToTodo = todo.data['dueMileage'] - car.mileage;
-      int daysToTodo = (distanceToTodo * car.distanceRate).round();
+      int daysToTodo = (distanceToTodo / car.distanceRate).round();
       Duration timeToTodo = Duration(days: daysToTodo);
       item.dueDate = car.lastMileageUpdate.add(timeToTodo);
+      print('${car.distanceRate} + ${item.dueDate}');
       scheduleNotification(item);
       var ref = FirestoreBLoC().getUserDocument()
         .collection('todos')
         .document(todo.documentID); 
-      batch.setData(ref, item.toJSON());
+      batch.updateData(ref, item.toJSON());
     }
     await batch.commit();
   }
