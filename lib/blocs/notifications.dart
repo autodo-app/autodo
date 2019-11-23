@@ -1,8 +1,7 @@
 import 'dart:async';
-import 'package:autodo/blocs/firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:autodo/blocs/subcomponents/subcomponents.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class NotificationBLoC {
@@ -34,9 +33,9 @@ class NotificationBLoC {
   }
 
   Future<int> getNextNotificationID() async {
-    var userDoc = await FirestoreBLoC.fetchUserDocument();
+    var userDoc = FirestoreBLoC().getUserDocument();
     var userData = await userDoc.get();
-    if (!userData.data.containsKey('lastNotificationID')) {
+    if (userData.data == null || !userData.data.containsKey('lastNotificationID')) {
       var lastID = 0;
       var userJSON = userData.data;
       userJSON['lastNotificationID'] = lastID;

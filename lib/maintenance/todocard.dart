@@ -1,29 +1,109 @@
+import 'package:autodo/blocs/cars.dart';
 import 'package:autodo/blocs/todo.dart';
+import 'package:autodo/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/items/items.dart';
 import 'package:intl/intl.dart';
 import 'package:autodo/screens/screens.dart';
 import 'package:autodo/sharedmodels/cartag.dart';
 
+const int DUE_SOON_INTERVAL = 100; 
+
 class MaintenanceTodoCard extends StatefulWidget {
   final MaintenanceTodoItem item;
-  MaintenanceTodoCard({@required this.item});
+  final bool emphasized;
+
+  MaintenanceTodoCard({@required this.item, this.emphasized});
 
   @override
-  State<MaintenanceTodoCard> createState() => MaintenanceTodoCardState();
+  State<MaintenanceTodoCard> createState() => MaintenanceTodoCardState(emphasized: this.emphasized ?? false);
 }
 
 class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
   bool isChecked = false;
+  final bool emphasized;
+  MaintenanceTodoCardState({@required this.emphasized});
+  String preface;
+  BoxDecoration emphasizedDecoration;
+
+  static var grad1 = LinearGradient(
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+    colors: [mainColors[300], mainColors[400]]
+  );
+  static var grad2 = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [mainColors[700], mainColors[900]]
+  );
+  BoxDecoration upcomingDecoration = BoxDecoration(  
+    borderRadius: BorderRadius.circular(25),
+    gradient: LinearGradient.lerp(grad1, grad2, 0.5)
+  );
+
+  static var grad3 = LinearGradient(
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+    colors: [Colors.yellow.shade700, Colors.yellow.shade800]
+  );
+  static var grad4 = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [Colors.yellow.shade800, Colors.orange.shade300]
+  );
+  BoxDecoration duesoonDecoration = BoxDecoration(  
+    borderRadius: BorderRadius.circular(25),
+    gradient: LinearGradient.lerp(grad3, grad4, 0.5)
+  );
+
+  static var grad5 = LinearGradient(
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+    colors: [Colors.red.shade300, Colors.red.shade600]
+  );
+  static var grad6 = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [Colors.orange.shade800, Colors.red.shade500]
+  );
+  BoxDecoration pastdueDecoration = BoxDecoration(  
+    borderRadius: BorderRadius.circular(25),
+    gradient: LinearGradient.lerp(grad5, grad6, 0.4)
+  );
+
+  Future<void> emphasis() async {
+    if (!emphasized) return; 
+    var car = await CarsBLoC().getCarByName(widget.item.tags[0]);
+    if (car == null) return;
+    var distUntilToDo = widget.item.dueMileage - car.mileage;
+    if (distUntilToDo < 0) {
+      emphasizedDecoration = pastdueDecoration;
+      preface = "Past Due: " + widget.item.name;
+    } else if (distUntilToDo < DUE_SOON_INTERVAL) {
+      emphasizedDecoration = duesoonDecoration;
+      preface = "Due Soon: " + widget.item.name;
+    } else {
+      emphasizedDecoration = upcomingDecoration;
+      preface = "Upcoming: " + widget.item.name;
+    } 
+    setState(() {});
+  }
+
+  @override 
+  void initState() {
+    emphasis();
+    super.initState();
+  }
 
   Transform checkbox(MaintenanceTodoCard widget) {
     return Transform.scale(
       scale: 1.5,
       child: Padding(
-        padding: EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
+        padding: EdgeInsets.fromLTRB(5.0, 0, 5.0, 0),
         child: Checkbox(
           value: isChecked,
-          checkColor: Theme.of(context).accentIconTheme.color,
+          checkColor: Theme.of(context).primaryColor,
+          activeColor: Colors.white,
           onChanged: (bool val) {
             setState(() {
               isChecked = val;
@@ -55,12 +135,32 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
   Row dueMileage(int mileage) {
     bool isMileage = mileage != null;
     if (isMileage) {
+      var mileageString = mileage.toString();
+      // Add commas to the mileage number
+      mileageString = mileageString.replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => "${m[1]},");
       return Row(
         children: <Widget>[
-          Icon(Icons.directions_car, size: 30.0),
-          Text(
-            'Due at ' + mileage.toString() + ' miles',
-            style: Theme.of(context).primaryTextTheme.body1,
+          Icon(Icons.pin_drop, size: 30.0),
+          Padding(  
+            padding: EdgeInsets.all(5),
+          ),
+          RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(  
+                  text: 'Due at ',
+                  style: Theme.of(context).primaryTextTheme.body1,
+                ),
+                TextSpan(  
+                  text: mileageString,
+                  style: Theme.of(context).primaryTextTheme.subtitle,
+                ),
+                TextSpan(  
+                  text: ' miles',
+                  style: Theme.of(context).primaryTextTheme.body1,
+                )
+              ]
+            ),
           ),
         ],
       );
@@ -69,13 +169,38 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
     }
   }
 
+  Row lastCompleted() {
+    // TODO: change this based on past historical data
+    return Row(  
+      children: <Widget>[
+        Icon(Icons.new_releases, size: 30.0),
+        Padding(  
+          padding: EdgeInsets.all(5),
+        ),
+        Text(
+          'First time doing this task\non this vehicle.',
+          style: Theme.of(context).primaryTextTheme.body1,
+        ),
+      ],
+    );
+  }
+
   Container due(MaintenanceTodoCard widget) {
     return Container(
+      padding: EdgeInsets.fromLTRB(5.0, 0, 5.0, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           dueDate(widget.item.dueDate),
+          Padding( 
+            padding: EdgeInsets.all(5),
+          ),
           dueMileage(widget.item.dueMileage),
+          Padding( 
+            padding: EdgeInsets.all(5),
+          ),
+          lastCompleted(),
         ],
       ),
     );
@@ -88,7 +213,10 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
           padding: EdgeInsets.fromLTRB(0.0, 10.0, 0, 0.0),
           alignment: Alignment.center,
           child: Text(
-            widget.item.name,
+            // making sure that the text isn't null.
+            // creating a todo without an attached car causes
+            // a weird set of behavior upon initial widget creation
+            preface ?? widget.item.name ?? "",
             style: Theme.of(context).primaryTextTheme.title,
           ),
         ),
@@ -99,10 +227,16 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
 
   Container body(MaintenanceTodoCard widget) {
     return Container(
-      padding: EdgeInsets.fromLTRB(0, 36.0, 0, 36.0),
+      padding: EdgeInsets.fromLTRB(10.0, 25.0, 10.0, 25.0),
       child: Row(
         children: <Widget>[
           checkbox(widget),
+          Container(
+            height: 100, 
+            child: VerticalDivider(
+              color: Colors.white.withAlpha(230),
+            )
+          ),
           due(widget),
         ],
       ),
@@ -115,11 +249,19 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
         padding: EdgeInsets.only(left: 5.0),
       ),
     ];
+    
     for (var tag in widget.item.tags) {
       tags.add(
-        CarTag(tag),
+        FutureBuilder(
+          future: CarsBLoC().getCarByName(tag),
+          builder: (context, tag) {
+            if (tag.data == null) return Container();
+            return CarTag(text: tag.data.name, color: tag.data.color);
+          }
+        )
       );
     }
+
     return Row(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -161,15 +303,16 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
               color: Theme.of(context).primaryIconTheme.color,
             ),
             onPressed: () {
-              FirebaseTodoBLoC().delete(widget.item);
+              TodoBLoC().delete(widget.item);
               final snackbar = SnackBar(
                 content: Text('Deleted ' + widget.item.name),
                 action: SnackBarAction(
                   label: 'Undo',
-                  onPressed: () => FirebaseTodoBLoC().undo(),
+                  onPressed: () => TodoBLoC().undo(),
                 ),
               );
               Scaffold.of(context).showSnackBar(snackbar);
+              setState(() {});
             },
           ),
         ),
@@ -192,9 +335,11 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
     return Padding(
       padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
       child: Card(
-        elevation: 8.0,
+        elevation: (emphasized) ? 16.0 : 4.0,
+        color: (emphasized) ? Colors.transparent : cardColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
         child: Container(
+          decoration: (emphasized) ? emphasizedDecoration : BoxDecoration(),
           child: Column(
             children: <Widget>[
               title(widget),

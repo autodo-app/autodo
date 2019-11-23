@@ -1,8 +1,11 @@
+import 'package:autodo/blocs/cars.dart';
+import 'package:autodo/sharedmodels/cartag.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/items/items.dart';
 import 'package:intl/intl.dart';
 import 'package:autodo/screens/screens.dart';
 import 'package:autodo/blocs/refueling.dart';
+import 'package:autodo/util.dart';
 
 class RefuelingCard extends StatefulWidget {
   final RefuelingItem item;
@@ -37,15 +40,20 @@ class RefuelingCardState extends State<RefuelingCard> {
                 color: textColor,
               ),
             ),
-            Text(
-              widget.item.mpg.toStringAsFixed(3),
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 16.0,
+            FutureBuilder(
+              future: RefuelingBLoC().hsv(widget.item),
+              initialData: HSV(0.0, 0.0, 1.0), // use white as the default color
+              builder: (context, snap) => Text(
+                (widget.item.efficiency == double.infinity) ? "N/A" : widget.item.efficiency.toStringAsFixed(3),
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16.0,
+                  color: Color(hsv2rgb(snap.data).toValue())
+                ),
               ),
             ),
             Text(
-              ' mpg',
+              (widget.item.efficiency == double.infinity) ? "" : ' mpg',
               style: TextStyle(
                 color: textColor,
               ),
@@ -186,33 +194,13 @@ class RefuelingCardState extends State<RefuelingCard> {
     );
   }
 
-  Row tags(RefuelingCard widget) {
-    List<Widget> tags = [
-      Padding(
-        padding: EdgeInsets.only(left: 5.0),
-      ),
-    ];
-    for (var tag in widget.item.tags) {
-      tags.add(
-        ButtonTheme.fromButtonThemeData(
-          data: ButtonThemeData(
-            minWidth: 0,
-            padding: EdgeInsets.fromLTRB(5.0, 0, 5.0, 0),
-          ),
-          child: FlatButton(
-            child: Chip(
-              backgroundColor: Colors.lightGreen,
-              label: Text(tag),
-            ),
-            onPressed: () {},
-          ),
-        ),
-      );
-    }
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: tags,
+  Widget tags(RefuelingCard widget) {
+    return FutureBuilder( 
+      future: CarsBLoC().getCarByName(widget.item.carName),
+      builder: (context, tag) {
+        if (tag.data == null) return Container();
+        return CarTag(text: tag.data.name, color: tag.data.color);
+      } 
     );
   }
 
@@ -244,12 +232,12 @@ class RefuelingCardState extends State<RefuelingCard> {
           child: FlatButton(
             child: const Icon(Icons.delete),
             onPressed: () {
-              FirebaseRefuelingBLoC().delete(widget.item);
+              RefuelingBLoC().delete(widget.item);
               final snackbar = SnackBar(
                 content: Text('Deleted Refueling.'),
                 action: SnackBarAction(
                   label: 'Undo',
-                  onPressed: () => FirebaseRefuelingBLoC().undo(),
+                  onPressed: () => RefuelingBLoC().undo(),
                 ),
               );
               Scaffold.of(context).showSnackBar(snackbar);

@@ -1,11 +1,10 @@
 import 'dart:async';
 
 import 'package:autodo/blocs/todo.dart';
-import 'package:autodo/blocs/carstats.dart';
+import 'package:autodo/blocs/cars.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:autodo/items/items.dart';
-import 'package:autodo/blocs/userauth.dart';
-import 'package:autodo/blocs/firestore.dart';
+import 'package:autodo/blocs/subcomponents/subcomponents.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/items/repeateditor.dart';
 import 'package:autodo/items/repeat.dart';
@@ -28,48 +27,27 @@ List<Repeat> defaults = [
   Repeat("coolantChange", 100000)
 ];
 
-class RepeatingBLoC {
+class RepeatingBLoC extends BLoC {
   static final Firestore _db = Firestore.instance;
-  Repeat _past;
   List<Repeat> repeats = defaults;
-  /**
-   * Maps containing the related tasks for each repeating task type.
-   * Example Map:
-   * "repeatKey": {
-   *   {
-   *     // MaintenanceTodoItem contents
-   *    "name": "todoName",
-   *    "dueMileage": xxx  
-   *  }
-   * }
-   */
-  Map<String, Map<String, dynamic>> upcomingRepeatTodos = Map();
+  /// Maps containing the related tasks for each repeating task type.
+  /// Example Map:
+  /// 
+  /// "carName": {
+  ///   "repeatKey": {
+  ///     // MaintenanceTodoItem contents
+  ///     "name": "todoName",
+  ///     "dueMileage": xxx  
+  ///   }
+  /// }
+  Map<String, Map<String, Map<String, dynamic>>> upcomingRepeatTodos = Map();
   Map<String, Map<String, dynamic>> latestCompletedRepeatTodos = Map();
 
-  final StreamController editStream = StreamController();
+  @override
+  Widget buildItem(dynamic snapshot, int index) => RepeatEditor(item: Repeat.fromJSON(snapshot.data, snapshot.documentID));
 
-  Widget _buildItem(BuildContext context, DocumentSnapshot snapshot) => RepeatEditor(item: Repeat.fromJSON(snapshot.data, snapshot.documentID));
-
-
-  StreamBuilder buildList(BuildContext context) {
-    if (FirestoreBLoC.isLoading()) return StreamBuilder();
-    return StreamBuilder(
-      stream: FirestoreBLoC.getUserDocument()
-          .collection('repeats')
-          .document('default')
-          .collection('repeats')
-          .orderBy('name')
-          .snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) return const Text('Loading...');
-        // sort data alphabetically by name
-        return ListView.builder(
-          itemCount: snapshot.data.documents.length,
-          itemBuilder: (context, index) =>
-              _buildItem(context, snapshot.data.documents[index]),
-        );
-      },
-    );
+  StreamBuilder items() {
+    return buildList('repeats');
   }
 
   List<Repeat> _convertDocuments(List<DocumentSnapshot> docs) {
@@ -115,30 +93,29 @@ class RepeatingBLoC {
 
   /// Checks to see if the user has repeat intervals in their db collection
   /// If not, push the defaults
-  Future<void> checkRepeats() async {
+  Future<void> _checkForRepeats() async {
     // Determine if the repeating intervals are saved in the user's data
     // Currently hard-coded to have one car named default
-    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    DocumentReference userDoc = FirestoreBLoC().getUserDocument();
     QuerySnapshot snap = await userDoc
-        .collection('repeats')
-        .document('default')
         .collection('repeats')
         .getDocuments();
     List<DocumentSnapshot> docs = snap.documents;
     if (docs.isNotEmpty) {
       repeats = _convertDocuments(docs);
     } else {
-      pushRepeats('default', repeats);
+      pushRepeats(repeats);
     }
   }
 
   /// Finds a Map of the last completed todo in the repeating
   /// task categories.
-  Future<void> findLatestCompletedTodos() async {
-    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+  Future<void> _findLatestCompletedTodos(String car) async {
+    DocumentReference userDoc = FirestoreBLoC().getUserDocument();
     Query completes = userDoc
                         .collection('todos')
                         .where("complete", isEqualTo: true)
+                        .where("tags", arrayContains: car)
                         .orderBy("completeDate");
     QuerySnapshot docs = await completes.getDocuments();
     List<DocumentSnapshot> snaps = docs.documents;
@@ -147,17 +124,23 @@ class RepeatingBLoC {
       String taskType = snap.data['repeatingType'];
       if (!_keyInRepeats(taskType))
         return;
-      if (!latestCompletedRepeatTodos.containsKey(taskType))
-        latestCompletedRepeatTodos[taskType] = snap.data;
+      // Initialize the Map if it is a new car
+      if (latestCompletedRepeatTodos[car] == null)
+        latestCompletedRepeatTodos[car] = {};
+      if (!latestCompletedRepeatTodos[car].containsKey(taskType))
+        latestCompletedRepeatTodos[car][taskType] = snap.data;
     });
   }
 
   /// Finds a Map of upcoming todo items in the repeating
   /// task categories.
-  Future<void> findUpcomingRepeatTodos() async {
-    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+  Future<void> _findUpcomingRepeatTodos(String car) async {
+    DocumentReference userDoc = FirestoreBLoC().getUserDocument();
     Query completes = userDoc
-                        .collection('todos').where("complete", isEqualTo: false).orderBy("completeDate");
+      .collection('todos')
+      .where("complete", isEqualTo: false)
+      .where("tags", arrayContains: car)
+      .orderBy("completeDate");
     QuerySnapshot docs = await completes.getDocuments();
     List<DocumentSnapshot> snaps = docs.documents;
 
@@ -165,8 +148,10 @@ class RepeatingBLoC {
       String taskType = snap.data['repeatingType'];
       if (!_keyInRepeats(taskType))
         return;
-      if (!upcomingRepeatTodos.containsKey(taskType))
-        upcomingRepeatTodos[taskType] = snap.data;
+      if (upcomingRepeatTodos[car] == null)
+        upcomingRepeatTodos[car] = {};
+      if (!upcomingRepeatTodos[car].containsKey(taskType))
+        upcomingRepeatTodos[car][taskType] = snap.data;
     });
   }
 
@@ -175,97 +160,91 @@ class RepeatingBLoC {
   // if not, find the interval for the todo and add that to the mileage where the completed todo ocurred
   // create new todo with that information
   Future<void> updateUpcomingTodos() async {
-    await checkRepeats();
-    await findLatestCompletedTodos();
-    await findUpcomingRepeatTodos();
+    await _checkForRepeats();
 
-
-    repeats.forEach((repeat) {
-      // Check if the upcoming ToDo for this category already exists
-      if (!upcomingRepeatTodos.containsKey(repeat.name)) {
-        int newDueMileage = repeat.interval;
-        if (latestCompletedRepeatTodos.keys.contains(repeat.name)) {
-          // If a ToDo in this category has already been completed, use that as
-          // the base for extrapolating the dueMileage for the new ToDo
-          newDueMileage += latestCompletedRepeatTodos[repeat.name]['completedMileage'];
-        } else if (newDueMileage > CarStatsBLoC().getCurrentMileage()) {
-          // Add the repeat interval to the car's current mileage if the small
-          // interval and high mileage makes it seem unlikely that the car
-          // has not had this operation done at some point
-          // TODO: referenced in #36
-          newDueMileage += CarStatsBLoC().getCurrentMileage();
+    List<Car> cars = await CarsBLoC().getCars();
+    cars.forEach((car) async {
+      print('here');
+      await _findLatestCompletedTodos(car.name);
+      await _findUpcomingRepeatTodos(car.name);
+      repeats.forEach((repeat) {
+        if (repeat == null) return;
+        // Check if the upcoming ToDo for this category already exists
+        if (upcomingRepeatTodos[car.name] == null || 
+            !upcomingRepeatTodos[car.name].containsKey(repeat.name)) {
+          int newDueMileage = repeat.interval;
+          if (latestCompletedRepeatTodos[car.name] != null &&
+              latestCompletedRepeatTodos[car.name].keys.contains(repeat.name)) {
+            // If a ToDo in this category has already been completed, use that as
+            // the base for extrapolating the dueMileage for the new ToDo
+            newDueMileage += latestCompletedRepeatTodos[car.name][repeat.name]['completedMileage'];
+          } else if (newDueMileage < (car.mileage * 0.75)) {
+            // Add the repeat interval to the car's current mileage if the small
+            // interval and high mileage makes it seem unlikely that the car
+            // has not had this operation done at some point
+            newDueMileage += car.mileage;
+          }
+          pushNewTodo(car.name, repeat.name, newDueMileage, false);
         }
-        pushNewTodo('default', repeat.name, newDueMileage);
-      }
+      });
     });
   }
 
-  // TODO: this should probably get covered by something else
-  addExtraneousTodos() {
-    // add in any maintenance todo items that aren't included in the repeating set here
-  }
-
-  Future<void> pushRepeats(String carName, List<Repeat> repeats) async {
-      // creates a new unique identifier for the item
-      DocumentReference doc = await FirestoreBLoC.fetchUserDocument();
-      repeats.forEach( (repeat) async {
-        _db.runTransaction((transaction) async {
-          DocumentReference ref = await doc
-            .collection('repeats')
-            .document(carName)
-            .collection('repeats')
-            .add(repeat.toJSON());
-          await transaction.set(ref, repeat.toJSON());
-        }
-      );
+  Future<void> pushRepeats(List<Repeat> repeats) async {
+    // creates a new unique identifier for the item
+    repeats.forEach( (repeat) async {
+      await pushItem('repeats', repeat);
     });
   }
 
-  Future<void> push(String carName, Repeat repeat) async {
-      // creates a new unique identifier for the item
-      DocumentReference doc = await FirestoreBLoC.fetchUserDocument();
-      _db.runTransaction((transaction) async {
-        DocumentReference ref = await doc
-          .collection('repeats')
-          .document(carName)
-          .collection('repeats')
-          .add(repeat.toJSON());
-        await transaction.set(ref, repeat.toJSON());
-      }
-    );
+  Future<void> push(Repeat item) async {
+    item.cars.forEach((carName) async {
+      var car = await CarsBLoC().getCarByName(carName);
+      var dueMileage = car.mileage + item.interval;
+      pushNewTodo(carName, item.name, dueMileage, false);
+    });
+    await pushItem('repeats', item);
   }
 
   void edit(Repeat item) {
-    _db.runTransaction((transaction) async {
-      // Grab the item's existing identifier
-      DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
-      if (item.ref == null) return;
-      DocumentReference ref = userDoc
-          .collection('repeats')
-          .document('default')
-          .collection('repeats')
-          .document(item.ref);
-      if (ref == null) return;
+    if (item.ref == null) return;
+    updateTodos(item);
+    editItem('repeats', item);
+  }
 
-      await transaction.update(ref, item.toJSON());
+  void delete(Repeat item) {
+    deleteRelatedTodos(item);
+    deleteItem('repeats', item);
+  }
+
+  void undo() {
+    var item = undoItem('repeats');
+    item.cars.forEach((carName) async {
+      var car = await CarsBLoC().getCarByName(carName);
+      var dueMileage = car.mileage + item.interval;
+      pushNewTodo(carName, item.name, dueMileage, false);
     });
   }
   
   void updateTodos(Repeat item) async {
-    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    DocumentReference userDoc = FirestoreBLoC().getUserDocument();
     Query completes = userDoc
                         .collection('todos').where("complete", isEqualTo: false).orderBy("completeDate");
     QuerySnapshot docs = await completes.getDocuments();
     List<DocumentSnapshot> snaps = docs.documents;
     WriteBatch _batch = _db.batch();
 
+    var prevRepeat = repeats.firstWhere((r) => r.name == item.name);
+    var repeatIndex = repeats.indexOf(prevRepeat);
+    int prevInterval = repeats[repeatIndex].interval ?? 0; // prevent exception on null value
+    int curInterval = item.interval ?? 0;
+    repeats[repeatIndex] = item;
+
     for (var snap in snaps) {
       var todo = snap.data;
       String taskType = snap.data['repeatingType'];
       if (taskType == item.name) {
         // use the difference in the previous and new intervals to update the dueMileage
-        int prevInterval = repeatByName(taskType).interval ?? 0; // prevent exception on null value
-        int curInterval = item.interval ?? 0;
         if (!todo.containsKey('dueMileage') || todo['dueMileage'] == null || prevInterval == curInterval)
           return;
         int curMileage = todo['dueMileage'] as int;
@@ -273,76 +252,59 @@ class RepeatingBLoC {
       } 
       var updatedItem = MaintenanceTodoItem.fromMap(
         todo, 
-        reference: userDoc.collection('todos').document(snap.documentID));
-      _batch = await FirebaseTodoBLoC().addUpdate(_batch, updatedItem);
+        ref: snap.documentID);
+      _batch = await TodoBLoC().addUpdate(_batch, updatedItem);
     }
     _batch.commit();
   }
 
-  void editRunner(dynamic item) {
-    if (item.ref == null) return;
-    updateTodos(item);
-    edit(item);
-  }
-
-  void queueEdit(Repeat item) {
-    if (!editStream.hasListener) {
-      editStream.stream.listen(editRunner);
+  void deleteRelatedTodos(Repeat item) async {
+    DocumentReference userDoc = FirestoreBLoC().getUserDocument();
+    Query completes = userDoc
+                        .collection('todos').where("complete", isEqualTo: false).orderBy("completeDate");
+    QuerySnapshot docs = await completes.getDocuments();
+    List<DocumentSnapshot> snaps = docs.documents;
+    for (var snap in snaps) {
+      var todo = MaintenanceTodoItem.fromMap(
+        snap.data,
+        ref: snap.documentID
+      );
+      String taskType = snap.data['repeatingType'];
+      if (taskType == item.name) {
+        TodoBLoC().delete(todo);
+      }
     }
-    editStream.add(item);
   }
 
-  void pushNewTodo(String carName, String taskName, int dueMileage) async {
+  void pushNewTodo(String carName, String taskName, int dueMileage, bool complete) async {
     MaintenanceTodoItem newTodo = MaintenanceTodoItem(  
       name: taskName,
       dueMileage: dueMileage,
       repeatingType: taskName,
+      tags: [carName],
+      complete: complete,
     );
-    await Auth().fetchUser();
-    FirebaseTodoBLoC().push(newTodo);
-  }
-
-  void delete(Repeat repeat) {
-    _past = repeat;
-    _db.runTransaction((transaction) async {
-      // Grab the item's existing identifier
-      DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
-      DocumentReference ref = userDoc
-          .collection('repeats')
-          .document('default')
-          .collection('repeats')
-          .document(repeat.ref);
-      await transaction.delete(ref);
-    });
-  }
-
-  void undo() {
-    if (_past != null) pushRepeats('default', [_past]);
-    _past = null;
-  }
-
-  List<Repeat> getSuggestions(String pattern) {
-    RegExp regex = RegExp('*$pattern*'); // match anything with the pattern in it
-    List<Repeat> out = [];
-    for (var r in repeats) {
-      if (regex.hasMatch(r.name)) out.add(r);
-    }
-    // return out;
-    print(repeats);
-    return repeats;
+    TodoBLoC().push(newTodo);
   }
 
   Future<void> editByName(String name, int interval) async {
-    DocumentReference userDoc = await FirestoreBLoC.fetchUserDocument();
+    DocumentReference userDoc = FirestoreBLoC().getUserDocument();
     if (!_keyInRepeats(name)) return;
     var item = repeatByName(name);
     item.interval = interval;
     DocumentReference ref = userDoc
           .collection('repeats')
-          .document('default')
-          .collection('repeats')
           .document(item.ref);
     ref.updateData(item.toJSON());
+  }
+
+  Future<void> setLastCompleted(String repeat, int mileage) async {
+    if (!_keyInRepeats(repeat)) return;
+    // XXX: currently defaulting to using the first car for the new user,
+    // not sure if that's ideal
+    List<Car> cars = await CarsBLoC().getCars();
+    var car = cars[0];
+    pushNewTodo(car.name, repeat, mileage, true);
   }
 
   // Make the object a Singleton

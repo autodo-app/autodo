@@ -147,8 +147,6 @@ class StatisticsScreenState extends State<StatisticsScreen> {
     }
 
     final double maxMeasure = 300, minMeasure = 5;
-    print(rgb2Hsl(255, 0, 0));
-    print(hslToRgb(0.3333, 1.0, 0.5));
 
     return [
       Series<FuelMileagePoint, double>(
@@ -158,8 +156,8 @@ class StatisticsScreenState extends State<StatisticsScreen> {
           // Shade the point from red to green depending on its position relative to min/max
           final scale = scaleToUnit(point.mpg, minMeasure, maxMeasure);
           final hue = scale * 0.3333;
-          final rgb = hslToRgb(hue, 1.0, 0.5);
-          return Color(r: rgb['r'], g: rgb['g'], b: rgb['b']);
+          final rgb = hsv2rgb(HSV(hue, 1.0, 0.5));
+          return Color(r: (rgb.r * 255).toInt(), g: (rgb.g * 255).toInt(), b: (rgb.b * 255).toInt());
         },
         domainFn: (FuelMileagePoint point, _) => point.date,
         measureFn: (FuelMileagePoint point, _) => point.mpg,

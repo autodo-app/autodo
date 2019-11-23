@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:intl/intl.dart';
-import 'package:autodo/blocs/refueling.dart';
+import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/items/items.dart';
+import 'package:autodo/sharedmodels/sharedmodels.dart';
+import 'package:autodo/theme.dart';
+import 'package:autodo/util.dart';
 
 enum RefuelingEditMode { CREATE, EDIT }
 
@@ -21,6 +24,18 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
   RefuelingItem refuelingItem;
   final _formKey = GlobalKey<FormState>();
 
+  TextEditingController _autocompleteController;
+  Car selectedCar;
+  final _autocompleteKey = GlobalKey<AutoCompleteTextFieldState<Car>>();
+  List<Car> cars;
+
+  void setCars() async {
+    var carList = await CarsBLoC().getCars();
+    // update the autocomplete field
+    _autocompleteKey.currentState.updateSuggestions(carList);
+    setState(() => cars = carList);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -28,6 +43,8 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
     refuelingItem = (widget.mode == RefuelingEditMode.EDIT)
         ? widget.existing
         : RefuelingItem.empty();
+    _autocompleteController = TextEditingController();
+    setCars();  
   }
 
   @override
@@ -72,6 +89,51 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
     return d != null && d.isBefore(new DateTime.now());
   }
 
+  Widget autoComplete(FormFieldState<String> input) {
+    var txt = _autocompleteController.text;
+    if ((txt == null || txt == '') && widget.mode == RefuelingEditMode.EDIT)
+      _autocompleteController.text = widget.existing.carName;
+    return AutoCompleteTextField<Car>(
+      controller: _autocompleteController,
+      decoration: defaultInputDecoration('Required', 'Car Name'),
+      itemSubmitted: (item) => setState(() {
+        _autocompleteController.text = item.name;
+        selectedCar = item;
+        print(item.name);
+      }),
+      key: _autocompleteKey,
+      focusNode: focusNode,
+      suggestions: cars,
+      itemBuilder: (context, suggestion) => Padding(
+        child: ListTile(
+          title: Text(suggestion.name),
+          trailing: Text("Mileage: ${suggestion.mileage}")
+        ),
+        padding: EdgeInsets.all(5.0),
+      ),
+      itemSorter: (a, b) => a.name.length == b.name.length ? 0 : a.name.length < b.name.length ? -1 : 1,
+      // returns a match anytime that the input is anywhere in the repeat name
+      itemFilter: (suggestion, input) {
+        return suggestion.name.toLowerCase().contains(input.toLowerCase());
+      },
+    );
+  }
+
+  Widget carForm() {
+    return FormField<String>( 
+      builder: autoComplete,
+      initialValue: (widget.mode == RefuelingEditMode.EDIT) ? widget.existing.carName : '',
+      // validator: requiredValidator,
+      // for some reason the validator is never given the value?
+      onSaved: (val) => setState(() {
+        if (selectedCar != null) refuelingItem.carName = selectedCar.name;
+        else if (val != null && cars.any((element) => element.name == val)) {
+          refuelingItem.carName = val;
+        }
+      }),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.existing != null) print(widget.existing.ref);
@@ -103,18 +165,20 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                         labelText: "Odometer Reading (mi)",
                         contentPadding: EdgeInsets.only(
                             left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
+                        ),
+                        autofocus: true,
+                        initialValue: (widget.mode == RefuelingEditMode.EDIT)
+                            ? widget.existing.odom.toString()
+                            : '',
+                        keyboardType: TextInputType.number,
+                        validator: intValidator,
+                        onSaved: (val) => setState(() => refuelingItem.odom = int.parse(val)
                       ),
-                      autofocus: true,
-                      initialValue: (widget.mode == RefuelingEditMode.EDIT)
-                          ? widget.existing.odom.toString()
-                          : '',
-                      keyboardType: TextInputType.number,
-                      onSaved: (val) => setState(() {
-                            if (val != null && val != '') {
-                              refuelingItem.odom = int.parse(val);
-                            }
-                          }),
                     ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16.0),
+                    ),
+                    carForm(),
                     Padding(
                       padding: EdgeInsets.only(bottom: 16.0),
                     ),
@@ -126,18 +190,16 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                         ),
                         labelText: "Amount of Fuel (gal)",
                         contentPadding: EdgeInsets.only(
-                            left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
+                          left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
+                        ),
+                        initialValue: (widget.mode == RefuelingEditMode.EDIT)
+                            ? widget.existing.amount.toString()
+                            : '',
+                        autofocus: false,
+                        keyboardType: TextInputType.number,
+                        validator: doubleValidator,
+                        onSaved: (val) => setState(() => refuelingItem.amount = double.parse(val)
                       ),
-                      initialValue: (widget.mode == RefuelingEditMode.EDIT)
-                          ? widget.existing.amount.toString()
-                          : '',
-                      autofocus: false,
-                      keyboardType: TextInputType.number,
-                      onSaved: (val) => setState(() {
-                            if (val != null && val != '') {
-                              refuelingItem.amount = double.parse(val);
-                            }
-                          }),
                     ),
                     Padding(
                       padding: EdgeInsets.only(bottom: 16.0),
@@ -151,18 +213,15 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                         labelText: "Total Price (USD)",
                         contentPadding: EdgeInsets.only(
                             left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
+                        ),
+                        initialValue: (widget.mode == RefuelingEditMode.EDIT)
+                            ? widget.existing.cost.toString()
+                            : '',
+                        autofocus: false,
+                        keyboardType: TextInputType.number,
+                        validator: doubleValidator,
+                        onSaved: (val) => setState(() => refuelingItem.cost = double.parse(val)
                       ),
-                      // controller: listNameController,
-                      initialValue: (widget.mode == RefuelingEditMode.EDIT)
-                          ? widget.existing.cost.toString()
-                          : '',
-                      autofocus: false,
-                      keyboardType: TextInputType.number,
-                      onSaved: (val) => setState(() {
-                            if (val != null && val != '') {
-                              refuelingItem.cost = double.parse(val);
-                            }
-                          }),
                     ),
                     Padding(
                       padding: EdgeInsets.only(bottom: 10.0),
@@ -219,14 +278,13 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                       ),
                       color: Theme.of(context).primaryColor,
                       elevation: 4.0,
-                      splashColor: Colors.deepPurple,
                       onPressed: () {
                         if (_formKey.currentState.validate()) {
                           _formKey.currentState.save();
                           if (widget.mode == RefuelingEditMode.CREATE)
-                            FirebaseRefuelingBLoC().push(refuelingItem);
+                            RefuelingBLoC().push(refuelingItem);
                           else
-                            FirebaseRefuelingBLoC().edit(refuelingItem);
+                            RefuelingBLoC().edit(refuelingItem);
                           Navigator.of(context).pop();
                         }
                       },

@@ -1,11 +1,10 @@
+import 'package:autodo/blocs/init.dart';
 import 'package:autodo/sharedmodels/legal.dart';
 import 'package:flutter/material.dart';
-import 'package:autodo/blocs/userauth.dart';
 import 'package:autodo/theme.dart';
 import 'package:flutter/gestures.dart';
 
-class SignInScreen extends StatefulWidget {
-  final Auth userAuth = Auth();
+class SignInScreen extends StatefulWidget { // ignore: must_be_immutable
   FormMode formMode;
   SignInScreen({@required this.formMode});
 
@@ -39,22 +38,19 @@ class SignInScreenState extends State<SignInScreen> {
       _isLoading = true;
     });
     if (_validateAndSave()) {
-      String userId = "";
       try {
         if (widget.formMode == FormMode.SIGNUP)
-          userId = await widget.userAuth.signUp(_email, _password);
-        else
-          userId = await widget.userAuth.signIn(_email, _password);
+          await initNewUser(_email, _password);
+        else 
+          await initExistingUser(_email, _password);
         // widget.userAuth.sendEmailVerification();
         setState(() {
           _isLoading = false;
         });
-        if (userId.length > 0 && userId != null) {
-          if (widget.formMode == FormMode.SIGNUP)
-            Navigator.popAndPushNamed(context, '/newuser');
-          else
-            Navigator.pushNamed(context, '/');
-        }
+        if (widget.formMode == FormMode.SIGNUP)
+          Navigator.popAndPushNamed(context, '/newuser');
+        else
+          Navigator.pushNamed(context, '/load');
       } catch (e) {
         print("error: $e");
         setState(() {

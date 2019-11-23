@@ -5,20 +5,31 @@ class MaintenanceTodoItem {
   String name, ref, repeatingType;
   DateTime dueDate, completeDate;
   int dueMileage, notificationID;
-  bool complete = false;
-  List<String> tags = ['Example Tag'];
-  DocumentReference reference;
+  bool complete;
+  bool estimatedDueDate; // true if the user set this value, false if generated
+  List tags;
 
-  MaintenanceTodoItem(
-      {this.ref, @required this.name, this.dueDate, this.dueMileage, this.repeatingType});
+  MaintenanceTodoItem({
+        this.ref, 
+        @required this.name, 
+        this.dueDate, 
+        this.dueMileage, 
+        this.repeatingType, 
+        tags,
+        this.estimatedDueDate = true, 
+        this.complete = false}) {
+    this.tags = tags ?? [];
+  }
 
-  MaintenanceTodoItem.empty();
+  MaintenanceTodoItem.empty() {
+    this.tags = [];
+  }
 
-  MaintenanceTodoItem.fromMap(Map<String, dynamic> map, {this.reference})
+  MaintenanceTodoItem.fromMap(Map<String, dynamic> map, {this.ref})
       : assert(map['name'] != null),
         name = map['name'] {
     if (map['dueDate'] != null) {
-      dueDate = map['dueDate'];
+      dueDate = map['dueDate'].toDate();
     }
     if (map['dueMileage'] != null) {
       dueMileage = map['dueMileage'];
@@ -32,11 +43,16 @@ class MaintenanceTodoItem {
     if (map['repeatingType'] != null) {
       repeatingType = map['repeatingType'];
     }
-    tags = List<String>.from(map['tags']);
+    if (map['tags'] != null) {
+      tags = map['tags'];
+    } else {
+      tags = [];
+    }
+    this.estimatedDueDate = map['estimatedDueDate'] ?? true;
   }
 
   MaintenanceTodoItem.fromSnapshot(DocumentSnapshot snapshot)
-      : this.fromMap(snapshot.data, reference: snapshot.reference);
+      : this.fromMap(snapshot.data, ref: snapshot.documentID);
 
   Map<String, dynamic> toJSON() {
     return {
@@ -46,6 +62,7 @@ class MaintenanceTodoItem {
       'dueMileage': this.dueMileage,
       'complete': this.complete,
       'repeatingType': this.repeatingType,
+      'estimatedDueDate': this.estimatedDueDate,
       'tags': this.tags
     };
   }
