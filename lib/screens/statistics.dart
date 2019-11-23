@@ -22,7 +22,7 @@ class FuelMileageChart extends StatelessWidget {
       ),
       renderSpec: GridlineRendererSpec(
         lineStyle: LineStyleSpec( 
-          color: Color(r: 0x99, g: 0x99, b: 0x99),
+          color: Color(r: 0x99, g: 0x99, b: 0x99, a: 100),
         ),
         labelOffsetFromAxisPx: 10,
         labelStyle: TextStyleSpec(
@@ -155,7 +155,7 @@ class StatisticsScreenState extends State<StatisticsScreen> {
         colorFn: (FuelMileagePoint point, _) {
           // Shade the point from red to green depending on its position relative to min/max
           final scale = scaleToUnit(point.mpg, minMeasure, maxMeasure);
-          final hue = scale * 0.3333;
+          final hue = scale * 120; // 0 is red, 120 is green in HSV space
           final rgb = hsv2rgb(HSV(hue, 1.0, 0.5));
           return Color(r: (rgb.r * 255).toInt(), g: (rgb.g * 255).toInt(), b: (rgb.b * 255).toInt());
         },
@@ -178,29 +178,50 @@ class StatisticsScreenState extends State<StatisticsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomPadding:
-          false, // used to avoid overflow when keyboard is viewable
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
+    return ListView(
+      children: <Widget>[
+        Column( 
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Padding( 
+              padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+            ),
+            Text(
+              'Fuel Efficiency History',
+              style: Theme.of(context).primaryTextTheme.subtitle
+            ),
+            Container(
+              height: 300,
+              padding: EdgeInsets.all(15),  
+              child: FuelMileageChart(_createSampleData(), false),
+            )
+          ]
         ),
-        title: Text('Statistics'),
-      ),
-      body: ListView(
-        children: <Widget>[
-          Container(
-            height: 300,
-            padding: EdgeInsets.all(15),  
-            child: FuelMileageChart(_createSampleData(), false),
-          ),
-          Container(
-            height: 400,
-            child: SimpleBarChart.withSampleData(),
-          )
+        Padding( 
+          padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+          child: Divider(),
+        ),
+        Column( 
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Padding( 
+              padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+            ),
+            Text(
+              'Driving Distance History',
+              style: Theme.of(context).primaryTextTheme.subtitle
+            ),
+            Container(
+              height: 300,
+              padding: EdgeInsets.all(15), 
+              child: SimpleBarChart.withSampleData(),
+            )
+          ]
+        ),
+        
         ],
-      ),
     );
   }
 }
