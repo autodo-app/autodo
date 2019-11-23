@@ -1,3 +1,4 @@
+import 'package:autodo/blocs/cars.dart';
 import 'package:flutter/material.dart';
 
 import 'package:autodo/blocs/refueling.dart';
@@ -25,7 +26,7 @@ class StatisticsScreenState extends State<StatisticsScreen> {
           child: Divider(),
         ),
         FutureBuilder(
-          future: RefuelingBLoC().getAllRefuelings(),
+          future: DrivingDistanceHistory.prepData(CarsBLoC().getCars()),
           builder: (context, snap) => (snap.hasData) ?
             DrivingDistanceHistory(snap.data) :
             CircularProgressIndicator()

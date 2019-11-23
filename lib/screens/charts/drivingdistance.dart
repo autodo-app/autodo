@@ -1,62 +1,63 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart';
 
-class SimpleBarChart extends StatelessWidget {
-  final List<Series> seriesList;
+class DistanceRatePoint {
+  DateTime date;
+  double distanceRate;
+
+  DistanceRatePoint({this.date, this.distanceRate});
+}
+
+class DrivingDistanceChart extends StatelessWidget {
+  final List<Series<DistanceRatePoint, DateTime>> seriesList;
   final bool animate;
 
-  SimpleBarChart(this.seriesList, {this.animate});
-
-  /// Creates a [BarChart] with sample data and no transition.
-  factory SimpleBarChart.withSampleData() {
-    return new SimpleBarChart(
-      _createSampleData(),
-      // Disable animations for image tests.
-      animate: false,
-    );
-  }
-
+  DrivingDistanceChart(this.seriesList, {this.animate});
 
   @override
   Widget build(BuildContext context) {
-    return new BarChart(
+    if (seriesList.length == 0) {
+      return Center(
+        child: Text( 
+          'No Data Available to Display.',
+          style: Theme.of(context).primaryTextTheme.body1
+        )
+      );
+    }
+    return TimeSeriesChart(
       seriesList,
       animate: animate,
+      // add configurations here eventually
     );
   }
-
-  /// Create one series with sample hard coded data.
-  static List<Series<OrdinalSales, String>> _createSampleData() {
-    final data = [
-      new OrdinalSales('2014', 5),
-      new OrdinalSales('2015', 25),
-      new OrdinalSales('2016', 100),
-      new OrdinalSales('2017', 75),
-    ];
-
-    return [
-      new Series<OrdinalSales, String>(
-        id: 'Sales',
-        colorFn: (_, __) => MaterialPalette.blue.shadeDefault,
-        domainFn: (OrdinalSales sales, _) => sales.year,
-        measureFn: (OrdinalSales sales, _) => sales.sales,
-        data: data,
-      )
-    ];
-  }
-}
-
-/// Sample ordinal data type.
-class OrdinalSales {
-  final String year;
-  final int sales;
-
-  OrdinalSales(this.year, this.sales);
 }
 
 class DrivingDistanceHistory extends StatelessWidget {
   final data;
   DrivingDistanceHistory(this.data);
+
+  static Future<List<Series<DistanceRatePoint, DateTime>>> prepData(Future carsGetter) async {
+    var out = List<Series<DistanceRatePoint, DateTime>>();
+    var cars = await carsGetter;
+    for (var car in cars) {
+      var points = car.distanceRateHistory;
+      if (points == null || points.length == 0) continue;
+
+      out.add( 
+        Series<DistanceRatePoint, DateTime>(
+          id: car.name,
+          // colorFn: (_, __) {
+          //   var primaryColor = Theme.of(context).primaryColor;
+          //   return Color(r: primaryColor.red, g: primaryColor.green, b: primaryColor.blue);
+          // },
+          domainFn: (DistanceRatePoint point, _) => point.date,
+          measureFn: (DistanceRatePoint point, _) => point.distanceRate,
+          data: points,
+        )
+      );
+    }
+    return out;
+  }
 
   @override 
   Widget build(BuildContext context) => Column( 
@@ -73,7 +74,7 @@ class DrivingDistanceHistory extends StatelessWidget {
       Container(
         height: 300,
         padding: EdgeInsets.all(15), 
-        child: SimpleBarChart.withSampleData(),
+        child: DrivingDistanceChart(data),
       )
     ]
   );

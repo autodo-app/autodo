@@ -53,33 +53,38 @@ class FuelMileageChart extends StatelessWidget {
   ); 
 
   @override 
-  Widget build(BuildContext context) => TimeSeriesChart(
-    seriesList, 
-    animate: animate,
-    domainAxis: horizAxisSpec,
-    primaryMeasureAxis: vertAxisSpec,
-    defaultRenderer: PointRendererConfig(
-        customRendererId: 'customPoint',
-        layoutPaintOrder: LayoutViewPaintOrder.point,
-      ),
-    // Custom renderer configuration for the line series.
-    customSeriesRenderers: [
-      PointRendererConfig(
-        customRendererId: 'customPoint',
-        layoutPaintOrder: LayoutViewPaintOrder.point,
-      ),
-      LineRendererConfig(
-        // ID used to link series to this renderer.
-        customRendererId: 'customLine',
-        // Configure the regression line to be painted above the points.
-        //
-        // By default, series drawn by the point renderer are painted on
-        // top of those drawn by a line renderer.
-        layoutPaintOrder: LayoutViewPaintOrder.point + 1,
-        stacked: true,
-      ),
-    ],
-  );
+  Widget build(BuildContext context)  {
+    if (seriesList[0].data.length == 0) {
+      return Center(
+        child: Text( 
+          'No Data Available to Display.',
+          style: Theme.of(context).primaryTextTheme.body1
+        )
+      );
+    }
+    return TimeSeriesChart(
+      seriesList, 
+      animate: animate,
+      domainAxis: horizAxisSpec,
+      primaryMeasureAxis: vertAxisSpec,
+      defaultRenderer: PointRendererConfig(
+          customRendererId: 'customPoint',
+          layoutPaintOrder: LayoutViewPaintOrder.point,
+        ),
+      // Custom renderer configuration for the line series.
+      customSeriesRenderers: [
+        PointRendererConfig(
+          customRendererId: 'customPoint',
+          layoutPaintOrder: LayoutViewPaintOrder.point,
+        ),
+        LineRendererConfig(
+          customRendererId: 'customLine',
+          layoutPaintOrder: LayoutViewPaintOrder.point + 1,
+          stacked: true,
+        ),
+      ],
+    );
+  }
 }
 
 class FuelMileageHistory extends StatelessWidget {
@@ -118,9 +123,9 @@ class FuelMileageHistory extends StatelessWidget {
       emaData.add(newPoint);
     }
 
-    // TODO: scale this according to the incoming data
-    final double maxMeasure = points.map((val) => val.mpg).reduce(max);
-    final double minMeasure = points.map((val) => val.mpg).reduce(min);
+    var mpgs = points.map((val) => val.mpg);
+    final double maxMeasure = (mpgs.length > 0) ? mpgs.reduce(max) : 0;
+    final double minMeasure = (mpgs.length > 0) ? mpgs.reduce(min) : 0;
 
     return [
       Series<FuelMileagePoint, DateTime>(
