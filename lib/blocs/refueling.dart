@@ -103,6 +103,8 @@ class RefuelingBLoC extends BLoC {
     for (var r in refuelings.documents) {
       out.add(RefuelingItem.fromJSON(r.data, r.documentID));
     }
+    // put them in order according to date
+    out.sort((a, b) => (a.date.isAfter(b.date)) ? 1 : (a.date.isBefore(b.date)) ? -1 : 0);
     return out;
   }
 
