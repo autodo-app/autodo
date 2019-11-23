@@ -96,6 +96,16 @@ class RefuelingBLoC extends BLoC {
     return HSV(hue.toDouble(), 1.0, 1.0);
   }
 
+  Future<List<RefuelingItem>> getAllRefuelings() async {
+    var doc = FirestoreBLoC().getUserDocument();
+    var refuelings = await doc.collection('refuelings').getDocuments();
+    List<RefuelingItem> out = [];
+    for (var r in refuelings.documents) {
+      out.add(RefuelingItem.fromJSON(r.data, r.documentID));
+    }
+    return out;
+  }
+
   // Make the object a Singleton
   static final RefuelingBLoC _bloc = RefuelingBLoC._internal();
   factory RefuelingBLoC() => _bloc;

@@ -1,9 +1,12 @@
+import 'package:autodo/blocs/refueling.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart';
 import 'package:autodo/util.dart';
+import 'dart:math';
 
 class FuelMileagePoint {
-  double date, mpg;
+  DateTime date;
+  double mpg;
 
   FuelMileagePoint({this.date, this.mpg});
 }
@@ -14,44 +17,60 @@ class FuelMileageChart extends StatelessWidget {
 
   FuelMileageChart(this.seriesList, this.animate);
 
-  @override 
-  Widget build(BuildContext context) {
-    final axisSpec = NumericAxisSpec(
-      tickProviderSpec: BasicNumericTickProviderSpec(
-        desiredTickCount: 6
+  final horizAxisSpec = DateTimeAxisSpec(
+    tickFormatterSpec: AutoDateTimeTickFormatterSpec(
+      day: TimeFormatterSpec(
+        format: 'd', transitionFormat: 'MM/dd/yyyy'
       ),
-      renderSpec: GridlineRendererSpec(
-        lineStyle: LineStyleSpec( 
-          color: Color(r: 0x99, g: 0x99, b: 0x99, a: 100),
-        ),
-        labelOffsetFromAxisPx: 10,
-        labelStyle: TextStyleSpec(
-          fontSize: 12, 
-          color: MaterialPalette.white,
-        ),
+    ),
+    renderSpec: GridlineRendererSpec(
+      lineStyle: LineStyleSpec( 
+        color: Color(r: 0x99, g: 0x99, b: 0x99, a: 100),
       ),
-    );
+      labelOffsetFromAxisPx: 10,
+      labelStyle: TextStyleSpec(
+        fontSize: 12, 
+        color: MaterialPalette.white,
+      ),
+    ),
+  );
 
-    return ScatterPlotChart(
-      seriesList, 
-      animate: animate,
-      domainAxis: axisSpec,
-      primaryMeasureAxis: axisSpec,
-      // Custom renderer configuration for the line series.
-      customSeriesRenderers: [
-        LineRendererConfig(
-          // ID used to link series to this renderer.
-          customRendererId: 'customLine',
-          // Configure the regression line to be painted above the points.
-          //
-          // By default, series drawn by the point renderer are painted on
-          // top of those drawn by a line renderer.
-          layoutPaintOrder: LayoutViewPaintOrder.point + 1,
-          stacked: true,
-        ),
-      ],
-    );
-  }
+  final vertAxisSpec = NumericAxisSpec(
+    tickProviderSpec: BasicNumericTickProviderSpec(
+      desiredTickCount: 6
+    ),
+    renderSpec: GridlineRendererSpec(
+      lineStyle: LineStyleSpec( 
+        color: Color(r: 0x99, g: 0x99, b: 0x99, a: 100),
+      ),
+      labelOffsetFromAxisPx: 10,
+      labelStyle: TextStyleSpec(
+        fontSize: 12, 
+        color: MaterialPalette.white,
+      ),
+    ),
+  ); 
+
+  @override 
+  Widget build(BuildContext context) => TimeSeriesChart(
+    seriesList, 
+    animate: animate,
+    domainAxis: horizAxisSpec,
+    primaryMeasureAxis: vertAxisSpec,
+    // Custom renderer configuration for the line series.
+    customSeriesRenderers: [
+      LineRendererConfig(
+        // ID used to link series to this renderer.
+        customRendererId: 'customLine',
+        // Configure the regression line to be painted above the points.
+        //
+        // By default, series drawn by the point renderer are painted on
+        // top of those drawn by a line renderer.
+        layoutPaintOrder: LayoutViewPaintOrder.point + 1,
+        stacked: true,
+      ),
+    ],
+  );
 }
 
 class SimpleBarChart extends StatelessWidget {
@@ -107,30 +126,27 @@ class OrdinalSales {
   OrdinalSales(this.year, this.sales);
 }
 
-class StatisticsScreen extends StatefulWidget {
-  @override
-  StatisticsScreenState createState() => StatisticsScreenState();
-}
+class FuelMileageHistory extends StatelessWidget {
+  final data;
 
-class StatisticsScreenState extends State<StatisticsScreen> {
-  static List<Series<FuelMileagePoint, double>> _createSampleData() {
-    final data = [
-      FuelMileagePoint(date: 0, mpg: 5),
-      FuelMileagePoint(date: 10, mpg: 25),
-      FuelMileagePoint(date: 12, mpg: 75),
-      FuelMileagePoint(date: 13, mpg: 225),
-      FuelMileagePoint(date: 16, mpg: 50),
-      FuelMileagePoint(date: 24, mpg: 75),
-      FuelMileagePoint(date: 25, mpg: 100),
-      FuelMileagePoint(date: 34, mpg: 150),
-      FuelMileagePoint(date: 37, mpg: 10),
-      FuelMileagePoint(date: 45, mpg: 300),
-      FuelMileagePoint(date: 52, mpg: 15),
-      FuelMileagePoint(date: 56, mpg: 200),
-    ];
+  FuelMileageHistory(this.data);
 
-    final List<FuelMileagePoint> emaData = [];
-    for (var point in data) {
+  static interpolateDate(DateTime prev, DateTime next) {
+    return DateTime.fromMillisecondsSinceEpoch(
+      (prev.millisecondsSinceEpoch + next.millisecondsSinceEpoch / 2).toInt()
+    );
+  }
+
+  static Future<List<Series<FuelMileagePoint, DateTime>>> prepData(Future incomingData) async {
+    var rawData = await incomingData;
+
+    List<FuelMileagePoint> points = [];
+    for (var r in rawData) {
+      points.add(FuelMileagePoint(date: r.date, mpg: r.efficiency));
+    }
+
+    List<FuelMileagePoint> emaData = [];
+    for (var point in points) {
       if (emaData.length == 0) {
         emaData.add(point);
         continue;
@@ -140,16 +156,18 @@ class StatisticsScreenState extends State<StatisticsScreen> {
       FuelMileagePoint last = emaData[emaData.length - 1];
       newPoint.date = point.date;
       newPoint.mpg = last.mpg * 0.8 + point.mpg * 0.2;
-      interpolate.date = (point.date + last.date) / 2;
+      interpolate.date = interpolateDate(last.date, point.date);
       interpolate.mpg = last.mpg * 0.8 + newPoint.mpg * 0.2;
-      emaData.add(interpolate);
+      // emaData.add(interpolate);
       emaData.add(newPoint);
     }
 
-    final double maxMeasure = 300, minMeasure = 5;
+    // TODO: scale this according to the incoming data
+    final double maxMeasure = points.map((val) => val.mpg).reduce(max);
+    final double minMeasure = points.map((val) => val.mpg).reduce(min);
 
     return [
-      Series<FuelMileagePoint, double>(
+      Series<FuelMileagePoint, DateTime>(
         id: 'Fuel Mileage vs Time',
         // Providing a color function is optional.
         colorFn: (FuelMileagePoint point, _) {
@@ -163,10 +181,10 @@ class StatisticsScreenState extends State<StatisticsScreen> {
         measureFn: (FuelMileagePoint point, _) => point.mpg,
         // Providing a radius function is optional.
         radiusPxFn: (FuelMileagePoint point, _) => 6.0, // all values have the same radius for now
-        data: data,
+        data: points,
       ),
       // Configure our custom line renderer for this series.
-      Series<FuelMileagePoint, double>(
+      Series<FuelMileagePoint, DateTime>(
           id: 'Mobile',
           colorFn: (_, __) => MaterialPalette.blue.shadeDefault,
           domainFn: (FuelMileagePoint point, _) => point.date,
@@ -176,52 +194,80 @@ class StatisticsScreenState extends State<StatisticsScreen> {
     ];
   }
 
+  @override 
+  Widget build(BuildContext context) => Column( 
+    mainAxisSize: MainAxisSize.min,
+    mainAxisAlignment: MainAxisAlignment.spaceAround,
+    children: [
+      Padding( 
+        padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+      ),
+      Text(
+        'Fuel Efficiency History',
+        style: Theme.of(context).primaryTextTheme.subtitle
+      ),
+      Container(
+        height: 300,
+        padding: EdgeInsets.all(15),  
+        child: FuelMileageChart(data, false),
+      )
+    ]
+  );
+}
+
+class DrivingDistanceHistory extends StatelessWidget {
+  final data;
+  DrivingDistanceHistory(this.data);
+
+  @override 
+  Widget build(BuildContext context) => Column( 
+    mainAxisSize: MainAxisSize.min,
+    mainAxisAlignment: MainAxisAlignment.spaceAround,
+    children: [
+      Padding( 
+        padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+      ),
+      Text(
+        'Driving Distance History',
+        style: Theme.of(context).primaryTextTheme.subtitle
+      ),
+      Container(
+        height: 300,
+        padding: EdgeInsets.all(15), 
+        child: SimpleBarChart.withSampleData(),
+      )
+    ]
+  );
+}
+
+class StatisticsScreen extends StatefulWidget {
+  @override
+  StatisticsScreenState createState() => StatisticsScreenState();
+}
+
+class StatisticsScreenState extends State<StatisticsScreen> {
   @override
   Widget build(BuildContext context) {
     return ListView(
       children: <Widget>[
-        Column( 
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Padding( 
-              padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
-            ),
-            Text(
-              'Fuel Efficiency History',
-              style: Theme.of(context).primaryTextTheme.subtitle
-            ),
-            Container(
-              height: 300,
-              padding: EdgeInsets.all(15),  
-              child: FuelMileageChart(_createSampleData(), false),
-            )
-          ]
+        FutureBuilder(
+          // future: RefuelingBLoC().getAllRefuelings(),
+          future: FuelMileageHistory.prepData(RefuelingBLoC().getAllRefuelings()),
+          builder: (context, snap) => (snap.hasData) ?
+            FuelMileageHistory(snap.data) :
+            CircularProgressIndicator()
         ),
         Padding( 
           padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
           child: Divider(),
         ),
-        Column( 
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Padding( 
-              padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
-            ),
-            Text(
-              'Driving Distance History',
-              style: Theme.of(context).primaryTextTheme.subtitle
-            ),
-            Container(
-              height: 300,
-              padding: EdgeInsets.all(15), 
-              child: SimpleBarChart.withSampleData(),
-            )
-          ]
+        FutureBuilder(
+          future: RefuelingBLoC().getAllRefuelings(),
+          builder: (context, snap) => (snap.hasData) ?
+            DrivingDistanceHistory(snap.data) :
+            CircularProgressIndicator()
         ),
-        
-        ],
+      ],
     );
   }
 }
