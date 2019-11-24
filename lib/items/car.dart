@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/util.dart';
+import './distanceratepoint.dart';
 
 class Car {
   static const double EMA_GAIN = 0.9;
@@ -10,13 +11,26 @@ class Car {
   int mileage = 0, numRefuelings = 0; 
   Color color;
   double averageEfficiency, distanceRate;
-  DateTime lastMileageUpdate; // add date that the car's mileage was last updated?
+  DateTime lastMileageUpdate;
+  List<DistanceRatePoint> distanceRateHistory;
 
   factory Car.fromJSON(Map input, String ref) {
     var out = Car(name: input['name'], mileage: input['mileage'], ref: ref);
     out.numRefuelings = input['numRefuelings'] ?? 0;
     out.averageEfficiency = input['averageEfficiency'] ?? double.infinity;
     out.distanceRate = input['distanceRate'] ?? double.infinity;
+    if (input['distanceRateHistory'] == null) {
+      out.distanceRateHistory = [];
+    } else {
+      List<DistanceRatePoint> history = List<DistanceRatePoint>.from(
+        input['distanceRateHistory']
+        .map((val) => DistanceRatePoint(
+          DateTime.fromMillisecondsSinceEpoch(val['date']), 
+          val['distanceRate'])
+        )
+      );
+      out.distanceRateHistory = history;
+    }
     if (input['color'] != null)
       out.color = Color(input['color']);
     return out;
@@ -34,12 +48,19 @@ class Car {
   Car.empty();
   
   Map<String, dynamic> toJSON() {
+    List<Map<String, dynamic>> distanceRateHistoryJSON = List.from(
+      distanceRateHistory.map((val) => {
+        'date': val.date.millisecondsSinceEpoch, 
+        'distanceRate': val.distanceRate
+      })
+    );
     return {
       'name': name,
       'mileage': mileage,
       'numRefuelings': numRefuelings,
       'averageEfficiency': averageEfficiency,
       'distanceRate': distanceRate,
+      'distanceRateHistory': distanceRateHistoryJSON,
       'color': (color == null) ? Colors.blue.value : color.value,
     };
   }
@@ -73,7 +94,6 @@ class Car {
   double _distanceFilter(int numItems, double prev, double cur) {
     if (numItems == 1 || prev == double.infinity) {
       // no point in averaging only one value
-      print('here');
       return cur;
     } else if (numItems > EMA_CUTOFF) {
       // Use the EMA when we have enough data to get 
@@ -95,6 +115,7 @@ class Car {
     var elapsedDuration = cur.difference(prev);
     var curDistRate = distance.toDouble() / elapsedDuration.inDays.toDouble();
     this.distanceRate = _distanceFilter(this.numRefuelings, this.distanceRate, curDistRate);
+    this.distanceRateHistory.add(DistanceRatePoint(cur, this.distanceRate));
     TodoBLoC().updateDueDates(this);
   }
 }
