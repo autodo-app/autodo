@@ -48,7 +48,8 @@ class Car {
   Car.empty();
   
   Map<String, dynamic> toJSON() {
-    List<Map<String, dynamic>> distanceRateHistoryJSON = List.from(
+    List<Map<String, dynamic>> distanceRateHistoryJSON = 
+      (distanceRateHistory == null) ? [] : List.from(
       distanceRateHistory.map((val) => {
         'date': val.date.millisecondsSinceEpoch, 
         'distanceRate': val.distanceRate
