@@ -37,14 +37,10 @@ class TodoBLoC extends BLoC {
         if (aMileage > bMileage) return 1;
         else if (aMileage < bMileage) return -1;
         else return 0;
-      } else if (aMileage == 0 && bMileage == 0) {
-        // both don't have a mileage, so only consider the dates
-        if (aDate < bDate) return 1;
-        else if (aDate > bDate) return -1;
-        else return 0;
       } else {
-        // there should be a function here to translate mileage to dates
-        return 0;
+        // consider the dates since all todo items should have dates as a result
+        // of the distance rate translation function
+        return aDate.compareTo(bDate);
       }
     });
   }
