@@ -22,8 +22,14 @@ class Car {
     if (input['distanceRateHistory'] == null) {
       out.distanceRateHistory = [];
     } else {
-      out.distanceRateHistory = input['distanceRateHistory']
-        .map((val) => DistanceRatePoint(val['date'], val['distanceRate']));
+      List<DistanceRatePoint> history = List<DistanceRatePoint>.from(
+        input['distanceRateHistory']
+        .map((val) => DistanceRatePoint(
+          DateTime.fromMillisecondsSinceEpoch(val['date']), 
+          val['distanceRate'])
+        )
+      );
+      out.distanceRateHistory = history;
     }
     if (input['color'] != null)
       out.color = Color(input['color']);
@@ -42,16 +48,19 @@ class Car {
   Car.empty();
   
   Map<String, dynamic> toJSON() {
+    List<Map<String, dynamic>> distanceRateHistoryJSON = List.from(
+      distanceRateHistory.map((val) => {
+        'date': val.date.millisecondsSinceEpoch, 
+        'distanceRate': val.distanceRate
+      })
+    );
     return {
       'name': name,
       'mileage': mileage,
       'numRefuelings': numRefuelings,
       'averageEfficiency': averageEfficiency,
       'distanceRate': distanceRate,
-      'distanceRateHistory': distanceRateHistory.map((val) => {
-        'date': val.date.millisecondsSinceEpoch, 
-        'distanceRate': val.distanceRate
-      }),
+      'distanceRateHistory': distanceRateHistoryJSON,
       'color': (color == null) ? Colors.blue.value : color.value,
     };
   }

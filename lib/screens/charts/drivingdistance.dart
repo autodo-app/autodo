@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart';
-
-class DistanceRatePoint {
-  DateTime date;
-  double distanceRate;
-
-  DistanceRatePoint({this.date, this.distanceRate});
-}
+import 'package:autodo/items/distanceratepoint.dart';
 
 class DrivingDistanceChart extends StatelessWidget {
   final List<Series<DistanceRatePoint, DateTime>> seriesList;

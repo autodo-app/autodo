@@ -164,5 +164,9 @@ roundToDay(DateTime date) {
 }
 
 double scaleToUnit(double _num, double _min, double _max) {
-  return (_num - _min) / (_max - _min);
+  if ((_max - _min).abs() < 0.001) {
+    // don't want to be dividing by ~0, so we'll set the output to be green
+    return 1.0;
+   } 
+  return clamp((_num - _min) / (_max - _min), 0.0, 1.0);
 }

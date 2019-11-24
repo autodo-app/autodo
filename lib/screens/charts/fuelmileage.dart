@@ -54,7 +54,7 @@ class FuelMileageChart extends StatelessWidget {
 
   @override 
   Widget build(BuildContext context)  {
-    if (seriesList[0].data.length == 0) {
+    if (seriesList.length == 0 || seriesList[0].data.length == 0) {
       return Center(
         child: Text( 
           'No Data Available to Display.',
@@ -103,6 +103,7 @@ class FuelMileageHistory extends StatelessWidget {
 
     List<FuelMileagePoint> points = [];
     for (var r in rawData) {
+      if (r.efficiency == double.infinity || r.efficiency == 0) continue;
       points.add(FuelMileagePoint(date: r.date, mpg: r.efficiency));
     }
 
@@ -124,8 +125,11 @@ class FuelMileageHistory extends StatelessWidget {
     }
 
     var mpgs = points.map((val) => val.mpg);
-    final double maxMeasure = (mpgs.length > 0) ? mpgs.reduce(max) : 0;
-    final double minMeasure = (mpgs.length > 0) ? mpgs.reduce(min) : 0;
+    // Not worth displaying a line graph with only one point
+    if (mpgs.length < 2) return [];
+
+    final double maxMeasure = mpgs.reduce(max);
+    final double minMeasure = mpgs.reduce(min);
 
     return [
       Series<FuelMileagePoint, DateTime>(
