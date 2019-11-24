@@ -37,14 +37,13 @@ class TodoBLoC extends BLoC {
         if (aMileage > bMileage) return 1;
         else if (aMileage < bMileage) return -1;
         else return 0;
-      } else if (aMileage == 0 && bMileage == 0) {
-        // both don't have a mileage, so only consider the dates
-        if (aDate < bDate) return 1;
-        else if (aDate > bDate) return -1;
-        else return 0;
       } else {
-        // there should be a function here to translate mileage to dates
-        return 0;
+        // in case one of the two isn't a valid timestamp
+        if (aDate == 0) return -1;
+        if (bDate == 0) return 1;
+        // consider the dates since all todo items should have dates as a result
+        // of the distance rate translation function
+        return aDate.compareTo(bDate);
       }
     });
   }
@@ -88,6 +87,32 @@ class TodoBLoC extends BLoC {
         .document(item.ref);
     batch.setData(ref, item.toJSON());
     return batch;
+  }
+
+  Future<void> updateDueDates(Car car) async {
+    WriteBatch batch = Firestore.instance.batch();
+    QuerySnapshot snap = await FirestoreBLoC().getUserDocument()
+        .collection('todos')
+        .getDocuments();
+    for (var todo in snap.documents) {
+      if (!todo.data['tags'].contains(car.name) || 
+          todo.data['estimatedDueDate'] == null || 
+          !todo.data['estimatedDueDate'])
+        continue;
+      MaintenanceTodoItem item = MaintenanceTodoItem.fromMap(todo.data);
+
+      var distanceToTodo = todo.data['dueMileage'] - car.mileage;
+      int daysToTodo = (distanceToTodo / car.distanceRate).round();
+      Duration timeToTodo = Duration(days: daysToTodo);
+      item.dueDate = car.lastMileageUpdate.add(timeToTodo);
+      print('${car.distanceRate} + ${item.dueDate}');
+      scheduleNotification(item);
+      var ref = FirestoreBLoC().getUserDocument()
+        .collection('todos')
+        .document(todo.documentID); 
+      batch.updateData(ref, item.toJSON());
+    }
+    await batch.commit();
   }
 
   // Make the object a Singleton

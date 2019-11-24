@@ -38,18 +38,10 @@ class CarsBLoC extends BLoC {
       .collection('cars')
       .getDocuments();
     cars.documents.forEach((car) {
+      print(car['mileage']);
       out.add(Car.fromJSON(car.data, car.documentID));
     });
     return out;
-  }
-
-  Future<void> updateMileage(String carName, int mileage) async {
-    print(mileage);
-    Car car = await getCarByName(carName);
-    if (car.mileage > mileage)
-      return; // allow adding past refuelings, but odometers don't go backwards
-    car.mileage = mileage;
-    edit(car);
   }
 
   static final CarsBLoC _self = CarsBLoC._internal();
