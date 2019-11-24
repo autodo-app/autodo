@@ -44,7 +44,8 @@ class RefuelingCardState extends State<RefuelingCard> {
               future: RefuelingBLoC().hsv(widget.item),
               initialData: HSV(0.0, 0.0, 1.0), // use white as the default color
               builder: (context, snap) => Text(
-                (widget.item.efficiency == double.infinity) ? "N/A" : widget.item.efficiency.toStringAsFixed(3),
+                (widget.item.efficiency == null || widget.item.efficiency == double.infinity) ? 
+                  "N/A" : widget.item.efficiency.toStringAsFixed(3),
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 16.0,

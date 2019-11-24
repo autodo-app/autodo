@@ -38,6 +38,9 @@ class TodoBLoC extends BLoC {
         else if (aMileage < bMileage) return -1;
         else return 0;
       } else {
+        // in case one of the two isn't a valid timestamp
+        if (aDate == 0) return -1;
+        if (bDate == 0) return 1;
         // consider the dates since all todo items should have dates as a result
         // of the distance rate translation function
         return aDate.compareTo(bDate);

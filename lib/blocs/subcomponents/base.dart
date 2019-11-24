@@ -2,6 +2,7 @@ import 'package:autodo/blocs/subcomponents/firestore.dart';
 import 'package:autodo/blocs/filtering.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:autodo/util.dart';
 
 class BLoC {
   var _past;
@@ -47,8 +48,17 @@ class BLoC {
         filteredData = sortItems(filteredData);
 
         return ListView.builder(
-          itemCount: filteredData.length,
-          itemBuilder: (context, index) => buildItem(filteredData[index], index)
+          itemCount: filteredData.length + 1,
+          itemBuilder: (context, index) {
+            if (index == filteredData.length) {
+              // allows the bottom item to be scrolled up above the FAB
+              return Container(
+                height: clamp(MediaQuery.of(context).size.height - 400, 
+                              80.0, double.infinity)
+              );
+            }
+            return buildItem(filteredData[index], index);
+          }
         );
       }
     );

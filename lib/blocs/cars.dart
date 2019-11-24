@@ -38,6 +38,7 @@ class CarsBLoC extends BLoC {
       .collection('cars')
       .getDocuments();
     cars.documents.forEach((car) {
+      print(car['mileage']);
       out.add(Car.fromJSON(car.data, car.documentID));
     });
     return out;
