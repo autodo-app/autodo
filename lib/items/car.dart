@@ -66,10 +66,15 @@ class Car {
     };
   }
 
-  void updateMileage(int newMileage, DateTime updateDate) {
-    if (this.mileage > newMileage)
-      return; // allow adding past refuelings, but odometers don't go backwards
-    this.mileage = mileage;
+  void updateMileage(int newMileage, DateTime updateDate, {override = false}) {
+    if (this.mileage > newMileage && !override) {
+      // allow adding past refuelings, but we don't want to roll back the
+      // mileage in that case. The override switch is available to force a 
+      // rollback in the case of a deleted refueling.
+      return; 
+    }
+      
+    this.mileage = newMileage;
     this.lastMileageUpdate = roundToDay(updateDate);
   }
 

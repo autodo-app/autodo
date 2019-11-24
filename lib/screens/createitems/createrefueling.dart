@@ -28,6 +28,7 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
   Car selectedCar;
   final _autocompleteKey = GlobalKey<AutoCompleteTextFieldState<Car>>();
   List<Car> cars;
+  final TextEditingController _controller = TextEditingController();
 
   void setCars() async {
     var carList = await CarsBLoC().getCars();
@@ -44,7 +45,10 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
         ? widget.existing
         : RefuelingItem.empty();
     _autocompleteController = TextEditingController();
-    setCars();  
+    setCars();
+    if (widget.existing != null && widget.existing.date != null) {
+      _controller.text = DateFormat.yMd().format(widget.existing.date);
+    }  
   }
 
   @override
@@ -53,7 +57,7 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
     super.dispose();
   }
 
-  final TextEditingController _controller = new TextEditingController();
+  
   Future _chooseDate(BuildContext context, String initialDateString) async {
     var now = new DateTime.now();
     var initialDate = convertToDate(initialDateString) ?? now;
@@ -64,13 +68,13 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
     var result = await showDatePicker(
         context: context,
         initialDate: initialDate,
-        firstDate: new DateTime(1900),
-        lastDate: new DateTime.now());
+        firstDate: DateTime(1900),
+        lastDate: DateTime.now());
 
     if (result == null) return;
 
     setState(() {
-      _controller.text = new DateFormat.yMd().format(result);
+      _controller.text = DateFormat.yMd().format(result);
     });
   }
 
@@ -256,8 +260,8 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                               }),
                         ),
                       ),
-                      new IconButton(
-                        icon: new Icon(Icons.calendar_today),
+                      IconButton(
+                        icon: Icon(Icons.calendar_today),
                         tooltip: 'Choose date',
                         onPressed: (() {
                           _chooseDate(context, _controller.text);
