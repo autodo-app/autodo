@@ -14,6 +14,10 @@ Future<void> initBLoCs(String uuid) async {
   await FilteringBLoC().initialize();
 }
 
+void startListeners() {
+  FirestoreBLoC().initialize();
+}
+
 /// Signs up a new user and creates their user document
 /// in the database.
 Future<void> initNewUser(String email, String password) async {
