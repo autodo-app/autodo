@@ -47,8 +47,12 @@ class Auth implements BaseAuth {
   
   Future<String> waitForVerification(FirebaseUser user) async {
     while(!user.isEmailVerified) {
-      Future.delayed(const Duration(milliseconds: 500), () {
-        user.reload(); // refresh the user to see if they have verified their email
+      await Future.microtask(() async {
+        // reload the user's values
+        await Future.delayed(const Duration(milliseconds: 500), () async {
+          user = await FirebaseAuth.instance.currentUser();
+          user.reload();
+        });
       });
     }
     return user.uid;
