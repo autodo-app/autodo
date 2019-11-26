@@ -34,7 +34,14 @@ class SignInScreenState extends State<SignInScreen> {
   }
 
   Widget _waitForEmailVerification(user) => AlertDialog(
-    content: Text('here'), 
+    title: Text(
+      'Verify Email',
+      style: Theme.of(context).primaryTextTheme.title
+    ),
+    content: Text(
+      'An email has been sent to you with a link to verify your account.\n\nYou must verify your email to use auToDo.',
+      style: Theme.of(context).primaryTextTheme.body1
+    ), 
     actions: [
       FutureBuilder( 
         future: Auth().waitForVerification(user),
@@ -42,7 +49,7 @@ class SignInScreenState extends State<SignInScreen> {
           if (!snap.hasData) return Container();
           return FlatButton(
             child: Text('Next'),
-            onPressed: () {},
+            onPressed: () => Navigator.popAndPushNamed(context, '/newuser'),
           );
         }
       )
@@ -57,7 +64,7 @@ class SignInScreenState extends State<SignInScreen> {
     if (_validateAndSave()) {
       try {
         if (widget.formMode == FormMode.SIGNUP) {
-          // if (kReleaseMode) {
+          if (kReleaseMode) {
             var user = await Auth().signUpWithVerification(_email, _password);
             if (user != null) {
               showDialog(
@@ -70,9 +77,11 @@ class SignInScreenState extends State<SignInScreen> {
               _isLoading = false;
             });
             return;
-          // } else {
-            // await initNewUser(_email, _password);
-          // }
+          } else {
+            // don't want to deal with using real emails and verifying them in
+            // debug
+            await initNewUser(_email, _password);
+          }
         } else {
           await initExistingUser(_email, _password);
         } 

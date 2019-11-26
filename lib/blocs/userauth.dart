@@ -64,8 +64,6 @@ class Auth implements BaseAuth {
       res = await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
       await res.user.sendEmailVerification();
-      // currentUser = res.user.uid;
-      // currentUserName = res.user.email;
     } on PlatformException {
       print(
           "PlatformException: Cannot create a user with an email that already exists");
@@ -98,11 +96,6 @@ class Auth implements BaseAuth {
   }
 
   Future<String> getCurrentUserName() async {
-    // FirebaseUser user = await _firebaseAuth.currentUser();
-    // if (user != null && user.displayName != "")
-    //   return user.displayName;
-    // else if (user != null) return user.email;
-    // return "NO_USER";
     return currentUserName;
   }
 
