@@ -8,15 +8,16 @@ import 'package:flutter/material.dart';
 /// in the proper order to prevent issues with
 /// their data not being populated.
 Future<void> initBLoCs(String uuid) async {
-  print('uias $uuid');
-  await FirestoreBLoC().setUserDocument(uuid)
-    .then((_) => RepeatingBLoC().updateUpcomingTodos())
-    .then((_) => FilteringBLoC().initialize());
+  FirestoreBLoC().setUserDocument(uuid);
+  print('askl $uuid');
+  await RepeatingBLoC().updateUpcomingTodos();
+  await FilteringBLoC().initialize();
 }
 
 /// Signs up a new user and creates their user document
 /// in the database.
 Future<void> initNewUser(String email, String password) async {
+  FirestoreBLoC().initialize(); // starts listening for auth change
   String uuid = await Auth().signUp(email, password);
   if (uuid == null || uuid == "")
     throw SignInFailure();
@@ -35,6 +36,7 @@ Future<void> loadingSequence(BuildContext context) async {
 }
 
 Future<void> initExistingUser(String email, String password) async {
+  FirestoreBLoC().initialize(); // starts listening for auth change
   String uuid = await Auth().signIn(email, password);
   if (uuid == null || uuid == "")
     throw SignInFailure();
