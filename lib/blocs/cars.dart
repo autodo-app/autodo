@@ -34,10 +34,15 @@ class CarsBLoC extends BLoC {
   Future<List<Car>> getCars() async {
     List<Car> out = []; // assign it so that .add() works
     DocumentReference userDoc = FirestoreBLoC().getUserDocument();
-    QuerySnapshot cars = await userDoc
+    QuerySnapshot cars;
+    try {
+      cars = await userDoc
       .collection('cars')
       .getDocuments();
-    cars.documents.forEach((car) {
+    } catch (e) {
+      print(e);
+    }
+    cars?.documents?.forEach((car) {
       print(car['mileage']);
       out.add(Car.fromJSON(car.data, car.documentID));
     });

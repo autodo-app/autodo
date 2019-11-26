@@ -1,5 +1,6 @@
-import 'package:autodo/blocs/init.dart';
+import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/sharedmodels/legal.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/theme.dart';
 import 'package:flutter/gestures.dart';
@@ -32,6 +33,29 @@ class SignInScreenState extends State<SignInScreen> {
     return false;
   }
 
+  Widget _waitForEmailVerification(user) => AlertDialog(
+    title: Text(
+      'Verify Email',
+      style: Theme.of(context).primaryTextTheme.title
+    ),
+    content: Text(
+      'An email has been sent to you with a link to verify your account.\n\nYou must verify your email to use auToDo.',
+      style: Theme.of(context).primaryTextTheme.body1
+    ), 
+    actions: [
+      FutureBuilder( 
+        future: Auth().waitForVerification(user),
+        builder: (context, snap) {
+          if (!snap.hasData) return Container();
+          return FlatButton(
+            child: Text('Next'),
+            onPressed: () => Navigator.popAndPushNamed(context, '/newuser'),
+          );
+        }
+      )
+    ],
+  );
+
   void _submit() async {
     setState(() {
       _errorMessage = "";
@@ -39,11 +63,28 @@ class SignInScreenState extends State<SignInScreen> {
     });
     if (_validateAndSave()) {
       try {
-        if (widget.formMode == FormMode.SIGNUP)
-          await initNewUser(_email, _password);
-        else 
+        if (widget.formMode == FormMode.SIGNUP) {
+          if (kReleaseMode) {
+            var user = await Auth().signUpWithVerification(_email, _password);
+            if (user != null) {
+              showDialog(
+                context: context, 
+                builder: (context) => _waitForEmailVerification(user),
+                barrierDismissible: false
+              );
+            }
+            setState(() {
+              _isLoading = false;
+            });
+            return;
+          } else {
+            // don't want to deal with using real emails and verifying them in
+            // debug
+            await initNewUser(_email, _password);
+          }
+        } else {
           await initExistingUser(_email, _password);
-        // widget.userAuth.sendEmailVerification();
+        } 
         setState(() {
           _isLoading = false;
         });
