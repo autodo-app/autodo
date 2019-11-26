@@ -10,7 +10,7 @@ class FirestoreBLoC {
     await userDoc.setData(Map<String, Object>());
   }
 
-  void setUserDocument(String uuid) {
+  Future<void> setUserDocument(String uuid) async {
     userDoc = _db.collection('users').document(uuid);
   }
 

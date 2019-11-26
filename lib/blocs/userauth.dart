@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:autodo/blocs/subcomponents/subcomponents.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart';
 
 class SignInFailure implements Exception {
   String errMsg() => "Firebase Auth rejected attempt to register new user";
@@ -41,9 +42,32 @@ class Auth implements BaseAuth {
           "PlatformException: Cannot create a user with an email that already exists");
       return "";
     }
-
-    FirebaseUser user = res.user;
+    return res.user.uid;
+  }
+  
+  Future<String> waitForVerification(FirebaseUser user) async {
+    while(!user.isEmailVerified) {
+      Future.delayed(const Duration(milliseconds: 500), () {
+        user.reload(); // refresh the user to see if they have verified their email
+      });
+    }
     return user.uid;
+  }
+
+  Future<FirebaseUser> signUpWithVerification(String email, String password) async {
+    AuthResult res;
+    try {
+      res = await _firebaseAuth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      await res.user.sendEmailVerification();
+      // currentUser = res.user.uid;
+      // currentUserName = res.user.email;
+    } on PlatformException {
+      print(
+          "PlatformException: Cannot create a user with an email that already exists");
+      return null;
+    }
+    return res.user;
   }
 
   Future<void> deleteCurrentUser() async {
