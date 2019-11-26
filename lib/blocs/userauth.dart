@@ -2,10 +2,12 @@ import 'dart:async';
 import 'package:autodo/blocs/subcomponents/subcomponents.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/foundation.dart';
 
-class SignInFailure implements Exception {
+class SignInFailure implements PlatformException {
   String errMsg() => "Firebase Auth rejected attempt to register new user";
+  String get code => "UNKNOWN_AUTH_ERROR";
+  String get details => "";
+  String get message => "Could not authenticate this user";
 }
 
 abstract class BaseAuth {
@@ -31,17 +33,10 @@ class Auth implements BaseAuth {
   }
 
   Future<String> signUp(String email, String password) async {
-    AuthResult res;
-    try {
-      res = await _firebaseAuth.createUserWithEmailAndPassword(
-          email: email, password: password);
-      currentUser = res.user.uid;
-      currentUserName = res.user.email;
-    } on PlatformException {
-      print(
-          "PlatformException: Cannot create a user with an email that already exists");
-      return "";
-    }
+    AuthResult res = await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email, password: password);
+    currentUser = res.user.uid;
+    currentUserName = res.user.email;
     return res.user.uid;
   }
   

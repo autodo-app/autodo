@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/theme.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/services.dart';
 
 class SignInScreen extends StatefulWidget { // ignore: must_be_immutable
   FormMode formMode;
@@ -56,53 +57,64 @@ class SignInScreenState extends State<SignInScreen> {
     ],
   );
 
+  void _signUp() async {
+    if (kReleaseMode) {
+      var user = await Auth().signUpWithVerification(_email, _password);
+      if (user != null) {
+        showDialog(
+          context: context, 
+          builder: (context) => _waitForEmailVerification(user),
+          barrierDismissible: false
+        );
+      }
+      setState(() {
+        _isLoading = false;
+      });
+    } else {
+      // don't want to deal with using real emails and verifying them in
+      // debug
+      await initNewUser(_email, _password);
+    }
+  }
+
+  void _signUpErrorHandling(PlatformException e) {
+    var errorString = "Error communicating to the auToDo servers.";
+      if (e.code == "ERROR_WEAK_PASSWORD") {
+        errorString = "Your password must be longer than 6 characters.";
+      } else if (e.code == "ERROR_INVALID_EMAIL") {
+        errorString = "The email address you entered is invalid.";
+      } else if (e.code == "ERROR_EMAIL_ALREADY_IN_USE") {
+        errorString = "The email address you entered is already in use.";
+      }
+      setState(() {
+        _isLoading = false;
+        _errorMessage = errorString;
+      });
+  }
+
   void _submit() async {
     setState(() {
       _errorMessage = "";
       _isLoading = true;
     });
-    if (_validateAndSave()) {
-      try {
-        if (widget.formMode == FormMode.SIGNUP) {
-          if (kReleaseMode) {
-            var user = await Auth().signUpWithVerification(_email, _password);
-            if (user != null) {
-              showDialog(
-                context: context, 
-                builder: (context) => _waitForEmailVerification(user),
-                barrierDismissible: false
-              );
-            }
-            setState(() {
-              _isLoading = false;
-            });
-            return;
-          } else {
-            // don't want to deal with using real emails and verifying them in
-            // debug
-            await initNewUser(_email, _password);
-          }
-        } else {
-          await initExistingUser(_email, _password);
-        } 
-        setState(() {
-          _isLoading = false;
-        });
-        if (widget.formMode == FormMode.SIGNUP)
-          Navigator.popAndPushNamed(context, '/newuser');
-        else
-          Navigator.pushNamed(context, '/load');
-      } catch (e) {
-        print("error: $e");
-        setState(() {
-          _isLoading = false;
-          _errorMessage = e.toString();
-        });
-      }
-    } else {
-      setState(() {
-        _isLoading = false;
-      });
+    if (!_validateAndSave()) {
+      setState(() => _isLoading = false);
+      return;
+    }
+
+    try {
+      if (widget.formMode == FormMode.SIGNUP) {
+        _signUp();
+      } else {
+        await initExistingUser(_email, _password);
+      } 
+      setState(() => _isLoading = false);
+      if (widget.formMode == FormMode.SIGNUP)
+        Navigator.popAndPushNamed(context, '/newuser');
+      else
+        Navigator.pushNamed(context, '/load');
+    } on PlatformException catch (e) {
+      _signUpErrorHandling(e);
     }
   }
 
@@ -169,29 +181,13 @@ class SignInScreenState extends State<SignInScreen> {
     );
   }
 
-  // void _showVerifyEmailSentDialog() {
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       // return object of type Dialog
-  //       return AlertDialog(
-  //         title: Text("Verify your account"),
-  //         content: Text("Link to verify account has been sent to your email"),
-  //         actions: <Widget>[
-  //           FlatButton(
-  //             child: Text("Dismiss"),
-  //             onPressed: () {
-  //               // _changeFormToLogin();
-  //               Navigator.of(context).pop();
-  //             },
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
+  bool _error() {
+    return _errorMessage.length > 0 && _errorMessage != null;
+  }
 
-  Widget legal() {
+  Widget _legal() {
+    if (_error()) 
+      return Container();
     return Padding(  
       padding: EdgeInsets.fromLTRB(5, 15, 5, 0),
       child: Center(
@@ -242,10 +238,10 @@ class SignInScreenState extends State<SignInScreen> {
           children: <Widget>[
             _showEmailInput(),
             _showPasswordInput(),
-            legal(),
+            _legal(),
+            _showErrorMessage(),
             _showPrimaryButton(),
             _showSecondaryButton(),
-            _showErrorMessage(),
           ],
         ),
       ),
@@ -253,20 +249,22 @@ class SignInScreenState extends State<SignInScreen> {
   }
 
   Widget _showErrorMessage() {
-    if (_errorMessage.length > 0 && _errorMessage != null) {
-      return Text(
-        _errorMessage,
-        style: TextStyle(
+    if (!_error())
+      return Container();
+    return Padding(
+      padding: EdgeInsets.fromLTRB(0, 25, 0, 0),  
+      child: Center( 
+        child: Text(
+          _errorMessage,
+          style: TextStyle(
             fontSize: 13.0,
             color: Colors.red,
             height: 1.0,
-            fontWeight: FontWeight.w300),
-      );
-    } else {
-      return Container(
-        height: 0.0,
-      );
-    }
+            fontWeight: FontWeight.w300
+          ),
+        ),
+      ),
+    );
   }
 
   String _emailValidator(value) {
@@ -351,7 +349,7 @@ class SignInScreenState extends State<SignInScreen> {
 
   Widget _showPrimaryButton() {
     return Padding(
-      padding: EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
+      padding: EdgeInsets.fromLTRB(0.0, 25.0, 0.0, 0.0),
       child: SizedBox(
         height: 40.0,
         child: RaisedButton(
