@@ -25,8 +25,8 @@ jobs:
         KEY_PASSWORD: ${{ secrets.key_password }}
         STORE_FILE: ~/keystore.jks
         STORE_PASSWORD: ${{ secrets.store_password }}
-    - name: Create a Release APK
-      uses: ncipollo/release-action@v1
-      with:
-        artifacts: "build/app/outputs/apk/debug/*.apk"
-        token: ${{ secrets.TOKEN }}
+    # - name: Create a Release APK
+    #   uses: ncipollo/release-action@v1
+    #   with:
+    #     artifacts: "build/app/outputs/apk/debug/*.apk"
+    #     token: ${{ secrets.TOKEN }}
