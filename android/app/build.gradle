@@ -40,9 +40,12 @@ def key_password = keystoreProperties.getProperty('keyPassword')
 if (key_password == null) {
     key_password = System.getenv("KEY_PASSWORD")
 }
-def store_file = file(keystoreProperties.getProperty('storeFile')) // wrap this in file()
-if (store_file == null) {
+def store_file_path = keystoreProperties.getProperty('storeFile') // wrap this in file()
+def store_file = ""
+if (store_file_path == null) {
     store_file = System.getenv("STORE_FILE")
+} else {
+    store_file = file(store_file_path)
 }
 def store_password = keystoreProperties.getProperty('storePassword')
 if (store_password == null) {
