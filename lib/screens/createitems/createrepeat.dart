@@ -20,9 +20,24 @@ class CreateRepeatScreenState extends State<CreateRepeatScreen> {
   Repeat repeat = Repeat.empty();
   final _formKey = GlobalKey<FormState>();
   var filterList;
+  FocusNode _nameNode, _intervalNode;
 
   CreateRepeatScreenState() {
     filterList = FilteringBLoC().getFiltersAsList();
+  }
+  
+  @override
+  initState() {
+    _nameNode = FocusNode();
+    _intervalNode = FocusNode();
+    super.initState();
+  }
+
+  @override
+  dispose() {
+    _nameNode.dispose();
+    _intervalNode.dispose();
+    super.dispose();
   }
 
   Future<void> updateFilters(filter) async => FilteringBLoC().setFilter(filter);
@@ -37,7 +52,9 @@ class CreateRepeatScreenState extends State<CreateRepeatScreen> {
       style: Theme.of(context).primaryTextTheme.subtitle,
       keyboardType: TextInputType.number,
       validator: intValidator,
-      onSaved: (val) => setState(() => repeat.interval = int.parse(val))
+      onSaved: (val) => setState(() => repeat.interval = int.parse(val)),
+      focusNode: _intervalNode,
+      textInputAction: TextInputAction.done,
     );
   }
 
@@ -51,7 +68,10 @@ class CreateRepeatScreenState extends State<CreateRepeatScreen> {
       style: Theme.of(context).primaryTextTheme.subtitle,
       keyboardType: TextInputType.text,
       validator: requiredValidator,
-      onSaved: (val) => setState(() => repeat.name = val)
+      onSaved: (val) => setState(() => repeat.name = val),
+      focusNode: _nameNode,
+      textInputAction: TextInputAction.next,
+      onFieldSubmitted: (_) => changeFocus(_nameNode, _intervalNode),
     );
   }
 

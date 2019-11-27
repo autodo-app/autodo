@@ -25,6 +25,8 @@ class SignInScreenState extends State<SignInScreen> {
 
   bool _isLoading;
 
+  FocusNode _emailNode, _passwordNode;
+
   bool _validateAndSave() {
     final form = _formKey.currentState;
     if (form.validate()) {
@@ -123,7 +125,16 @@ class SignInScreenState extends State<SignInScreen> {
     _errorMessage = "";
     _isLoading = false;
     PrivacyPolicy.init(context);
+    _emailNode = FocusNode()..requestFocus();
+    _passwordNode = FocusNode();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _emailNode.dispose();
+    _passwordNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -279,7 +290,9 @@ class SignInScreenState extends State<SignInScreen> {
     return TextFormField(
       maxLines: 1,
       keyboardType: TextInputType.emailAddress,
+      textInputAction: TextInputAction.next,
       autofocus: true,
+      focusNode: _emailNode,
       decoration: InputDecoration(
           hintText: 'Email',
           hintStyle: TextStyle(
@@ -291,6 +304,10 @@ class SignInScreenState extends State<SignInScreen> {
           )),
       validator: (value) => _emailValidator(value),
       onSaved: (value) => _email = value.trim(),
+      onFieldSubmitted: (_) {
+        _emailNode.unfocus();
+        _passwordNode.requestFocus();
+      },
     );
   }
 
@@ -308,7 +325,8 @@ class SignInScreenState extends State<SignInScreen> {
       child: TextFormField(
         maxLines: 1,
         obscureText: true,
-        autofocus: false,
+        focusNode: _passwordNode,
+        textInputAction: TextInputAction.done,
         decoration: InputDecoration(
             hintText: 'Password',
             hintStyle: TextStyle(

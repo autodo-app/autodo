@@ -1,4 +1,4 @@
-import 'dart:math';
+import 'package:flutter/material.dart';
 
 final RegExp lowerToUpper = RegExp('([a-z])([A-Z])');
 
@@ -169,4 +169,9 @@ double scaleToUnit(double _num, double _min, double _max) {
     return 1.0;
    } 
   return clamp((_num - _min) / (_max - _min), 0.0, 1.0);
+}
+
+changeFocus(FocusNode cur, FocusNode next) {
+  cur.unfocus();
+  next.requestFocus();
 }

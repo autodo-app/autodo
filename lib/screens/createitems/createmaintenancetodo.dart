@@ -99,101 +99,80 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
     return d != null && d.isAfter(DateTime.now().subtract(Duration(days: 1)));
   }
 
-  Widget repeatField() {
-    return TextFormField(
-      decoration: InputDecoration(
+  nameField() => TextFormField(
+    decoration: InputDecoration(
       border: OutlineInputBorder(
         borderSide: BorderSide(color: Colors.teal),
       ),
-      labelText: "Repeating Task",
+      labelText: "Action Name *",
       contentPadding: EdgeInsets.only(
           left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
-      ),
-      initialValue: (widget.mode == TodoEditMode.EDIT)
-          ? widget.existing.repeatingType
-          : '',
-      autofocus: false,
-      focusNode: _repeatNode,
-      style: Theme.of(context).primaryTextTheme.subtitle,
-      keyboardType: TextInputType.text,
-      validator: (value) { return null;},
-      onSaved: (val) => setState(() => todoItem.repeatingType = val),
-    );
-  }
+    ),
+    initialValue: (widget.mode == TodoEditMode.EDIT)
+        ? widget.existing.name.toString()
+        : '',
+    autofocus: true,
+    focusNode: _nameNode,
+    style: Theme.of(context).primaryTextTheme.subtitle,
+    keyboardType: TextInputType.text,
+    textCapitalization: TextCapitalization.sentences,
+    validator: requiredValidator,
+    onSaved: (val) => setState(() => todoItem.name = val),
+    textInputAction: TextInputAction.next,
+    onFieldSubmitted: (_) => changeFocus(_nameNode, _dateNode),
+  );
 
-  Widget nameField() {
-    return TextFormField(
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.teal),
-        ),
-        labelText: "Action Name *",
-        contentPadding: EdgeInsets.only(
-            left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
+  dateField() => TextFormField(
+    decoration: InputDecoration(
+      hintText: 'Optional if Mileage Entered',
+      hintStyle: TextStyle(
+        fontSize: 18.0,
+        fontWeight: FontWeight.w400,
       ),
-      initialValue: (widget.mode == TodoEditMode.EDIT)
-          ? widget.existing.name.toString()
-          : '',
-      autofocus: true,
-      focusNode: _nameNode,
-      style: Theme.of(context).primaryTextTheme.subtitle,
-      keyboardType: TextInputType.text,
-      textCapitalization: TextCapitalization.sentences,
-      validator: requiredValidator,
-      onSaved: (val) => setState(() => todoItem.name = val),
-    );
-  }
-
-  Widget dateField() {
-    return TextFormField(
-      decoration: InputDecoration(
-        hintText: 'Optional if Mileage Entered',
-        hintStyle: TextStyle(
-          fontSize: 18.0,
-          fontWeight: FontWeight.w400,
-        ),
-        labelText: 'Due Date',
-        contentPadding: EdgeInsets.only(
-            left: 16.0,
-            top: 20.0,
-            right: 16.0,
-            bottom: 5.0),
-        border: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.teal),
-        ),
+      labelText: 'Due Date',
+      contentPadding: EdgeInsets.only(
+          left: 16.0,
+          top: 20.0,
+          right: 16.0,
+          bottom: 5.0),
+      border: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.teal),
       ),
-      focusNode: _dateNode,
-      style: Theme.of(context).primaryTextTheme.subtitle,
-      controller: _controller,
-      keyboardType: TextInputType.datetime,
-      validator: (val) =>
-          isValidDate(val) ? null : 'Not a valid date',
-      onSaved: (val) => setState(() {
-            if (val != null && val != '') {
-              todoItem.dueDate = convertToDate(val);
-              todoItem.estimatedDueDate = false;
-            }
-          }),
-    );
-  }
+    ),
+    focusNode: _dateNode,
+    style: Theme.of(context).primaryTextTheme.subtitle,
+    controller: _controller,
+    keyboardType: TextInputType.datetime,
+    validator: (val) =>
+        isValidDate(val) ? null : 'Not a valid date',
+    onSaved: (val) => setState(() {
+      if (val != null && val != '') {
+        todoItem.dueDate = convertToDate(val);
+        todoItem.estimatedDueDate = false;
+      }
+    }),
+    textInputAction: TextInputAction.next,
+    onFieldSubmitted: (_) => changeFocus(_dateNode, _mileageNode),
+  );
 
-  Widget mileageField() {
-    return TextFormField(
-      decoration: defaultInputDecoration('Optional if Due Date Entered', 'DueMileage'),
-      initialValue: (widget.mode == TodoEditMode.EDIT)
-          ? widget.existing.dueMileage.toString()
-          : '',
-      autofocus: false,
-      focusNode: _mileageNode,
-      style: Theme.of(context).primaryTextTheme.subtitle,
-      keyboardType: TextInputType.number,
-      onSaved: (val) => setState(() {
-            if (val != null && val != '') {
-              todoItem.dueMileage = int.parse(val);
-            }
-          }),
-    );
-  }
+  mileageField() => TextFormField(
+    decoration: defaultInputDecoration('Optional if Due Date Entered', 'DueMileage'),
+    initialValue: (widget.mode == TodoEditMode.EDIT)
+        ? widget.existing.dueMileage.toString()
+        : '',
+    autofocus: false,
+    focusNode: _mileageNode,
+    style: Theme.of(context).primaryTextTheme.subtitle,
+    keyboardType: TextInputType.number,
+    onSaved: (val) => setState(() {
+      if (val != null && val != '') {
+        todoItem.dueMileage = int.parse(val);
+      }
+    }),
+    textInputAction: TextInputAction.next,
+    onFieldSubmitted: (_) => changeFocus(_mileageNode, _repeatNode),
+  );
+  
   Widget cars() {
     return Column( 
       mainAxisSize: MainAxisSize.min,
@@ -278,7 +257,6 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
       itemSorter: (a, b) => a.name.length == b.name.length ? 0 : a.name.length < b.name.length ? -1 : 1,
       // returns a match anytime that the input is anywhere in the repeat name
       itemFilter: (suggestion, input) {
-        print('here');
         return suggestion.name.toLowerCase().contains(input.toLowerCase());
       }
     );
@@ -321,11 +299,8 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
                 focusNode: _nameNode,
               ),
               Padding(  
-                padding: EdgeInsets.only(bottom: 15),
-              ),
-              Divider(),
-              Padding(  
-                padding: EdgeInsets.only(bottom: 15),
+                padding: EdgeInsets.only(top: 15, bottom: 15),
+                child: Divider(),
               ),
               Row(
                 children: <Widget>[
