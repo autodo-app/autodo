@@ -1,6 +1,7 @@
 import 'package:autodo/screens/newuser.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/theme.dart';
+import 'package:autodo/util.dart';
 import 'package:autodo/blocs/blocs.dart';
 import './accountsetuptemplate.dart';
 
@@ -19,6 +20,7 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen> with TickerPro
   bool expanded, pageTransition, pageWillBeVisible;
   AnimationController openCtrl;
   var openCurve;
+  FocusNode _oilNode, _tiresNode;
 
   LatestRepeatsScreenState(this.pageWillBeVisible);
 
@@ -46,7 +48,16 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen> with TickerPro
       parent: openCtrl,
       curve: Curves.easeOutCubic
     ));
+    _oilNode = FocusNode();
+    _tiresNode = FocusNode();
     super.initState();
+  }
+
+  @override 
+  dispose() {
+    _oilNode.dispose();
+    _tiresNode.dispose();
+    super.dispose();
   }
 
   @override 
@@ -66,6 +77,9 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen> with TickerPro
         if (value != null && value != '')
           RepeatingBLoC().setLastCompleted('oil', int.parse(value.trim()));
       },
+      focusNode: _oilNode,
+      textInputAction: TextInputAction.next,
+      onFieldSubmitted: (_) => changeFocus(_oilNode, _tiresNode),
     );
 
     Widget tireRotationMileage = TextFormField(
@@ -77,6 +91,8 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen> with TickerPro
         if (value != null && value != '')
           RepeatingBLoC().setLastCompleted('tireRotation', int.parse(value.trim()));
       },
+      focusNode: _tiresNode,
+      textInputAction: TextInputAction.done,
     );
 
     Widget headerText = AnimatedContainer(

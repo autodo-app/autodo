@@ -1,4 +1,5 @@
 import 'package:autodo/blocs/cars.dart';
+import 'package:autodo/util.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/theme.dart';
 import 'package:autodo/items/items.dart';
@@ -7,61 +8,80 @@ import './accountsetuptemplate.dart';
 
 class CarEntryField extends StatefulWidget {
   final Car car;
-  CarEntryField(this.car);
+  final Function next;
+  CarEntryField(this.car, this.next);
 
   @override
-  State<CarEntryField> createState() => CarEntryFieldState(car);
+  State<CarEntryField> createState() => CarEntryFieldState(car, next);
 }
 
 class CarEntryFieldState extends State<CarEntryField> {
   Car car;
   bool firstWritten = false;
+  FocusNode _nameNode, _mileageNode;
+  Function next;
 
-  CarEntryFieldState(this.car);
+  CarEntryFieldState(this.car, this.next);
+
+  @override 
+  initState() {
+    _nameNode = FocusNode();
+    _mileageNode = FocusNode();
+    super.initState();
+  }
+
+  @override 
+  dispose() {
+    _nameNode.dispose();
+    _mileageNode.dispose();
+    super.dispose();
+  }
   
   @override 
   Widget build(BuildContext context) {
-    Widget nameField() {
-      return TextFormField(
-        maxLines: 1,
-        autofocus: true,
-        decoration: defaultInputDecoration('', 'Car Name'),
-        validator: (value) {
-          if (value == null || value == '')
-            return 'Field must not be empty';
-          return null;
-        },
-        initialValue: car.name ?? '',
-        onSaved: (value) {
-          car.name = value.trim();
-          if (firstWritten)
-            CarsBLoC().push(car);
-          firstWritten = !firstWritten;
-        },
-      );
-    }
+    nameField() => TextFormField(
+      maxLines: 1,
+      autofocus: true,
+      decoration: defaultInputDecoration('', 'Car Name'),
+      validator: (value) {
+        if (value == null || value == '')
+          return 'Field must not be empty';
+        return null;
+      },
+      initialValue: car.name ?? '',
+      onSaved: (value) {
+        car.name = value.trim();
+        if (firstWritten)
+          CarsBLoC().push(car);
+        firstWritten = !firstWritten;
+      },
+      focusNode: _nameNode,
+      textInputAction: TextInputAction.next,
+      onFieldSubmitted: (_) => changeFocus(_nameNode, _mileageNode),
+    );
 
-    Widget mileageField() {
-      return TextFormField(
-        maxLines: 1,
-        autofocus: true,
-        decoration: defaultInputDecoration('', 'Mileage'),
-        validator: (value) {
-          if (value == null || value == '')
-            return 'Field must not be empty';
-          return null;
-        },
-        initialValue: '',
-        onSaved: (value) {
-          int mileage = int.parse(value.trim());
-          print(mileage);
-          car.updateMileage(mileage, DateTime.now());
-          if (firstWritten)
-            CarsBLoC().push(car);
-          firstWritten = !firstWritten;
-        },
-      );
-    }
+    mileageField() => TextFormField(
+      maxLines: 1,
+      autofocus: true,
+      decoration: defaultInputDecoration('', 'Mileage'),
+      validator: (value) {
+        if (value == null || value == '')
+          return 'Field must not be empty';
+        return null;
+      },
+      initialValue: '',
+      onSaved: (value) {
+        int mileage = int.parse(value.trim());
+        print(mileage);
+        car.updateMileage(mileage, DateTime.now());
+        if (firstWritten)
+          CarsBLoC().push(car);
+        firstWritten = !firstWritten;
+      },
+      focusNode: _mileageNode,
+      textInputAction: TextInputAction.done,
+      onFieldSubmitted: (_) async => await next(),
+    );
 
     return Container( 
       padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
@@ -105,6 +125,16 @@ class MileageScreenState extends State<MileageScreen> {
 
   MileageScreenState(this.mileageEntry);
 
+  _next() async {
+    if (widget.mileageKey.currentState.validate()) {
+      widget.mileageKey.currentState.save();
+      // hide the keyboard
+      FocusScope.of(context).requestFocus(new FocusNode());
+      await Future.delayed(Duration(milliseconds: 400));
+      widget.onNext();
+    }
+  }
+
   @override 
   Widget build(BuildContext context) {
     Widget headerText = Container(
@@ -137,7 +167,7 @@ class MileageScreenState extends State<MileageScreen> {
     Widget card() {
       List<Widget> carFields = [];
       for (var car in cars) {
-        carFields.add(CarEntryField(car));
+        carFields.add(CarEntryField(car, _next));
       }
 
       return Container( 
@@ -180,15 +210,7 @@ class MileageScreenState extends State<MileageScreen> {
                       'Next',
                       style: Theme.of(context).primaryTextTheme.button,
                     ),
-                    onPressed: () async {
-                      if (widget.mileageKey.currentState.validate()) {
-                        widget.mileageKey.currentState.save();
-                        // hide the keyboard
-                        FocusScope.of(context).requestFocus(new FocusNode());
-                        await Future.delayed(Duration(milliseconds: 400));
-                        widget.onNext();
-                      }
-                    },
+                    onPressed: () async => await _next(),
                   ),
                 ],
               ),

@@ -1,6 +1,7 @@
 import 'package:autodo/screens/newuser.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/theme.dart';
+import 'package:autodo/util.dart';
 import 'package:autodo/blocs/blocs.dart';
 import './accountsetuptemplate.dart';
 
@@ -20,6 +21,7 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen> with SingleTickerPro
   bool pageWillBeVisible;
   AnimationController openCtrl;
   var openCurve;
+  FocusNode _oilNode, _tiresNode;
 
   SetRepeatsScreenState(this.pageWillBeVisible);
 
@@ -36,7 +38,16 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen> with SingleTickerPro
       parent: openCtrl,
       curve: Curves.easeOutCubic
     ));
+    _oilNode = FocusNode();
+    _tiresNode = FocusNode();
     super.initState();
+  }
+
+  @override 
+  dispose() {
+    _oilNode.dispose();
+    _tiresNode.dispose();
+    super.dispose();
   }
 
   @override 
@@ -53,6 +64,9 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen> with SingleTickerPro
       decoration: defaultInputDecoration('(miles)', 'Oil Change Interval (miles)'),
       validator: (value) =>  null,
       onSaved: (value) => RepeatingBLoC().editByName('oil', int.parse(value.trim())),
+      focusNode: _oilNode,
+      textInputAction: TextInputAction.next,
+      onFieldSubmitted: (_) => changeFocus(_oilNode, _tiresNode),
     );
 
     Widget tireRotationInterval = TextFormField(
@@ -62,6 +76,8 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen> with SingleTickerPro
       decoration: defaultInputDecoration('(miles)', 'Tire Rotation Interval (miles)'),
       validator: (value) =>  null,
       onSaved: (value) => RepeatingBLoC().editByName('tireRotation', int.parse(value.trim())),
+      focusNode: _tiresNode,
+      textInputAction: TextInputAction.done,
     );
 
     Widget headerText = Container(
