@@ -20,7 +20,7 @@ class CreateRefuelingScreen extends StatefulWidget {
 
 class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
   DateTime selectedDate = DateTime.now();
-  FocusNode focusNode;
+  FocusNode _odomNode, _nameNode, _fuelNode, _costNode, _dateNode;
   RefuelingItem refuelingItem;
   final _formKey = GlobalKey<FormState>();
 
@@ -40,7 +40,11 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
   @override
   void initState() {
     super.initState();
-    focusNode = FocusNode();
+    _odomNode = FocusNode();
+    _nameNode = FocusNode();
+    _fuelNode = FocusNode();
+    _costNode = FocusNode();
+    _dateNode = FocusNode();
     refuelingItem = (widget.mode == RefuelingEditMode.EDIT)
         ? widget.existing
         : RefuelingItem.empty();
@@ -53,7 +57,11 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
 
   @override
   void dispose() {
-    focusNode.dispose();
+    _odomNode.dispose();
+    _nameNode.dispose();
+    _fuelNode.dispose();
+    _costNode.dispose();
+    _dateNode.dispose();
     super.dispose();
   }
 
@@ -103,10 +111,10 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
       itemSubmitted: (item) => setState(() {
         _autocompleteController.text = item.name;
         selectedCar = item;
-        print(item.name);
       }),
       key: _autocompleteKey,
-      focusNode: focusNode,
+      focusNode: _nameNode,
+      textInputAction: TextInputAction.next,
       suggestions: cars,
       itemBuilder: (context, suggestion) => Padding(
         child: ListTile(
@@ -120,6 +128,7 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
       itemFilter: (suggestion, input) {
         return suggestion.name.toLowerCase().contains(input.toLowerCase());
       },
+      textSubmitted: (_) => changeFocus(_nameNode, _fuelNode),
     );
   }
 
@@ -165,45 +174,46 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                         hintText: 'Required',
                         border: OutlineInputBorder(
                           borderSide: BorderSide(color: Theme.of(context).primaryColor),
-                        ),
-                        labelText: "Odometer Reading (mi)",
-                        contentPadding: EdgeInsets.only(
-                            left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
-                        ),
-                        autofocus: true,
-                        initialValue: (widget.mode == RefuelingEditMode.EDIT)
-                            ? widget.existing.odom.toString()
-                            : '',
-                        keyboardType: TextInputType.number,
-                        validator: intValidator,
-                        onSaved: (val) => setState(() => refuelingItem.odom = int.parse(val)
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 16.0),
-                    ),
-                    carForm(),
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 16.0),
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        hintText: 'Required',
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Theme.of(context).primaryColor),
-                        ),
-                        labelText: "Amount of Fuel (gal)",
-                        contentPadding: EdgeInsets.only(
+                      labelText: "Odometer Reading (mi)",
+                      contentPadding: EdgeInsets.only(
                           left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
-                        ),
-                        initialValue: (widget.mode == RefuelingEditMode.EDIT)
-                            ? widget.existing.amount.toString()
-                            : '',
-                        autofocus: false,
-                        keyboardType: TextInputType.number,
-                        validator: doubleValidator,
-                        onSaved: (val) => setState(() => refuelingItem.amount = double.parse(val)
                       ),
+                      autofocus: true,
+                      initialValue: (widget.mode == RefuelingEditMode.EDIT)
+                          ? widget.existing.odom.toString()
+                          : '',
+                      keyboardType: TextInputType.number,
+                      validator: intValidator,
+                      onSaved: (val) => setState(() => refuelingItem.odom = int.parse(val)),
+                      textInputAction: TextInputAction.next,
+                      focusNode: _odomNode,
+                      onFieldSubmitted: (_) => changeFocus(_odomNode, _nameNode),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
+                      child: carForm(),
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        hintText: 'Required',
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Theme.of(context).primaryColor),
+                      ),
+                      labelText: "Amount of Fuel (gal)",
+                      contentPadding: EdgeInsets.only(
+                        left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
+                      ),
+                      initialValue: (widget.mode == RefuelingEditMode.EDIT)
+                          ? widget.existing.amount.toString()
+                          : '',
+                      autofocus: false,
+                      keyboardType: TextInputType.number,
+                      validator: doubleValidator,
+                      onSaved: (val) => setState(() => refuelingItem.amount = double.parse(val)),
+                      textInputAction: TextInputAction.next,
+                      focusNode: _fuelNode,
+                      onFieldSubmitted: (_) => changeFocus(_fuelNode, _costNode),
                     ),
                     Padding(
                       padding: EdgeInsets.only(bottom: 16.0),
@@ -213,31 +223,30 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                         hintText: 'Required',
                         border: OutlineInputBorder(
                           borderSide: BorderSide(color: Theme.of(context).primaryColor),
-                        ),
-                        labelText: "Total Price (USD)",
-                        contentPadding: EdgeInsets.only(
-                            left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
-                        ),
-                        initialValue: (widget.mode == RefuelingEditMode.EDIT)
-                            ? widget.existing.cost.toString()
-                            : '',
-                        autofocus: false,
-                        keyboardType: TextInputType.number,
-                        validator: doubleValidator,
-                        onSaved: (val) => setState(() => refuelingItem.cost = double.parse(val)
                       ),
+                      labelText: "Total Price (USD)",
+                      contentPadding: EdgeInsets.only(
+                          left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
+                      ),
+                      initialValue: (widget.mode == RefuelingEditMode.EDIT)
+                          ? widget.existing.cost.toString()
+                          : '',
+                      autofocus: false,
+                      keyboardType: TextInputType.number,
+                      validator: doubleValidator,
+                      onSaved: (val) => setState(() => refuelingItem.cost = double.parse(val)),
+                      textInputAction: TextInputAction.next,
+                      focusNode: _costNode,
+                      onFieldSubmitted: (_) => changeFocus(_costNode, _dateNode),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 10.0),
-                    ),
-                    Divider(),
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 10.0),
+                      padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
+                      child: Divider(),
                     ),
                     Row(children: <Widget>[
-                      new Expanded(
-                        child: new TextFormField(
-                          decoration: new InputDecoration(
+                      Expanded(
+                        child: TextFormField(
+                          decoration: InputDecoration(
                             hintText: 'Optional',
                             labelText: 'Refueling Date',
                             contentPadding: EdgeInsets.only(
@@ -254,10 +263,12 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
                           validator: (val) =>
                               isValidDob(val) ? null : 'Not a valid date',
                           onSaved: (val) => setState(() {
-                                if (val != null && val != '') {
-                                  refuelingItem.date = convertToDate(val);
-                                }
-                              }),
+                            if (val != null && val != '') {
+                              refuelingItem.date = convertToDate(val);
+                            }
+                          }),
+                          textInputAction: TextInputAction.done,
+                          focusNode: _dateNode
                         ),
                       ),
                       IconButton(
