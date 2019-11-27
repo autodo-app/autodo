@@ -27,7 +27,30 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 def keyPropertiesFile = rootProject.file("key.properties")
 def keystoreProperties = new Properties()
-keystoreProperties.load(new FileInputStream(keyPropertiesFile))
+if (keyPropertiesFile.exists()) {
+    keyPropertiesFile.withReader('UTF-8') { reader ->
+        keystoreProperties.load(reader)
+    }
+}
+def key_alias = keystoreProperties.getProperty('keyAlias')
+if (key_alias == null) {
+    key_alias = System.getenv("KEY_ALIAS")
+}
+def key_password = keystoreProperties.getProperty('keyPassword')
+if (key_password == null) {
+    key_password = System.getenv("KEY_PASSWORD")
+}
+def store_file_path = keystoreProperties.getProperty('storeFile') // wrap this in file()
+def store_file = ""
+if (store_file_path == null) {
+    store_file = file(System.getenv("STORE_FILE"))
+} else {
+    store_file = file(store_file_path)
+}
+def store_password = keystoreProperties.getProperty('storePassword')
+if (store_password == null) {
+    store_password = System.getenv("STORE_PASSWORD")
+}
 
 android {
     compileSdkVersion 28
@@ -52,10 +75,10 @@ android {
 
     signingConfigs {
         release {
-	    keyAlias keystoreProperties['keyAlias']
-	    keyPassword keystoreProperties['keyPassword']
-	    storeFile file(keystoreProperties['storeFile'])
-	    storePassword keystoreProperties['storePassword']
+            keyAlias key_alias
+            keyPassword key_password
+            storeFile store_file
+            storePassword store_password
         }
     }
 
@@ -78,9 +101,9 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    // testImplementation 'junit:junit:4.12'
+    // androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    // androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
 
 apply plugin: 'com.google.gms.google-services'  // Google Play services Gradle plugin
