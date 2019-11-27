@@ -17,7 +17,7 @@ jobs:
         flutter-version: '1.9.1+hotfix.5'
     - run: flutter pub get
     - run: flutter test
-    - run: echo ${{ secrets.store_file }} | base64 --decode > ~/keystore.jks
+    - run: ${{ secrets.store_file }} | base64 --decode > ~/keystore.jks
     - run: flutter build apk --debug --split-per-abi
       env:
         KEY_ALIAS: ${{ secrets.key_alias }}
