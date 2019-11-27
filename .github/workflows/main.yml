@@ -19,10 +19,10 @@ jobs:
     - run: flutter test
     - run: flutter build apk --debug --split-per-abi
       env:
-        KEY_ALIAS: ${{ secret.key_alias }}
-        KEY_PASSWORD: ${{ secret.key_password }}
-        STORE_FILE: ${{ secret.store_file }}
-        STORE_PASSWORD: ${{ secret.store_password }}
+        KEY_ALIAS: ${{ secrets.key_alias }}
+        KEY_PASSWORD: ${{ secrets.key_password }}
+        STORE_FILE: ${{ secrets.store_file }} | base64 --decode
+        STORE_PASSWORD: ${{ secrets.store_password }}
     - name: Create a Release APK
       uses: ncipollo/release-action@v1
       with:
