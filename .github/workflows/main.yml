@@ -18,6 +18,7 @@ jobs:
     - run: flutter pub get
     - run: flutter test
     - run: echo "${{ secrets.store_file }}" | base64 --decode > ~/keystore.jks
+    - run: echo "${{ secrets.google_services }}" | base64 --decode > ./android/app/google-services.json
     - run: flutter build apk --debug --split-per-abi
       env:
         KEY_ALIAS: ${{ secrets.key_alias }}
