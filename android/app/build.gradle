@@ -43,7 +43,7 @@ if (key_password == null) {
 def store_file_path = keystoreProperties.getProperty('storeFile') // wrap this in file()
 def store_file = ""
 if (store_file_path == null) {
-    store_file = System.getenv("STORE_FILE")
+    store_file = file(System.getenv("STORE_FILE"))
 } else {
     store_file = file(store_file_path)
 }
