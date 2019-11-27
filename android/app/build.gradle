@@ -27,7 +27,27 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 def keyPropertiesFile = rootProject.file("key.properties")
 def keystoreProperties = new Properties()
-keystoreProperties.load(new FileInputStream(keyPropertiesFile))
+if (keyPropertiesFile.exists()) {
+    keyPropertiesFile.withReader('UTF-8') { reader ->
+        keystoreProperties.load(reader)
+    }
+}
+def key_alias = keystoreProperties.getProperty('keyAlias')
+if (key_alias == null) {
+    key_alias = System.getenv("KEY_ALIAS")
+}
+def key_password = keystoreProperties.getProperty('keyPassword')
+if (key_password == null) {
+    key_password = System.getenv("KEY_PASSWORD")
+}
+def store_file = file(keystoreProperties.getProperty('storeFile')) // wrap this in file()
+if (store_file == null) {
+    store_file = System.getenv("STORE_FILE")
+}
+def store_password = keystoreProperties.getProperty('storePassword')
+if (store_password == null) {
+    store_password = System.getenv("STORE_PASSWORD")
+}
 
 android {
     compileSdkVersion 28
@@ -52,10 +72,10 @@ android {
 
     signingConfigs {
         release {
-	    keyAlias keystoreProperties['keyAlias']
-	    keyPassword keystoreProperties['keyPassword']
-	    storeFile file(keystoreProperties['storeFile'])
-	    storePassword keystoreProperties['storePassword']
+            keyAlias key_alias
+            keyPassword key_password
+            storeFile store_file
+            storePassword store_password
         }
     }
 
