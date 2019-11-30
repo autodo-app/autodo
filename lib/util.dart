@@ -16,7 +16,18 @@ String doubleValidator(String val) {
   try {
     double.parse(val);
   } catch (e) {
-    return "Car Mileage must be a valid number.";
+    return "Number";
+  }
+  return null;
+}
+
+String intNoRequire(String val) {
+  if (val == null || val == "")
+    return null;
+  try {
+    int.parse(val);
+  } catch (e) {
+    return "Integer";
   }
   return null;
 }
@@ -24,13 +35,10 @@ String doubleValidator(String val) {
 String intValidator(String val) {
   if (val == null || val == "")
     return "This field is required.";
-  try {
-    int.parse(val);
-  } catch (e) {
-    return "Car Mileage must be an integer.";
-  }
-  return null;
+  return intNoRequire(val);
 }
+
+
 
 class RGB {
   double r = 0.0;       // a fraction between 0 and 1

@@ -43,11 +43,7 @@ class CarEntryFieldState extends State<CarEntryField> {
       maxLines: 1,
       autofocus: true,
       decoration: defaultInputDecoration('', 'Car Name'),
-      validator: (value) {
-        if (value == null || value == '')
-          return 'Field must not be empty';
-        return null;
-      },
+      validator: (val) => requiredValidator(val),
       initialValue: car.name ?? '',
       onSaved: (value) {
         car.name = value.trim();
@@ -62,13 +58,9 @@ class CarEntryFieldState extends State<CarEntryField> {
 
     mileageField() => TextFormField(
       maxLines: 1,
-      autofocus: true,
+      autofocus: false,
       decoration: defaultInputDecoration('', 'Mileage'),
-      validator: (value) {
-        if (value == null || value == '')
-          return 'Field must not be empty';
-        return null;
-      },
+      validator: (val) => intValidator(val),
       initialValue: '',
       onSaved: (value) {
         int mileage = int.parse(value.trim());
