@@ -50,6 +50,16 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen> with SingleTickerPro
     super.dispose();
   }
 
+  _next() async {
+    if (widget.repeatKey.currentState.validate()) {
+      widget.repeatKey.currentState.save();
+      // hide the keyboard
+      FocusScope.of(context).requestFocus(new FocusNode());
+      await Future.delayed(Duration(milliseconds: 400));
+      Navigator.popAndPushNamed(context, '/load');
+    }
+  }
+
   @override 
   Widget build(BuildContext context) {
     if (pageWillBeVisible) {
@@ -62,7 +72,7 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen> with SingleTickerPro
       autofocus: false,
       initialValue: RepeatingBLoC().repeatByName('oil').interval.toString(),
       decoration: defaultInputDecoration('(miles)', 'Oil Change Interval (miles)'),
-      validator: (value) =>  null,
+      validator: (val) => intValidator(val),
       onSaved: (value) => RepeatingBLoC().editByName('oil', int.parse(value.trim())),
       focusNode: _oilNode,
       textInputAction: TextInputAction.next,
@@ -74,7 +84,7 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen> with SingleTickerPro
       autofocus: false,
       initialValue: RepeatingBLoC().repeatByName('tireRotation').interval.toString(),
       decoration: defaultInputDecoration('(miles)', 'Tire Rotation Interval (miles)'),
-      validator: (value) =>  null,
+      validator: (val) => intValidator(val),
       onSaved: (value) => RepeatingBLoC().editByName('tireRotation', int.parse(value.trim())),
       focusNode: _tiresNode,
       textInputAction: TextInputAction.done,
@@ -145,7 +155,7 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen> with SingleTickerPro
                       'Next',
                       style: Theme.of(context).primaryTextTheme.button,
                     ),
-                    onPressed: () => Navigator.popAndPushNamed(context, '/load'),
+                    onPressed: () async => await _next(),
                   ),
                 ],
               ),

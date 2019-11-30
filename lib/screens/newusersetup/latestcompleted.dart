@@ -24,12 +24,13 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen> with TickerPro
 
   LatestRepeatsScreenState(this.pageWillBeVisible);
 
-  String intValidator(String value) {
-    try { 
-      int.parse(value);
-      return null;
-    } catch (e) { 
-      return 'Value must be an integer.'; 
+  _next() async {
+    if (widget.repeatKey.currentState.validate()) {
+      widget.repeatKey.currentState.save();
+      // hide the keyboard
+      FocusScope.of(context).requestFocus(new FocusNode());
+      await Future.delayed(Duration(milliseconds: 400));
+      widget.onNext();
     }
   }
 
@@ -72,7 +73,7 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen> with TickerPro
       autofocus: false,
       onTap: () => setState(() => expanded = false),
       decoration: defaultInputDecoration('(miles)', 'Last Oil Change (miles)'),
-      validator: (value) => intValidator(value),
+      validator: (value) => intNoRequire(value),
       onSaved: (value) {
         if (value != null && value != '')
           RepeatingBLoC().setLastCompleted('oil', int.parse(value.trim()));
@@ -86,7 +87,7 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen> with TickerPro
       maxLines: 1,
       onTap: () => setState(() => expanded = true),
       decoration: defaultInputDecoration('(miles)', 'Last Tire Rotation (miles)'),
-      validator: (value) => intValidator(value),
+      validator: (value) => intNoRequire(value),
       onSaved: (value) {
         if (value != null && value != '')
           RepeatingBLoC().setLastCompleted('tireRotation', int.parse(value.trim()));
@@ -130,7 +131,6 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen> with TickerPro
 
     Widget card() {
       return Container(
-        // height: openCurve.value * (viewportSize.maxHeight - 110),
         padding: EdgeInsets.all(10),
         child: Column(  
           mainAxisAlignment: MainAxisAlignment.start,
@@ -165,11 +165,7 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen> with TickerPro
                       'Next',
                       style: Theme.of(context).primaryTextTheme.button,
                     ),
-                    onPressed: () async {
-                      setState(() => pageTransition = true);
-                      await Future.delayed(Duration(milliseconds: 200)); // wait for the animation to finish
-                      widget.onNext();
-                    }
+                    onPressed: () async => await _next(),
                   ),
                 ],
               ),
