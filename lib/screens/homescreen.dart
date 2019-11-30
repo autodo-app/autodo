@@ -39,7 +39,7 @@ class HomeScreenState extends State<HomeScreen> {
     authStream = Auth().listen(onAuthChange);
   }
 
-  @override 
+  @override
   void dispose() {
     authStream.cancel();
     super.dispose();
@@ -57,12 +57,12 @@ class HomeScreenState extends State<HomeScreen> {
         repeatsScreen,
       ];
 
-      bodyStack = IndexedStack(  
+      bodyStack = IndexedStack(
         index: tabIndex,
         children: bodies,
       );
     }
-    
+
     return Container(
       decoration: scaffoldBackgroundGradient(),
       child: Scaffold(
@@ -94,36 +94,27 @@ class HomeScreenState extends State<HomeScreen> {
           ],
         ),
         body: (signedIn) ? bodyStack : Container(),
-        bottomNavigationBar: BottomNavigationBar(  
-          backgroundColor: bottomControllerColor,
-          type: BottomNavigationBarType.fixed,
-          showSelectedLabels: true,
-          showUnselectedLabels: false,
-          onTap: (index) => setState(() {
-            if (tabIndex == 3)
-              repeatsScreen.save();
-            tabIndex = index;
-          }),
-          currentIndex: tabIndex,
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.build),
-              title: Text('ToDos')
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.local_gas_station),
-              title: Text('Refuelings')
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.show_chart),
-              title: Text('Statistics')
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.autorenew),
-              title: Text('Repeats')
-            ),
-          ]
-        ),
+        bottomNavigationBar: BottomNavigationBar(
+            backgroundColor: bottomControllerColor,
+            type: BottomNavigationBarType.fixed,
+            showSelectedLabels: true,
+            showUnselectedLabels: false,
+            onTap: (index) => setState(() {
+                  if (tabIndex == 3) repeatsScreen.save();
+                  tabIndex = index;
+                }),
+            currentIndex: tabIndex,
+            items: [
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.build), title: Text('ToDos')),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.local_gas_station),
+                  title: Text('Refuelings')),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.show_chart), title: Text('Statistics')),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.autorenew), title: Text('Repeats')),
+            ]),
         drawer: NavDrawer(),
         floatingActionButton: CreateEntryButton(),
         backgroundColor: Colors.transparent,

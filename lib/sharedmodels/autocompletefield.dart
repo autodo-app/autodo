@@ -1,6 +1,6 @@
 ///
 /// Copyright <2018> <@Felix McCuaig>
-/// 
+///
 /// Licensed under MIT License. A copy of this license is included.
 ///
 

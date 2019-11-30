@@ -23,8 +23,7 @@ void startListeners() {
 Future<void> initNewUser(String email, String password) async {
   FirestoreBLoC().initialize(); // starts listening for auth change
   String uuid = await Auth().signUp(email, password);
-  if (uuid == null || uuid == "")
-    throw SignInFailure();
+  if (uuid == null || uuid == "") throw SignInFailure();
   await FirestoreBLoC().createUserDocument(uuid);
   await initBLoCs(uuid);
 }
@@ -42,7 +41,6 @@ Future<void> loadingSequence(BuildContext context) async {
 Future<void> initExistingUser(String email, String password) async {
   FirestoreBLoC().initialize(); // starts listening for auth change
   String uuid = await Auth().signIn(email, password);
-  if (uuid == null || uuid == "")
-    throw SignInFailure();
+  if (uuid == null || uuid == "") throw SignInFailure();
   await initBLoCs(uuid);
 }

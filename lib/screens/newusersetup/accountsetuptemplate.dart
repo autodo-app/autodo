@@ -7,7 +7,7 @@ class AccountSetupScreen extends StatefulWidget {
 
   AccountSetupScreen({@required this.header, @required this.panel});
 
-  @override 
+  @override
   AccountSetupScreenState createState() => AccountSetupScreenState();
 }
 
@@ -16,46 +16,46 @@ class AccountSetupScreenState extends State<AccountSetupScreen> {
     width: 50,
     height: 5,
     decoration: BoxDecoration(
-      color: Colors.black.withAlpha(140),
-      borderRadius: BorderRadius.all(Radius.circular(12.0))
-    ),
+        color: Colors.black.withAlpha(140),
+        borderRadius: BorderRadius.all(Radius.circular(12.0))),
   );
-            
-  @override 
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints viewportConstraints) {
-            return ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight: viewportConstraints.maxHeight,
-              ), 
-              child: SafeArea(
-                child: SlidingUpPanel(
-                  maxHeight: viewportConstraints.maxHeight,
-                  minHeight: viewportConstraints.maxHeight - 110,
-                  parallaxEnabled: true,
-                  parallaxOffset: .5,
-                  body: widget.header,
-                  color: cardColor,
-                  panel: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
-                        child: pullTab,
-                      ),
-                      widget.panel
-                    ],
+        return ConstrainedBox(
+          constraints: BoxConstraints(
+            minHeight: viewportConstraints.maxHeight,
+          ),
+          child: SafeArea(
+            child: SlidingUpPanel(
+              maxHeight: viewportConstraints.maxHeight,
+              minHeight: viewportConstraints.maxHeight - 110,
+              parallaxEnabled: true,
+              parallaxOffset: .5,
+              body: widget.header,
+              color: cardColor,
+              panel: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
+                    child: pullTab,
                   ),
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0)),
-                  onPanelSlide: (double pos) => setState((){}),
-                ),
+                  widget.panel
+                ],
               ),
-            );
-          }
-        ),
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30.0),
+                  topRight: Radius.circular(30.0)),
+              onPanelSlide: (double pos) => setState(() {}),
+            ),
+          ),
+        );
+      }),
     );
   }
 }

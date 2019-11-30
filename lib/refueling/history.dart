@@ -9,7 +9,6 @@ class RefuelingHistory extends StatefulWidget {
 }
 
 class RefuelingHistoryState extends State<RefuelingHistory> {
-
   @override
   Widget build(BuildContext context) {
     return RefuelingBLoC().items();

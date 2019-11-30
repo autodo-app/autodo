@@ -4,15 +4,17 @@ final RegExp lowerToUpper = RegExp('([a-z])([A-Z])');
 
 String titleCase(String input) {
   if (input == '' || input == null) return input;
-  input = input[0].toUpperCase() + input.substring(1); // capitalize first letter
-  return input.replaceAllMapped(lowerToUpper, (m) => "${m[1]} ${m[2]}"); // space between words
+  input =
+      input[0].toUpperCase() + input.substring(1); // capitalize first letter
+  return input.replaceAllMapped(
+      lowerToUpper, (m) => "${m[1]} ${m[2]}"); // space between words
 }
 
-String requiredValidator(String val) => (val == null || val == "") ? "This field is required." : null; 
+String requiredValidator(String val) =>
+    (val == null || val == "") ? "This field is required." : null;
 
 String doubleValidator(String val) {
-  if (val == null || val == "")
-    return "This field is required.";
+  if (val == null || val == "") return "This field is required.";
   try {
     double.parse(val);
   } catch (e) {
@@ -22,8 +24,7 @@ String doubleValidator(String val) {
 }
 
 String intValidator(String val) {
-  if (val == null || val == "")
-    return "This field is required.";
+  if (val == null || val == "") return "This field is required.";
   try {
     int.parse(val);
   } catch (e) {
@@ -33,9 +34,9 @@ String intValidator(String val) {
 }
 
 class RGB {
-  double r = 0.0;       // a fraction between 0 and 1
-  double g = 0.0;       // a fraction between 0 and 1
-  double b = 0.0;       // a fraction between 0 and 1
+  double r = 0.0; // a fraction between 0 and 1
+  double g = 0.0; // a fraction between 0 and 1
+  double b = 0.0; // a fraction between 0 and 1
 
   toValue() {
     int red = (r * 255).toInt();
@@ -46,9 +47,9 @@ class RGB {
 }
 
 class HSV {
-  double h = 0.0;       // angle in degrees
-  double s = 0.0;       // a fraction between 0 and 1
-  double v = 0.0;       // a fraction between 0 and 1
+  double h = 0.0; // angle in degrees
+  double s = 0.0; // a fraction between 0 and 1
+  double v = 0.0; // a fraction between 0 and 1
 
   HSV(this.h, this.s, this.v);
 }
@@ -70,10 +71,11 @@ HSV rgb2hsv(RGB rgb) {
     out.h = 0; // undefined, maybe nan?
     return out;
   }
-  if (max > 0.0) { // NOTE: if Max is == 0, this divide would cause a crash
+  if (max > 0.0) {
+    // NOTE: if Max is == 0, this divide would cause a crash
     out.s = (delta / max);
   } else {
-    // if max is 0, then r = g = b = 0              
+    // if max is 0, then r = g = b = 0
     // s = 0, h is undefined
     out.s = 0.0;
     out.h = double.infinity; // its now undefined
@@ -81,16 +83,15 @@ HSV rgb2hsv(RGB rgb) {
   }
 
   if (rgb.r >= max) // > is bogus, just keeps compilor happy
-    out.h = (rgb.g - rgb.b) / delta;        // between yellow & magenta
+    out.h = (rgb.g - rgb.b) / delta; // between yellow & magenta
   else if (rgb.g >= max)
-    out.h = 2.0 + (rgb.b - rgb.r) / delta;  // between cyan & yellow
+    out.h = 2.0 + (rgb.b - rgb.r) / delta; // between cyan & yellow
   else
-    out.h = 4.0 + (rgb.r - rgb.g) / delta;  // between magenta & cyan
+    out.h = 4.0 + (rgb.r - rgb.g) / delta; // between magenta & cyan
 
-  out.h *= 60.0;                              // degrees
+  out.h *= 60.0; // degrees
 
-  if( out.h < 0.0 )
-    out.h += 360.0;
+  if (out.h < 0.0) out.h += 360.0;
 
   return out;
 }
@@ -100,7 +101,8 @@ RGB hsv2rgb(HSV hsv) {
   int i;
   RGB out = RGB();
 
-  if (hsv.s <= 0.0) {       // < is bogus, just shuts up warnings
+  if (hsv.s <= 0.0) {
+    // < is bogus, just shuts up warnings
     out.r = hsv.v;
     out.g = hsv.v;
     out.b = hsv.v;
@@ -116,43 +118,45 @@ RGB hsv2rgb(HSV hsv) {
   t = hsv.v * (1.0 - (hsv.s * (1.0 - ff)));
 
   switch (i) {
-  case 0:
-    out.r = hsv.v;
-    out.g = t;
-    out.b = p;
-    break;
-  case 1:
-    out.r = q;
-    out.g = hsv.v;
-    out.b = p;
-    break;
-  case 2:
-    out.r = p;
-    out.g = hsv.v;
-    out.b = t;
-    break;
+    case 0:
+      out.r = hsv.v;
+      out.g = t;
+      out.b = p;
+      break;
+    case 1:
+      out.r = q;
+      out.g = hsv.v;
+      out.b = p;
+      break;
+    case 2:
+      out.r = p;
+      out.g = hsv.v;
+      out.b = t;
+      break;
 
-  case 3:
-    out.r = p;
-    out.g = q;
-    out.b = hsv.v;
-    break;
-  case 4:
-    out.r = t;
-    out.g = p;
-    out.b = hsv.v;
-    break;
-  case 5:
-  default:
-    out.r = hsv.v;
-    out.g = p;
-    out.b = q;
-    break;
+    case 3:
+      out.r = p;
+      out.g = q;
+      out.b = hsv.v;
+      break;
+    case 4:
+      out.r = t;
+      out.g = p;
+      out.b = hsv.v;
+      break;
+    case 5:
+    default:
+      out.r = hsv.v;
+      out.g = p;
+      out.b = q;
+      break;
   }
-  return out;     
+  return out;
 }
 
-clamp(input, lo, hi) { return (input < lo) ? lo : (input > hi) ? hi : input; }
+clamp(input, lo, hi) {
+  return (input < lo) ? lo : (input > hi) ? hi : input;
+}
 
 /// This will always round down for now
 roundToDay(DateTime date) {
@@ -167,7 +171,7 @@ double scaleToUnit(double _num, double _min, double _max) {
   if ((_max - _min).abs() < 0.001) {
     // don't want to be dividing by ~0, so we'll set the output to be green
     return 1.0;
-   } 
+  }
   return clamp((_num - _min) / (_max - _min), 0.0, 1.0);
 }
 

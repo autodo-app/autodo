@@ -6,14 +6,16 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 class NotificationBLoC {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   static final channelID = 'com.jonathanbayless.autodo';
-  static final channelName =  'auToDo';
+  static final channelName = 'auToDo';
   static final channelDescription = 'Task reminders from the auToDo app';
   static final androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        channelID, channelName, channelDescription,
-        importance: Importance.Max, priority: Priority.High, ticker: 'auToDo notification');
+      channelID, channelName, channelDescription,
+      importance: Importance.Max,
+      priority: Priority.High,
+      ticker: 'auToDo notification');
   static final iOSPlatformChannelSpecifics = IOSNotificationDetails();
   static final platformChannelSpecifics = NotificationDetails(
-        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+      androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
 
   Future onSelectNotification(String payload) async {
     if (payload != null) {
@@ -34,7 +36,8 @@ class NotificationBLoC {
   Future<int> getNextNotificationID() async {
     var userDoc = FirestoreBLoC().getUserDocument();
     var userData = await userDoc.get();
-    if (userData.data == null || !userData.data.containsKey('lastNotificationID')) {
+    if (userData.data == null ||
+        !userData.data.containsKey('lastNotificationID')) {
       var lastID = 0;
       var userJSON = userData.data;
       userJSON['lastNotificationID'] = lastID;
@@ -49,15 +52,14 @@ class NotificationBLoC {
     return lastID;
   }
 
-  Future<int> scheduleNotification({@required DateTime datetime, @required String title, @required String body}) async {
+  Future<int> scheduleNotification(
+      {@required DateTime datetime,
+      @required String title,
+      @required String body}) async {
     // Set a value in the user's db with the id value corresponding to this notification?
     var id = await getNextNotificationID();
     await flutterLocalNotificationsPlugin.schedule(
-        id,
-        title,
-        body,
-        datetime,
-        platformChannelSpecifics);
+        id, title, body, datetime, platformChannelSpecifics);
     return id;
   }
 
@@ -75,26 +77,28 @@ class NotificationBLoC {
       print(e);
     }
   }
-  
+
   Future<void> cancelAll() async {
     await flutterLocalNotificationsPlugin.cancelAll();
   }
 
   Future<bool> launchedByNotification() async {
     var notificationAppLaunchDetails =
-      await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+        await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
     return notificationAppLaunchDetails.didNotificationLaunchApp;
   }
 
-  Future<dynamic> onDidReceiveLocalNotification(int ign1, String ign2, String ign3, String ign4) async {}
+  Future<dynamic> onDidReceiveLocalNotification(
+      int ign1, String ign2, String ign3, String ign4) async {}
 
   Future<void> printPendingNotifications() async {
-    var requests = await flutterLocalNotificationsPlugin.pendingNotificationRequests();
+    var requests =
+        await flutterLocalNotificationsPlugin.pendingNotificationRequests();
     requests.forEach((f) {
       print(f.title);
     });
   }
-  
+
   // Make the object a Singleton
   static final NotificationBLoC _bloc = NotificationBLoC._internal();
   factory NotificationBLoC() {

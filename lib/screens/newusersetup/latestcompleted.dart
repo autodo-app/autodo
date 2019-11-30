@@ -12,11 +12,13 @@ class LatestRepeatsScreen extends StatefulWidget {
 
   LatestRepeatsScreen(this.repeatKey, this.onNext, this.page);
 
-  @override 
-  LatestRepeatsScreenState createState() => LatestRepeatsScreenState(page == NewUserScreenPage.LATEST);
+  @override
+  LatestRepeatsScreenState createState() =>
+      LatestRepeatsScreenState(page == NewUserScreenPage.LATEST);
 }
 
-class LatestRepeatsScreenState extends State<LatestRepeatsScreen> with TickerProviderStateMixin{
+class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
+    with TickerProviderStateMixin {
   bool expanded, pageTransition, pageWillBeVisible;
   AnimationController openCtrl;
   var openCurve;
@@ -25,42 +27,39 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen> with TickerPro
   LatestRepeatsScreenState(this.pageWillBeVisible);
 
   String intValidator(String value) {
-    try { 
+    try {
       int.parse(value);
       return null;
-    } catch (e) { 
-      return 'Value must be an integer.'; 
+    } catch (e) {
+      return 'Value must be an integer.';
     }
   }
 
-  @override 
+  @override
   void initState() {
     expanded = false;
     pageTransition = false;
-    openCtrl = AnimationController(  
+    openCtrl = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 600),
     )..addListener(() => setState(() {}));
     openCurve = Tween(
       begin: 0.0,
       end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: openCtrl,
-      curve: Curves.easeOutCubic
-    ));
+    ).animate(CurvedAnimation(parent: openCtrl, curve: Curves.easeOutCubic));
     _oilNode = FocusNode();
     _tiresNode = FocusNode();
     super.initState();
   }
 
-  @override 
+  @override
   dispose() {
     _oilNode.dispose();
     _tiresNode.dispose();
     super.dispose();
   }
 
-  @override 
+  @override
   Widget build(BuildContext context) {
     if (pageWillBeVisible) {
       openCtrl.forward();
@@ -85,11 +84,13 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen> with TickerPro
     Widget tireRotationMileage = TextFormField(
       maxLines: 1,
       onTap: () => setState(() => expanded = true),
-      decoration: defaultInputDecoration('(miles)', 'Last Tire Rotation (miles)'),
+      decoration:
+          defaultInputDecoration('(miles)', 'Last Tire Rotation (miles)'),
       validator: (value) => intValidator(value),
       onSaved: (value) {
         if (value != null && value != '')
-          RepeatingBLoC().setLastCompleted('tireRotation', int.parse(value.trim()));
+          RepeatingBLoC()
+              .setLastCompleted('tireRotation', int.parse(value.trim()));
       },
       focusNode: _tiresNode,
       textInputAction: TextInputAction.done,
@@ -102,41 +103,39 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen> with TickerPro
       child: Padding(
         padding: EdgeInsets.fromLTRB(0, 0, 0, 30),
         child: Center(
-          child: Column(  
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-                child: Text( 
-                  'Before you get started,\n let\'s get some info about your car.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontFamily: 'Ubuntu',
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white.withAlpha(230),
-                  ),
+            child: Column(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+              child: Text(
+                'Before you get started,\n let\'s get some info about your car.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'Ubuntu',
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white.withAlpha(230),
                 ),
               ),
-              Text(  
-                'When was the last time you did these tasks?',
-                style: Theme.of(context).primaryTextTheme.body1,
-              ),
-            ],
-          )
-        ),
+            ),
+            Text(
+              'When was the last time you did these tasks?',
+              style: Theme.of(context).primaryTextTheme.body1,
+            ),
+          ],
+        )),
       ),
     );
-
 
     Widget card() {
       return Container(
         // height: openCurve.value * (viewportSize.maxHeight - 110),
         padding: EdgeInsets.all(10),
-        child: Column(  
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
-          children: <Widget>[  
+          children: <Widget>[
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
               child: oilMileage,
@@ -147,41 +146,42 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen> with TickerPro
             ),
             Container(
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,  
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  FlatButton( 
+                  FlatButton(
                     padding: EdgeInsets.all(0),
                     materialTapTargetSize: MaterialTapTargetSize.padded,
                     child: Text(
-                      'Skip',     
+                      'Skip',
                       style: Theme.of(context).primaryTextTheme.button,
                     ),
-                    onPressed: () => Navigator.popAndPushNamed(context, '/load'),
+                    onPressed: () =>
+                        Navigator.popAndPushNamed(context, '/load'),
                   ),
-                  FlatButton( 
-                    padding: EdgeInsets.all(0),
-                    materialTapTargetSize: MaterialTapTargetSize.padded,
-                    child: Text(
-                      'Next',
-                      style: Theme.of(context).primaryTextTheme.button,
-                    ),
-                    onPressed: () async {
-                      setState(() => pageTransition = true);
-                      await Future.delayed(Duration(milliseconds: 200)); // wait for the animation to finish
-                      widget.onNext();
-                    }
-                  ),
+                  FlatButton(
+                      padding: EdgeInsets.all(0),
+                      materialTapTargetSize: MaterialTapTargetSize.padded,
+                      child: Text(
+                        'Next',
+                        style: Theme.of(context).primaryTextTheme.button,
+                      ),
+                      onPressed: () async {
+                        setState(() => pageTransition = true);
+                        await Future.delayed(Duration(
+                            milliseconds:
+                                200)); // wait for the animation to finish
+                        widget.onNext();
+                      }),
                 ],
               ),
             ),
           ],
         ),
-      );  
+      );
     }
 
     return Form(
-      key: widget.repeatKey,
-      child: AccountSetupScreen(header: headerText, panel: card())
-    );
+        key: widget.repeatKey,
+        child: AccountSetupScreen(header: headerText, panel: card()));
   }
 }

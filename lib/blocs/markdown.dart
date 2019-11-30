@@ -15,18 +15,18 @@ class MarkdownParser {
       List<String> pieces = line.split(RegExp(r'^- '));
       return '•   ' + pieces[1];
     }
-    return null;      
+    return null;
   }
 
   static String _h2(String line) {
     if (RegExp(r'^## ').hasMatch(line)) {
-        List<String> pieces = line.split(RegExp(r'^## '));
-        return pieces[1];
+      List<String> pieces = line.split(RegExp(r'^## '));
+      return pieces[1];
     }
     return null;
   }
 
-  static TextStyle _h2Style = TextStyle( 
+  static TextStyle _h2Style = TextStyle(
     color: Colors.white.withAlpha(230),
     fontSize: 22,
     fontWeight: FontWeight.w600,
@@ -35,20 +35,20 @@ class MarkdownParser {
 
   static String _h3(String line) {
     if (RegExp(r'^### ').hasMatch(line)) {
-        List<String> pieces = line.split(RegExp(r'^### '));
-        return pieces[1];
+      List<String> pieces = line.split(RegExp(r'^### '));
+      return pieces[1];
     }
     return null;
   }
 
-  static TextStyle _h3Style = TextStyle( 
+  static TextStyle _h3Style = TextStyle(
     color: Colors.white.withAlpha(230),
     fontSize: 16,
     fontWeight: FontWeight.w600,
     fontFamily: 'Ubuntu',
   );
 
-  static TextStyle defaultStyle = TextStyle( 
+  static TextStyle defaultStyle = TextStyle(
     color: Colors.white.withAlpha(230),
     fontSize: 12,
     fontWeight: FontWeight.w300,
@@ -60,21 +60,19 @@ class MarkdownParser {
     _Parser(_h2, _h2Style),
   ];
 
-  static List<TextSpan> addLine(List<TextSpan> spans, String txt, TextStyle style) {
+  static List<TextSpan> addLine(
+      List<TextSpan> spans, String txt, TextStyle style) {
     txt += '\n';
-    return spans..add(
-      TextSpan(
+    return spans
+      ..add(TextSpan(
         text: txt,
         style: style ?? defaultStyle,
-      )
-    );
+      ));
   }
 
   static TextStyle bold = defaultStyle.copyWith(fontWeight: FontWeight.w600);
-  static TextStyle _linkStyle = defaultStyle.copyWith( 
-    decoration: TextDecoration.underline,
-    color: Colors.blue
-  );
+  static TextStyle _linkStyle = defaultStyle.copyWith(
+      decoration: TextDecoration.underline, color: Colors.blue);
 
   static List<TextSpan> _inlineMarkup(List<TextSpan> spans, String txt) {
     List<TextSpan> out = [];
@@ -87,22 +85,18 @@ class MarkdownParser {
     bool odd = false;
     for (var piece in pieces) {
       var match = piece.group(0);
-      
+
       // odd numbered matches (zero aligned) will be bolded sections
       if (odd) {
-        out.add(
-          TextSpan(  
-            text: match,
-            style: bold,
-          )
-        );
+        out.add(TextSpan(
+          text: match,
+          style: bold,
+        ));
       } else {
-        out.add(
-          TextSpan(  
-            text: match,
-            style: defaultStyle,
-          )
-        );
+        out.add(TextSpan(
+          text: match,
+          style: defaultStyle,
+        ));
       }
       odd = !odd;
     }
@@ -113,10 +107,7 @@ class MarkdownParser {
     for (var span in out) {
       var txt = span.text;
       // dynamically resizing the list is bad
-      TextSpan t = TextSpan(
-        text: '',
-        children: []
-      );
+      TextSpan t = TextSpan(text: '', children: []);
       var pieces = isLink.allMatches(txt);
       for (var piece in pieces) {
         var fullMatch = piece.group(0);
@@ -126,29 +117,23 @@ class MarkdownParser {
           if (odd) {
             var url = piece.group(2);
             var linkText = piece.group(1);
-            var tap = TapGestureRecognizer()..onTap = () => launcher.launch(url);
-            t.children.add(
-              TextSpan(
-                text: linkText,
-                recognizer: tap,
-                style: _linkStyle,
-              )
-            );
-          } 
-          t.children.add(
-            TextSpan( 
-              text: s,
-              style: defaultStyle,
-            )
-          );
+            var tap = TapGestureRecognizer()
+              ..onTap = () => launcher.launch(url);
+            t.children.add(TextSpan(
+              text: linkText,
+              recognizer: tap,
+              style: _linkStyle,
+            ));
+          }
+          t.children.add(TextSpan(
+            text: s,
+            style: defaultStyle,
+          ));
           odd = !odd;
         }
       }
       if (isLink.hasMatch(txt)) {
-        toRemove.add([
-          span,
-          t
-        ]);
+        toRemove.add([span, t]);
       }
     }
     for (var pair in toRemove) {
@@ -158,7 +143,8 @@ class MarkdownParser {
 
     // italics could be dealt with by another regex, but that's a problem for later
 
-    out.add(TextSpan(text: '\n')); // make sure that the line ends with a newline character
+    out.add(TextSpan(
+        text: '\n')); // make sure that the line ends with a newline character
 
     return spans + out;
   }
@@ -171,22 +157,23 @@ class MarkdownParser {
         break;
       }
     }
-    endJekyllFrontMatter += 2; // account for the last '---' line plus a gap space
+    endJekyllFrontMatter +=
+        2; // account for the last '---' line plus a gap space
     return List.from(lines.getRange(endJekyllFrontMatter, lines.length));
   }
 
   static TextSpan parse(String input) {
     List<String> lines = input.split(RegExp(r'\r?\n'));
     List<TextSpan> spans = [];
-    
+
     lines = _removeJekyllHeader(lines);
 
     lines.forEach((line) {
-      bool parsed = false;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+      bool parsed = false;
 
       // line starting styles - headers, lists, etc.
       for (var parser in parsers) {
-        String txt = parser.fn(line); 
+        String txt = parser.fn(line);
         if (txt != null) {
           spans = addLine(spans, txt, parser.style);
           parsed = true;
@@ -200,7 +187,7 @@ class MarkdownParser {
         spans = _inlineMarkup(spans, line);
       }
     });
-    return TextSpan(  
+    return TextSpan(
       children: spans,
     );
   }

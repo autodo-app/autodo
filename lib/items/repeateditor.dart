@@ -9,7 +9,7 @@ class RepeatEditor extends StatefulWidget {
     if (this.item.name == '') this.item.name = 'New Repeat';
   }
 
-  @override 
+  @override
   State<StatefulWidget> createState() => RepeatEditorState();
 }
 
@@ -19,49 +19,41 @@ class RepeatEditorState extends State<RepeatEditor> {
 
   Widget name() {
     return Align(
-      alignment: Alignment.centerLeft, 
-      child: RichText(  
-        textAlign: TextAlign.left,
-        text: TextSpan(  
-          children: [ 
-            TextSpan(  
-              text: 'Task Name:  ',
-              style: Theme.of(context).primaryTextTheme.subtitle
-            ),
-            TextSpan(
-              text: nameInit,
-              style: Theme.of(context).primaryTextTheme.subtitle
-                .copyWith(fontWeight: FontWeight.w600)
-            ),
-          ]
-        )
-      )
-    );
+        alignment: Alignment.centerLeft,
+        child: RichText(
+            textAlign: TextAlign.left,
+            text: TextSpan(children: [
+              TextSpan(
+                  text: 'Task Name:  ',
+                  style: Theme.of(context).primaryTextTheme.subtitle),
+              TextSpan(
+                  text: nameInit,
+                  style: Theme.of(context)
+                      .primaryTextTheme
+                      .subtitle
+                      .copyWith(fontWeight: FontWeight.w600)),
+            ])));
   }
 
   Widget value() {
     return Align(
-      alignment: Alignment.centerLeft, 
-      child: RichText(  
-        textAlign: TextAlign.left,
-        text: TextSpan(  
-          children: [ 
-            TextSpan(  
-              text: 'Interval:  ',
-              style: Theme.of(context).primaryTextTheme.body1
-            ),
-            TextSpan(
-              text: valInit,
-              style: Theme.of(context).primaryTextTheme.body1
-                .copyWith(fontWeight: FontWeight.w600)
-            ),
-          ]
-        )
-      )
-    );
+        alignment: Alignment.centerLeft,
+        child: RichText(
+            textAlign: TextAlign.left,
+            text: TextSpan(children: [
+              TextSpan(
+                  text: 'Interval:  ',
+                  style: Theme.of(context).primaryTextTheme.body1),
+              TextSpan(
+                  text: valInit,
+                  style: Theme.of(context)
+                      .primaryTextTheme
+                      .body1
+                      .copyWith(fontWeight: FontWeight.w600)),
+            ])));
   }
 
-  @override 
+  @override
   Widget build(BuildContext context) {
     // Setting the controller text values here ensures that the textfields
     // actually get updated when another repeat is deleted
@@ -71,58 +63,55 @@ class RepeatEditorState extends State<RepeatEditor> {
       padding: EdgeInsets.all(15),
       constraints: BoxConstraints(maxHeight: 300),
       child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            name(),
-            Flex( 
-              direction: Axis.horizontal,
-              children: <Widget>[ 
-                Expanded( 
-                  flex: 7,
-                  child: value(),
-                ),
-                Expanded( 
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          name(),
+          Flex(
+            direction: Axis.horizontal,
+            children: <Widget>[
+              Expanded(
+                flex: 7,
+                child: value(),
+              ),
+              Expanded(
                   flex: 3,
                   child: Align(
-                    alignment: Alignment.centerRight,
-                    child: Row( 
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        IconButton(  
-                          onPressed: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CreateRepeatScreen(
-                                mode: RepeatEditMode.EDIT,
-                                existing: widget.item,
-                              ),
+                      alignment: Alignment.centerRight,
+                      child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            IconButton(
+                                onPressed: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            CreateRepeatScreen(
+                                          mode: RepeatEditMode.EDIT,
+                                          existing: widget.item,
+                                        ),
+                                      ),
+                                    ),
+                                icon: Icon(Icons.edit)),
+                            IconButton(
+                              onPressed: () {
+                                RepeatingBLoC().delete(widget.item);
+                                final snackbar = SnackBar(
+                                  content: Text('Deleted ${widget.item.name}'),
+                                  action: SnackBarAction(
+                                    label: 'Undo',
+                                    onPressed: () => RepeatingBLoC().undo(),
+                                  ),
+                                );
+                                Scaffold.of(context).showSnackBar(snackbar);
+                              },
+                              icon: Icon(Icons.delete),
                             ),
-                          ),
-                          icon: Icon(Icons.edit)
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            RepeatingBLoC().delete(widget.item);
-                            final snackbar = SnackBar(
-                              content: Text('Deleted ${widget.item.name}'),
-                              action: SnackBarAction(
-                                label: 'Undo',
-                                onPressed: () => RepeatingBLoC().undo(),
-                              ),
-                            );
-                            Scaffold.of(context).showSnackBar(snackbar);
-                          },
-                          icon: Icon(Icons.delete),
-                        ),
-                      ]
-                    )
-                  )
-                )
-              ],
-            )
-          ],
-        ),
+                          ])))
+            ],
+          )
+        ],
+      ),
     );
   }
 }

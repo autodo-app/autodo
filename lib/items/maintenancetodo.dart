@@ -9,15 +9,15 @@ class MaintenanceTodoItem {
   bool estimatedDueDate; // true if the user set this value, false if generated
   List tags;
 
-  MaintenanceTodoItem({
-        this.ref, 
-        @required this.name, 
-        this.dueDate, 
-        this.dueMileage, 
-        this.repeatingType, 
-        tags,
-        this.estimatedDueDate = true, 
-        this.complete = false}) {
+  MaintenanceTodoItem(
+      {this.ref,
+      @required this.name,
+      this.dueDate,
+      this.dueMileage,
+      this.repeatingType,
+      tags,
+      this.estimatedDueDate = true,
+      this.complete = false}) {
     this.tags = tags ?? [];
   }
 

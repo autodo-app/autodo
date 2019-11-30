@@ -15,22 +15,21 @@ class StatisticsScreenState extends State<StatisticsScreen> {
     return ListView(
       children: <Widget>[
         FutureBuilder(
-          // future: RefuelingBLoC().getAllRefuelings(),
-          future: FuelMileageHistory.prepData(RefuelingBLoC().getAllRefuelings()),
-          builder: (context, snap) => (snap.hasData) ?
-            FuelMileageHistory(snap.data) :
-            CircularProgressIndicator()
-        ),
-        Padding( 
+            // future: RefuelingBLoC().getAllRefuelings(),
+            future:
+                FuelMileageHistory.prepData(RefuelingBLoC().getAllRefuelings()),
+            builder: (context, snap) => (snap.hasData)
+                ? FuelMileageHistory(snap.data)
+                : CircularProgressIndicator()),
+        Padding(
           padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
           child: Divider(),
         ),
         FutureBuilder(
-          future: DrivingDistanceHistory.prepData(CarsBLoC().getCars()),
-          builder: (context, snap) => (snap.hasData) ?
-            DrivingDistanceHistory(snap.data) :
-            CircularProgressIndicator()
-        ),
+            future: DrivingDistanceHistory.prepData(CarsBLoC().getCars()),
+            builder: (context, snap) => (snap.hasData)
+                ? DrivingDistanceHistory(snap.data)
+                : CircularProgressIndicator()),
       ],
     );
   }
