@@ -323,6 +323,7 @@ class AutoCompleteTextFieldState<T> extends State<AutoCompleteTextField> {
                               child: InkWell(
                                   child: itemBuilder(context, suggestion),
                                   onTap: () {
+                                    if (!this.mounted) return;
                                     setState(() {
                                       if (submitOnSuggestionTap) {
                                         String newText = suggestion.toString();

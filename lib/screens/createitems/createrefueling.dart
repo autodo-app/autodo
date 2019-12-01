@@ -62,6 +62,7 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
     _fuelNode.dispose();
     _costNode.dispose();
     _dateNode.dispose();
+    _autocompleteController.dispose();
     super.dispose();
   }
 
@@ -159,7 +160,8 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
+          // onPressed: () => Navigator.pop(context),
+          onPressed: () => Navigator.popAndPushNamed(context, '/')
         ),
         title: Text('Refueling'),
       ),
