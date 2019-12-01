@@ -114,9 +114,8 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
         var res = requiredValidator(val);
         if (res != null) {
           autoCompleteField.updateDecoration(
-            decoration: defaultInputDecoration('Required', 'Car Name')
-                .copyWith(errorText: res)
-          );
+              decoration: defaultInputDecoration('Required', 'Car Name')
+                  .copyWith(errorText: res));
         }
         setState(() => _carError = res);
         return _carError;
@@ -135,7 +134,8 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
   Widget build(BuildContext context) {
     autoCompleteField = AutoCompleteTextField<Car>(
       controller: _autocompleteController,
-      decoration: defaultInputDecoration('Required', 'Car Name').copyWith(errorText: _carError),
+      decoration: defaultInputDecoration('Required', 'Car Name')
+          .copyWith(errorText: _carError),
       itemSubmitted: (item) => setState(() {
         _autocompleteController.text = item.name;
         selectedCar = item;
