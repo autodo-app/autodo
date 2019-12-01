@@ -30,6 +30,8 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
   final _autocompleteKey = GlobalKey<AutoCompleteTextFieldState<Repeat>>();
   TextEditingController _autocompleteController;
   var filterList;
+  AutoCompleteTextField autoCompleteField;
+  String _carError;
 
   CreateTodoScreenState() {
     filterList = FilteringBLoC().getFiltersAsList();
@@ -227,14 +229,47 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
     );
   }
 
-  Widget autoComplete(FormFieldState<String> input) {
+  Widget repeatForm() {
+    return FormField<String>(
+      builder: (input) => autoCompleteField,
+      initialValue: (widget.mode == TodoEditMode.EDIT)
+          ? widget.existing.repeatingType
+          : '',
+      validator: (val) {
+        var txt = _autocompleteController.text;
+        var res = "Specified Repeat cannot be found.";
+        if (txt == null ||
+            txt == "" ||
+            RepeatingBLoC().repeats.map((r) => r.name).contains(txt)) {
+          res = null;
+        }
+        autoCompleteField.updateDecoration(
+            decoration: defaultInputDecoration('Optional', 'Repeating Task')
+                .copyWith(errorText: res));
+        setState(() => _carError = res);
+        return _carError;
+      },
+      onSaved: (val) => setState(() {
+        if (selectedRepeat != null)
+          todoItem.repeatingType = selectedRepeat.name;
+        else if (val != null &&
+            RepeatingBLoC().repeats.any((element) => element.name == val)) {
+          todoItem.repeatingType = val;
+        }
+      }),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     var txt = _autocompleteController.text;
     if ((txt == null || txt == '') && widget.mode == TodoEditMode.EDIT)
       _autocompleteController.text = widget.existing.repeatingType;
-    return AutoCompleteTextField<Repeat>(
+    autoCompleteField = AutoCompleteTextField<Repeat>(
         focusNode: _repeatNode,
         controller: _autocompleteController,
-        decoration: defaultInputDecoration('Optional', 'Repeating Task'),
+        decoration: defaultInputDecoration('Optional', 'Repeating Task')
+            .copyWith(errorText: _carError),
         itemSubmitted: (item) => setState(() {
               _autocompleteController.text = item.name;
               selectedRepeat = item;
@@ -254,27 +289,6 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
         itemFilter: (suggestion, input) {
           return suggestion.name.toLowerCase().contains(input.toLowerCase());
         });
-  }
-
-  Widget repeatForm() {
-    return FormField<String>(
-      builder: autoComplete,
-      initialValue: (widget.mode == TodoEditMode.EDIT)
-          ? widget.existing.repeatingType
-          : '',
-      onSaved: (val) => setState(() {
-        if (selectedRepeat != null)
-          todoItem.repeatingType = selectedRepeat.name;
-        else if (val != null &&
-            RepeatingBLoC().repeats.any((element) => element.name == val)) {
-          todoItem.repeatingType = val;
-        }
-      }),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomPadding:
           false, // used to avoid overflow when keyboard is viewable

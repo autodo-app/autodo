@@ -26,9 +26,12 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
 
   TextEditingController _autocompleteController;
   Car selectedCar;
+  String _carError;
   final _autocompleteKey = GlobalKey<AutoCompleteTextFieldState<Car>>();
   List<Car> cars;
   final TextEditingController _controller = TextEditingController();
+
+  AutoCompleteTextField autoCompleteField;
 
   void setCars() async {
     var carList = await CarsBLoC().getCars();
@@ -101,13 +104,37 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
     return d != null && d.isBefore(DateTime.now());
   }
 
-  Widget autoComplete(FormFieldState<String> input) {
-    var txt = _autocompleteController.text;
-    if ((txt == null || txt == '') && widget.mode == RefuelingEditMode.EDIT)
-      _autocompleteController.text = widget.existing.carName;
-    return AutoCompleteTextField<Car>(
+  Widget carForm() {
+    return FormField<String>(
+      builder: (FormFieldState<String> input) => autoCompleteField,
+      initialValue: (widget.mode == RefuelingEditMode.EDIT)
+          ? widget.existing.carName
+          : '',
+      validator: (val) {
+        var txt = _autocompleteController.text;
+        var res = requiredValidator(txt);
+        autoCompleteField.updateDecoration(
+            decoration: defaultInputDecoration('Required', 'Car Name')
+                .copyWith(errorText: res));
+        setState(() => _carError = res);
+        return _carError;
+      },
+      onSaved: (val) => setState(() {
+        if (selectedCar != null)
+          refuelingItem.carName = selectedCar.name;
+        else if (val != null && cars.any((element) => element.name == val)) {
+          refuelingItem.carName = val;
+        }
+      }),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    autoCompleteField = AutoCompleteTextField<Car>(
       controller: _autocompleteController,
-      decoration: defaultInputDecoration('Required', 'Car Name'),
+      decoration: defaultInputDecoration('Required', 'Car Name')
+          .copyWith(errorText: _carError),
       itemSubmitted: (item) => setState(() {
         _autocompleteController.text = item.name;
         selectedCar = item;
@@ -131,29 +158,6 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
       },
       textSubmitted: (_) => changeFocus(_nameNode, _fuelNode),
     );
-  }
-
-  Widget carForm() {
-    return FormField<String>(
-      builder: autoComplete,
-      initialValue: (widget.mode == RefuelingEditMode.EDIT)
-          ? widget.existing.carName
-          : '',
-      // validator: requiredValidator,
-      // for some reason the validator is never given the value?
-      onSaved: (val) => setState(() {
-        if (selectedCar != null)
-          refuelingItem.carName = selectedCar.name;
-        else if (val != null && cars.any((element) => element.name == val)) {
-          refuelingItem.carName = val;
-        }
-      }),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (widget.existing != null) print(widget.existing.ref);
     return Scaffold(
       resizeToAvoidBottomPadding:
           false, // used to avoid overflow when keyboard is viewable
