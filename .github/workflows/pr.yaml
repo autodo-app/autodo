@@ -8,4 +8,5 @@ jobs:
     - uses: bltavares/actions/dartfmt@master
       with:
         args: "autofix"
-        secrets: "${{ secrets.TOKEN }}"
+      env:
+        GITHUB_TOKEN: "${{ secrets.TOKEN }}"
