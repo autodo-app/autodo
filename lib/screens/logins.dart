@@ -20,6 +20,7 @@ enum FormMode { LOGIN, SIGNUP }
 class SignInScreenState extends State<SignInScreen> {
   final _formKey = GlobalKey<FormState>();
   final _passwordResetKey = GlobalKey<FormState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   String _email;
   String _password;
@@ -87,7 +88,10 @@ class SignInScreenState extends State<SignInScreen> {
       errorString = "The email address you entered is invalid.";
     } else if (e.code == "ERROR_EMAIL_ALREADY_IN_USE") {
       errorString = "The email address you entered is already in use.";
+    } else if (e.code == "ERROR_WRONG_PASSWORD") {
+      errorString = "Incorrect password, please try again.";
     }
+    print(e);
     setState(() {
       _isLoading = false;
       _errorMessage = errorString;
@@ -144,6 +148,7 @@ class SignInScreenState extends State<SignInScreen> {
     return Container(
       decoration: scaffoldBackgroundGradient(),
       child: Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.grey[300]),
@@ -354,7 +359,7 @@ class SignInScreenState extends State<SignInScreen> {
                 : setState(() => widget.formMode = FormMode.LOGIN);
           },
         ),
-        _passwordReset(),
+        (widget.formMode == FormMode.LOGIN) ? _passwordReset() : Container(),
       ],
     ),
   );
@@ -393,7 +398,10 @@ class SignInScreenState extends State<SignInScreen> {
       style: Theme.of(context).primaryTextTheme.button,
     ),
     onPressed: () async {
-      // Figure out how to display a circular progress indicator here at the beginning
+      showDialog(
+        context: context,
+        builder: (context) => Center(child: CircularProgressIndicator()),
+      );
       if (_passwordResetKey.currentState.validate())
         _passwordResetKey.currentState.save();
       try {
@@ -404,8 +412,15 @@ class SignInScreenState extends State<SignInScreen> {
         else if (e.code == 'ERROR_USER_NOT_FOUND')
           _sendError = "Could not find an account for this email address";
       }
-      if (_sendError == null)
-        Navigator.pop(context);
+      if (_sendError == null) {
+        _scaffoldKey.currentState.showSnackBar( 
+          SnackBar(
+            content: Text('Password Reset email has been sent.')
+          )
+        );
+        Navigator.pop(context); // progress bar
+        Navigator.pop(context); // dialog
+      }
     }
   );
 
