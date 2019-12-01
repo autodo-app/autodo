@@ -56,6 +56,7 @@ class BLoC {
   }
 
   Future<void> pushItem(String collection, dynamic item) async {
+    // TODO: this shouldn't happen until the doc is created
     DocumentReference userDoc = FirestoreBLoC().getUserDocument();
     DocumentReference ref =
         await userDoc.collection(collection).add(item.toJSON());

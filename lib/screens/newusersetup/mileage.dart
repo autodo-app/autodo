@@ -160,7 +160,6 @@ class MileageScreenState extends State<MileageScreen> {
       }
 
       return Container(
-        // height: viewportSize.maxHeight - 110,
         padding: EdgeInsets.all(10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
