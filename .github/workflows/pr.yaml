@@ -5,6 +5,9 @@ jobs:
     name: Dart Format
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v1
+      with: 
+        submodules: true
     - uses: bltavares/actions/dartfmt@master
       with:
         args: "autofix"
