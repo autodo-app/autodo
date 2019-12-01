@@ -22,7 +22,7 @@ class FilteringBLoC {
         }
       });
     }
-  } 
+  }
 
   Map<String, bool> getFilters() {
     return filters;
@@ -49,10 +49,8 @@ class FilteringBLoC {
   }
 
   Stream filteredDocuments() {
-    StreamController.broadcast(
-
-    );
-  } 
+    StreamController.broadcast();
+  }
 
   // Make the object a Singleton
   static final FilteringBLoC _bloc = FilteringBLoC._internal();

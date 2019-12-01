@@ -4,18 +4,17 @@ import 'package:autodo/theme.dart';
 
 class PrivacyPolicy {
   static Future<String> loadAsset(context) async {
-    return await DefaultAssetBundle.of(context).loadString('legal/privacy-policy.md');
+    return await DefaultAssetBundle.of(context)
+        .loadString('legal/privacy-policy.md');
   }
 
   static RichText txt;
 
   static void init(BuildContext context) async {
     var text = await loadAsset(context);
-    txt = RichText(
-      text: MarkdownParser.parse(text)
-    );
+    txt = RichText(text: MarkdownParser.parse(text));
   }
-  
+
   static Widget text() {
     return txt;
   }
@@ -25,13 +24,11 @@ class PrivacyPolicy {
       backgroundColor: cardColor,
       title: Text('Privacy Policy'),
       titleTextStyle: Theme.of(context).primaryTextTheme.title,
-      content: SingleChildScrollView(  
-        child: Container(  
-          child: PrivacyPolicy.text()    
-        ),
+      content: SingleChildScrollView(
+        child: Container(child: PrivacyPolicy.text()),
       ),
       contentPadding: EdgeInsets.fromLTRB(20, 20, 20, 0),
-      actions: <Widget>[ 
+      actions: <Widget>[
         FlatButton(
           child: Text(
             'Got it!',

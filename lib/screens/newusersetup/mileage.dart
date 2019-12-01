@@ -23,21 +23,21 @@ class CarEntryFieldState extends State<CarEntryField> {
 
   CarEntryFieldState(this.car, this.next);
 
-  @override 
+  @override
   initState() {
     _nameNode = FocusNode();
     _mileageNode = FocusNode();
     super.initState();
   }
 
-  @override 
+  @override
   dispose() {
     _nameNode.dispose();
     _mileageNode.dispose();
     super.dispose();
   }
-  
-  @override 
+
+  @override
   Widget build(BuildContext context) {
     nameField() => TextFormField(
       maxLines: 1,
@@ -83,14 +83,14 @@ class CarEntryFieldState extends State<CarEntryField> {
           Expanded(
             flex: 2,
             child: Padding(
-              padding: EdgeInsets.fromLTRB(5, 0, 5, 0),  
+              padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
               child: nameField(),
             ),
           ),
           Expanded(
             flex: 1,
             child: Padding(
-              padding: EdgeInsets.fromLTRB(5, 0, 5, 0),  
+              padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
               child: mileageField(),
             ),
           ),
@@ -107,7 +107,7 @@ class MileageScreen extends StatefulWidget {
 
   MileageScreen(this.mileageEntry, this.mileageKey, this.onNext);
 
-  @override 
+  @override
   MileageScreenState createState() => MileageScreenState(this.mileageEntry);
 }
 
@@ -127,33 +127,32 @@ class MileageScreenState extends State<MileageScreen> {
     }
   }
 
-  @override 
+  @override
   Widget build(BuildContext context) {
     Widget headerText = Container(
       height: 110,
       child: Center(
-        child: Column(  
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-              child: Text( 
-                'Before you get started,\n let\'s get some info about your car(s).',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontFamily: 'Ubuntu',
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white.withAlpha(230),
-                ),
+          child: Column(
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+            child: Text(
+              'Before you get started,\n let\'s get some info about your car(s).',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 20,
+                fontFamily: 'Ubuntu',
+                fontWeight: FontWeight.w600,
+                color: Colors.white.withAlpha(230),
               ),
             ),
-            Text(  
-              'Tap "Add" to configure multiple cars.',
-              style: Theme.of(context).primaryTextTheme.body1,
-            ),
-          ],
-        )
-      ),
+          ),
+          Text(
+            'Tap "Add" to configure multiple cars.',
+            style: Theme.of(context).primaryTextTheme.body1,
+          ),
+        ],
+      )),
     );
 
     Widget card() {
@@ -162,29 +161,29 @@ class MileageScreenState extends State<MileageScreen> {
         carFields.add(CarEntryField(car, _next));
       }
 
-      return Container( 
+      return Container(
         // height: viewportSize.maxHeight - 110,
         padding: EdgeInsets.all(10),
-        child: Column(  
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[  
+          children: <Widget>[
             ...carFields,
             Container(
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,  
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Row(  
+                  Row(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      FlatButton.icon( 
+                      FlatButton.icon(
                         padding: EdgeInsets.all(0),
                         icon: Icon(Icons.add),
                         label: Text('Add'),
                         onPressed: () => setState(() => cars.add(Car.empty())),
                       ),
-                      FlatButton.icon( 
+                      FlatButton.icon(
                         padding: EdgeInsets.all(0),
                         icon: Icon(Icons.delete),
                         label: Text('Remove'),
@@ -195,7 +194,7 @@ class MileageScreenState extends State<MileageScreen> {
                       ),
                     ],
                   ),
-                  FlatButton( 
+                  FlatButton(
                     padding: EdgeInsets.all(0),
                     materialTapTargetSize: MaterialTapTargetSize.padded,
                     child: Text(
@@ -210,11 +209,10 @@ class MileageScreenState extends State<MileageScreen> {
           ],
         ),
       );
-    }  
+    }
 
     return Form(
-      key: widget.mileageKey,
-      child: AccountSetupScreen(header: headerText, panel: card())
-    );
+        key: widget.mileageKey,
+        child: AccountSetupScreen(header: headerText, panel: card()));
   }
 }

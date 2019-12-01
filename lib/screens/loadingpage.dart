@@ -17,7 +17,7 @@ class LoadingPageState extends State<LoadingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(  
+    return Container(
       color: splashColor,
       child: Scaffold(
         body: Center(

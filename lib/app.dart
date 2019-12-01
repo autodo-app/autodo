@@ -9,13 +9,12 @@ import 'package:autodo/blocs/blocs.dart';
 class AutodoApp extends StatefulWidget {
   AutodoApp() {
     FirebaseApp.configure(
-      name: 'autodo',
-      options: FirebaseOptions(  
-        googleAppID: '1:617460744396:android:400cbb86de167047',
-        projectID: 'autodo-49f21',
-        apiKey: 'AIzaSyAAYhwsJVyiYywUFORBgaUuyXqXFiFpbZo',
-      )
-    );
+        name: 'autodo',
+        options: FirebaseOptions(
+          googleAppID: '1:617460744396:android:400cbb86de167047',
+          projectID: 'autodo-49f21',
+          apiKey: 'AIzaSyAAYhwsJVyiYywUFORBgaUuyXqXFiFpbZo',
+        ));
   }
 
   @override
@@ -44,7 +43,8 @@ class AutodoAppState extends State<AutodoApp> {
         '/createTodo': (context) => CreateTodoScreen(mode: TodoEditMode.CREATE),
         '/createRefueling': (context) =>
             CreateRefuelingScreen(mode: RefuelingEditMode.CREATE),
-        '/createRepeat': (context) => CreateRepeatScreen(mode: RepeatEditMode.CREATE),
+        '/createRepeat': (context) =>
+            CreateRepeatScreen(mode: RepeatEditMode.CREATE),
         '/settings': (context) => SettingsScreen(),
         '/statistics': (context) => StatisticsScreen(),
         '/editcarlist': (context) => EditCarListScreen(),

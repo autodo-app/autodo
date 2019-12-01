@@ -127,7 +127,7 @@ class Welcome extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container( 
+          Container(
             height: 180,
             child: Center(
               child: Image.asset(
@@ -240,7 +240,7 @@ class Tutorial1 extends StatelessWidget {
           Text(
             "Simplify Your Tasks",
             textAlign: TextAlign.center,
-            style: TextStyle(  
+            style: TextStyle(
               fontSize: 30,
               fontFamily: 'Ubuntu',
               fontWeight: FontWeight.w600,

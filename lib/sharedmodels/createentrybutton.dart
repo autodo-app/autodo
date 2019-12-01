@@ -80,7 +80,7 @@ class CreateEntryButtonState extends State<CreateEntryButton>
             builder: (BuildContext context, Widget child) {
               return FloatingActionButton(
                 heroTag: null,
-                backgroundColor: ColorTween(  
+                backgroundColor: ColorTween(
                   begin: Theme.of(context).primaryColor,
                   end: Theme.of(context).cardColor,
                 ).evaluate(_controller),
@@ -90,7 +90,7 @@ class CreateEntryButtonState extends State<CreateEntryButton>
                   alignment: FractionalOffset.center,
                   child: Icon(
                     Icons.add,
-                    color: ColorTween(  
+                    color: ColorTween(
                       begin: Theme.of(context).accentIconTheme.color,
                       end: Theme.of(context).primaryColor,
                     ).evaluate(_controller),

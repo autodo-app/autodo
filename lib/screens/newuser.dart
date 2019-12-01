@@ -7,11 +7,7 @@ class NewUserScreen extends StatefulWidget {
   NewUserScreenState createState() => NewUserScreenState();
 }
 
-enum NewUserScreenPage {
-  MILEAGE,
-  LATEST,
-  REPEATS
-}
+enum NewUserScreenPage { MILEAGE, LATEST, REPEATS }
 
 class NewUserScreenState extends State<NewUserScreen> {
   final page = ValueNotifier<NewUserScreenPage>(NewUserScreenPage.MILEAGE);
@@ -59,20 +55,19 @@ class NewUserScreenState extends State<NewUserScreen> {
     if (page.value == NewUserScreenPage.MILEAGE) {
       // delete the current user somehow?
       Navigator.pop(context);
-    }
-    else if (page.value == NewUserScreenPage.LATEST)
+    } else if (page.value == NewUserScreenPage.LATEST)
       setState(() => page.value = NewUserScreenPage.MILEAGE);
     else if (page.value == NewUserScreenPage.REPEATS)
       setState(() => page.value = NewUserScreenPage.LATEST);
   }
 
-  @override 
+  @override
   Widget build(BuildContext context) {
     return Container(
       decoration: scaffoldBackgroundGradient(),
       child: Scaffold(
-        appBar: AppBar(  
-          leading: IconButton( 
+        appBar: AppBar(
+          leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () => backAction(),
           ),

@@ -39,9 +39,9 @@ class Auth implements BaseAuth {
     currentUserName = res.user.email;
     return res.user.uid;
   }
-  
+
   Future<String> waitForVerification(FirebaseUser user) async {
-    while(!user.isEmailVerified) {
+    while (!user.isEmailVerified) {
       await Future.microtask(() async {
         // reload the user's values
         await Future.delayed(const Duration(milliseconds: 500), () async {
@@ -53,7 +53,8 @@ class Auth implements BaseAuth {
     return user.uid;
   }
 
-  Future<FirebaseUser> signUpWithVerification(String email, String password) async {
+  Future<FirebaseUser> signUpWithVerification(
+      String email, String password) async {
     AuthResult res;
     try {
       res = await _firebaseAuth.createUserWithEmailAndPassword(
@@ -68,7 +69,7 @@ class Auth implements BaseAuth {
   }
 
   Future<void> deleteCurrentUser() async {
-    FirebaseUser cur = await  _firebaseAuth.currentUser();
+    FirebaseUser cur = await _firebaseAuth.currentUser();
     if (cur != null) {
       try {
         FirestoreBLoC().deleteUserDocument();
@@ -99,12 +100,18 @@ class Auth implements BaseAuth {
   }
 
   bool isLoading() {
-    if (getCurrentUser() == '') return true;
-    else return false;
+    if (getCurrentUser() == '')
+      return true;
+    else
+      return false;
   }
 
   StreamSubscription<FirebaseUser> listen(Function(FirebaseUser) fn) {
     return _firebaseAuth.onAuthStateChanged.listen(fn);
+  }
+
+  Future<void> sendPasswordReset(String email) async {
+    await _firebaseAuth.sendPasswordResetEmail(email: email);
   }
 
   // Make the object a Singleton

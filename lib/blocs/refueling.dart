@@ -24,7 +24,11 @@ class RefuelingBLoC extends BLoC {
     var amount = snap.data['amount'].toDouble();
     var carName = snap.data['tags'][0];
     var item = RefuelingItem(
-        ref: snap.documentID, odom: odom, cost: cost, amount: amount, carName: carName);
+        ref: snap.documentID,
+        odom: odom,
+        cost: cost,
+        amount: amount,
+        carName: carName);
     return RefuelingCard(item: item);
   }
 
@@ -41,8 +45,7 @@ class RefuelingBLoC extends BLoC {
     }
 
     Car car = await CarsBLoC().getCarByName(item.carName);
-    if (car.numRefuelings < MAX_NUM_REFUELINGS)
-      car.numRefuelings++;
+    if (car.numRefuelings < MAX_NUM_REFUELINGS) car.numRefuelings++;
     car.updateMileage(item.odom, item.date);
     car.updateEfficiency(item.efficiency);
     car.updateDistanceRate((prev == null) ? null : prev.date, item.date, dist);
@@ -52,7 +55,7 @@ class RefuelingBLoC extends BLoC {
   }
 
   void edit(RefuelingItem item) async {
-    // TODO: pull this into its own async function since it doesn't affect our 
+    // TODO: pull this into its own async function since it doesn't affect our
     // ability to update a refueling
     var prev = await findLatestRefueling(item);
     var dist = (prev == null) ? 0 : item.odom - prev.odom;
@@ -85,7 +88,7 @@ class RefuelingBLoC extends BLoC {
     var car = (item.carName != null) ? item.carName : '';
     var doc = FirestoreBLoC().getUserDocument();
     var refuelings = await doc.collection('refuelings').getDocuments();
-    
+
     int smallestDiff = MAX_MPG;
     RefuelingItem out;
     for (var r in refuelings.documents) {
@@ -97,19 +100,19 @@ class RefuelingBLoC extends BLoC {
           smallestDiff = diff;
           out = RefuelingItem.fromJSON(r.data, r.documentID);
         }
-      } 
+      }
     }
     return out;
   }
 
   Future<HSV> hsv(RefuelingItem item) async {
-    if (item.efficiency == double.infinity)
-      return HSV(1.0, 1.0, 1.0); 
+    if (item.efficiency == double.infinity) return HSV(1.0, 1.0, 1.0);
     var car = await CarsBLoC().getCarByName(item.carName);
     var avgEff = car.averageEfficiency;
     // range is 0 to 120
     var diff = (item.efficiency == null || item.efficiency == double.infinity)
-      ? 0 : item.efficiency - avgEff;
+        ? 0
+        : item.efficiency - avgEff;
     dynamic hue = (diff * HUE_RANGE) / EFF_VAR;
     hue = clamp(hue, 0, HUE_RANGE * 2);
     return HSV(hue.toDouble(), 1.0, 1.0);
@@ -123,7 +126,8 @@ class RefuelingBLoC extends BLoC {
       out.add(RefuelingItem.fromJSON(r.data, r.documentID));
     }
     // put them in order according to date
-    out.sort((a, b) => (a.date.isAfter(b.date)) ? 1 : (a.date.isBefore(b.date)) ? -1 : 0);
+    out.sort((a, b) =>
+        (a.date.isAfter(b.date)) ? 1 : (a.date.isBefore(b.date)) ? -1 : 0);
     return out;
   }
 

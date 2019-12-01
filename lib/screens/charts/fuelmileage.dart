@@ -20,57 +20,50 @@ class FuelMileageChart extends StatelessWidget {
 
   final horizAxisSpec = DateTimeAxisSpec(
     tickFormatterSpec: AutoDateTimeTickFormatterSpec(
-      day: TimeFormatterSpec(
-        format: 'd', transitionFormat: 'MM/dd/yyyy'
-      ),
+      day: TimeFormatterSpec(format: 'd', transitionFormat: 'MM/dd/yyyy'),
     ),
     renderSpec: GridlineRendererSpec(
-      lineStyle: LineStyleSpec( 
+      lineStyle: LineStyleSpec(
         color: Color(r: 0x99, g: 0x99, b: 0x99, a: 100),
       ),
       labelOffsetFromAxisPx: 10,
       labelStyle: TextStyleSpec(
-        fontSize: 12, 
+        fontSize: 12,
         color: MaterialPalette.white,
       ),
     ),
   );
 
   final vertAxisSpec = NumericAxisSpec(
-    tickProviderSpec: BasicNumericTickProviderSpec(
-      desiredTickCount: 6
-    ),
+    tickProviderSpec: BasicNumericTickProviderSpec(desiredTickCount: 6),
     renderSpec: GridlineRendererSpec(
-      lineStyle: LineStyleSpec( 
+      lineStyle: LineStyleSpec(
         color: Color(r: 0x99, g: 0x99, b: 0x99, a: 100),
       ),
       labelOffsetFromAxisPx: 10,
       labelStyle: TextStyleSpec(
-        fontSize: 12, 
+        fontSize: 12,
         color: MaterialPalette.white,
       ),
     ),
-  ); 
+  );
 
-  @override 
-  Widget build(BuildContext context)  {
+  @override
+  Widget build(BuildContext context) {
     if (seriesList.length == 0 || seriesList[0].data.length == 0) {
       return Center(
-        child: Text( 
-          'No Data Available to Display.',
-          style: Theme.of(context).primaryTextTheme.body1
-        )
-      );
+          child: Text('No Data Available to Display.',
+              style: Theme.of(context).primaryTextTheme.body1));
     }
     return TimeSeriesChart(
-      seriesList, 
+      seriesList,
       animate: animate,
       domainAxis: horizAxisSpec,
       primaryMeasureAxis: vertAxisSpec,
       defaultRenderer: PointRendererConfig(
-          customRendererId: 'customPoint',
-          layoutPaintOrder: LayoutViewPaintOrder.point,
-        ),
+        customRendererId: 'customPoint',
+        layoutPaintOrder: LayoutViewPaintOrder.point,
+      ),
       // Custom renderer configuration for the line series.
       customSeriesRenderers: [
         PointRendererConfig(
@@ -94,11 +87,12 @@ class FuelMileageHistory extends StatelessWidget {
 
   static interpolateDate(DateTime prev, DateTime next) {
     return DateTime.fromMillisecondsSinceEpoch(
-      (prev.millisecondsSinceEpoch + next.millisecondsSinceEpoch / 2).toInt()
-    );
+        (prev.millisecondsSinceEpoch + next.millisecondsSinceEpoch / 2)
+            .toInt());
   }
 
-  static Future<List<Series<FuelMileagePoint, DateTime>>> prepData(Future incomingData) async {
+  static Future<List<Series<FuelMileagePoint, DateTime>>> prepData(
+      Future incomingData) async {
     var rawData = await incomingData;
 
     List<FuelMileagePoint> points = [];
@@ -140,12 +134,16 @@ class FuelMileageHistory extends StatelessWidget {
           final scale = scaleToUnit(point.mpg, minMeasure, maxMeasure);
           final hue = scale * 120; // 0 is red, 120 is green in HSV space
           final rgb = hsv2rgb(HSV(hue, 1.0, 0.5));
-          return Color(r: (rgb.r * 255).toInt(), g: (rgb.g * 255).toInt(), b: (rgb.b * 255).toInt());
+          return Color(
+              r: (rgb.r * 255).toInt(),
+              g: (rgb.g * 255).toInt(),
+              b: (rgb.b * 255).toInt());
         },
         domainFn: (FuelMileagePoint point, _) => point.date,
         measureFn: (FuelMileagePoint point, _) => point.mpg,
         // Providing a radius function is optional.
-        radiusPxFn: (FuelMileagePoint point, _) => 6.0, // all values have the same radius for now
+        radiusPxFn: (FuelMileagePoint point, _) =>
+            6.0, // all values have the same radius for now
         data: points,
       ),
       // Configure our custom line renderer for this series.
@@ -154,28 +152,25 @@ class FuelMileageHistory extends StatelessWidget {
           colorFn: (_, __) => MaterialPalette.blue.shadeDefault,
           domainFn: (FuelMileagePoint point, _) => point.date,
           measureFn: (FuelMileagePoint point, _) => point.mpg,
-          data: emaData
-      )..setAttribute(rendererIdKey, 'customLine'),
+          data: emaData)
+        ..setAttribute(rendererIdKey, 'customLine'),
     ];
   }
 
-  @override 
-  Widget build(BuildContext context) => Column( 
-    mainAxisSize: MainAxisSize.min,
-    mainAxisAlignment: MainAxisAlignment.spaceAround,
-    children: [
-      Padding( 
-        padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
-      ),
-      Text(
-        'Fuel Efficiency History',
-        style: Theme.of(context).primaryTextTheme.subtitle
-      ),
-      Container(
-        height: 300,
-        padding: EdgeInsets.all(15),  
-        child: FuelMileageChart(data, false),
-      )
-    ]
-  );
+  @override
+  Widget build(BuildContext context) => Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Padding(
+              padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+            ),
+            Text('Fuel Efficiency History',
+                style: Theme.of(context).primaryTextTheme.subtitle),
+            Container(
+              height: 300,
+              padding: EdgeInsets.all(15),
+              child: FuelMileageChart(data, false),
+            )
+          ]);
 }

@@ -12,7 +12,7 @@ class CreateRepeatScreen extends StatefulWidget {
   final Repeat existing;
   CreateRepeatScreen({@required this.mode, this.existing});
 
-  @override 
+  @override
   CreateRepeatScreenState createState() => CreateRepeatScreenState();
 }
 
@@ -25,7 +25,7 @@ class CreateRepeatScreenState extends State<CreateRepeatScreen> {
   CreateRepeatScreenState() {
     filterList = FilteringBLoC().getFiltersAsList();
   }
-  
+
   @override
   initState() {
     _nameNode = FocusNode();
@@ -43,11 +43,11 @@ class CreateRepeatScreenState extends State<CreateRepeatScreen> {
   Future<void> updateFilters(filter) async => FilteringBLoC().setFilter(filter);
 
   Widget mileageField() {
-    return TextFormField( 
+    return TextFormField(
       decoration: defaultInputDecoration('Required', 'Mileage Interval'),
-      initialValue: (widget.mode == RepeatEditMode.EDIT) 
-        ? widget.existing.interval.toString()
-        : '',
+      initialValue: (widget.mode == RepeatEditMode.EDIT)
+          ? widget.existing.interval.toString()
+          : '',
       autofocus: false,
       style: Theme.of(context).primaryTextTheme.subtitle,
       keyboardType: TextInputType.number,
@@ -59,11 +59,10 @@ class CreateRepeatScreenState extends State<CreateRepeatScreen> {
   }
 
   Widget nameField() {
-    return TextFormField( 
+    return TextFormField(
       decoration: defaultInputDecoration('Required', 'Task Name'),
-      initialValue: (widget.mode == RepeatEditMode.EDIT) 
-        ? widget.existing.name
-        : '',
+      initialValue:
+          (widget.mode == RepeatEditMode.EDIT) ? widget.existing.name : '',
       autofocus: true,
       style: Theme.of(context).primaryTextTheme.subtitle,
       keyboardType: TextInputType.text,
@@ -110,58 +109,55 @@ class CreateRepeatScreenState extends State<CreateRepeatScreen> {
 
   Widget cars() {
     return Container(
-      height: 120, 
+      height: 120,
       child: ListView.builder(
         itemCount: FilteringBLoC().getFilters().keys.length,
         itemBuilder: (context, index) => ListTile(
-          leading: Checkbox( 
-            value: filterList[index].enabled,
-            onChanged: (state) {
-              filterList[index].enabled = state; 
-              updateFilters(filterList[index]);
-              setState(() {});
-            },
-            materialTapTargetSize: MaterialTapTargetSize.padded,
-          ),
-          title: Text(filterList[index].carName)
-        ),
+            leading: Checkbox(
+              value: filterList[index].enabled,
+              onChanged: (state) {
+                filterList[index].enabled = state;
+                updateFilters(filterList[index]);
+                setState(() {});
+              },
+              materialTapTargetSize: MaterialTapTargetSize.padded,
+            ),
+            title: Text(filterList[index].carName)),
       ),
     );
   }
 
-  @override 
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(  
-      resizeToAvoidBottomPadding: false, // avoid overflow with keyboard present
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
+    return Scaffold(
+        resizeToAvoidBottomPadding:
+            false, // avoid overflow with keyboard present
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () => Navigator.pop(context),
+          ),
+          title: Text((widget.mode == RepeatEditMode.CREATE)
+              ? 'New Repeating Task'
+              : 'Edit Repeating Task'),
         ),
-        title: Text(
-          (widget.mode == RepeatEditMode.CREATE) ? 'New Repeating Task' : 'Edit Repeating Task'
-        ),
-      ),
-      body: Container(  
-        child: Form(  
-          key: _formKey,
-          child: ListView(  
-            padding: EdgeInsets.fromLTRB(20, 24, 20, 0),
-            children: <Widget>[
-              nameField(),
-              Padding( 
-                padding: EdgeInsets.only(bottom: 15),
-              ),
-              mileageField(),
-              Padding( 
-                padding: EdgeInsets.only(bottom: 15),
-              ),
-              cars(),
-              addButton()
-            ],
-          )
-        )
-      )
-    );
+        body: Container(
+            child: Form(
+                key: _formKey,
+                child: ListView(
+                  padding: EdgeInsets.fromLTRB(20, 24, 20, 0),
+                  children: <Widget>[
+                    nameField(),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 15),
+                    ),
+                    mileageField(),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 15),
+                    ),
+                    cars(),
+                    addButton()
+                  ],
+                ))));
   }
 }

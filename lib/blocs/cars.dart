@@ -21,9 +21,7 @@ class CarsBLoC extends BLoC {
 
   Future<Car> getCarByName(String name) async {
     DocumentReference userDoc = FirestoreBLoC().getUserDocument();
-    QuerySnapshot cars = await userDoc
-      .collection('cars')
-      .getDocuments();
+    QuerySnapshot cars = await userDoc.collection('cars').getDocuments();
     for (var doc in cars.documents) {
       if (doc.data['name'] == name)
         return Car.fromJSON(doc.data, doc.documentID);
@@ -36,9 +34,7 @@ class CarsBLoC extends BLoC {
     DocumentReference userDoc = FirestoreBLoC().getUserDocument();
     QuerySnapshot cars;
     try {
-      cars = await userDoc
-      .collection('cars')
-      .getDocuments();
+      cars = await userDoc.collection('cars').getDocuments();
     } catch (e) {
       print(e);
     }
