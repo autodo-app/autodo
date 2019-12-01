@@ -111,12 +111,11 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
           ? widget.existing.carName
           : '',
       validator: (val) {
-        var res = requiredValidator(val);
-        if (res != null) {
-          autoCompleteField.updateDecoration(
-              decoration: defaultInputDecoration('Required', 'Car Name')
-                  .copyWith(errorText: res));
-        }
+        var txt = _autocompleteController.text;
+        var res = requiredValidator(txt);
+        autoCompleteField.updateDecoration(
+            decoration: defaultInputDecoration('Required', 'Car Name')
+                .copyWith(errorText: res));
         setState(() => _carError = res);
         return _carError;
       },

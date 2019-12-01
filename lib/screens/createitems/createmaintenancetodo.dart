@@ -236,18 +236,18 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
           ? widget.existing.repeatingType
           : '',
       validator: (val) {
-        if (val == null || val == "" || 
-            RepeatingBLoC().repeats.map((r) => r.name).contains(val)) {
-          return null;
-        } else {
-          var res = "Specified Repeat cannot be found.";
-          autoCompleteField.updateDecoration(
-            decoration: defaultInputDecoration('Optional', 'Repeating Task')
-                .copyWith(errorText: res)
-          );
-          setState(() => _carError = res);
-          return _carError;
+        var txt = _autocompleteController.text;
+        var res = "Specified Repeat cannot be found.";
+        if (txt == null || txt == "" || 
+            RepeatingBLoC().repeats.map((r) => r.name).contains(txt)) {
+          res = null;
         }
+        autoCompleteField.updateDecoration(
+          decoration: defaultInputDecoration('Optional', 'Repeating Task')
+              .copyWith(errorText: res)
+        );
+        setState(() => _carError = res);
+        return _carError;
       },  
       onSaved: (val) => setState(() {
         if (selectedRepeat != null)
