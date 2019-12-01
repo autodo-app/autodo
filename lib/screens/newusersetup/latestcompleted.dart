@@ -30,7 +30,7 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
     if (widget.repeatKey.currentState.validate()) {
       widget.repeatKey.currentState.save();
       // hide the keyboard
-      FocusScope.of(context).requestFocus(new FocusNode());
+      FocusScope.of(context).requestFocus(FocusNode());
       await Future.delayed(Duration(milliseconds: 400));
       widget.onNext();
     }
@@ -85,7 +85,8 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
     Widget tireRotationMileage = TextFormField(
       maxLines: 1,
       onTap: () => setState(() => expanded = true),
-      decoration: defaultInputDecoration('(miles)', 'Last Tire Rotation (miles)'),
+      decoration:
+          defaultInputDecoration('(miles)', 'Last Tire Rotation (miles)'),
       validator: (value) => intNoRequire(value),
       onSaved: (value) {
         if (value != null && value != '')
@@ -154,9 +155,10 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
                       'Skip',
                       style: Theme.of(context).primaryTextTheme.button,
                     ),
-                    onPressed: () => Navigator.popAndPushNamed(context, '/load'),
+                    onPressed: () =>
+                        Navigator.popAndPushNamed(context, '/load'),
                   ),
-                  FlatButton( 
+                  FlatButton(
                     padding: EdgeInsets.all(0),
                     materialTapTargetSize: MaterialTapTargetSize.padded,
                     child: Text(

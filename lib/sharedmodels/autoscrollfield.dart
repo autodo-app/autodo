@@ -7,8 +7,8 @@ class AutoScrollField extends StatefulWidget {
     @required this.focusNode,
     @required this.controller,
     @required this.position,
-    this.curve: Curves.ease,
-    this.duration: const Duration(milliseconds: 200),
+    this.curve = Curves.ease,
+    this.duration = const Duration(milliseconds: 200),
   }) : super(key: key);
 
   /// The node we will monitor to determine if the child is focused

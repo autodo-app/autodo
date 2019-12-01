@@ -24,8 +24,7 @@ String doubleValidator(String val) {
 }
 
 String intNoRequire(String val) {
-  if (val == null || val == "")
-    return null;
+  if (val == null || val == "") return null;
   try {
     int.parse(val);
   } catch (e) {
@@ -35,12 +34,9 @@ String intNoRequire(String val) {
 }
 
 String intValidator(String val) {
-  if (val == null || val == "")
-    return "This field is required.";
+  if (val == null || val == "") return "This field is required.";
   return intNoRequire(val);
 }
-
-
 
 class RGB {
   double r = 0.0; // a fraction between 0 and 1
