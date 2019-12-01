@@ -176,8 +176,7 @@ class RepeatingBLoC extends BLoC {
               latestCompletedRepeatTodos[car.name].keys.contains(repeat.name)) {
             // If a ToDo in this category has already been completed, use that as
             // the base for extrapolating the dueMileage for the new ToDo
-            // TODO: this field is always empty so far
-            // newDueMileage += latestCompletedRepeatTodos[car.name][repeat.name]['completedMileage'];
+            newDueMileage += latestCompletedRepeatTodos[car.name][repeat.name]['completedMileage'];
           } else if (newDueMileage < (car.mileage * 0.75)) {
             // Add the repeat interval to the car's current mileage if the small
             // interval and high mileage makes it seem unlikely that the car
@@ -285,6 +284,7 @@ class RepeatingBLoC extends BLoC {
       repeatingType: taskName,
       tags: [carName],
       complete: complete,
+      completeMileage: (complete) ? dueMileage : null
     );
     TodoBLoC().push(newTodo);
   }

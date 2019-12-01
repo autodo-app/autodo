@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class MaintenanceTodoItem {
   String name, ref, repeatingType;
   DateTime dueDate, completeDate;
-  int dueMileage, notificationID;
+  int dueMileage, notificationID, completeMileage;
   bool complete;
   bool estimatedDueDate; // true if the user set this value, false if generated
   List tags;
@@ -17,7 +17,8 @@ class MaintenanceTodoItem {
       this.repeatingType,
       tags,
       this.estimatedDueDate = true,
-      this.complete = false}) {
+      this.complete = false,
+      this.completeMileage}) {
     this.tags = tags ?? [];
   }
 
@@ -49,6 +50,7 @@ class MaintenanceTodoItem {
       tags = [];
     }
     this.estimatedDueDate = map['estimatedDueDate'] ?? true;
+    this.completeMileage = map['completeMileage'] ?? 0;
   }
 
   MaintenanceTodoItem.fromSnapshot(DocumentSnapshot snapshot)
@@ -63,7 +65,8 @@ class MaintenanceTodoItem {
       'complete': this.complete,
       'repeatingType': this.repeatingType,
       'estimatedDueDate': this.estimatedDueDate,
-      'tags': this.tags
+      'tags': this.tags,
+      'completeMileage': this.completeMileage
     };
   }
 }

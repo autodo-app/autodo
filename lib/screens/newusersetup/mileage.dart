@@ -64,7 +64,6 @@ class CarEntryFieldState extends State<CarEntryField> {
       initialValue: '',
       onSaved: (value) {
         int mileage = int.parse(value.trim());
-        print(mileage);
         car.updateMileage(mileage, DateTime.now());
         if (firstWritten)
           CarsBLoC().push(car);
@@ -162,7 +161,6 @@ class MileageScreenState extends State<MileageScreen> {
       }
 
       return Container(
-        // height: viewportSize.maxHeight - 110,
         padding: EdgeInsets.all(10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,

@@ -61,7 +61,7 @@ class SignInScreenState extends State<SignInScreen> {
         ],
       );
 
-  void _signUp() async {
+  Future<void> _signUp() async {
     if (kReleaseMode) {
       var user = await Auth().signUpWithVerification(_email, _password);
       if (user != null) {
@@ -110,7 +110,7 @@ class SignInScreenState extends State<SignInScreen> {
 
     try {
       if (widget.formMode == FormMode.SIGNUP) {
-        _signUp();
+        await _signUp();
       } else {
         await initExistingUser(_email, _password);
       }
