@@ -238,17 +238,17 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
       validator: (val) {
         var txt = _autocompleteController.text;
         var res = "Specified Repeat cannot be found.";
-        if (txt == null || txt == "" || 
+        if (txt == null ||
+            txt == "" ||
             RepeatingBLoC().repeats.map((r) => r.name).contains(txt)) {
           res = null;
         }
         autoCompleteField.updateDecoration(
-          decoration: defaultInputDecoration('Optional', 'Repeating Task')
-              .copyWith(errorText: res)
-        );
+            decoration: defaultInputDecoration('Optional', 'Repeating Task')
+                .copyWith(errorText: res));
         setState(() => _carError = res);
         return _carError;
-      },  
+      },
       onSaved: (val) => setState(() {
         if (selectedRepeat != null)
           todoItem.repeatingType = selectedRepeat.name;
