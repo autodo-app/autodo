@@ -4,7 +4,7 @@ workflow "on reviews" {
 }
 
 action "shfmt" {
-  uses = "bltavares/actions/shfmt@master"
+  uses = "bltavares/actions/dartfmt@master"
   args = ["autofix"]
   env = {
     AUTOFIX_EVENTS="pull_request|push"
