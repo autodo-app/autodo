@@ -12,63 +12,54 @@ class BLoC {
   List sortItems(List items) => items;
 
   StreamBuilder buildList(String collection) {
-    return StreamBuilder(  
-      stream: FirestoreBLoC().getUserDocument()
-        .collection(collection)
-        .snapshots(),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Center( 
-            child: Text('Error getting data from database')
-          );
-        } else if (!snapshot.hasData) {
-          return Center( 
-            child: CircularProgressIndicator()
-          );
-        } else if (snapshot.data.documents.length == 0) {
-          return Center( 
-            child: Text('No items recorded yet.')
-          );
-        }
-
-        var filteredData = [];
-        snapshot.data.documents.forEach((item) {
-          if (!item.data.containsKey('tags') || item.data['tags'] == null) {
-            filteredData.add(item);
-            return;
+    return StreamBuilder(
+        stream: FirestoreBLoC()
+            .getUserDocument()
+            .collection(collection)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Center(child: Text('Error getting data from database'));
+          } else if (!snapshot.hasData) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.data.documents.length == 0) {
+            return Center(child: Text('No items recorded yet.'));
           }
 
-          item.data['tags'].forEach((tag) {
-            if (!FilteringBLoC().containsKey(tag) || 
-              FilteringBLoC().value(tag) == true)
-            filteredData.add(item);
-          });
-        });
-
-        filteredData = sortItems(filteredData);
-
-        return ListView.builder(
-          itemCount: filteredData.length + 1,
-          itemBuilder: (context, index) {
-            if (index == filteredData.length) {
-              // allows the bottom item to be scrolled up above the FAB
-              return Container(
-                height: clamp(MediaQuery.of(context).size.height - 400, 
-                              80.0, double.infinity)
-              );
+          var filteredData = [];
+          snapshot.data.documents.forEach((item) {
+            if (!item.data.containsKey('tags') || item.data['tags'] == null) {
+              filteredData.add(item);
+              return;
             }
-            return buildItem(filteredData[index], index);
-          }
-        );
-      }
-    );
+
+            item.data['tags'].forEach((tag) {
+              if (!FilteringBLoC().containsKey(tag) ||
+                  FilteringBLoC().value(tag) == true) filteredData.add(item);
+            });
+          });
+
+          filteredData = sortItems(filteredData);
+
+          return ListView.builder(
+              itemCount: filteredData.length + 1,
+              itemBuilder: (context, index) {
+                if (index == filteredData.length) {
+                  // allows the bottom item to be scrolled up above the FAB
+                  return Container(
+                      height: clamp(MediaQuery.of(context).size.height - 400,
+                          80.0, double.infinity));
+                }
+                return buildItem(filteredData[index], index);
+              });
+        });
   }
 
   Future<void> pushItem(String collection, dynamic item) async {
+    // TODO: this shouldn't happen until the doc is created
     DocumentReference userDoc = FirestoreBLoC().getUserDocument();
-    DocumentReference ref = await userDoc
-        .collection(collection)
-        .add(item.toJSON());
+    DocumentReference ref =
+        await userDoc.collection(collection).add(item.toJSON());
     item.ref = ref.documentID;
   }
 
@@ -78,18 +69,14 @@ class BLoC {
       return;
     }
     DocumentReference userDoc = FirestoreBLoC().getUserDocument();
-    DocumentReference ref = userDoc
-        .collection(collection)
-        .document(item.ref);
+    DocumentReference ref = userDoc.collection(collection).document(item.ref);
     ref.updateData(item.toJSON());
   }
 
   void deleteItem(String collection, dynamic item) {
     _past = item;
     DocumentReference userDoc = FirestoreBLoC().getUserDocument();
-    DocumentReference ref = userDoc
-      .collection(collection)
-      .document(item.ref);
+    DocumentReference ref = userDoc.collection(collection).document(item.ref);
     ref.delete();
   }
 

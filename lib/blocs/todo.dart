@@ -10,42 +10,46 @@ class TodoBLoC extends BLoC {
   Widget buildItem(dynamic snapshot, int index) {
     bool first = index == 0;
     var date;
-    if (snapshot.data.containsKey('dueDate') && snapshot.data['dueDate'] != null)
+    if (snapshot.data.containsKey('dueDate') &&
+        snapshot.data['dueDate'] != null)
       date = snapshot.data['dueDate'].toDate();
     var mileage = snapshot.data['dueMileage'];
     var item = MaintenanceTodoItem(
-      ref: snapshot.documentID,
-      name: snapshot.data['name'],
-      dueDate: date,
-      dueMileage: mileage,
-      repeatingType: snapshot.data['repeatingType'],
-      tags: snapshot.data['tags']
-    );
+        ref: snapshot.documentID,
+        name: snapshot.data['name'],
+        dueDate: date,
+        dueMileage: mileage,
+        repeatingType: snapshot.data['repeatingType'],
+        tags: snapshot.data['tags']);
     return MaintenanceTodoCard(item: item, emphasized: first);
   }
 
   @override
   List sortItems(List items) {
-    return items..sort((a, b) {
-      var aDate = a.data['dueDate'] ?? 0;
-      var bDate = b.data['dueDate'] ?? 0;
-      var aMileage = a.data['dueMileage'] ?? 0;
-      var bMileage = b.data['dueMileage'] ?? 0;
-       
-      if (aDate == 0 && bDate == 0) {
-        // both don't have a date, so only consider the mileages
-        if (aMileage > bMileage) return 1;
-        else if (aMileage < bMileage) return -1;
-        else return 0;
-      } else {
-        // in case one of the two isn't a valid timestamp
-        if (aDate == 0) return -1;
-        if (bDate == 0) return 1;
-        // consider the dates since all todo items should have dates as a result
-        // of the distance rate translation function
-        return aDate.compareTo(bDate);
-      }
-    });
+    return items
+      ..sort((a, b) {
+        var aDate = a.data['dueDate'] ?? 0;
+        var bDate = b.data['dueDate'] ?? 0;
+        var aMileage = a.data['dueMileage'] ?? 0;
+        var bMileage = b.data['dueMileage'] ?? 0;
+
+        if (aDate == 0 && bDate == 0) {
+          // both don't have a date, so only consider the mileages
+          if (aMileage > bMileage)
+            return 1;
+          else if (aMileage < bMileage)
+            return -1;
+          else
+            return 0;
+        } else {
+          // in case one of the two isn't a valid timestamp
+          if (aDate == 0) return -1;
+          if (bDate == 0) return 1;
+          // consider the dates since all todo items should have dates as a result
+          // of the distance rate translation function
+          return aDate.compareTo(bDate);
+        }
+      });
   }
 
   StreamBuilder items() {
@@ -55,10 +59,9 @@ class TodoBLoC extends BLoC {
   Future<void> scheduleNotification(MaintenanceTodoItem item) async {
     if (item.dueDate != null) {
       var id = await NotificationBLoC().scheduleNotification(
-        datetime: item.dueDate,
-        title: 'Maintenance ToDo Due Soon: ${item.name}',
-        body: ''
-      );
+          datetime: item.dueDate,
+          title: 'Maintenance ToDo Due Soon: ${item.name}',
+          body: '');
       item.notificationID = id;
     }
   }
@@ -80,25 +83,24 @@ class TodoBLoC extends BLoC {
     undoItem('todos');
   }
 
-  Future<WriteBatch> addUpdate(WriteBatch batch, MaintenanceTodoItem item) async {
+  Future<WriteBatch> addUpdate(
+      WriteBatch batch, MaintenanceTodoItem item) async {
     DocumentReference userDoc = FirestoreBLoC().getUserDocument();
-    DocumentReference ref = userDoc
-        .collection('todos')
-        .document(item.ref);
+    DocumentReference ref = userDoc.collection('todos').document(item.ref);
     batch.setData(ref, item.toJSON());
     return batch;
   }
 
   Future<void> updateDueDates(Car car) async {
     WriteBatch batch = Firestore.instance.batch();
-    QuerySnapshot snap = await FirestoreBLoC().getUserDocument()
+    QuerySnapshot snap = await FirestoreBLoC()
+        .getUserDocument()
         .collection('todos')
         .getDocuments();
     for (var todo in snap.documents) {
-      if (!todo.data['tags'].contains(car.name) || 
-          todo.data['estimatedDueDate'] == null || 
-          !todo.data['estimatedDueDate'])
-        continue;
+      if (!todo.data['tags'].contains(car.name) ||
+          todo.data['estimatedDueDate'] == null ||
+          !todo.data['estimatedDueDate']) continue;
       MaintenanceTodoItem item = MaintenanceTodoItem.fromMap(todo.data);
 
       var distanceToTodo = todo.data['dueMileage'] - car.mileage;
@@ -107,9 +109,10 @@ class TodoBLoC extends BLoC {
       item.dueDate = car.lastMileageUpdate.add(timeToTodo);
       print('${car.distanceRate} + ${item.dueDate}');
       scheduleNotification(item);
-      var ref = FirestoreBLoC().getUserDocument()
-        .collection('todos')
-        .document(todo.documentID); 
+      var ref = FirestoreBLoC()
+          .getUserDocument()
+          .collection('todos')
+          .document(todo.documentID);
       batch.updateData(ref, item.toJSON());
     }
     await batch.commit();

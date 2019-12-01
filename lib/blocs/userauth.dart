@@ -3,8 +3,11 @@ import 'package:autodo/blocs/subcomponents/subcomponents.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 
-class SignInFailure implements Exception {
+class SignInFailure implements PlatformException {
   String errMsg() => "Firebase Auth rejected attempt to register new user";
+  String get code => "UNKNOWN_AUTH_ERROR";
+  String get details => "";
+  String get message => "Could not authenticate this user";
 }
 
 abstract class BaseAuth {
@@ -30,24 +33,43 @@ class Auth implements BaseAuth {
   }
 
   Future<String> signUp(String email, String password) async {
+    AuthResult res = await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email, password: password);
+    currentUser = res.user.uid;
+    currentUserName = res.user.email;
+    return res.user.uid;
+  }
+
+  Future<String> waitForVerification(FirebaseUser user) async {
+    while (!user.isEmailVerified) {
+      await Future.microtask(() async {
+        // reload the user's values
+        await Future.delayed(const Duration(milliseconds: 500), () async {
+          user = await FirebaseAuth.instance.currentUser();
+          user.reload();
+        });
+      });
+    }
+    return user.uid;
+  }
+
+  Future<FirebaseUser> signUpWithVerification(
+      String email, String password) async {
     AuthResult res;
     try {
       res = await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
-      currentUser = res.user.uid;
-      currentUserName = res.user.email;
+      await res.user.sendEmailVerification();
     } on PlatformException {
       print(
           "PlatformException: Cannot create a user with an email that already exists");
-      return "";
+      return null;
     }
-
-    FirebaseUser user = res.user;
-    return user.uid;
+    return res.user;
   }
 
   Future<void> deleteCurrentUser() async {
-    FirebaseUser cur = await  _firebaseAuth.currentUser();
+    FirebaseUser cur = await _firebaseAuth.currentUser();
     if (cur != null) {
       try {
         FirestoreBLoC().deleteUserDocument();
@@ -70,11 +92,6 @@ class Auth implements BaseAuth {
   }
 
   Future<String> getCurrentUserName() async {
-    // FirebaseUser user = await _firebaseAuth.currentUser();
-    // if (user != null && user.displayName != "")
-    //   return user.displayName;
-    // else if (user != null) return user.email;
-    // return "NO_USER";
     return currentUserName;
   }
 
@@ -83,12 +100,18 @@ class Auth implements BaseAuth {
   }
 
   bool isLoading() {
-    if (getCurrentUser() == '') return true;
-    else return false;
+    if (getCurrentUser() == '')
+      return true;
+    else
+      return false;
   }
 
   StreamSubscription<FirebaseUser> listen(Function(FirebaseUser) fn) {
     return _firebaseAuth.onAuthStateChanged.listen(fn);
+  }
+
+  Future<void> sendPasswordReset(String email) async {
+    await _firebaseAuth.sendPasswordResetEmail(email: email);
   }
 
   // Make the object a Singleton

@@ -1,0 +1,27 @@
+# https://medium.com/better-programming/ci-cd-for-flutter-apps-using-github-actions-b833f8f7aac
+on: push
+name: Test and Build apk
+jobs:
+  build:
+    name: Build APK
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+      with: 
+        submodules: true
+    - uses: actions/setup-java@v1
+      with:
+        java-version: '12.x'
+    - uses: subosito/flutter-action@v1
+      with:
+        flutter-version: '1.9.1+hotfix.5'
+    - run: flutter pub get
+    - run: flutter test
+    - run: echo "${{ secrets.store_file }}" | base64 --decode > ~/keystore.jks
+    - run: echo "${{ secrets.google_services }}" | base64 --decode > ./android/app/google-services.json
+    - run: flutter build apk --debug --split-per-abi
+      env:
+        KEY_ALIAS: ${{ secrets.key_alias }}
+        KEY_PASSWORD: ${{ secrets.key_password }}
+        STORE_FILE: ~/keystore.jks
+        STORE_PASSWORD: ${{ secrets.store_password }}

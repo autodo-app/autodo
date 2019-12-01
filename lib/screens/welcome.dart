@@ -127,7 +127,7 @@ class Welcome extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container( 
+          Container(
             height: 180,
             child: Center(
               child: Image.asset(
@@ -240,7 +240,7 @@ class Tutorial1 extends StatelessWidget {
           Text(
             "Simplify Your Tasks",
             textAlign: TextAlign.center,
-            style: TextStyle(  
+            style: TextStyle(
               fontSize: 30,
               fontFamily: 'Ubuntu',
               fontWeight: FontWeight.w600,
@@ -294,7 +294,7 @@ class DotsIndicator extends AnimatedWidget {
     this.controller,
     this.itemCount,
     this.onPageSelected,
-    this.color: Colors.white,
+    this.color = Colors.white,
   }) : super(listenable: controller);
 
   Widget build(BuildContext context) {
@@ -304,7 +304,7 @@ class DotsIndicator extends AnimatedWidget {
         padding: EdgeInsets.only(bottom: 10.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: new List<Widget>.generate(itemCount, _buildDot),
+          children: List<Widget>.generate(itemCount, _buildDot),
         ),
       ),
     );
@@ -318,15 +318,15 @@ class DotsIndicator extends AnimatedWidget {
       ),
     );
     double zoom = 1.0 + (_kMaxZoom - 1.0) * selectedness;
-    return new Container(
+    return Container(
       width: _kDotSpacing,
-      child: new Material(
+      child: Material(
         color: color,
         type: MaterialType.circle,
-        child: new Container(
+        child: Container(
           width: _kDotSize * zoom,
           height: _kDotSize * zoom,
-          child: new InkWell(
+          child: InkWell(
             onTap: () => onPageSelected(index),
           ),
         ),

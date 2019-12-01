@@ -1,22 +1,20 @@
+import 'package:autodo/blocs/init.dart';
 import 'package:autodo/refueling/history.dart';
-import 'package:autodo/screens/editrepeats.dart';
-import 'package:autodo/screens/newuser.dart';
-import 'package:autodo/screens/statistics.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/screens/screens.dart';
 import 'package:autodo/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:autodo/blocs/blocs.dart';
 
 class AutodoApp extends StatefulWidget {
   AutodoApp() {
     FirebaseApp.configure(
-      name: 'autodo',
-      options: FirebaseOptions(  
-        googleAppID: '1:617460744396:android:400cbb86de167047',
-        projectID: 'autodo-49f21',
-        apiKey: 'AIzaSyAAYhwsJVyiYywUFORBgaUuyXqXFiFpbZo',
-      )
-    );
+        name: 'autodo',
+        options: FirebaseOptions(
+          googleAppID: '1:617460744396:android:400cbb86de167047',
+          projectID: 'autodo-49f21',
+          apiKey: 'AIzaSyAAYhwsJVyiYywUFORBgaUuyXqXFiFpbZo',
+        ));
   }
 
   @override
@@ -27,6 +25,7 @@ class AutodoAppState extends State<AutodoApp> {
   @override
   Widget build(BuildContext context) {
     var theme = createTheme();
+    startListeners();
     return MaterialApp(
       theme: theme,
       initialRoute: '/load',
@@ -44,7 +43,8 @@ class AutodoAppState extends State<AutodoApp> {
         '/createTodo': (context) => CreateTodoScreen(mode: TodoEditMode.CREATE),
         '/createRefueling': (context) =>
             CreateRefuelingScreen(mode: RefuelingEditMode.CREATE),
-        '/createRepeat': (context) => CreateRepeatScreen(mode: RepeatEditMode.CREATE),
+        '/createRepeat': (context) =>
+            CreateRepeatScreen(mode: RepeatEditMode.CREATE),
         '/settings': (context) => SettingsScreen(),
         '/statistics': (context) => StatisticsScreen(),
         '/editcarlist': (context) => EditCarListScreen(),

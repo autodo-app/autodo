@@ -8,7 +8,7 @@ class Car {
   static const double EMA_CUTOFF = 8;
 
   String name, ref;
-  int mileage = 0, numRefuelings = 0; 
+  int mileage = 0, numRefuelings = 0;
   Color color;
   double averageEfficiency, distanceRate;
   DateTime lastMileageUpdate;
@@ -23,38 +23,34 @@ class Car {
       out.distanceRateHistory = [];
     } else {
       List<DistanceRatePoint> history = List<DistanceRatePoint>.from(
-        input['distanceRateHistory']
-        .map((val) => DistanceRatePoint(
-          DateTime.fromMillisecondsSinceEpoch(val['date']), 
-          val['distanceRate'])
-        )
-      );
+          input['distanceRateHistory'].map((val) => DistanceRatePoint(
+              DateTime.fromMillisecondsSinceEpoch(val['date']),
+              val['distanceRate'])));
       out.distanceRateHistory = history;
     }
-    if (input['color'] != null)
-      out.color = Color(input['color']);
+    if (input['color'] != null) out.color = Color(input['color']);
     return out;
   }
 
-  Car({
-    @required this.name, 
-    @required this.mileage, 
-    this.color, 
-    this.numRefuelings, 
-    this.averageEfficiency, 
-    this.distanceRate, 
-    this.ref});
+  Car(
+      {@required this.name,
+      @required this.mileage,
+      this.color,
+      this.numRefuelings,
+      this.averageEfficiency,
+      this.distanceRate,
+      this.ref});
 
   Car.empty();
-  
+
   Map<String, dynamic> toJSON() {
-    List<Map<String, dynamic>> distanceRateHistoryJSON = 
-      (distanceRateHistory == null) ? [] : List.from(
-      distanceRateHistory.map((val) => {
-        'date': val.date.millisecondsSinceEpoch, 
-        'distanceRate': val.distanceRate
-      })
-    );
+    List<Map<String, dynamic>> distanceRateHistoryJSON =
+        (distanceRateHistory == null)
+            ? []
+            : List.from(distanceRateHistory.map((val) => {
+                  'date': val.date.millisecondsSinceEpoch,
+                  'distanceRate': val.distanceRate
+                }));
     return {
       'name': name,
       'mileage': mileage,
@@ -69,11 +65,11 @@ class Car {
   void updateMileage(int newMileage, DateTime updateDate, {override = false}) {
     if (this.mileage > newMileage && !override) {
       // allow adding past refuelings, but we don't want to roll back the
-      // mileage in that case. The override switch is available to force a 
+      // mileage in that case. The override switch is available to force a
       // rollback in the case of a deleted refueling.
-      return; 
+      return;
     }
-      
+
     this.mileage = newMileage;
     this.lastMileageUpdate = roundToDay(updateDate);
   }
@@ -93,16 +89,17 @@ class Car {
       // first refueling for this car
       this.averageEfficiency = eff;
     } else {
-      this.averageEfficiency = _efficiencyFilter(this.numRefuelings, this.averageEfficiency, eff);
+      this.averageEfficiency =
+          _efficiencyFilter(this.numRefuelings, this.averageEfficiency, eff);
     }
-  } 
+  }
 
   double _distanceFilter(int numItems, double prev, double cur) {
     if (numItems == 1 || prev == double.infinity) {
       // no point in averaging only one value
       return cur;
     } else if (numItems > EMA_CUTOFF) {
-      // Use the EMA when we have enough data to get 
+      // Use the EMA when we have enough data to get
       // good results from it
       return EMA_GAIN * prev + (1 - EMA_GAIN) * cur;
     } else {
@@ -120,7 +117,8 @@ class Car {
 
     var elapsedDuration = cur.difference(prev);
     var curDistRate = distance.toDouble() / elapsedDuration.inDays.toDouble();
-    this.distanceRate = _distanceFilter(this.numRefuelings, this.distanceRate, curDistRate);
+    this.distanceRate =
+        _distanceFilter(this.numRefuelings, this.distanceRate, curDistRate);
     this.distanceRateHistory.add(DistanceRatePoint(cur, this.distanceRate));
     TodoBLoC().updateDueDates(this);
   }

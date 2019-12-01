@@ -8,3 +8,5 @@ export './logins.dart';
 export './loadingpage.dart';
 export './statistics.dart';
 export './editcarlist.dart';
+export './editrepeats.dart';
+export './newuser.dart';

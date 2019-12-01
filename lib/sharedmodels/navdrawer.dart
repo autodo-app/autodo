@@ -60,7 +60,8 @@ class NavDrawerState extends State<NavDrawer> {
           'Refueling History',
           style: Theme.of(context).primaryTextTheme.button,
         ),
-        onPressed: () => Navigator.popAndPushNamed(context, '/refuelinghistory'),
+        onPressed: () =>
+            Navigator.popAndPushNamed(context, '/refuelinghistory'),
       ),
       FlatButton(
         child: Text(
@@ -107,8 +108,8 @@ class NavDrawerState extends State<NavDrawer> {
                   child: DrawerHeader(
                     child: FutureBuilder<String>(
                       future: Auth().getCurrentUserName(),
-                      builder:
-                          (BuildContext context, AsyncSnapshot<String> snapshot) {
+                      builder: (BuildContext context,
+                          AsyncSnapshot<String> snapshot) {
                         switch (snapshot.connectionState) {
                           case ConnectionState.none:
                             return Text('here');

@@ -44,13 +44,14 @@ class RefuelingCardState extends State<RefuelingCard> {
               future: RefuelingBLoC().hsv(widget.item),
               initialData: HSV(0.0, 0.0, 1.0), // use white as the default color
               builder: (context, snap) => Text(
-                (widget.item.efficiency == null || widget.item.efficiency == double.infinity) ? 
-                  "N/A" : widget.item.efficiency.toStringAsFixed(3),
+                (widget.item.efficiency == null ||
+                        widget.item.efficiency == double.infinity)
+                    ? "N/A"
+                    : widget.item.efficiency.toStringAsFixed(3),
                 style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 16.0,
-                  color: Color(hsv2rgb(snap.data).toValue())
-                ),
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16.0,
+                    color: Color(hsv2rgb(snap.data).toValue())),
               ),
             ),
             Text(
@@ -196,13 +197,12 @@ class RefuelingCardState extends State<RefuelingCard> {
   }
 
   Widget tags(RefuelingCard widget) {
-    return FutureBuilder( 
-      future: CarsBLoC().getCarByName(widget.item.carName),
-      builder: (context, tag) {
-        if (tag.data == null) return Container();
-        return CarTag(text: tag.data.name, color: tag.data.color);
-      } 
-    );
+    return FutureBuilder(
+        future: CarsBLoC().getCarByName(widget.item.carName),
+        builder: (context, tag) {
+          if (tag.data == null) return Container();
+          return CarTag(text: tag.data.name, color: tag.data.color);
+        });
   }
 
   Row buttons(RefuelingCard widget) {
@@ -216,14 +216,14 @@ class RefuelingCardState extends State<RefuelingCard> {
           child: FlatButton(
             child: const Icon(Icons.edit),
             onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CreateRefuelingScreen(
-                          mode: RefuelingEditMode.EDIT,
-                          existing: widget.item,
-                        ),
-                  ),
+              context,
+              MaterialPageRoute(
+                builder: (context) => CreateRefuelingScreen(
+                  mode: RefuelingEditMode.EDIT,
+                  existing: widget.item,
                 ),
+              ),
+            ),
           ),
         ),
         ButtonTheme.fromButtonThemeData(
@@ -267,7 +267,8 @@ class RefuelingCardState extends State<RefuelingCard> {
         onTap: () => setState(() => expanded = !expanded),
         child: Card(
           elevation: 8.0,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           child: Container(
             child: Column(
               children: <Widget>[

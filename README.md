@@ -1,6 +1,6 @@
 # auToDo
 
-![travis-ci](https://travis-ci.org/baylessj/autodo.svg?branch=master)
+[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fautodo-app%2Fautodo%2Fbadge%3Fref%3Ddevelop&style=popout)](https://actions-badge.atrox.dev/autodo-app/autodo/goto?ref=develop)
 
 A flexible, intuitive ToDo list app for keeping track of your cars' maintenance needs.
 

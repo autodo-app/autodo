@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:autodo/screens/screens.dart';
 import 'package:autodo/sharedmodels/cartag.dart';
 
-const int DUE_SOON_INTERVAL = 100; 
+const int DUE_SOON_INTERVAL = 100;
 
 class MaintenanceTodoCard extends StatefulWidget {
   final MaintenanceTodoItem item;
@@ -16,7 +16,8 @@ class MaintenanceTodoCard extends StatefulWidget {
   MaintenanceTodoCard({@required this.item, this.emphasized});
 
   @override
-  State<MaintenanceTodoCard> createState() => MaintenanceTodoCardState(emphasized: this.emphasized ?? false);
+  State<MaintenanceTodoCard> createState() =>
+      MaintenanceTodoCardState(emphasized: this.emphasized ?? false);
 }
 
 class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
@@ -27,52 +28,43 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
   BoxDecoration emphasizedDecoration;
 
   static var grad1 = LinearGradient(
-    begin: Alignment.centerLeft,
-    end: Alignment.centerRight,
-    colors: [mainColors[300], mainColors[400]]
-  );
+      begin: Alignment.centerLeft,
+      end: Alignment.centerRight,
+      colors: [mainColors[300], mainColors[400]]);
   static var grad2 = LinearGradient(
-    begin: Alignment.topCenter,
-    end: Alignment.bottomCenter,
-    colors: [mainColors[700], mainColors[900]]
-  );
-  BoxDecoration upcomingDecoration = BoxDecoration(  
-    borderRadius: BorderRadius.circular(25),
-    gradient: LinearGradient.lerp(grad1, grad2, 0.5)
-  );
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: [mainColors[700], mainColors[900]]);
+  BoxDecoration upcomingDecoration = BoxDecoration(
+      borderRadius: BorderRadius.circular(25),
+      gradient: LinearGradient.lerp(grad1, grad2, 0.5));
 
   static var grad3 = LinearGradient(
-    begin: Alignment.centerLeft,
-    end: Alignment.centerRight,
-    colors: [Colors.yellow.shade700, Colors.yellow.shade800]
-  );
+      begin: Alignment.centerLeft,
+      end: Alignment.centerRight,
+      colors: [Colors.yellow.shade700, Colors.yellow.shade800]);
   static var grad4 = LinearGradient(
-    begin: Alignment.topCenter,
-    end: Alignment.bottomCenter,
-    colors: [Colors.yellow.shade800, Colors.orange.shade300]
-  );
-  BoxDecoration duesoonDecoration = BoxDecoration(  
-    borderRadius: BorderRadius.circular(25),
-    gradient: LinearGradient.lerp(grad3, grad4, 0.5)
-  );
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: [Colors.yellow.shade800, Colors.orange.shade300]);
+  BoxDecoration duesoonDecoration = BoxDecoration(
+      borderRadius: BorderRadius.circular(25),
+      gradient: LinearGradient.lerp(grad3, grad4, 0.5));
 
   static var grad5 = LinearGradient(
-    begin: Alignment.centerLeft,
-    end: Alignment.centerRight,
-    colors: [Colors.red.shade300, Colors.red.shade600]
-  );
+      begin: Alignment.centerLeft,
+      end: Alignment.centerRight,
+      colors: [Colors.red.shade300, Colors.red.shade600]);
   static var grad6 = LinearGradient(
-    begin: Alignment.topCenter,
-    end: Alignment.bottomCenter,
-    colors: [Colors.orange.shade800, Colors.red.shade500]
-  );
-  BoxDecoration pastdueDecoration = BoxDecoration(  
-    borderRadius: BorderRadius.circular(25),
-    gradient: LinearGradient.lerp(grad5, grad6, 0.4)
-  );
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: [Colors.orange.shade800, Colors.red.shade500]);
+  BoxDecoration pastdueDecoration = BoxDecoration(
+      borderRadius: BorderRadius.circular(25),
+      gradient: LinearGradient.lerp(grad5, grad6, 0.4));
 
   Future<void> emphasis() async {
-    if (!emphasized) return; 
+    if (!emphasized) return;
     var car = await CarsBLoC().getCarByName(widget.item.tags[0]);
     if (car == null) return;
     var distUntilToDo = widget.item.dueMileage - car.mileage;
@@ -85,11 +77,11 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
     } else {
       emphasizedDecoration = upcomingDecoration;
       preface = "Upcoming: " + widget.item.name;
-    } 
+    }
     setState(() {});
   }
 
-  @override 
+  @override
   void initState() {
     emphasis();
     super.initState();
@@ -137,30 +129,29 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
     if (isMileage) {
       var mileageString = mileage.toString();
       // Add commas to the mileage number
-      mileageString = mileageString.replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => "${m[1]},");
+      mileageString = mileageString.replaceAllMapped(
+          RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => "${m[1]},");
       return Row(
         children: <Widget>[
           Icon(Icons.pin_drop, size: 30.0),
-          Padding(  
+          Padding(
             padding: EdgeInsets.all(5),
           ),
           RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(  
-                  text: 'Due at ',
-                  style: Theme.of(context).primaryTextTheme.body1,
-                ),
-                TextSpan(  
-                  text: mileageString,
-                  style: Theme.of(context).primaryTextTheme.subtitle,
-                ),
-                TextSpan(  
-                  text: ' miles',
-                  style: Theme.of(context).primaryTextTheme.body1,
-                )
-              ]
-            ),
+            text: TextSpan(children: [
+              TextSpan(
+                text: 'Due at ',
+                style: Theme.of(context).primaryTextTheme.body1,
+              ),
+              TextSpan(
+                text: mileageString,
+                style: Theme.of(context).primaryTextTheme.subtitle,
+              ),
+              TextSpan(
+                text: ' miles',
+                style: Theme.of(context).primaryTextTheme.body1,
+              )
+            ]),
           ),
         ],
       );
@@ -171,10 +162,10 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
 
   Row lastCompleted() {
     // TODO: change this based on past historical data
-    return Row(  
+    return Row(
       children: <Widget>[
         Icon(Icons.new_releases, size: 30.0),
-        Padding(  
+        Padding(
           padding: EdgeInsets.all(5),
         ),
         Text(
@@ -193,11 +184,11 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           dueDate(widget.item.dueDate),
-          Padding( 
+          Padding(
             padding: EdgeInsets.all(5),
           ),
           dueMileage(widget.item.dueMileage),
-          Padding( 
+          Padding(
             padding: EdgeInsets.all(5),
           ),
           lastCompleted(),
@@ -232,11 +223,10 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
         children: <Widget>[
           checkbox(widget),
           Container(
-            height: 100, 
-            child: VerticalDivider(
-              color: Colors.white.withAlpha(230),
-            )
-          ),
+              height: 100,
+              child: VerticalDivider(
+                color: Colors.white.withAlpha(230),
+              )),
           due(widget),
         ],
       ),
@@ -249,17 +239,14 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
         padding: EdgeInsets.only(left: 5.0),
       ),
     ];
-    
+
     for (var tag in widget.item.tags) {
-      tags.add(
-        FutureBuilder(
+      tags.add(FutureBuilder(
           future: CarsBLoC().getCarByName(tag),
           builder: (context, tag) {
             if (tag.data == null) return Container();
             return CarTag(text: tag.data.name, color: tag.data.color);
-          }
-        )
-      );
+          }));
     }
 
     return Row(
@@ -283,14 +270,14 @@ class MaintenanceTodoCardState extends State<MaintenanceTodoCard> {
               color: Theme.of(context).primaryIconTheme.color,
             ),
             onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CreateTodoScreen(
-                          mode: TodoEditMode.EDIT,
-                          existing: widget.item,
-                        ),
-                  ),
+              context,
+              MaterialPageRoute(
+                builder: (context) => CreateTodoScreen(
+                  mode: TodoEditMode.EDIT,
+                  existing: widget.item,
                 ),
+              ),
+            ),
           ),
         ),
         ButtonTheme.fromButtonThemeData(

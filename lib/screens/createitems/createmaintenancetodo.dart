@@ -30,6 +30,8 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
   final _autocompleteKey = GlobalKey<AutoCompleteTextFieldState<Repeat>>();
   TextEditingController _autocompleteController;
   var filterList;
+  AutoCompleteTextField autoCompleteField;
+  String _carError;
 
   CreateTodoScreenState() {
     filterList = FilteringBLoC().getFiltersAsList();
@@ -99,121 +101,94 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
     return d != null && d.isAfter(DateTime.now().subtract(Duration(days: 1)));
   }
 
-  Widget repeatField() {
-    return TextFormField(
-      decoration: InputDecoration(
-      border: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.teal),
-      ),
-      labelText: "Repeating Task",
-      contentPadding: EdgeInsets.only(
-          left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
-      ),
-      initialValue: (widget.mode == TodoEditMode.EDIT)
-          ? widget.existing.repeatingType
-          : '',
-      autofocus: false,
-      focusNode: _repeatNode,
-      style: Theme.of(context).primaryTextTheme.subtitle,
-      keyboardType: TextInputType.text,
-      validator: (value) { return null;},
-      onSaved: (val) => setState(() => todoItem.repeatingType = val),
-    );
-  }
-
-  Widget nameField() {
-    return TextFormField(
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.teal),
-        ),
-        labelText: "Action Name *",
-        contentPadding: EdgeInsets.only(
-            left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
-      ),
-      initialValue: (widget.mode == TodoEditMode.EDIT)
-          ? widget.existing.name.toString()
-          : '',
-      autofocus: true,
-      focusNode: _nameNode,
-      style: Theme.of(context).primaryTextTheme.subtitle,
-      keyboardType: TextInputType.text,
-      textCapitalization: TextCapitalization.sentences,
-      validator: requiredValidator,
-      onSaved: (val) => setState(() => todoItem.name = val),
-    );
-  }
-
-  Widget dateField() {
-    return TextFormField(
-      decoration: InputDecoration(
-        hintText: 'Optional if Mileage Entered',
-        hintStyle: TextStyle(
-          fontSize: 18.0,
-          fontWeight: FontWeight.w400,
-        ),
-        labelText: 'Due Date',
-        contentPadding: EdgeInsets.only(
-            left: 16.0,
-            top: 20.0,
-            right: 16.0,
-            bottom: 5.0),
-        border: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.teal),
-        ),
-      ),
-      focusNode: _dateNode,
-      style: Theme.of(context).primaryTextTheme.subtitle,
-      controller: _controller,
-      keyboardType: TextInputType.datetime,
-      validator: (val) =>
-          isValidDate(val) ? null : 'Not a valid date',
-      onSaved: (val) => setState(() {
-            if (val != null && val != '') {
-              todoItem.dueDate = convertToDate(val);
-              todoItem.estimatedDueDate = false;
-            }
-          }),
-    );
-  }
-
-  Widget mileageField() {
-    return TextFormField(
-      decoration: defaultInputDecoration('Optional if Due Date Entered', 'DueMileage'),
-      initialValue: (widget.mode == TodoEditMode.EDIT)
-          ? widget.existing.dueMileage.toString()
-          : '',
-      autofocus: false,
-      focusNode: _mileageNode,
-      style: Theme.of(context).primaryTextTheme.subtitle,
-      keyboardType: TextInputType.number,
-      onSaved: (val) => setState(() {
-            if (val != null && val != '') {
-              todoItem.dueMileage = int.parse(val);
-            }
-          }),
-    );
-  }
-  Widget cars() {
-    return Column( 
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: List.generate(
-        FilteringBLoC().getFilters().keys.length,
-        (index) => ListTile(
-          leading: Checkbox( 
-            value: filterList[index].enabled,
-            onChanged: (state) {
-              filterList[index].enabled = state; 
-              updateFilters(filterList[index]);
-              setState(() {});
-            },
-            materialTapTargetSize: MaterialTapTargetSize.padded,
+  nameField() => TextFormField(
+        decoration: InputDecoration(
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.teal),
           ),
-          title: Text(filterList[index].carName)
-        )
-      )
-    );
+          labelText: "Action Name *",
+          contentPadding:
+              EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
+        ),
+        initialValue: (widget.mode == TodoEditMode.EDIT)
+            ? widget.existing.name.toString()
+            : '',
+        autofocus: true,
+        focusNode: _nameNode,
+        style: Theme.of(context).primaryTextTheme.subtitle,
+        keyboardType: TextInputType.text,
+        textCapitalization: TextCapitalization.sentences,
+        validator: requiredValidator,
+        onSaved: (val) => setState(() => todoItem.name = val),
+        textInputAction: TextInputAction.next,
+        onFieldSubmitted: (_) => changeFocus(_nameNode, _dateNode),
+      );
+
+  dateField() => TextFormField(
+        decoration: InputDecoration(
+          hintText: 'Optional if Mileage Entered',
+          hintStyle: TextStyle(
+            fontSize: 18.0,
+            fontWeight: FontWeight.w400,
+          ),
+          labelText: 'Due Date',
+          contentPadding:
+              EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.teal),
+          ),
+        ),
+        focusNode: _dateNode,
+        style: Theme.of(context).primaryTextTheme.subtitle,
+        controller: _controller,
+        keyboardType: TextInputType.datetime,
+        validator: (val) => isValidDate(val) ? null : 'Not a valid date',
+        onSaved: (val) => setState(() {
+          if (val != null && val != '') {
+            todoItem.dueDate = convertToDate(val);
+            todoItem.estimatedDueDate = false;
+          }
+        }),
+        textInputAction: TextInputAction.next,
+        onFieldSubmitted: (_) => changeFocus(_dateNode, _mileageNode),
+      );
+
+  mileageField() => TextFormField(
+        decoration: defaultInputDecoration(
+            'Optional if Due Date Entered', 'DueMileage'),
+        initialValue: (widget.mode == TodoEditMode.EDIT)
+            ? widget.existing.dueMileage.toString()
+            : '',
+        autofocus: false,
+        focusNode: _mileageNode,
+        style: Theme.of(context).primaryTextTheme.subtitle,
+        keyboardType: TextInputType.number,
+        onSaved: (val) => setState(() {
+          if (val != null && val != '') {
+            todoItem.dueMileage = int.parse(val);
+          }
+        }),
+        textInputAction: TextInputAction.next,
+        onFieldSubmitted: (_) => changeFocus(_mileageNode, _repeatNode),
+      );
+
+  Widget cars() {
+    return Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: List.generate(
+            FilteringBLoC().getFilters().keys.length,
+            (index) => ListTile(
+                leading: Checkbox(
+                  value: filterList[index].enabled,
+                  onChanged: (state) {
+                    filterList[index].enabled = state;
+                    updateFilters(filterList[index]);
+                    setState(() {});
+                  },
+                  materialTapTargetSize: MaterialTapTargetSize.padded,
+                ),
+                title: Text(filterList[index].carName))));
   }
 
   Widget addButton() {
@@ -234,7 +209,7 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
                 var todoItems = [];
                 filterList.forEach((f) {
                   if (f.enabled) {
-                    todoItem.tags  = [];
+                    todoItem.tags = [];
                     todoItem.tags.add(f.carName);
                     todoItems.add(todoItem);
                   }
@@ -254,43 +229,31 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
     );
   }
 
-  Widget autoComplete(FormFieldState<String> input) {
-    var txt = _autocompleteController.text;
-    if ((txt == null || txt == '') && widget.mode == TodoEditMode.EDIT)
-      _autocompleteController.text = widget.existing.repeatingType;
-    return AutoCompleteTextField<Repeat>(
-      focusNode: _repeatNode,
-      controller: _autocompleteController,
-      decoration: defaultInputDecoration('Optional', 'Repeating Task'),
-      itemSubmitted: (item) => setState(() {
-        _autocompleteController.text = item.name;
-        selectedRepeat = item;
-      }),
-      key: _autocompleteKey,
-      suggestions: RepeatingBLoC().repeats,
-      itemBuilder: (context, suggestion) => Padding(
-        child: ListTile(
-          title: Text(suggestion.name),
-          trailing: Text("Interval: ${suggestion.interval}")
-        ),
-        padding: EdgeInsets.all(5.0),
-      ),
-      itemSorter: (a, b) => a.name.length == b.name.length ? 0 : a.name.length < b.name.length ? -1 : 1,
-      // returns a match anytime that the input is anywhere in the repeat name
-      itemFilter: (suggestion, input) {
-        print('here');
-        return suggestion.name.toLowerCase().contains(input.toLowerCase());
-      }
-    );
-  }
-
   Widget repeatForm() {
-    return FormField<String>( 
-      builder: autoComplete,
-      initialValue: (widget.mode == TodoEditMode.EDIT) ? widget.existing.repeatingType : '',
+    return FormField<String>(
+      builder: (input) => autoCompleteField,
+      initialValue: (widget.mode == TodoEditMode.EDIT)
+          ? widget.existing.repeatingType
+          : '',
+      validator: (val) {
+        var txt = _autocompleteController.text;
+        var res = "Specified Repeat cannot be found.";
+        if (txt == null ||
+            txt == "" ||
+            RepeatingBLoC().repeats.map((r) => r.name).contains(txt)) {
+          res = null;
+        }
+        autoCompleteField.updateDecoration(
+            decoration: defaultInputDecoration('Optional', 'Repeating Task')
+                .copyWith(errorText: res));
+        setState(() => _carError = res);
+        return _carError;
+      },
       onSaved: (val) => setState(() {
-        if (selectedRepeat != null) todoItem.repeatingType = selectedRepeat.name;
-        else if (val != null && RepeatingBLoC().repeats.any((element) => element.name == val)) {
+        if (selectedRepeat != null)
+          todoItem.repeatingType = selectedRepeat.name;
+        else if (val != null &&
+            RepeatingBLoC().repeats.any((element) => element.name == val)) {
           todoItem.repeatingType = val;
         }
       }),
@@ -299,6 +262,33 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var txt = _autocompleteController.text;
+    if ((txt == null || txt == '') && widget.mode == TodoEditMode.EDIT)
+      _autocompleteController.text = widget.existing.repeatingType;
+    autoCompleteField = AutoCompleteTextField<Repeat>(
+        focusNode: _repeatNode,
+        controller: _autocompleteController,
+        decoration: defaultInputDecoration('Optional', 'Repeating Task')
+            .copyWith(errorText: _carError),
+        itemSubmitted: (item) => setState(() {
+              _autocompleteController.text = item.name;
+              selectedRepeat = item;
+            }),
+        key: _autocompleteKey,
+        suggestions: RepeatingBLoC().repeats,
+        itemBuilder: (context, suggestion) => Padding(
+              child: ListTile(
+                  title: Text(suggestion.name),
+                  trailing: Text("Interval: ${suggestion.interval}")),
+              padding: EdgeInsets.all(5.0),
+            ),
+        itemSorter: (a, b) => a.name.length == b.name.length
+            ? 0
+            : a.name.length < b.name.length ? -1 : 1,
+        // returns a match anytime that the input is anywhere in the repeat name
+        itemFilter: (suggestion, input) {
+          return suggestion.name.toLowerCase().contains(input.toLowerCase());
+        });
     return Scaffold(
       resizeToAvoidBottomPadding:
           false, // used to avoid overflow when keyboard is viewable
@@ -316,21 +306,18 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
             padding: EdgeInsets.only(top: 24.0, left: 20.0, right: 20.0),
             controller: scrollCtrl,
             children: <Widget>[
-              EnsureVisibleWhenFocused(  
+              EnsureVisibleWhenFocused(
                 child: nameField(),
                 focusNode: _nameNode,
               ),
-              Padding(  
-                padding: EdgeInsets.only(bottom: 15),
-              ),
-              Divider(),
-              Padding(  
-                padding: EdgeInsets.only(bottom: 15),
+              Padding(
+                padding: EdgeInsets.only(top: 15, bottom: 15),
+                child: Divider(),
               ),
               Row(
                 children: <Widget>[
                   Expanded(
-                    child: EnsureVisibleWhenFocused(  
+                    child: EnsureVisibleWhenFocused(
                       child: dateField(),
                       focusNode: _dateNode,
                     ),
@@ -344,14 +331,14 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
                   ),
                 ],
               ),
-              Padding(  
+              Padding(
                 padding: EdgeInsets.only(bottom: 15),
               ),
-              EnsureVisibleWhenFocused(  
+              EnsureVisibleWhenFocused(
                 child: mileageField(),
                 focusNode: _mileageNode,
               ),
-              Padding(  
+              Padding(
                 padding: EdgeInsets.only(bottom: 15),
               ),
               AutoScrollField(
@@ -360,12 +347,14 @@ class CreateTodoScreenState extends State<CreateTodoScreen> {
                 position: 240,
                 child: repeatForm(),
               ),
-              Padding(  
+              Padding(
                 padding: EdgeInsets.only(bottom: 10),
               ),
               cars(),
               addButton(),
-              Container(height: 10000,),
+              Container(
+                height: 10000,
+              ),
             ],
           ),
         ),

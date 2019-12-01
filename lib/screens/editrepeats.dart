@@ -5,8 +5,7 @@ class EditRepeatsScreen extends StatefulWidget {
   final _formKey = GlobalKey<FormState>();
 
   void save() {
-    if (_formKey.currentState.validate())
-      _formKey.currentState.save();
+    if (_formKey.currentState.validate()) _formKey.currentState.save();
   }
 
   @override

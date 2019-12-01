@@ -7,8 +7,8 @@ class AutoScrollField extends StatefulWidget {
     @required this.focusNode,
     @required this.controller,
     @required this.position,
-    this.curve: Curves.ease,
-    this.duration: const Duration(milliseconds: 200),
+    this.curve = Curves.ease,
+    this.duration = const Duration(milliseconds: 200),
   }) : super(key: key);
 
   /// The node we will monitor to determine if the child is focused
@@ -37,17 +37,18 @@ class AutoScrollField extends StatefulWidget {
 }
 
 class AutoScrollFieldState extends State<AutoScrollField> {
-   @override
-  void initState(){
+  @override
+  void initState() {
     super.initState();
     widget.focusNode.addListener(_scroll);
-    /// WidgetsBinding is used to get a function invoked when the 
+
+    /// WidgetsBinding is used to get a function invoked when the
     /// window size changes (rotation, keyboard, etc.)
     // WidgetsBinding.instance.addObserver(this);
   }
 
   @override
-  void dispose(){
+  void dispose() {
     // WidgetsBinding.instance.removeObserver(this);
     widget.focusNode.removeListener(_scroll);
     super.dispose();
@@ -56,14 +57,11 @@ class AutoScrollFieldState extends State<AutoScrollField> {
   Future<Null> _scroll() async {
     if (!widget.focusNode.hasFocus) return;
 
-    await widget.controller.animateTo(
-      widget.position, 
-      duration: widget.duration, 
-      curve: widget.curve
-    );
+    await widget.controller.animateTo(widget.position,
+        duration: widget.duration, curve: widget.curve);
   }
 
-  @override 
+  @override
   Widget build(BuildContext context) {
     return widget.child;
   }
