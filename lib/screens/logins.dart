@@ -340,29 +340,29 @@ class SignInScreenState extends State<SignInScreen> {
     );
   }
 
-  Widget _showSecondaryButtons() => Padding( 
-    padding: EdgeInsets.only(top: 10.0),
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        FlatButton(
-          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          child: widget.formMode == FormMode.LOGIN
-              ? Text('Create an account',
-                  style: linkStyle())
-              : Text('Have an account? Sign in',
-                  style: linkStyle()),
-          onPressed: () {
-            widget.formMode == FormMode.LOGIN
-                ? setState(() => widget.formMode = FormMode.SIGNUP)
-                : setState(() => widget.formMode = FormMode.LOGIN);
-          },
+  Widget _showSecondaryButtons() => Padding(
+        padding: EdgeInsets.only(top: 10.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            FlatButton(
+              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              child: widget.formMode == FormMode.LOGIN
+                  ? Text('Create an account', style: linkStyle())
+                  : Text('Have an account? Sign in', style: linkStyle()),
+              onPressed: () {
+                widget.formMode == FormMode.LOGIN
+                    ? setState(() => widget.formMode = FormMode.SIGNUP)
+                    : setState(() => widget.formMode = FormMode.LOGIN);
+              },
+            ),
+            (widget.formMode == FormMode.LOGIN)
+                ? _passwordReset()
+                : Container(),
+          ],
         ),
-        (widget.formMode == FormMode.LOGIN) ? _passwordReset() : Container(),
-      ],
-    ),
-  );
+      );
 
   Widget _showPrimaryButton() {
     return Padding(
@@ -392,93 +392,82 @@ class SignInScreenState extends State<SignInScreen> {
     );
   }
 
-  _sendButton() => FlatButton(  
-    child: Text(
-      'SEND',
-      style: Theme.of(context).primaryTextTheme.button,
-    ),
-    onPressed: () async {
-      showDialog(
-        context: context,
-        builder: (context) => Center(child: CircularProgressIndicator()),
-      );
-      if (_passwordResetKey.currentState.validate())
-        _passwordResetKey.currentState.save();
-      try {
-        await Auth().sendPasswordReset(_email);
-      } catch (e) {
-        if (e.code == 'ERROR_INVALID_EMAIL')
-          _sendError = "Invalid email address format";
-        else if (e.code == 'ERROR_USER_NOT_FOUND')
-          _sendError = "Could not find an account for this email address";
-      }
-      if (_sendError == null) {
-        _scaffoldKey.currentState.showSnackBar( 
-          SnackBar(
-            content: Text('Password Reset email has been sent.')
-          )
+  _sendButton() => FlatButton(
+      child: Text(
+        'SEND',
+        style: Theme.of(context).primaryTextTheme.button,
+      ),
+      onPressed: () async {
+        showDialog(
+          context: context,
+          builder: (context) => Center(child: CircularProgressIndicator()),
         );
-        Navigator.pop(context); // progress bar
-        Navigator.pop(context); // dialog
-      }
-    }
-  );
+        if (_passwordResetKey.currentState.validate())
+          _passwordResetKey.currentState.save();
+        try {
+          await Auth().sendPasswordReset(_email);
+        } catch (e) {
+          if (e.code == 'ERROR_INVALID_EMAIL')
+            _sendError = "Invalid email address format";
+          else if (e.code == 'ERROR_USER_NOT_FOUND')
+            _sendError = "Could not find an account for this email address";
+        }
+        if (_sendError == null) {
+          _scaffoldKey.currentState.showSnackBar(
+              SnackBar(content: Text('Password Reset email has been sent.')));
+          Navigator.pop(context); // progress bar
+          Navigator.pop(context); // dialog
+        }
+      });
 
-  _passwordResetDialog() => showDialog( 
-    context: context,
-    builder: (context) => AlertDialog( 
-      title: Text(
-        'Send Password Reset',
-        style: Theme.of(context).primaryTextTheme.title
-      ),
-      content: Form( 
-        key: _passwordResetKey,
-        child: Column( 
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            // roll own email box
-            TextFormField(
-              initialValue: _emailController.text,
-              maxLines: 1,
-              keyboardType: TextInputType.emailAddress,
-              textInputAction: TextInputAction.done,
-              autofocus: true,
-              decoration: InputDecoration(
-                  hintText: 'Email',
-                  hintStyle: TextStyle(
-                    color: Colors.grey[400],
+  _passwordResetDialog() => showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+            title: Text('Send Password Reset',
+                style: Theme.of(context).primaryTextTheme.title),
+            content: Form(
+              key: _passwordResetKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  // roll own email box
+                  TextFormField(
+                    initialValue: _emailController.text,
+                    maxLines: 1,
+                    keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.done,
+                    autofocus: true,
+                    decoration: InputDecoration(
+                        hintText: 'Email',
+                        hintStyle: TextStyle(
+                          color: Colors.grey[400],
+                        ),
+                        icon: Icon(
+                          Icons.mail,
+                          color: Colors.grey[300],
+                        )),
+                    validator: (value) => _emailValidator(value),
+                    onSaved: (value) => _email = value.trim(),
                   ),
-                  icon: Icon(
-                    Icons.mail,
-                    color: Colors.grey[300],
-                  )),
-              validator: (value) => _emailValidator(value),
-              onSaved: (value) => _email = value.trim(),
+                  (_sendError != null) ? Text(_sendError) : Container(),
+                ],
+              ),
             ),
-            (_sendError != null) ? Text(_sendError) : Container(),
-          ],
-        ),
-      ),
-      actions: [
-        FlatButton( 
-          child: Text(
-            'BACK',
-            style: Theme.of(context).primaryTextTheme.button
-          ),
-          onPressed: () => Navigator.pop(context)
-        ),
-        _sendButton()
-      ]
-    ),
-  );
+            actions: [
+              FlatButton(
+                  child: Text('BACK',
+                      style: Theme.of(context).primaryTextTheme.button),
+                  onPressed: () => Navigator.pop(context)),
+              _sendButton()
+            ]),
+      );
 
   _passwordReset() => FlatButton(
-    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-    child: Text(
-      'Forgot your password?',
-      style: linkStyle(),
-    ),
-    onPressed: () => _passwordResetDialog()
-  );
+      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      child: Text(
+        'Forgot your password?',
+        style: linkStyle(),
+      ),
+      onPressed: () => _passwordResetDialog());
 }

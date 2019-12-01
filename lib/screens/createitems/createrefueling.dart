@@ -66,7 +66,7 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
   }
 
   Future _chooseDate(BuildContext context, String initialDateString) async {
-    var now = new DateTime.now();
+    var now = DateTime.now();
     var initialDate = convertToDate(initialDateString) ?? now;
     initialDate = (initialDate.year >= 1900 && initialDate.isBefore(now)
         ? initialDate
@@ -87,7 +87,7 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
 
   DateTime convertToDate(String input) {
     try {
-      var d = new DateFormat.yMd().parseStrict(input);
+      var d = DateFormat.yMd().parseStrict(input);
       return d;
     } catch (e) {
       return null;
@@ -97,7 +97,7 @@ class CreateRefuelingScreenState extends State<CreateRefuelingScreen> {
   bool isValidDob(String dob) {
     if (dob.isEmpty) return true;
     var d = convertToDate(dob);
-    return d != null && d.isBefore(new DateTime.now());
+    return d != null && d.isBefore(DateTime.now());
   }
 
   Widget autoComplete(FormFieldState<String> input) {

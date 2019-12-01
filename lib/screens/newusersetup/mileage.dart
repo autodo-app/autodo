@@ -40,42 +40,40 @@ class CarEntryFieldState extends State<CarEntryField> {
   @override
   Widget build(BuildContext context) {
     nameField() => TextFormField(
-      maxLines: 1,
-      autofocus: true,
-      decoration: defaultInputDecoration('', 'Car Name'),
-      validator: (val) => requiredValidator(val),
-      initialValue: car.name ?? '',
-      onSaved: (value) {
-        car.name = value.trim();
-        if (firstWritten)
-          CarsBLoC().push(car);
-        firstWritten = !firstWritten;
-      },
-      focusNode: _nameNode,
-      textInputAction: TextInputAction.next,
-      onFieldSubmitted: (_) => changeFocus(_nameNode, _mileageNode),
-    );
+          maxLines: 1,
+          autofocus: true,
+          decoration: defaultInputDecoration('', 'Car Name'),
+          validator: (val) => requiredValidator(val),
+          initialValue: car.name ?? '',
+          onSaved: (value) {
+            car.name = value.trim();
+            if (firstWritten) CarsBLoC().push(car);
+            firstWritten = !firstWritten;
+          },
+          focusNode: _nameNode,
+          textInputAction: TextInputAction.next,
+          onFieldSubmitted: (_) => changeFocus(_nameNode, _mileageNode),
+        );
 
     mileageField() => TextFormField(
-      maxLines: 1,
-      autofocus: false,
-      decoration: defaultInputDecoration('', 'Mileage'),
-      validator: (val) => intValidator(val),
-      initialValue: '',
-      onSaved: (value) {
-        int mileage = int.parse(value.trim());
-        print(mileage);
-        car.updateMileage(mileage, DateTime.now());
-        if (firstWritten)
-          CarsBLoC().push(car);
-        firstWritten = !firstWritten;
-      },
-      focusNode: _mileageNode,
-      textInputAction: TextInputAction.done,
-      onFieldSubmitted: (_) async => await next(),
-    );
+          maxLines: 1,
+          autofocus: false,
+          decoration: defaultInputDecoration('', 'Mileage'),
+          validator: (val) => intValidator(val),
+          initialValue: '',
+          onSaved: (value) {
+            int mileage = int.parse(value.trim());
+            print(mileage);
+            car.updateMileage(mileage, DateTime.now());
+            if (firstWritten) CarsBLoC().push(car);
+            firstWritten = !firstWritten;
+          },
+          focusNode: _mileageNode,
+          textInputAction: TextInputAction.done,
+          onFieldSubmitted: (_) async => await next(),
+        );
 
-    return Container( 
+    return Container(
       padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -121,7 +119,7 @@ class MileageScreenState extends State<MileageScreen> {
     if (widget.mileageKey.currentState.validate()) {
       widget.mileageKey.currentState.save();
       // hide the keyboard
-      FocusScope.of(context).requestFocus(new FocusNode());
+      FocusScope.of(context).requestFocus(FocusNode());
       await Future.delayed(Duration(milliseconds: 400));
       widget.onNext();
     }

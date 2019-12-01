@@ -13,7 +13,7 @@ class CreateEntryButtonState extends State<CreateEntryButton>
     with TickerProviderStateMixin {
   static AnimationController _controller;
 
-  static const List<IconData> icons = const [
+  static const List<IconData> icons = [
     Icons.local_gas_station,
     Icons.build,
     Icons.autorenew
