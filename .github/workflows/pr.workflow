@@ -1,19 +1,20 @@
-workflow "on reviews" {
+workflow "on push" {
+  on = "push"
+  resolves = ["dartfmt"]
+}
+
+# Used for fix on review
+# Don't enable if you plan using autofix on push
+# Or there might be race conditions
+workflow "on review" {
+  resolves = ["dartfmt"]
   on = "pull_request_review"
-  resolves = ["shfmt"]
 }
 
-action "shfmt" {
+action "dartfmt" {
   uses = "bltavares/actions/dartfmt@master"
-  args = ["autofix"]
-  env = {
-    AUTOFIX_EVENTS="pull_request|push"
-  }
-  secrets = ["GITHUB_TOKEN"]
-  needs = ["action-filter"]
-}
-
-action "action-filter" {
-  uses = "actions/bin/filter@master"
-  args = "action 'opened|ready_for_review|synchronize'"
+  # Enable autofix on push
+  # args = ["autofix"]
+  # Used for pushing changes for `fix` comments on review
+  secrets = ["${{ secrets.TOKEN }}"]
 }
