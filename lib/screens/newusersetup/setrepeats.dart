@@ -53,13 +53,13 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen>
     if (widget.repeatKey.currentState.validate()) {
       widget.repeatKey.currentState.save();
       // hide the keyboard
-      FocusScope.of(context).requestFocus(new FocusNode());
+      FocusScope.of(context).requestFocus(FocusNode());
       await Future.delayed(Duration(milliseconds: 400));
       Navigator.popAndPushNamed(context, '/load');
     }
   }
 
-  @override 
+  @override
   Widget build(BuildContext context) {
     if (pageWillBeVisible) {
       openCtrl.forward();
@@ -70,9 +70,11 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen>
       maxLines: 1,
       autofocus: false,
       initialValue: RepeatingBLoC().repeatByName('oil').interval.toString(),
-      decoration: defaultInputDecoration('(miles)', 'Oil Change Interval (miles)'),
+      decoration:
+          defaultInputDecoration('(miles)', 'Oil Change Interval (miles)'),
       validator: (val) => intValidator(val),
-      onSaved: (value) => RepeatingBLoC().editByName('oil', int.parse(value.trim())),
+      onSaved: (value) =>
+          RepeatingBLoC().editByName('oil', int.parse(value.trim())),
       focusNode: _oilNode,
       textInputAction: TextInputAction.next,
       onFieldSubmitted: (_) => changeFocus(_oilNode, _tiresNode),
@@ -81,10 +83,13 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen>
     Widget tireRotationInterval = TextFormField(
       maxLines: 1,
       autofocus: false,
-      initialValue: RepeatingBLoC().repeatByName('tireRotation').interval.toString(),
-      decoration: defaultInputDecoration('(miles)', 'Tire Rotation Interval (miles)'),
+      initialValue:
+          RepeatingBLoC().repeatByName('tireRotation').interval.toString(),
+      decoration:
+          defaultInputDecoration('(miles)', 'Tire Rotation Interval (miles)'),
       validator: (val) => intValidator(val),
-      onSaved: (value) => RepeatingBLoC().editByName('tireRotation', int.parse(value.trim())),
+      onSaved: (value) =>
+          RepeatingBLoC().editByName('tireRotation', int.parse(value.trim())),
       focusNode: _tiresNode,
       textInputAction: TextInputAction.done,
     );
