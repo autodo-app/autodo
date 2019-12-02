@@ -1,7 +1,8 @@
-cloud_firestore=/home/bayle/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore-0.12.9+4/
-firebase_auth=/home/bayle/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_auth-0.14.0+5/
-firebase_core=/home/bayle/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-0.4.0+9/
-flutter_local_notifications=/home/bayle/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_local_notifications-0.8.4/
-keyboard_visibility=/home/bayle/flutter/.pub-cache/hosted/pub.dartlang.org/keyboard_visibility-0.5.6/
-shared_preferences=/home/bayle/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences-0.5.3+4/
-url_launcher=/home/bayle/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher-5.2.3/
+# This is a generated file; do not edit or check into version control.
+cloud_firestore=/home/bayle/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore-0.12.10+2/
+firebase_auth=/home/bayle/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_auth-0.15.0+1/
+firebase_core=/home/bayle/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-0.4.2+1/
+flutter_keyboard_visibility=/home/bayle/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_keyboard_visibility-0.7.0/
+flutter_local_notifications=/home/bayle/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_local_notifications-0.8.4+3/
+shared_preferences=/home/bayle/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences-0.5.4+6/
+url_launcher=/home/bayle/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher-5.2.7/
