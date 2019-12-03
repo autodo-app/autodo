@@ -34,6 +34,12 @@
 @import flutter_local_notifications;
 #endif
 
+#if __has_include(<google_sign_in/GoogleSignInPlugin.h>)
+#import <google_sign_in/GoogleSignInPlugin.h>
+#else
+@import google_sign_in;
+#endif
+
 #if __has_include(<shared_preferences/SharedPreferencesPlugin.h>)
 #import <shared_preferences/SharedPreferencesPlugin.h>
 #else
@@ -54,6 +60,7 @@
   [FLTFirebaseCorePlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseCorePlugin"]];
   [FLTKeyboardVisibilityPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTKeyboardVisibilityPlugin"]];
   [FlutterLocalNotificationsPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterLocalNotificationsPlugin"]];
+  [FLTGoogleSignInPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTGoogleSignInPlugin"]];
   [FLTSharedPreferencesPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTSharedPreferencesPlugin"]];
   [FLTUrlLauncherPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTUrlLauncherPlugin"]];
 }

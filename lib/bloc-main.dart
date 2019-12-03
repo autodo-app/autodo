@@ -1,7 +1,3 @@
-// import 'package:flutter/material.dart';
-// import 'package:autodo/app.dart';
-
-// void main() => runApp(AutodoApp());
 import 'package:autodo/screens/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
@@ -9,18 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:autodo/blocs/authentication_bloc/bloc.dart';
 import 'package:autodo/blocs/user_repository.dart';
 import './simple_bloc_delegate.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  FirebaseApp.configure(
-    name: 'autodo',
-    options: FirebaseOptions(
-      googleAppID: '1:617460744396:android:400cbb86de167047',
-      projectID: 'autodo-49f21',
-      apiKey: 'AIzaSyAAYhwsJVyiYywUFORBgaUuyXqXFiFpbZo',
-    )
-  );
   BlocSupervisor.delegate = SimpleBlocDelegate();
   final UserRepository userRepository = UserRepository();
   runApp(
@@ -51,7 +38,7 @@ class App extends StatelessWidget {
             // return HomeScreen(name: state.displayName);
             return HomeScreen();
           } else if (state is Unauthenticated) {
-            return LoginPage();
+            return Welcome();
           }
           return Container();
         },

@@ -4,5 +4,6 @@ firebase_auth=/home/bayle/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_au
 firebase_core=/home/bayle/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-0.4.2+1/
 flutter_keyboard_visibility=/home/bayle/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_keyboard_visibility-0.7.0/
 flutter_local_notifications=/home/bayle/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_local_notifications-0.8.4+3/
+google_sign_in=/home/bayle/flutter/.pub-cache/hosted/pub.dartlang.org/google_sign_in-4.0.14/
 shared_preferences=/home/bayle/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences-0.5.4+6/
 url_launcher=/home/bayle/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher-5.2.7/

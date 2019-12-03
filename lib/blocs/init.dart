@@ -31,10 +31,10 @@ Future<void> initNewUser(String email, String password) async {
 Future<void> loadingSequence(BuildContext context) async {
   String uuid = await Auth().fetchUser();
   if (uuid == "NO_USER") {
-    Navigator.pushNamed(context, '/welcomepage');
+    // Navigator.pushNamed(context, '/welcomepage');
   } else {
     await initBLoCs(uuid);
-    Navigator.pushNamed(context, '/');
+    // Navigator.pushNamed(context, '/');
   }
 }
 
