@@ -79,7 +79,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     yield LoginState.loading();
     try {
       if (kReleaseMode) {
-        var user = await _userRepository.signUpWithVerification(email, password);
+        await _userRepository.signUpWithVerification(email, password);
       }
       await _userRepository.signInWithCredentials(email, password);
       yield LoginState.success();

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:autodo/blocs/user_repository.dart';
-import 'package:autodo/blocs/signup/bloc.dart';
+import '../../signup/screen.dart';
 
 class CreateAccountButton extends StatelessWidget {
   final UserRepository _userRepository;
@@ -19,7 +19,7 @@ class CreateAccountButton extends StatelessWidget {
       onPressed: () {
         Navigator.of(context).push(
           MaterialPageRoute(builder: (context) {
-            return RegisterScreen(userRepository: _userRepository);
+            return SignupScreen(userRepository: _userRepository);
           }),
         );
       },

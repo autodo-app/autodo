@@ -3,7 +3,7 @@ export './createitems/createmaintenancetodo.dart';
 export './createitems/createrefueling.dart';
 export './createitems/createrepeat.dart';
 export './settings.dart';
-export './welcome.dart';
+export './authentication/welcome/screen.dart';
 export './logins.dart';
 export './loadingpage.dart';
 export './statistics.dart';

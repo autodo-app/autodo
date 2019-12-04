@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_firebase_login/user_repository.dart';
-import 'package:flutter_firebase_login/register/register.dart';
+import 'package:autodo/blocs/user_repository.dart';
+import 'package:autodo/blocs/signup/bloc.dart';
+import 'form.dart';
 
-class RegisterScreen extends StatelessWidget {
+class SignupScreen extends StatelessWidget {
   final UserRepository _userRepository;
 
-  RegisterScreen({Key key, @required UserRepository userRepository})
+  SignupScreen({Key key, @required UserRepository userRepository})
       : assert(userRepository != null),
         _userRepository = userRepository,
         super(key: key);
@@ -16,9 +17,9 @@ class RegisterScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text('Register')),
       body: Center(
-        child: BlocProvider<RegisterBloc>(
-          create: (context) => RegisterBloc(userRepository: _userRepository),
-          child: RegisterForm(),
+        child: BlocProvider<SignupBloc>(
+          create: (context) => SignupBloc(userRepository: _userRepository),
+          child: SignupForm(),
         ),
       ),
     );

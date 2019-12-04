@@ -2,7 +2,7 @@
 // import 'package:autodo/app.dart';
 
 // void main() => runApp(AutodoApp());
-import 'package:autodo/screens/screens.dart';
+import 'package:autodo/screens/barrel.dart';
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,6 +10,7 @@ import 'package:autodo/blocs/authentication_bloc/bloc.dart';
 import 'package:autodo/blocs/user_repository.dart';
 import './simple_bloc_delegate.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'theme.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,6 +24,7 @@ void main() {
   );
   BlocSupervisor.delegate = SimpleBlocDelegate();
   final UserRepository userRepository = UserRepository();
+  createTheme();
   runApp(
     BlocProvider(
       create: (context) => AuthenticationBloc(userRepository: userRepository)
@@ -51,7 +53,7 @@ class App extends StatelessWidget {
             // return HomeScreen(name: state.displayName);
             return HomeScreen();
           } else if (state is Unauthenticated) {
-            return LoginPage();
+            return WelcomeScreen(userRepository: _userRepository);
           }
           return Container();
         },

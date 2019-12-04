@@ -1,36 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_firebase_login/authentication_bloc/bloc.dart';
-import 'package:flutter_firebase_login/register/register.dart';
+import 'package:autodo/blocs/authentication_bloc/bloc.dart';
+import 'package:autodo/blocs/signup/bloc.dart';
+import 'button.dart';
 
-class RegisterForm extends StatefulWidget {
-  State<RegisterForm> createState() => _RegisterFormState();
+class SignupForm extends StatefulWidget {
+  State<SignupForm> createState() => _SignupFormState();
 }
 
-class _RegisterFormState extends State<RegisterForm> {
+class _SignupFormState extends State<SignupForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  RegisterBloc _registerBloc;
+  SignupBloc _registerBloc;
 
   bool get isPopulated =>
       _emailController.text.isNotEmpty && _passwordController.text.isNotEmpty;
 
-  bool isRegisterButtonEnabled(RegisterState state) {
+  bool isSignupButtonEnabled(SignupState state) {
     return state.isFormValid && isPopulated && !state.isSubmitting;
   }
 
   @override
   void initState() {
     super.initState();
-    _registerBloc = BlocProvider.of<RegisterBloc>(context);
+    _registerBloc = BlocProvider.of<SignupBloc>(context);
     _emailController.addListener(_onEmailChanged);
     _passwordController.addListener(_onPasswordChanged);
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<RegisterBloc, RegisterState>(
+    return BlocListener<SignupBloc, SignupState>(
       listener: (context, state) {
         if (state.isSubmitting) {
           Scaffold.of(context)
@@ -40,7 +41,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 content: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Registering...'),
+                    Text('Signuping...'),
                     CircularProgressIndicator(),
                   ],
                 ),
@@ -68,7 +69,7 @@ class _RegisterFormState extends State<RegisterForm> {
             );
         }
       },
-      child: BlocBuilder<RegisterBloc, RegisterState>(
+      child: BlocBuilder<SignupBloc, SignupState>(
         builder: (context, state) {
           return Padding(
             padding: EdgeInsets.all(20),
@@ -100,8 +101,8 @@ class _RegisterFormState extends State<RegisterForm> {
                       return !state.isPasswordValid ? 'Invalid Password' : null;
                     },
                   ),
-                  RegisterButton(
-                    onPressed: isRegisterButtonEnabled(state)
+                  SignupButton(
+                    onPressed: isSignupButtonEnabled(state)
                         ? _onFormSubmitted
                         : null,
                   ),

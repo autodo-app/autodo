@@ -1,7 +1,7 @@
 import 'package:autodo/blocs/init.dart';
 import 'package:autodo/refueling/history.dart';
 import 'package:flutter/material.dart';
-import 'package:autodo/screens/screens.dart';
+import 'package:autodo/screens/barrel.dart';
 import 'package:autodo/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:autodo/blocs/blocs.dart';
@@ -34,7 +34,7 @@ class AutodoAppState extends State<AutodoApp> {
         '/': (context) => HomeScreen(),
         '/refuelinghistory': (context) => RefuelingHistory(),
         '/load': (context) => LoadingPage(),
-        '/welcomepage': (context) => LoginPage(),
+        '/welcomepage': (context) => WelcomeScreen(),
         '/loginpage': (context) => SignInScreen(
               formMode: FormMode.LOGIN,
             ),
