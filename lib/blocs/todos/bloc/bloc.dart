@@ -5,6 +5,7 @@ import 'package:bloc/bloc.dart';
 import 'event.dart';
 import 'state.dart';
 import '../repository/barrel.dart';
+import 'package:autodo/models/barrel.dart';
 
 class TodosBloc extends Bloc<TodosEvent, TodosState> {
   final TodosRepository _todosRepository;

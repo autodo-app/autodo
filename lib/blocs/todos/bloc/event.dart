@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import '../repository/barrel.dart';
+import 'package:autodo/models/barrel.dart';
 
 abstract class TodosEvent extends Equatable {
   const TodosEvent();

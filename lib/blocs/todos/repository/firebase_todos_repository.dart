@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'todos_repository.dart';
-import 'models/barrel.dart';
-import 'entities/barrel.dart';
+import 'package:autodo/models/barrel.dart';
+import 'package:autodo/entities/barrel.dart';
 
 class FirebaseTodosRepository implements TodosRepository {
   final todoCollection = Firestore.instance.collection('todos');

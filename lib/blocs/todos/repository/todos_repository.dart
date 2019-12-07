@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'models/barrel.dart';
+import 'package:autodo/models/barrel.dart';
 
 abstract class TodosRepository {
   Future<void> addNewTodo(Todo todo);
