@@ -41,7 +41,7 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
       yield* _mapDeleteRefuelingToState(event);
     } else if (event is RefuelingsUpdated) {
       yield* _mapRefuelingsUpdateToState(event);
-    } else if (event is CarsUpdated) {
+    } else if (event is ExternalCarsUpdated) {
       yield* _mapCarsUpdatedToState(event);
     }
   }
@@ -82,11 +82,15 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
           (refuelings) => add(RefuelingsUpdated(refuelings)),
         );
     _carsSubscription = _carsBloc.listen(
-      (cars) => add(CarsUpdated(cars.cars)),
+      (state) {
+        if (state is CarsLoaded) {
+          add(ExternalCarsUpdated(state.cars));
+        }
+      }
     );
   }
 
-  Stream<RefuelingsState> _mapCarsUpdatedToState(CarsUpdated event) async* {
+  Stream<RefuelingsState> _mapCarsUpdatedToState(ExternalCarsUpdated event) async* {
     // Create new write batch in db
     var batch = _dataRepository.startRefuelingWriteBatch();
     if (state is RefuelingsLoaded) {

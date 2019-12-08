@@ -11,6 +11,7 @@ class FirebaseDataRepository implements DataRepository {
   final refuelingCollection = Firestore.instance.collection('refuelings');
   final carCollection = Firestore.instance.collection('cars');
   final repeatCollection = Firestore.instance.collection('repeats');
+  final notificationIdDoc = Firestore.instance.document('notificationID');
 
   @override
   Future<void> addNewTodo(Todo todo) {
@@ -134,5 +135,10 @@ class FirebaseDataRepository implements DataRepository {
   @override
   WriteBatchWrapper startRepeatWriteBatch() {
     return WriteBatchWrapper(repeatCollection);
+  }
+
+  @override 
+  Stream<int> notificationID() {
+    return notificationIdDoc.snapshots().map((snap) => snap.data as int);
   }
 }

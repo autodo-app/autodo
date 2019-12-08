@@ -47,4 +47,7 @@ abstract class DataRepository {
   Future<void> updateRepeat(Repeat repeat);
 
   WriteBatchWrapper startRepeatWriteBatch();
+
+  // Notifications
+  Stream<int> notificationID();
 }

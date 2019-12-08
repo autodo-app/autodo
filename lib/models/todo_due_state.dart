@@ -1,1 +1,1 @@
-enum TodoDueState { PAST_DUE, DUE_SOON, UPCOMING }
+enum TodoDueState { PAST_DUE , DUE_SOON, UPCOMING }

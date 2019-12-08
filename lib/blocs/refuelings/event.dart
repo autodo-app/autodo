@@ -56,3 +56,12 @@ class RefuelingsUpdated extends RefuelingsEvent {
   @override
   List<Object> get props => [refuelings];
 }
+
+class ExternalCarsUpdated extends RefuelingsEvent {
+  final List<Car> cars;
+
+  const ExternalCarsUpdated(this.cars);
+
+  @override 
+  List<Object> get props => [cars];
+}

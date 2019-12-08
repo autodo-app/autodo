@@ -1,58 +1,87 @@
-// Copyright 2018 The Flutter Architecture Sample Authors. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found
-// in the LICENSE file.
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:autodo/models/barrel.dart';
 
 class TodoEntity extends Equatable {
-  final bool complete;
-  final String id;
-  final String note;
-  final String name;
+  final String id, name, carName;
+  final TodoDueState dueState;
+  final int dueMileage;
+  final bool completed, estimatedDueDate;
+  final DateTime completedDate, dueDate;
 
-  const TodoEntity(this.name, this.id, this.note, this.complete);
+  const TodoEntity(
+    this.id,
+    this.name,
+    this.carName,
+    this.dueState,
+    this.dueMileage,
+    this.completed,
+    this.estimatedDueDate,
+    this.completedDate,
+    this.dueDate
+  );
 
   Map<String, Object> toJson() {
     return {
-      "complete": complete,
-      "name": name,
-      "note": note,
       "id": id,
+      "name": name,
+      "carName": carName,
+      "dueState": dueState.index,
+      "dueMileage": dueMileage,
+      "completed": completed,
+      "estimatedDueDate": estimatedDueDate,
+      "completedDate": completedDate.millisecondsSinceEpoch,
+      "dueDate": completedDate.millisecondsSinceEpoch
     };
   }
 
   @override
-  List<Object> get props => [complete, id, note, name];
+  List<Object> get props => [id, name, carName, dueState, dueMileage, completed, estimatedDueDate, completedDate, dueDate];
+
 
   @override
   String toString() {
-    return 'TodoEntity { complete: $complete, task: $name, note: $note, id: $id }';
+    return 'TodoEntity { id: $id, name: $name, carName: $carName, dueState: $dueState, dueMileage: $dueMileage, completed: $completed, estimatedDueDate: $estimatedDueDate, completedDate: $completedDate, dueDate: $dueDate }';
   }
 
   static TodoEntity fromJson(Map<String, Object> json) {
     return TodoEntity(
-      json["name"] as String,
       json["id"] as String,
-      json["note"] as String,
-      json["complete"] as bool,
+      json["name"] as String,
+      json["carName"] as String,
+      TodoDueState.values[json["dueState"] as int],
+      json["dueMileage"] as int,
+      json["completed"] as bool,
+      json['estimatedDueDate'] as bool,
+      DateTime.fromMillisecondsSinceEpoch(json["completedDate"] as int),
+      DateTime.fromMillisecondsSinceEpoch(json["dueDate"] as int),
     );
   }
 
   static TodoEntity fromSnapshot(DocumentSnapshot snap) {
     return TodoEntity(
-      snap.data['name'],
       snap.documentID,
-      snap.data['note'],
-      snap.data['complete'],
+      snap.data["name"] as String,
+      snap.data["carName"] as String,
+      TodoDueState.values[snap.data["dueState"] as int],
+      snap.data["dueMileage"] as int,
+      snap.data["completed"] as bool,
+      snap.data['estimatedDueDate'] as bool,
+      DateTime.fromMillisecondsSinceEpoch(snap.data["completedDate"] as int),
+      DateTime.fromMillisecondsSinceEpoch(snap.data["dueDate"] as int),
     );
   }
 
   Map<String, Object> toDocument() {
     return {
-      "complete": complete,
       "name": name,
-      "note": note,
+      "carName": carName,
+      "dueState": dueState.index,
+      "dueMileage": dueMileage,
+      "completed": completed,
+      "estimatedDueDate": estimatedDueDate,
+      "completedDate": completedDate.millisecondsSinceEpoch,
+      "dueDate": completedDate.millisecondsSinceEpoch
     };
   }
 }

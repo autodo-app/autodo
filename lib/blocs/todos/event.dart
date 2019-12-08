@@ -58,3 +58,12 @@ class TodosUpdated extends TodosEvent {
   @override
   List<Object> get props => [todos];
 }
+
+class UpdateDueDates extends TodosEvent {
+  final List<Car> cars;
+
+  const UpdateDueDates(this.cars);
+
+  @override 
+  List<Object> get props => [cars];
+}

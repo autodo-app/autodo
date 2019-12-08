@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:autodo/blocs/cars/barrel.dart';
+import 'package:autodo/localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:bloc/bloc.dart';
 import 'event.dart';
@@ -8,12 +10,20 @@ import 'package:autodo/repositories/barrel.dart';
 import 'package:autodo/models/barrel.dart';
 
 class TodosBloc extends Bloc<TodosEvent, TodosState> {
-  final DataRepository _todosRepository;
-  StreamSubscription _todosSubscription;
+  final DataRepository _dataRepository;
+  StreamSubscription _dataSubscription, _carsSubscription;
+  final CarsBloc _carsBloc;
+  final NotificationsBloc _notificationsBloc;
 
-  TodosBloc({@required DataRepository todosRepository})
-      : assert(todosRepository != null),
-        _todosRepository = todosRepository;
+  List<Car> _carsCache;
+
+  TodosBloc({
+    @required DataRepository dataRepository, 
+    @required CarsBloc carsBloc,
+    @required NotificationsBloc notificationsBloc
+  }) : assert(dataRepository != null), assert(carsBloc != null),
+       assert(notificationsBloc != null), _dataRepository = dataRepository, 
+       _carsBloc = carsBloc, _notificationsBloc = notificationsBloc;
 
   @override
   TodosState get initialState => TodosLoading();
@@ -34,77 +44,86 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       yield* _mapClearCompletedToState();
     } else if (event is TodosUpdated) {
       yield* _mapTodosUpdateToState(event);
+    } else if (event is UpdateDueDates) {
+      yield* _mapUpdateDueDatesToState(event);
     }
   }
 
   Stream<TodosState> _mapLoadTodosToState() async* {
-    _todosSubscription?.cancel();
-    _todosSubscription = _todosRepository.todos().listen(
+    _dataSubscription?.cancel();
+    _dataSubscription = _dataRepository.todos().listen(
           (todos) => add(TodosUpdated(todos)),
         );
+    _carsSubscription = _carsBloc.listen( 
+      (state) {
+        if (state is CarsLoaded) {
+          add(UpdateDueDates(state.cars));
+        }
+      }
+    );
   }
 
-  Future<int> _scheduleNotification(Todo todo) async {
-    if (item.dueDate != null) {
-      var id = await NotificationBLoC().scheduleNotification(
-          datetime: item.dueDate,
-          title: 'Maintenance ToDo Due Soon: ${item.name}',
-          body: '');
-      return id;
-    }
+  void _scheduleNotification(Todo todo) {
+    _notificationsBloc.add(
+      ScheduleNotification(
+        date: todo.dueDate,
+        title: AutodoLocalizations.todoDueSoon + ': ${todo.name}',
+        body: ''
+      )
+    );
   }
 
-  Future<void> updateDueDates(Car car) async {
-    WriteBatch batch = Firestore.instance.batch();
-    QuerySnapshot snap = await FirestoreBLoC()
-        .getUserDocument()
-        .collection('todos')
-        .getDocuments();
-    for (var todo in snap.documents) {
-      if (!todo.data['tags'].contains(car.name) ||
-          todo.data['estimatedDueDate'] == null ||
-          !todo.data['estimatedDueDate']) continue;
-      MaintenanceTodoItem item = MaintenanceTodoItem.fromMap(todo.data);
+  Stream<TodosState> _mapUpdateDueDatesToState(UpdateDueDates event) async* {
+    List<Car> cars = event.cars;
+    if (state is TodosLoaded) {
+      TodosLoaded curState = state;
+      WriteBatchWrapper batch = _dataRepository.startTodoWriteBatch();
+      for (var car in cars) {
+        if (_carsCache?.contains(car) ?? false) continue;
 
-      var distanceToTodo = todo.data['dueMileage'] - car.mileage;
-      int daysToTodo = (distanceToTodo / car.distanceRate).round();
-      Duration timeToTodo = Duration(days: daysToTodo);
-      item.dueDate = car.lastMileageUpdate.add(timeToTodo);
-      print('${car.distanceRate} + ${item.dueDate}');
-      scheduleNotification(item);
-      var ref = FirestoreBLoC()
-          .getUserDocument()
-          .collection('todos')
-          .document(todo.documentID);
-      batch.updateData(ref, item.toJSON());
+        List<Todo> thisCarsTodos = curState.todos.where((t) => t.carName == car.name);
+        for (var todo in thisCarsTodos) {
+          if (todo.estimatedDueDate == null ||
+              !todo.estimatedDueDate) {
+            continue;
+          } 
+          var distanceToTodo = todo.dueMileage - car.mileage;
+          int daysToTodo = (distanceToTodo / car.distanceRate).round();
+          Duration timeToTodo = Duration(days: daysToTodo);
+          var newDueDate = car.lastMileageUpdate.add(timeToTodo);
+          _notificationsBloc.rescheduleNotification(todo);
+          Todo out = todo.copyWith(dueDate: newDueDate);
+          batch.updateData(todo.id, todo.toEntity().toDocument());
+        }
+      }
+      _carsCache = cars;
+      batch.commit();
     }
-    await batch.commit();
   }
 
   Stream<TodosState> _mapAddTodoToState(AddTodo event) async* {
-    Todo out;
-    var notificationID = await _scheduleNotification(event.todo);
-    out = event.todo.copyWith(notificationID: notificationID);
-    _todosRepository.addNewTodo(out);
+    _scheduleNotification(event.todo);
+    // out = event.todo.copyWith(notificationID: notificationID);
+    _dataRepository.addNewTodo(event.todo);
   }
 
   Stream<TodosState> _mapUpdateTodoToState(UpdateTodo event) async* {
-    _todosRepository.updateTodo(event.updatedTodo);
+    _dataRepository.updateTodo(event.updatedTodo);
   }
 
   Stream<TodosState> _mapDeleteTodoToState(DeleteTodo event) async* {
-    _todosRepository.deleteTodo(event.todo);
+    _dataRepository.deleteTodo(event.todo);
   }
 
   Stream<TodosState> _mapToggleAllToState() async* {
     final currentState = state;
     if (currentState is TodosLoaded) {
-      final allComplete = currentState.todos.every((todo) => todo.complete);
+      final allComplete = currentState.todos.every((todo) => todo.completed);
       final List<Todo> updatedTodos = currentState.todos
-          .map((todo) => todo.copyWith(complete: !allComplete))
+          .map((todo) => todo.copyWith(completed: !allComplete))
           .toList();
       updatedTodos.forEach((updatedTodo) {
-        _todosRepository.updateTodo(updatedTodo);
+        _dataRepository.updateTodo(updatedTodo);
       });
     }
   }
@@ -113,9 +132,9 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     final currentState = state;
     if (currentState is TodosLoaded) {
       final List<Todo> completedTodos =
-          currentState.todos.where((todo) => todo.complete).toList();
+          currentState.todos.where((todo) => todo.completed).toList();
       completedTodos.forEach((completedTodo) {
-        _todosRepository.deleteTodo(completedTodo);
+        _dataRepository.deleteTodo(completedTodo);
       });
     }
   }
@@ -153,7 +172,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
 
   @override
   Future<void> close() {
-    _todosSubscription?.cancel();
+    _dataSubscription?.cancel();
     return super.close();
   }
 }
