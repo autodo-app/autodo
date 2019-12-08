@@ -8,6 +8,7 @@ import 'package:autodo/entities/barrel.dart';
 class FirebaseDataRepository implements DataRepository {
   final todoCollection = Firestore.instance.collection('todos');
   final refuelingCollection = Firestore.instance.collection('refuelings');
+  final carCollection = Firestore.instance.collection('cars');
 
   @override
   Future<void> addNewTodo(Todo todo) {
@@ -59,5 +60,31 @@ class FirebaseDataRepository implements DataRepository {
     return refuelingCollection
       .document(refueling.id)
       .updateData(refueling.toEntity().toDocument());
+  }
+
+  @override
+  Future<void> addNewCar(Car car) {
+    return carCollection.add(car.toEntity().toDocument());
+  }
+
+  @override
+  Future<void> deleteCar(Car car) {
+    return carCollection.document(car.id).delete();
+  }
+
+  @override
+  Stream<List<Car>> cars() {
+    return carCollection.snapshots().map((snapshot) {
+      return snapshot.documents
+        .map((doc) => Car.fromEntity(CarEntity.fromSnapshot(doc)))
+        .toList();
+    });
+  }
+
+  @override
+  Future<void> updateCar(Car car) {
+    return carCollection
+      .document(car.id)
+      .updateData(car.toEntity().toDocument());
   }
 }

@@ -11,15 +11,15 @@ abstract class RefuelingsEvent extends Equatable {
 class LoadRefuelings extends RefuelingsEvent {}
 
 class AddRefueling extends RefuelingsEvent {
-  final Refueling todo;
+  final Refueling refueling;
 
-  const AddRefueling(this.todo);
-
-  @override
-  List<Object> get props => [todo];
+  const AddRefueling(this.refueling);
 
   @override
-  String toString() => 'AddRefueling { todo: $todo }';
+  List<Object> get props => [refueling];
+
+  @override
+  String toString() => 'AddRefueling { refueling: $refueling }';
 }
 
 class UpdateRefueling extends RefuelingsEvent {
@@ -35,22 +35,22 @@ class UpdateRefueling extends RefuelingsEvent {
 }
 
 class DeleteRefueling extends RefuelingsEvent {
-  final Refueling todo;
+  final Refueling refueling;
 
-  const DeleteRefueling(this.todo);
-
-  @override
-  List<Object> get props => [todo];
+  const DeleteRefueling(this.refueling);
 
   @override
-  String toString() => 'DeleteRefueling { todo: $todo }';
+  List<Object> get props => [refueling];
+
+  @override
+  String toString() => 'DeleteRefueling { refueling: $refueling }';
 }
 
 class RefuelingsUpdated extends RefuelingsEvent {
-  final List<Refueling> todos;
+  final List<Refueling> refuelings;
 
-  const RefuelingsUpdated(this.todos);
+  const RefuelingsUpdated(this.refuelings);
 
   @override
-  List<Object> get props => [todos];
+  List<Object> get props => [refuelings];
 }

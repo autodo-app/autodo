@@ -20,4 +20,13 @@ abstract class DataRepository {
   Stream<List<Refueling>> refuelings();
 
   Future<void> updateRefueling(Refueling refueling);
+
+  // Cars
+  Future<void> addNewCar(Car car);
+
+  Future<void> deleteCar(Car car);
+
+  Stream<List<Car>> cars();
+
+  Future<void> updateCar(Car car);
 }

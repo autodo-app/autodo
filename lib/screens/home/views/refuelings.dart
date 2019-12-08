@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-\
+
 import 'package:autodo/localization.dart';
 import 'package:autodo/widgets/barrel.dart';
 import 'package:autodo/models/barrel.dart';
@@ -40,7 +40,7 @@ class _RefuelingTitle extends StatelessWidget {
           style: Theme.of(context).primaryTextTheme.body1
         ),
         TextSpan(
-          text: refueling.odom.toString() + ' ',
+          text: refueling.mileage.toString() + ' ',
           style: Theme.of(context).primaryTextTheme.subtitle
         ),
         TextSpan(  
@@ -128,7 +128,7 @@ class _RefuelingTags extends StatelessWidget {
       : super(key: key);
 
   @override 
-  build(context) => CarTags(cars: [refueling.carName]);
+  build(context) => CarTag(text: refueling.carName, color: refueling.carColor);
 }
 
 class _RefuelingEditButton extends StatelessWidget {

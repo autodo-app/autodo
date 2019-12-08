@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
 import '../entities/barrel.dart';
 
@@ -9,7 +10,8 @@ class Refueling extends Equatable{
   final String carName;
   final int mileage;
   final DateTime date;
-  final double amount, cost;
+  final double amount, cost, efficiency;
+  final Color carColor;
 
   Refueling({
     this.carName,
@@ -17,7 +19,9 @@ class Refueling extends Equatable{
     this.mileage,
     this.date,
     this.amount,
-    this.cost
+    this.cost,
+    this.carColor,
+    this.efficiency
   });
 
   Refueling copyWith({
@@ -26,7 +30,9 @@ class Refueling extends Equatable{
     int mileage, 
     DateTime date, 
     double amount,
-    double cost 
+    double cost,
+    Color carColor,
+    double efficiency
   }) {
     return Refueling(
       carName: carName ?? this.carName,
@@ -34,20 +40,22 @@ class Refueling extends Equatable{
       mileage: mileage ?? this.mileage,
       date: date ?? this.date,
       amount: amount ?? this.amount,
-      cost: cost ?? this.cost
+      cost: cost ?? this.cost,
+      carColor: carColor ?? this.carColor,
+      efficiency: efficiency ?? this.efficiency
     );
   }
 
   @override 
-  List<Object> get props => [carName, id, mileage, date, amount, cost];
+  List<Object> get props => [carName, id, mileage, date, amount, cost, carColor, efficiency];
 
   @override
   String toString() {
-    return 'Refueling { task: $carName, id: $id, mileage: $mileage, date: $date, amount: $amount, cost: $cost }';
+    return 'Refueling { carName: $carName, carColor: $carColor, id: $id, mileage: $mileage, date: $date, amount: $amount, cost: $cost, efficiency: $efficiency}';
   }
 
   RefuelingEntity toEntity() {
-    return RefuelingEntity(id, carName, mileage, date, amount, cost);
+    return RefuelingEntity(id, carName, mileage, date, amount, cost, carColor, efficiency);
   }
 
   static Refueling fromEntity(RefuelingEntity entity) {
@@ -57,7 +65,9 @@ class Refueling extends Equatable{
       mileage: entity.mileage,
       date: entity.date,
       amount: entity.amount,
-      cost: entity.cost
+      cost: entity.cost,
+      carColor: entity.carColor,
+      efficiency: entity.efficiency,
     );
   }
 }
