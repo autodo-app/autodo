@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:autodo/models/barrel.dart';
+import 'package:autodo/repositories/write_batch_wrappers.dart';
 
 abstract class DataRepository {
   // Todos
@@ -12,6 +13,8 @@ abstract class DataRepository {
 
   Future<void> updateTodo(Todo todo);
 
+  WriteBatchWrapper startTodoWriteBatch();
+
   // Refuelings
   Future<void> addNewRefueling(Refueling refueling);
 
@@ -20,6 +23,8 @@ abstract class DataRepository {
   Stream<List<Refueling>> refuelings();
 
   Future<void> updateRefueling(Refueling refueling);
+
+  WriteBatchWrapper startRefuelingWriteBatch();
 
   // Cars
   Future<void> addNewCar(Car car);
@@ -30,6 +35,8 @@ abstract class DataRepository {
 
   Future<void> updateCar(Car car);
 
+  WriteBatchWrapper startCarWriteBatch();
+
   // Repeats
   Future<void> addNewRepeat(Repeat repeat);
 
@@ -38,4 +45,6 @@ abstract class DataRepository {
   Stream<List<Repeat>> repeats();
 
   Future<void> updateRepeat(Repeat repeat);
+
+  WriteBatchWrapper startRepeatWriteBatch();
 }

@@ -8,9 +8,9 @@ class RefuelingEntity extends Equatable {
   final int mileage;
   final DateTime date;
   final double amount, cost, efficiency;
-  final Color carColor;
+  final Color carColor, efficiencyColor;
 
-  const RefuelingEntity(this.id, this.carName, this.mileage, this.date, this.amount, this.cost, this.carColor, this.efficiency);
+  const RefuelingEntity(this.id, this.carName, this.mileage, this.date, this.amount, this.cost, this.carColor, this.efficiency, this.efficiencyColor);
 
   Map<String, Object> toJson() {
     return {
@@ -21,16 +21,17 @@ class RefuelingEntity extends Equatable {
       "amount": amount,
       "cost": cost,
       "carColor": carColor.value,
-      "efficiency": efficiency
+      "efficiency": efficiency,
+      "efficiencyColor": efficiencyColor.value,
     };
   }
 
   @override
-  List<Object> get props => [id, carName, mileage, date, amount, cost, carColor, efficiency];
+  List<Object> get props => [id, carName, mileage, date, amount, cost, carColor, efficiency, efficiencyColor];
 
   @override
   String toString() {
-    return 'RefuelingEntity { id: $id, name: $carName, carColor: $carColor, mileage: $mileage, date: $date, amount: $amount, cost: $cost, efficiency: $efficiency}';
+    return 'RefuelingEntity { id: $id, name: $carName, carColor: $carColor, mileage: $mileage, date: $date, amount: $amount, cost: $cost, efficiency: $efficiency, efficiencyColor: $efficiencyColor}';
   }
 
   static RefuelingEntity fromJson(Map<String, Object> json) {
@@ -43,6 +44,7 @@ class RefuelingEntity extends Equatable {
       json["cost"] as double,
       Color(json["carColor"] as int),
       json["efficiency"] as double,
+      Color(json["efficiencyColor"] as int),
     );
   }
 
@@ -56,6 +58,7 @@ class RefuelingEntity extends Equatable {
       snap.data["cost"] as double,
       Color(snap.data["carColor"] as int),
       snap.data["efficiency"] as double,
+      Color(snap.data["efficiencyColor"] as int),
     );
   }
 
@@ -67,7 +70,8 @@ class RefuelingEntity extends Equatable {
       "amount": amount,
       "cost": cost,
       "carColor": carColor.value,
-      "efficiency": efficiency
+      "efficiency": efficiency,
+      "efficiencyColor": efficiencyColor.value
     };
   }
 }

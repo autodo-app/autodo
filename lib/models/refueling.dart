@@ -11,7 +11,7 @@ class Refueling extends Equatable{
   final int mileage;
   final DateTime date;
   final double amount, cost, efficiency;
-  final Color carColor;
+  final Color carColor, efficiencyColor;
 
   Refueling({
     this.carName,
@@ -21,7 +21,8 @@ class Refueling extends Equatable{
     this.amount,
     this.cost,
     this.carColor,
-    this.efficiency
+    this.efficiency,
+    this.efficiencyColor,
   });
 
   Refueling copyWith({
@@ -32,7 +33,8 @@ class Refueling extends Equatable{
     double amount,
     double cost,
     Color carColor,
-    double efficiency
+    double efficiency,
+    Color efficiencyColor
   }) {
     return Refueling(
       carName: carName ?? this.carName,
@@ -42,20 +44,21 @@ class Refueling extends Equatable{
       amount: amount ?? this.amount,
       cost: cost ?? this.cost,
       carColor: carColor ?? this.carColor,
-      efficiency: efficiency ?? this.efficiency
+      efficiency: efficiency ?? this.efficiency,
+      efficiencyColor: efficiencyColor ?? this.efficiencyColor,
     );
   }
 
   @override 
-  List<Object> get props => [carName, id, mileage, date, amount, cost, carColor, efficiency];
+  List<Object> get props => [carName, id, mileage, date, amount, cost, carColor, efficiency, efficiencyColor];
 
   @override
   String toString() {
-    return 'Refueling { carName: $carName, carColor: $carColor, id: $id, mileage: $mileage, date: $date, amount: $amount, cost: $cost, efficiency: $efficiency}';
+    return 'Refueling { carName: $carName, carColor: $carColor, id: $id, mileage: $mileage, date: $date, amount: $amount, cost: $cost, efficiency: $efficiency, efficiencyColor: $efficiencyColor}';
   }
 
   RefuelingEntity toEntity() {
-    return RefuelingEntity(id, carName, mileage, date, amount, cost, carColor, efficiency);
+    return RefuelingEntity(id, carName, mileage, date, amount, cost, carColor, efficiency, efficiencyColor);
   }
 
   static Refueling fromEntity(RefuelingEntity entity) {
@@ -68,6 +71,7 @@ class Refueling extends Equatable{
       cost: entity.cost,
       carColor: entity.carColor,
       efficiency: entity.efficiency,
+      efficiencyColor: entity.efficiencyColor,
     );
   }
 }

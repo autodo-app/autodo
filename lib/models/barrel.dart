@@ -6,3 +6,4 @@ export 'todo_due_state.dart';
 export 'refueling.dart';
 export 'car.dart';
 export 'repeat.dart';
+export 'distanceratepoint.dart';

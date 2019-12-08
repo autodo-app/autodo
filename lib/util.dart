@@ -57,6 +57,8 @@ class HSV {
   double v = 0.0; // a fraction between 0 and 1
 
   HSV(this.h, this.s, this.v);
+
+  toValue() => hsv2rgb(this).toValue();
 }
 
 HSV rgb2hsv(RGB rgb) {

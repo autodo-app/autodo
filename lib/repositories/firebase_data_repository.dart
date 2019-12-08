@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:autodo/repositories/write_batch_wrappers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'data_repository.dart';
 import 'package:autodo/models/barrel.dart';
@@ -38,6 +39,11 @@ class FirebaseDataRepository implements DataRepository {
   }
 
   @override
+  WriteBatchWrapper startTodoWriteBatch() {
+    return WriteBatchWrapper(todoCollection);
+  }
+
+  @override
   Future<void> addNewRefueling(Refueling refueling) {
     return refuelingCollection.add(refueling.toEntity().toDocument());
   }
@@ -61,6 +67,11 @@ class FirebaseDataRepository implements DataRepository {
     return refuelingCollection
       .document(refueling.id)
       .updateData(refueling.toEntity().toDocument());
+  }
+
+  @override
+  WriteBatchWrapper startRefuelingWriteBatch() {
+    return WriteBatchWrapper(refuelingCollection);
   }
 
   @override
@@ -90,6 +101,11 @@ class FirebaseDataRepository implements DataRepository {
   }
 
   @override
+  WriteBatchWrapper startCarWriteBatch() {
+    return WriteBatchWrapper(carCollection);
+  }
+
+  @override
   Future<void> addNewRepeat(Repeat repeat) {
     return repeatCollection.add(repeat.toEntity().toDocument());
   }
@@ -113,5 +129,10 @@ class FirebaseDataRepository implements DataRepository {
     return repeatCollection
       .document(repeat.id)
       .updateData(repeat.toEntity().toDocument());
+  }
+
+  @override
+  WriteBatchWrapper startRepeatWriteBatch() {
+    return WriteBatchWrapper(repeatCollection);
   }
 }

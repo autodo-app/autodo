@@ -1,6 +1,8 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
+import 'package:autodo/blocs/cars/barrel.dart';
+import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:bloc/bloc.dart';
 import 'event.dart';
 import 'state.dart';
@@ -17,11 +19,12 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
   static const int MAX_NUM_REFUELINGS = 0xffff;
 
   final DataRepository _dataRepository;
-  StreamSubscription _dataSubscription;
+  StreamSubscription _dataSubscription, _carsSubscription;
+  final CarsBloc _carsBloc;
 
-  RefuelingsBloc({@required DataRepository dataRepository})
-      : assert(dataRepository != null),
-        _dataRepository = dataRepository;
+  RefuelingsBloc({@required DataRepository dataRepository, @required CarsBloc carsBloc})
+      : assert(dataRepository != null), assert(carsBloc != null),
+        _dataRepository = dataRepository, _carsBloc = carsBloc;
 
   @override
   RefuelingsState get initialState => RefuelingsLoading();
@@ -38,33 +41,31 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
       yield* _mapDeleteRefuelingToState(event);
     } else if (event is RefuelingsUpdated) {
       yield* _mapRefuelingsUpdateToState(event);
+    } else if (event is CarsUpdated) {
+      yield* _mapCarsUpdatedToState(event);
     }
   }
 
   Future<Refueling> _findLatestRefueling(Refueling refueling) async {
-    var car = (refueling.carName != null) ? refueling.carName : '';
-    var doc = FirestoreBLoC().getUserDocument();
-    var refuelings = await doc.collection('refuelings').getDocuments();
+    var refuelings = await _dataRepository.refuelings().take(1).toList();
 
     int smallestDiff = MAX_MPG;
     Refueling out;
-    for (var r in refuelings.documents) {
-      if (r.data['tags'] != null && r.data['tags'][0] == car) {
-        var mileage = r.data['odom'];
-        var diff = refueling.mileage - mileage;
-        if (diff <= 0) continue; // only looking for past refuelings
-        if (diff < smallestDiff) {
-          smallestDiff = diff;
-          out = Refueling.fromJSON(r.data, r.documentID);
+    for (var r in refuelings[0]) {
+      if (r.carName == refueling.carName) {
+        var mileageDiff = refueling.mileage - r.mileage;
+        if (mileageDiff <= 0) continue; // only looking for past refuelings
+        if (mileageDiff < smallestDiff) {
+          smallestDiff = mileageDiff;
+          out = r;
         }
       }
     }
     return out;
   }
 
-  Future<HSV> hsv(Refueling refueling) async {
-    if (refueling.efficiency == double.infinity) return HSV(1.0, 1.0, 1.0);
-    var car = await CarsBLoC().getCarByName(item.carName);
+  int _hsv(Refueling refueling, Car car) {
+    if (refueling.efficiency == double.infinity) return HSV(1.0, 1.0, 1.0).toValue();
     var avgEff = car.averageEfficiency;
     // range is 0 to 120
     var diff = (refueling.efficiency == null || refueling.efficiency == double.infinity)
@@ -72,7 +73,7 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
         : refueling.efficiency - avgEff;
     dynamic hue = (diff * HUE_RANGE) / EFF_VAR;
     hue = clamp(hue, 0, HUE_RANGE * 2);
-    return HSV(hue.toDouble(), 1.0, 1.0);
+    return HSV(hue.toDouble(), 1.0, 1.0).toValue();
   }
 
   Stream<RefuelingsState> _mapLoadRefuelingsToState() async* {
@@ -80,6 +81,26 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
     _dataSubscription = _dataRepository.refuelings().listen(
           (refuelings) => add(RefuelingsUpdated(refuelings)),
         );
+    _carsSubscription = _carsBloc.listen(
+      (cars) => add(CarsUpdated(cars.cars)),
+    );
+  }
+
+  Stream<RefuelingsState> _mapCarsUpdatedToState(CarsUpdated event) async* {
+    // Create new write batch in db
+    var batch = _dataRepository.startRefuelingWriteBatch();
+    if (state is RefuelingsLoaded) {
+      RefuelingsLoaded curState = state as RefuelingsLoaded;
+      for (var r in curState.refuelings) {
+        for (var c in event.cars) {
+          if (c.name == r.carName) {
+            batch.updateData(r.id, r.copyWith(efficiencyColor: Color(_hsv(r, c))));
+            break;
+          }
+        }
+      }
+    }
+    batch.commit();
   }
 
   Stream<RefuelingsState> _mapAddRefuelingToState(AddRefueling event) async* {
@@ -88,46 +109,31 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
     var dist = (prev == null) ? 0 : item.mileage - prev.mileage;
     Refueling out = event.refueling.copyWith(efficiency: dist / item.amount);
 
-    Car car = await CarsBLoC().getCarByName(item.carName);
-    if (car.numRefuelings < MAX_NUM_REFUELINGS) car.numRefuelings++;
-    car.updateMileage(item.odom, item.date);
-    car.updateEfficiency(item.efficiency);
-    car.updateDistanceRate((prev == null) ? null : prev.date, item.date, dist);
-    CarsBLoC().edit(car);
+    // event.carsBloc.add(AddRefuelingInfo(item.car, item.mileage, item.date, item.efficiency, prev.date, dist));
     _dataRepository.addNewRefueling(out);
   }
 
   Stream<RefuelingsState> _mapUpdateRefuelingToState(UpdateRefueling event) async* {
-    // TODO: pull this into its own async function since it doesn't affect our
-    // ability to update a refueling
-    var prev = await findLatestRefueling(item);
-    var dist = (prev == null) ? 0 : item.odom - prev.odom;
-    item.efficiency = dist / item.amount;
+    var prev = await _findLatestRefueling(event.refueling);
+    var dist = (prev == null) ? 0 : event.refueling.mileage - prev.mileage;
+    var efficiency = dist / event.refueling.amount;
 
-    Car car = await CarsBLoC().getCarByName(item.carName);
-    car.updateMileage(item.odom, item.date);
-    car.updateEfficiency(item.efficiency);
-    car.updateDistanceRate((prev == null) ? null : prev.date, item.date, dist);
-    CarsBLoC().edit(car);
-    _dataRepository.updateRefueling(event.updatedRefueling);
+    Refueling out = event.refueling.copyWith(efficiency: efficiency);
+    _dataRepository.updateRefueling(out);
   }
 
   Stream<RefuelingsState> _mapDeleteRefuelingToState(DeleteRefueling event) async* {
-    var prev = await findLatestRefueling(item);
-    Car car = await CarsBLoC().getCarByName(item.carName);
-    car.updateMileage(prev.odom, prev.date, override: true);
-    // TODO: figure out how to undo the efficiency and distance rate calcs
-    CarsBLoC().edit(car);
-    _dataRepository.deleteRefueling(event.todo);
+    _dataRepository.deleteRefueling(event.refueling);
   }
 
   Stream<RefuelingsState> _mapRefuelingsUpdateToState(RefuelingsUpdated event) async* {
-    yield RefuelingsLoaded(event.todos);
+    yield RefuelingsLoaded(event.refuelings);
   }
 
   @override
   Future<void> close() {
     _dataSubscription?.cancel();
+    _carsSubscription?.cancel();
     return super.close();
   }
 }

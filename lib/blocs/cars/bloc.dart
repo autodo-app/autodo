@@ -1,21 +1,27 @@
 import 'dart:async';
 
+import 'package:autodo/repositories/write_batch_wrappers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:bloc/bloc.dart';
 import 'event.dart';
 import 'state.dart';
 import 'package:autodo/repositories/barrel.dart';
+import 'package:autodo/models/barrel.dart';
+import 'package:autodo/blocs/refuelings/barrel.dart';
+import 'package:autodo/util.dart' as util;
 
 class CarsBloc extends Bloc<CarsEvent, CarsState> {
   static const double EMA_GAIN = 0.9;
   static const double EMA_CUTOFF = 8;
   
-  final DataRepository _carsRepository;
-  StreamSubscription _carsSubscription;
+  final DataRepository _dataRepository;
+  StreamSubscription _carsSubscription, _refuelingsSubscription;
+  final RefuelingsBloc _refuelingsBloc;
+  List<Refueling> _refuelingsCache;
 
-  CarsBloc({@required DataRepository carsRepository})
-      : assert(carsRepository != null),
-        _carsRepository = carsRepository;
+  CarsBloc({@required DataRepository dataRepository, @required RefuelingsBloc refuelingsBloc})
+      : assert(dataRepository != null), assert(refuelingsBloc != null),
+        _dataRepository = dataRepository, _refuelingsBloc = refuelingsBloc;
 
   @override
   CarsState get initialState => CarsLoading();
@@ -32,48 +38,98 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
       yield* _mapDeleteCarToState(event);
     } else if (event is CarsUpdated) {
       yield* _mapCarsUpdateToState(event);
+    } else if (event is ExternalRefuelingsUpdated) {
+      yield* _mapRefuelingsUpdatedToState(event);
     }
   }
 
   Stream<CarsState> _mapLoadCarsToState() async* {
     _carsSubscription?.cancel();
-    _carsSubscription = _carsRepository.cars().listen(
+    _carsSubscription = _dataRepository.cars().listen(
           (cars) => add(CarsUpdated(cars)),
         );
+    _refuelingsSubscription = _refuelingsBloc.listen(
+      (state) {
+        if (state is RefuelingsLoaded) {
+          add(ExternalRefuelingsUpdated(state.refuelings));
+        }
+      }
+    );
   }
 
   Stream<CarsState> _mapAddCarToState(AddCar event) async* {
-    _carsRepository.addNewCar(event.car);
+    _dataRepository.addNewCar(event.car);
   }
 
   Stream<CarsState> _mapUpdateCarToState(UpdateCar event) async* {
-    _carsRepository.updateCar(event.updatedCar);
+    _dataRepository.updateCar(event.updatedCar);
   }
 
   Stream<CarsState> _mapDeleteCarToState(DeleteCar event) async* {
-    _carsRepository.deleteCar(event.car);
+    _dataRepository.deleteCar(event.car);
   }
 
   Stream<CarsState> _mapCarsUpdateToState(CarsUpdated event) async* {
     yield CarsLoaded(event.cars);
   }
 
+  Car _updateWithRefueling(Car c, Refueling r) {
+    var mileage, lastMileageUpdate, averageEfficiency;
+    // update mileage
+    if (c.mileage < r.mileage) {
+      mileage = r.mileage;
+      lastMileageUpdate = util.roundToDay(r.date);
+    }
+    // Update efficiency
+    if (c.numRefuelings == 1) {
+      // first refueling for this car
+      averageEfficiency = r.efficiency;
+    } else {
+      averageEfficiency =
+          _efficiencyFilter(c.numRefuelings, c.averageEfficiency, r.efficiency);
+    }
+    // Distance Rate
+    var elapsedDuration = r.date.difference(c.lastMileageUpdate);
+    var dist = r.mileage - c.mileage;
+    var curDistRate = dist.toDouble() / elapsedDuration.inDays.toDouble();
+    var distanceRate =
+        _distanceFilter(c.numRefuelings, c.distanceRate, curDistRate);
+    var distanceRateHistory = c.distanceRateHistory;
+    distanceRateHistory.add(DistanceRatePoint(r.date, distanceRate));
+
+    return c.copyWith(
+      mileage: mileage,
+      lastMileageUpdate: lastMileageUpdate,
+      averageEfficiency: averageEfficiency,
+      distanceRate: distanceRate,
+      distanceRateHistory: distanceRateHistory,
+      numRefuelings: c.numRefuelings + 1,
+    );
+  }
+
+  Stream<CarsState> _mapRefuelingsUpdatedToState(ExternalRefuelingsUpdated event) async* {
+    WriteBatchWrapper batch = _dataRepository.startCarWriteBatch();
+    // TODO cache the cars here so that updating number of refuelings will work
+    for (var r in event.refuelings) {
+      if (_refuelingsCache.contains(r)) {
+        continue; // only do calculations for updated refuelings
+      }
+      
+      Car cur = (state as CarsLoaded).cars.firstWhere((car) => car.name == r.carName);
+      Car update = _updateWithRefueling(cur, r); 
+
+      batch.updateData(update.id, update.toEntity().toDocument());
+    }
+    _refuelingsCache = event.refuelings;
+    
+    batch.commit();
+  }
+
   @override
   Future<void> close() {
     _carsSubscription?.cancel();
+    _refuelingsSubscription?.cancel();
     return super.close();
-  }
-
-  void updateMileage(int newMileage, DateTime updateDate, {override = false}) {
-    if (this.mileage > newMileage && !override) {
-      // allow adding past refuelings, but we don't want to roll back the
-      // mileage in that case. The override switch is available to force a
-      // rollback in the case of a deleted refueling.
-      return;
-    }
-
-    this.mileage = newMileage;
-    this.lastMileageUpdate = roundToDay(updateDate);
   }
 
   double _efficiencyFilter(int numRefuelings, double prev, double cur) {
@@ -83,16 +139,6 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
       double fac1 = (numRefuelings - 1) / numRefuelings;
       double fac2 = 1 / numRefuelings;
       return prev * fac1 + cur * fac2;
-    }
-  }
-
-  void updateEfficiency(double eff) {
-    if (this.numRefuelings == 1) {
-      // first refueling for this car
-      this.averageEfficiency = eff;
-    } else {
-      this.averageEfficiency =
-          _efficiencyFilter(this.numRefuelings, this.averageEfficiency, eff);
     }
   }
 
@@ -112,16 +158,5 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
       double fac2 = 1 / numItems;
       return prev * fac1 + cur * fac2;
     }
-  }
-
-  void updateDistanceRate(DateTime prev, DateTime cur, int distance) {
-    if (prev == null || cur == null) return;
-
-    var elapsedDuration = cur.difference(prev);
-    var curDistRate = distance.toDouble() / elapsedDuration.inDays.toDouble();
-    this.distanceRate =
-        _distanceFilter(this.numRefuelings, this.distanceRate, curDistRate);
-    this.distanceRateHistory.add(DistanceRatePoint(cur, this.distanceRate));
-    TodoBLoC().updateDueDates(this);
   }
 }

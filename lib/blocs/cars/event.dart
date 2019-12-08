@@ -46,9 +46,17 @@ class DeleteCar extends CarsEvent {
   String toString() => 'DeleteCar { car: $car }';
 }
 
-class ClearCompleted extends CarsEvent {}
+class ExternalRefuelingsUpdated extends CarsEvent {
+  final List<Refueling> refuelings;
 
-class ToggleAll extends CarsEvent {}
+  ExternalRefuelingsUpdated(this.refuelings);
+
+  @override
+  List<Object> get props => [refuelings];
+
+  @override 
+  String toString() => 'ExternalRefuelingsUpdated { refuelings: $refuelings }';
+}
 
 class CarsUpdated extends CarsEvent {
   final List<Car> cars;
