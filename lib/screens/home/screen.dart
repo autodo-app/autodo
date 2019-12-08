@@ -12,7 +12,7 @@ class HomeScreen extends StatelessWidget {
   build(context) => BlocBuilder<TabBloc, AppTab>( 
     builder: (context, activeTab) => Scaffold(  
       appBar: AppBar(  
-        title: Text(AutodoLocalizations.of(context).appTitle)
+        title: Text(AutodoLocalizations.appTitle)
       ),
       body: activeTab == AppTab.todos ? FilteredTodos() : Stats(),
       floatingActionButton: AutodoActionButton(),

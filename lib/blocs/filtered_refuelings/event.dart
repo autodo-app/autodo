@@ -1,11 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:autodo/models/barrel.dart';
 
-abstract class FilteredTodosEvent extends Equatable {
-  const FilteredTodosEvent();
+abstract class FilteredRefuelingsEvent extends Equatable {
+  const FilteredRefuelingsEvent();
 }
 
-class UpdateFilter extends FilteredTodosEvent {
+class UpdateFilter extends FilteredRefuelingsEvent {
   final VisibilityFilter filter;
 
   const UpdateFilter(this.filter);
@@ -17,14 +17,14 @@ class UpdateFilter extends FilteredTodosEvent {
   String toString() => 'UpdateFilter { filter: $filter }';
 }
 
-class UpdateTodos extends FilteredTodosEvent {
-  final List<Todo> todos;
+class UpdateRefuelings extends FilteredRefuelingsEvent {
+  final List<Refueling> todos;
 
-  const UpdateTodos(this.todos);
+  const UpdateRefuelings(this.todos);
 
   @override
   List<Object> get props => [todos];
 
   @override
-  String toString() => 'UpdateTodos { todos: $todos }';
+  String toString() => 'UpdateRefuelings { todos: $todos }';
 }

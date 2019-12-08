@@ -1,4 +1,4 @@
-export 'delete_todo_snackbar.dart';
+export 'snackbars.dart';
 export 'extra_actions.dart';
 export 'filter_button.dart';
 export 'filtered_todos.dart';

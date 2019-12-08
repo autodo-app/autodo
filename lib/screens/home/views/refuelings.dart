@@ -1,301 +1,304 @@
 import 'package:flutter/material.dart';
-import 'package:autodo/blocs/refueling.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+\
+import 'package:autodo/localization.dart';
+import 'package:autodo/widgets/barrel.dart';
+import 'package:autodo/models/barrel.dart';
+import 'package:autodo/blocs/refuelings/barrel.dart';
+import 'package:autodo/screens/details/barrel.dart';
+import 'package:autodo/blocs/filtered_refuelings/barrel.dart';
+import 'package:autodo/screens/createitems/barrel.dart';
 
-import 'package:autodo/blocs/cars.dart';
-import 'package:autodo/widgets/cartag.dart';
-import 'package:autodo/items/items.dart';
-import 'package:intl/intl.dart';
-import 'package:autodo/blocs/refueling.dart';
-import 'package:autodo/util.dart';
+class _RefuelingTitle extends StatelessWidget {
+  final Refueling refueling;
 
-class RefuelingCard extends StatefulWidget {
-  final RefuelingItem item;
+  _RefuelingTitle({Key key, @required this.refueling})
+      : super(key: key);
 
-  RefuelingCard({
-    @required this.item,
-  });
-
-  @override
-  State<RefuelingCard> createState() {
-    return RefuelingCardState();
-  }
-}
-
-class RefuelingCardState extends State<RefuelingCard> {
-  bool expanded = false;
-
-  Widget checkbox(RefuelingCard widget) {
-    return Row();
-  }
-
-  List<Widget> additionalStats() {
-    Color textColor = Theme.of(context).iconTheme.color.withAlpha(200);
-
-    if (expanded) {
-      return [
-        Row(
-          children: <Widget>[
-            Text(
-              'Fuel Efficiency: ',
-              style: TextStyle(
-                color: textColor,
-              ),
-            ),
-            FutureBuilder(
-              future: RefuelingBLoC().hsv(widget.item),
-              initialData: HSV(0.0, 0.0, 1.0), // use white as the default color
-              builder: (context, snap) => Text(
-                (widget.item.efficiency == null ||
-                        widget.item.efficiency == double.infinity)
-                    ? "N/A"
-                    : widget.item.efficiency.toStringAsFixed(3),
-                style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16.0,
-                    color: Color(hsv2rgb(snap.data).toValue())),
-              ),
-            ),
-            Text(
-              (widget.item.efficiency == double.infinity) ? "" : ' mpg',
-              style: TextStyle(
-                color: textColor,
-              ),
-            ),
-          ],
-        ),
-        Row(
-          children: <Widget>[
-            Text(
-              'Cost per ' + 'gal: ',
-              style: TextStyle(
-                color: textColor,
-              ),
-            ),
-            Text(
-              widget.item.costpergal.toStringAsFixed(3),
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 16.0,
-              ),
-            ),
-            Text(
-              ' USD/gal',
-              style: TextStyle(
-                color: textColor,
-              ),
-            ),
-          ],
-        ),
-      ];
+  dateField(context) {
+    if (refueling.date != null) {
+      return TextSpan(  
+        text: AutodoLocalizations.onLiteral + ' ' + AutodoLocalizations.dateFormat(refueling.date) + ' ',
+        style: Theme.of(context).primaryTextTheme.body1
+      );
     } else {
-      return [];
+      return Container();
     }
   }
 
-  Container stats(RefuelingCard widget) {
-    Color textColor = Theme.of(context).iconTheme.color.withAlpha(200);
+  @override 
+  build(context) => RichText(  
+    text: TextSpan(  
+      children: [
+        TextSpan(
+          text: AutodoLocalizations.refueling + ' ',
+          style: Theme.of(context).primaryTextTheme.body1
+        ),
+        dateField(context),
+        TextSpan(  
+          text: AutodoLocalizations.at + ' ',
+          style: Theme.of(context).primaryTextTheme.body1
+        ),
+        TextSpan(
+          text: refueling.odom.toString() + ' ',
+          style: Theme.of(context).primaryTextTheme.subtitle
+        ),
+        TextSpan(  
+          text: AutodoLocalizations.distanceUnits,
+          style: Theme.of(context).primaryTextTheme.body1
+        )
+      ],
+    ),
+  );
+}
 
-    return Container(
-      padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Text(
-                'Total Cost: ',
-                style: TextStyle(
-                  color: textColor,
-                ),
-              ),
-              Text(
-                '\$' + widget.item.cost.toStringAsFixed(2),
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 16.0,
-                ),
-              ),
-            ],
-          ),
-          Row(
-            children: <Widget>[
-              Text(
-                'Total Amount: ',
-                style: TextStyle(
-                  color: textColor,
-                ),
-              ),
-              Text(
-                widget.item.amount.toStringAsFixed(2),
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 16.0,
-                ),
-              ),
-              Text(
-                ' gal',
-                style: TextStyle(
-                  color: textColor,
-                ),
-              ),
-            ],
-          ),
-          ...additionalStats(),
-        ],
-      ),
-    );
-  }
+class _RefuelingCost extends StatelessWidget {
+  final Refueling refueling;
 
-  Column title(RefuelingCard widget) {
-    DateTime date = widget.item.date;
-    String dateStr =
-        date != null ? ' on ' + DateFormat("MM/dd/yyyy").format(date) : '';
-    return Column(
+  _RefuelingCost({Key key, @required this.refueling})
+      : super(key: key);
+
+  @override 
+  build(context) => RichText(  
+    text: TextSpan(  
+      children: [
+        TextSpan(  
+          text: AutodoLocalizations.totalCost + ': ',
+          style: Theme.of(context).primaryTextTheme.body1
+        ),
+        TextSpan(  
+          text: AutodoLocalizations.moneyUnits + refueling.cost.toStringAsFixed(2),
+          style: Theme.of(context).primaryTextTheme.subtitle
+        ),
+      ],
+    ),
+  );
+}
+
+class _RefuelingAmount extends StatelessWidget {
+  final Refueling refueling;
+
+  _RefuelingAmount({Key key, @required this.refueling})
+      : super(key: key);
+
+  @override 
+  build(context) => RichText(  
+    text: TextSpan(  
+      children: [
+        TextSpan(  
+          text: AutodoLocalizations.totalAmount + ': ',
+          style: Theme.of(context).primaryTextTheme.body1
+        ),
+        TextSpan(  
+          text: refueling.amount.toStringAsFixed(2),
+          style: Theme.of(context).primaryTextTheme.subtitle
+        ),
+        TextSpan(  
+          text: ' ' + AutodoLocalizations.fuelUnits,
+          style: Theme.of(context).primaryTextTheme.body1
+        )
+      ],
+    ),
+  );
+}
+
+class _RefuelingBody extends StatelessWidget {
+  final Refueling refueling;
+
+  _RefuelingBody({Key key, @required this.refueling})
+      : super(key: key);
+
+  @override 
+  build(context) => Container(  
+    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+    child: Column(  
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Container(
-          padding: EdgeInsets.fromLTRB(10.0, 10.0, 0, 0.0),
-          alignment: Alignment.centerLeft,
-          child: Row(
-            children: <Widget>[
-              Text(
-                'Refueling' + dateStr + ' at ',
-                style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: dateStr == '' ? 18.0 : 16.0,
-                ),
-              ),
-              Text(
-                widget.item.odom.toString(),
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: dateStr == '' ? 20.0 : 18.0,
-                ),
-              ),
-              Text(
-                ' miles',
-                style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: dateStr == '' ? 18.0 : 16.0,
-                ),
-              ),
-            ],
+        _RefuelingCost(refueling: refueling),
+        _RefuelingAmount(refueling: refueling),
+      ],
+    )
+  );
+}
+
+class _RefuelingTags extends StatelessWidget {
+  final Refueling refueling;
+
+  _RefuelingTags({Key key, @required this.refueling})
+      : super(key: key);
+
+  @override 
+  build(context) => CarTags(cars: [refueling.carName]);
+}
+
+class _RefuelingEditButton extends StatelessWidget {
+  final Refueling refueling;
+
+  _RefuelingEditButton({Key key, @required this.refueling})
+      : super(key: key);
+
+  @override 
+  build(context) => ButtonTheme.fromButtonThemeData(
+    data: ButtonThemeData(
+      minWidth: 0,
+    ),
+    child: FlatButton(
+      child: const Icon(Icons.edit),
+      onPressed: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => CreateRefuelingScreen(
+            refueling: refueling,
           ),
         ),
-        Divider(),
-      ],
-    );
-  }
+      ),
+    ),
+  );
+}
 
-  Container body(RefuelingCard widget) {
-    return Container(
-      child: Row(
+class _RefuelingDeleteButton extends StatelessWidget {
+  final Refueling refueling;
+
+  _RefuelingDeleteButton({Key key, @required this.refueling})
+      : super(key: key);
+
+  @override 
+  build(context) => ButtonTheme.fromButtonThemeData(
+    data: ButtonThemeData(
+      minWidth: 0,
+    ),
+    child: FlatButton(
+      child: const Icon(Icons.delete),
+      onPressed: () {
+        BlocProvider.of<RefuelingsBloc>(context).add(
+          DeleteRefueling(refueling)
+        );
+        Scaffold.of(context).showSnackBar(
+          DeleteRefuelingSnackBar(
+            onUndo: () => BlocProvider.of<RefuelingsBloc>(context)
+              .add(AddRefueling(refueling)),
+          )
+        );
+      },
+    ),
+  );
+}
+
+class _RefuelingFooter extends StatelessWidget {
+  final Refueling refueling;
+
+  _RefuelingFooter({Key key, @required this.refueling}) : super(key: key);
+
+  @override 
+  build(context) => Row(  
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: <Widget>[
+      _RefuelingTags(refueling: refueling),
+      Row(  
         children: <Widget>[
-          checkbox(widget),
-          stats(widget),
+          _RefuelingEditButton(refueling: refueling),
+          _RefuelingDeleteButton(refueling: refueling),
         ],
       ),
-    );
-  }
+    ],
+  );
+}
 
-  Widget tags(RefuelingCard widget) {
-    return FutureBuilder(
-        future: CarsBLoC().getCarByName(widget.item.carName),
-        builder: (context, tag) {
-          if (tag.data == null) return Container();
-          return CarTag(text: tag.data.name, color: tag.data.color);
-        });
-  }
+class _RefuelingCard extends StatelessWidget {
+  final Refueling refueling;
+  final DismissDirectionCallback onDismissed;
+  final GestureTapCallback onTap;
 
-  Row buttons(RefuelingCard widget) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        ButtonTheme.fromButtonThemeData(
-          data: ButtonThemeData(
-            minWidth: 0,
-          ),
-          child: FlatButton(
-            child: const Icon(Icons.edit),
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => CreateRefuelingScreen(
-                  mode: RefuelingEditMode.EDIT,
-                  existing: widget.item,
-                ),
+  _RefuelingCard({
+    Key key,
+    @required this.refueling,
+    @required this.onDismissed,
+    @required this.onTap
+  }) : super(key: key);
+
+  @override 
+  build(context) => Dismissible(  
+    key: Key("__dismissible__"),
+    onDismissed: onDismissed,
+    child: Card(  
+      elevation: 4,
+      color: Theme.of(context).cardColor,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      child: Column(  
+        children: <Widget>[
+          Column(
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.all(10),
+                alignment: Alignment.centerLeft,
+                child: _RefuelingTitle(refueling: refueling),
               ),
-            ),
-          ),
-        ),
-        ButtonTheme.fromButtonThemeData(
-          data: ButtonThemeData(
-            minWidth: 0,
-          ),
-          child: FlatButton(
-            child: const Icon(Icons.delete),
-            onPressed: () {
-              RefuelingBLoC().delete(widget.item);
-              final snackbar = SnackBar(
-                content: Text('Deleted Refueling.'),
-                action: SnackBarAction(
-                  label: 'Undo',
-                  onPressed: () => RefuelingBLoC().undo(),
-                ),
-              );
-              Scaffold.of(context).showSnackBar(snackbar);
-            },
-          ),
-        ),
-      ],
+              Divider(),
+            ],
+          ),      
+          _RefuelingBody(refueling: refueling),
+          _RefuelingFooter(refueling: refueling),
+        ],
+      ),
+    )
+  );
+}
+
+class RefuelingsScreen extends StatelessWidget {
+  RefuelingsScreen({Key key}) : super(key: key);
+
+  onDismissed(direction, context, refueling) {
+    BlocProvider.of<RefuelingsBloc>(context).add(DeleteRefueling(refueling));
+    Scaffold.of(context).showSnackBar(
+      DeleteRefuelingSnackBar(
+        onUndo: () => BlocProvider.of<RefuelingsBloc>(context)
+          .add(AddRefueling(refueling)),
+      )
     );
   }
 
-  Row footer(RefuelingCard widget) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        tags(widget),
-        buttons(widget),
-      ],
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 0.0),
-      child: InkWell(
-        onTap: () => setState(() => expanded = !expanded),
-        child: Card(
-          elevation: 8.0,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          child: Container(
-            child: Column(
-              children: <Widget>[
-                title(widget),
-                body(widget),
-                footer(widget),
-              ],
-            ),
-          ),
-        ),
+  onTap(context, refueling) async {
+    final removedRefueling = await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => DetailsScreen(id: refueling.id),
       ),
     );
+    if (removedRefueling != null) {
+      Scaffold.of(context).showSnackBar(
+      DeleteRefuelingSnackBar(
+        onUndo: () => BlocProvider.of<RefuelingsBloc>(context)
+          .add(AddRefueling(refueling)),
+      )
+    );
+    }
   }
-}
 
-
-class RefuelingHistory extends StatefulWidget {
-  @override
-  State<RefuelingHistory> createState() {
-    return RefuelingHistoryState();
-  }
-}
-
-class RefuelingHistoryState extends State<RefuelingHistory> {
-  @override
-  Widget build(BuildContext context) {
-    return RefuelingBLoC().items();
-  }
+  @override 
+  build(context) => 
+      BlocBuilder<FilteredRefuelingsBloc, FilteredRefuelingsState>(  
+    builder: (context, state) {
+      if (state is FilteredRefuelingsLoading) {
+        return LoadingIndicator();
+      } else if (state is FilteredRefuelingsLoaded) {
+        final refuelings = state.filteredRefuelings;
+        return ListView.builder(   
+          itemCount: refuelings.length,
+          itemBuilder: (context, index) {
+            final refueling = refuelings[index];
+            return Padding(  
+              padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+              child: _RefuelingCard(  
+                refueling: refueling,
+                onDismissed: (direction) =>
+                    onDismissed(direction, context, refueling),
+                onTap: () => onTap(context, refueling)
+              ),          
+            );
+          }
+        );
+      } else {
+        return Container();
+      }
+    }
+  );
 }

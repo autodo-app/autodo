@@ -3,8 +3,8 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'event.dart';
 import 'state.dart';
-import 'package:bloc_test/blocs/todos/barrel.dart';
-import 'package:bloc_test/models/barrel.dart';
+import 'package:autodo/blocs/todos/barrel.dart';
+import 'package:autodo/models/barrel.dart';
 
 class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
   final TodosBloc todosBloc;

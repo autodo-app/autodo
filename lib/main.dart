@@ -9,6 +9,7 @@ import 'routes.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'theme.dart';
 import 'screens/home/provider.dart';
+import 'repositories/barrel.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,7 +34,7 @@ void main() {
         ),
         BlocProvider<TodosBloc>(  
           create: (context) => TodosBloc(
-            todosRepository: FirebaseTodosRepository(),
+            todosRepository: FirebaseDataRepository(),
           )..add(LoadTodos()),
         ),
       ],

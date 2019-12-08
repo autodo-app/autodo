@@ -21,3 +21,22 @@ class DeleteTodoSnackBar extends SnackBar {
           ),
         );
 }
+
+class DeleteRefuelingSnackBar extends SnackBar {
+  DeleteRefuelingSnackBar({
+    Key key,
+    @required VoidCallback onUndo,
+  }) : super(
+          key: key,
+          content: Text(
+            AutodoLocalizations.refuelingDeleted,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          duration: Duration(seconds: 2),
+          action: SnackBarAction(
+            label: AutodoLocalizations.undo,
+            onPressed: onUndo,
+          ),
+        );
+}

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:intl/intl.dart';
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/items/items.dart';
-import 'package:autodo/sharedmodels/sharedmodels.dart';
+import 'package:autodo/widgets/barrel.dart';
 import 'package:autodo/theme.dart';
 import 'package:autodo/util.dart';
 

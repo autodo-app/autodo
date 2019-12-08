@@ -1,11 +1,12 @@
 import 'package:autodo/models/barrel.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
+import 'package:equatable/equatable.dart';
 
 import '../entities/barrel.dart';
 
 @immutable
-class Todo {
+class Todo extends Equatable {
   final bool complete;
   final String id;
   final String note;
@@ -29,19 +30,9 @@ class Todo {
     );
   }
 
-  @override
-  int get hashCode =>
-      complete.hashCode ^ name.hashCode ^ note.hashCode ^ id.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is Todo &&
-          runtimeType == other.runtimeType &&
-          complete == other.complete &&
-          name == other.name &&
-          note == other.note &&
-          id == other.id;
+  @override 
+  List<Object> get props => [complete, id, note, name, dueState, mileage, 
+      completed, completedDate, dueDate];
 
   @override
   String toString() {

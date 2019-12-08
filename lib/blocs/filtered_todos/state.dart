@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:bloc_test/models/barrel.dart';
+import 'package:autodo/models/barrel.dart';
 
 abstract class FilteredTodosState extends Equatable {
   const FilteredTodosState();

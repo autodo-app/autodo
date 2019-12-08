@@ -16,6 +16,7 @@ class AutodoLocalizations {
   static dateFormat(date) => (DateFormat("MM/dd/yyyy").format(date));
   static String get undo => "Undo";
   static todoDeleted(name) => "ToDo $name deleted.";
+  static String get refuelingDeleted => "Refueling deleted.";
   static String get firstTimeDoingTask => "First Time Doing This Task.";
   static String get dueAt => "Due At";
   static String get distanceUnits => "miles";
@@ -23,6 +24,13 @@ class AutodoLocalizations {
   static String get pastDue => "Past Due";
   static String get dueSoon => "Due Soon";
   static String get upcoming => "Upcoming";
+  static String get totalCost => "Total Cost";
+  static String get moneyUnits => "\$";
+  static String get totalAmount => "Total Amount";
+  static String get fuelUnits => "gal";
+  static String get onLiteral => "on";
+  static String get refueling => "Refueling";
+  static String get at => "at";
 }
 
 class AutodoLocalizationsDelegate

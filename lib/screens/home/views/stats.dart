@@ -2,7 +2,7 @@ import 'package:autodo/blocs/cars.dart';
 import 'package:flutter/material.dart';
 
 import 'package:autodo/blocs/refueling.dart';
-import 'package:autodo/screens/charts/charts.dart';
+import '../charts/barrel.dart';
 
 class StatisticsScreen extends StatefulWidget {
   @override
