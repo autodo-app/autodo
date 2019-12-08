@@ -147,8 +147,20 @@ class _RefuelingEditButton extends StatelessWidget {
       onPressed: () => Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => CreateRefuelingScreen(
+          builder: (context) => RefuelingAddEditScreen(
             refueling: refueling,
+            isEditing: true,
+            onSave: (m, d, a, c, n) {
+              BlocProvider.of<RefuelingsBloc>(context).add(  
+                UpdateRefueling(refueling.copyWith(
+                  mileage: m,
+                  date: d,
+                  amount: a,
+                  cost: c,
+                  carName: n,
+                ))
+              );
+            },
           ),
         ),
       ),

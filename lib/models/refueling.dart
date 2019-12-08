@@ -6,13 +6,13 @@ import '../entities/barrel.dart';
 @immutable
 class Refueling extends Equatable{
   final String id;
-  final String name;
+  final String carName;
   final int mileage;
   final DateTime date;
   final double amount, cost;
 
   Refueling({
-    this.name,
+    this.carName,
     this.id,
     this.mileage,
     this.date,
@@ -20,9 +20,16 @@ class Refueling extends Equatable{
     this.cost
   });
 
-  Refueling copyWith({String id, String name}) {
+  Refueling copyWith({
+    String id, 
+    String carName, 
+    int mileage, 
+    DateTime date, 
+    double amount,
+    double cost 
+  }) {
     return Refueling(
-      name: name ?? this.name,
+      carName: carName ?? this.carName,
       id: id ?? this.id,
       mileage: mileage ?? this.mileage,
       date: date ?? this.date,
@@ -32,20 +39,20 @@ class Refueling extends Equatable{
   }
 
   @override 
-  List<Object> get props => [name, id, mileage, date, amount, cost];
+  List<Object> get props => [carName, id, mileage, date, amount, cost];
 
   @override
   String toString() {
-    return 'Refueling { task: $name, id: $id, mileage: $mileage, date: $date, amount: $amount, cost: $cost }';
+    return 'Refueling { task: $carName, id: $id, mileage: $mileage, date: $date, amount: $amount, cost: $cost }';
   }
 
   RefuelingEntity toEntity() {
-    return RefuelingEntity(id, name, mileage, date, amount, cost);
+    return RefuelingEntity(id, carName, mileage, date, amount, cost);
   }
 
   static Refueling fromEntity(RefuelingEntity entity) {
     return Refueling(
-      name: entity.name,
+      carName: entity.carName,
       id: entity.id,
       mileage: entity.mileage,
       date: entity.date,

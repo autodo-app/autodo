@@ -20,17 +20,32 @@ class AutodoLocalizations {
   static String get firstTimeDoingTask => "First Time Doing This Task.";
   static String get dueAt => "Due At";
   static String get distanceUnits => "miles";
+  static String get distanceUnitsShort => "(mi)";
   static String get dueOn => "Due on";
   static String get pastDue => "Past Due";
   static String get dueSoon => "Due Soon";
   static String get upcoming => "Upcoming";
   static String get totalCost => "Total Cost";
   static String get moneyUnits => "\$";
+  static String get moneyUnitsSuffix => "(USD)";
   static String get totalAmount => "Total Amount";
   static String get fuelUnits => "gal";
   static String get onLiteral => "on";
   static String get refueling => "Refueling";
   static String get at => "at";
+  static String get requiredLiteral => "Required";
+  static String get optional => "Optional";
+  static String get odomReading => "Odometer Reading";
+  static String get totalPrice => "Total Price";
+  static String get refuelingDate => "Refueling Date";
+  static String get refuelingAmount => "Refueling Amount";
+  static String get chooseDate => "Choose Date";
+  static String get invalidDate => "Not a valid date";
+  static String get addRefueling => "Add Refueling";
+  static String get editRefueling => "Edit Refueling";
+  static String get saveChanges => "Save Changes";
+  static String get carName => "Car Name";
+  static String get mileage => "Mileage";
 }
 
 class AutodoLocalizationsDelegate
