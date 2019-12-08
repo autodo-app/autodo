@@ -5,9 +5,11 @@ import 'package:bloc/bloc.dart';
 import 'event.dart';
 import 'state.dart';
 import 'package:autodo/repositories/barrel.dart';
-import 'package:autodo/models/barrel.dart';
 
 class CarsBloc extends Bloc<CarsEvent, CarsState> {
+  static const double EMA_GAIN = 0.9;
+  static const double EMA_CUTOFF = 8;
+  
   final DataRepository _carsRepository;
   StreamSubscription _carsSubscription;
 
@@ -60,5 +62,66 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
   Future<void> close() {
     _carsSubscription?.cancel();
     return super.close();
+  }
+
+  void updateMileage(int newMileage, DateTime updateDate, {override = false}) {
+    if (this.mileage > newMileage && !override) {
+      // allow adding past refuelings, but we don't want to roll back the
+      // mileage in that case. The override switch is available to force a
+      // rollback in the case of a deleted refueling.
+      return;
+    }
+
+    this.mileage = newMileage;
+    this.lastMileageUpdate = roundToDay(updateDate);
+  }
+
+  double _efficiencyFilter(int numRefuelings, double prev, double cur) {
+    if (numRefuelings > EMA_CUTOFF) {
+      return EMA_GAIN * prev + (1 - EMA_GAIN) * cur;
+    } else {
+      double fac1 = (numRefuelings - 1) / numRefuelings;
+      double fac2 = 1 / numRefuelings;
+      return prev * fac1 + cur * fac2;
+    }
+  }
+
+  void updateEfficiency(double eff) {
+    if (this.numRefuelings == 1) {
+      // first refueling for this car
+      this.averageEfficiency = eff;
+    } else {
+      this.averageEfficiency =
+          _efficiencyFilter(this.numRefuelings, this.averageEfficiency, eff);
+    }
+  }
+
+  double _distanceFilter(int numItems, double prev, double cur) {
+    if (numItems == 1 || prev == double.infinity) {
+      // no point in averaging only one value
+      return cur;
+    } else if (numItems > EMA_CUTOFF) {
+      // Use the EMA when we have enough data to get
+      // good results from it
+      return EMA_GAIN * prev + (1 - EMA_GAIN) * cur;
+    } else {
+      // simple moving average when we don't have much
+      // data to work with
+      numItems--; // we don't track distanceRate between first two refuelings
+      double fac1 = (numItems - 1) / numItems;
+      double fac2 = 1 / numItems;
+      return prev * fac1 + cur * fac2;
+    }
+  }
+
+  void updateDistanceRate(DateTime prev, DateTime cur, int distance) {
+    if (prev == null || cur == null) return;
+
+    var elapsedDuration = cur.difference(prev);
+    var curDistRate = distance.toDouble() / elapsedDuration.inDays.toDouble();
+    this.distanceRate =
+        _distanceFilter(this.numRefuelings, this.distanceRate, curDistRate);
+    this.distanceRateHistory.add(DistanceRatePoint(cur, this.distanceRate));
+    TodoBLoC().updateDueDates(this);
   }
 }

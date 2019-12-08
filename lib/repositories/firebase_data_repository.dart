@@ -9,6 +9,7 @@ class FirebaseDataRepository implements DataRepository {
   final todoCollection = Firestore.instance.collection('todos');
   final refuelingCollection = Firestore.instance.collection('refuelings');
   final carCollection = Firestore.instance.collection('cars');
+  final repeatCollection = Firestore.instance.collection('repeats');
 
   @override
   Future<void> addNewTodo(Todo todo) {
@@ -86,5 +87,31 @@ class FirebaseDataRepository implements DataRepository {
     return carCollection
       .document(car.id)
       .updateData(car.toEntity().toDocument());
+  }
+
+  @override
+  Future<void> addNewRepeat(Repeat repeat) {
+    return repeatCollection.add(repeat.toEntity().toDocument());
+  }
+
+  @override
+  Future<void> deleteRepeat(Repeat repeat) {
+    return repeatCollection.document(repeat.id).delete();
+  }
+
+  @override
+  Stream<List<Repeat>> repeats() {
+    return repeatCollection.snapshots().map((snapshot) {
+      return snapshot.documents
+        .map((doc) => Repeat.fromEntity(RepeatEntity.fromSnapshot(doc)))
+        .toList();
+    });
+  }
+
+  @override
+  Future<void> updateRepeat(Repeat repeat) {
+    return repeatCollection
+      .document(repeat.id)
+      .updateData(repeat.toEntity().toDocument());
   }
 }

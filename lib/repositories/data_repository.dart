@@ -29,4 +29,13 @@ abstract class DataRepository {
   Stream<List<Car>> cars();
 
   Future<void> updateCar(Car car);
+
+  // Repeats
+  Future<void> addNewRepeat(Repeat repeat);
+
+  Future<void> deleteRepeat(Repeat repeat);
+
+  Stream<List<Repeat>> repeats();
+
+  Future<void> updateRepeat(Repeat repeat);
 }
