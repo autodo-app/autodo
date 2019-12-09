@@ -34,7 +34,7 @@ void main() {
         ),
         BlocProvider<TodosBloc>(  
           create: (context) => TodosBloc(
-            todosRepository: FirebaseDataRepository(),
+            dataRepository: FirebaseDataRepository(),
           )..add(LoadTodos()),
         ),
       ],

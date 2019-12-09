@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:autodo/blocs/cars/barrel.dart';
+import 'package:autodo/blocs/repeating/barrel.dart';
+import 'package:autodo/blocs/notifications/barrel.dart';
 import 'package:autodo/localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:bloc/bloc.dart';
@@ -11,18 +13,21 @@ import 'package:autodo/models/barrel.dart';
 
 class TodosBloc extends Bloc<TodosEvent, TodosState> {
   final DataRepository _dataRepository;
-  StreamSubscription _dataSubscription, _carsSubscription;
+  StreamSubscription _dataSubscription, _carsSubscription, _repeatsSubscription;
   final CarsBloc _carsBloc;
   final NotificationsBloc _notificationsBloc;
+  final RepeatsBloc _repeatsBloc;
 
   List<Car> _carsCache;
 
   TodosBloc({
     @required DataRepository dataRepository, 
     @required CarsBloc carsBloc,
-    @required NotificationsBloc notificationsBloc
+    @required NotificationsBloc notificationsBloc,
+    @required RepeatsBloc repeatsBloc
   }) : assert(dataRepository != null), assert(carsBloc != null),
-       assert(notificationsBloc != null), _dataRepository = dataRepository, 
+       assert(notificationsBloc != null), assert(repeatsBloc != null),
+       _dataRepository = dataRepository, _repeatsBloc = repeatsBloc, 
        _carsBloc = carsBloc, _notificationsBloc = notificationsBloc;
 
   @override
@@ -46,6 +51,10 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       yield* _mapTodosUpdateToState(event);
     } else if (event is UpdateDueDates) {
       yield* _mapUpdateDueDatesToState(event);
+    } else if (event is RepeatsRefresh) {
+      yield* _mapRepeatsRefreshToState(event);
+    } else if (event is CompleteTodo) {
+      yield* _mapCompleteTodoToState(event);
     }
   }
 
@@ -58,6 +67,13 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       (state) {
         if (state is CarsLoaded) {
           add(UpdateDueDates(state.cars));
+        }
+      }
+    );
+    _repeatsSubscription = _repeatsBloc.listen(
+      (state) {
+        if (state is RepeatsLoaded) {
+          add(RepeatsRefresh(state.repeats));
         }
       }
     );
@@ -91,7 +107,12 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
           int daysToTodo = (distanceToTodo / car.distanceRate).round();
           Duration timeToTodo = Duration(days: daysToTodo);
           var newDueDate = car.lastMileageUpdate.add(timeToTodo);
-          _notificationsBloc.rescheduleNotification(todo);
+          _notificationsBloc.add(ReScheduleNotification(
+            id: todo.notificationID,
+            date: todo.dueDate,
+            title: AutodoLocalizations.todoDueSoon + ': ${todo.name}',
+            body: ''
+          ));
           Todo out = todo.copyWith(dueDate: newDueDate);
           batch.updateData(todo.id, todo.toEntity().toDocument());
         }
@@ -109,6 +130,26 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
 
   Stream<TodosState> _mapUpdateTodoToState(UpdateTodo event) async* {
     _dataRepository.updateTodo(event.updatedTodo);
+  }
+
+  Stream<TodosState> _mapCompleteTodoToState(CompleteTodo event) async* {
+    Todo curTodo = event.todo;
+    if (_repeatsBloc.state is RepeatsLoaded && _carsBloc.state is CarsLoaded) {
+      RepeatsLoaded curRepeatsState = _repeatsBloc.state;
+      Repeat curRepeat = curRepeatsState.repeats.firstWhere((r) => r.name == curTodo.repeatName);
+      CarsLoaded curCarsState = _carsBloc.state;
+      Car curCar = curCarsState.cars.firstWhere((c) => c.name == curTodo.carName);
+
+      int nextDueMileage = curCar.mileage + curRepeat.mileageInterval;
+      int daysToDue = (curRepeat.mileageInterval / curCar.distanceRate).round();
+      DateTime nextDueDate = curTodo.completedDate.add(Duration(days: daysToDue));
+      Todo next = curTodo.copyWith(
+        dueMileage: nextDueMileage,
+        dueDate: nextDueDate,
+        completed: false
+      );
+      _dataRepository.addNewTodo(next);
+    }
   }
 
   Stream<TodosState> _mapDeleteTodoToState(DeleteTodo event) async* {
@@ -143,6 +184,11 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     yield TodosLoaded(event.todos);
   }
 
+  Stream<TodosState> _mapRepeatsRefreshToState(RepeatsRefresh event) async* {
+    // TODO figure out what was/wasn't updated based on metadata?
+    // new repeats, updated repeats, and deleted repeats affect this
+  }
+
   List sortItems(List items) {
     return items
       ..sort((a, b) {
@@ -173,6 +219,8 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   @override
   Future<void> close() {
     _dataSubscription?.cancel();
+    _carsSubscription?.cancel();
+    _repeatsSubscription?.cancel();
     return super.close();
   }
 }

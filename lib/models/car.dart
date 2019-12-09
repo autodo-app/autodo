@@ -1,4 +1,4 @@
-import 'package:autodo/items/distanceratepoint.dart';
+import 'package:autodo/models/distanceratepoint.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
 import 'package:equatable/equatable.dart';

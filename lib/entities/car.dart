@@ -1,4 +1,4 @@
-import 'package:autodo/items/distanceratepoint.dart';
+import 'package:autodo/models/distanceratepoint.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 

@@ -46,6 +46,7 @@ class AutodoLocalizations {
   static String get saveChanges => "Save Changes";
   static String get carName => "Car Name";
   static String get mileage => "Mileage";
+  static String get todoDueSoon => "Maintenance ToDo Due Soon";
 }
 
 class AutodoLocalizationsDelegate

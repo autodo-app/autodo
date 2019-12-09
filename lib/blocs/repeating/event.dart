@@ -54,3 +54,5 @@ class RepeatsUpdated extends RepeatsEvent {
   @override
   List<Object> get props => [repeats];
 }
+
+class AddDefaultRepeats extends RepeatsEvent {}

@@ -67,3 +67,21 @@ class UpdateDueDates extends TodosEvent {
   @override 
   List<Object> get props => [cars];
 }
+
+class RepeatsRefresh extends TodosEvent {
+  final List<Repeat> repeats;
+
+  const RepeatsRefresh(this.repeats);
+
+  @override 
+  List<Object> get props => [repeats];
+}
+
+class CompleteTodo extends TodosEvent {
+  final Todo todo;
+
+  const CompleteTodo(this.todo);
+
+  @override 
+  List<Object> get props => [todo];
+}
