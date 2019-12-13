@@ -2,30 +2,42 @@ import 'dart:async';
 
 import 'package:autodo/repositories/write_batch_wrappers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'data_repository.dart';
 import 'package:autodo/models/barrel.dart';
 import 'package:autodo/entities/barrel.dart';
 
 class FirebaseDataRepository implements DataRepository {
-  final todoCollection = Firestore.instance.collection('todos');
-  final refuelingCollection = Firestore.instance.collection('refuelings');
-  final carCollection = Firestore.instance.collection('cars');
-  final repeatCollection = Firestore.instance.collection('repeats');
-  final notificationIdDoc = Firestore.instance.document('notificationID');
+  final Firestore _firestoreInstance;
+  final String _uuid;
+  DocumentReference _userDoc;
+  CollectionReference _todos, _refuelings, _cars, _repeats;
+
+  FirebaseDataRepository({Firestore firestoreInstance, @required String uuid}) :
+      assert(uuid != null), 
+      _firestoreInstance = firestoreInstance ?? Firestore.instance,
+      _uuid = uuid {
+    _userDoc = _firestoreInstance.collection('users').document(_uuid);
+
+    _todos = _userDoc.collection('todos');
+    _refuelings = _userDoc.collection('refuelings');
+    _cars = _userDoc.collection('cars');
+    _repeats = _userDoc.collection('repeats');
+  }
 
   @override
   Future<void> addNewTodo(Todo todo) {
-    return todoCollection.add(todo.toEntity().toDocument());
+    return _todos.add(todo.toEntity().toDocument());
   }
 
   @override
   Future<void> deleteTodo(Todo todo) async {
-    return todoCollection.document(todo.id).delete();
+    return _todos.document(todo.id).delete();
   }
 
   @override
   Stream<List<Todo>> todos() {
-    return todoCollection.snapshots().map((snapshot) {
+    return _todos.snapshots().map((snapshot) {
       return snapshot.documents
           .map((doc) => Todo.fromEntity(TodoEntity.fromSnapshot(doc)))
           .toList();
@@ -34,29 +46,29 @@ class FirebaseDataRepository implements DataRepository {
 
   @override
   Future<void> updateTodo(Todo update) {
-    return todoCollection
+    return _todos
         .document(update.id)
         .updateData(update.toEntity().toDocument());
   }
 
   @override
   WriteBatchWrapper startTodoWriteBatch() {
-    return WriteBatchWrapper(todoCollection);
+    return WriteBatchWrapper(_todos);
   }
 
   @override
   Future<void> addNewRefueling(Refueling refueling) {
-    return refuelingCollection.add(refueling.toEntity().toDocument());
+    return _refuelings.add(refueling.toEntity().toDocument());
   }
 
   @override
   Future<void> deleteRefueling(Refueling refueling) {
-    return refuelingCollection.document(refueling.id).delete();
+    return _refuelings.document(refueling.id).delete();
   }
 
   @override
   Stream<List<Refueling>> refuelings() {
-    return refuelingCollection.snapshots().map((snapshot) {
+    return _refuelings.snapshots().map((snapshot) {
       return snapshot.documents
         .map((doc) => Refueling.fromEntity(RefuelingEntity.fromSnapshot(doc)))
         .toList();
@@ -65,29 +77,29 @@ class FirebaseDataRepository implements DataRepository {
 
   @override
   Future<void> updateRefueling(Refueling refueling) {
-    return refuelingCollection
+    return _refuelings
       .document(refueling.id)
       .updateData(refueling.toEntity().toDocument());
   }
 
   @override
   WriteBatchWrapper startRefuelingWriteBatch() {
-    return WriteBatchWrapper(refuelingCollection);
+    return WriteBatchWrapper(_refuelings);
   }
 
   @override
   Future<void> addNewCar(Car car) {
-    return carCollection.add(car.toEntity().toDocument());
+    return _cars.add(car.toEntity().toDocument());
   }
 
   @override
   Future<void> deleteCar(Car car) {
-    return carCollection.document(car.id).delete();
+    return _cars.document(car.id).delete();
   }
 
   @override
   Stream<List<Car>> cars() {
-    return carCollection.snapshots().map((snapshot) {
+    return _cars.snapshots().map((snapshot) {
       return snapshot.documents
         .map((doc) => Car.fromEntity(CarEntity.fromSnapshot(doc)))
         .toList();
@@ -96,29 +108,29 @@ class FirebaseDataRepository implements DataRepository {
 
   @override
   Future<void> updateCar(Car car) {
-    return carCollection
+    return _cars
       .document(car.id)
       .updateData(car.toEntity().toDocument());
   }
 
   @override
   WriteBatchWrapper startCarWriteBatch() {
-    return WriteBatchWrapper(carCollection);
+    return WriteBatchWrapper(_cars);
   }
 
   @override
   Future<void> addNewRepeat(Repeat repeat) {
-    return repeatCollection.add(repeat.toEntity().toDocument());
+    return _repeats.add(repeat.toEntity().toDocument());
   }
 
   @override
   Future<void> deleteRepeat(Repeat repeat) {
-    return repeatCollection.document(repeat.id).delete();
+    return _repeats.document(repeat.id).delete();
   }
 
   @override
   Stream<List<Repeat>> repeats() {
-    return repeatCollection.snapshots().map((snapshot) {
+    return _repeats.snapshots().map((snapshot) {
       return snapshot.documents
         .map((doc) => Repeat.fromEntity(RepeatEntity.fromSnapshot(doc)))
         .toList();
@@ -127,18 +139,18 @@ class FirebaseDataRepository implements DataRepository {
 
   @override
   Future<void> updateRepeat(Repeat repeat) {
-    return repeatCollection
+    return _repeats
       .document(repeat.id)
       .updateData(repeat.toEntity().toDocument());
   }
 
   @override
   WriteBatchWrapper startRepeatWriteBatch() {
-    return WriteBatchWrapper(repeatCollection);
+    return WriteBatchWrapper(_repeats);
   }
 
   @override 
   Stream<int> notificationID() {
-    return notificationIdDoc.snapshots().map((snap) => snap.data as int);
+    return _userDoc.snapshots().map((snap) => snap.data['lastNotificationId'] as int);
   }
 }

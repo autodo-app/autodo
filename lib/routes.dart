@@ -1,5 +1,5 @@
 class AutodoRoutes {
-  static final home = "/";
+  static final home = "__home__";
   static final welcome = "__welcome__";
   static final createTodo = "__createTodo__";
   static final createRefueling = "__createRefueling__";

@@ -10,9 +10,9 @@ abstract class AuthenticationState extends Equatable {
 class Uninitialized extends AuthenticationState {}
 
 class Authenticated extends AuthenticationState {
-  final String displayName;
+  final String displayName, uuid;
 
-  const Authenticated(this.displayName);
+  const Authenticated(this.displayName, this.uuid);
 
   @override
   List<Object> get props => [displayName];

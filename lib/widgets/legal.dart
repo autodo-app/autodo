@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:autodo/blocs/blocs.dart';
+import 'package:autodo/blocs/markdown.dart';
 import 'package:autodo/theme.dart';
 
 class PrivacyPolicy {

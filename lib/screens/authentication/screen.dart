@@ -1,20 +1,10 @@
 import 'package:autodo/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:autodo/blocs/user_repository.dart';
-import 'dots_indicator.dart';
-import 'scroller/scroller.dart';
-import 'signup_button.dart';
-import 'trial_button.dart';
-import 'login_button.dart';
+import 'welcome/barrel.dart';
 
 class WelcomeScreen extends StatefulWidget {
-  final UserRepository _userRepository;
-
-  WelcomeScreen({Key key, @required UserRepository userRepository})
-      : assert(userRepository != null),
-        _userRepository = userRepository,
-        super(key: key);
+  WelcomeScreen({Key key}) : super(key: key);
 
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
@@ -61,15 +51,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           SignupButton(
-                            userRepository: widget._userRepository,
                             buttonPadding: BUTTON_PADDING,
                           ),
                           TrialButton(
-                            userRepository: widget._userRepository,
                             buttonPadding: BUTTON_PADDING,
                           ),
                           LoginButton(
-                            userRepository: widget._userRepository,
                             buttonPadding: BUTTON_PADDING,
                           ),
                           Padding(

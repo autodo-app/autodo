@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:bloc_test/blocs/barrel.dart';
-import 'package:bloc_test/localization.dart';
-import 'package:bloc_test/keys.dart';
+import 'package:autodo/blocs/barrel.dart';
+import 'package:autodo/localization.dart';
 import 'loading_indicator.dart';
 
 class Stats extends StatelessWidget {

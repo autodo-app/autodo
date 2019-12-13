@@ -1,14 +1,15 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import './bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:autodo/blocs/authentication_bloc/bloc.dart';
-import 'package:autodo/blocs/user_repository.dart';
+import 'package:autodo/repositories/auth_repository.dart';
+
+import 'event.dart';
+import 'state.dart';
 
 class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> {
-  final UserRepository _userRepository;
+  final AuthRepository _userRepository;
 
-  AuthenticationBloc({@required UserRepository userRepository})
+  AuthenticationBloc({@required AuthRepository userRepository})
       : assert(userRepository != null),
         _userRepository = userRepository;
 
@@ -32,8 +33,9 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     try {
       final isSignedIn = await _userRepository.isSignedIn();
       if (isSignedIn) {
-        final name = await _userRepository.getUser();
-        yield Authenticated(name);
+        final name = await _userRepository.getUserEmail();
+        String uuid = await _userRepository.getUserId();
+        yield Authenticated(name, uuid);
       } else {
         yield Unauthenticated();
       }
@@ -43,7 +45,9 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
   }
 
   Stream<AuthenticationState> _mapLoggedInToState() async* {
-    yield Authenticated(await _userRepository.getUser());
+    String email = await _userRepository.getUserEmail();
+    String uuid = await _userRepository.getUserId();
+    yield Authenticated(email, uuid);
   }
 
   Stream<AuthenticationState> _mapLoggedOutToState() async* {

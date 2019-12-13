@@ -1,11 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-class UserRepository {
+import 'auth_repository.dart';
+
+class FirebaseAuthRepository extends AuthRepository{
   final FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
 
-  UserRepository({FirebaseAuth firebaseAuth, GoogleSignIn googleSignin})
+  FirebaseAuthRepository({FirebaseAuth firebaseAuth, GoogleSignIn googleSignin})
       : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
         _googleSignIn = googleSignin ?? GoogleSignIn();
   
@@ -21,14 +23,15 @@ class UserRepository {
     return _firebaseAuth.currentUser();
   }
 
-  Future<void> signInWithCredentials(String email, String password) {
-    return _firebaseAuth.signInWithEmailAndPassword(
+  Future<FirebaseUser> signInWithCredentials(String email, String password) async {
+    await _firebaseAuth.signInWithEmailAndPassword(
       email: email,
       password: password,
     );
+    return _firebaseAuth.currentUser();
   }
 
-  Future<FirebaseUser> signUp({String email, String password}) async {
+  Future<FirebaseUser> signUp(String email, String password) async {
     var res = await _firebaseAuth.createUserWithEmailAndPassword(
       email: email,
       password: password,
@@ -36,9 +39,10 @@ class UserRepository {
     return res.user;
   }
 
-  Future<void> signUpWithVerification(String email, String password) async {
-    var user = await signUp(email: email, password: password);
-    return await user.sendEmailVerification();
+  Future<FirebaseUser> signUpWithVerification(String email, String password) async {
+    var user = await signUp(email, password);
+    await user.sendEmailVerification();
+    return _firebaseAuth.currentUser();
   }
 
   Future<void> signOut() async {
@@ -53,7 +57,11 @@ class UserRepository {
     return currentUser != null;
   }
 
-  Future<String> getUser() async {
+  Future<String> getUserEmail() async {
     return (await _firebaseAuth.currentUser()).email;
+  }
+
+  Future<String> getUserId() async {
+    return (await _firebaseAuth.currentUser()).uid;
   }
 }
