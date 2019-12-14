@@ -5,18 +5,16 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
-import 'package:autodo/repositories/auth_repository.dart';
+import '../barrel.dart';
 import '../validators.dart';
 import 'event.dart';
 import 'state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  AuthRepository _userRepository;
+  final AuthenticationBloc _authBloc;
+  StreamSubscription _authSubscription;
 
-  LoginBloc({
-    @required AuthRepository userRepository,
-  })  : assert(userRepository != null),
-        _userRepository = userRepository;
+  LoginBloc({@required authBloc}) : assert(authBloc != null), _authBloc = authBloc;
 
   @override
   LoginState get initialState => LoginState.empty();
@@ -52,6 +50,17 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }
   }
 
+  Stream<LoginState> _mapLoadLoginToState() async* {
+    _authSubscription?.cancel();
+    _authSubscription = _authBloc.listen((state) {
+      if (state is Authenticated) {
+        add(LoginSuccess());
+      } else if (state is Unauthenticated) {
+        add(LoginFailure(state.error));
+      }
+    });
+  }
+
   Stream<LoginState> _mapEmailChangedToState(String email) async* {
     yield state.update(
       isEmailValid: Validators.isValidEmail(email),
@@ -65,12 +74,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   Stream<LoginState> _mapLoginWithGooglePressedToState() async* {
-    try {
-      await _userRepository.signInWithGoogle();
-      yield LoginState.success();
-    } catch (_) {
-      yield LoginState.failure();
-    }
+    _authBloc.add(SignInWithGoogle());
   }
 
   Stream<LoginState> _mapLoginWithCredentialsPressedToState({
@@ -78,14 +82,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     String password,
   }) async* {
     yield LoginState.loading();
-    try {
-      if (kReleaseMode) {
-        await _userRepository.signUpWithVerification(email, password);
-      }
-      await _userRepository.signInWithCredentials(email, password);
-      yield LoginState.success();
-    } catch (_) {
-      yield LoginState.failure();
-    }
+    _authBloc.add(Login(email, password));
   }
 }

@@ -1,8 +1,9 @@
-import 'package:autodo/blocs/cars.dart';
+import 'package:autodo/widgets/loading_indicator.dart';
 import 'package:flutter/material.dart';
 
-import 'package:autodo/blocs/refueling.dart';
-import '../charts/barrel.dart';
+import 'package:autodo/blocs/barrel.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'charts/barrel.dart';
 
 class StatisticsScreen extends StatefulWidget {
   @override
@@ -11,26 +12,44 @@ class StatisticsScreen extends StatefulWidget {
 
 class StatisticsScreenState extends State<StatisticsScreen> {
   @override
-  Widget build(BuildContext context) {
-    return ListView(
+  Widget build(BuildContext context) => MultiBlocProvider(
+    providers: [
+      BlocProvider<EfficiencyStatsBloc>(
+        create: (context) => EfficiencyStatsBloc(  
+          refuelingsBloc: BlocProvider.of<RefuelingsBloc>(context),
+        ),
+      ),
+      BlocProvider<DrivingDistanceStatsBloc>(
+        create: (context) => DrivingDistanceStatsBloc(  
+          refuelingsBloc: BlocProvider.of<RefuelingsBloc>(context),
+        ),
+      ),
+    ],
+    child: ListView(
       children: <Widget>[
-        FutureBuilder(
-            // future: RefuelingBLoC().getAllRefuelings(),
-            future:
-                FuelMileageHistory.prepData(RefuelingBLoC().getAllRefuelings()),
-            builder: (context, snap) => (snap.hasData)
-                ? FuelMileageHistory(snap.data)
-                : CircularProgressIndicator()),
+        BlocBuilder<EfficiencyStatsBloc, EfficiencyStatsState>(
+          builder: (context, state) {
+            if (state is EfficiencyStatsLoaded) {
+              return FuelMileageHistory(state.fuelEfficiencyData);
+            } else {
+              return LoadingIndicator();
+            }
+          } ,
+        ),
         Padding(
           padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
           child: Divider(),
         ),
-        FutureBuilder(
-            future: DrivingDistanceHistory.prepData(CarsBLoC().getCars()),
-            builder: (context, snap) => (snap.hasData)
-                ? DrivingDistanceHistory(snap.data)
-                : CircularProgressIndicator()),
+        BlocBuilder<DrivingDistanceStatsBloc, DrivingDistanceStatsState>(
+          builder: (context, state) {
+            if (state is DrivingDistanceStatsLoaded) {
+              return DrivingDistanceHistory(state.drivingDistanceData);
+            } else {
+              return LoadingIndicator();
+            }
+          } ,
+        ),
       ],
-    );
-  }
+    )
+  );
 }

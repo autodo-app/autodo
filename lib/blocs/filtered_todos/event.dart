@@ -5,10 +5,10 @@ abstract class FilteredTodosEvent extends Equatable {
   const FilteredTodosEvent();
 }
 
-class UpdateFilter extends FilteredTodosEvent {
+class UpdateTodosFilter extends FilteredTodosEvent {
   final VisibilityFilter filter;
 
-  const UpdateFilter(this.filter);
+  const UpdateTodosFilter(this.filter);
 
   @override
   List<Object> get props => [filter];

@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:bloc_test/blocs/barrel.dart';
-import 'package:bloc_test/models/barrel.dart';
-import 'package:bloc_test/localization.dart';
-import 'package:bloc_test/keys.dart';
+import 'package:autodo/blocs/barrel.dart';
+import 'package:autodo/models/barrel.dart';
+import 'package:autodo/localization.dart';
 
 class ExtraActions extends StatelessWidget {
-  ExtraActions({Key key}) : super(key: ArchSampleKeys.extraActionsButton);
+  ExtraActions({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +17,8 @@ class ExtraActions extends StatelessWidget {
           bool allComplete =
               (BlocProvider.of<TodosBloc>(context).state as TodosLoaded)
                   .todos
-                  .every((todo) => todo.complete);
+                  .every((todo) => todo.completed);
           return PopupMenuButton<ExtraAction>(
-            key: ArchSampleKeys.extraActionsPopupMenuButton,
             onSelected: (action) {
               switch (action) {
                 case ExtraAction.clearCompleted:
@@ -33,25 +31,23 @@ class ExtraActions extends StatelessWidget {
             },
             itemBuilder: (BuildContext context) => <PopupMenuItem<ExtraAction>>[
               PopupMenuItem<ExtraAction>(
-                key: ArchSampleKeys.toggleAll,
                 value: ExtraAction.toggleAllComplete,
                 child: Text(
                   allComplete
-                      ? ArchSampleLocalizations.of(context).markAllIncomplete
-                      : ArchSampleLocalizations.of(context).markAllComplete,
+                      ? AutodoLocalizations.markAllIncomplete
+                      : AutodoLocalizations.markAllComplete,
                 ),
               ),
               PopupMenuItem<ExtraAction>(
-                key: ArchSampleKeys.clearCompleted,
                 value: ExtraAction.clearCompleted,
                 child: Text(
-                  ArchSampleLocalizations.of(context).clearCompleted,
+                  AutodoLocalizations.clearCompleted,
                 ),
               ),
             ],
           );
         }
-        return Container(key: ArchSampleKeys.extraActionsEmptyContainer);
+        return Container();
       },
     );
   }

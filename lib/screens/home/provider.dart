@@ -1,9 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:autodo/blocs/todos/barrel.dart';
 import 'package:autodo/blocs/tab/barrel.dart';
-import 'package:autodo/blocs/stats/barrel.dart';
 
 import 'screen.dart';
 
@@ -21,11 +19,6 @@ class HomeScreenProvider extends StatelessWidget {
         //     todosBloc: BlocProvider.of<TodosBloc>(context),
         //   ),
         // ),
-        BlocProvider<StatsBloc>(
-          create: (context) => StatsBloc(
-            todosBloc: BlocProvider.of<TodosBloc>(context),
-          ),
-        ),
       ],
       child: HomeScreen(),
   );

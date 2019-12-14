@@ -7,7 +7,7 @@ import 'package:autodo/models/barrel.dart';
 import 'package:autodo/blocs/refuelings/barrel.dart';
 import 'package:autodo/screens/details/barrel.dart';
 import 'package:autodo/blocs/filtered_refuelings/barrel.dart';
-import 'package:autodo/screens/createitems/barrel.dart';
+import 'package:autodo/screens/add_edit/barrel.dart';
 
 class _RefuelingTitle extends StatelessWidget {
   final Refueling refueling;

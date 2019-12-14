@@ -5,10 +5,10 @@ abstract class FilteredRefuelingsEvent extends Equatable {
   const FilteredRefuelingsEvent();
 }
 
-class UpdateFilter extends FilteredRefuelingsEvent {
+class UpdateRefuelingsFilter extends FilteredRefuelingsEvent {
   final VisibilityFilter filter;
 
-  const UpdateFilter(this.filter);
+  const UpdateRefuelingsFilter(this.filter);
 
   @override
   List<Object> get props => [filter];

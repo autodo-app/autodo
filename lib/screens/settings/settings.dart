@@ -1,5 +1,7 @@
+import 'package:autodo/blocs/barrel.dart';
 import 'package:flutter/material.dart';
-import 'package:autodo/blocs/userauth.dart';
+import 'package:autodo/blocs/auth/barrel.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -15,11 +17,7 @@ class SettingsScreenState extends State<SettingsScreen> {
           style: Theme.of(context).primaryTextTheme.body1),
       actions: <Widget>[
         FlatButton(
-            onPressed: () {
-              Auth()
-                  .deleteCurrentUser()
-                  .then((val) => Navigator.pushNamed(context, '/welcomepage'));
-            },
+            onPressed: () => BlocProvider.of<AuthenticationBloc>(context).add(DeletedUser()),
             child: Text('Yes',
                 style: Theme.of(context)
                     .primaryTextTheme

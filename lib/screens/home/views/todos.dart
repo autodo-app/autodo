@@ -8,7 +8,7 @@ import 'package:autodo/localization.dart';
 import 'package:autodo/widgets/barrel.dart';
 import 'package:autodo/models/barrel.dart';
 import 'package:autodo/screens/details/barrel.dart';
-import 'package:autodo/screens/createitems/barrel.dart';
+import 'package:autodo/screens/add_edit/barrel.dart';
 
 const int DUE_SOON_INTERVAL = 100;
 
@@ -60,7 +60,7 @@ class _TodoCheckbox extends StatelessWidget {
     child: Container(  
       padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
       child: Checkbox(  
-        value: todo.complete,
+        value: todo.completed,
         onChanged: onCheckboxChanged,
         checkColor: Theme.of(context).primaryColor,
         activeColor: Colors.white,
@@ -93,8 +93,8 @@ class _TodoDueMileage extends StatelessWidget {
   _TodoDueMileage({Key key, @required this.todo}) : super(key: key);
   
   mileageString() {
-    if (todo.mileage != null) {
-      return todo.mileage.toString()
+    if (todo.dueMileage != null) {
+      return todo.dueMileage.toString()
           .replaceAllMapped(commaRegex, (Match m) => "${m[1]},");
     } else {
       return "";
@@ -246,7 +246,27 @@ class _TodoEditButton extends StatelessWidget {
       onPressed: () => Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => CreateTodoScreen(todo: todo),
+          builder: (context) => TodoAddEditScreen(
+            isEditing: true,
+            onSave: (dueDate, dueMileage, repeatName, carNames) {
+              for (var car in carNames) {
+                if (car == todo.carName) {
+                  // update existing
+                  var out = todo.copyWith(dueDate: dueDate, dueMileage: dueMileage, repeatName: repeatName);
+                  BlocProvider.of<TodosBloc>(context).add(UpdateTodo(out));
+                } else {
+                  var out = Todo(  
+                    dueDate: dueDate,
+                    dueMileage: dueMileage,
+                    repeatName: repeatName,
+                    carName: car,
+                  );
+                  BlocProvider.of<TodosBloc>(context).add(AddTodo(out));
+                }
+              }
+            },
+            todo: todo,
+          ),
         ),
       ),
     ),

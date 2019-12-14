@@ -7,3 +7,4 @@ export 'refueling.dart';
 export 'car.dart';
 export 'repeat.dart';
 export 'distanceratepoint.dart';
+export 'fuel_mileage_point.dart';

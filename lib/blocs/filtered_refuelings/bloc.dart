@@ -30,7 +30,7 @@ class FilteredRefuelingsBloc extends Bloc<FilteredRefuelingsEvent, FilteredRefue
 
   @override
   Stream<FilteredRefuelingsState> mapEventToState(FilteredRefuelingsEvent event) async* {
-    if (event is UpdateFilter) {
+    if (event is UpdateRefuelingsFilter) {
       yield* _mapUpdateFilterToState(event);
     } else if (event is UpdateRefuelings) {
       yield* _mapRefuelingsUpdatedToState(event);
@@ -38,7 +38,7 @@ class FilteredRefuelingsBloc extends Bloc<FilteredRefuelingsEvent, FilteredRefue
   }
 
   Stream<FilteredRefuelingsState> _mapUpdateFilterToState(
-    UpdateFilter event,
+    UpdateRefuelingsFilter event,
   ) async* {
     if (refuelingsBloc.state is RefuelingsLoaded) {
       yield FilteredRefuelingsLoaded(

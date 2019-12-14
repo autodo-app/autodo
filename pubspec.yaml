@@ -32,6 +32,7 @@ dependencies:
   flutter_bloc: ^2.1.1
   google_sign_in: any
   equatable: any
+  font_awesome_flutter: any
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

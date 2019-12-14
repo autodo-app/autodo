@@ -1,7 +1,7 @@
 export 'markdown.dart';
 export 'cars/barrel.dart';
 export 'filtered_refuelings/barrel.dart';
-// export 'filtered_todos/barrel.dart'; // overlapping names, maybe overlapping functionality?
+export 'filtered_todos/barrel.dart';
 export 'notifications/barrel.dart';
 export 'refuelings/barrel.dart';
 export 'stats/barrel.dart'; 

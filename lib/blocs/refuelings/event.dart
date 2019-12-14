@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:autodo/models/barrel.dart';
-import 'package:autodo/blocs/cars/barrel.dart';
 
 abstract class RefuelingsEvent extends Equatable {
   const RefuelingsEvent();
@@ -13,9 +12,8 @@ class LoadRefuelings extends RefuelingsEvent {}
 
 class AddRefueling extends RefuelingsEvent {
   final Refueling refueling;
-  final CarsBloc carsBloc;
 
-  const AddRefueling(this.refueling, this.carsBloc);
+  const AddRefueling(this.refueling);
 
   @override
   List<Object> get props => [refueling];

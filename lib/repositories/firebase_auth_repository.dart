@@ -52,6 +52,11 @@ class FirebaseAuthRepository extends AuthRepository{
     ]);
   }
 
+  Future<void> deleteCurrentUser() async {
+    var user = await _firebaseAuth.currentUser();
+    return user.delete();
+  }
+
   Future<bool> isSignedIn() async {
     final currentUser = await _firebaseAuth.currentUser();
     return currentUser != null;

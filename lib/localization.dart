@@ -47,6 +47,20 @@ class AutodoLocalizations {
   static String get carName => "Car Name";
   static String get mileage => "Mileage";
   static String get todoDueSoon => "Maintenance ToDo Due Soon";
+  static String get markAllIncomplete => "Mark All Incomplete";
+  static String get markAllComplete => "Mark All Complete";
+  static String get clearCompleted => "Clear Completed";
+  static String get filterTodos => "Filter ToDos";
+  static String get showAll => "Show All";
+  static String get showActive => "Show Active";
+  static String get showCompleted => "Show Completed";
+  static String get todos => "ToDos";
+  static String get refuelings => "Refuelings";
+  static String get stats => "Stats";
+  static String get repeats => "Repeats";
+  static String get interval => "Interval"; 
+  static String get dueDate => "Due Date";
+  static String get signInWithGoogle => "Sign In with Google";
 }
 
 class AutodoLocalizationsDelegate

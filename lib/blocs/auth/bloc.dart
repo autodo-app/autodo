@@ -26,6 +26,8 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
       yield* _mapLoggedInToState();
     } else if (event is LoggedOut) {
       yield* _mapLoggedOutToState();
+    } else if (event is DeletedUser) {
+      yield* _mapDeletedUserToState();
     }
   }
 
@@ -53,6 +55,11 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
   Stream<AuthenticationState> _mapLoggedOutToState() async* {
     yield Unauthenticated();
     _userRepository.signOut();
+  }
+
+  Stream<AuthenticationState> _mapDeletedUserToState() async* {
+    await _userRepository.deleteCurrentUser();
+    yield Unauthenticated();
   }
 }
 

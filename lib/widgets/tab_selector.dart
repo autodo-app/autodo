@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:bloc_test/models/barrel.dart';
-import 'package:bloc_test/localization.dart';
-import 'package:bloc_test/keys.dart';
+import 'package:autodo/models/barrel.dart';
+import 'package:autodo/localization.dart';
 
 class TabSelector extends StatelessWidget {
   final AppTab activeTab;
@@ -18,22 +17,26 @@ class TabSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-      key: ArchSampleKeys.tabs,
       currentIndex: AppTab.values.indexOf(activeTab),
       onTap: (index) => onTabSelected(AppTab.values[index]),
-      items: AppTab.values.map((tab) {
-        return BottomNavigationBarItem(
-          icon: Icon(
-            tab == AppTab.todos ? Icons.list : Icons.show_chart,
-            key: tab == AppTab.todos
-                ? ArchSampleKeys.todoTab
-                : ArchSampleKeys.statsTab,
-          ),
-          title: Text(tab == AppTab.stats
-              ? ArchSampleLocalizations.of(context).stats
-              : ArchSampleLocalizations.of(context).todos),
-        );
-      }).toList(),
+      items: [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.list),
+          title: Text(AutodoLocalizations.todos),
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.local_gas_station),
+          title: Text(AutodoLocalizations.refuelings),
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.show_chart),
+          title: Text(AutodoLocalizations.stats),
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.repeat),
+          title: Text(AutodoLocalizations.repeats),
+        ),
+      ],
     );
   }
 }

@@ -8,7 +8,7 @@ import 'routes.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'theme.dart';
 import 'screens/home/provider.dart';
-import 'screens/authentication/provider.dart';
+import 'screens/welcome/provider.dart';
 import 'repositories/barrel.dart';
 
 void main() {

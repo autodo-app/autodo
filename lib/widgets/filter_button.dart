@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:bloc_test/blocs/barrel.dart';
-import 'package:bloc_test/models/barrel.dart';
-import 'package:bloc_test/localization.dart';
-import 'package:bloc_test/keys.dart';
+import 'package:autodo/blocs/barrel.dart';
+import 'package:autodo/models/barrel.dart';
+import 'package:autodo/localization.dart';
 
 class FilterButton extends StatelessWidget {
   final bool visible;
@@ -22,7 +21,7 @@ class FilterButton extends StatelessWidget {
         builder: (context, state) {
       final button = _Button(
         onSelected: (filter) {
-          BlocProvider.of<FilteredTodosBloc>(context).add(UpdateFilter(filter));
+          BlocProvider.of<FilteredTodosBloc>(context).add(UpdateTodosFilter(filter));
         },
         activeFilter: state is FilteredTodosLoaded
             ? state.activeFilter
@@ -56,35 +55,31 @@ class _Button extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<VisibilityFilter>(
-      key: ArchSampleKeys.filterButton,
-      tooltip: ArchSampleLocalizations.of(context).filterTodos,
+      tooltip: AutodoLocalizations.filterTodos,
       onSelected: onSelected,
       itemBuilder: (BuildContext context) => <PopupMenuItem<VisibilityFilter>>[
             PopupMenuItem<VisibilityFilter>(
-              key: ArchSampleKeys.allFilter,
               value: VisibilityFilter.all,
               child: Text(
-                ArchSampleLocalizations.of(context).showAll,
+                AutodoLocalizations.showAll,
                 style: activeFilter == VisibilityFilter.all
                     ? activeStyle
                     : defaultStyle,
               ),
             ),
             PopupMenuItem<VisibilityFilter>(
-              key: ArchSampleKeys.activeFilter,
               value: VisibilityFilter.active,
               child: Text(
-                ArchSampleLocalizations.of(context).showActive,
+                AutodoLocalizations.showActive,
                 style: activeFilter == VisibilityFilter.active
                     ? activeStyle
                     : defaultStyle,
               ),
             ),
             PopupMenuItem<VisibilityFilter>(
-              key: ArchSampleKeys.completedFilter,
               value: VisibilityFilter.completed,
               child: Text(
-                ArchSampleLocalizations.of(context).showCompleted,
+                AutodoLocalizations.showCompleted,
                 style: activeFilter == VisibilityFilter.completed
                     ? activeStyle
                     : defaultStyle,
