@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:autodo/blocs/auth/barrel.dart';
@@ -7,12 +8,12 @@ import 'package:autodo/localization.dart';
 import 'package:autodo/blocs/barrel.dart';
 import '../../widgets/barrel.dart';
 
-class LoginForm extends StatefulWidget {
+class SignupForm extends StatefulWidget {
   @override 
-  _LoginFormState createState() => _LoginFormState();
+  _SignupFormState createState() => _SignupFormState();
 }
 
-class _LoginFormState extends State<LoginForm> {
+class _SignupFormState extends State<SignupForm> {
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   String _email, _password;
@@ -33,9 +34,9 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   @override 
-  build(context) => BlocListener<LoginBloc, LoginState>(
+  build(context) => BlocListener<SignupBloc, SignupState>(
     listener: (context, state) {
-      if (state is LoginError) {
+      if (state is SignupError) {
         Scaffold.of(context)
           ..hideCurrentSnackBar()
           ..showSnackBar(
@@ -53,7 +54,7 @@ class _LoginFormState extends State<LoginForm> {
             ),
           );
       }
-      if (state is LoginLoading) {
+      if (state is SignupLoading) {
         Scaffold.of(context)
           ..hideCurrentSnackBar()
           ..showSnackBar(
@@ -70,12 +71,12 @@ class _LoginFormState extends State<LoginForm> {
             ),
           );
       }
-      if (state is LoginSuccess) {
+      if (state is SignupSuccess) {
         BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
         Navigator.pushNamed(context, AutodoRoutes.home);
       }
     },
-    child: BlocBuilder<LoginBloc, LoginState>(
+    child: BlocBuilder<SignupBloc, SignupState>(
       builder: (context, state) => Form(  
         key: _formKey,
         child: Container(  
@@ -91,14 +92,14 @@ class _LoginFormState extends State<LoginForm> {
                 onSaved: (val) => _password = val,
                 node: _passwordNode
               ),
-              (state is LoginError) ? ErrorMessage(state.errorMsg) : Container(),
+              (state is SignupError) ? ErrorMessage(state.errorMsg) : Container(),
               LegalNotice(),
-              LoginSubmitButton( 
+              SignupSubmitButton( 
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
                     _formKey.currentState.save();
-                    BlocProvider.of<LoginBloc>(context).add(
-                      LoginWithCredentialsPressed(
+                    BlocProvider.of<SignupBloc>(context).add(
+                      SignupWithCredentialsPressed(
                         email: _email,
                         password: _password
                       )
@@ -108,7 +109,7 @@ class _LoginFormState extends State<LoginForm> {
                 } 
               ),
               PasswordResetButton(),
-              LoginToSignupButton(),
+              SignupToLoginButton(),
             ],
           )
         )

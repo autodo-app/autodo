@@ -14,3 +14,5 @@ class LoggedIn extends AuthenticationEvent {}
 class LoggedOut extends AuthenticationEvent {}
 
 class DeletedUser extends AuthenticationEvent {}
+
+class SignInWithGoogle extends AuthenticationEvent {}

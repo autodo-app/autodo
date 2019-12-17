@@ -1,30 +1,10 @@
 import 'package:equatable/equatable.dart';
-import 'package:autodo/models/barrel.dart';
 
-abstract class FilteredTodosEvent extends Equatable {
-  const FilteredTodosEvent();
+abstract class LegalEvent extends Equatable {
+  const LegalEvent();
+
+  @override 
+  List<Object> get props => [];
 }
 
-class UpdateTodosFilter extends FilteredTodosEvent {
-  final VisibilityFilter filter;
-
-  const UpdateTodosFilter(this.filter);
-
-  @override
-  List<Object> get props => [filter];
-
-  @override
-  String toString() => 'UpdateFilter { filter: $filter }';
-}
-
-class UpdateTodos extends FilteredTodosEvent {
-  final List<Todo> todos;
-
-  const UpdateTodos(this.todos);
-
-  @override
-  List<Object> get props => [todos];
-
-  @override
-  String toString() => 'UpdateTodos { todos: $todos }';
-}
+class LoadLegal extends LegalEvent {}

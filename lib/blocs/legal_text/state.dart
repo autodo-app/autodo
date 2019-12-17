@@ -1,29 +1,27 @@
 import 'package:equatable/equatable.dart';
-import 'package:autodo/models/barrel.dart';
+import 'package:flutter/material.dart';
 
-abstract class FilteredTodosState extends Equatable {
-  const FilteredTodosState();
+abstract class LegalState extends Equatable {
+  const LegalState();
 
   @override
   List<Object> get props => [];
 }
 
-class FilteredTodosLoading extends FilteredTodosState {}
+class LegalNotLoaded extends LegalState {}
 
-class FilteredTodosLoaded extends FilteredTodosState {
-  final List<Todo> filteredTodos;
-  final VisibilityFilter activeFilter;
+class LegalLoading extends LegalState {}
 
-  const FilteredTodosLoaded(
-    this.filteredTodos,
-    this.activeFilter,
-  );
+class LegalLoaded extends LegalState {
+  final RichText text;
+
+  const LegalLoaded({this.text});
 
   @override
-  List<Object> get props => [filteredTodos, activeFilter];
+  List<Object> get props => [text];
 
   @override
   String toString() {
-    return 'FilteredTodosLoaded { filteredTodos: $filteredTodos, activeFilter: $activeFilter }';
+    return 'LegalLoaded { text: $text }';
   }
 }

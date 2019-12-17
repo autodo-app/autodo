@@ -1,22 +1,24 @@
 import 'dart:async';
+
+import 'package:autodo/repositories/auth_repository.dart';
+import 'package:flutter/foundation.dart';
 import 'package:bloc/bloc.dart';
+import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
-import 'package:autodo/repositories/auth_repository.dart';
+import '../barrel.dart';
 import '../validators.dart';
 import 'event.dart';
 import 'state.dart';
 
 class SignupBloc extends Bloc<SignupEvent, SignupState> {
-  final AuthRepository _userRepository;
+  AuthRepository _authRepository;
 
-  SignupBloc({@required AuthRepository userRepository})
-      : assert(userRepository != null),
-        _userRepository = userRepository;
+  SignupBloc({@required authRepository}) : assert(authRepository != null), _authRepository = authRepository;
 
   @override
-  SignupState get initialState => SignupState.empty();
+  SignupState get initialState => SignupEmpty();
 
   @override
   Stream<SignupState> transformEvents(
@@ -34,40 +36,122 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
   }
 
   @override
-  Stream<SignupState> mapEventToState(
-    SignupEvent event,
-  ) async* {
+  Stream<SignupState> mapEventToState(SignupEvent event) async* {
     if (event is SignupEmailChanged) {
       yield* _mapEmailChangedToState(event.email);
     } else if (event is SignupPasswordChanged) {
       yield* _mapPasswordChangedToState(event.password);
-    } else if (event is SignupSubmitted) {
-      yield* _mapFormSubmittedToState(event.email, event.password);
+    } else if (event is SignupWithCredentialsPressed) {
+      yield* _mapSignupWithCredentialsPressedToState(
+        email: event.email,
+        password: event.password,
+      );
     }
   }
 
   Stream<SignupState> _mapEmailChangedToState(String email) async* {
-    yield state.update(
-      isEmailValid: Validators.isValidEmail(email),
-    );
+    String errorString;
+    if (email.isEmpty)
+      errorString = 'Email can\'t be empty';
+    else if (!email.contains('@') || !email.contains('.'))
+      errorString = 'Invalid email address';
+    
+    if (errorString == null) {
+      yield _clearEmailError();
+    } else {
+      yield _addEmailError(errorString);
+    }
+  }
+
+  SignupState _clearEmailError() {
+    if (state is SignupCredentialsInvalid) {
+      return (state as SignupCredentialsInvalid).copyWith(emailError: null);
+    } else {
+      return SignupCredentialsValid();
+    }
+  }
+
+  SignupState _addEmailError(emailError) {
+    if (state is SignupCredentialsInvalid) {
+      return (state as SignupCredentialsInvalid).copyWith(emailError: "");
+    } else {
+      return SignupCredentialsInvalid(emailError: "");
+    }
   }
 
   Stream<SignupState> _mapPasswordChangedToState(String password) async* {
-    yield state.update(
-      isPasswordValid: Validators.isValidPassword(password),
-    );
+    String errorString;
+    if (password.isEmpty)
+      errorString = 'Password can\'t be empty';
+    else if (password.length < 6)
+      errorString =  'Password must be longer than 6 characters';
+    
+    if (errorString == null) {
+      yield _clearPasswordError();
+    } else {
+      yield _addPasswordError(errorString);
+    }
   }
 
-  Stream<SignupState> _mapFormSubmittedToState(
+  SignupState _clearPasswordError() {
+    if (state is SignupCredentialsInvalid) {
+      return (state as SignupCredentialsInvalid).copyWith(emailError: null);
+    } else {
+      return SignupCredentialsValid();
+    }
+  }
+
+  SignupState _addPasswordError(passwordError) {
+    if (state is SignupCredentialsInvalid) {
+      return (state as SignupCredentialsInvalid).copyWith(passwordError: "");
+    } else {
+      return SignupCredentialsInvalid(passwordError: "");
+    }
+  }
+
+  Future<bool> _checkIfUserIsVerified(user) async {
+    while (!user.isEmailVerified) {
+      await Future.microtask(() async {
+        // reload the user's values
+        await Future.delayed(const Duration(milliseconds: 100), () async {
+          user = await _authRepository.getCurrentUser();
+          user.reload();
+        });
+      });
+    }
+  }
+
+  Stream<SignupState> _mapSignupWithCredentialsPressedToState({
     String email,
     String password,
-  ) async* {
-    yield SignupState.loading();
+  }) async* {
+    yield SignupLoading();
     try {
-      await _userRepository.signUp(email, password);
-      yield SignupState.success();
-    } catch (_) {
-      yield SignupState.failure();
+      if (kReleaseMode) { // TODO: make this mockable?
+        var user = await _authRepository.signUpWithVerification(email, password);
+        yield VerificationSent();
+        var verified = await _checkIfUserIsVerified(user);
+        if (verified) {
+          yield UserVerified();
+        } else {
+          yield SignupError("User Email Address Never Verified");
+        }
+      } else {
+        await _authRepository.signInWithCredentials(email, password);
+        yield SignupSuccess();
+      }
+    } on PlatformException catch (e) {
+      var errorString = "Error communicating to the auToDo servers.";
+      if (e.code == "ERROR_WEAK_PASSWORD") {
+        errorString = "Your password must be longer than 6 characters.";
+      } else if (e.code == "ERROR_INVALID_EMAIL") {
+        errorString = "The email address you entered is invalid.";
+      } else if (e.code == "ERROR_EMAIL_ALREADY_IN_USE") {
+        errorString = "The email address you entered is already in use.";
+      } else if (e.code == "ERROR_WRONG_PASSWORD") {
+        errorString = "Incorrect password, please try again.";
+      }
+      yield SignupError(errorString);
     }
   }
 }

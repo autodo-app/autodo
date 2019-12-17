@@ -1,5 +1,6 @@
 export 'dots_indicator.dart';
-export 'login_button.dart';
-export 'signup_button.dart';
-export 'trial_button.dart';
+export 'error_message.dart';
+export 'legal_notice.dart';
+export 'buttons/barrel.dart';
+export 'forms/barrel.dart';
 export 'scroller/barrel.dart';

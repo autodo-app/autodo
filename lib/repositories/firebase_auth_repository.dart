@@ -62,11 +62,19 @@ class FirebaseAuthRepository extends AuthRepository{
     return currentUser != null;
   }
 
+  Future<FirebaseUser> getCurrentUser() async {
+    return (await _firebaseAuth.currentUser());
+  }
+
   Future<String> getUserEmail() async {
     return (await _firebaseAuth.currentUser()).email;
   }
 
   Future<String> getUserId() async {
     return (await _firebaseAuth.currentUser()).uid;
+  }
+
+  Future<void> sendPasswordReset(String email) async {
+    return (await _firebaseAuth.sendPasswordResetEmail(email: email));
   }
 }

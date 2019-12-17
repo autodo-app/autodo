@@ -73,6 +73,15 @@ class AutodoLocalizations {
   static String get legal4 => "privacy policy";
   static String get legal5 => "of the auToDo app.";
   static String get gotItBang => "Got It!";
+  static String get send => "Send";
+  static String get back => "Back";
+  static String get loginFailure => "Login Failure";
+  static String get loggingInEllipsis => "Logging in...";
+  static String get signup => "Sign Up";
+  static String get alreadyHaveAnAccount => "Already have an account?";
+  static String get verifyEmail => "Verify Email";
+  static String get verifyBodyText => 'An email has been sent to you with a link to verify your account.\n\nYou must verify your email to use auToDo.';
+  static String get next => "Next";
 }
 
 class AutodoLocalizationsDelegate

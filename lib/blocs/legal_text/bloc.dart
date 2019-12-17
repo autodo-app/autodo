@@ -7,6 +7,7 @@ import 'package:autodo/blocs/todos/barrel.dart';
 import 'package:autodo/models/barrel.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart' as launcher;
 
 class _Parser {
@@ -201,98 +202,25 @@ class MarkdownParser {
 }
 
 
-class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
-  final TodosBloc todosBloc;
-  StreamSubscription todosSubscription;
+class LegalBloc extends Bloc<LegalEvent, LegalState> {
+  AssetBundle _bundle;
 
-  FilteredTodosBloc({@required this.todosBloc}) {
-    todosSubscription = todosBloc.listen((state) {
-      if (state is TodosLoaded) {
-        add(UpdateTodos((todosBloc.state as TodosLoaded).todos));
-      }
-    });
-  }
+  LegalBloc({@required bundle}) : assert(bundle != null), _bundle = bundle;
 
   @override
-  FilteredTodosState get initialState {
-    return todosBloc.state is TodosLoaded
-        ? FilteredTodosLoaded(
-            (todosBloc.state as TodosLoaded).todos,
-            VisibilityFilter.all,
-          )
-        : FilteredTodosLoading();
-  }
+  LegalState get initialState => LegalNotLoaded();
 
   @override
-  Stream<FilteredTodosState> mapEventToState(FilteredTodosEvent event) async* {
-    if (event is UpdateTodosFilter) {
-      yield* _mapUpdateFilterToState(event);
-    } else if (event is UpdateTodos) {
-      yield* _mapTodosUpdatedToState(event);
+  Stream<LegalState> mapEventToState(LegalEvent event) async* {
+    if (event is LoadLegal) {
+      yield* _mapLoadLegalToState();
     }
   }
 
-  Stream<FilteredTodosState> _mapUpdateFilterToState(
-    UpdateTodosFilter event,
-  ) async* {
-    if (todosBloc.state is TodosLoaded) {
-      yield FilteredTodosLoaded(
-        _mapTodosToFilteredTodos(
-          (todosBloc.state as TodosLoaded).todos,
-          event.filter,
-        ),
-        event.filter,
-      );
-    }
-  }
-
-  Stream<FilteredTodosState> _mapTodosUpdatedToState(
-    UpdateTodos event,
-  ) async* {
-    final visibilityFilter = state is FilteredTodosLoaded
-        ? (state as FilteredTodosLoaded).activeFilter
-        : VisibilityFilter.all;
-    yield FilteredTodosLoaded(
-      _mapTodosToFilteredTodos(
-        (todosBloc.state as TodosLoaded).todos,
-        visibilityFilter,
-      ),
-      visibilityFilter,
-    );
-  }
-
-  List<Todo> _mapTodosToFilteredTodos(
-      List<Todo> todos, VisibilityFilter filter) {
-    return todos.where((todo) {
-      if (filter == VisibilityFilter.all) {
-        return true;
-      } else if (filter == VisibilityFilter.active) {
-        return !todo.completed;
-      } else {
-        return todo.completed;
-      }
-    }).toList();
-  }
-
-  @override
-  Future<void> close() {
-    todosSubscription.cancel();
-    return super.close();
+  Stream<LegalState> _mapLoadLegalToState() async* {
+    yield LegalLoading();
+    var rawText = await _bundle.loadString('legal/privacy-policy.md');
+    var richText = RichText(text: MarkdownParser.parse(rawText));
+    yield LegalLoaded(text: richText); 
   }
 }
-
-static Future<String> loadAsset(context) async {
-    return await DefaultAssetBundle.of(context)
-        .loadString('legal/privacy-policy.md');
-  }
-
-  static RichText txt;
-
-  static void init(BuildContext context) async {
-    var text = await loadAsset(context);
-    txt = RichText(text: MarkdownParser.parse(text));
-  }
-
-  static Widget text() {
-    return txt;
-  }

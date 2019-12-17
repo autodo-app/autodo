@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:autodo/repositories/auth_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/services.dart';
@@ -12,13 +13,14 @@ import 'event.dart';
 import 'state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
+  AuthRepository _authRepository;
   final AuthenticationBloc _authBloc;
   StreamSubscription _authSubscription;
 
   LoginBloc({@required authBloc}) : assert(authBloc != null), _authBloc = authBloc;
 
   @override
-  LoginState get initialState => LoginState.empty();
+  LoginState get initialState => LoginEmpty();
 
   @override
   Stream<LoginState> transformEvents(
@@ -48,30 +50,69 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         email: event.email,
         password: event.password,
       );
+    } else if (event is SendPasswordResetPressed) {
+      yield* _mapSendPasswordResetToState(event);
     }
   }
 
-  Stream<LoginState> _mapLoadLoginToState() async* {
-    _authSubscription?.cancel();
-    _authSubscription = _authBloc.listen((state) {
-      if (state is Authenticated) {
-        add(LoginSuccess());
-      } else if (state is Unauthenticated) {
-        add(LoginFailure(state.error));
-      }
-    });
+  Stream<LoginState> _mapEmailChangedToState(String email) async* {
+    String errorString;
+    if (email.isEmpty)
+      errorString = 'Email can\'t be empty';
+    else if (!email.contains('@') || !email.contains('.'))
+      errorString = 'Invalid email address';
+    
+    if (errorString == null) {
+      yield _clearEmailError();
+    } else {
+      yield _addEmailError(errorString);
+    }
   }
 
-  Stream<LoginState> _mapEmailChangedToState(String email) async* {
-    yield state.update(
-      isEmailValid: Validators.isValidEmail(email),
-    );
+  LoginState _clearEmailError() {
+    if (state is LoginCredentialsInvalid) {
+      return (state as LoginCredentialsInvalid).copyWith(emailError: null);
+    } else {
+      return LoginCredentialsValid();
+    }
+  }
+
+  LoginState _addEmailError(emailError) {
+    if (state is LoginCredentialsInvalid) {
+      return (state as LoginCredentialsInvalid).copyWith(emailError: "");
+    } else {
+      return LoginCredentialsInvalid(emailError: "");
+    }
   }
 
   Stream<LoginState> _mapPasswordChangedToState(String password) async* {
-    yield state.update(
-      isPasswordValid: Validators.isValidPassword(password),
-    );
+    String errorString;
+    if (password.isEmpty)
+      errorString = 'Password can\'t be empty';
+    else if (password.length < 6)
+      errorString =  'Password must be longer than 6 characters';
+    
+    if (errorString == null) {
+      yield _clearPasswordError();
+    } else {
+      yield _addPasswordError(errorString);
+    }
+  }
+
+  LoginState _clearPasswordError() {
+    if (state is LoginCredentialsInvalid) {
+      return (state as LoginCredentialsInvalid).copyWith(emailError: null);
+    } else {
+      return LoginCredentialsValid();
+    }
+  }
+
+  LoginState _addPasswordError(passwordError) {
+    if (state is LoginCredentialsInvalid) {
+      return (state as LoginCredentialsInvalid).copyWith(passwordError: "");
+    } else {
+      return LoginCredentialsInvalid(passwordError: "");
+    }
   }
 
   Stream<LoginState> _mapLoginWithGooglePressedToState() async* {
@@ -82,10 +123,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     String email,
     String password,
   }) async* {
-    yield LoginState.loading();
-
+    yield LoginLoading();
     try {
-      _authBloc.add(Login(email, password));
+      await _authRepository.signInWithCredentials(email, password);
+      yield LoginSuccess();
     } on PlatformException catch (e) {
       var errorString = "Error communicating to the auToDo servers.";
       if (e.code == "ERROR_WEAK_PASSWORD") {
@@ -97,22 +138,25 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       } else if (e.code == "ERROR_WRONG_PASSWORD") {
         errorString = "Incorrect password, please try again.";
       }
-      // TODO: move this to the authBloc
+      yield LoginError(errorString);
     }
   }
-  
-  String _passwordValidator(value) {
-    if (value.isEmpty)
-      return 'Password can\'t be empty';
-    else if (value.length < 6)
-      return 'Password must be longer than 6 characters';
-    return null;
-  }
-  String _emailValidator(value) {
-    if (value.isEmpty)
-      return 'Email can\'t be empty';
-    else if (!value.contains('@') || !value.contains('.'))
-      return 'Invalid email address';
-    return null;
+
+  Stream<LoginState> _mapSendPasswordResetToState(event) async* {
+    yield LoginLoading();
+    try {
+      // not doing this through the authbloc because it doesn't affect 
+      // the app's global authentication state (i.e. it's not possible)
+      // to login or logout this way
+      await _authRepository.sendPasswordReset(event.email);
+    } on PlatformException catch (e) {
+      var errorString = "Error communicating to the auToDo servers.";
+      if (e.code == 'ERROR_INVALID_EMAIL')
+        errorString = "Invalid email address format";
+      else if (e.code == 'ERROR_USER_NOT_FOUND')
+        errorString = "Could not find an account for this email address";
+      yield LoginError(errorString);
+    }
+    yield LoginEmpty();
   }
 }

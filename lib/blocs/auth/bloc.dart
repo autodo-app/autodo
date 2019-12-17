@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:flutter/services.dart';
 import 'package:autodo/repositories/auth_repository.dart';
 
 import 'event.dart';
@@ -28,6 +29,8 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
       yield* _mapLoggedOutToState();
     } else if (event is DeletedUser) {
       yield* _mapDeletedUserToState();
+    } else if (event is SignInWithGoogle) {
+      yield* _mapSignInWithGoogleToState();
     }
   }
 
@@ -47,9 +50,9 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
   }
 
   Stream<AuthenticationState> _mapLoggedInToState() async* {
-    String email = await _userRepository.getUserEmail();
-    String uuid = await _userRepository.getUserId();
-    yield Authenticated(email, uuid);
+    var _email = await _userRepository.getUserEmail();
+    var _uuid = await _userRepository.getUserId();
+    yield Authenticated(_email, _uuid);
   }
 
   Stream<AuthenticationState> _mapLoggedOutToState() async* {
@@ -60,6 +63,11 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
   Stream<AuthenticationState> _mapDeletedUserToState() async* {
     await _userRepository.deleteCurrentUser();
     yield Unauthenticated();
+  }
+
+  Stream<AuthenticationState> _mapSignInWithGoogleToState() async* {
+    var user = await _userRepository.signInWithGoogle();
+    yield Authenticated(user.email, user.uid);
   }
 }
 

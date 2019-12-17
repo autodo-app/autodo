@@ -1,4 +1,4 @@
-export 'markdown.dart';
+export 'legal_text/barrel.dart';
 export 'cars/barrel.dart';
 export 'filtered_refuelings/barrel.dart';
 export 'filtered_todos/barrel.dart';

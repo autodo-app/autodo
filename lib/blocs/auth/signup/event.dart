@@ -1,5 +1,5 @@
-import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+import 'package:equatable/equatable.dart';
 
 abstract class SignupEvent extends Equatable {
   const SignupEvent();
@@ -47,5 +47,23 @@ class SignupSubmitted extends SignupEvent {
   @override
   String toString() {
     return 'SignupSubmitted { email: $email, password: $password }';
+  }
+}
+
+class SignupWithCredentialsPressed extends SignupEvent {
+  final String email;
+  final String password;
+
+  const SignupWithCredentialsPressed({
+    @required this.email,
+    @required this.password,
+  });
+
+  @override
+  List<Object> get props => [email, password];
+
+  @override
+  String toString() {
+    return 'SignupWithCredentialsPressed { email: $email, password: $password }';
   }
 }

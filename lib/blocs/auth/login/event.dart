@@ -69,3 +69,12 @@ class LoginWithCredentialsPressed extends LoginEvent {
     return 'LoginWithCredentialsPressed { email: $email, password: $password }';
   }
 }
+
+class SendPasswordResetPressed extends LoginEvent {
+  final String email;
+
+  const SendPasswordResetPressed({@required this.email});
+
+  @override
+  List<Object> get props => [email];
+}

@@ -1,4 +1,5 @@
 import 'package:autodo/localization.dart';
+import 'package:autodo/widgets/loading_indicator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
@@ -31,43 +32,53 @@ class _ErrorMessage extends StatelessWidget {
 
 class _Legal extends StatelessWidget {
   @override 
-  build(context) => BlocBuilder<LegalBloc, LegalState>(  // TODO this is wrong
-    builder: (context, state) => Container(
-      padding: EdgeInsets.fromLTRB(5, 15, 5, 0),
-      child: Center(
-        child: RichText(
-          textAlign: TextAlign.center,
-          text: TextSpan(children: [
-            TextSpan(
-              text: AutodoLocalizations.legal1 + ' ',
-              style: finePrint(),
-            ),
-            TextSpan(
-              text: AutodoLocalizations.legal2,
-              style: linkStyle(),
-              recognizer: TapGestureRecognizer()..onTap = () {},
-            ),
-            TextSpan(
-              text: ' ' + AutodoLocalizations.legal3 + ' ',
-              style: finePrint(),
-            ),
-            TextSpan(
-              text: AutodoLocalizations.legal4,
-              style: linkStyle(),
-              recognizer: TapGestureRecognizer()
-                ..onTap = () {
-                  BlocProvider.of<LegalBloc>(context).add(LoadLegal());
-                  showDialog<Widget>(
-                      context: context,
-                      builder: (ctx) => PrivacyPolicy(state.text));
-                },
-            ),
-            TextSpan(
-              text: ' ' + AutodoLocalizations.legal5,
-              style: finePrint(),
-            ),
-          ]),
-        )
+  build(context) => Container(
+    padding: EdgeInsets.fromLTRB(5, 15, 5, 0),
+    child: Center(
+      child: RichText(
+        textAlign: TextAlign.center,
+        text: TextSpan(children: [
+          TextSpan(
+            text: AutodoLocalizations.legal1 + ' ',
+            style: finePrint(),
+          ),
+          TextSpan(
+            text: AutodoLocalizations.legal2,
+            style: linkStyle(),
+            recognizer: TapGestureRecognizer()..onTap = () {},
+          ),
+          TextSpan(
+            text: ' ' + AutodoLocalizations.legal3 + ' ',
+            style: finePrint(),
+          ),
+          TextSpan(
+            text: AutodoLocalizations.legal4,
+            style: linkStyle(),
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                BlocProvider.of<LegalBloc>(context).add(LoadLegal());
+                showDialog<Widget>(
+                    context: context,
+                    builder: (ctx) => BlocBuilder<LegalBloc, LegalState>(
+                      builder: (context, state) {
+                        if (state is LegalLoading) {
+                          return LoadingIndicator();
+                        } else if (state is LegalLoaded) {
+                          return PrivacyPolicy(state.text);
+                        } else {
+                          Navigator.pop(context);
+                          return Container();
+                        }
+                      }
+                    )
+                );
+              },
+          ),
+          TextSpan(
+            text: ' ' + AutodoLocalizations.legal5,
+            style: finePrint(),
+          ),
+        ]),
       )
     )
   );
@@ -228,35 +239,22 @@ class _PasswordResetDialogState extends State<_PasswordResetDialog> {
     ),
     actions: [
       FlatButton(
-          child: Text('BACK',
-              style: Theme.of(context).primaryTextTheme.button),
-          onPressed: () => Navigator.pop(context)),
+        child: Text(
+          AutodoLocalizations.back.toUpperCase(),
+          style: Theme.of(context).primaryTextTheme.button
+        ),
+        onPressed: () => Navigator.pop(context)
+      ),
       FlatButton(
         child: Text(
           AutodoLocalizations.send.toUpperCase(),
           style: Theme.of(context).primaryTextTheme.button,
         ),
-        onPressed: () async {
-          showDialog(
-            context: context,
-            builder: (context) => Center(child: CircularProgressIndicator()),
+        onPressed: () {
+          BlocProvider.of<LoginBloc>(context).add(
+            SendPasswordResetPressed(email: _email)
           );
-          if (_passwordResetKey.currentState.validate())
-            _passwordResetKey.currentState.save();
-          try {
-            await Auth().sendPasswordReset(_email);
-          } catch (e) {
-            if (e.code == 'ERROR_INVALID_EMAIL')
-              _sendError = "Invalid email address format";
-            else if (e.code == 'ERROR_USER_NOT_FOUND')
-              _sendError = "Could not find an account for this email address";
-          }
-          if (_sendError == null) {
-            Scaffold.of(context).showSnackBar(
-                SnackBar(content: Text('Password Reset email has been sent.')));
-            Navigator.pop(context); // progress bar
-            Navigator.pop(context); // dialog
-          }
+          Navigator.pop(context); // dialog
         }
       )
     ]
@@ -315,6 +313,7 @@ class _LoginScreenState extends State<LoginScreen> {
           style: Theme.of(context).primaryTextTheme.subtitle
         ),
       ),
+      // Add a stack somewhere in here to display the loading process indicator
       body: Form(  
         key: _formKey,
         child: Container(  
@@ -330,7 +329,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 onSaved: (val) => _password = val,
                 node: _passwordNode
               ),
-              (state is LoginError) ? _ErrorMessage(state.error) : Container(),
+              (state is LoginError) ? _ErrorMessage(state.errorMsg) : Container(),
               _Legal(),
               _LoginButton( 
                 onPressed: () {

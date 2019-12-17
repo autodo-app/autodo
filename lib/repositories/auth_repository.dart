@@ -9,6 +9,8 @@ abstract class AuthRepository {
   Future<void> signOut();
   Future<void> deleteCurrentUser();
   Future<bool> isSignedIn();
+  Future<FirebaseUser> getCurrentUser();
   Future<String> getUserEmail();
   Future<String> getUserId();
+  Future<void> sendPasswordReset(String email);
 }

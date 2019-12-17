@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../views/signup/screen.dart';
+
+import 'package:autodo/routes.dart';
 
 class SignupButton extends StatelessWidget {
   final buttonPadding;
@@ -20,11 +21,7 @@ class SignupButton extends StatelessWidget {
           child: RaisedButton(
             elevation: 24.0,
             onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => SignupScreen()
-                ),
-              );
+              Navigator.of(context).pushNamed(AutodoRoutes.signupScreen);
             },
             textColor: Colors.white,
             padding: const EdgeInsets.all(0.0),

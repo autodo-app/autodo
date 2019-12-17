@@ -33,45 +33,45 @@ void main() {
 
     // Create a group for each event
     group('LoadRefuelings', () {
-      blocTest(
-        'emits [WeatherInitial, WeatherLoadInProgress, WeatherLoadSuccess] when WeatherRequested is added and getWeather succeeds',
-        build: () {
-          when(weatherRepository.getWeather(city: 'Chicago')).thenAnswer(
-            (_) => Future.value(
-              Weather(
-                temperature: 10,
-                condition: Condition.cloudy,
-              ),
-            ),
-          );
-          return weatherBloc;
-        },
-        act: (bloc) => bloc.add(WeatherRequested(city: 'Chicago')),
-        expect: [
-          WeatherInitial(),
-          WeatherLoadInProgress(),
-          WeatherLoadSuccess(
-            weather: Weather(
-              temperature: 10,
-              condition: Condition.cloudy,
-            ),
-          )
-        ],
-      );
+      // blocTest(
+      //   'emits [WeatherInitial, WeatherLoadInProgress, WeatherLoadSuccess] when WeatherRequested is added and getWeather succeeds',
+      //   build: () {
+      //     when(weatherRepository.getWeather(city: 'Chicago')).thenAnswer(
+      //       (_) => Future.value(
+      //         Weather(
+      //           temperature: 10,
+      //           condition: Condition.cloudy,
+      //         ),
+      //       ),
+      //     );
+      //     return weatherBloc;
+      //   },
+      //   act: (bloc) => bloc.add(WeatherRequested(city: 'Chicago')),
+      //   expect: [
+      //     WeatherInitial(),
+      //     WeatherLoadInProgress(),
+      //     WeatherLoadSuccess(
+      //       weather: Weather(
+      //         temperature: 10,
+      //         condition: Condition.cloudy,
+      //       ),
+      //     )
+      //   ],
+      // );
 
-      blocTest(
-        'emits [WeatherInitial, WeatherLoadInProgress, WeatherLoadFailure] when WeatherRequested is added and getWeather fails',
-        build: () {
-          when(weatherRepository.getWeather(city: 'Chicago')).thenThrow('oops');
-          return weatherBloc;
-        },
-        act: (bloc) => bloc.add(WeatherRequested(city: 'Chicago')),
-        expect: [
-          WeatherInitial(),
-          WeatherLoadInProgress(),
-          WeatherLoadFailure(),
-        ],
-      );
+      // blocTest(
+      //   'emits [WeatherInitial, WeatherLoadInProgress, WeatherLoadFailure] when WeatherRequested is added and getWeather fails',
+      //   build: () {
+      //     when(weatherRepository.getWeather(city: 'Chicago')).thenThrow('oops');
+      //     return weatherBloc;
+      //   },
+      //   act: (bloc) => bloc.add(WeatherRequested(city: 'Chicago')),
+      //   expect: [
+      //     WeatherInitial(),
+      //     WeatherLoadInProgress(),
+      //     WeatherLoadFailure(),
+      //   ],
+      // );
     });
   });
 }

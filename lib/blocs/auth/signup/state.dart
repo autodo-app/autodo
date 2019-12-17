@@ -1,101 +1,45 @@
-import 'package:meta/meta.dart';
+import 'package:equatable/equatable.dart';
 
-@immutable
-class SignupState {
-  final bool isEmailValid;
-  final bool isPasswordValid;
-  final bool isSubmitting;
-  final bool isSuccess;
-  final bool isFailure;
+abstract class SignupState extends Equatable {
+  const SignupState();
 
-  bool get isFormValid => isEmailValid && isPasswordValid;
+  @override 
+  List<Object> get props => [];
+}
 
-  SignupState({
-    @required this.isEmailValid,
-    @required this.isPasswordValid,
-    @required this.isSubmitting,
-    @required this.isSuccess,
-    @required this.isFailure,
-  });
+class SignupEmpty extends SignupState {}
 
-  factory SignupState.empty() {
-    return SignupState(
-      isEmailValid: true,
-      isPasswordValid: true,
-      isSubmitting: false,
-      isSuccess: false,
-      isFailure: false,
-    );
-  }
+class SignupError extends SignupState {
+  final String errorMsg;
 
-  factory SignupState.loading() {
-    return SignupState(
-      isEmailValid: true,
-      isPasswordValid: true,
-      isSubmitting: true,
-      isSuccess: false,
-      isFailure: false,
-    );
-  }
-
-  factory SignupState.failure() {
-    return SignupState(
-      isEmailValid: true,
-      isPasswordValid: true,
-      isSubmitting: false,
-      isSuccess: false,
-      isFailure: true,
-    );
-  }
-
-  factory SignupState.success() {
-    return SignupState(
-      isEmailValid: true,
-      isPasswordValid: true,
-      isSubmitting: false,
-      isSuccess: true,
-      isFailure: false,
-    );
-  }
-
-  SignupState update({
-    bool isEmailValid,
-    bool isPasswordValid,
-  }) {
-    return copyWith(
-      isEmailValid: isEmailValid,
-      isPasswordValid: isPasswordValid,
-      isSubmitting: false,
-      isSuccess: false,
-      isFailure: false,
-    );
-  }
-
-  SignupState copyWith({
-    bool isEmailValid,
-    bool isPasswordValid,
-    bool isSubmitEnabled,
-    bool isSubmitting,
-    bool isSuccess,
-    bool isFailure,
-  }) {
-    return SignupState(
-      isEmailValid: isEmailValid ?? this.isEmailValid,
-      isPasswordValid: isPasswordValid ?? this.isPasswordValid,
-      isSubmitting: isSubmitting ?? this.isSubmitting,
-      isSuccess: isSuccess ?? this.isSuccess,
-      isFailure: isFailure ?? this.isFailure,
-    );
-  }
+  const SignupError(this.errorMsg);
 
   @override
-  String toString() {
-    return '''SignupState {
-      isEmailValid: $isEmailValid,
-      isPasswordValid: $isPasswordValid,
-      isSubmitting: $isSubmitting,
-      isSuccess: $isSuccess,
-      isFailure: $isFailure,
-    }''';
-  }
+  List<Object> get props => [];
 }
+
+class SignupLoading extends SignupState {}
+
+class SignupCredentialsInvalid extends SignupState {
+  final String emailError;
+  final String passwordError;
+
+  const SignupCredentialsInvalid({this.emailError, this.passwordError});
+
+  SignupCredentialsInvalid copyWith({emailError, passwordError}) => 
+    SignupCredentialsInvalid(
+      emailError: emailError ?? this.emailError,
+      passwordError: passwordError ?? this.passwordError,
+  );
+
+  @override 
+  List<Object> get props => [];
+}
+
+class SignupCredentialsValid extends SignupState {}
+
+class SignupSuccess extends SignupState {}
+
+class VerificationSent extends SignupState {}
+
+class UserVerified extends SignupState {}
