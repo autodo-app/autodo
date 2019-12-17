@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:bloc/bloc.dart';
+import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -82,6 +83,36 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     String password,
   }) async* {
     yield LoginState.loading();
-    _authBloc.add(Login(email, password));
+
+    try {
+      _authBloc.add(Login(email, password));
+    } on PlatformException catch (e) {
+      var errorString = "Error communicating to the auToDo servers.";
+      if (e.code == "ERROR_WEAK_PASSWORD") {
+        errorString = "Your password must be longer than 6 characters.";
+      } else if (e.code == "ERROR_INVALID_EMAIL") {
+        errorString = "The email address you entered is invalid.";
+      } else if (e.code == "ERROR_EMAIL_ALREADY_IN_USE") {
+        errorString = "The email address you entered is already in use.";
+      } else if (e.code == "ERROR_WRONG_PASSWORD") {
+        errorString = "Incorrect password, please try again.";
+      }
+      // TODO: move this to the authBloc
+    }
+  }
+  
+  String _passwordValidator(value) {
+    if (value.isEmpty)
+      return 'Password can\'t be empty';
+    else if (value.length < 6)
+      return 'Password must be longer than 6 characters';
+    return null;
+  }
+  String _emailValidator(value) {
+    if (value.isEmpty)
+      return 'Email can\'t be empty';
+    else if (!value.contains('@') || !value.contains('.'))
+      return 'Invalid email address';
+    return null;
   }
 }

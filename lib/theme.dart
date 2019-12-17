@@ -102,6 +102,18 @@ InputDecoration defaultInputDecoration(String hintText, String labelText) {
   );
 }
 
+TextStyle linkStyle() {
+  return TextStyle(
+      decoration: TextDecoration.underline,
+      decorationStyle: TextDecorationStyle.solid,
+      fontSize: 13.0,
+      fontWeight: FontWeight.w300);
+}
+
+TextStyle finePrint() {
+  return TextStyle(fontSize: 13.0, fontWeight: FontWeight.w300);
+}
+
 createTheme() {
   TextTheme primaryText = TextTheme(
     body1: TextStyle(

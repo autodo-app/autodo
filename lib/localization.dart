@@ -61,6 +61,18 @@ class AutodoLocalizations {
   static String get interval => "Interval"; 
   static String get dueDate => "Due Date";
   static String get signInWithGoogle => "Sign In with Google";
+  static String get forgotYourPassword => "Forgot your password?";
+  static String get login => "Login";
+  static String get email => "Email";
+  static String get password => "Password";
+  static String get sendPasswordReset => "Send Password Reset";
+  static String get createAnAccount => "Create an Account";
+  static String get legal1 => "By signing up, you agree to the";
+  static String get legal2 => "terms and conditions";
+  static String get legal3 => "and";
+  static String get legal4 => "privacy policy";
+  static String get legal5 => "of the auToDo app.";
+  static String get gotItBang => "Got It!";
 }
 
 class AutodoLocalizationsDelegate

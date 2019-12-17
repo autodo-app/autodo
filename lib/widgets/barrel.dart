@@ -8,3 +8,4 @@ export 'autocompletefield.dart';
 export 'car_tag.dart';
 export 'ensurevisiblewidget.dart';
 export 'autoscrollfield.dart';
+export 'legal.dart';

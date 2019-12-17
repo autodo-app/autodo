@@ -1,42 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:autodo/blocs/markdown.dart';
+import 'package:autodo/localization.dart';
 import 'package:autodo/theme.dart';
 
-class PrivacyPolicy {
-  static Future<String> loadAsset(context) async {
-    return await DefaultAssetBundle.of(context)
-        .loadString('legal/privacy-policy.md');
-  }
+class PrivacyPolicy extends StatelessWidget {
+  final RichText text;
 
-  static RichText txt;
+  PrivacyPolicy(this.text);
 
-  static void init(BuildContext context) async {
-    var text = await loadAsset(context);
-    txt = RichText(text: MarkdownParser.parse(text));
-  }
-
-  static Widget text() {
-    return txt;
-  }
-
-  static Widget dialog(BuildContext context) {
-    return AlertDialog(
-      backgroundColor: cardColor,
-      title: Text('Privacy Policy'),
-      titleTextStyle: Theme.of(context).primaryTextTheme.title,
-      content: SingleChildScrollView(
-        child: Container(child: PrivacyPolicy.text()),
-      ),
-      contentPadding: EdgeInsets.fromLTRB(20, 20, 20, 0),
-      actions: <Widget>[
-        FlatButton(
-          child: Text(
-            'Got it!',
-            style: Theme.of(context).primaryTextTheme.button,
-          ),
-          onPressed: () => Navigator.pop(context),
-        )
-      ],
-    );
-  }
+  @override
+  build(context) => AlertDialog(
+    backgroundColor: cardColor,
+    title: Text('Privacy Policy'),
+    titleTextStyle: Theme.of(context).primaryTextTheme.title,
+    content: SingleChildScrollView(
+      child: Container(
+        child: text,
+      )
+    ),
+    contentPadding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+    actions: <Widget>[
+      FlatButton(
+        child: Text(
+          AutodoLocalizations.gotItBang,
+          style: Theme.of(context).primaryTextTheme.button,
+        ),
+        onPressed: () => Navigator.pop(context),
+      )
+    ],
+  );
 }
