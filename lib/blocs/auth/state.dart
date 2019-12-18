@@ -15,14 +15,20 @@ class Authenticated extends AuthenticationState {
   const Authenticated(this.displayName, this.uuid);
 
   @override
-  List<Object> get props => [displayName];
+  List<Object> get props => [displayName, uuid];
 
   @override
-  String toString() => 'Authenticated { displayName: $displayName }';
+  String toString() => 'Authenticated { displayName: $displayName, uuid: $uuid }';
 }
 
 class Unauthenticated extends AuthenticationState {
   final String errorCode;
 
   const Unauthenticated({this.errorCode});
+
+  @override
+  List<Object> get props => [errorCode];
+
+  @override
+  String toString() => 'Unauthenticated { errorCode: $errorCode }';
 }
