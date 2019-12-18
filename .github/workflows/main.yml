@@ -16,7 +16,11 @@ jobs:
       with:
         flutter-version: '1.9.1+hotfix.5'
     - run: flutter pub get
-    - run: flutter test
+    - run: flutter test --coverage
+    - uses: codecov/codecov-action@v1.0.2
+      with:
+        token: ${{secrets.CODECOV_TOKEN}}
+        file: ./coverage/lcov.info
     - run: echo "${{ secrets.store_file }}" | base64 --decode > ~/keystore.jks
     - run: echo "${{ secrets.google_services }}" | base64 --decode > ./android/app/google-services.json
     - run: flutter build apk --debug --split-per-abi
