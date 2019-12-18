@@ -18,13 +18,13 @@ class UpdateRefuelingsFilter extends FilteredRefuelingsEvent {
 }
 
 class UpdateRefuelings extends FilteredRefuelingsEvent {
-  final List<Refueling> todos;
+  final List<Refueling> refuelings;
 
-  const UpdateRefuelings(this.todos);
-
-  @override
-  List<Object> get props => [todos];
+  const UpdateRefuelings(this.refuelings);
 
   @override
-  String toString() => 'UpdateRefuelings { todos: $todos }';
+  List<Object> get props => [refuelings];
+
+  @override
+  String toString() => 'UpdateRefuelings { refuelings: $refuelings }';
 }

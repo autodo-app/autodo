@@ -83,7 +83,7 @@ class FilteredRefuelingsBloc extends Bloc<FilteredRefuelingsEvent, FilteredRefue
 
   @override
   Future<void> close() {
-    refuelingsSubscription.cancel();
+    refuelingsSubscription?.cancel();
     return super.close();
   }
 }

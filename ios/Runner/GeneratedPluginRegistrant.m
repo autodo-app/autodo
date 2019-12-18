@@ -34,8 +34,8 @@
 @import flutter_local_notifications;
 #endif
 
-#if __has_include(<google_sign_in/GoogleSignInPlugin.h>)
-#import <google_sign_in/GoogleSignInPlugin.h>
+#if __has_include(<google_sign_in/FLTGoogleSignInPlugin.h>)
+#import <google_sign_in/FLTGoogleSignInPlugin.h>
 #else
 @import google_sign_in;
 #endif
