@@ -15,9 +15,6 @@ class LoginEmailChanged extends LoginEvent {
 
   @override
   List<Object> get props => [email];
-
-  @override
-  String toString() => 'LoginEmailChanged { email :$email }';
 }
 
 class LoginPasswordChanged extends LoginEvent {
@@ -27,27 +24,6 @@ class LoginPasswordChanged extends LoginEvent {
 
   @override
   List<Object> get props => [password];
-
-  @override
-  String toString() => 'LoginPasswordChanged { password: $password }';
-}
-
-class LoginSubmitted extends LoginEvent {
-  final String email;
-  final String password;
-
-  const LoginSubmitted({
-    @required this.email,
-    @required this.password,
-  });
-
-  @override
-  List<Object> get props => [email, password];
-
-  @override
-  String toString() {
-    return 'LoginSubmitted { email: $email, password: $password }';
-  }
 }
 
 class LoginWithGooglePressed extends LoginEvent {}
@@ -63,11 +39,6 @@ class LoginWithCredentialsPressed extends LoginEvent {
 
   @override
   List<Object> get props => [email, password];
-
-  @override
-  String toString() {
-    return 'LoginWithCredentialsPressed { email: $email, password: $password }';
-  }
 }
 
 class SendPasswordResetPressed extends LoginEvent {

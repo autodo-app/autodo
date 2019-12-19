@@ -14,8 +14,9 @@ import 'state.dart';
 
 class SignupBloc extends Bloc<SignupEvent, SignupState> {
   AuthRepository _authRepository;
+  final bool verifyEmail;
 
-  SignupBloc({@required authRepository}) : assert(authRepository != null), _authRepository = authRepository;
+  SignupBloc({@required authRepository, this.verifyEmail = kReleaseMode}) : assert(authRepository != null), _authRepository = authRepository;
 
   @override
   SignupState get initialState => SignupEmpty();
@@ -50,12 +51,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
   }
 
   Stream<SignupState> _mapEmailChangedToState(String email) async* {
-    String errorString;
-    if (email.isEmpty)
-      errorString = 'Email can\'t be empty';
-    else if (!email.contains('@') || !email.contains('.'))
-      errorString = 'Invalid email address';
-    
+    String errorString = Validators.isValidEmail(email);
     if (errorString == null) {
       yield _clearEmailError();
     } else {
@@ -80,12 +76,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
   }
 
   Stream<SignupState> _mapPasswordChangedToState(String password) async* {
-    String errorString;
-    if (password.isEmpty)
-      errorString = 'Password can\'t be empty';
-    else if (password.length < 6)
-      errorString =  'Password must be longer than 6 characters';
-    
+    String errorString = Validators.isValidPassword(password);
     if (errorString == null) {
       yield _clearPasswordError();
     } else {
@@ -109,15 +100,13 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
     }
   }
 
-  Future<bool> _checkIfUserIsVerified(user) async {
-    while (!user.isEmailVerified) {
-      await Future.microtask(() async {
-        // reload the user's values
-        await Future.delayed(const Duration(milliseconds: 100), () async {
-          user = await _authRepository.getCurrentUser();
-          user.reload();
-        });
-      });
+  Future<void> _checkIfUserIsVerified(user) async {
+    bool verified = user.isEmailVerified;
+    while (!verified) {
+      await Future.delayed(const Duration(milliseconds: 100));
+      var cur = await _authRepository.getCurrentUser();
+      cur.reload();
+      verified = cur.isEmailVerified; 
     }
   }
 
@@ -127,15 +116,11 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
   }) async* {
     yield SignupLoading();
     try {
-      if (kReleaseMode) { // TODO: make this mockable?
+      if (verifyEmail) {
         var user = await _authRepository.signUpWithVerification(email, password);
         yield VerificationSent();
-        var verified = await _checkIfUserIsVerified(user);
-        if (verified) {
-          yield UserVerified();
-        } else {
-          yield SignupError("User Email Address Never Verified");
-        }
+        await _checkIfUserIsVerified(user);
+        yield UserVerified();
       } else {
         await _authRepository.signInWithCredentials(email, password);
         yield SignupSuccess();

@@ -1,16 +1,15 @@
 class Validators {
-  static final RegExp _emailRegExp = RegExp(
-    r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$',
-  );
-  static final RegExp _passwordRegExp = RegExp(
-    r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$',
-  );
-
   static isValidEmail(String email) {
-    return _emailRegExp.hasMatch(email);
+    if (email.isEmpty)
+      return 'Email can\'t be empty';
+    else if (!email.contains('@') || !email.contains('.'))
+      return 'Invalid email address';
   }
 
   static isValidPassword(String password) {
-    return _passwordRegExp.hasMatch(password);
+    if (password.isEmpty)
+      return 'Password can\'t be empty';
+    else if (password.length < 6)
+      return 'Password must be longer than 6 characters';
   }
 }

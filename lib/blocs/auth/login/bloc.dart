@@ -14,10 +14,8 @@ import 'state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   AuthRepository _authRepository;
-  final AuthenticationBloc _authBloc;
-  StreamSubscription _authSubscription;
 
-  LoginBloc({@required authBloc}) : assert(authBloc != null), _authBloc = authBloc;
+  LoginBloc({@required authRepository}) : assert(authRepository != null), _authRepository = authRepository;
 
   @override
   LoginState get initialState => LoginEmpty();
@@ -56,17 +54,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   Stream<LoginState> _mapEmailChangedToState(String email) async* {
-    String errorString;
-    if (email.isEmpty)
-      errorString = 'Email can\'t be empty';
-    else if (!email.contains('@') || !email.contains('.'))
-      errorString = 'Invalid email address';
-    
+    String errorString = Validators.isValidEmail(email);
+    LoginState out;
     if (errorString == null) {
-      yield _clearEmailError();
+      out = _clearEmailError();
     } else {
-      yield _addEmailError(errorString);
+      out = _addEmailError(errorString);
     }
+    yield out;
   }
 
   LoginState _clearEmailError() {
@@ -86,12 +81,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   Stream<LoginState> _mapPasswordChangedToState(String password) async* {
-    String errorString;
-    if (password.isEmpty)
-      errorString = 'Password can\'t be empty';
-    else if (password.length < 6)
-      errorString =  'Password must be longer than 6 characters';
-    
+    String errorString = Validators.isValidPassword(password);
     if (errorString == null) {
       yield _clearPasswordError();
     } else {
@@ -116,7 +106,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   Stream<LoginState> _mapLoginWithGooglePressedToState() async* {
-    _authBloc.add(SignInWithGoogle());
+    _authRepository.signInWithGoogle();
+    yield LoginEmpty();
   }
 
   Stream<LoginState> _mapLoginWithCredentialsPressedToState({
@@ -149,6 +140,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       // the app's global authentication state (i.e. it's not possible)
       // to login or logout this way
       await _authRepository.sendPasswordReset(event.email);
+      yield LoginEmpty();
     } on PlatformException catch (e) {
       var errorString = "Error communicating to the auToDo servers.";
       if (e.code == 'ERROR_INVALID_EMAIL')
@@ -157,6 +149,5 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         errorString = "Could not find an account for this email address";
       yield LoginError(errorString);
     }
-    yield LoginEmpty();
   }
 }
