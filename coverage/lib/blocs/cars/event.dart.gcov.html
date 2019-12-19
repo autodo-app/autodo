@@ -31,13 +31,13 @@
             <td class="headerValue">lcov.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">0</td>
-            <td class="headerCovTableEntry">26</td>
-            <td class="headerCovTableEntryLo">0.0 %</td>
+            <td class="headerCovTableEntry">23</td>
+            <td class="headerCovTableEntry">23</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-12-18 22:52:14</td>
+            <td class="headerValue">2019-12-19 11:39:53</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">0</td>
@@ -64,10 +64,10 @@
 <a name="2"><span class="lineNum">       2 </span>            : import 'package:autodo/models/barrel.dart';</a>
 <a name="3"><span class="lineNum">       3 </span>            : </a>
 <a name="4"><span class="lineNum">       4 </span>            : abstract class CarsEvent extends Equatable {</a>
-<a name="5"><span class="lineNum">       5 </span><span class="lineNoCov">          0 :   const CarsEvent();</span></a>
+<a name="5"><span class="lineNum">       5 </span><span class="lineCov">          2 :   const CarsEvent();</span></a>
 <a name="6"><span class="lineNum">       6 </span>            : </a>
-<a name="7"><span class="lineNum">       7 </span><span class="lineNoCov">          0 :   @override</span></a>
-<a name="8"><span class="lineNum">       8 </span><span class="lineNoCov">          0 :   List&lt;Object&gt; get props =&gt; [];</span></a>
+<a name="7"><span class="lineNum">       7 </span><span class="lineCov">          1 :   @override</span></a>
+<a name="8"><span class="lineNum">       8 </span><span class="lineCov">          1 :   List&lt;Object&gt; get props =&gt; [];</span></a>
 <a name="9"><span class="lineNum">       9 </span>            : }</a>
 <a name="10"><span class="lineNum">      10 </span>            : </a>
 <a name="11"><span class="lineNum">      11 </span>            : class LoadCars extends CarsEvent {}</a>
@@ -75,59 +75,50 @@
 <a name="13"><span class="lineNum">      13 </span>            : class AddCar extends CarsEvent {</a>
 <a name="14"><span class="lineNum">      14 </span>            :   final Car car;</a>
 <a name="15"><span class="lineNum">      15 </span>            : </a>
-<a name="16"><span class="lineNum">      16 </span><span class="lineNoCov">          0 :   const AddCar(this.car);</span></a>
+<a name="16"><span class="lineNum">      16 </span><span class="lineCov">          2 :   const AddCar(this.car);</span></a>
 <a name="17"><span class="lineNum">      17 </span>            : </a>
-<a name="18"><span class="lineNum">      18 </span><span class="lineNoCov">          0 :   @override</span></a>
-<a name="19"><span class="lineNum">      19 </span><span class="lineNoCov">          0 :   List&lt;Object&gt; get props =&gt; [car];</span></a>
+<a name="18"><span class="lineNum">      18 </span><span class="lineCov">          1 :   @override</span></a>
+<a name="19"><span class="lineNum">      19 </span><span class="lineCov">          2 :   List&lt;Object&gt; get props =&gt; [car];</span></a>
 <a name="20"><span class="lineNum">      20 </span>            : </a>
-<a name="21"><span class="lineNum">      21 </span><span class="lineNoCov">          0 :   @override</span></a>
-<a name="22"><span class="lineNum">      22 </span><span class="lineNoCov">          0 :   String toString() =&gt; 'AddCar { car: $car }';</span></a>
+<a name="21"><span class="lineNum">      21 </span><span class="lineCov">          1 :   @override</span></a>
+<a name="22"><span class="lineNum">      22 </span><span class="lineCov">          2 :   String toString() =&gt; 'AddCar { car: $car }';</span></a>
 <a name="23"><span class="lineNum">      23 </span>            : }</a>
 <a name="24"><span class="lineNum">      24 </span>            : </a>
 <a name="25"><span class="lineNum">      25 </span>            : class UpdateCar extends CarsEvent {</a>
 <a name="26"><span class="lineNum">      26 </span>            :   final Car updatedCar;</a>
 <a name="27"><span class="lineNum">      27 </span>            : </a>
-<a name="28"><span class="lineNum">      28 </span><span class="lineNoCov">          0 :   const UpdateCar(this.updatedCar);</span></a>
+<a name="28"><span class="lineNum">      28 </span><span class="lineCov">          2 :   const UpdateCar(this.updatedCar);</span></a>
 <a name="29"><span class="lineNum">      29 </span>            : </a>
-<a name="30"><span class="lineNum">      30 </span><span class="lineNoCov">          0 :   @override</span></a>
-<a name="31"><span class="lineNum">      31 </span><span class="lineNoCov">          0 :   List&lt;Object&gt; get props =&gt; [updatedCar];</span></a>
+<a name="30"><span class="lineNum">      30 </span><span class="lineCov">          1 :   @override</span></a>
+<a name="31"><span class="lineNum">      31 </span><span class="lineCov">          2 :   List&lt;Object&gt; get props =&gt; [updatedCar];</span></a>
 <a name="32"><span class="lineNum">      32 </span>            : </a>
-<a name="33"><span class="lineNum">      33 </span><span class="lineNoCov">          0 :   @override</span></a>
-<a name="34"><span class="lineNum">      34 </span><span class="lineNoCov">          0 :   String toString() =&gt; 'UpdateCar { updatedCar: $updatedCar }';</span></a>
+<a name="33"><span class="lineNum">      33 </span><span class="lineCov">          1 :   @override</span></a>
+<a name="34"><span class="lineNum">      34 </span><span class="lineCov">          2 :   String toString() =&gt; 'UpdateCar { updatedCar: $updatedCar }';</span></a>
 <a name="35"><span class="lineNum">      35 </span>            : }</a>
 <a name="36"><span class="lineNum">      36 </span>            : </a>
 <a name="37"><span class="lineNum">      37 </span>            : class DeleteCar extends CarsEvent {</a>
 <a name="38"><span class="lineNum">      38 </span>            :   final Car car;</a>
 <a name="39"><span class="lineNum">      39 </span>            : </a>
-<a name="40"><span class="lineNum">      40 </span><span class="lineNoCov">          0 :   const DeleteCar(this.car);</span></a>
+<a name="40"><span class="lineNum">      40 </span><span class="lineCov">          2 :   const DeleteCar(this.car);</span></a>
 <a name="41"><span class="lineNum">      41 </span>            : </a>
-<a name="42"><span class="lineNum">      42 </span><span class="lineNoCov">          0 :   @override</span></a>
-<a name="43"><span class="lineNum">      43 </span><span class="lineNoCov">          0 :   List&lt;Object&gt; get props =&gt; [car];</span></a>
+<a name="42"><span class="lineNum">      42 </span><span class="lineCov">          1 :   @override</span></a>
+<a name="43"><span class="lineNum">      43 </span><span class="lineCov">          2 :   List&lt;Object&gt; get props =&gt; [car];</span></a>
 <a name="44"><span class="lineNum">      44 </span>            : </a>
-<a name="45"><span class="lineNum">      45 </span><span class="lineNoCov">          0 :   @override</span></a>
-<a name="46"><span class="lineNum">      46 </span><span class="lineNoCov">          0 :   String toString() =&gt; 'DeleteCar { car: $car }';</span></a>
+<a name="45"><span class="lineNum">      45 </span><span class="lineCov">          1 :   @override</span></a>
+<a name="46"><span class="lineNum">      46 </span><span class="lineCov">          2 :   String toString() =&gt; 'DeleteCar { car: $car }';</span></a>
 <a name="47"><span class="lineNum">      47 </span>            : }</a>
 <a name="48"><span class="lineNum">      48 </span>            : </a>
 <a name="49"><span class="lineNum">      49 </span>            : class ExternalRefuelingsUpdated extends CarsEvent {</a>
 <a name="50"><span class="lineNum">      50 </span>            :   final List&lt;Refueling&gt; refuelings;</a>
 <a name="51"><span class="lineNum">      51 </span>            : </a>
-<a name="52"><span class="lineNum">      52 </span><span class="lineNoCov">          0 :   ExternalRefuelingsUpdated(this.refuelings);</span></a>
+<a name="52"><span class="lineNum">      52 </span><span class="lineCov">          2 :   ExternalRefuelingsUpdated(this.refuelings);</span></a>
 <a name="53"><span class="lineNum">      53 </span>            : </a>
-<a name="54"><span class="lineNum">      54 </span><span class="lineNoCov">          0 :   @override</span></a>
-<a name="55"><span class="lineNum">      55 </span><span class="lineNoCov">          0 :   List&lt;Object&gt; get props =&gt; [refuelings];</span></a>
+<a name="54"><span class="lineNum">      54 </span><span class="lineCov">          1 :   @override</span></a>
+<a name="55"><span class="lineNum">      55 </span><span class="lineCov">          2 :   List&lt;Object&gt; get props =&gt; [refuelings];</span></a>
 <a name="56"><span class="lineNum">      56 </span>            : </a>
-<a name="57"><span class="lineNum">      57 </span><span class="lineNoCov">          0 :   @override </span></a>
-<a name="58"><span class="lineNum">      58 </span><span class="lineNoCov">          0 :   String toString() =&gt; 'ExternalRefuelingsUpdated { refuelings: $refuelings }';</span></a>
+<a name="57"><span class="lineNum">      57 </span><span class="lineCov">          1 :   @override </span></a>
+<a name="58"><span class="lineNum">      58 </span><span class="lineCov">          2 :   String toString() =&gt; 'ExternalRefuelingsUpdated { refuelings: $refuelings }';</span></a>
 <a name="59"><span class="lineNum">      59 </span>            : }</a>
-<a name="60"><span class="lineNum">      60 </span>            : </a>
-<a name="61"><span class="lineNum">      61 </span>            : class CarsUpdated extends CarsEvent {</a>
-<a name="62"><span class="lineNum">      62 </span>            :   final List&lt;Car&gt; cars;</a>
-<a name="63"><span class="lineNum">      63 </span>            : </a>
-<a name="64"><span class="lineNum">      64 </span><span class="lineNoCov">          0 :   const CarsUpdated(this.cars);</span></a>
-<a name="65"><span class="lineNum">      65 </span>            : </a>
-<a name="66"><span class="lineNum">      66 </span><span class="lineNoCov">          0 :   @override</span></a>
-<a name="67"><span class="lineNum">      67 </span><span class="lineNoCov">          0 :   List&lt;Object&gt; get props =&gt; [cars];</span></a>
-<a name="68"><span class="lineNum">      68 </span>            : }</a>
 </pre>
       </td>
     </tr>

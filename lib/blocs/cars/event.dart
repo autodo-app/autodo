@@ -57,12 +57,3 @@ class ExternalRefuelingsUpdated extends CarsEvent {
   @override 
   String toString() => 'ExternalRefuelingsUpdated { refuelings: $refuelings }';
 }
-
-class CarsUpdated extends CarsEvent {
-  final List<Car> cars;
-
-  const CarsUpdated(this.cars);
-
-  @override
-  List<Object> get props => [cars];
-}

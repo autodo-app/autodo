@@ -2,6 +2,7 @@ import 'package:autodo/models/distanceratepoint.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
 import 'package:equatable/equatable.dart';
+import 'package:autodo/util.dart';
 
 import '../entities/barrel.dart';
 
@@ -17,12 +18,14 @@ class Car extends Equatable {
     this.id,
     this.name,
     this.mileage,
-    this.numRefuelings,
-    this.averageEfficiency,
-    this.distanceRate,
-    this.lastMileageUpdate,
-    this.distanceRateHistory
-  });
+    this.numRefuelings = 0,
+    this.averageEfficiency = 0.0,
+    this.distanceRate = 0.0,
+    lastMileageUpdate,
+    distanceRateHistory,
+  }) :
+   this.lastMileageUpdate = lastMileageUpdate ?? roundToDay(DateTime.fromMillisecondsSinceEpoch(0)),
+   this.distanceRateHistory = distanceRateHistory ?? [];
 
   Car copyWith({
     String id,
