@@ -8,14 +8,7 @@ abstract class NotificationsEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadNotifications extends NotificationsEvent {
-  final int id;
-
-  const LoadNotifications(this.id);
-
-  @override 
-  List<Object> get props => [id];
-}
+class LoadNotifications extends NotificationsEvent {}
 
 class NotificationIdUpdated extends NotificationsEvent {
   final int id;
@@ -24,6 +17,9 @@ class NotificationIdUpdated extends NotificationsEvent {
 
   @override 
   List<Object> get props => [id];
+
+  @override 
+  toString() => "NotificationIdUpdated { id: $id }";
 }
 
 class ScheduleNotification extends NotificationsEvent {
@@ -38,6 +34,9 @@ class ScheduleNotification extends NotificationsEvent {
 
   @override 
   List<Object> get props => [date, title, body];
+
+  @override
+  toString() => "ScheduleNotification { date: $date, title: $title, body: $body }";
 }
 
 class ReScheduleNotification extends NotificationsEvent {
@@ -54,6 +53,9 @@ class ReScheduleNotification extends NotificationsEvent {
 
   @override 
   List<Object> get props => [id, date, title, body];
+
+  @override
+  toString() => "ReScheduleNotification { id: $id, date: $date, title: $title, body: $body }";
 }
 
 class CancelNotification extends NotificationsEvent {
@@ -63,4 +65,7 @@ class CancelNotification extends NotificationsEvent {
 
   @override 
   List<Object> get props => [id];
+
+  @override
+  toString() => "CancelNotification { id: $id }";
 }

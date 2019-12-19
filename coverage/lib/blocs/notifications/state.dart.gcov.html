@@ -31,13 +31,13 @@
             <td class="headerValue">lcov.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">0</td>
             <td class="headerCovTableEntry">6</td>
-            <td class="headerCovTableEntryLo">0.0 %</td>
+            <td class="headerCovTableEntry">6</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-12-19 15:50:40</td>
+            <td class="headerValue">2019-12-19 16:47:58</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">0</td>
@@ -63,10 +63,10 @@
 <a name="1"><span class="lineNum">       1 </span>            : import 'package:equatable/equatable.dart';</a>
 <a name="2"><span class="lineNum">       2 </span>            : </a>
 <a name="3"><span class="lineNum">       3 </span>            : abstract class NotificationsState extends Equatable {</a>
-<a name="4"><span class="lineNum">       4 </span><span class="lineNoCov">          0 :   const NotificationsState();</span></a>
+<a name="4"><span class="lineNum">       4 </span><span class="lineCov">          1 :   const NotificationsState();</span></a>
 <a name="5"><span class="lineNum">       5 </span>            : </a>
-<a name="6"><span class="lineNum">       6 </span><span class="lineNoCov">          0 :   @override </span></a>
-<a name="7"><span class="lineNum">       7 </span><span class="lineNoCov">          0 :   List&lt;Object&gt; get props =&gt; [];</span></a>
+<a name="6"><span class="lineNum">       6 </span><span class="lineCov">          1 :   @override </span></a>
+<a name="7"><span class="lineNum">       7 </span><span class="lineCov">          1 :   List&lt;Object&gt; get props =&gt; [];</span></a>
 <a name="8"><span class="lineNum">       8 </span>            : }</a>
 <a name="9"><span class="lineNum">       9 </span>            : </a>
 <a name="10"><span class="lineNum">      10 </span>            : class NotificationsLoading extends NotificationsState {}</a>
@@ -74,10 +74,10 @@
 <a name="12"><span class="lineNum">      12 </span>            : class NotificationsLoaded extends NotificationsState {</a>
 <a name="13"><span class="lineNum">      13 </span>            :   final int lastID;</a>
 <a name="14"><span class="lineNum">      14 </span>            : </a>
-<a name="15"><span class="lineNum">      15 </span><span class="lineNoCov">          0 :   const NotificationsLoaded(this.lastID);</span></a>
+<a name="15"><span class="lineNum">      15 </span><span class="lineCov">          1 :   const NotificationsLoaded(this.lastID);</span></a>
 <a name="16"><span class="lineNum">      16 </span>            : </a>
-<a name="17"><span class="lineNum">      17 </span><span class="lineNoCov">          0 :   @override</span></a>
-<a name="18"><span class="lineNum">      18 </span><span class="lineNoCov">          0 :   List&lt;Object&gt; get props =&gt; [lastID];</span></a>
+<a name="17"><span class="lineNum">      17 </span><span class="lineCov">          1 :   @override</span></a>
+<a name="18"><span class="lineNum">      18 </span><span class="lineCov">          2 :   List&lt;Object&gt; get props =&gt; [lastID];</span></a>
 <a name="19"><span class="lineNum">      19 </span>            : }</a>
 <a name="20"><span class="lineNum">      20 </span>            : </a>
 <a name="21"><span class="lineNum">      21 </span>            : class NotificationsNotLoaded extends NotificationsState {}</a>
