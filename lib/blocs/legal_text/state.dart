@@ -18,7 +18,7 @@ class LegalLoaded extends LegalState {
   const LegalLoaded({this.text});
 
   @override
-  List<Object> get props => [text];
+  List<Object> get props => [text.text.toPlainText()];
 
   @override
   String toString() {
