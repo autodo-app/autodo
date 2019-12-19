@@ -1,29 +1,29 @@
 import 'dart:async';
 
-import 'package:autodo/repositories/write_batch_wrappers.dart';
+import 'package:equatable/equatable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
 import 'data_repository.dart';
 import 'package:autodo/models/barrel.dart';
 import 'package:autodo/entities/barrel.dart';
+import 'package:autodo/repositories/write_batch_wrappers.dart';
 
-class FirebaseDataRepository implements DataRepository {
+class FirebaseDataRepository extends Equatable implements DataRepository {
   final Firestore _firestoreInstance;
   final String _uuid;
-  DocumentReference _userDoc;
-  CollectionReference _todos, _refuelings, _cars, _repeats;
+
+  DocumentReference get _userDoc => 
+    _firestoreInstance.collection('users').document(_uuid);
+  CollectionReference get _todos => _userDoc.collection('todos');
+  CollectionReference get _refuelings => _userDoc.collection('refuelings');
+  CollectionReference get _cars => _userDoc.collection('cars');
+  CollectionReference get _repeats => _userDoc.collection('repeats');
 
   FirebaseDataRepository({Firestore firestoreInstance, @required String uuid}) :
       assert(uuid != null), 
       _firestoreInstance = firestoreInstance ?? Firestore.instance,
-      _uuid = uuid {
-    _userDoc = _firestoreInstance.collection('users').document(_uuid);
-
-    _todos = _userDoc.collection('todos');
-    _refuelings = _userDoc.collection('refuelings');
-    _cars = _userDoc.collection('cars');
-    _repeats = _userDoc.collection('repeats');
-  }
+      _uuid = uuid;
 
   @override
   Future<void> addNewTodo(Todo todo) {
@@ -153,4 +153,12 @@ class FirebaseDataRepository implements DataRepository {
   Stream<int> notificationID() {
     return _userDoc.snapshots().map((snap) => snap.data['lastNotificationId'] as int);
   }
+
+  @override 
+  List<Object> get props => [_firestoreInstance, _uuid, _userDoc, _todos, _refuelings, _cars, _repeats];
+
+  @override 
+  toString() => "FirebaseDataRepository { firestoreInstance: "
+    "$_firestoreInstance, uuid: $_uuid, userDoc: $_userDoc, todos: "
+    "$_todos, refuelings: $_refuelings, cars: $_cars, repeats: $_repeats }";
 }

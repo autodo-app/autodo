@@ -31,13 +31,13 @@
             <td class="headerValue">lcov.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">0</td>
-            <td class="headerCovTableEntry">70</td>
-            <td class="headerCovTableEntryLo">0.0 %</td>
+            <td class="headerCovTableEntry">9</td>
+            <td class="headerCovTableEntry">76</td>
+            <td class="headerCovTableEntryLo">11.8 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-12-19 11:39:53</td>
+            <td class="headerValue">2019-12-19 12:53:15</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">0</td>
@@ -62,30 +62,30 @@
 <pre class="source">
 <a name="1"><span class="lineNum">       1 </span>            : import 'dart:async';</a>
 <a name="2"><span class="lineNum">       2 </span>            : </a>
-<a name="3"><span class="lineNum">       3 </span>            : import 'package:autodo/repositories/write_batch_wrappers.dart';</a>
+<a name="3"><span class="lineNum">       3 </span>            : import 'package:equatable/equatable.dart';</a>
 <a name="4"><span class="lineNum">       4 </span>            : import 'package:cloud_firestore/cloud_firestore.dart';</a>
 <a name="5"><span class="lineNum">       5 </span>            : import 'package:flutter/material.dart';</a>
-<a name="6"><span class="lineNum">       6 </span>            : import 'data_repository.dart';</a>
-<a name="7"><span class="lineNum">       7 </span>            : import 'package:autodo/models/barrel.dart';</a>
-<a name="8"><span class="lineNum">       8 </span>            : import 'package:autodo/entities/barrel.dart';</a>
-<a name="9"><span class="lineNum">       9 </span>            : </a>
-<a name="10"><span class="lineNum">      10 </span>            : class FirebaseDataRepository implements DataRepository {</a>
-<a name="11"><span class="lineNum">      11 </span>            :   final Firestore _firestoreInstance;</a>
-<a name="12"><span class="lineNum">      12 </span>            :   final String _uuid;</a>
-<a name="13"><span class="lineNum">      13 </span>            :   DocumentReference _userDoc;</a>
-<a name="14"><span class="lineNum">      14 </span>            :   CollectionReference _todos, _refuelings, _cars, _repeats;</a>
+<a name="6"><span class="lineNum">       6 </span>            : </a>
+<a name="7"><span class="lineNum">       7 </span>            : import 'data_repository.dart';</a>
+<a name="8"><span class="lineNum">       8 </span>            : import 'package:autodo/models/barrel.dart';</a>
+<a name="9"><span class="lineNum">       9 </span>            : import 'package:autodo/entities/barrel.dart';</a>
+<a name="10"><span class="lineNum">      10 </span>            : import 'package:autodo/repositories/write_batch_wrappers.dart';</a>
+<a name="11"><span class="lineNum">      11 </span>            : </a>
+<a name="12"><span class="lineNum">      12 </span>            : class FirebaseDataRepository extends Equatable implements DataRepository {</a>
+<a name="13"><span class="lineNum">      13 </span>            :   final Firestore _firestoreInstance;</a>
+<a name="14"><span class="lineNum">      14 </span>            :   final String _uuid;</a>
 <a name="15"><span class="lineNum">      15 </span>            : </a>
-<a name="16"><span class="lineNum">      16 </span><span class="lineNoCov">          0 :   FirebaseDataRepository({Firestore firestoreInstance, @required String uuid}) :</span></a>
-<a name="17"><span class="lineNum">      17 </span><span class="lineNoCov">          0 :       assert(uuid != null), </span></a>
-<a name="18"><span class="lineNum">      18 </span><span class="lineNoCov">          0 :       _firestoreInstance = firestoreInstance ?? Firestore.instance,</span></a>
-<a name="19"><span class="lineNum">      19 </span>            :       _uuid = uuid {</a>
-<a name="20"><span class="lineNum">      20 </span><span class="lineNoCov">          0 :     _userDoc = _firestoreInstance.collection('users').document(_uuid);</span></a>
-<a name="21"><span class="lineNum">      21 </span>            : </a>
-<a name="22"><span class="lineNum">      22 </span><span class="lineNoCov">          0 :     _todos = _userDoc.collection('todos');</span></a>
-<a name="23"><span class="lineNum">      23 </span><span class="lineNoCov">          0 :     _refuelings = _userDoc.collection('refuelings');</span></a>
-<a name="24"><span class="lineNum">      24 </span><span class="lineNoCov">          0 :     _cars = _userDoc.collection('cars');</span></a>
-<a name="25"><span class="lineNum">      25 </span><span class="lineNoCov">          0 :     _repeats = _userDoc.collection('repeats');</span></a>
-<a name="26"><span class="lineNum">      26 </span>            :   }</a>
+<a name="16"><span class="lineNum">      16 </span><span class="lineCov">          1 :   DocumentReference get _userDoc =&gt; </span></a>
+<a name="17"><span class="lineNum">      17 </span><span class="lineCov">          4 :     _firestoreInstance.collection('users').document(_uuid);</span></a>
+<a name="18"><span class="lineNum">      18 </span><span class="lineCov">          3 :   CollectionReference get _todos =&gt; _userDoc.collection('todos');</span></a>
+<a name="19"><span class="lineNum">      19 </span><span class="lineCov">          3 :   CollectionReference get _refuelings =&gt; _userDoc.collection('refuelings');</span></a>
+<a name="20"><span class="lineNum">      20 </span><span class="lineCov">          3 :   CollectionReference get _cars =&gt; _userDoc.collection('cars');</span></a>
+<a name="21"><span class="lineNum">      21 </span><span class="lineCov">          3 :   CollectionReference get _repeats =&gt; _userDoc.collection('repeats');</span></a>
+<a name="22"><span class="lineNum">      22 </span>            : </a>
+<a name="23"><span class="lineNum">      23 </span><span class="lineCov">          1 :   FirebaseDataRepository({Firestore firestoreInstance, @required String uuid}) :</span></a>
+<a name="24"><span class="lineNum">      24 </span><span class="lineNoCov">          0 :       assert(uuid != null), </span></a>
+<a name="25"><span class="lineNum">      25 </span><span class="lineNoCov">          0 :       _firestoreInstance = firestoreInstance ?? Firestore.instance,</span></a>
+<a name="26"><span class="lineNum">      26 </span>            :       _uuid = uuid;</a>
 <a name="27"><span class="lineNum">      27 </span>            : </a>
 <a name="28"><span class="lineNum">      28 </span><span class="lineNoCov">          0 :   @override</span></a>
 <a name="29"><span class="lineNum">      29 </span>            :   Future&lt;void&gt; addNewTodo(Todo todo) {</a>
@@ -215,7 +215,15 @@
 <a name="153"><span class="lineNum">     153 </span>            :   Stream&lt;int&gt; notificationID() {</a>
 <a name="154"><span class="lineNum">     154 </span><span class="lineNoCov">          0 :     return _userDoc.snapshots().map((snap) =&gt; snap.data['lastNotificationId'] as int);</span></a>
 <a name="155"><span class="lineNum">     155 </span>            :   }</a>
-<a name="156"><span class="lineNum">     156 </span>            : }</a>
+<a name="156"><span class="lineNum">     156 </span>            : </a>
+<a name="157"><span class="lineNum">     157 </span><span class="lineCov">          1 :   @override </span></a>
+<a name="158"><span class="lineNum">     158 </span><span class="lineCov">          8 :   List&lt;Object&gt; get props =&gt; [_firestoreInstance, _uuid, _userDoc, _todos, _refuelings, _cars, _repeats];</span></a>
+<a name="159"><span class="lineNum">     159 </span>            : </a>
+<a name="160"><span class="lineNum">     160 </span><span class="lineNoCov">          0 :   @override </span></a>
+<a name="161"><span class="lineNum">     161 </span>            :   toString() =&gt; &quot;FirebaseDataRepository { firestoreInstance: &quot;</a>
+<a name="162"><span class="lineNum">     162 </span><span class="lineNoCov">          0 :     &quot;$_firestoreInstance, uuid: $_uuid, userDoc: $_userDoc, todos: &quot;</span></a>
+<a name="163"><span class="lineNum">     163 </span><span class="lineNoCov">          0 :     &quot;$_todos, refuelings: $_refuelings, cars: $_cars, repeats: $_repeats }&quot;;</span></a>
+<a name="164"><span class="lineNum">     164 </span>            : }</a>
 </pre>
       </td>
     </tr>

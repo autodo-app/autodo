@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:equatable/equatable.dart';
+
 import 'package:autodo/models/barrel.dart';
 import 'package:autodo/repositories/write_batch_wrappers.dart';
 
-abstract class DataRepository {
+abstract class DataRepository extends Equatable {
   // Todos
   Future<void> addNewTodo(Todo todo);
 
@@ -50,4 +52,7 @@ abstract class DataRepository {
 
   // Notifications
   Stream<int> notificationID();
+
+  @override 
+  List<Object> get props => [];
 }

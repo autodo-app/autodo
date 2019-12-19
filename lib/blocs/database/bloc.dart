@@ -3,18 +3,21 @@ import 'package:autodo/blocs/auth/barrel.dart';
 import 'package:autodo/blocs/auth/bloc.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:autodo/repositories/firebase_data_repository.dart';
 import 'event.dart';
 import 'state.dart';
 
 class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
+  final Firestore _firestoreInstance;
   AuthenticationBloc _authenticationBloc;
   StreamSubscription _authSubscription;
 
-  DatabaseBloc({@required authenticationBloc}) : 
+  DatabaseBloc({firestoreInstance, @required authenticationBloc}) : 
     assert(authenticationBloc != null),
-    _authenticationBloc = authenticationBloc;
+    _authenticationBloc = authenticationBloc,
+    _firestoreInstance = firestoreInstance ?? Firestore.instance;
 
   @override
   DatabaseState get initialState => DbUninitialized();
@@ -43,6 +46,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
 
   Stream<DatabaseState> _mapUserLoggedInToState(event) async* {
     FirebaseDataRepository repository = FirebaseDataRepository(
+      firestoreInstance: _firestoreInstance,
       uuid: event.uuid,
     );
     yield DbLoaded(repository);
