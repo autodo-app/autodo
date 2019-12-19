@@ -1,3 +1,4 @@
+import 'package:autodo/repositories/barrel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:autodo/blocs/auth/barrel.dart';
@@ -25,7 +26,7 @@ class LoginScreen extends StatelessWidget {
         ),
         body: BlocProvider<LoginBloc>(
           create: (context) => LoginBloc(
-            authBloc: BlocProvider.of<AuthenticationBloc>(context),
+            authRepository: FirebaseAuthRepository(),
           ),
           child: BlocBuilder<LoginBloc, LoginState>(
             builder: (context, state) => LoginForm(),
