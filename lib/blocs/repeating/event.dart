@@ -46,13 +46,4 @@ class DeleteRepeat extends RepeatsEvent {
   String toString() => 'DeleteRepeat { repeat: $repeat }';
 }
 
-class RepeatsUpdated extends RepeatsEvent {
-  final List<Repeat> repeats;
-
-  const RepeatsUpdated(this.repeats);
-
-  @override
-  List<Object> get props => [repeats];
-}
-
 class AddDefaultRepeats extends RepeatsEvent {}

@@ -11,7 +11,7 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
   final DataRepository _dataRepository;
   StreamSubscription _repeatsSubscription;
 
-  final List<Repeat> defaults = [
+  static final List<Repeat> defaults = [
     Repeat(name: "oil", mileageInterval: 3500),
     Repeat(name: "tireRotation", mileageInterval: 7500),
     Repeat(name: "engineFilter", mileageInterval: 45000),
@@ -46,35 +46,54 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
       yield* _mapUpdateRepeatToState(event);
     } else if (event is DeleteRepeat) {
       yield* _mapDeleteRepeatToState(event);
-    } else if (event is RepeatsUpdated) {
-      yield* _mapRepeatsUpdateToState(event);
     } else if (event is AddDefaultRepeats) {
       yield* _mapAddDefaultRepeatsToState(event);
     }
   }
 
   Stream<RepeatsState> _mapLoadRepeatsToState() async* {
-    _repeatsSubscription?.cancel();
-    _repeatsSubscription = _dataRepository.repeats().listen(
-      (repeats) => add(RepeatsUpdated(repeats)),
-    );
+    try {
+      final repeats = await _dataRepository.repeats().first;
+      if (repeats != null) {
+        yield RepeatsLoaded(repeats);
+      } else {
+        yield RepeatsNotLoaded();
+      }
+    } catch (_) {
+      yield RepeatsNotLoaded();
+    }
+  //   _repeatsSubscription?.cancel();
+  //   _repeatsSubscription = _dataRepository.repeats().listen(
+  //     (repeats) => add(RepeatsUpdated(repeats)),
+  //   );
   }
 
   Stream<RepeatsState> _mapAddRepeatToState(AddRepeat event) async* {
-    Repeat out;
-    _dataRepository.addNewRepeat(out);
+    if (state is RepeatsLoaded) {
+      final List<Repeat> updatedRepeats = List.from((state as RepeatsLoaded).repeats)..add(event.repeat);
+      yield RepeatsLoaded(updatedRepeats);
+      _dataRepository.addNewRepeat(event.repeat);
+    }
   }
 
   Stream<RepeatsState> _mapUpdateRepeatToState(UpdateRepeat event) async* {
-    _dataRepository.updateRepeat(event.updatedRepeat);
+    if (state is RepeatsLoaded) {
+      final List<Repeat> updatedRepeats = (state as RepeatsLoaded).repeats
+        .map((r) => r.id == event.updatedRepeat.id ? event.updatedRepeat : r)
+        .toList();
+      yield RepeatsLoaded(updatedRepeats);
+      _dataRepository.updateRepeat(event.updatedRepeat);
+    }
   }
 
   Stream<RepeatsState> _mapDeleteRepeatToState(DeleteRepeat event) async* {
-    _dataRepository.deleteRepeat(event.repeat);
-  }
-
-  Stream<RepeatsState> _mapRepeatsUpdateToState(RepeatsUpdated event) async* {
-    yield RepeatsLoaded(event.repeats);
+    if (state is RepeatsLoaded) {
+      final updatedRepeats = (state as RepeatsLoaded).repeats
+        .where((r) => r.id != event.repeat.id)
+        .toList();
+      yield RepeatsLoaded(updatedRepeats);
+      _dataRepository.deleteRepeat(event.repeat);
+    }
   }
 
   /// Finds a Map of the last completed todo in the repeating
@@ -155,40 +174,41 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
   //   });
   // }
 
-  Stream<RepeatsState> _mapAddDefaultRepeatsToState(AddDefaultRepeats event) {
+  Stream<RepeatsState> _mapAddDefaultRepeatsToState(AddDefaultRepeats event) async* {
+    yield RepeatsLoaded(defaults);
     WriteBatchWrapper batch = _dataRepository.startRepeatWriteBatch();
     for (var r in defaults) {
       batch.setData(r.toEntity().toDocument());
     }
-    return batch.commit();
+    batch.commit();
   }
 
-  List sortItems(List items) {
-    return items
-      ..sort((a, b) {
-        var aDate = a.data['dueDate'] ?? 0;
-        var bDate = b.data['dueDate'] ?? 0;
-        var aMileage = a.data['dueMileage'] ?? 0;
-        var bMileage = b.data['dueMileage'] ?? 0;
+  // List sortItems(List items) {
+  //   return items
+  //     ..sort((a, b) {
+  //       var aDate = a.data['dueDate'] ?? 0;
+  //       var bDate = b.data['dueDate'] ?? 0;
+  //       var aMileage = a.data['dueMileage'] ?? 0;
+  //       var bMileage = b.data['dueMileage'] ?? 0;
 
-        if (aDate == 0 && bDate == 0) {
-          // both don't have a date, so only consider the mileages
-          if (aMileage > bMileage)
-            return 1;
-          else if (aMileage < bMileage)
-            return -1;
-          else
-            return 0;
-        } else {
-          // in case one of the two isn't a valid timestamp
-          if (aDate == 0) return -1;
-          if (bDate == 0) return 1;
-          // consider the dates since all todo items should have dates as a result
-          // of the distance rate translation function
-          return aDate.compareTo(bDate);
-        }
-      });
-  }
+  //       if (aDate == 0 && bDate == 0) {
+  //         // both don't have a date, so only consider the mileages
+  //         if (aMileage > bMileage)
+  //           return 1;
+  //         else if (aMileage < bMileage)
+  //           return -1;
+  //         else
+  //           return 0;
+  //       } else {
+  //         // in case one of the two isn't a valid timestamp
+  //         if (aDate == 0) return -1;
+  //         if (bDate == 0) return 1;
+  //         // consider the dates since all todo items should have dates as a result
+  //         // of the distance rate translation function
+  //         return aDate.compareTo(bDate);
+  //       }
+  //     });
+  // }
 
   @override
   Future<void> close() {

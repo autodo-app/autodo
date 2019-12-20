@@ -51,7 +51,7 @@ class RepeatEntity extends Equatable {
     return {
       "name": name,
       "mileageInterval": mileageInterval,
-      "dateInterval": dateInterval.inDays,
+      "dateInterval": dateInterval?.inDays,
       "cars": cars
     };
   }

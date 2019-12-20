@@ -9,3 +9,4 @@ export 'tab/barrel.dart';
 export 'todos/barrel.dart';
 export 'database/barrel.dart';
 export 'auth/barrel.dart';
+export 'repeating/barrel.dart';
