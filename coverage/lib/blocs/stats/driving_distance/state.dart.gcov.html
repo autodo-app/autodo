@@ -31,13 +31,13 @@
             <td class="headerValue">lcov.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">6</td>
             <td class="headerCovTableEntry">8</td>
-            <td class="headerCovTableEntryLo">0.0 %</td>
+            <td class="headerCovTableEntryMed">75.0 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-12-20 08:21:58</td>
+            <td class="headerValue">2019-12-20 09:25:46</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">0</td>
@@ -66,10 +66,10 @@
 <a name="4"><span class="lineNum">       4 </span>            : import 'package:autodo/models/barrel.dart';</a>
 <a name="5"><span class="lineNum">       5 </span>            : </a>
 <a name="6"><span class="lineNum">       6 </span>            : abstract class DrivingDistanceStatsState extends Equatable {</a>
-<a name="7"><span class="lineNum">       7 </span><span class="lineNoCov">          0 :   const DrivingDistanceStatsState();</span></a>
+<a name="7"><span class="lineNum">       7 </span><span class="lineCov">          1 :   const DrivingDistanceStatsState();</span></a>
 <a name="8"><span class="lineNum">       8 </span>            : </a>
-<a name="9"><span class="lineNum">       9 </span><span class="lineNoCov">          0 :   @override</span></a>
-<a name="10"><span class="lineNum">      10 </span><span class="lineNoCov">          0 :   List&lt;Object&gt; get props =&gt; [];</span></a>
+<a name="9"><span class="lineNum">       9 </span><span class="lineCov">          1 :   @override</span></a>
+<a name="10"><span class="lineNum">      10 </span><span class="lineCov">          1 :   List&lt;Object&gt; get props =&gt; [];</span></a>
 <a name="11"><span class="lineNum">      11 </span>            : }</a>
 <a name="12"><span class="lineNum">      12 </span>            : </a>
 <a name="13"><span class="lineNum">      13 </span>            : class DrivingDistanceStatsLoading extends DrivingDistanceStatsState {}</a>
@@ -77,10 +77,10 @@
 <a name="15"><span class="lineNum">      15 </span>            : class DrivingDistanceStatsLoaded extends DrivingDistanceStatsState {</a>
 <a name="16"><span class="lineNum">      16 </span>            :   final List&lt;Series&lt;DistanceRatePoint, DateTime&gt;&gt; drivingDistanceData;</a>
 <a name="17"><span class="lineNum">      17 </span>            : </a>
-<a name="18"><span class="lineNum">      18 </span><span class="lineNoCov">          0 :   const DrivingDistanceStatsLoaded(this.drivingDistanceData);</span></a>
+<a name="18"><span class="lineNum">      18 </span><span class="lineCov">          1 :   const DrivingDistanceStatsLoaded(this.drivingDistanceData);</span></a>
 <a name="19"><span class="lineNum">      19 </span>            : </a>
-<a name="20"><span class="lineNum">      20 </span><span class="lineNoCov">          0 :   @override</span></a>
-<a name="21"><span class="lineNum">      21 </span><span class="lineNoCov">          0 :   List&lt;Object&gt; get props =&gt; [drivingDistanceData];</span></a>
+<a name="20"><span class="lineNum">      20 </span><span class="lineCov">          1 :   @override</span></a>
+<a name="21"><span class="lineNum">      21 </span><span class="lineCov">          8 :   List&lt;Object&gt; get props =&gt; [drivingDistanceData.map((r) =&gt; r.id).reduce((val, id) =&gt; val + id)];</span></a>
 <a name="22"><span class="lineNum">      22 </span>            : </a>
 <a name="23"><span class="lineNum">      23 </span><span class="lineNoCov">          0 :   @override</span></a>
 <a name="24"><span class="lineNum">      24 </span>            :   String toString() {</a>

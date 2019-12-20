@@ -5,16 +5,16 @@ import 'package:bloc/bloc.dart';
 import 'package:charts_flutter/flutter.dart';
 
 import 'package:autodo/models/barrel.dart';
-import 'package:autodo/blocs/refuelings/barrel.dart';
+import 'package:autodo/blocs/cars/barrel.dart';
 import 'event.dart';
 import 'state.dart';
 
 class DrivingDistanceStatsBloc extends Bloc<DrivingDistanceStatsEvent, DrivingDistanceStatsState> {
-  final RefuelingsBloc _refuelingsBloc;
-  StreamSubscription _refuelingsSubscription;
+  final CarsBloc _carsBloc;
+  StreamSubscription _carsSubscription;
 
-  DrivingDistanceStatsBloc({@required refuelingsBloc}) :
-      assert(refuelingsBloc != null), _refuelingsBloc = refuelingsBloc;
+  DrivingDistanceStatsBloc({@required carsBloc}) :
+      assert(carsBloc != null), _carsBloc = carsBloc;
 
   @override
   DrivingDistanceStatsState get initialState => DrivingDistanceStatsLoading();
@@ -29,11 +29,15 @@ class DrivingDistanceStatsBloc extends Bloc<DrivingDistanceStatsEvent, DrivingDi
   }
 
   Stream<DrivingDistanceStatsState> _mapLoadDrivingDistanceStatsToState(event) async* {
-    _refuelingsSubscription?.cancel();
-    _refuelingsBloc.listen(
+    if (_carsBloc.state is CarsLoaded) {
+      final data = await _prepData((_carsBloc.state as CarsLoaded).cars);
+      yield DrivingDistanceStatsLoaded(data);
+    }
+    _carsSubscription?.cancel();
+    _carsBloc.listen(
       (state) {
-        if (state is RefuelingsLoaded) {
-          add(UpdateDrivingDistanceData(state.refuelings));
+        if (state is CarsLoaded) {
+          add(UpdateDrivingDistanceData(state.cars));
         }
       }
     );
@@ -61,12 +65,12 @@ class DrivingDistanceStatsBloc extends Bloc<DrivingDistanceStatsEvent, DrivingDi
 
   Stream<DrivingDistanceStatsState> _mapUpdateDrivingDistanceDataToState(event) async* {
     final data = await _prepData(event.cars);
-    yield(DrivingDistanceStatsLoaded(data));
+    yield DrivingDistanceStatsLoaded(data);
   }
 
   @override
   Future<void> close() {
-    _refuelingsSubscription?.cancel();
+    _carsSubscription?.cancel();
     return super.close();
   }
 }

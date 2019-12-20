@@ -21,7 +21,7 @@ class StatisticsScreenState extends State<StatisticsScreen> {
       ),
       BlocProvider<DrivingDistanceStatsBloc>(
         create: (context) => DrivingDistanceStatsBloc(  
-          refuelingsBloc: BlocProvider.of<RefuelingsBloc>(context),
+          carsBloc: BlocProvider.of<CarsBloc>(context),
         ),
       ),
     ],
