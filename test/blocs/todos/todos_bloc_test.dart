@@ -271,7 +271,7 @@ void main() {
       expect: [ 
         TodosLoading(),
         TodosLoaded([todo3]),
-        TodosLoaded([todo3.copyWith(dueDate: DateTime.parse('1971-05-15 01:00:00.000'), estimatedDueDate: true)]),
+        TodosLoaded([todo3.copyWith(dueDate: DateTime.parse('1971-05-15 05:00:00.000Z'), estimatedDueDate: true)]),
       ],
     );
     blocTest('CompletedTodo', 
