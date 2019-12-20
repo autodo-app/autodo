@@ -13,12 +13,15 @@ class CarEntity extends Equatable {
     this.id,
     this.name,
     this.mileage,
-    this.numRefuelings,
-    this.averageEfficiency,
-    this.distanceRate,
+    numRefuelings,
+    averageEfficiency,
+    distanceRate ,
     this.lastMileageUpdate,
     this.distanceRateHistory
-  );
+  ) : 
+    this.numRefuelings = numRefuelings ?? 0,
+    this.averageEfficiency = averageEfficiency ?? 0.0,
+    this.distanceRate = distanceRate ?? 0.0;
 
   Map<String, Object> toJson() {
     return {
@@ -62,7 +65,8 @@ class CarEntity extends Equatable {
       snap.data["numRefuelings"] as int,
       snap.data["averageEfficiency"] as double,
       snap.data["distanceRate"] as double,
-      DateTime.fromMillisecondsSinceEpoch(snap.data["lastMileageUpdate"] as int),
+      (snap.data['lastMileageUpdate'] == null) ? null :
+        DateTime.fromMillisecondsSinceEpoch(snap.data["lastMileageUpdate"] as int),
       snap.data["distanceRateHistory"] as List<DistanceRatePoint>
     );
   }
@@ -74,7 +78,7 @@ class CarEntity extends Equatable {
       "numRefuelings": numRefuelings,
       "averageEfficiency": averageEfficiency,
       "distanceRate": distanceRate,
-      "lastMileageUpdate": lastMileageUpdate,
+      "lastMileageUpdate": lastMileageUpdate?.millisecondsSinceEpoch,
       "distanceRateHistory": distanceRateHistory
     };
   }

@@ -53,7 +53,10 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
 
   @override
   WriteBatchWrapper startTodoWriteBatch() {
-    return WriteBatchWrapper(_todos);
+    return WriteBatchWrapper(  
+      firestoreInstance: _firestoreInstance,
+      collection: _todos
+    );
   }
 
   @override
@@ -84,7 +87,10 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
 
   @override
   WriteBatchWrapper startRefuelingWriteBatch() {
-    return WriteBatchWrapper(_refuelings);
+    return WriteBatchWrapper(  
+      firestoreInstance: _firestoreInstance,
+      collection: _refuelings
+    );
   }
 
   @override
@@ -115,7 +121,10 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
 
   @override
   WriteBatchWrapper startCarWriteBatch() {
-    return WriteBatchWrapper(_cars);
+    return WriteBatchWrapper(  
+      firestoreInstance: _firestoreInstance,
+      collection: _cars
+    );
   }
 
   @override
@@ -146,7 +155,10 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
 
   @override
   WriteBatchWrapper startRepeatWriteBatch() {
-    return WriteBatchWrapper(_repeats);
+    return WriteBatchWrapper(  
+      firestoreInstance: _firestoreInstance,
+      collection: _repeats
+    );
   }
 
   @override 
@@ -155,7 +167,7 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
   }
 
   @override 
-  List<Object> get props => [_firestoreInstance, _uuid, _userDoc, _todos, _refuelings, _cars, _repeats];
+  List<Object> get props => [_firestoreInstance, _uuid];
 
   @override 
   toString() => "FirebaseDataRepository { firestoreInstance: "

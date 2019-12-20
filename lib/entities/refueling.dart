@@ -53,12 +53,15 @@ class RefuelingEntity extends Equatable {
       snap.documentID,
       snap.data['carName'],
       snap.data['mileage'],
-      DateTime.fromMillisecondsSinceEpoch(snap.data['date']),
+      (snap.data['date'] == null) ? null : 
+        DateTime.fromMillisecondsSinceEpoch(snap.data['date']),
       snap.data["amount"] as double,
       snap.data["cost"] as double,
-      Color(snap.data["carColor"] as int),
+      (snap.data['carColor'] == null) ? null :
+        Color(snap.data["carColor"] as int),
       snap.data["efficiency"] as double,
-      Color(snap.data["efficiencyColor"] as int),
+      (snap.data['efficiencyColor'] == null) ? null :
+        Color(snap.data["efficiencyColor"] as int),
     );
   }
 
@@ -66,12 +69,12 @@ class RefuelingEntity extends Equatable {
     return {
       "carName": carName,
       "mileage": mileage,
-      "date": date.millisecondsSinceEpoch,
+      "date": date?.millisecondsSinceEpoch,
       "amount": amount,
       "cost": cost,
-      "carColor": carColor.value,
+      "carColor": carColor?.value,
       "efficiency": efficiency,
-      "efficiencyColor": efficiencyColor.value
+      "efficiencyColor": efficiencyColor?.value
     };
   }
 }

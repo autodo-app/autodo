@@ -75,13 +75,16 @@ class TodoEntity extends Equatable {
       snap.data["name"] as String,
       snap.data["carName"] as String,
       snap.data["repeatName"] as String,
-      TodoDueState.values[snap.data["dueState"] as int],
+      (snap.data["dueState"] == null) ? null : 
+        TodoDueState.values[snap.data["dueState"]],
       snap.data["dueMileage"] as int,
       snap.data["notificationID"] as int,
       snap.data["completed"] as bool,
       snap.data['estimatedDueDate'] as bool,
-      DateTime.fromMillisecondsSinceEpoch(snap.data["completedDate"] as int),
-      DateTime.fromMillisecondsSinceEpoch(snap.data["dueDate"] as int),
+      (snap.data["completedDate"] == null) ? null : 
+        DateTime.fromMillisecondsSinceEpoch(snap.data["completedDate"]),
+      (snap.data["dueDate"] == null) ? null : 
+        DateTime.fromMillisecondsSinceEpoch(snap.data["dueDate"]),
     );
   }
 
