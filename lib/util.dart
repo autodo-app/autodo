@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:equatable/equatable.dart';
 
 final RegExp lowerToUpper = RegExp('([a-z])([A-Z])');
 
@@ -16,7 +17,8 @@ String requiredValidator(String val) =>
     (val == null || val == "") ? "This field is required." : null;
 
 String doubleValidator(String val) {
-  if (val == null || val == "") return "This field is required.";
+  if (requiredValidator(val) != null) 
+    return requiredValidator(val);
   try {
     double.parse(val);
   } catch (e) {
@@ -26,7 +28,6 @@ String doubleValidator(String val) {
 }
 
 String intNoRequire(String val) {
-  if (val == null || val == "") return null;
   try {
     int.parse(val);
   } catch (e) {
@@ -36,14 +37,17 @@ String intNoRequire(String val) {
 }
 
 String intValidator(String val) {
-  if (val == null || val == "") return "This field is required.";
+  if (requiredValidator(val) != null) 
+    return requiredValidator(val);
   return intNoRequire(val);
 }
 
-class RGB {
-  double r = 0.0; // a fraction between 0 and 1
-  double g = 0.0; // a fraction between 0 and 1
-  double b = 0.0; // a fraction between 0 and 1
+class RGB extends Equatable {
+  final double r; // a fraction between 0 and 1
+  final double g; // a fraction between 0 and 1
+  final double b; // a fraction between 0 and 1
+
+  RGB(this.r, this.g, this.b);
 
   toValue() {
     int red = (r * 255).toInt();
@@ -51,20 +55,31 @@ class RGB {
     int blue = (b * 255).toInt();
     return (0xff << 24) + (red << 16) + (green << 8) + blue;
   }
+
+  @override
+  List<Object> get props => [r, g, b];
+
+  @override 
+  toString() => 'RGB { r: $r, g: $g, b: $b }';
 }
 
-class HSV {
-  double h = 0.0; // angle in degrees
-  double s = 0.0; // a fraction between 0 and 1
-  double v = 0.0; // a fraction between 0 and 1
+class HSV extends Equatable {
+  final double h; // angle in degrees
+  final double s; // a fraction between 0 and 1
+  final double v; // a fraction between 0 and 1
 
   HSV(this.h, this.s, this.v);
 
   toValue() => hsv2rgb(this).toValue();
+
+  @override 
+  List<Object> get props => [h, s, v];
+
+  @override 
+  toString() => 'HSV { h: $h, s: $s, v: $v }';
 }
 
 HSV rgb2hsv(RGB rgb) {
-  HSV out;
   double min, max, delta;
 
   min = rgb.r < rgb.g ? rgb.r : rgb.g;
@@ -73,49 +88,43 @@ HSV rgb2hsv(RGB rgb) {
   max = rgb.r > rgb.g ? rgb.r : rgb.g;
   max = max > rgb.b ? max : rgb.b;
 
-  out.v = max;
+  var h, s, v = max;
+
   delta = max - min;
   if (delta < 0.00001) {
-    out.s = 0;
-    out.h = 0; // undefined, maybe nan?
-    return out;
+    return HSV(v, 0, 0);
   }
   if (max > 0.0) {
     // NOTE: if Max is == 0, this divide would cause a crash
-    out.s = (delta / max);
+    s = (delta / max);
   } else {
     // if max is 0, then r = g = b = 0
     // s = 0, h is undefined
-    out.s = 0.0;
-    out.h = double.infinity; // its now undefined
-    return out;
+    return HSV(double.infinity, 0.0, v);
   }
 
-  if (rgb.r >= max) // > is bogus, just keeps compilor happy
-    out.h = (rgb.g - rgb.b) / delta; // between yellow & magenta
+  if (rgb.r >= max) // > is bogus, just keeps compiler happy
+    h = (rgb.g - rgb.b) / delta; // between yellow & magenta
   else if (rgb.g >= max)
-    out.h = 2.0 + (rgb.b - rgb.r) / delta; // between cyan & yellow
+    h = 2.0 + (rgb.b - rgb.r) / delta; // between cyan & yellow
   else
-    out.h = 4.0 + (rgb.r - rgb.g) / delta; // between magenta & cyan
+    h = 4.0 + (rgb.r - rgb.g) / delta; // between magenta & cyan
 
-  out.h *= 60.0; // degrees
+  h *= 60.0; // degrees
 
-  if (out.h < 0.0) out.h += 360.0;
+  if (h < 0.0) h += 360.0;
 
-  return out;
+  return HSV(h, s, v);
 }
 
 RGB hsv2rgb(HSV hsv) {
   double hh, p, q, t, ff;
   int i;
-  RGB out = RGB();
+  RGB out = RGB(0, 0, 0);
 
   if (hsv.s <= 0.0) {
     // < is bogus, just shuts up warnings
-    out.r = hsv.v;
-    out.g = hsv.v;
-    out.b = hsv.v;
-    return out;
+    return RGB(hsv.v, hsv.v, hsv.v);
   }
   hh = hsv.h;
   if (hh >= 360.0) hh = 0.0;
@@ -128,36 +137,23 @@ RGB hsv2rgb(HSV hsv) {
 
   switch (i) {
     case 0:
-      out.r = hsv.v;
-      out.g = t;
-      out.b = p;
+      out = RGB(hsv.v, t, p);
       break;
     case 1:
-      out.r = q;
-      out.g = hsv.v;
-      out.b = p;
+      out = RGB(q, hsv.v, p);
       break;
     case 2:
-      out.r = p;
-      out.g = hsv.v;
-      out.b = t;
+      out = RGB(p, hsv.v, t);
       break;
-
     case 3:
-      out.r = p;
-      out.g = q;
-      out.b = hsv.v;
+      out = RGB(p, q, hsv.v);
       break;
     case 4:
-      out.r = t;
-      out.g = p;
-      out.b = hsv.v;
+      out = RGB(t, p, hsv.v);
       break;
     case 5:
     default:
-      out.r = hsv.v;
-      out.g = p;
-      out.b = q;
+      out = RGB(hsv.v, p, q);
       break;
   }
   return out;
