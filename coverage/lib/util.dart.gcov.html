@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-12-20 09:25:46</td>
+            <td class="headerValue">2019-12-20 10:09:39</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">0</td>
@@ -246,9 +246,9 @@
 <a name="184"><span class="lineNum">     184 </span><span class="lineNoCov">          0 :   return clamp((_num - _min) / (_max - _min), 0.0, 1.0);</span></a>
 <a name="185"><span class="lineNum">     185 </span>            : }</a>
 <a name="186"><span class="lineNum">     186 </span>            : </a>
-<a name="187"><span class="lineNum">     187 </span><span class="lineCov">          1 : double roundToPrecision(double val, int places){ </span></a>
-<a name="188"><span class="lineNum">     188 </span><span class="lineCov">          1 :   double mod = pow(10.0, places); </span></a>
-<a name="189"><span class="lineNum">     189 </span><span class="lineCov">          4 :   return ((val * mod).round().toDouble() / mod); </span></a>
+<a name="187"><span class="lineNum">     187 </span><span class="lineCov">          3 : double roundToPrecision(double val, int places){ </span></a>
+<a name="188"><span class="lineNum">     188 </span><span class="lineCov">          3 :   double mod = pow(10.0, places); </span></a>
+<a name="189"><span class="lineNum">     189 </span><span class="lineCov">         12 :   return ((val * mod).round().toDouble() / mod); </span></a>
 <a name="190"><span class="lineNum">     190 </span>            : }</a>
 <a name="191"><span class="lineNum">     191 </span>            : </a>
 <a name="192"><span class="lineNum">     192 </span><span class="lineNoCov">          0 : changeFocus(FocusNode cur, FocusNode next) {</span></a>

@@ -18,10 +18,14 @@ class EfficiencyStatsLoaded extends EfficiencyStatsState {
   const EfficiencyStatsLoaded(this.fuelEfficiencyData);
 
   @override
-  List<Object> get props => [fuelEfficiencyData];
+  List<Object> get props => [
+    fuelEfficiencyData?.map((r) => r.id)?.fold('', (val, id) => (val as String) + id), 
+    fuelEfficiencyData?.map((r) => r.data)?.fold([], (val, data) => (val as List)..addAll(data))
+  ];
 
   @override
   String toString() {
-    return 'StatsLoaded { fuelEfficiencyData: $fuelEfficiencyData }';
+    return 'EfficiencyStatsLoaded { fuelEfficiencyData:' + 
+      fuelEfficiencyData.map((p) => p.data.toString()).fold('', (val, str) => val + str) + ' }';
   }
 }

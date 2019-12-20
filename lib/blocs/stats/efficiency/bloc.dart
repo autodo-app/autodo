@@ -31,6 +31,10 @@ class EfficiencyStatsBloc extends Bloc<EfficiencyStatsEvent, EfficiencyStatsStat
   }
 
   Stream<EfficiencyStatsState> _mapLoadEfficiencyStatsToState(event) async* {
+    if (_refuelingsBloc.state is RefuelingsLoaded) {
+      final data = await _prepData((_refuelingsBloc.state as RefuelingsLoaded).refuelings);
+      yield EfficiencyStatsLoaded(data);
+    }
     _refuelingsSubscription?.cancel();
     _refuelingsBloc.listen(
       (state) {
@@ -47,7 +51,9 @@ class EfficiencyStatsBloc extends Bloc<EfficiencyStatsEvent, EfficiencyStatsStat
             .toInt());
   }
 
-  Future<List<Series<FuelMileagePoint, DateTime>>> _prepRefuelingData(refuelings) async {
+  static double emaFilter(prev, current) => roundToPrecision(0.8 * prev + 0.2 * current, 3);
+
+  Future<List<Series<FuelMileagePoint, DateTime>>> _prepData(refuelings) async {
     List<FuelMileagePoint> points = [];
     for (var r in refuelings) {
       if (r.efficiency == double.infinity || r.efficiency == 0) continue;
@@ -62,7 +68,7 @@ class EfficiencyStatsBloc extends Bloc<EfficiencyStatsEvent, EfficiencyStatsStat
       }
       FuelMileagePoint last = emaData[emaData.length - 1];
       var newDate = point.date;
-      var newEfficiency = last.efficiency * 0.8 + point.efficiency * 0.2;
+      var newEfficiency = emaFilter(last.efficiency, point.efficiency);
       var newPoint = FuelMileagePoint(newDate, newEfficiency);
       var interDate = _interpolateDate(last.date, point.date);
       var interEfficiency = last.efficiency * 0.8 + newPoint.efficiency * 0.2;
@@ -101,7 +107,7 @@ class EfficiencyStatsBloc extends Bloc<EfficiencyStatsEvent, EfficiencyStatsStat
       ),
       // Configure our custom line renderer for this series.
       Series<FuelMileagePoint, DateTime>(
-          id: 'Mobile',
+          id: 'EMA',
           colorFn: (_, __) => MaterialPalette.blue.shadeDefault,
           domainFn: (FuelMileagePoint point, _) => point.date,
           measureFn: (FuelMileagePoint point, _) => point.efficiency,
@@ -111,7 +117,7 @@ class EfficiencyStatsBloc extends Bloc<EfficiencyStatsEvent, EfficiencyStatsStat
   }  
 
   Stream<EfficiencyStatsState> _mapUpdateEfficiencyDataToState(event) async* {
-    final data = await _prepRefuelingData(event.refuelings);
+    final data = await _prepData(event.refuelings);
     yield(EfficiencyStatsLoaded(data));
   }
 
