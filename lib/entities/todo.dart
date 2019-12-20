@@ -23,21 +23,21 @@ class TodoEntity extends Equatable {
     this.dueDate
   );
 
-  Map<String, Object> toJson() {
-    return {
-      "id": id,
-      "name": name,
-      "carName": carName,
-      "repeatName": repeatName,
-      "dueState": dueState.index,
-      "dueMileage": dueMileage,
-      "notificationID": notificationID,
-      "completed": completed,
-      "estimatedDueDate": estimatedDueDate,
-      "completedDate": completedDate.millisecondsSinceEpoch,
-      "dueDate": completedDate.millisecondsSinceEpoch
-    };
-  }
+  // Map<String, Object> toJson() {
+  //   return {
+  //     "id": id,
+  //     "name": name,
+  //     "carName": carName,
+  //     "repeatName": repeatName,
+  //     "dueState": dueState.index,
+  //     "dueMileage": dueMileage,
+  //     "notificationID": notificationID,
+  //     "completed": completed,
+  //     "estimatedDueDate": estimatedDueDate,
+  //     "completedDate": completedDate.millisecondsSinceEpoch,
+  //     "dueDate": completedDate.millisecondsSinceEpoch
+  //   };
+  // }
 
   @override
   List<Object> get props => [id, name, carName, repeatName, dueState, 
@@ -49,25 +49,25 @@ class TodoEntity extends Equatable {
   String toString() {
     return 'TodoEntity { id: $id, name: $name, carName: $carName, repeatName: '
     '$repeatName, dueState: $dueState, dueMileage: $dueMileage, notificationID: '
-    '$notificationID, completed: $completed, estimatedDueDate: $estimatedDueDate,'
+    '$notificationID, completed: $completed, estimatedDueDate: $estimatedDueDate, '
     'completedDate: $completedDate, dueDate: $dueDate }';
   }
 
-  static TodoEntity fromJson(Map<String, Object> json) {
-    return TodoEntity(
-      json["id"] as String,
-      json["name"] as String,
-      json["carName"] as String,
-      json["repeatName"] as String,
-      TodoDueState.values[json["dueState"] as int],
-      json["dueMileage"] as int,
-      json["notificationID"] as int,
-      json["completed"] as bool,
-      json['estimatedDueDate'] as bool,
-      DateTime.fromMillisecondsSinceEpoch(json["completedDate"] as int),
-      DateTime.fromMillisecondsSinceEpoch(json["dueDate"] as int),
-    );
-  }
+  // static TodoEntity fromJson(Map<String, Object> json) {
+  //   return TodoEntity(
+  //     json["id"] as String,
+  //     json["name"] as String,
+  //     json["carName"] as String,
+  //     json["repeatName"] as String,
+  //     TodoDueState.values[json["dueState"] as int],
+  //     json["dueMileage"] as int,
+  //     json["notificationID"] as int,
+  //     json["completed"] as bool,
+  //     json['estimatedDueDate'] as bool,
+  //     DateTime.fromMillisecondsSinceEpoch(json["completedDate"] as int),
+  //     DateTime.fromMillisecondsSinceEpoch(json["dueDate"] as int),
+  //   );
+  // }
 
   static TodoEntity fromSnapshot(DocumentSnapshot snap) {
     return TodoEntity(

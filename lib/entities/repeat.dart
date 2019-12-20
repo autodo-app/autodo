@@ -9,15 +9,15 @@ class RepeatEntity extends Equatable {
 
   const RepeatEntity(this.id, this.name, this.mileageInterval, this.dateInterval, this.cars);
 
-  Map<String, Object> toJson() {
-    return {
-      "id": id,
-      "name": name,
-      "mileageInterval": mileageInterval,
-      "dateInterval": dateInterval,
-      "cars": cars
-    };
-  }
+  // Map<String, Object> toJson() {
+  //   return {
+  //     "id": id,
+  //     "name": name,
+  //     "mileageInterval": mileageInterval,
+  //     "dateInterval": dateInterval,
+  //     "cars": cars
+  //   };
+  // }
 
   @override
   List<Object> get props => [id, name, mileageInterval, dateInterval, cars];
@@ -27,15 +27,15 @@ class RepeatEntity extends Equatable {
     return 'RepeatEntity { id: $id, name: $name, mileageInterval: $mileageInterval, dateInterval: $dateInterval, cars: $cars}';
   }
 
-  static RepeatEntity fromJson(Map<String, Object> json) {
-    return RepeatEntity(
-      json["id"] as String,
-      json["name"] as String,
-      json["mileageInterval"] as int,
-      Duration(days: json["dateInterval"] as int),
-      json["cars"] as List<String>
-    );
-  }
+  // static RepeatEntity fromJson(Map<String, Object> json) {
+  //   return RepeatEntity(
+  //     json["id"] as String,
+  //     json["name"] as String,
+  //     json["mileageInterval"] as int,
+  //     Duration(days: json["dateInterval"] as int),
+  //     json["cars"] as List<String>
+  //   );
+  // }
 
   static RepeatEntity fromSnapshot(DocumentSnapshot snap) {
     return RepeatEntity(

@@ -23,18 +23,18 @@ class CarEntity extends Equatable {
     this.averageEfficiency = averageEfficiency ?? 0.0,
     this.distanceRate = distanceRate ?? 0.0;
 
-  Map<String, Object> toJson() {
-    return {
-      "id": id,
-      "name": name,
-      "mileage": mileage,
-      "numRefuelings": numRefuelings,
-      "averageEfficiency": averageEfficiency,
-      "distanceRate": distanceRate,
-      "lastMileageUpdate": lastMileageUpdate,
-      "distanceRateHistory": distanceRateHistory
-    };
-  }
+  // Map<String, Object> toJson() {
+  //   return {
+  //     "id": id,
+  //     "name": name,
+  //     "mileage": mileage,
+  //     "numRefuelings": numRefuelings,
+  //     "averageEfficiency": averageEfficiency,
+  //     "distanceRate": distanceRate,
+  //     "lastMileageUpdate": lastMileageUpdate,
+  //     "distanceRateHistory": distanceRateHistory
+  //   };
+  // }
 
   @override
   List<Object> get props => [id, name, mileage, numRefuelings, averageEfficiency, distanceRate, lastMileageUpdate, distanceRateHistory];
@@ -44,18 +44,18 @@ class CarEntity extends Equatable {
     return 'CarEntity { id: $id, name: $name, mileage: $mileage, numRefuelings: $numRefuelings, averageEfficiency: $averageEfficiency, distanceRate: $distanceRate, lastMileageUpdate: $lastMileageUpdate, distanceRateHistory: $distanceRateHistory }';
   }
 
-  static CarEntity fromJson(Map<String, Object> json) {
-    return CarEntity(
-      json["id"] as String,
-      json["name"] as String,
-      json["mileage"] as int,
-      json["numRefuelings"] as int,
-      json["averageEfficiency"] as double,
-      json["distanceRate"] as double,
-      DateTime.fromMillisecondsSinceEpoch(json["lastMileageUpdate"] as int),
-      json["distanceRateHistory"] as List<DistanceRatePoint>
-    );
-  }
+  // static CarEntity fromJson(Map<String, Object> json) {
+  //   return CarEntity(
+  //     json["id"] as String,
+  //     json["name"] as String,
+  //     json["mileage"] as int,
+  //     json["numRefuelings"] as int,
+  //     json["averageEfficiency"] as double,
+  //     json["distanceRate"] as double,
+  //     DateTime.fromMillisecondsSinceEpoch(json["lastMileageUpdate"] as int),
+  //     json["distanceRateHistory"] as List<DistanceRatePoint>
+  //   );
+  // }
 
   static CarEntity fromSnapshot(DocumentSnapshot snap) {
     return CarEntity(

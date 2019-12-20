@@ -12,41 +12,41 @@ class RefuelingEntity extends Equatable {
 
   const RefuelingEntity(this.id, this.carName, this.mileage, this.date, this.amount, this.cost, this.carColor, this.efficiency, this.efficiencyColor);
 
-  Map<String, Object> toJson() {
-    return {
-      "id": id,
-      "carName": carName,
-      "mileage": mileage,
-      "date": date.millisecondsSinceEpoch,
-      "amount": amount,
-      "cost": cost,
-      "carColor": carColor.value,
-      "efficiency": efficiency,
-      "efficiencyColor": efficiencyColor.value,
-    };
-  }
+  // Map<String, Object> toJson() {
+  //   return {
+  //     "id": id,
+  //     "carName": carName,
+  //     "mileage": mileage,
+  //     "date": date.millisecondsSinceEpoch,
+  //     "amount": amount,
+  //     "cost": cost,
+  //     "carColor": carColor.value,
+  //     "efficiency": efficiency,
+  //     "efficiencyColor": efficiencyColor.value,
+  //   };
+  // }
 
   @override
   List<Object> get props => [id, carName, mileage, date, amount, cost, carColor, efficiency, efficiencyColor];
 
   @override
   String toString() {
-    return 'RefuelingEntity { id: $id, name: $carName, carColor: $carColor, mileage: $mileage, date: $date, amount: $amount, cost: $cost, efficiency: $efficiency, efficiencyColor: $efficiencyColor}';
+    return 'RefuelingEntity { id: $id, name: $carName, carColor: $carColor, mileage: $mileage, date: $date, amount: $amount, cost: $cost, efficiency: $efficiency, efficiencyColor: $efficiencyColor }';
   }
 
-  static RefuelingEntity fromJson(Map<String, Object> json) {
-    return RefuelingEntity(
-      json["id"] as String,
-      json["carName"] as String,
-      json["mileage"] as int,
-      DateTime.fromMillisecondsSinceEpoch(json["date"] as int),
-      json["amount"] as double,
-      json["cost"] as double,
-      Color(json["carColor"] as int),
-      json["efficiency"] as double,
-      Color(json["efficiencyColor"] as int),
-    );
-  }
+  // static RefuelingEntity fromJson(Map<String, Object> json) {
+  //   return RefuelingEntity(
+  //     json["id"] as String,
+  //     json["carName"] as String,
+  //     json["mileage"] as int,
+  //     DateTime.fromMillisecondsSinceEpoch(json["date"] as int),
+  //     json["amount"] as double,
+  //     json["cost"] as double,
+  //     Color(json["carColor"] as int),
+  //     json["efficiency"] as double,
+  //     Color(json["efficiencyColor"] as int),
+  //   );
+  // }
 
   static RefuelingEntity fromSnapshot(DocumentSnapshot snap) {
     return RefuelingEntity(
