@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-12-20 10:16:03</td>
+            <td class="headerValue">2019-12-20 14:18:30</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">0</td>
@@ -230,12 +230,12 @@
 <a name="168"><span class="lineNum">     168 </span>            : }</a>
 <a name="169"><span class="lineNum">     169 </span>            : </a>
 <a name="170"><span class="lineNum">     170 </span>            : /// This will always round down for now</a>
-<a name="171"><span class="lineNum">     171 </span><span class="lineCov">          6 : roundToDay(DateTime date) {</span></a>
-<a name="172"><span class="lineNum">     172 </span><span class="lineCov">         12 :   var hours = Duration(hours: date.hour);</span></a>
-<a name="173"><span class="lineNum">     173 </span><span class="lineCov">         12 :   var mins = Duration(minutes: date.minute);</span></a>
-<a name="174"><span class="lineNum">     174 </span><span class="lineCov">         12 :   var secs = Duration(seconds: date.second);</span></a>
-<a name="175"><span class="lineNum">     175 </span><span class="lineCov">         12 :   var millis = Duration(milliseconds: date.millisecond);</span></a>
-<a name="176"><span class="lineNum">     176 </span><span class="lineCov">         24 :   return date.subtract(hours).subtract(mins).subtract(secs).subtract(millis);</span></a>
+<a name="171"><span class="lineNum">     171 </span><span class="lineCov">          8 : roundToDay(DateTime date) {</span></a>
+<a name="172"><span class="lineNum">     172 </span><span class="lineCov">         16 :   var hours = Duration(hours: date.hour);</span></a>
+<a name="173"><span class="lineNum">     173 </span><span class="lineCov">         16 :   var mins = Duration(minutes: date.minute);</span></a>
+<a name="174"><span class="lineNum">     174 </span><span class="lineCov">         16 :   var secs = Duration(seconds: date.second);</span></a>
+<a name="175"><span class="lineNum">     175 </span><span class="lineCov">         16 :   var millis = Duration(milliseconds: date.millisecond);</span></a>
+<a name="176"><span class="lineNum">     176 </span><span class="lineCov">         32 :   return date.subtract(hours).subtract(mins).subtract(secs).subtract(millis);</span></a>
 <a name="177"><span class="lineNum">     177 </span>            : }</a>
 <a name="178"><span class="lineNum">     178 </span>            : </a>
 <a name="179"><span class="lineNum">     179 </span><span class="lineNoCov">          0 : double scaleToUnit(double _num, double _min, double _max) {</span></a>

@@ -156,7 +156,6 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
       yield RefuelingsLoaded(updatedRefuelings);
       _dataRepository.deleteRefueling(event.refueling);
     }
-    
   }
 
   @override

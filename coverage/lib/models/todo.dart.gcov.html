@@ -31,13 +31,13 @@
             <td class="headerValue">lcov.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">6</td>
+            <td class="headerCovTableEntry">25</td>
             <td class="headerCovTableEntry">38</td>
-            <td class="headerCovTableEntryLo">15.8 %</td>
+            <td class="headerCovTableEntryLo">65.8 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-12-20 10:16:03</td>
+            <td class="headerValue">2019-12-20 14:18:30</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">0</td>
@@ -75,7 +75,7 @@
 <a name="13"><span class="lineNum">      13 </span>            :   final bool completed, estimatedDueDate;</a>
 <a name="14"><span class="lineNum">      14 </span>            :   final DateTime completedDate, dueDate;</a>
 <a name="15"><span class="lineNum">      15 </span>            : </a>
-<a name="16"><span class="lineNum">      16 </span><span class="lineCov">          4 :   Todo({</span></a>
+<a name="16"><span class="lineNum">      16 </span><span class="lineCov">          6 :   Todo({</span></a>
 <a name="17"><span class="lineNum">      17 </span>            :     this.id,</a>
 <a name="18"><span class="lineNum">      18 </span>            :     this.name,</a>
 <a name="19"><span class="lineNum">      19 </span>            :     this.carName,</a>
@@ -89,7 +89,7 @@
 <a name="27"><span class="lineNum">      27 </span>            :     this.dueDate</a>
 <a name="28"><span class="lineNum">      28 </span>            :   });</a>
 <a name="29"><span class="lineNum">      29 </span>            : </a>
-<a name="30"><span class="lineNum">      30 </span><span class="lineNoCov">          0 :   Todo copyWith({</span></a>
+<a name="30"><span class="lineNum">      30 </span><span class="lineCov">          1 :   Todo copyWith({</span></a>
 <a name="31"><span class="lineNum">      31 </span>            :     String id,</a>
 <a name="32"><span class="lineNum">      32 </span>            :     String name,</a>
 <a name="33"><span class="lineNum">      33 </span>            :     String carName,</a>
@@ -102,36 +102,36 @@
 <a name="40"><span class="lineNum">      40 </span>            :     DateTime completedDate,</a>
 <a name="41"><span class="lineNum">      41 </span>            :     DateTime dueDate</a>
 <a name="42"><span class="lineNum">      42 </span>            :   }) {</a>
-<a name="43"><span class="lineNum">      43 </span><span class="lineNoCov">          0 :     return Todo(  </span></a>
-<a name="44"><span class="lineNum">      44 </span><span class="lineNoCov">          0 :       id: id ?? this.id,</span></a>
-<a name="45"><span class="lineNum">      45 </span><span class="lineNoCov">          0 :       name: name ?? this.name,</span></a>
-<a name="46"><span class="lineNum">      46 </span><span class="lineNoCov">          0 :       carName: carName ?? this.carName,</span></a>
-<a name="47"><span class="lineNum">      47 </span><span class="lineNoCov">          0 :       repeatName: repeatName ?? this.repeatName,</span></a>
-<a name="48"><span class="lineNum">      48 </span><span class="lineNoCov">          0 :       dueState: dueState ?? this.dueState,</span></a>
-<a name="49"><span class="lineNum">      49 </span><span class="lineNoCov">          0 :       dueMileage: dueMileage ?? this.dueMileage,</span></a>
-<a name="50"><span class="lineNum">      50 </span><span class="lineNoCov">          0 :       notificationID: notificationID ?? this.notificationID,</span></a>
-<a name="51"><span class="lineNum">      51 </span><span class="lineNoCov">          0 :       completed: completed ?? this.completed,</span></a>
-<a name="52"><span class="lineNum">      52 </span><span class="lineNoCov">          0 :       estimatedDueDate: estimatedDueDate ?? this.estimatedDueDate,</span></a>
-<a name="53"><span class="lineNum">      53 </span><span class="lineNoCov">          0 :       completedDate: completedDate ?? this.completedDate,</span></a>
-<a name="54"><span class="lineNum">      54 </span><span class="lineNoCov">          0 :       dueDate: dueDate ?? this.dueDate</span></a>
+<a name="43"><span class="lineNum">      43 </span><span class="lineCov">          1 :     return Todo(  </span></a>
+<a name="44"><span class="lineNum">      44 </span><span class="lineCov">          1 :       id: id ?? this.id,</span></a>
+<a name="45"><span class="lineNum">      45 </span><span class="lineCov">          1 :       name: name ?? this.name,</span></a>
+<a name="46"><span class="lineNum">      46 </span><span class="lineCov">          1 :       carName: carName ?? this.carName,</span></a>
+<a name="47"><span class="lineNum">      47 </span><span class="lineCov">          1 :       repeatName: repeatName ?? this.repeatName,</span></a>
+<a name="48"><span class="lineNum">      48 </span><span class="lineCov">          1 :       dueState: dueState ?? this.dueState,</span></a>
+<a name="49"><span class="lineNum">      49 </span><span class="lineCov">          1 :       dueMileage: dueMileage ?? this.dueMileage,</span></a>
+<a name="50"><span class="lineNum">      50 </span><span class="lineCov">          1 :       notificationID: notificationID ?? this.notificationID,</span></a>
+<a name="51"><span class="lineNum">      51 </span><span class="lineCov">          1 :       completed: completed ?? this.completed,</span></a>
+<a name="52"><span class="lineNum">      52 </span><span class="lineCov">          1 :       estimatedDueDate: estimatedDueDate ?? this.estimatedDueDate,</span></a>
+<a name="53"><span class="lineNum">      53 </span><span class="lineCov">          1 :       completedDate: completedDate ?? this.completedDate,</span></a>
+<a name="54"><span class="lineNum">      54 </span><span class="lineCov">          1 :       dueDate: dueDate ?? this.dueDate</span></a>
 <a name="55"><span class="lineNum">      55 </span>            :     );</a>
 <a name="56"><span class="lineNum">      56 </span>            :   }</a>
 <a name="57"><span class="lineNum">      57 </span>            : </a>
-<a name="58"><span class="lineNum">      58 </span><span class="lineNoCov">          0 :   @override </span></a>
-<a name="59"><span class="lineNum">      59 </span><span class="lineNoCov">          0 :   List&lt;Object&gt; get props =&gt; [id, name, carName, repeatName, dueState, dueMileage, </span></a>
-<a name="60"><span class="lineNum">      60 </span><span class="lineNoCov">          0 :       notificationID, completed, estimatedDueDate, completedDate, dueDate];</span></a>
+<a name="58"><span class="lineNum">      58 </span><span class="lineCov">          2 :   @override </span></a>
+<a name="59"><span class="lineNum">      59 </span><span class="lineCov">         14 :   List&lt;Object&gt; get props =&gt; [id, name, carName, repeatName, dueState, dueMileage, </span></a>
+<a name="60"><span class="lineNum">      60 </span><span class="lineCov">         10 :       notificationID, completed, estimatedDueDate, completedDate, dueDate];</span></a>
 <a name="61"><span class="lineNum">      61 </span>            : </a>
-<a name="62"><span class="lineNum">      62 </span><span class="lineCov">          2 :   @override</span></a>
+<a name="62"><span class="lineNum">      62 </span><span class="lineCov">          3 :   @override</span></a>
 <a name="63"><span class="lineNum">      63 </span>            :   String toString() {</a>
-<a name="64"><span class="lineNum">      64 </span><span class="lineCov">          6 :     return 'Todo { id: $id, name: $name, carName: $carName, repeatName: '</span></a>
-<a name="65"><span class="lineNum">      65 </span><span class="lineCov">          6 :     '$repeatName, dueState: $dueState, dueMileage: $dueMileage, completed: '</span></a>
-<a name="66"><span class="lineNum">      66 </span><span class="lineCov">          4 :     '$completed, estimatedDueDate: $estimatedDueDate, completedDate: '</span></a>
-<a name="67"><span class="lineNum">      67 </span><span class="lineCov">          4 :     '$completedDate, dueDate: $dueDate }';</span></a>
+<a name="64"><span class="lineNum">      64 </span><span class="lineCov">          9 :     return 'Todo { id: $id, name: $name, carName: $carName, repeatName: '</span></a>
+<a name="65"><span class="lineNum">      65 </span><span class="lineCov">          9 :     '$repeatName, dueState: $dueState, dueMileage: $dueMileage, completed: '</span></a>
+<a name="66"><span class="lineNum">      66 </span><span class="lineCov">          6 :     '$completed, estimatedDueDate: $estimatedDueDate, completedDate: '</span></a>
+<a name="67"><span class="lineNum">      67 </span><span class="lineCov">          6 :     '$completedDate, dueDate: $dueDate }';</span></a>
 <a name="68"><span class="lineNum">      68 </span>            :   }</a>
 <a name="69"><span class="lineNum">      69 </span>            : </a>
-<a name="70"><span class="lineNum">      70 </span><span class="lineNoCov">          0 :   TodoEntity toEntity() {</span></a>
-<a name="71"><span class="lineNum">      71 </span><span class="lineNoCov">          0 :     return TodoEntity(id, name, carName, repeatName, dueState, dueMileage, </span></a>
-<a name="72"><span class="lineNum">      72 </span><span class="lineNoCov">          0 :         notificationID, completed, estimatedDueDate, completedDate, dueDate);</span></a>
+<a name="70"><span class="lineNum">      70 </span><span class="lineCov">          1 :   TodoEntity toEntity() {</span></a>
+<a name="71"><span class="lineNum">      71 </span><span class="lineCov">          7 :     return TodoEntity(id, name, carName, repeatName, dueState, dueMileage, </span></a>
+<a name="72"><span class="lineNum">      72 </span><span class="lineCov">          5 :         notificationID, completed, estimatedDueDate, completedDate, dueDate);</span></a>
 <a name="73"><span class="lineNum">      73 </span>            :   }</a>
 <a name="74"><span class="lineNum">      74 </span>            : </a>
 <a name="75"><span class="lineNum">      75 </span><span class="lineNoCov">          0 :   static Todo fromEntity(TodoEntity entity) {</span></a>

@@ -90,13 +90,13 @@ class TodoEntity extends Equatable {
       "name": name,
       "carName": carName,
       "repeatName": repeatName,
-      "dueState": dueState.index,
+      "dueState": dueState?.index,
       "dueMileage": dueMileage,
       "notificationID": notificationID,
       "completed": completed,
       "estimatedDueDate": estimatedDueDate,
-      "completedDate": completedDate.millisecondsSinceEpoch,
-      "dueDate": completedDate.millisecondsSinceEpoch
+      "completedDate": completedDate?.millisecondsSinceEpoch,
+      "dueDate": dueDate?.millisecondsSinceEpoch
     };
   }
 }

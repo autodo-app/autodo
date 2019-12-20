@@ -13,11 +13,11 @@ import 'package:autodo/models/barrel.dart';
 
 class TodosBloc extends Bloc<TodosEvent, TodosState> {
   final DataRepository _dataRepository;
-  StreamSubscription _dataSubscription, _carsSubscription, _repeatsSubscription;
   final CarsBloc _carsBloc;
   final NotificationsBloc _notificationsBloc;
   final RepeatsBloc _repeatsBloc;
-
+  StreamSubscription _dataSubscription, _carsSubscription, _repeatsSubscription;
+  
   List<Car> _carsCache;
 
   TodosBloc({
@@ -45,10 +45,6 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       yield* _mapDeleteTodoToState(event);
     } else if (event is ToggleAll) {
       yield* _mapToggleAllToState();
-    } else if (event is ClearCompleted) {
-      yield* _mapClearCompletedToState();
-    } else if (event is TodosUpdated) {
-      yield* _mapTodosUpdateToState(event);
     } else if (event is UpdateDueDates) {
       yield* _mapUpdateDueDatesToState(event);
     } else if (event is RepeatsRefresh) {
@@ -59,10 +55,20 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   }
 
   Stream<TodosState> _mapLoadTodosToState() async* {
+    try {
+      final todos = await _dataRepository.todos().first;
+      if (todos != null) {
+        yield TodosLoaded(todos);
+      } else {
+        yield TodosNotLoaded();
+      }
+    } catch (_) {
+      yield TodosNotLoaded();
+    }
     _dataSubscription?.cancel();
-    _dataSubscription = _dataRepository.todos().listen(
-          (todos) => add(TodosUpdated(todos)),
-        );
+    // _dataSubscription = _dataRepository.todos().listen(
+    //       (todos) => add(TodosUpdated(todos)),
+    //     );
     _carsSubscription = _carsBloc.listen( 
       (state) {
         if (state is CarsLoaded) {
@@ -89,70 +95,110 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     );
   }
 
+  Todo _updateDueDate(car, todo, batch) {
+    var distanceToTodo = todo.dueMileage - car.mileage;
+    int daysToTodo = (distanceToTodo / car.distanceRate).round();
+    Duration timeToTodo = Duration(days: daysToTodo);
+    var newDueDate = car.lastMileageUpdate.add(timeToTodo);
+
+    Todo out = todo.copyWith(dueDate: newDueDate, estimatedDueDate: true);
+    _notificationsBloc.add(ReScheduleNotification(
+      id: out.notificationID,
+      date: out.dueDate,
+      title: AutodoLocalizations.todoDueSoon + ': ${out.name}',
+      body: ''
+    ));
+    batch.updateData(out.id, out.toEntity().toDocument());
+    return out;
+  }
+
+  bool _shouldUpdate(car, t) => 
+    (t.carName == car.name && (t?.estimatedDueDate ?? false));
+
   Stream<TodosState> _mapUpdateDueDatesToState(UpdateDueDates event) async* {
     List<Car> cars = event.cars;
     if (state is TodosLoaded) {
       TodosLoaded curState = state;
       WriteBatchWrapper batch = _dataRepository.startTodoWriteBatch();
+      List<Todo> updatedTodos;
       for (var car in cars) {
         if (_carsCache?.contains(car) ?? false) continue;
 
-        List<Todo> thisCarsTodos = curState.todos.where((t) => t.carName == car.name);
-        for (var todo in thisCarsTodos) {
-          if (todo.estimatedDueDate == null ||
-              !todo.estimatedDueDate) {
-            continue;
-          } 
-          var distanceToTodo = todo.dueMileage - car.mileage;
-          int daysToTodo = (distanceToTodo / car.distanceRate).round();
-          Duration timeToTodo = Duration(days: daysToTodo);
-          var newDueDate = car.lastMileageUpdate.add(timeToTodo);
-          _notificationsBloc.add(ReScheduleNotification(
-            id: todo.notificationID,
-            date: todo.dueDate,
-            title: AutodoLocalizations.todoDueSoon + ': ${todo.name}',
-            body: ''
-          ));
-          Todo out = todo.copyWith(dueDate: newDueDate);
-          batch.updateData(todo.id, todo.toEntity().toDocument());
-        }
+        updatedTodos = curState.todos
+          .map((t) => _shouldUpdate(car, t) ? _updateDueDate(car, t, batch) : t)
+          .toList();
       }
+      yield TodosLoaded(updatedTodos);
       _carsCache = cars;
       batch.commit();
     }
   }
 
   Stream<TodosState> _mapAddTodoToState(AddTodo event) async* {
+    final List<Todo> updatedTodos = List.from((state as TodosLoaded).todos)..add(event.todo);
+    yield TodosLoaded(updatedTodos);
     _scheduleNotification(event.todo);
     // out = event.todo.copyWith(notificationID: notificationID);
     _dataRepository.addNewTodo(event.todo);
   }
 
   Stream<TodosState> _mapUpdateTodoToState(UpdateTodo event) async* {
+    final List<Todo> updatedTodos = (state as TodosLoaded)
+      .todos.map((r) => r.id == event.updatedTodo.id ? event.updatedTodo : r)
+      .toList();
+    yield TodosLoaded(updatedTodos);
     _dataRepository.updateTodo(event.updatedTodo);
+  }
+
+  Todo _createNewTodoFromRepeat(repeat, todo) {
+    CarsLoaded curCarsState = _carsBloc.state;
+    Car curCar = curCarsState.cars.firstWhere((c) => c.name == todo.carName);
+
+    int nextDueMileage = curCar.mileage + repeat.mileageInterval;
+    int daysToDue = (repeat.mileageInterval / curCar.distanceRate).round();
+    DateTime nextDueDate = todo.completedDate.add(Duration(days: daysToDue));
+    Todo next = todo.copyWith(
+      dueMileage: nextDueMileage,
+      dueDate: nextDueDate,
+      completed: false
+    );
+    _dataRepository.addNewTodo(next);
+    return next;
   }
 
   Stream<TodosState> _mapCompleteTodoToState(CompleteTodo event) async* {
     Todo curTodo = event.todo;
-    if (_repeatsBloc.state is RepeatsLoaded && _carsBloc.state is CarsLoaded) {
-      RepeatsLoaded curRepeatsState = _repeatsBloc.state;
-      Repeat curRepeat = curRepeatsState.repeats.firstWhere((r) => r.name == curTodo.repeatName);
-      CarsLoaded curCarsState = _carsBloc.state;
-      Car curCar = curCarsState.cars.firstWhere((c) => c.name == curTodo.carName);
+    if (_repeatsBloc.state is RepeatsLoaded && 
+        _carsBloc.state is CarsLoaded) {
+      List<Todo> updatedTodos = (state as TodosLoaded).todos;
 
-      int nextDueMileage = curCar.mileage + curRepeat.mileageInterval;
-      int daysToDue = (curRepeat.mileageInterval / curCar.distanceRate).round();
-      DateTime nextDueDate = curTodo.completedDate.add(Duration(days: daysToDue));
-      Todo next = curTodo.copyWith(
-        dueMileage: nextDueMileage,
-        dueDate: nextDueDate,
-        completed: false
+      RepeatsLoaded curRepeatsState = _repeatsBloc.state;
+      Repeat curRepeat = curRepeatsState.repeats.firstWhere((r) => r.name == curTodo.repeatName, orElse: () => null);
+      // throw Exception();
+      if (!curRepeat.props.every((p) => p == null)) {
+        Todo newTodo = _createNewTodoFromRepeat(curRepeat, curTodo);
+        updatedTodos = updatedTodos..add(newTodo);
+        _dataRepository.addNewTodo(newTodo);
+      }
+      
+      Todo completedTodo = curTodo.copyWith(
+        completed: true, 
+        completedDate: event.completedDate ?? DateTime.now(),
       );
-      _dataRepository.addNewTodo(next);
+      updatedTodos = updatedTodos
+        .map((t) => (t.id == completedTodo.id) ? completedTodo : t)
+        .toList();
+      yield TodosLoaded(updatedTodos);
+      _dataRepository.updateTodo(completedTodo);
     }
   }
 
   Stream<TodosState> _mapDeleteTodoToState(DeleteTodo event) async* {
+    final updatedTodos = (state as TodosLoaded)
+          .todos
+          .where((r) => r.id != event.todo.id)
+          .toList();
+    yield TodosLoaded(updatedTodos);
     _dataRepository.deleteTodo(event.todo);
   }
 
@@ -163,25 +209,11 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       final List<Todo> updatedTodos = currentState.todos
           .map((todo) => todo.copyWith(completed: !allComplete))
           .toList();
+      yield TodosLoaded(updatedTodos);
       updatedTodos.forEach((updatedTodo) {
         _dataRepository.updateTodo(updatedTodo);
       });
     }
-  }
-
-  Stream<TodosState> _mapClearCompletedToState() async* {
-    final currentState = state;
-    if (currentState is TodosLoaded) {
-      final List<Todo> completedTodos =
-          currentState.todos.where((todo) => todo.completed).toList();
-      completedTodos.forEach((completedTodo) {
-        _dataRepository.deleteTodo(completedTodo);
-      });
-    }
-  }
-
-  Stream<TodosState> _mapTodosUpdateToState(TodosUpdated event) async* {
-    yield TodosLoaded(event.todos);
   }
 
   Stream<TodosState> _mapRepeatsRefreshToState(RepeatsRefresh event) async* {
@@ -192,10 +224,10 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   List sortItems(List items) {
     return items
       ..sort((a, b) {
-        var aDate = a.data['dueDate'] ?? 0;
-        var bDate = b.data['dueDate'] ?? 0;
-        var aMileage = a.data['dueMileage'] ?? 0;
-        var bMileage = b.data['dueMileage'] ?? 0;
+        var aDate = a?.dueDate ?? 0;
+        var bDate = b?.dueDate ?? 0;
+        var aMileage = a?.dueMileage ?? 0;
+        var bMileage = b?.dueMileage ?? 0;
 
         if (aDate == 0 && bDate == 0) {
           // both don't have a date, so only consider the mileages
