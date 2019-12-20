@@ -10,6 +10,7 @@ import 'event.dart';
 import 'state.dart';
 import 'package:autodo/repositories/barrel.dart';
 import 'package:autodo/models/barrel.dart';
+import 'package:autodo/util.dart';
 
 class TodosBloc extends Bloc<TodosEvent, TodosState> {
   final DataRepository _dataRepository;
@@ -99,7 +100,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     var distanceToTodo = todo.dueMileage - car.mileage;
     int daysToTodo = (distanceToTodo / car.distanceRate).round();
     Duration timeToTodo = Duration(days: daysToTodo);
-    var newDueDate = car.lastMileageUpdate.add(timeToTodo);
+    var newDueDate = roundToDay(car.lastMileageUpdate.toUtc().add(timeToTodo)).toLocal();
 
     Todo out = todo.copyWith(dueDate: newDueDate, estimatedDueDate: true);
     _notificationsBloc.add(ReScheduleNotification(
