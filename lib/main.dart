@@ -1,3 +1,4 @@
+import 'package:autodo/screens/home/screen.dart';
 import 'package:autodo/widgets/loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
@@ -53,11 +54,9 @@ class App extends StatelessWidget {
         // Just here as the splitter between home screen and login screen
         builder: (context, state) {
           if (state is Authenticated) {
-            Navigator.popAndPushNamed(context, AutodoRoutes.home);
-            return Container();
+            return HomeScreenProvider();
           } else if (state is Unauthenticated) {
-            Navigator.popAndPushNamed(context, AutodoRoutes.welcome);
-            return Container();
+            return WelcomeScreenProvider();
           } else {
             return LoadingIndicator();
           }
