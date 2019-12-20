@@ -50,7 +50,7 @@ class Refueling extends Equatable{
   }
 
   @override 
-  List<Object> get props => [carName, id, mileage, date, amount, cost, carColor, efficiency, efficiencyColor];
+  List<Object> get props => [carName, id, mileage, date, amount, cost, carColor, efficiency, efficiencyColor?.value];
 
   @override
   String toString() {

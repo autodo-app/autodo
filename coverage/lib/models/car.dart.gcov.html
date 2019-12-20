@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-12-19 16:47:58</td>
+            <td class="headerValue">2019-12-19 19:19:27</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">0</td>
@@ -76,7 +76,7 @@
 <a name="14"><span class="lineNum">      14 </span>            :   final DateTime lastMileageUpdate;</a>
 <a name="15"><span class="lineNum">      15 </span>            :   final List&lt;DistanceRatePoint&gt; distanceRateHistory;</a>
 <a name="16"><span class="lineNum">      16 </span>            : </a>
-<a name="17"><span class="lineNum">      17 </span><span class="lineCov">          2 :   Car({ </span></a>
+<a name="17"><span class="lineNum">      17 </span><span class="lineCov">          4 :   Car({ </span></a>
 <a name="18"><span class="lineNum">      18 </span>            :     this.id,</a>
 <a name="19"><span class="lineNum">      19 </span>            :     this.name,</a>
 <a name="20"><span class="lineNum">      20 </span>            :     this.mileage,</a>
@@ -86,8 +86,8 @@
 <a name="24"><span class="lineNum">      24 </span>            :     lastMileageUpdate,</a>
 <a name="25"><span class="lineNum">      25 </span>            :     distanceRateHistory,</a>
 <a name="26"><span class="lineNum">      26 </span>            :   }) :</a>
-<a name="27"><span class="lineNum">      27 </span><span class="lineCov">          4 :    this.lastMileageUpdate = lastMileageUpdate ?? roundToDay(DateTime.fromMillisecondsSinceEpoch(0)),</span></a>
-<a name="28"><span class="lineNum">      28 </span><span class="lineCov">          2 :    this.distanceRateHistory = distanceRateHistory ?? [];</span></a>
+<a name="27"><span class="lineNum">      27 </span><span class="lineCov">          8 :    this.lastMileageUpdate = lastMileageUpdate ?? roundToDay(DateTime.fromMillisecondsSinceEpoch(0)),</span></a>
+<a name="28"><span class="lineNum">      28 </span><span class="lineCov">          4 :    this.distanceRateHistory = distanceRateHistory ?? [];</span></a>
 <a name="29"><span class="lineNum">      29 </span>            : </a>
 <a name="30"><span class="lineNum">      30 </span><span class="lineCov">          1 :   Car copyWith({</span></a>
 <a name="31"><span class="lineNum">      31 </span>            :     String id,</a>
@@ -111,12 +111,12 @@
 <a name="49"><span class="lineNum">      49 </span>            :     );</a>
 <a name="50"><span class="lineNum">      50 </span>            :   }</a>
 <a name="51"><span class="lineNum">      51 </span>            : </a>
-<a name="52"><span class="lineNum">      52 </span><span class="lineCov">          2 :   @override </span></a>
-<a name="53"><span class="lineNum">      53 </span><span class="lineCov">         18 :   List&lt;Object&gt; get props =&gt; [id, name, mileage, numRefuelings, averageEfficiency, distanceRate, lastMileageUpdate, distanceRateHistory];</span></a>
+<a name="52"><span class="lineNum">      52 </span><span class="lineCov">          3 :   @override </span></a>
+<a name="53"><span class="lineNum">      53 </span><span class="lineCov">         27 :   List&lt;Object&gt; get props =&gt; [id, name, mileage, numRefuelings, averageEfficiency, distanceRate, lastMileageUpdate, distanceRateHistory];</span></a>
 <a name="54"><span class="lineNum">      54 </span>            : </a>
-<a name="55"><span class="lineNum">      55 </span><span class="lineCov">          1 :   @override</span></a>
+<a name="55"><span class="lineNum">      55 </span><span class="lineCov">          2 :   @override</span></a>
 <a name="56"><span class="lineNum">      56 </span>            :   String toString() {</a>
-<a name="57"><span class="lineNum">      57 </span><span class="lineCov">          9 :     return 'Car { id: $id, name: $name, mileage: $mileage, numRefuelings: $numRefuelings, averageEfficiency: $averageEfficiency, distanceRate: $distanceRate, lastMileageUpdate: $lastMileageUpdate, distanceRateHistory: $distanceRateHistory }';</span></a>
+<a name="57"><span class="lineNum">      57 </span><span class="lineCov">         18 :     return 'Car { id: $id, name: $name, mileage: $mileage, numRefuelings: $numRefuelings, averageEfficiency: $averageEfficiency, distanceRate: $distanceRate, lastMileageUpdate: $lastMileageUpdate, distanceRateHistory: $distanceRateHistory }';</span></a>
 <a name="58"><span class="lineNum">      58 </span>            :   }</a>
 <a name="59"><span class="lineNum">      59 </span>            : </a>
 <a name="60"><span class="lineNum">      60 </span><span class="lineCov">          1 :   CarEntity toEntity() {</span></a>

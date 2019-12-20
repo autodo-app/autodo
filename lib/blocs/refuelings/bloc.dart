@@ -20,6 +20,7 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
   final DataRepository _dataRepository;
   StreamSubscription _dataSubscription, _carsSubscription;
   final CarsBloc _carsBloc;
+  List<Car> _carsCache;
 
   RefuelingsBloc({@required DataRepository dataRepository, @required CarsBloc carsBloc})
       : assert(dataRepository != null), assert(carsBloc != null),
@@ -38,9 +39,7 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
       yield* _mapUpdateRefuelingToState(event);
     } else if (event is DeleteRefueling) {
       yield* _mapDeleteRefuelingToState(event);
-    } else if (event is RefuelingsUpdated) {
-      yield* _mapRefuelingsUpdateToState(event);
-    } else if (event is ExternalCarsUpdated) {
+    } if (event is ExternalCarsUpdated) {
       yield* _mapCarsUpdatedToState(event);
     }
   }
@@ -76,10 +75,20 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
   }
 
   Stream<RefuelingsState> _mapLoadRefuelingsToState() async* {
-    _dataSubscription?.cancel();
-    _dataSubscription = _dataRepository.refuelings().listen(
-          (refuelings) => add(RefuelingsUpdated(refuelings)),
-        );
+    try {
+      final refuelings = await _dataRepository.refuelings().first;
+      if (refuelings != null) {
+        yield RefuelingsLoaded(refuelings);
+      } else {
+        yield RefuelingsNotLoaded();
+      }
+    } catch (_) {
+      yield RefuelingsNotLoaded();
+    }
+    // _dataSubscription?.cancel();
+    // _dataSubscription = _dataRepository.refuelings().listen(
+    //   (refuelings) => add(LoadRefuelings(refuelings)),
+    // );
     _carsSubscription = _carsBloc.listen(
       (state) {
         if (state is CarsLoaded) {
@@ -94,14 +103,21 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
     var batch = _dataRepository.startRefuelingWriteBatch();
     if (state is RefuelingsLoaded) {
       RefuelingsLoaded curState = state as RefuelingsLoaded;
-      for (var r in curState.refuelings) {
-        for (var c in event.cars) {
-          if (c.name == r.carName) {
-            batch.updateData(r.id, r.copyWith(efficiencyColor: Color(_hsv(r, c))));
-            break;
-          }
+      List<Refueling> updatedRefuelings = curState.refuelings;
+      for (var c in event.cars) {
+        if (_carsCache?.contains(c) ?? false) {
+          continue; // only do calculations for updated cars
+        }
+
+        List<Refueling> toUpdate = curState.refuelings.where((r) => r.carName == c.name).toList();
+        for (var r in toUpdate) {
+          Refueling updated = r.copyWith(efficiencyColor: Color(_hsv(r, c)));
+          batch.updateData(r.id, updated);
+          updatedRefuelings = updatedRefuelings.map((r) => r.id == updated.id ? updated : r).toList();
         }
       }
+      yield RefuelingsLoaded(updatedRefuelings);
+      _carsCache = event.cars;
     }
     batch.commit();
   }
@@ -113,6 +129,8 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
     Refueling out = event.refueling.copyWith(efficiency: dist / item.amount);
 
     // event.carsBloc.add(AddRefuelingInfo(item.car, item.mileage, item.date, item.efficiency, prev.date, dist));
+    final List<Refueling> updatedRefuelings = List.from((state as RefuelingsLoaded).refuelings)..add(out);
+    yield RefuelingsLoaded(updatedRefuelings);
     _dataRepository.addNewRefueling(out);
   }
 
@@ -120,17 +138,25 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
     var prev = await _findLatestRefueling(event.refueling);
     var dist = (prev == null) ? 0 : event.refueling.mileage - prev.mileage;
     var efficiency = dist / event.refueling.amount;
-
     Refueling out = event.refueling.copyWith(efficiency: efficiency);
+
+    final List<Refueling> updatedRefuelings = (state as RefuelingsLoaded)
+      .refuelings.map((r) => r.id == out.id ? out : r)
+      .toList();
+    yield RefuelingsLoaded(updatedRefuelings);
     _dataRepository.updateRefueling(out);
   }
 
   Stream<RefuelingsState> _mapDeleteRefuelingToState(DeleteRefueling event) async* {
-    _dataRepository.deleteRefueling(event.refueling);
-  }
-
-  Stream<RefuelingsState> _mapRefuelingsUpdateToState(RefuelingsUpdated event) async* {
-    yield RefuelingsLoaded(event.refuelings);
+    if (state is RefuelingsLoaded) {
+      final updatedRefuelings = (state as RefuelingsLoaded)
+          .refuelings
+          .where((r) => r.id != event.refueling.id)
+          .toList();
+      yield RefuelingsLoaded(updatedRefuelings);
+      _dataRepository.deleteRefueling(event.refueling);
+    }
+    
   }
 
   @override

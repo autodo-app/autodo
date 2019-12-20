@@ -82,11 +82,11 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
 
   Stream<CarsState> _mapDeleteCarToState(DeleteCar event) async* {
     if (state is CarsLoaded) {
-      final updatedTodos = (state as CarsLoaded)
+      final updatedCars = (state as CarsLoaded)
           .cars
           .where((car) => car.id != event.car.id)
           .toList();
-      yield CarsLoaded(updatedTodos);
+      yield CarsLoaded(updatedCars);
       _dataRepository.deleteCar(event.car);
     }
   }
