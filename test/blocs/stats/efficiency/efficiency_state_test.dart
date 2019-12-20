@@ -30,10 +30,10 @@ void main() {
           )
         ]).toString(),
         'EfficiencyStatsLoaded { fuelEfficiencyData:[FuelMileagePoint { date: '
-        '1969-12-31 19:00:00.000, efficiency: 1.0 }, FuelMileagePoint { date: '
-        '1969-12-31 19:00:00.100, efficiency: 2.0 }][FuelMileagePoint { date: '
-        '1969-12-31 19:00:00.000, efficiency: 1.0 }, FuelMileagePoint { date: '
-        '1969-12-31 19:00:00.100, efficiency: 1.2 }] }'
+        '1970-01-01 00:00:00.000Z, efficiency: 1.0 }, FuelMileagePoint { date: '
+        '1970-01-01 00:00:00.100Z, efficiency: 2.0 }][FuelMileagePoint { date: '
+        '1970-01-01 00:00:00.000Z, efficiency: 1.0 }, FuelMileagePoint { date: '
+        '1970-01-01 00:00:00.100Z, efficiency: 1.2 }] }'
       );
     });
   });

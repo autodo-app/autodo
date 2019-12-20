@@ -50,7 +50,7 @@ class Car extends Equatable {
   }
 
   @override 
-  List<Object> get props => [id, name, mileage, numRefuelings, averageEfficiency, distanceRate, lastMileageUpdate, distanceRateHistory];
+  List<Object> get props => [id, name, mileage, numRefuelings, averageEfficiency, distanceRate, lastMileageUpdate?.toUtc(), distanceRateHistory];
 
   @override
   String toString() {

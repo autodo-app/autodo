@@ -7,8 +7,8 @@ class DistanceRatePoint extends Equatable {
   DistanceRatePoint(this.date, this.distanceRate);
 
   @override 
-  List<Object> get props => [date, distanceRate];
+  List<Object> get props => [date?.toUtc(), distanceRate];
 
   @override 
-  toString() => "DistanceRatePoint { date: $date, distanceRate: $distanceRate }";
+  toString() => "DistanceRatePoint { date: ${date?.toUtc()}, distanceRate: $distanceRate }";
 }

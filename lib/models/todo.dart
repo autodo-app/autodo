@@ -57,14 +57,14 @@ class Todo extends Equatable {
 
   @override 
   List<Object> get props => [id, name, carName, repeatName, dueState, dueMileage, 
-      notificationID, completed, estimatedDueDate, completedDate, dueDate];
+      notificationID, completed, estimatedDueDate, completedDate?.toUtc(), dueDate?.toUtc()];
 
   @override
   String toString() {
     return 'Todo { id: $id, name: $name, carName: $carName, repeatName: '
     '$repeatName, dueState: $dueState, dueMileage: $dueMileage, completed: '
     '$completed, estimatedDueDate: $estimatedDueDate, completedDate: '
-    '$completedDate, dueDate: $dueDate }';
+    '${completedDate?.toUtc()}, dueDate: ${dueDate?.toUtc()} }';
   }
 
   TodoEntity toEntity() {

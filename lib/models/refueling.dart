@@ -50,11 +50,11 @@ class Refueling extends Equatable{
   }
 
   @override 
-  List<Object> get props => [carName, id, mileage, date, amount, cost, carColor, efficiency, efficiencyColor?.value];
+  List<Object> get props => [carName, id, mileage, date?.toUtc(), amount, cost, carColor, efficiency, efficiencyColor?.value];
 
   @override
   String toString() {
-    return 'Refueling { carName: $carName, carColor: $carColor, id: $id, mileage: $mileage, date: $date, amount: $amount, cost: $cost, efficiency: $efficiency, efficiencyColor: $efficiencyColor}';
+    return 'Refueling { carName: $carName, carColor: $carColor, id: $id, mileage: $mileage, date: ${date?.toUtc()}, amount: $amount, cost: $cost, efficiency: $efficiency, efficiencyColor: $efficiencyColor}';
   }
 
   RefuelingEntity toEntity() {
