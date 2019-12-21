@@ -241,6 +241,7 @@ void main() {
       name: 'test',
       mileage: 1000,
       distanceRate: 1.0,
+      lastMileageUpdate: DateTime.fromMillisecondsSinceEpoch(0).toUtc()
     );
     final todo3 = Todo(id: '0', carName: 'test', dueMileage: 2000, estimatedDueDate: true);
     blocTest('UpdateDueDates', 
@@ -271,7 +272,7 @@ void main() {
       expect: [ 
         TodosLoading(),
         TodosLoaded([todo3]),
-        TodosLoaded([todo3.copyWith(dueDate: DateTime.parse('1971-05-15 00:00:00.000Z'), estimatedDueDate: true)]),
+        TodosLoaded([todo3.copyWith(dueDate: DateTime.parse('1971-05-16 00:00:00.000Z'), estimatedDueDate: true)]),
       ],
     );
     blocTest('CompletedTodo', 

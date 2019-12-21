@@ -100,7 +100,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     var distanceToTodo = todo.dueMileage - car.mileage;
     int daysToTodo = (distanceToTodo / car.distanceRate).round();
     Duration timeToTodo = Duration(days: daysToTodo);
-    var newDueDate = roundToDay(car.lastMileageUpdate.toUtc().add(timeToTodo)).toLocal();
+    var newDueDate = roundToDay(car.lastMileageUpdate.toUtc()).add(timeToTodo).toLocal();
 
     Todo out = todo.copyWith(dueDate: newDueDate, estimatedDueDate: true);
     _notificationsBloc.add(ReScheduleNotification(
