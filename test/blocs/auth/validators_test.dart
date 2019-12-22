@@ -1,5 +1,6 @@
-import 'package:autodo/blocs/auth/validators.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import 'package:autodo/blocs/validators.dart';
 
 void main() {
   group('Validators', () {

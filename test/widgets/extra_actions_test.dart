@@ -5,9 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter/material.dart';
 
-import 'package:autodo/blocs/barrel.dart';
-import 'package:autodo/widgets/barrel.dart';
-import 'package:autodo/models/barrel.dart';
+import 'package:autodo/blocs/blocs.dart';
+import 'package:autodo/widgets/widgets.dart';
+import 'package:autodo/models/models.dart';
 
 class MockTodosBloc extends MockBloc<TodosEvent, TodosState>
     implements TodosBloc {}

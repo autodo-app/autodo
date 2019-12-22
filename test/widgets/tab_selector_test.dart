@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:autodo/widgets/barrel.dart';
-import 'package:autodo/models/barrel.dart';
+import 'package:autodo/widgets/widgets.dart';
+import 'package:autodo/models/models.dart';
 
 void main() {
   group('TabSelector', () {

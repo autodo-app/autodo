@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:autodo/entities/barrel.dart';
+import 'package:autodo/entities/entities.dart';
 
 void main() {
   group('CarEntity', () {

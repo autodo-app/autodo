@@ -1,11 +1,11 @@
-import 'package:autodo/repositories/firebase_data_repository.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
-import 'package:autodo/blocs/barrel.dart';
+import 'package:autodo/blocs/blocs.dart';
+import 'package:autodo/repositories/repositories.dart';
 
 class MockAuthenticationBloc extends Mock implements AuthenticationBloc {}
 // EquatableMixin is needed to verify results of bloctests

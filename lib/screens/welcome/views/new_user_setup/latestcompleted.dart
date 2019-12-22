@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:autodo/blocs/todos/barrel.dart';
-import 'package:autodo/models/barrel.dart';
+import 'package:autodo/blocs/blocs.dart';
+import 'package:autodo/models/models.dart';
 import 'package:autodo/theme.dart';
 import 'package:autodo/util.dart';
 import 'new_user_screen_page.dart';

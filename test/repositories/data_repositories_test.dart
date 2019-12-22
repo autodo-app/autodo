@@ -3,8 +3,8 @@ import 'package:mockito/mockito.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import 'package:autodo/repositories/barrel.dart';
-import 'package:autodo/models/barrel.dart';
+import 'package:autodo/repositories/repositories.dart';
+import 'package:autodo/models/models.dart';
 
 class MockFirestore extends Mock implements Firestore {}
 class MockCollection extends Mock implements CollectionReference {}

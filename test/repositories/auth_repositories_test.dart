@@ -4,7 +4,7 @@ import 'package:mockito/mockito.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:equatable/equatable.dart';
 
-import 'package:autodo/repositories/barrel.dart';
+import 'package:autodo/repositories/repositories.dart';
 
 class MockFirebaseAuth extends Mock implements FirebaseAuth {}
 class MockGoogleSignin extends Mock implements GoogleSignIn {}

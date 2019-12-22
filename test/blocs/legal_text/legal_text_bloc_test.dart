@@ -4,7 +4,7 @@ import 'package:mockito/mockito.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 
-import 'package:autodo/blocs/barrel.dart';
+import 'package:autodo/blocs/blocs.dart';
 
 class MockAssetBundle extends Mock implements AssetBundle {}
 

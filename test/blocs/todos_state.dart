@@ -1,8 +1,8 @@
 /// From https://github.com/brianegan/flutter_architecture_samples/blob/master/bloc_library/test/blocs/todos_state_test.dart
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:autodo/blocs/todos/barrel.dart';
-import 'package:autodo/models/barrel.dart';
+import 'package:autodo/blocs/blocs.dart';
+import 'package:autodo/models/models.dart';
 
 void main() {
     group('TodosState', () {

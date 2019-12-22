@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:autodo/repositories/barrel.dart';
+import 'package:autodo/repositories/repositories.dart';
 
 class LoginButton extends StatelessWidget {
   final buttonPadding;

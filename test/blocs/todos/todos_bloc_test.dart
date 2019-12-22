@@ -4,9 +4,9 @@ import 'package:mockito/mockito.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/painting.dart';
 
-import 'package:autodo/blocs/barrel.dart';
-import 'package:autodo/repositories/barrel.dart';
-import 'package:autodo/models/barrel.dart';
+import 'package:autodo/blocs/blocs.dart';
+import 'package:autodo/repositories/repositories.dart';
+import 'package:autodo/models/models.dart';
 
 class MockDataRepository extends Mock with EquatableMixin implements DataRepository {}
 class MockCarsBloc extends Mock implements CarsBloc {}

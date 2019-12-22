@@ -1,16 +1,16 @@
-import 'package:autodo/screens/home/screen.dart';
-import 'package:autodo/widgets/loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:autodo/blocs/barrel.dart';
-import 'delegate.dart';
-import 'routes.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'theme.dart';
+
+import 'widgets/widgets.dart';
+import 'blocs/blocs.dart';
 import 'screens/home/provider.dart';
 import 'screens/welcome/provider.dart';
-import 'repositories/barrel.dart';
+import 'repositories/repositories.dart';
+import 'delegate.dart';
+import 'routes.dart';
+import 'theme.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

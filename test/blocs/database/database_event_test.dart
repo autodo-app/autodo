@@ -1,4 +1,4 @@
-import 'package:autodo/blocs/database/event.dart';
+import 'package:autodo/blocs/blocs.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

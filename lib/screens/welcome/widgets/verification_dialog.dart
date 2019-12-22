@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:autodo/localization.dart';
-import 'package:autodo/blocs/barrel.dart';
+import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/routes.dart';
 
 class EmailVerificationDialog extends StatelessWidget {

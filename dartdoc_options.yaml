@@ -1,0 +1,3 @@
+dartdoc:
+  include: [blocs, entities, models, repositories, intl, cloud_firestore, firebase_auth, flutter_local_notifications, sliding_up_panel, bloc, flutter_bloc, equatable, font_awesome_flutter, autocomplete_textfield, dart.async, dart.collection, dart.convert, dart.core, dart.developer, dart.math, dart.typed_data, dart.ffi, dart.io, dart.isolate]
+  favicon: img/icon-only-green.png

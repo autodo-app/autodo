@@ -1,11 +1,11 @@
-import 'package:autodo/repositories/data_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:mockito/mockito.dart';
 
-import 'package:autodo/blocs/barrel.dart';
+import 'package:autodo/blocs/blocs.dart';
+import 'package:autodo/repositories/repositories.dart';
 
 class MockDataRepository extends Mock with EquatableMixin implements DataRepository {}
 class MockNotificationsPlugin extends Mock implements FlutterLocalNotificationsPlugin {}

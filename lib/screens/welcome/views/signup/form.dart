@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:autodo/blocs/auth/barrel.dart';
+import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/routes.dart';
 import 'package:autodo/localization.dart';
-import 'package:autodo/blocs/barrel.dart';
 import '../../widgets/barrel.dart';
 
 class SignupForm extends StatefulWidget {

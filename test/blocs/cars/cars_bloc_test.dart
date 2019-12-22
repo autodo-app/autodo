@@ -1,14 +1,13 @@
 import 'dart:async';
 
-import 'package:autodo/repositories/barrel.dart';
 import 'package:autodo/util.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:mockito/mockito.dart';
 
-import 'package:autodo/repositories/data_repository.dart';
-import 'package:autodo/blocs/barrel.dart';
-import 'package:autodo/models/barrel.dart';
+import 'package:autodo/repositories/repositories.dart';
+import 'package:autodo/blocs/blocs.dart';
+import 'package:autodo/models/models.dart';
 
 class MockDataRepository extends Mock implements DataRepository {}
 class MockRefuelingsBloc extends Mock implements RefuelingsBloc {}

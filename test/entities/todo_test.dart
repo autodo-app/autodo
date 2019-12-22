@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:autodo/entities/barrel.dart';
-import 'package:autodo/models/todo_due_state.dart';
+import 'package:autodo/entities/entities.dart';
+import 'package:autodo/models/models.dart';
 
 void main() {
   group('TodoEntity', () {

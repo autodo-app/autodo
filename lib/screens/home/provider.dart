@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:autodo/blocs/tab/barrel.dart';
+import 'package:autodo/blocs/blocs.dart';
 
 import 'screen.dart';
 

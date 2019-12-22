@@ -5,8 +5,8 @@ import 'package:flutter/painting.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
-import 'package:autodo/blocs/barrel.dart';
-import 'package:autodo/models/barrel.dart';
+import 'package:autodo/blocs/blocs.dart';
+import 'package:autodo/models/models.dart';
 
 class MockRefuelingsBloc extends MockBloc<RefuelingsEvent, RefuelingsState>
     implements RefuelingsBloc {}

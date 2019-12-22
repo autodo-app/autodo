@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:autodo/util.dart';
 import 'package:autodo/theme.dart';
 import 'base.dart';
-import 'package:autodo/blocs/cars/barrel.dart';
-import 'package:autodo/models/barrel.dart';
 
 class CarEntryField extends StatefulWidget {
   final Function next;

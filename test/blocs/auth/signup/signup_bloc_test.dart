@@ -1,11 +1,11 @@
-import 'package:autodo/repositories/auth_repository.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter/services.dart';
 
-import 'package:autodo/blocs/barrel.dart';
+import 'package:autodo/blocs/blocs.dart';
+import 'package:autodo/repositories/repositories.dart';
 
 class MockAuthRepository extends Mock implements AuthRepository {}
 class MockFirebaseUser extends Mock implements FirebaseUser {}

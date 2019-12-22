@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:autodo/localization.dart';
-import 'package:autodo/widgets/barrel.dart';
-import 'package:autodo/models/barrel.dart';
-import 'package:autodo/blocs/refuelings/barrel.dart';
+import 'package:autodo/widgets/widgets.dart';
+import 'package:autodo/models/models.dart';
+import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/screens/details/barrel.dart';
-import 'package:autodo/blocs/filtered_refuelings/barrel.dart';
 import 'package:autodo/screens/add_edit/barrel.dart';
 
 class _RefuelingTitle extends StatelessWidget {

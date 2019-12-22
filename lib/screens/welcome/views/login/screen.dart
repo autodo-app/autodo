@@ -1,7 +1,8 @@
-import 'package:autodo/repositories/barrel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:autodo/blocs/auth/barrel.dart';
+
+import 'package:autodo/blocs/blocs.dart';
+import 'package:autodo/repositories/repositories.dart';
 import 'package:autodo/theme.dart';
 import 'form.dart';
 

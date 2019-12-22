@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:charts_flutter/flutter.dart';
 
-import 'package:autodo/blocs/barrel.dart';
-import 'package:autodo/models/barrel.dart';
+import 'package:autodo/blocs/blocs.dart';
+import 'package:autodo/models/models.dart';
 
 void main() {
   group('EfficiencyState', () {

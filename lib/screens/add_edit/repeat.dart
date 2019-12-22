@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
-import 'package:autodo/models/barrel.dart';
-import 'package:autodo/widgets/barrel.dart';
-import 'package:autodo/blocs/cars/barrel.dart';
+import 'package:autodo/models/models.dart';
+import 'package:autodo/widgets/widgets.dart';
+import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/localization.dart';
 import 'package:autodo/util.dart';
 
