@@ -7,11 +7,16 @@ import 'package:autodo/localization.dart';
 class TabSelector extends StatelessWidget {
   final AppTab activeTab;
   final Function(AppTab) onTabSelected;
+  final Key todosTabKey, refuelingsTabKey, statsTabKey, repeatsTabKey; 
 
   TabSelector({
     Key key,
     @required this.activeTab,
     @required this.onTabSelected,
+    this.todosTabKey,
+    this.refuelingsTabKey,
+    this.statsTabKey,
+    this.repeatsTabKey
   }) : super(key: key);
 
   @override
@@ -21,19 +26,19 @@ class TabSelector extends StatelessWidget {
       onTap: (index) => onTabSelected(AppTab.values[index]),
       items: [
         BottomNavigationBarItem(
-          icon: Icon(Icons.list),
+          icon: Icon(Icons.list, key: todosTabKey),
           title: Text(AutodoLocalizations.todos),
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.local_gas_station),
+          icon: Icon(Icons.local_gas_station, key: refuelingsTabKey),
           title: Text(AutodoLocalizations.refuelings),
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.show_chart),
+          icon: Icon(Icons.show_chart, key: statsTabKey),
           title: Text(AutodoLocalizations.stats),
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.repeat),
+          icon: Icon(Icons.repeat, key: repeatsTabKey),
           title: Text(AutodoLocalizations.repeats),
         ),
       ],
