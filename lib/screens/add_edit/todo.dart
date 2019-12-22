@@ -391,7 +391,8 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
         padding: EdgeInsets.all(15),
         child: ListView(  
           children: <Widget>[
-            EnsureVisibleWhenFocused(
+            AutoScrollField(
+                controller: scrollCtrl,
                 child: _NameForm(  
                   node: _nameNode,
                   nextNode: _dateNode,
@@ -402,7 +403,8 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
                 padding: EdgeInsets.only(top: 15, bottom: 15),
                 child: Divider(),
               ),
-              EnsureVisibleWhenFocused(  
+              AutoScrollField(
+                controller: scrollCtrl,
                 child: _DateForm(
                   todo: todo,
                   node: _dateNode,
@@ -414,7 +416,8 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
               Padding(
                 padding: EdgeInsets.only(bottom: 15),
               ),
-              EnsureVisibleWhenFocused(
+              AutoScrollField(
+                controller: scrollCtrl,
                 child: _MileageForm(  
                   todo: todo,
                   node: _mileageNode,

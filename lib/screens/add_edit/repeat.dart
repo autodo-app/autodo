@@ -287,20 +287,23 @@ class _RepeatAddEditScreenState extends State<RepeatAddEditScreen> {
       child: Container(  
         padding: EdgeInsets.all(15),
         child: ListView(  
+          controller: scrollCtrl,
           children: <Widget>[
-            EnsureVisibleWhenFocused(
-                child: _NameForm(  
-                  repeat: repeat,
-                  node: _nameNode,
-                  nextNode: _mileageNode,
-                  onSaved: (val) => _name = val,
-                ),
-                focusNode: _nameNode,
+            AutoScrollField(
+              controller: scrollCtrl,
+              child: _NameForm(  
+                repeat: repeat,
+                node: _nameNode,
+                nextNode: _mileageNode,
+                onSaved: (val) => _name = val,
+              ),
+              focusNode: _nameNode,
               ),
               Padding(
                 padding: EdgeInsets.only(bottom: 15),
               ),
-              EnsureVisibleWhenFocused(
+              AutoScrollField(
+                controller: scrollCtrl,
                 child: _MileageForm(  
                   repeat: repeat,
                   node: _mileageNode,

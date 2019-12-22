@@ -1,3 +1,4 @@
+import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
 
 class AutoScrollField extends StatefulWidget {
@@ -6,7 +7,7 @@ class AutoScrollField extends StatefulWidget {
     @required this.child,
     @required this.focusNode,
     @required this.controller,
-    @required this.position,
+    this.position,
     this.curve = Curves.ease,
     this.duration = const Duration(milliseconds: 200),
   }) : super(key: key);
@@ -54,10 +55,20 @@ class AutoScrollFieldState extends State<AutoScrollField> {
     super.dispose();
   }
 
+  double _getScrollPosition() {
+    final RenderObject object = context.findRenderObject();
+    final RenderAbstractViewport viewport = RenderAbstractViewport.of(object);
+    if (viewport == null) return null;
+
+    return viewport.getOffsetToReveal(object, 0.0).offset;
+  }
+
   Future<Null> _scroll() async {
     if (!widget.focusNode.hasFocus) return;
 
-    await widget.controller.animateTo(widget.position,
+    double scrollTo = widget.position ?? _getScrollPosition();
+    if (scrollTo == null) return; // can't scroll
+    await widget.controller.animateTo(scrollTo,
         duration: widget.duration, curve: widget.curve);
   }
 
