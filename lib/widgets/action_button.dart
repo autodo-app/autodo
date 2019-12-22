@@ -1,21 +1,38 @@
-import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
+import 'package:flutter/material.dart';
+
 class AutodoActionButton extends StatefulWidget {
+  final Key mainButtonKey;
+  final List<Key> miniButtonKeys;
+  AutodoActionButton({Key key, this.mainButtonKey, this.miniButtonKeys}) : super(key: key);
+  
   @override
-  State<StatefulWidget> createState() {
-    return AutodoActionButtonState();
-  }
+  _AutodoActionButtonState createState() => 
+      _AutodoActionButtonState(mainButtonKey, miniButtonKeys);
 }
 
-class AutodoActionButtonState extends State<AutodoActionButton>
+class _AutodoActionButtonState extends State<AutodoActionButton>
     with TickerProviderStateMixin {
   static AnimationController _controller;
+  final Key mainButtonKey;
+  final List<Key> miniButtonKeys;
 
-  static const List<IconData> icons = [
-    Icons.local_gas_station,
-    Icons.build,
-    Icons.autorenew
+  _AutodoActionButtonState(this.mainButtonKey, this.miniButtonKeys);
+
+  static const List<Map<String, dynamic>> icons = [
+    {
+      "data": Icons.local_gas_station,
+      "semanticLabel": 'Add Refueling',
+    },
+    {
+      "data": Icons.build,
+      "semanticLabel": 'Add ToDo'
+    },
+    {
+      "data": Icons.autorenew,
+      "semanticLabel": 'Add Repeat'
+    },
   ];
 
   @override
@@ -34,7 +51,11 @@ class AutodoActionButtonState extends State<AutodoActionButton>
     } else {
       _controller.reverse();
     }
-  }
+  } 
+
+  _buttonKey(index) => 
+    (miniButtonKeys == null && miniButtonKeys.length >= index)
+    ? null : miniButtonKeys[index];
 
   @override
   Widget build(BuildContext context) {
@@ -57,13 +78,18 @@ class AutodoActionButtonState extends State<AutodoActionButton>
               heroTag: null,
               backgroundColor: backgroundColor,
               mini: true,
-              child: Icon(icons[index], color: foregroundColor),
+              child: Icon(
+                icons[index]['data'], 
+                color: foregroundColor,
+                semanticLabel: icons[index]['semanticLabel'],
+                key: _buttonKey(index)
+              ),
               onPressed: () {
                 switchState();
-                if (index == 1) {
-                  Navigator.pushNamed(context, '/createTodo');
-                } else if (index == 0) {
+                if (index == 0) {
                   Navigator.pushNamed(context, '/createRefueling');
+                } else if (index == 1) {
+                  Navigator.pushNamed(context, '/createTodo');
                 } else if (index == 2) {
                   Navigator.pushNamed(context, '/createRepeat');
                 }
@@ -78,6 +104,7 @@ class AutodoActionButtonState extends State<AutodoActionButton>
             animation: _controller,
             builder: (BuildContext context, Widget child) {
               return FloatingActionButton(
+                key: mainButtonKey,
                 heroTag: null,
                 backgroundColor: ColorTween(
                   begin: Theme.of(context).primaryColor,
