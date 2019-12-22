@@ -4,7 +4,7 @@ class CarTag extends StatelessWidget {
   final String text;
   final Color color;
 
-  CarTag({@required this.text, this.color = Colors.blue});
+  CarTag({Key key, @required this.text, this.color = Colors.blue}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

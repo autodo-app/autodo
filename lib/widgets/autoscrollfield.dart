@@ -29,7 +29,7 @@ class AutoScrollField extends StatefulWidget {
 
   /// The duration we will use to scroll ourselves into view
   ///
-  /// Defaults to 100 milliseconds.
+  /// Defaults to 200 milliseconds.
   final Duration duration;
 
   @override
