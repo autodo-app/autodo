@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 
 import 'package:autodo/localization.dart';
 import 'package:autodo/models/barrel.dart';
-import 'package:autodo/widgets/barrel.dart';
 import 'package:autodo/theme.dart';
 import 'package:autodo/util.dart';
 

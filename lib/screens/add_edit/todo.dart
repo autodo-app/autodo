@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 
 import 'package:autodo/models/barrel.dart';
 import 'package:autodo/widgets/barrel.dart';

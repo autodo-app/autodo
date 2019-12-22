@@ -33,6 +33,9 @@ dependencies:
   google_sign_in: any
   equatable: any
   font_awesome_flutter: any
+  autocomplete_textfield:
+    git:
+      url: git://github.com/baylessj/flutter-autocomplete-textfield.git
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
