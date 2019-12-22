@@ -4,8 +4,9 @@ import 'package:autodo/theme.dart';
 
 class PrivacyPolicy extends StatelessWidget {
   final RichText text;
+  final Key buttonKey;
 
-  PrivacyPolicy(this.text);
+  PrivacyPolicy(this.text, {Key key, this.buttonKey}) : super(key: key);
 
   @override
   build(context) => AlertDialog(
@@ -20,6 +21,7 @@ class PrivacyPolicy extends StatelessWidget {
     contentPadding: EdgeInsets.fromLTRB(20, 20, 20, 0),
     actions: <Widget>[
       FlatButton(
+        key: buttonKey,
         child: Text(
           AutodoLocalizations.gotItBang,
           style: Theme.of(context).primaryTextTheme.button,
