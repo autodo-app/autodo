@@ -20,7 +20,8 @@ class HomeScreen extends StatelessWidget {
   build(context) => BlocBuilder<TabBloc, AppTab>( 
     builder: (context, activeTab) => Scaffold(  
       appBar: AppBar(  
-        title: Text(AutodoLocalizations.appTitle)
+        title: Text(AutodoLocalizations.appTitle),
+        actions: [ExtraActions()],
       ),
       body: views[activeTab],
       floatingActionButton: AutodoActionButton(),

@@ -7,7 +7,9 @@ import 'package:autodo/models/barrel.dart';
 import 'package:autodo/localization.dart';
 
 class ExtraActions extends StatelessWidget {
-  ExtraActions({Key key}) : super(key: key);
+  final Key toggleAllKey;
+
+  ExtraActions({Key key, this.toggleAllKey}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,27 +23,21 @@ class ExtraActions extends StatelessWidget {
           return PopupMenuButton<ExtraAction>(
             onSelected: (action) {
               switch (action) {
-                case ExtraAction.clearCompleted:
-                  BlocProvider.of<TodosBloc>(context).add(ClearCompleted());
-                  break;
                 case ExtraAction.toggleAllComplete:
                   BlocProvider.of<TodosBloc>(context).add(ToggleAll());
+                  break;
+                default:
                   break;
               }
             },
             itemBuilder: (BuildContext context) => <PopupMenuItem<ExtraAction>>[
               PopupMenuItem<ExtraAction>(
+                key: toggleAllKey,
                 value: ExtraAction.toggleAllComplete,
                 child: Text(
                   allComplete
                       ? AutodoLocalizations.markAllIncomplete
                       : AutodoLocalizations.markAllComplete,
-                ),
-              ),
-              PopupMenuItem<ExtraAction>(
-                value: ExtraAction.clearCompleted,
-                child: Text(
-                  AutodoLocalizations.clearCompleted,
                 ),
               ),
             ],

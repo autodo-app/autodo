@@ -1,1 +1,1 @@
-enum ExtraAction { toggleAllComplete, clearCompleted }
+enum ExtraAction { toggleAllComplete }
