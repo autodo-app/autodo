@@ -2,13 +2,14 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:equatable/equatable.dart';
 
 import 'data_repository.dart';
 import 'package:autodo/models/models.dart';
 import 'package:autodo/entities/entities.dart';
 import 'write_batch_wrappers.dart';
 
-class FirebaseDataRepository implements DataRepository {
+class FirebaseDataRepository extends Equatable implements DataRepository {
   final Firestore _firestoreInstance;
   final String _uuid;
 
