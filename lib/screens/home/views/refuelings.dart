@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:autodo/widgets/widgets.dart';
 import 'package:autodo/blocs/blocs.dart';
-import 'package:autodo/screens/details/barrel.dart';
 import '../widgets/barrel.dart';
 
 class RefuelingsScreen extends StatelessWidget {

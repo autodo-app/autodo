@@ -1,16 +1,6 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart';
 
-import 'package:autodo/util.dart';
-
-class FuelMileagePoint {
-  DateTime date;
-  double mpg;
-
-  FuelMileagePoint({this.date, this.mpg});
-}
 
 class FuelMileageChart extends StatelessWidget {
   final List<Series> seriesList;
@@ -85,92 +75,21 @@ class FuelMileageHistory extends StatelessWidget {
 
   FuelMileageHistory(this.data);
 
-  static interpolateDate(DateTime prev, DateTime next) {
-    return DateTime.fromMillisecondsSinceEpoch(
-        (prev.millisecondsSinceEpoch + next.millisecondsSinceEpoch / 2)
-            .toInt());
-  }
-
-  static Future<List<Series<FuelMileagePoint, DateTime>>> prepData(
-      Future incomingData) async {
-    var rawData = await incomingData;
-
-    List<FuelMileagePoint> points = [];
-    for (var r in rawData) {
-      if (r.efficiency == double.infinity || r.efficiency == 0) continue;
-      points.add(FuelMileagePoint(date: r.date, mpg: r.efficiency));
-    }
-
-    List<FuelMileagePoint> emaData = [];
-    for (var point in points) {
-      if (emaData.length == 0) {
-        emaData.add(point);
-        continue;
-      }
-      FuelMileagePoint newPoint = FuelMileagePoint();
-      FuelMileagePoint interpolate = FuelMileagePoint();
-      FuelMileagePoint last = emaData[emaData.length - 1];
-      newPoint.date = point.date;
-      newPoint.mpg = last.mpg * 0.8 + point.mpg * 0.2;
-      interpolate.date = interpolateDate(last.date, point.date);
-      interpolate.mpg = last.mpg * 0.8 + newPoint.mpg * 0.2;
-      // emaData.add(interpolate);
-      emaData.add(newPoint);
-    }
-
-    var mpgs = points.map((val) => val.mpg);
-    // Not worth displaying a line graph with only one point
-    if (mpgs.length < 2) return [];
-
-    final double maxMeasure = mpgs.reduce(max);
-    final double minMeasure = mpgs.reduce(min);
-
-    return [
-      Series<FuelMileagePoint, DateTime>(
-        id: 'Fuel Mileage vs Time',
-        // Providing a color function is optional.
-        colorFn: (FuelMileagePoint point, _) {
-          // Shade the point from red to green depending on its position relative to min/max
-          final scale = scaleToUnit(point.mpg, minMeasure, maxMeasure);
-          final hue = scale * 120; // 0 is red, 120 is green in HSV space
-          final rgb = hsv2rgb(HSV(hue, 1.0, 0.5));
-          return Color(
-              r: (rgb.r * 255).toInt(),
-              g: (rgb.g * 255).toInt(),
-              b: (rgb.b * 255).toInt());
-        },
-        domainFn: (FuelMileagePoint point, _) => point.date,
-        measureFn: (FuelMileagePoint point, _) => point.mpg,
-        // Providing a radius function is optional.
-        radiusPxFn: (FuelMileagePoint point, _) =>
-            6.0, // all values have the same radius for now
-        data: points,
-      ),
-      // Configure our custom line renderer for this series.
-      Series<FuelMileagePoint, DateTime>(
-          id: 'Mobile',
-          colorFn: (_, __) => MaterialPalette.blue.shadeDefault,
-          domainFn: (FuelMileagePoint point, _) => point.date,
-          measureFn: (FuelMileagePoint point, _) => point.mpg,
-          data: emaData)
-        ..setAttribute(rendererIdKey, 'customLine'),
-    ];
-  }
-
   @override
   Widget build(BuildContext context) => Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Padding(
-              padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
-            ),
-            Text('Fuel Efficiency History',
-                style: Theme.of(context).primaryTextTheme.subtitle),
-            Container(
-              height: 300,
-              padding: EdgeInsets.all(15),
-              child: FuelMileageChart(data, false),
-            )
-          ]);
+    mainAxisSize: MainAxisSize.min,
+    mainAxisAlignment: MainAxisAlignment.spaceAround,
+    children: [
+      Padding(
+        padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+      ),
+      Text('Fuel Efficiency History',
+          style: Theme.of(context).primaryTextTheme.subtitle),
+      Container(
+        height: 300,
+        padding: EdgeInsets.all(15),
+        child: FuelMileageChart(data, false),
+      )
+    ]
+  );
 }

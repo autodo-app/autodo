@@ -5,51 +5,34 @@ import 'package:autodo/blocs/blocs.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'charts/barrel.dart';
 
-class StatisticsScreen extends StatefulWidget {
-  @override
-  StatisticsScreenState createState() => StatisticsScreenState();
-}
+class StatisticsScreen extends StatelessWidget {
+  StatisticsScreen({Key key}) : super(key: key);
 
-class StatisticsScreenState extends State<StatisticsScreen> {
   @override
-  Widget build(BuildContext context) => MultiBlocProvider(
-    providers: [
-      BlocProvider<EfficiencyStatsBloc>(
-        create: (context) => EfficiencyStatsBloc(  
-          refuelingsBloc: BlocProvider.of<RefuelingsBloc>(context),
-        ),
+  build(context) => ListView(
+    children: <Widget>[
+      BlocBuilder<EfficiencyStatsBloc, EfficiencyStatsState>(
+        builder: (context, state) {
+          if (state is EfficiencyStatsLoaded) {
+            return FuelMileageHistory(state.fuelEfficiencyData);
+          } else {
+            return LoadingIndicator();
+          }
+        } ,
       ),
-      BlocProvider<DrivingDistanceStatsBloc>(
-        create: (context) => DrivingDistanceStatsBloc(  
-          carsBloc: BlocProvider.of<CarsBloc>(context),
-        ),
+      Padding(
+        padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+        child: Divider(),
+      ),
+      BlocBuilder<DrivingDistanceStatsBloc, DrivingDistanceStatsState>(
+        builder: (context, state) {
+          if (state is DrivingDistanceStatsLoaded) {
+            return DrivingDistanceHistory(state.drivingDistanceData);
+          } else {
+            return LoadingIndicator();
+          }
+        } ,
       ),
     ],
-    child: ListView(
-      children: <Widget>[
-        BlocBuilder<EfficiencyStatsBloc, EfficiencyStatsState>(
-          builder: (context, state) {
-            if (state is EfficiencyStatsLoaded) {
-              return FuelMileageHistory(state.fuelEfficiencyData);
-            } else {
-              return LoadingIndicator();
-            }
-          } ,
-        ),
-        Padding(
-          padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
-          child: Divider(),
-        ),
-        BlocBuilder<DrivingDistanceStatsBloc, DrivingDistanceStatsState>(
-          builder: (context, state) {
-            if (state is DrivingDistanceStatsLoaded) {
-              return DrivingDistanceHistory(state.drivingDistanceData);
-            } else {
-              return LoadingIndicator();
-            }
-          } ,
-        ),
-      ],
-    )
   );
 }
