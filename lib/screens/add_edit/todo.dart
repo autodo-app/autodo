@@ -3,13 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 
 import 'package:autodo/models/models.dart';
 import 'package:autodo/widgets/widgets.dart';
 import 'package:autodo/blocs/blocs.dart';
+import 'forms/barrel.dart';
 import 'package:autodo/localization.dart';
-import 'package:autodo/theme.dart';
 import 'package:autodo/util.dart';
 
 typedef _OnSaveCallback = Function(DateTime dueDate, int dueMileage, String repeatName, List<String> carNames);
@@ -186,147 +185,7 @@ class _MileageForm extends StatelessWidget {
   );
 }
 
-class _RepeatForm extends StatefulWidget {
-  final Todo todo;
-  final Function(String) onSaved;
-  final FocusNode node, nextNode;
 
-  _RepeatForm({
-    Key key,
-    this.todo,
-    @required this.onSaved,
-    @required this.node,
-    this.nextNode,
-  }) : super(key: key);
-
-  @override 
-  _RepeatFormState createState() => _RepeatFormState();
-}
-
-class _RepeatFormState extends State<_RepeatForm> { 
-  AutoCompleteTextField<Repeat> autoCompleteField;
-  TextEditingController _autocompleteController;
-  Repeat selectedRepeat;
-  String _repeatError;
-  final _autocompleteKey = GlobalKey<AutoCompleteTextFieldState<Repeat>>();
-  List<Repeat> repeats;
-
-  @override
-  initState() {
-    _autocompleteController = TextEditingController();
-    super.initState();
-  }
-  
-  @override 
-  dispose() {
-    _autocompleteController.dispose();
-    super.dispose();
-  }
-
-  @override 
-  build(context) {
-    autoCompleteField = AutoCompleteTextField<Repeat>(
-      controller: _autocompleteController,
-      decoration: defaultInputDecoration(
-        AutodoLocalizations.requiredLiteral,
-        AutodoLocalizations.carName
-      ).copyWith(errorText: _repeatError),
-      itemSubmitted: (item) => setState(() {
-        _autocompleteController.text = item.name;
-        selectedRepeat = item;
-      }),
-      key: _autocompleteKey,
-      focusNode: widget.node,
-      textInputAction: TextInputAction.done,
-      suggestions: repeats,
-      itemBuilder: (context, suggestion) => Padding(
-        child: ListTile(
-          title: Text(suggestion.name),
-          trailing: Text(
-            AutodoLocalizations.interval + ": ${suggestion.mileageInterval}"
-          )
-        ),
-        padding: EdgeInsets.all(5.0),
-      ),
-      itemSorter: (a, b) => a.name.length == b.name.length
-          ? 0
-          : a.name.length < b.name.length ? -1 : 1,
-      // returns a match anytime that the input is anywhere in the repeat name
-      itemFilter: (suggestion, input) {
-        return suggestion.name.toLowerCase().contains(input.toLowerCase());
-      },
-      textSubmitted: (_) {},
-    );
-    return FormField<String>(
-      builder: (FormFieldState<String> input) => autoCompleteField,
-      initialValue: widget.todo?.repeatName ?? '',
-      validator: (val) {
-        var txt = _autocompleteController.text;
-        var res = requiredValidator(txt);
-        // TODO figure this out better
-        // if (selectedCar != null)
-        //   widget.refueling.carName = selectedCar.name;
-        // else if (val != null && cars.any((element) => element.name == val)) {
-        //   widget.refueling.carName = val;
-        // }
-        autoCompleteField.updateDecoration(
-          decoration: defaultInputDecoration(
-            AutodoLocalizations.requiredLiteral,
-            AutodoLocalizations.carName
-          ).copyWith(errorText: res),
-        );
-        setState(() => _repeatError = res);
-        return _repeatError;
-      },
-      onSaved: (val) => widget.onSaved(val),
-    );
-  }
-}
-
-class _CarsForm extends StatefulWidget {
-  final List<Car> cars;
-  final Function(List<Map<String, dynamic>>) onSaved;
-
-  _CarsForm({this.cars, this.onSaved});
-
-  @override 
-  _CarsFormState createState() => _CarsFormState(cars, onSaved);
-}
-
-class _CarsFormState extends State<_CarsForm> {
-  final List<Car> cars;
-  final Function(List<Map<String, dynamic>>) onSaved;
-  List<Map<String, dynamic>> _carStates = [];
-
-  _CarsFormState(this.cars, this.onSaved) {
-    for (var car in cars) {
-      _carStates.add({'name': car.name, 'enabled': false});
-    }
-  }
-
-  @override 
-  build(context) => FormField<List<Map<String, dynamic>>>(
-    builder: (context) => Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: List.generate(
-        cars.length,
-        (index) => ListTile(
-          leading: Checkbox(
-            value: _carStates[index]['enabled'],
-            onChanged: (state) {
-              _carStates[index]['enabled'] = state;
-              setState(() {});
-            },
-            materialTapTargetSize: MaterialTapTargetSize.padded,
-          ),
-          title: Text(_carStates[index]['name'])
-        )
-      )
-    ),
-    onSaved: onSaved,
-  );
-}
 
 class TodoAddEditScreen extends StatefulWidget {
   final bool isEditing;
@@ -352,7 +211,7 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
   DateTime _dueDate;
   int _dueMileage;
   String _repeatName;
-  List<Map<String, dynamic>> _cars;
+  List<Map<String, dynamic>> _cars  = [{}];
 
   bool get isEditing => widget.isEditing;
 
@@ -389,6 +248,7 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
       child: Container(  
         padding: EdgeInsets.all(15),
         child: ListView(  
+          controller: scrollCtrl,
           children: <Widget>[
             AutoScrollField(
                 controller: scrollCtrl,
@@ -435,7 +295,7 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
                       controller: scrollCtrl,
                       focusNode: _repeatNode,
                       position: 240,
-                      child: _RepeatForm(  
+                      child: RepeatForm(  
                         todo: todo,
                         node: _repeatNode,
                         onSaved: (val) => _repeatName = val,
@@ -451,7 +311,7 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
               BlocBuilder<CarsBloc, CarsState>(
                 builder: (context, state) {
                   if (state is CarsLoaded) {
-                    return _CarsForm(  
+                    return CarsForm( 
                       cars: state.cars,
                       onSaved: (cars) => _cars = cars,
                     );
