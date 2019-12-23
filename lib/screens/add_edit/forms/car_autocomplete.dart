@@ -1,0 +1,104 @@
+import 'package:flutter/material.dart';
+import 'package:autocomplete_textfield/autocomplete_textfield.dart';
+
+import 'package:autodo/models/models.dart';
+import 'package:autodo/localization.dart';
+import 'package:autodo/theme.dart';
+import 'package:autodo/util.dart';
+
+class CarForm extends StatefulWidget {
+  final Refueling refueling;
+  final Function(String) onSaved;
+  final FocusNode node, nextNode;
+
+  CarForm({
+    Key key,
+    this.refueling,
+    @required this.onSaved,
+    @required this.node,
+    @required this.nextNode,
+  }) : super(key: key);
+
+  @override 
+  _CarFormState createState() => _CarFormState();
+}
+
+class _CarFormState extends State<CarForm> { 
+  AutoCompleteTextField<Car> autoCompleteField;
+  TextEditingController _autocompleteController;
+  Car selectedCar;
+  String _carError;
+  final _autocompleteKey = GlobalKey<AutoCompleteTextFieldState<Car>>();
+  List<Car> cars;
+
+  @override
+  initState() {
+    _autocompleteController = TextEditingController();
+    super.initState();
+  }
+  
+  @override 
+  dispose() {
+    _autocompleteController.dispose();
+    super.dispose();
+  }
+
+  @override 
+  build(context) {
+    autoCompleteField = AutoCompleteTextField<Car>(
+      controller: _autocompleteController,
+      decoration: defaultInputDecoration(
+        AutodoLocalizations.requiredLiteral,
+        AutodoLocalizations.carName
+      ).copyWith(errorText: _carError),
+      itemSubmitted: (item) => setState(() {
+        _autocompleteController.text = item.name;
+        selectedCar = item;
+      }),
+      key: _autocompleteKey,
+      focusNode: widget.node,
+      textInputAction: TextInputAction.next,
+      suggestions: cars,
+      itemBuilder: (context, suggestion) => Padding(
+        child: ListTile(
+          title: Text(suggestion.name),
+          trailing: Text(
+            AutodoLocalizations.mileage + ": ${suggestion.mileage}"
+          )
+        ),
+        padding: EdgeInsets.all(5.0),
+      ),
+      itemSorter: (a, b) => a.name.length == b.name.length
+          ? 0
+          : a.name.length < b.name.length ? -1 : 1,
+      // returns a match anytime that the input is anywhere in the repeat name
+      itemFilter: (suggestion, input) {
+        return suggestion.name.toLowerCase().contains(input.toLowerCase());
+      },
+      textSubmitted: (_) => changeFocus(widget.node, widget.nextNode),
+    );
+    return FormField<String>(
+      builder: (FormFieldState<String> input) => autoCompleteField,
+      initialValue: widget.refueling?.carName ?? '',
+      validator: (val) {
+        var txt = _autocompleteController.text;
+        var res = requiredValidator(txt);
+        // TODO figure this out better
+        // if (selectedCar != null)
+        //   widget.refueling.carName = selectedCar.name;
+        // else if (val != null && cars.any((element) => element.name == val)) {
+        //   widget.refueling.carName = val;
+        // }
+        autoCompleteField.updateDecoration(
+          decoration: defaultInputDecoration(
+            AutodoLocalizations.requiredLiteral,
+            AutodoLocalizations.carName
+          ).copyWith(errorText: res),
+        );
+        setState(() => _carError = res);
+        return _carError;
+      },
+      onSaved: (val) => widget.onSaved(val),
+    );
+  }
+}
