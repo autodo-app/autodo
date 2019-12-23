@@ -20,19 +20,11 @@ class RefuelingsScreen extends StatelessWidget {
   }
 
   onTap(context, refueling) async {
-    final removedRefueling = await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => DetailsScreen(id: refueling.id),
-      ),
-    );
-    if (removedRefueling != null) {
-      Scaffold.of(context).showSnackBar(
-      DeleteRefuelingSnackBar(
-        onUndo: () => BlocProvider.of<RefuelingsBloc>(context)
-          .add(AddRefueling(refueling)),
-      )
-    );
-    }
+    // final removedRefueling = await Navigator.of(context).push(
+    //   MaterialPageRoute(
+    //     builder: (_) => DetailsScreen(id: refueling.id),
+    //   ),
+    // );
   }
 
   @override 

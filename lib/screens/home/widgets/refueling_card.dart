@@ -13,16 +13,10 @@ class _RefuelingTitle extends StatelessWidget {
   _RefuelingTitle({Key key, @required this.refueling})
       : super(key: key);
 
-  dateField(context) {
-    if (refueling.date != null) {
-      return TextSpan(  
-        text: AutodoLocalizations.onLiteral + ' ' + AutodoLocalizations.dateFormat(refueling.date) + ' ',
-        style: Theme.of(context).primaryTextTheme.body1
-      );
-    } else {
-      return Container();
-    }
-  }
+  dateField(context) => TextSpan(  
+    text: AutodoLocalizations.onLiteral + ' ' + AutodoLocalizations.dateFormat(refueling.date) + ' ',
+    style: Theme.of(context).primaryTextTheme.body1
+  );  
 
   @override 
   build(context) => RichText(  
@@ -227,29 +221,32 @@ class RefuelingCard extends StatelessWidget {
   }) : super(key: key);
 
   @override 
-  build(context) => Dismissible(  
-    key: Key("__dismissible__"),
-    onDismissed: onDismissed,
-    child: Card(  
-      elevation: 4,
-      color: Theme.of(context).cardColor,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      child: Column(  
-        children: <Widget>[
-          Column(
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.all(10),
-                alignment: Alignment.centerLeft,
-                child: _RefuelingTitle(refueling: refueling),
-              ),
-              Divider(),
-            ],
-          ),      
-          _RefuelingBody(refueling: refueling),
-          _RefuelingFooter(refueling: refueling),
-        ],
-      ),
+  build(context) => InkWell(  
+    onTap: onTap,
+    child: Dismissible(  
+      key: Key("__dismissible__"),
+      onDismissed: onDismissed,
+      child: Card(  
+        elevation: 4,
+        color: Theme.of(context).cardColor,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        child: Column(  
+          children: <Widget>[
+            Column(
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.all(10),
+                  alignment: Alignment.centerLeft,
+                  child: _RefuelingTitle(refueling: refueling),
+                ),
+                Divider(),
+              ],
+            ),      
+            _RefuelingBody(refueling: refueling),
+            _RefuelingFooter(refueling: refueling),
+          ],
+        ),
+      )
     )
   );
 }

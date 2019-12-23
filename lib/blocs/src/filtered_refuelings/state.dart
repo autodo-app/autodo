@@ -8,6 +8,8 @@ abstract class FilteredRefuelingsState extends Equatable {
   List<Object> get props => [];
 }
 
+class FilteredRefuelingsNotLoaded extends FilteredRefuelingsState {}
+
 class FilteredRefuelingsLoading extends FilteredRefuelingsState {}
 
 class FilteredRefuelingsLoaded extends FilteredRefuelingsState {

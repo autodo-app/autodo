@@ -6,6 +6,7 @@ import 'package:bloc_test/bloc_test.dart';
 
 import 'package:autodo/models/models.dart';
 import 'package:autodo/blocs/blocs.dart';
+import 'package:autodo/widgets/widgets.dart';
 import 'package:autodo/screens/home/views/refuelings.dart';
 import 'package:autodo/screens/home/widgets/refueling_card.dart';
 
@@ -26,6 +27,52 @@ void main() {
   });
 
   group('RefuelingsScreen', () {
+    testWidgets('loading', (WidgetTester tester) async {
+      when(filteredRefuelingsBloc.state).thenAnswer((_) => FilteredRefuelingsLoading());
+      Key refuelingsKey = Key('refuelings');
+      await tester.pumpWidget(
+        MultiBlocProvider(
+          providers: [
+            BlocProvider<RefuelingsBloc>.value(
+              value: refuelingsBloc,
+            ),
+            BlocProvider<FilteredRefuelingsBloc>.value(
+              value: filteredRefuelingsBloc,
+            ),
+          ],
+          child: MaterialApp(
+            home: Scaffold(
+              body: RefuelingsScreen(key: refuelingsKey),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.byType(LoadingIndicator), findsOneWidget);
+    });
+    testWidgets('not loaded', (WidgetTester tester) async {
+      when(filteredRefuelingsBloc.state).thenAnswer((_) => FilteredRefuelingsNotLoaded());
+      Key refuelingsKey = Key('refuelings');
+      await tester.pumpWidget(
+        MultiBlocProvider(
+          providers: [
+            BlocProvider<RefuelingsBloc>.value(
+              value: refuelingsBloc,
+            ),
+            BlocProvider<FilteredRefuelingsBloc>.value(
+              value: filteredRefuelingsBloc,
+            ),
+          ],
+          child: MaterialApp(
+            home: Scaffold(
+              body: RefuelingsScreen(key: refuelingsKey),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.byKey(refuelingsKey), findsOneWidget);
+    });
     testWidgets('tap', (WidgetTester tester) async {
       final refueling = Refueling(
         carName: 'test',
@@ -56,6 +103,70 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.byType(RefuelingCard));
       await tester.pump();
+      expect(find.byKey(refuelingsKey), findsOneWidget);
+    });
+    testWidgets('dismiss', (WidgetTester tester) async {
+      final refueling = Refueling(
+        carName: 'test',
+        amount: 10.0,
+        cost: 10.0,
+        mileage: 1000,
+        date: DateTime.fromMillisecondsSinceEpoch(0),
+      );
+      when(filteredRefuelingsBloc.state).thenAnswer((_) => FilteredRefuelingsLoaded([refueling], VisibilityFilter.all));
+      Key refuelingsKey = Key('refuelings');
+      await tester.pumpWidget(
+        MultiBlocProvider(
+          providers: [
+            BlocProvider<RefuelingsBloc>.value(
+              value: refuelingsBloc,
+            ),
+            BlocProvider<FilteredRefuelingsBloc>.value(
+              value: filteredRefuelingsBloc,
+            ),
+          ],
+          child: MaterialApp(
+            home: Scaffold(
+              body: RefuelingsScreen(key: refuelingsKey),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.fling(find.byType(RefuelingCard), Offset(-300, 0), 10000.0);
+      await tester.pumpAndSettle();
+      verify(refuelingsBloc.add(DeleteRefueling(refueling))).called(1);
+    });
+    testWidgets('tap', (WidgetTester tester) async {
+      final refueling = Refueling(
+        carName: 'test',
+        amount: 10.0,
+        cost: 10.0,
+        mileage: 1000,
+        date: DateTime.fromMillisecondsSinceEpoch(0),
+      );
+      when(filteredRefuelingsBloc.state).thenAnswer((_) => FilteredRefuelingsLoaded([refueling], VisibilityFilter.all));
+      Key refuelingsKey = Key('refuelings');
+      await tester.pumpWidget(
+        MultiBlocProvider(
+          providers: [
+            BlocProvider<RefuelingsBloc>.value(
+              value: refuelingsBloc,
+            ),
+            BlocProvider<FilteredRefuelingsBloc>.value(
+              value: filteredRefuelingsBloc,
+            ),
+          ],
+          child: MaterialApp(
+            home: Scaffold(
+              body: RefuelingsScreen(key: refuelingsKey),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(RefuelingCard));
+      await tester.pumpAndSettle();
       expect(find.byKey(refuelingsKey), findsOneWidget);
     });
   });
