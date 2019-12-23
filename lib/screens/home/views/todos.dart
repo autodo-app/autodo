@@ -29,7 +29,7 @@ class TodosScreen extends StatelessWidget {
 
   onCheckboxChanged(context, todo) {
     BlocProvider.of<TodosBloc>(context).add(
-      UpdateTodo(todo.copyWith(complete: !todo.complete)),
+      UpdateTodo(todo.copyWith(completed: !todo.completed)),
     );
   }
 

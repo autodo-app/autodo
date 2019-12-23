@@ -14,9 +14,13 @@ void main() {
       expect(() => EfficiencyStatsBloc(refuelingsBloc: null), throwsAssertionError);
     });
     final refueling = Refueling(
-      id: '0',
-      date: DateTime.fromMillisecondsSinceEpoch(0),
+      id: '0', 
+      mileage: 0, 
+      amount: 10,
+      cost: 10.0,
       efficiency: 1.0,
+      date: DateTime.fromMillisecondsSinceEpoch(0),
+      carName: 'test'
     );
     blocTest('LoadEfficiencyStats',
       build: () {

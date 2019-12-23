@@ -14,16 +14,17 @@ class Refueling extends Equatable{
   final Color carColor, efficiencyColor;
 
   Refueling({
-    this.carName,
+    @required this.carName,
+    @required this.mileage,
+    @required this.date,
+    @required this.amount,
+    @required this.cost,
     this.id,
-    this.mileage,
-    this.date,
-    this.amount,
-    this.cost,
     this.carColor,
     this.efficiency,
     this.efficiencyColor,
-  });
+  }) : assert(date != null), assert(mileage != null), assert(cost != null),
+       assert(amount != null), assert(carName != null);
 
   Refueling copyWith({
     String id, 

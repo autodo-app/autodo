@@ -5,6 +5,7 @@ import 'package:mockito/mockito.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:autodo/screens/home/views/todos.dart';
+import 'package:autodo/screens/home/widgets/todo_card.dart';
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/models/models.dart';
 import 'package:autodo/widgets/widgets.dart';
@@ -98,6 +99,89 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
+      expect(find.byKey(todosKey), findsOneWidget);
+    });
+    testWidgets('check', (WidgetTester tester) async {
+      final todo = Todo(name: '', dueDate: DateTime.fromMillisecondsSinceEpoch(0), dueMileage: 0, completed: false);
+      when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded([todo], VisibilityFilter.all));
+      when(todosBloc.add(UpdateTodo(todo))).thenAnswer((_) => _);
+      Key todosKey = Key('todos');
+      await tester.pumpWidget(
+        MultiBlocProvider(
+          providers: [
+            BlocProvider<TodosBloc>.value(
+              value: todosBloc,
+            ),
+            BlocProvider<FilteredTodosBloc>.value(
+              value: filteredTodosBloc,
+            ),
+          ],
+          child: MaterialApp(
+            home: Scaffold(
+              body: TodosScreen(key: todosKey),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(Checkbox));
+      await tester.pump();
+      verify(todosBloc.add(UpdateTodo(todo.copyWith(completed: true)))).called(1);
+    });
+    testWidgets('dismiss', (WidgetTester tester) async {
+      final todo = Todo(name: '', dueDate: DateTime.fromMillisecondsSinceEpoch(0), dueMileage: 0, completed: false);
+      when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded([todo], VisibilityFilter.all));
+      when(todosBloc.add(DeleteTodo(todo))).thenAnswer((_) => null);
+      Key todosKey = Key('todos');
+      await tester.pumpWidget(
+        MultiBlocProvider(
+          providers: [
+            BlocProvider<TodosBloc>.value(
+              value: todosBloc,
+            ),
+            BlocProvider<FilteredTodosBloc>.value(
+              value: filteredTodosBloc,
+            ),
+          ],
+          child: MaterialApp(
+            home: Scaffold(
+              body: TodosScreen(key: todosKey),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(Checkbox));
+      await tester.pump();
+      verify(todosBloc.add(UpdateTodo(todo.copyWith(completed: true)))).called(1);
+      await tester.fling(find.byType(TodoCard), Offset(-300, 0), 10000.0);
+      await tester.pumpAndSettle();
+      verify(todosBloc.add(DeleteTodo(todo))).called(1);
+    });
+    testWidgets('tap', (WidgetTester tester) async {
+      final todo = Todo(name: '', dueDate: DateTime.fromMillisecondsSinceEpoch(0), dueMileage: 0, completed: false);
+      when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded([todo], VisibilityFilter.all));
+      Key todosKey = Key('todos');
+      await tester.pumpWidget(
+        MultiBlocProvider(
+          providers: [
+            BlocProvider<TodosBloc>.value(
+              value: todosBloc,
+            ),
+            BlocProvider<FilteredTodosBloc>.value(
+              value: filteredTodosBloc,
+            ),
+          ],
+          child: MaterialApp(
+            home: Scaffold(
+              body: TodosScreen(key: todosKey),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(TodoCard));
+      await tester.pump();
       expect(find.byKey(todosKey), findsOneWidget);
     });
   });

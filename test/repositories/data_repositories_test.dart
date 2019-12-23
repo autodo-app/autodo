@@ -78,30 +78,61 @@ void main() {
         .thenAnswer((_) => collection);
 
       test('New Refueling', () {
-        when(collection.add(Refueling().toEntity().toDocument()))
+        final refueling = Refueling(
+          id: '0',
+          carName: 'test',
+          amount: 10.0,
+          cost: 10.0,
+          mileage: 1000,
+          date: DateTime.fromMillisecondsSinceEpoch(0),
+        );
+        when(collection.add(refueling.toEntity().toDocument()))
           .thenAnswer((_) async => MockDocument());
-        expect(repository.addNewRefueling(Refueling()), completes);
+        expect(repository.addNewRefueling(refueling), completes);
       });
       test('Delete Refueling', () {
+        final refueling = Refueling(
+          id: '0',
+          carName: 'test',
+          amount: 10.0,
+          cost: 10.0,
+          mileage: 1000,
+          date: DateTime.fromMillisecondsSinceEpoch(0),
+        );
         when(document.delete())
           .thenAnswer((_) async {});
-        expect(repository.deleteRefueling(Refueling(id: '0')), completes);
+        expect(repository.deleteRefueling(refueling), completes);
       });
       test('Update Refueling', () {
-        when(document.updateData(Refueling(id: '0').toEntity().toDocument()))
+        final refueling = Refueling(
+          id: '0',
+          carName: 'test',
+          amount: 10.0,
+          cost: 10.0,
+          mileage: 1000,
+          date: DateTime.fromMillisecondsSinceEpoch(0),
+        );
+        when(document.updateData(refueling.toEntity().toDocument()))
           .thenAnswer((_) async {});
-        expect(repository.updateRefueling(Refueling(id: '0')), completes);
+        expect(repository.updateRefueling(refueling), completes);
       });
       test('refuelings', () {
+        final refueling = Refueling(
+          carName: 'test',
+          amount: 10.0,
+          cost: 10.0,
+          mileage: 1000,
+          date: DateTime.fromMillisecondsSinceEpoch(0),
+        );
         final snap = MockQuerySnapshot();
         final doc = MockDocSnapshot();
-        when(doc.data).thenAnswer((_) => {});
+        when(doc.data).thenAnswer((_) => refueling.toEntity().toDocument());
         when(doc.documentID).thenAnswer((_) => null);
         when(snap.documents)
           .thenAnswer((_) => [doc]);
         when(collection.snapshots())
           .thenAnswer((_) => Stream.fromIterable([snap]));
-        expect(repository.refuelings(), emits([Refueling()]));
+        expect(repository.refuelings(), emits([refueling]));
       });
       test('batch', () {
         WidgetsFlutterBinding.ensureInitialized();
