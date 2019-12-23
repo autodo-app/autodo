@@ -69,13 +69,21 @@ void main() {
       blocTest<CarsBloc, CarsEvent, CarsState>(
         'Event from Refuelings',
         build: () {
+          final refueling = Refueling(
+            id: '0',
+            carName: 'test',
+            amount: 10.0,
+            cost: 10.0,
+            mileage: 1000,
+            date: DateTime.fromMillisecondsSinceEpoch(0),
+          );
           final dataRepository = MockDataRepository();
           final refuelingsBloc = MockRefuelingsBloc();
           when(dataRepository.cars())
             .thenAnswer((_) => Stream<List<Car>>.fromIterable([[Car()]]));
           whenListen(refuelingsBloc, 
             Stream<RefuelingsState>.fromIterable([
-              RefuelingsLoaded([Refueling()])
+              RefuelingsLoaded([refueling])
             ])
           );
           return CarsBloc(
@@ -179,9 +187,18 @@ void main() {
       );
     });
     group('ExternalRefuelingsUpdated', () {
+      final refueling = Refueling(
+        id: '0',
+        carName: 'abcd',
+        amount: 10.0,
+        cost: 10.0,
+        mileage: 11000,
+        date: DateTime.fromMillisecondsSinceEpoch(0),
+      );
       blocTest<CarsBloc, CarsEvent, CarsState>(
         'First New Refueling',
         build: () {
+          
           final dataRepository = MockDataRepository();  
           final writeBatch = MockWriteBatch();
           when(dataRepository.cars())
@@ -196,7 +213,7 @@ void main() {
         },
         act: (bloc) async {
           bloc.add(LoadCars());
-          bloc.add(ExternalRefuelingsUpdated([Refueling(carName: 'abcd', mileage: 11000, date: DateTime.fromMillisecondsSinceEpoch(0))]));
+          bloc.add(ExternalRefuelingsUpdated([refueling]));
         },
         expect: [
           CarsLoading(),
@@ -233,7 +250,7 @@ void main() {
         },
         act: (bloc) async {
           bloc.add(LoadCars());
-          bloc.add(ExternalRefuelingsUpdated([Refueling(carName: 'abcd', mileage: 11000, date: DateTime.fromMillisecondsSinceEpoch(0), efficiency: 1.0)]));
+          bloc.add(ExternalRefuelingsUpdated([refueling.copyWith(efficiency: 1.0)]));
         },
         expect: [
           CarsLoading(),
@@ -271,7 +288,7 @@ void main() {
         },
         act: (bloc) async {
           bloc.add(LoadCars());
-          bloc.add(ExternalRefuelingsUpdated([Refueling(carName: 'abcd', mileage: 11000, date: DateTime.fromMillisecondsSinceEpoch(0), efficiency: 1.0)]));
+          bloc.add(ExternalRefuelingsUpdated([refueling.copyWith(efficiency: 1.0)]));
         },
         expect: [
           CarsLoading(),

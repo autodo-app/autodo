@@ -23,18 +23,26 @@ void main() {
       expect(() => RefuelingsBloc(dataRepository: dataRepository, carsBloc: null), throwsAssertionError);
     });
     group('LoadRefuelings', () {
+      final refueling = Refueling(
+        id: '0',
+        carName: 'abcd',
+        amount: 10.0,
+        cost: 10.0,
+        mileage: 11000,
+        date: DateTime.fromMillisecondsSinceEpoch(0),
+      );
       blocTest('Loaded', 
         build: () {
           final carsBloc = MockCarsBloc();
           whenListen(carsBloc, Stream.fromIterable([[Car()]]));
           final dataRepository = MockDataRepository();
-          when(dataRepository.refuelings()).thenAnswer((_) => Stream<List<Refueling>>.fromIterable([[Refueling()]]));
+          when(dataRepository.refuelings()).thenAnswer((_) => Stream<List<Refueling>>.fromIterable([[refueling]]));
           return RefuelingsBloc(dataRepository: dataRepository, carsBloc: carsBloc);
         },
         act: (bloc) async => bloc.add(LoadRefuelings()),
         expect: [ 
           RefuelingsLoading(),
-          RefuelingsLoaded([Refueling()]),
+          RefuelingsLoaded([refueling]),
         ],
       );
       blocTest('NotLoaded', 
@@ -66,8 +74,23 @@ void main() {
         ],
       );
     });
-    final refueling1 = Refueling(id: '0', mileage: 0, amount: 10);
-    final refueling2 = Refueling(id: '0', mileage: 1000, amount: 10, efficiency: 100);
+    final refueling1 = Refueling(
+      id: '0', 
+      mileage: 0, 
+      amount: 10,
+      cost: 10.0,
+      date: DateTime.fromMillisecondsSinceEpoch(0),
+      carName: 'test'
+    );
+    final refueling2 = Refueling(
+      id: '0', 
+      mileage: 1000, 
+      amount: 10,
+      efficiency: 100,
+      cost: 10.0,
+      date: DateTime.fromMillisecondsSinceEpoch(0),
+      carName: 'test'
+    );
     blocTest('AddRefueling', 
       build: () {
         final carsBloc = MockCarsBloc();
@@ -146,6 +169,15 @@ void main() {
         RefuelingsLoaded([]),
       ],
     );
+    final refueling3 = Refueling(
+      id: '0', 
+      mileage: 0, 
+      amount: 10,
+      cost: 10.0,
+      efficiency: 1.0,
+      date: DateTime.fromMillisecondsSinceEpoch(0),
+      carName: 'test'
+    );
     blocTest('CarsUpdated', 
       build: () {
         final carsBloc = MockCarsBloc();
@@ -155,7 +187,7 @@ void main() {
         when(dataRepository.refuelings())
           .thenAnswer((_) => 
             Stream<List<Refueling>>.fromIterable(
-              [[Refueling(carName: 'test', efficiency: 1.0, id: '0')]]
+              [[refueling3]]
           ));
         when(dataRepository.startRefuelingWriteBatch())
           .thenAnswer((_) => writeBatch);
@@ -167,8 +199,8 @@ void main() {
       },
       expect: [ 
         RefuelingsLoading(),
-        RefuelingsLoaded([Refueling(carName: 'test', efficiency: 1.0, id: '0')]),
-        RefuelingsLoaded([Refueling(carName: 'test', efficiency: 1.0, id: '0', efficiencyColor: Color(0xffff0000))]),
+        RefuelingsLoaded([refueling3]),
+        RefuelingsLoaded([refueling3.copyWith(efficiencyColor: Color(0xffff0000))]),
       ],
     );
   });

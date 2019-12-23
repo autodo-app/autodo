@@ -20,12 +20,16 @@ class FilteredRefuelingsBloc extends Bloc<FilteredRefuelingsEvent, FilteredRefue
 
   @override
   FilteredRefuelingsState get initialState {
-    return refuelingsBloc.state is RefuelingsLoaded
-        ? FilteredRefuelingsLoaded(
-            (refuelingsBloc.state as RefuelingsLoaded).refuelings,
-            VisibilityFilter.all,
-          )
-        : FilteredRefuelingsLoading();
+    if (refuelingsBloc.state is RefuelingsLoaded) {
+      return FilteredRefuelingsLoaded(
+        (refuelingsBloc.state as RefuelingsLoaded).refuelings,
+        VisibilityFilter.all,
+      );
+    } else if (refuelingsBloc.state is RefuelingsLoading) {
+      return FilteredRefuelingsLoading();
+    } else {
+      return FilteredRefuelingsNotLoaded();
+    }
   }
 
   @override

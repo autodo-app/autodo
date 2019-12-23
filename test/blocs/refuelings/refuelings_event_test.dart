@@ -5,31 +5,39 @@ import 'package:autodo/models/models.dart';
 
 void main() {
   group('RefuelingsEvents', () {
+    final refueling = Refueling(
+      id: '0', 
+      mileage: 0, 
+      amount: 10,
+      cost: 10.0,
+      date: DateTime.fromMillisecondsSinceEpoch(0),
+      carName: 'test'
+    );
     test('LoadRefuelings props', () {
       expect(LoadRefuelings().props, []);
     });
     group('AddRefueling', () {
       test('props', () {
-        expect(AddRefueling(Refueling()).props, [Refueling()]);
+        expect(AddRefueling(refueling).props, [refueling]);
       });
       test('toString', () {
-        expect(AddRefueling(Refueling()).toString(), 'AddRefueling { refueling: ${Refueling()} }');
+        expect(AddRefueling(refueling).toString(), 'AddRefueling { refueling: $refueling }');
       });
     });
     group('UpdateRefueling', () {
       test('props', () {
-        expect(UpdateRefueling(Refueling()).props, [Refueling()]);
+        expect(UpdateRefueling(refueling).props, [refueling]);
       });
       test('toString', () {
-        expect(UpdateRefueling(Refueling()).toString(), 'UpdateRefueling { refueling: ${Refueling()} }');
+        expect(UpdateRefueling(refueling).toString(), 'UpdateRefueling { refueling: $refueling }');
       });
     });
     group('DeleteRefueling', () {
       test('props', () {
-        expect(DeleteRefueling(Refueling()).props, [Refueling()]);
+        expect(DeleteRefueling(refueling).props, [refueling]);
       });
       test('toString', () {
-        expect(DeleteRefueling(Refueling()).toString(), 'DeleteRefueling { refueling: ${Refueling()} }');
+        expect(DeleteRefueling(refueling).toString(), 'DeleteRefueling { refueling: $refueling }');
       });
     });
     group('ExternalCarsUpdated', () {

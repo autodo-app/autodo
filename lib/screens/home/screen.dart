@@ -14,6 +14,9 @@ class HomeScreen extends StatelessWidget {
     AppTab.stats: StatisticsScreen(),
     AppTab.repeats: RepeatsScreen(),
   };
+  final Key todosTabKey;
+
+  HomeScreen({Key key, this.todosTabKey}) : super(key: key);
 
   @override 
   build(context) => BlocBuilder<TabBloc, AppTab>( 
@@ -28,6 +31,7 @@ class HomeScreen extends StatelessWidget {
         activeTab: activeTab,
         onTabSelected: (tab) =>
           BlocProvider.of<TabBloc>(context).add(UpdateTab(tab)),
+        todosTabKey: todosTabKey,
       )
     )
   );

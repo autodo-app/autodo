@@ -2,12 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 
 import 'package:autodo/localization.dart';
 import 'package:autodo/models/models.dart';
-import 'package:autodo/theme.dart';
 import 'package:autodo/util.dart';
+import 'forms/barrel.dart';
 
 typedef _OnSaveCallback = Function(int mileage, DateTime date, double amount, double cost, String car);
 
@@ -37,7 +36,7 @@ class _MileageForm extends StatelessWidget {
           left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
     ),
     autofocus: true,
-    initialValue: refueling.mileage.toString() ?? '',
+    initialValue: refueling?.mileage.toString() ?? '',
     keyboardType: TextInputType.number,
     validator: intValidator,
     onSaved: (val) => onSaved(val),
@@ -45,103 +44,6 @@ class _MileageForm extends StatelessWidget {
     focusNode: node,
     onFieldSubmitted: (_) => changeFocus(node, nextNode),
   );
-}
-
-class _CarForm extends StatefulWidget {
-  final Refueling refueling;
-  final Function(String) onSaved;
-  final FocusNode node, nextNode;
-
-  _CarForm({
-    Key key,
-    this.refueling,
-    @required this.onSaved,
-    @required this.node,
-    @required this.nextNode,
-  }) : super(key: key);
-
-  @override 
-  _CarFormState createState() => _CarFormState();
-}
-
-class _CarFormState extends State<_CarForm> { 
-  AutoCompleteTextField<Car> autoCompleteField;
-  TextEditingController _autocompleteController;
-  Car selectedCar;
-  String _carError;
-  final _autocompleteKey = GlobalKey<AutoCompleteTextFieldState<Car>>();
-  List<Car> cars;
-
-  @override
-  initState() {
-    _autocompleteController = TextEditingController();
-    super.initState();
-  }
-  
-  @override 
-  dispose() {
-    _autocompleteController.dispose();
-    super.dispose();
-  }
-
-  @override 
-  build(context) {
-    autoCompleteField = AutoCompleteTextField<Car>(
-      controller: _autocompleteController,
-      decoration: defaultInputDecoration(
-        AutodoLocalizations.requiredLiteral,
-        AutodoLocalizations.carName
-      ).copyWith(errorText: _carError),
-      itemSubmitted: (item) => setState(() {
-        _autocompleteController.text = item.name;
-        selectedCar = item;
-      }),
-      key: _autocompleteKey,
-      focusNode: widget.node,
-      textInputAction: TextInputAction.next,
-      suggestions: cars,
-      itemBuilder: (context, suggestion) => Padding(
-        child: ListTile(
-          title: Text(suggestion.name),
-          trailing: Text(
-            AutodoLocalizations.mileage + ": ${suggestion.mileage}"
-          )
-        ),
-        padding: EdgeInsets.all(5.0),
-      ),
-      itemSorter: (a, b) => a.name.length == b.name.length
-          ? 0
-          : a.name.length < b.name.length ? -1 : 1,
-      // returns a match anytime that the input is anywhere in the repeat name
-      itemFilter: (suggestion, input) {
-        return suggestion.name.toLowerCase().contains(input.toLowerCase());
-      },
-      textSubmitted: (_) => changeFocus(widget.node, widget.nextNode),
-    );
-    return FormField<String>(
-      builder: (FormFieldState<String> input) => autoCompleteField,
-      initialValue: widget.refueling?.carName ?? '',
-      validator: (val) {
-        var txt = _autocompleteController.text;
-        var res = requiredValidator(txt);
-        // TODO figure this out better
-        // if (selectedCar != null)
-        //   widget.refueling.carName = selectedCar.name;
-        // else if (val != null && cars.any((element) => element.name == val)) {
-        //   widget.refueling.carName = val;
-        // }
-        autoCompleteField.updateDecoration(
-          decoration: defaultInputDecoration(
-            AutodoLocalizations.requiredLiteral,
-            AutodoLocalizations.carName
-          ).copyWith(errorText: res),
-        );
-        setState(() => _carError = res);
-        return _carError;
-      },
-      onSaved: (val) => widget.onSaved(val),
-    );
-  }
 }
 
 class _AmountForm extends StatelessWidget {
@@ -170,7 +72,7 @@ class _AmountForm extends StatelessWidget {
           left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
     ),
     autofocus: true,
-    initialValue: refueling.amount.toString() ?? '',
+    initialValue: refueling?.amount.toString() ?? '',
     keyboardType: TextInputType.number,
     validator: intValidator,
     onSaved: (val) => onSaved(val),
@@ -206,7 +108,7 @@ class _CostForm extends StatelessWidget {
           left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
     ),
     autofocus: true,
-    initialValue: refueling.cost.toString() ?? '',
+    initialValue: refueling?.cost.toString() ?? '',
     keyboardType: TextInputType.number,
     validator: intValidator,
     onSaved: (val) => onSaved(val),
@@ -396,7 +298,7 @@ class _RefuelingAddEditScreenState extends State<RefuelingAddEditScreen> {
               nextNode: _carNode
             ),
             Padding(padding: EdgeInsets.fromLTRB(0, 16, 0, 16)),
-            _CarForm(
+            CarForm(
               refueling: widget.refueling,
               onSaved: (val) => _car = val,
               node: _carNode,

@@ -53,9 +53,12 @@ class _AutodoActionButtonState extends State<AutodoActionButton>
     }
   } 
 
-  _buttonKey(index) => 
-    (miniButtonKeys == null && miniButtonKeys.length >= index)
-    ? null : miniButtonKeys[index];
+  _buttonKey(index) {
+    if (miniButtonKeys == null) return null;
+    return (miniButtonKeys == null && miniButtonKeys.length >= index)
+        ? null : miniButtonKeys[index];
+  }
+    
 
   @override
   Widget build(BuildContext context) {

@@ -33,11 +33,19 @@ void main() {
       });
     });
     group('ExternalRefuelingsUpdated', () {
+      final refueling = Refueling(
+        id: '0',
+        carName: 'abcd',
+        amount: 10.0,
+        cost: 10.0,
+        mileage: 11000,
+        date: DateTime.fromMillisecondsSinceEpoch(0),
+      );
       test('props', () {
-        expect(ExternalRefuelingsUpdated([Refueling()]).props, [[Refueling()]]);
+        expect(ExternalRefuelingsUpdated([refueling]).props, [[refueling]]);
       });
       test('toString', () {
-        expect(ExternalRefuelingsUpdated([Refueling()]).toString(), 'ExternalRefuelingsUpdated { refuelings: ${[Refueling()]} }');
+        expect(ExternalRefuelingsUpdated([refueling]).toString(), 'ExternalRefuelingsUpdated { refuelings: ${[refueling]} }');
       });
     });
   });
