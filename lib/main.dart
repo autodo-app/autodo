@@ -15,8 +15,9 @@ import 'repositories/repositories.dart';
 import 'delegate.dart';
 import 'routes.dart';
 import 'theme.dart';
+import 'secret_loader.dart';
 
-final SentryClient _sentry = SentryClient(dsn: "https://20c77d8ea8634cb68f64d31a70a43add@sentry.io/1865109");
+SentryClient _sentry;
 
 Future<void> _reportError(dynamic error, dynamic stackTrace) async {
   // Print the exception to the console.
@@ -34,14 +35,16 @@ Future<void> _reportError(dynamic error, dynamic stackTrace) async {
   }
 }
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Map keys = await SecretLoader(secretPath: 'keys.json').load();
+  _sentry = SentryClient(dsn: keys['sentry-dsn']);
   FirebaseApp.configure(
     name: 'autodo',
     options: FirebaseOptions(
       googleAppID: '1:617460744396:android:400cbb86de167047',
       projectID: 'autodo-49f21',
-      apiKey: 'AIzaSyAAYhwsJVyiYywUFORBgaUuyXqXFiFpbZo',
+      apiKey: keys['firebase-key'],
     )
   );
   BlocSupervisor.delegate = AutodoBlocDelegate();
