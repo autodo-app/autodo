@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 
 class DotsIndicator extends AnimatedWidget {
   static const double _kDotSize = 5.0;
-
   static const double _kMaxZoom = 1.75;
-
   static const double _kDotSpacing = 20.0;
 
   /// The PageController that this DotsIndicator is representing.
@@ -13,7 +11,7 @@ class DotsIndicator extends AnimatedWidget {
 
   /// The number of items managed by the PageController
   final int itemCount;
-  // The base size of the dots
+
   /// Called when a dot is tapped
   final ValueChanged<int> onPageSelected;
 
@@ -23,12 +21,15 @@ class DotsIndicator extends AnimatedWidget {
   /// Defaults to `Colors.white`.
   final Color color;
 
-  // The distance between the center of each dot
+  /// A list of keys corresponding to each of the dots in the indicator.
+  final List<Key> keys;
+
   DotsIndicator({
     this.controller,
     this.itemCount,
     this.onPageSelected,
     this.color = Colors.white,
+    this.keys,
   }) : super(listenable: controller);
 
   Widget build(BuildContext context) {
@@ -53,6 +54,7 @@ class DotsIndicator extends AnimatedWidget {
     );
     double zoom = 1.0 + (_kMaxZoom - 1.0) * selectedness;
     return Container(
+      key: (keys != null) ? keys[index] : null,
       width: _kDotSpacing,
       child: Material(
         color: color,

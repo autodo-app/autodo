@@ -7,7 +7,6 @@ import 'welcome.dart';
 import 'tutorial1.dart';
 import 'tutorial2.dart';
 
-
 class WelcomePageScroller extends StatefulWidget {
   final VoidCallback lastPageNotifier;
   final PageController controller = PageController();
@@ -25,7 +24,9 @@ class WelcomePageScroller extends StatefulWidget {
     return this.controller;
   }
 
-  WelcomePageScroller({@required this.lastPageNotifier});
+  void showPage(page) => this.controller.jumpToPage(page);
+
+  WelcomePageScroller({this.lastPageNotifier});
   @override
   WelcomePageScrollerState createState() => WelcomePageScrollerState();
 }
@@ -58,6 +59,12 @@ class WelcomePageScrollerState extends State<WelcomePageScroller> {
       }
     };
     widget.controller..addListener(scrollListener);
+  }
+
+  @override 
+  void dispose() {
+    debounceTimer.cancel();
+    super.dispose();
   }
 
   @override
