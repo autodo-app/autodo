@@ -33,3 +33,4 @@ google-services.json
 **/coverage/**
 doc/**
 .flutter-plugins**
+keys.json
