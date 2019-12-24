@@ -16,6 +16,7 @@ jobs:
       with:
         flutter-version: '1.9.1+hotfix.5'
     - run: flutter pub get
+    - run: echo "${{ secrets.keys_json }}" > keys.json
     - run: flutter test --coverage
     - uses: codecov/codecov-action@v1.0.2
       with:
