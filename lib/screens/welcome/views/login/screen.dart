@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:autodo/blocs/blocs.dart';
-import 'package:autodo/repositories/repositories.dart';
 import 'package:autodo/theme.dart';
 import 'form.dart';
 
@@ -25,13 +24,9 @@ class LoginScreen extends StatelessWidget {
             style: TextStyle(color: Colors.grey[300]),
           ),
         ),
-        body: BlocProvider<LoginBloc>(
-          create: (context) => LoginBloc(
-            authRepository: FirebaseAuthRepository(),
-          ),
-          child: BlocBuilder<LoginBloc, LoginState>(
-            builder: (context, state) => LoginForm(),
-          ),
+        body: BlocBuilder<LoginBloc, LoginState>(
+          bloc: BlocProvider.of<LoginBloc>(context),
+          builder: (context, state) => LoginForm(),
         ),
         backgroundColor: Colors.transparent,
       ),
