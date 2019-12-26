@@ -28,3 +28,15 @@ class UpdateRefuelings extends FilteredRefuelingsEvent {
   @override
   String toString() => 'UpdateRefuelings { refuelings: $refuelings }';
 }
+
+class FilteredRefuelingsUpdateCars extends FilteredRefuelingsEvent {
+  final List<Car> cars;
+
+  const FilteredRefuelingsUpdateCars(this.cars);
+
+  @override 
+  List<Object> get props => [cars];
+
+  @override 
+  toString() => 'FilteredRefuelingsUpdateCars { cars: $cars }';
+}

@@ -10,6 +10,7 @@ import 'package:autodo/models/models.dart';
 
 class MockRefuelingsBloc extends MockBloc<RefuelingsEvent, RefuelingsState>
     implements RefuelingsBloc {}
+class MockCarsBloc extends MockBloc<CarsEvent, CarsState> implements CarsBloc {}
 
 void main() {
   group('FilteredRefuelingsBloc', () {
@@ -33,12 +34,16 @@ void main() {
           refuelingsBloc,
           Stream<RefuelingsState>.fromIterable([RefuelingsLoaded([refueling])]),
         );
-        return FilteredRefuelingsBloc(refuelingsBloc: refuelingsBloc);
+        final carsBloc = MockCarsBloc();
+        when(carsBloc.state).thenAnswer((_) => CarsLoaded([Car()]));
+        whenListen(carsBloc, Stream<CarsState>.fromIterable([CarsLoaded([Car()])]));
+        return FilteredRefuelingsBloc(refuelingsBloc: refuelingsBloc, carsBloc: carsBloc);
       }, 
       expect: [
         FilteredRefuelingsLoaded(
           [refueling],
           VisibilityFilter.all,
+          [Car()]
         ),
       ]
     );
@@ -49,7 +54,10 @@ void main() {
         final refuelingsBloc = MockRefuelingsBloc();
         when(refuelingsBloc.state)
             .thenReturn(RefuelingsLoaded([refueling]));
-        return FilteredRefuelingsBloc(refuelingsBloc: refuelingsBloc);
+        final carsBloc = MockCarsBloc();
+        when(carsBloc.state).thenAnswer((_) => CarsLoaded([Car()]));
+        whenListen(carsBloc, Stream<CarsState>.fromIterable([CarsLoaded([Car()])]));
+        return FilteredRefuelingsBloc(refuelingsBloc: refuelingsBloc, carsBloc: carsBloc);
       },
       act: (FilteredRefuelingsBloc bloc) async =>
           bloc.add(UpdateRefuelingsFilter(VisibilityFilter.active)),
@@ -57,10 +65,12 @@ void main() {
         FilteredRefuelingsLoaded(
           [refueling],
           VisibilityFilter.all,
+          [Car()]
         ),
         FilteredRefuelingsLoaded(
           [refueling],
           VisibilityFilter.active,
+          [Car()]
         ),
       ],
     );
@@ -71,7 +81,10 @@ void main() {
         final refuelingsBloc = MockRefuelingsBloc();
         when(refuelingsBloc.state)
             .thenReturn(RefuelingsLoaded([refueling]));
-        return FilteredRefuelingsBloc(refuelingsBloc: refuelingsBloc);
+        final carsBloc = MockCarsBloc();
+        when(carsBloc.state).thenAnswer((_) => CarsLoaded([Car()]));
+        whenListen(carsBloc, Stream<CarsState>.fromIterable([CarsLoaded([Car()])]));
+        return FilteredRefuelingsBloc(refuelingsBloc: refuelingsBloc, carsBloc: carsBloc);
       },
       act: (FilteredRefuelingsBloc bloc) async =>
           bloc.add(UpdateRefuelingsFilter(VisibilityFilter.completed)),
@@ -79,8 +92,9 @@ void main() {
         FilteredRefuelingsLoaded(
           [refueling],
           VisibilityFilter.all,
+          [Car()]
         ),
-        FilteredRefuelingsLoaded([refueling], VisibilityFilter.completed),
+        FilteredRefuelingsLoaded([refueling], VisibilityFilter.completed, [Car()]),
       ],
     );
   }); 
