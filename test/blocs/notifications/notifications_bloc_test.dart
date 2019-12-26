@@ -8,12 +8,13 @@ import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/repositories/repositories.dart';
 
 class MockDataRepository extends Mock with EquatableMixin implements DataRepository {}
+class MockDbBloc extends Mock implements DatabaseBloc {}
 class MockNotificationsPlugin extends Mock implements FlutterLocalNotificationsPlugin {}
 
 void main() {
   group('NotificationsBloc', () {
     test('Null Assertion', () {
-      expect(() => NotificationsBloc(dataRepository: null), throwsAssertionError);
+      expect(() => NotificationsBloc(dbBloc: null), throwsAssertionError);
     });
     group('LoadNotifications', () {
       blocTest<NotificationsBloc, NotificationsEvent, NotificationsState>(
@@ -22,8 +23,10 @@ void main() {
           final dataRepository = MockDataRepository();
           when(dataRepository.notificationID())
             .thenAnswer((_) => Stream<int>.fromIterable([0]));
+          final dbBloc = MockDbBloc();
+          when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
           return NotificationsBloc(
-            dataRepository: dataRepository,
+            dbBloc: dbBloc
           );
         },
         act: (bloc) async => bloc.add(LoadNotifications()),
@@ -38,8 +41,10 @@ void main() {
           final dataRepository = MockDataRepository();
           when(dataRepository.notificationID())
             .thenAnswer((_) => Stream<int>.fromIterable([null]));
+          final dbBloc = MockDbBloc();
+          when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
           return NotificationsBloc(
-            dataRepository: dataRepository,
+            dbBloc: dbBloc,
           );
         },
         act: (bloc) async => bloc.add(LoadNotifications()),
@@ -52,8 +57,10 @@ void main() {
         'Exception',
         build: () {
           final dataRepository = MockDataRepository();
+          final dbBloc = MockDbBloc();
+          when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
           return NotificationsBloc(
-            dataRepository: dataRepository,
+            dbBloc: dbBloc,
           );
         },
         act: (bloc) async => bloc.add(LoadNotifications()),
@@ -69,8 +76,10 @@ void main() {
         final dataRepository = MockDataRepository();
         when(dataRepository.notificationID())
           .thenAnswer((_) => Stream<int>.fromIterable([0]));
+        final dbBloc = MockDbBloc();
+        when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
         return NotificationsBloc(
-          dataRepository: dataRepository,
+          dbBloc: dbBloc,
         );
       },
       act: (bloc) async {
@@ -94,9 +103,11 @@ void main() {
             DateTime.fromMillisecondsSinceEpoch(0), 
             NotificationsBloc.platformChannelSpecifics
         )).thenAnswer((_) async {});
+        final dbBloc = MockDbBloc();
+        when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
         return NotificationsBloc(
           notificationsPlugin: notificationsPlugin,
-          dataRepository: dataRepository,
+          dbBloc: dbBloc,
         );
       },
       act: (bloc) async {
@@ -120,9 +131,11 @@ void main() {
             DateTime.fromMillisecondsSinceEpoch(0), 
             NotificationsBloc.platformChannelSpecifics
         )).thenAnswer((_) async {});
+        final dbBloc = MockDbBloc();
+        when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
         return NotificationsBloc(
           notificationsPlugin: notificationsPlugin,
-          dataRepository: dataRepository,
+          dbBloc: dbBloc,
         );
       },
       act: (bloc) async {
@@ -149,9 +162,11 @@ void main() {
             NotificationsBloc.platformChannelSpecifics
         )).thenAnswer((_) async {});
         when(notificationsPlugin.cancel(1)).thenThrow(Exception());
+        final dbBloc = MockDbBloc();
+        when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
         return NotificationsBloc(
           notificationsPlugin: notificationsPlugin,
-          dataRepository: dataRepository,
+          dbBloc: dbBloc,
         );
       },
       act: (bloc) async {
@@ -178,9 +193,11 @@ void main() {
             NotificationsBloc.platformChannelSpecifics
         )).thenAnswer((_) async {});
         when(notificationsPlugin.cancel(1)).thenAnswer((_) async {});
+        final dbBloc = MockDbBloc();
+        when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
         return NotificationsBloc(
           notificationsPlugin: notificationsPlugin,
-          dataRepository: dataRepository,
+          dbBloc: dbBloc,
         );
       },
       act: (bloc) async {

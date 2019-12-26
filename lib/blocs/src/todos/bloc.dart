@@ -11,10 +11,11 @@ import 'package:autodo/util.dart';
 import '../cars/barrel.dart';
 import '../repeating/barrel.dart';
 import '../notifications/barrel.dart';
+import '../database/barrel.dart';
 import 'package:autodo/localization.dart';
 
 class TodosBloc extends Bloc<TodosEvent, TodosState> {
-  final DataRepository _dataRepository;
+  final DatabaseBloc _dbBloc;
   final CarsBloc _carsBloc;
   final NotificationsBloc _notificationsBloc;
   final RepeatsBloc _repeatsBloc;
@@ -23,17 +24,20 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   List<Car> _carsCache;
 
   TodosBloc({
-    @required DataRepository dataRepository, 
+    @required DatabaseBloc dbBloc, 
     @required CarsBloc carsBloc,
     @required NotificationsBloc notificationsBloc,
     @required RepeatsBloc repeatsBloc
-  }) : assert(dataRepository != null), assert(carsBloc != null),
+  }) : assert(dbBloc != null), assert(carsBloc != null),
        assert(notificationsBloc != null), assert(repeatsBloc != null),
-       _dataRepository = dataRepository, _repeatsBloc = repeatsBloc, 
+       _dbBloc = dbBloc, _repeatsBloc = repeatsBloc, 
        _carsBloc = carsBloc, _notificationsBloc = notificationsBloc;
 
   @override
   TodosState get initialState => TodosLoading();
+
+  DataRepository get repo => (_dbBloc.state is DbLoaded) ? 
+    (_dbBloc.state as DbLoaded).repository : null;
 
   @override
   Stream<TodosState> mapEventToState(TodosEvent event) async* {
@@ -58,7 +62,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
 
   Stream<TodosState> _mapLoadTodosToState() async* {
     try {
-      final todos = await _dataRepository.todos().first;
+      final todos = await repo.todos().first;
       if (todos != null) {
         yield TodosLoaded(todos);
       } else {
@@ -119,9 +123,9 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
 
   Stream<TodosState> _mapUpdateDueDatesToState(UpdateDueDates event) async* {
     List<Car> cars = event.cars;
-    if (state is TodosLoaded) {
+    if (state is TodosLoaded && repo != null) {
       TodosLoaded curState = state;
-      WriteBatchWrapper batch = _dataRepository.startTodoWriteBatch();
+      WriteBatchWrapper batch = repo.startTodoWriteBatch();
       List<Todo> updatedTodos;
       for (var car in cars) {
         if (_carsCache?.contains(car) ?? false) continue;
@@ -137,19 +141,21 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   }
 
   Stream<TodosState> _mapAddTodoToState(AddTodo event) async* {
+    if (repo == null) return;
     final List<Todo> updatedTodos = List.from((state as TodosLoaded).todos)..add(event.todo);
     yield TodosLoaded(updatedTodos);
     _scheduleNotification(event.todo);
     // out = event.todo.copyWith(notificationID: notificationID);
-    _dataRepository.addNewTodo(event.todo);
+    repo.addNewTodo(event.todo);
   }
 
   Stream<TodosState> _mapUpdateTodoToState(UpdateTodo event) async* {
+    if (repo == null) return;
     final List<Todo> updatedTodos = (state as TodosLoaded)
       .todos.map((r) => r.id == event.updatedTodo.id ? event.updatedTodo : r)
       .toList();
     yield TodosLoaded(updatedTodos);
-    _dataRepository.updateTodo(event.updatedTodo);
+    repo.updateTodo(event.updatedTodo);
   }
 
   Todo _createNewTodoFromRepeat(repeat, todo) {
@@ -164,14 +170,14 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       dueDate: nextDueDate,
       completed: false
     );
-    _dataRepository.addNewTodo(next);
+    repo.addNewTodo(next);
     return next;
   }
 
   Stream<TodosState> _mapCompleteTodoToState(CompleteTodo event) async* {
     Todo curTodo = event.todo;
     if (_repeatsBloc.state is RepeatsLoaded && 
-        _carsBloc.state is CarsLoaded) {
+        _carsBloc.state is CarsLoaded && repo != null) {
       List<Todo> updatedTodos = (state as TodosLoaded).todos;
 
       RepeatsLoaded curRepeatsState = _repeatsBloc.state;
@@ -180,7 +186,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       if (!curRepeat.props.every((p) => p == null)) {
         Todo newTodo = _createNewTodoFromRepeat(curRepeat, curTodo);
         updatedTodos = updatedTodos..add(newTodo);
-        _dataRepository.addNewTodo(newTodo);
+        repo.addNewTodo(newTodo);
       }
       
       Todo completedTodo = curTodo.copyWith(
@@ -191,7 +197,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
         .map((t) => (t.id == completedTodo.id) ? completedTodo : t)
         .toList();
       yield TodosLoaded(updatedTodos);
-      _dataRepository.updateTodo(completedTodo);
+      repo.updateTodo(completedTodo);
     }
   }
 
@@ -201,19 +207,19 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
           .where((r) => r.id != event.todo.id)
           .toList();
     yield TodosLoaded(updatedTodos);
-    _dataRepository.deleteTodo(event.todo);
+    repo.deleteTodo(event.todo);
   }
 
   Stream<TodosState> _mapToggleAllToState() async* {
     final currentState = state;
-    if (currentState is TodosLoaded) {
+    if (currentState is TodosLoaded && repo != null) {
       final allComplete = currentState.todos.every((todo) => todo.completed);
       final List<Todo> updatedTodos = currentState.todos
           .map((todo) => todo.copyWith(completed: !allComplete))
           .toList();
       yield TodosLoaded(updatedTodos);
       updatedTodos.forEach((updatedTodo) {
-        _dataRepository.updateTodo(updatedTodo);
+        repo.updateTodo(updatedTodo);
       });
     }
   }

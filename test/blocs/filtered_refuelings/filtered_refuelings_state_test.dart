@@ -30,14 +30,14 @@ void main() {
     group('FilteredRefuelingsLoaded', () {
       test('toString returns correct value', () {
         expect(
-          FilteredRefuelingsLoaded([refueling], VisibilityFilter.active).toString(),
-          'FilteredRefuelingsLoaded { filteredRefuelings: [$refueling], activeFilter: VisibilityFilter.active }',
+          FilteredRefuelingsLoaded([refueling], VisibilityFilter.active, [Car()]).toString(),
+          'FilteredRefuelingsLoaded { filteredRefuelings: [$refueling], activeFilter: VisibilityFilter.active, cars: ${[Car()]} }',
         );
       });
       test('props are correct', () {
         expect(  
-          FilteredRefuelingsLoaded([refueling], VisibilityFilter.active).props,
-          [[refueling], VisibilityFilter.active],
+          FilteredRefuelingsLoaded([refueling], VisibilityFilter.active, [Car()]).props,
+          [[refueling], VisibilityFilter.active, [Car()]],
         );
       });
     });

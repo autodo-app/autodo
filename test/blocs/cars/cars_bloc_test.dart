@@ -12,20 +12,21 @@ import 'package:autodo/models/models.dart';
 class MockDataRepository extends Mock implements DataRepository {}
 class MockRefuelingsBloc extends Mock implements RefuelingsBloc {}
 class MockWriteBatch extends Mock implements WriteBatchWrapper {}
+class MockDbBloc extends Mock implements DatabaseBloc {}
 
 void main() {
   group('CarsBloc', () {
     test('Null Data Repository', () {
       final refuelingsBloc = MockRefuelingsBloc();
       expect(
-        () => CarsBloc(dataRepository: null, refuelingsBloc: refuelingsBloc),
+        () => CarsBloc(dbBloc: null, refuelingsBloc: refuelingsBloc),
         throwsAssertionError
       );
     });
     test('Null Refuelings Bloc', () {
-      final dataRepository = MockDataRepository();
+      final dbBloc = MockDbBloc();
       expect(
-        () => CarsBloc(dataRepository: dataRepository, refuelingsBloc: null),
+        () => CarsBloc(dbBloc: dbBloc, refuelingsBloc: null),
         throwsAssertionError
       );
     });
@@ -36,9 +37,11 @@ void main() {
           final dataRepository = MockDataRepository();
           when(dataRepository.cars())
             .thenAnswer((_) => Stream<List<Car>>.fromIterable([[Car()]]));
+          final dbBloc = MockDbBloc();
+          when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
           final refuelingsBloc = MockRefuelingsBloc();
           return CarsBloc(
-            dataRepository: dataRepository,
+            dbBloc: dbBloc,
             refuelingsBloc: refuelingsBloc
           );
         },
@@ -55,8 +58,10 @@ void main() {
           when(dataRepository.cars())
             .thenAnswer((_) => Stream<List<Car>>.fromIterable([null]));
           final refuelingsBloc = MockRefuelingsBloc();
+          final dbBloc = MockDbBloc();
+          when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
           return CarsBloc(
-            dataRepository: dataRepository,
+            dbBloc: dbBloc,
             refuelingsBloc: refuelingsBloc
           );
         },
@@ -86,8 +91,10 @@ void main() {
               RefuelingsLoaded([refueling])
             ])
           );
+          final dbBloc = MockDbBloc();
+          when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
           return CarsBloc(
-            dataRepository: dataRepository,
+            dbBloc: dbBloc,
             refuelingsBloc: refuelingsBloc
           );
         },
@@ -102,8 +109,10 @@ void main() {
         build: () {
           final dataRepository = MockDataRepository();
           final refuelingsBloc = MockRefuelingsBloc();
+          final dbBloc = MockDbBloc();
+          when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
           return CarsBloc(
-            dataRepository: dataRepository,
+            dbBloc: dbBloc,
             refuelingsBloc: refuelingsBloc
           );
         },
@@ -122,8 +131,10 @@ void main() {
           when(dataRepository.cars())
             .thenAnswer((_) => Stream<List<Car>>.fromIterable([[Car()]]));
           final refuelingsBloc = MockRefuelingsBloc();
+          final dbBloc = MockDbBloc();
+          when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
           return CarsBloc(
-            dataRepository: dataRepository,
+            dbBloc: dbBloc,
             refuelingsBloc: refuelingsBloc
           );
         },
@@ -146,8 +157,10 @@ void main() {
           when(dataRepository.cars())
             .thenAnswer((_) => Stream<List<Car>>.fromIterable([[Car(id: '0', name: 'abcd')]]));
           final refuelingsBloc = MockRefuelingsBloc();
+          final dbBloc = MockDbBloc();
+          when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
           return CarsBloc(
-            dataRepository: dataRepository,
+            dbBloc: dbBloc,
             refuelingsBloc: refuelingsBloc
           );
         },
@@ -170,8 +183,10 @@ void main() {
           when(dataRepository.cars())
             .thenAnswer((_) => Stream<List<Car>>.fromIterable([[Car(id: '0', name: 'abcd')]]));
           final refuelingsBloc = MockRefuelingsBloc();
+          final dbBloc = MockDbBloc();
+          when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
           return CarsBloc(
-            dataRepository: dataRepository,
+            dbBloc: dbBloc,
             refuelingsBloc: refuelingsBloc
           );
         },
@@ -206,8 +221,10 @@ void main() {
           when(dataRepository.startCarWriteBatch())
             .thenAnswer((_) => writeBatch);
           final refuelingsBloc = MockRefuelingsBloc();
+          final dbBloc = MockDbBloc();
+          when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
           return CarsBloc(
-            dataRepository: dataRepository,
+            dbBloc: dbBloc,
             refuelingsBloc: refuelingsBloc
           );
         },
@@ -243,8 +260,10 @@ void main() {
           when(dataRepository.startCarWriteBatch())
             .thenAnswer((_) => writeBatch);
           final refuelingsBloc = MockRefuelingsBloc();
+          final dbBloc = MockDbBloc();
+          when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
           return CarsBloc(
-            dataRepository: dataRepository,
+            dbBloc: dbBloc,
             refuelingsBloc: refuelingsBloc
           );
         },
@@ -281,8 +300,10 @@ void main() {
           when(dataRepository.startCarWriteBatch())
             .thenAnswer((_) => writeBatch);
           final refuelingsBloc = MockRefuelingsBloc();
+          final dbBloc = MockDbBloc();
+          when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
           return CarsBloc(
-            dataRepository: dataRepository,
+            dbBloc: dbBloc,
             refuelingsBloc: refuelingsBloc
           );
         },

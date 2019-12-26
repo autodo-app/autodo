@@ -5,11 +5,12 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'package:autodo/repositories/repositories.dart';
+import '../database/barrel.dart';
 import 'event.dart';
 import 'state.dart';
 
 class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
-  final DataRepository _dataRepository;
+  final DatabaseBloc _dbBloc;
   StreamSubscription _dataSubscription;
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   static final channelID = 'com.jonathanbayless.autodo';
@@ -26,12 +27,15 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
 
   NotificationsBloc({
     notificationsPlugin,
-    @required dataRepository
-  }) : assert(dataRepository != null), _dataRepository = dataRepository,
+    @required dbBloc
+  }) : assert(dbBloc != null), _dbBloc = dbBloc,
        flutterLocalNotificationsPlugin = notificationsPlugin ?? FlutterLocalNotificationsPlugin();
 
   @override
   NotificationsState get initialState => NotificationsLoading();
+
+  DataRepository get repo => (_dbBloc.state is DbLoaded) ? 
+    (_dbBloc.state as DbLoaded).repository : null;
 
   @override 
   Stream<NotificationsState> mapEventToState(NotificationsEvent event) async* {
@@ -50,7 +54,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
 
   Stream<NotificationsState> _mapLoadNotificationsToState(LoadNotifications event) async* {
     try {
-      final id = await _dataRepository.notificationID().first;
+      final id = await repo.notificationID().first;
       if (id != null) {
         yield NotificationsLoaded(id);
       } else {
@@ -60,7 +64,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
       yield NotificationsNotLoaded();
     }
     _dataSubscription?.cancel();
-    _dataSubscription = _dataRepository.notificationID().listen( 
+    _dataSubscription = repo?.notificationID()?.listen( 
       (id) => add(NotificationIdUpdated(id))
     );
   }

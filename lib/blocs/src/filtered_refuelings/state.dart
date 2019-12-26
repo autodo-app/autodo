@@ -14,18 +14,20 @@ class FilteredRefuelingsLoading extends FilteredRefuelingsState {}
 
 class FilteredRefuelingsLoaded extends FilteredRefuelingsState {
   final List<Refueling> filteredRefuelings;
+  final List<Car> cars;
   final VisibilityFilter activeFilter;
 
   const FilteredRefuelingsLoaded(
     this.filteredRefuelings,
     this.activeFilter,
+    this.cars
   );
 
   @override
-  List<Object> get props => [filteredRefuelings, activeFilter];
+  List<Object> get props => [filteredRefuelings, activeFilter, cars];
 
   @override
   String toString() {
-    return 'FilteredRefuelingsLoaded { filteredRefuelings: $filteredRefuelings, activeFilter: $activeFilter }';
+    return 'FilteredRefuelingsLoaded { filteredRefuelings: $filteredRefuelings, activeFilter: $activeFilter, cars: $cars }';
   }
 }
