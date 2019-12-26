@@ -1,6 +1,6 @@
 # auToDo
 
-[![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/autodo-app/autodo?include_prereleases)]() [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/autodo-app/autodo/Build APK)]() [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/autodo-app/autodo/Unit and Widget Tests?label=tests)]() [![codecov](https://codecov.io/gh/autodo-app/autodo/branch/develop/graph/badge.svg)](https://codecov.io/gh/autodo-app/autodo)
+[![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/autodo-app/autodo?include_prereleases)]() [![GitHub Workflow Status](https://github.com/autodo-app/autodo/workflows/Build%20APK/badge.svg)]() [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/autodo-app/autodo/Unit and Widget Tests?label=tests)]() [![codecov](https://codecov.io/gh/autodo-app/autodo/branch/develop/graph/badge.svg)](https://codecov.io/gh/autodo-app/autodo)
 
 A flexible, intuitive ToDo list app for keeping track of your cars' maintenance needs.
 
