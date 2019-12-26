@@ -1,6 +1,6 @@
 # https://medium.com/better-programming/ci-cd-for-flutter-apps-using-github-actions-b833f8f7aac
 on: push
-name: Test and Build APK
+name: Build APK
 jobs:
   build:
     name: Build APK
