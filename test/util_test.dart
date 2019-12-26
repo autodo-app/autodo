@@ -102,5 +102,11 @@ void main() {
         expect(scaleToUnit(2.0, 0.0, 4.0), 0.5);
       });
     });
+    test('rgb toString', () {
+      expect(RGB(0, 0, 0,).toString(), 'RGB { r: 0.0, g: 0.0, b: 0.0 }');
+    });
+    test('hsv toString', () {
+      expect(HSV(0, 0, 0,).toString(), 'HSV { h: 0.0, s: 0.0, v: 0.0 }');
+    });
   });
 }

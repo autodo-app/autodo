@@ -36,10 +36,10 @@ class FilteredRefuelingsBloc extends Bloc<FilteredRefuelingsEvent, FilteredRefue
   @override
   FilteredRefuelingsState get initialState {
     if (refuelingsBloc.state is RefuelingsLoaded && carsBloc.state is CarsLoaded) {
-      return FilteredRefuelingsLoaded(
+      return _shadeEfficiencyStats(
         (refuelingsBloc.state as RefuelingsLoaded).refuelings,
-        VisibilityFilter.all,
-        (carsBloc.state as CarsLoaded).cars
+        (carsBloc.state as CarsLoaded).cars,
+         VisibilityFilter.all
       );
     } else if (refuelingsBloc.state is RefuelingsLoading) {
       return FilteredRefuelingsLoading();
@@ -77,7 +77,7 @@ class FilteredRefuelingsBloc extends Bloc<FilteredRefuelingsEvent, FilteredRefue
   ) async* {
     if (state is FilteredRefuelingsLoaded) {
       final curState = (state as FilteredRefuelingsLoaded);
-      yield* _shadeEfficiencyStats(curState.filteredRefuelings, curState.cars);
+      yield _shadeEfficiencyStats(curState.filteredRefuelings, curState.cars);
     }
   }
 
@@ -93,15 +93,20 @@ class FilteredRefuelingsBloc extends Bloc<FilteredRefuelingsEvent, FilteredRefue
     return HSV(hue.toDouble(), 1.0, 1.0).toValue();
   }
 
-  Stream<FilteredRefuelingsState> _shadeEfficiencyStats(
-      List<Refueling> refuelings, List<Car> cars) async* {
-    final curFilter = (state as FilteredRefuelingsLoaded).activeFilter;
+  FilteredRefuelingsState _shadeEfficiencyStats(
+      List<Refueling> refuelings, List<Car> cars, [filter]) {
+    final curFilter = filter ?? (state as FilteredRefuelingsLoaded).activeFilter;
     final shadedRefuelings = refuelings
       .where((r) => cars.any((c) => c.name == r.carName))
       .map((r) => r.copyWith(
           efficiencyColor: Color(
-            _hsv(r, cars.firstWhere((c) => r.carName == c.name)))));
-    yield FilteredRefuelingsLoaded(shadedRefuelings, curFilter, cars);
+            _hsv(r, cars.firstWhere((c) => r.carName == c.name)))))
+      .toList();
+    final updatedRefuelings = refuelings
+      .map((r) => shadedRefuelings.any((s) => s.id == r.id) ? 
+        shadedRefuelings.firstWhere((s) => s.id == r.id) : r)
+      .toList();
+    return FilteredRefuelingsLoaded(updatedRefuelings, curFilter, cars);
   }
 
   Stream<FilteredRefuelingsState> _mapCarsUpdatedToState(FilteredRefuelingsUpdateCars event) async* {
