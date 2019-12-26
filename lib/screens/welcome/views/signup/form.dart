@@ -51,8 +51,7 @@ class _SignupFormState extends State<SignupForm> {
               backgroundColor: Colors.red,
             ),
           );
-      }
-      if (state is SignupLoading) {
+      } else if (state is SignupLoading) {
         Scaffold.of(context)
           ..hideCurrentSnackBar()
           ..showSnackBar(
@@ -68,8 +67,7 @@ class _SignupFormState extends State<SignupForm> {
               ),
             ),
           );
-      }
-      if (state is SignupSuccess) {
+      } else if (state is SignupSuccess) {
         BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
         Navigator.pushNamed(context, AutodoRoutes.home);
       }
@@ -84,11 +82,13 @@ class _SignupFormState extends State<SignupForm> {
               EmailForm( 
                 onSaved: (val) => _email = val,
                 node: _emailNode,
-                nextNode: _passwordNode
+                nextNode: _passwordNode,
+                login: false
               ),
               PasswordForm(
                 onSaved: (val) => _password = val,
-                node: _passwordNode
+                node: _passwordNode,
+                login: false,
               ),
               (state is SignupError) ? ErrorMessage(state.errorMsg) : Container(),
               LegalNotice(),
@@ -102,7 +102,7 @@ class _SignupFormState extends State<SignupForm> {
                         password: _password
                       )
                     );
-                    Navigator.pop(context);
+                    Navigator.pushNamed(context, AutodoRoutes.home);
                   }
                 } 
               ),

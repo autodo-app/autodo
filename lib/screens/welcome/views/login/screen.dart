@@ -19,13 +19,11 @@ class LoginScreen extends StatelessWidget {
             onPressed: () => Navigator.pop(context),
           ),
           title: Text(
-            // widget.formMode == FormMode.LOGIN ? 'LOG IN' : 'SIGN UP',
             'LOG IN',
             style: TextStyle(color: Colors.grey[300]),
           ),
         ),
         body: BlocBuilder<LoginBloc, LoginState>(
-          bloc: BlocProvider.of<LoginBloc>(context),
           builder: (context, state) => LoginForm(),
         ),
         backgroundColor: Colors.transparent,

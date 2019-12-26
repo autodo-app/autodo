@@ -7,8 +7,9 @@ import 'package:autodo/localization.dart';
 class EmailForm extends StatelessWidget {
   final Function onSaved;
   final FocusNode node, nextNode;
+  final bool login;
 
-  EmailForm({this.onSaved, this.node, this.nextNode});
+  EmailForm({this.onSaved, this.node, this.nextNode, this.login = true});
 
   @override 
   build(context) => TextFormField(
@@ -27,9 +28,15 @@ class EmailForm extends StatelessWidget {
       )
     ),
     onSaved: (value) => onSaved(value.trim()),
-    onChanged: (val) => BlocProvider.of<LoginBloc>(context).add(
-      LoginEmailChanged(email: val)
-    ),
+    onChanged: (val) {
+      if (login) {
+        return BlocProvider.of<LoginBloc>(context).add(
+          LoginEmailChanged(email: val));
+      } else {
+        return BlocProvider.of<SignupBloc>(context).add(
+          SignupEmailChanged(email: val));
+      }
+    },
     onFieldSubmitted: (_) {
       node.unfocus();
       nextNode.requestFocus();

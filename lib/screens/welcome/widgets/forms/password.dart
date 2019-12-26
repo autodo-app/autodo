@@ -7,8 +7,9 @@ import 'package:autodo/localization.dart';
 class PasswordForm extends StatelessWidget {
   final Function onSaved;
   final FocusNode node;
+  final bool login;
 
-  PasswordForm({this.onSaved, this.node});
+  PasswordForm({this.onSaved, this.node, this.login = true});
 
   @override 
   build(context) => Container(
@@ -27,9 +28,15 @@ class PasswordForm extends StatelessWidget {
           color: Colors.grey[300],
         )
       ),
-      onChanged: (val) => BlocProvider.of<LoginBloc>(context).add(
-        LoginPasswordChanged(password: val)
-      ),
+      onChanged: (val) {
+        if (login) {
+          return BlocProvider.of<LoginBloc>(context).add(
+            LoginPasswordChanged(password: val));
+        } else {
+          return BlocProvider.of<SignupBloc>(context).add(
+            SignupPasswordChanged(password: val));
+        }
+      },
       onSaved: (value) => onSaved(value.trim()),
     ),
   );
