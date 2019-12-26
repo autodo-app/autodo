@@ -25,6 +25,9 @@ jobs:
         KEY_PASSWORD: ${{ secrets.key_password }}
         STORE_FILE: ~/keystore.jks
         STORE_PASSWORD: ${{ secrets.store_password }}
+on: push
+name: Unit and Widget Tests
+jobs:
   test: 
     name: Unit and Widget Tests
     runs-on: ubuntu-latest
