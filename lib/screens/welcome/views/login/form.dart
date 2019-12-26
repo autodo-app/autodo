@@ -51,8 +51,7 @@ class _LoginFormState extends State<LoginForm> {
               backgroundColor: Colors.red,
             ),
           );
-      }
-      if (state is LoginLoading) {
+      } else if (state is LoginLoading) {
         Scaffold.of(context)
           ..hideCurrentSnackBar()
           ..showSnackBar(
@@ -68,8 +67,7 @@ class _LoginFormState extends State<LoginForm> {
               ),
             ),
           );
-      }
-      if (state is LoginSuccess) {
+      } else if (state is LoginSuccess) {
         BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
         Navigator.pushNamed(context, AutodoRoutes.home);
       }
@@ -102,7 +100,7 @@ class _LoginFormState extends State<LoginForm> {
                         password: _password
                       )
                     );
-                    Navigator.pop(context);
+                    Navigator.pushNamed(context, AutodoRoutes.home);
                   }
                 } 
               ),
