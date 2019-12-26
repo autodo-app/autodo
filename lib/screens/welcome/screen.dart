@@ -2,13 +2,14 @@ import 'package:autodo/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'widgets/barrel.dart';
+import 'package:autodo/integ_test_keys.dart';
 
 class WelcomeScreen extends StatelessWidget {
   final WelcomePageScroller scroller = WelcomePageScroller();
   static const BUTTON_PADDING = 8.0;
   final List<Key> dotKeys;
 
-  WelcomeScreen({Key key, this.dotKeys}) : super(key: key);
+  WelcomeScreen({Key key = IntegrationTestKeys.welcomeScreen, this.dotKeys}) : super(key: key);
 
   @override
   build(context) => Scaffold(

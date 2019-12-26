@@ -10,16 +10,16 @@ import 'screen.dart';
 class HomeScreenProvider extends StatelessWidget {
   @override 
   build(BuildContext context) => MultiBlocProvider(
-      providers: [
-        BlocProvider<TabBloc>(
-          create: (context) => TabBloc(),
+    providers: [
+      BlocProvider<TabBloc>(
+        create: (context) => TabBloc(),
+      ),
+      BlocProvider<FilteredTodosBloc>(
+        create: (context) => FilteredTodosBloc(
+          todosBloc: BlocProvider.of<TodosBloc>(context),
         ),
-        // BlocProvider<FilteredTodosBloc>(
-        //   create: (context) => FilteredTodosBloc(
-        //     todosBloc: BlocProvider.of<TodosBloc>(context),
-        //   ),
-        // ),
-      ],
-      child: HomeScreen(),
+      ),
+    ],
+    child: HomeScreen(),
   );
 }

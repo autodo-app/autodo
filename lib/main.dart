@@ -9,8 +9,7 @@ import 'package:sentry/sentry.dart';
 
 import 'widgets/widgets.dart';
 import 'blocs/blocs.dart';
-import 'screens/home/provider.dart';
-import 'screens/welcome/provider.dart';
+import 'screens/screens.dart';
 import 'repositories/repositories.dart';
 import 'delegate.dart';
 import 'routes.dart';
@@ -20,7 +19,6 @@ import 'secret_loader.dart';
 SentryClient _sentry;
 
 Future<void> _reportError(dynamic error, dynamic stackTrace) async {
-  // Print the exception to the console.
   print('Caught error: $error');
   if (!kReleaseMode) {
     // Print the full stacktrace in debug mode.
@@ -35,10 +33,30 @@ Future<void> _reportError(dynamic error, dynamic stackTrace) async {
   }
 }
 
-void main() async {
+void run(bool signOutCurrentUser) async { 
+  final AuthRepository authRepository = FirebaseAuthRepository();
+  if (signOutCurrentUser) {
+    authRepository.signOut();
+  }
+  ThemeData theme = createTheme();
+  runApp(
+    BlocProvider<AuthenticationBloc>(
+      create: (context) => AuthenticationBloc(
+          userRepository: authRepository
+        )..add(AppStarted()),
+      child: BlocProvider<DatabaseBloc>(  
+        create: (context) => DatabaseBloc(
+          authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+        )..add(LoadDatabase()),
+        child: App(theme: theme, authRepository: authRepository),
+      ),
+    ),
+  );
+}
+
+Future<Map> init() async {
   WidgetsFlutterBinding.ensureInitialized();
   Map keys = await SecretLoader(secretPath: 'keys.json').load();
-  _sentry = SentryClient(dsn: keys['sentry-dsn']);
   FirebaseApp.configure(
     name: 'autodo',
     options: FirebaseOptions(
@@ -48,30 +66,24 @@ void main() async {
     )
   );
   BlocSupervisor.delegate = AutodoBlocDelegate();
-  final AuthRepository authRepository = FirebaseAuthRepository();
-  // ThemeData theme = AutodoTheme();
-  ThemeData theme = createTheme();
+  return keys;
+}
+
+void main() async {
+  final keys = await init();
+  _sentry = SentryClient(dsn: keys['sentry-dsn']);
   runZoned<Future<void>>(() async {
-    runApp(
-      BlocProvider<AuthenticationBloc>(
-        create: (context) => AuthenticationBloc(
-            userRepository: authRepository
-          )..add(AppStarted()),
-        child: BlocProvider<DatabaseBloc>(  
-          create: (context) => DatabaseBloc(
-            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-          )..add(LoadDatabase()),
-          child: App(theme: theme),
-        ),
-      ),
-    );
+    run(false);
   }, onError: (error, stackTrace) => _reportError(error, stackTrace));
 }
 
 class App extends StatelessWidget {
   final ThemeData _theme;
+  final AuthRepository _authRepository;
 
-  App({@required theme}) : assert(theme != null), _theme = theme;
+  App({@required theme, @required authRepository}) : 
+    assert(theme != null), assert(authRepository != null), 
+    _theme = theme, _authRepository = authRepository;
 
   @override
   build(context) => MaterialApp(
@@ -88,10 +100,11 @@ class App extends StatelessWidget {
             return LoadingIndicator();
           }
         },
-        bloc: BlocProvider.of<AuthenticationBloc>(context),
       ),
       AutodoRoutes.home: (context) => HomeScreenProvider(),
       AutodoRoutes.welcome: (context) => WelcomeScreenProvider(),
+      AutodoRoutes.signupScreen: (context) => 
+        SignupScreenProvider(authRepository: _authRepository,),
     },
     theme: _theme,
     debugShowCheckedModeBanner: false,

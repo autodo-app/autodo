@@ -5,6 +5,7 @@ import 'package:autodo/localization.dart';
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/models/models.dart';
 import 'package:autodo/widgets/widgets.dart';
+import 'package:autodo/integ_test_keys.dart';
 import 'views/barrel.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -16,7 +17,7 @@ class HomeScreen extends StatelessWidget {
   };
   final Key todosTabKey;
 
-  HomeScreen({Key key, this.todosTabKey}) : super(key: key);
+  HomeScreen({Key key = IntegrationTestKeys.homeScreen, this.todosTabKey}) : super(key: key);
 
   @override 
   build(context) => BlocBuilder<TabBloc, AppTab>( 
