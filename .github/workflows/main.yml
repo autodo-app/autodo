@@ -1,6 +1,6 @@
 # https://medium.com/better-programming/ci-cd-for-flutter-apps-using-github-actions-b833f8f7aac
 on: push
-name: Test and Build apk
+name: Test and Build APK
 jobs:
   build:
     name: Build APK
@@ -17,11 +17,6 @@ jobs:
         flutter-version: '1.9.1+hotfix.5'
     - run: flutter pub get
     - run: echo "${{ secrets.keys_json }}" > keys.json
-    - run: flutter test --coverage
-    - uses: codecov/codecov-action@v1.0.2
-      with:
-        token: ${{secrets.CODECOV_TOKEN}}
-        file: ./coverage/lcov.info
     - run: echo "${{ secrets.store_file }}" | base64 --decode > ~/keystore.jks
     - run: echo "${{ secrets.google_services }}" | base64 --decode > ./android/app/google-services.json
     - run: flutter build apk --debug --split-per-abi
@@ -30,3 +25,20 @@ jobs:
         KEY_PASSWORD: ${{ secrets.key_password }}
         STORE_FILE: ~/keystore.jks
         STORE_PASSWORD: ${{ secrets.store_password }}
+  test: 
+    name: Unit and Widget Tests
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+      with: 
+        submodules: true
+    - uses: subosito/flutter-action@v1
+      with:
+        flutter-version: '1.9.1+hotfix.5'
+    - run: flutter pub get
+    - run: echo "${{ secrets.keys_json }}" > keys.json
+    - run: flutter test --coverage  
+    - uses: codecov/codecov-action@v1.0.2
+      with:
+        token: ${{secrets.CODECOV_TOKEN}}
+        file: ./coverage/lcov.info
