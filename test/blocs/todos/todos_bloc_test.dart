@@ -2,7 +2,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/painting.dart';
 
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/repositories/repositories.dart';
@@ -13,11 +12,12 @@ class MockCarsBloc extends Mock implements CarsBloc {}
 class MockRepeatsBloc extends Mock implements RepeatsBloc {}
 class MockNotificationsBloc extends Mock implements NotificationsBloc {}
 class MockWriteBatch extends Mock implements WriteBatchWrapper {}
+class MockDbBloc extends Mock implements DatabaseBloc {}
 
 void main() {
   group('RefuelingsBloc', () {
     group('Null Assertions', () { 
-      test('Null Data Repository', () {
+      test('Null Database Bloc', () {
         final carsBloc = MockCarsBloc();
         final notificationsBloc = MockNotificationsBloc();
         final repeatsBloc = MockRepeatsBloc();
@@ -25,40 +25,40 @@ void main() {
           carsBloc: carsBloc,
           notificationsBloc: notificationsBloc,
           repeatsBloc: repeatsBloc,
-          dataRepository: null
+          dbBloc: null
         ), throwsAssertionError);
       });
       test('Null Cars Bloc', () {
-        final dataRepository = MockDataRepository();
+        final dbBloc = MockDbBloc();
         final notificationsBloc = MockNotificationsBloc();
         final repeatsBloc = MockRepeatsBloc();
         expect(() => TodosBloc(
           carsBloc: null,
           notificationsBloc: notificationsBloc,
           repeatsBloc: repeatsBloc,
-          dataRepository: dataRepository
+          dbBloc: dbBloc
         ), throwsAssertionError);
       });
       test('Null NotificationsBloc', () {
         final carsBloc = MockCarsBloc();
-        final dataRepository = MockDataRepository();
+        final dbBloc = MockDbBloc();
         final repeatsBloc = MockRepeatsBloc();
         expect(() => TodosBloc(
           carsBloc: carsBloc,
           notificationsBloc: null,
           repeatsBloc: repeatsBloc,
-          dataRepository: dataRepository
+          dbBloc: dbBloc
         ), throwsAssertionError);
       });
       test('Null RepeatsBloc', () {
         final carsBloc = MockCarsBloc();
         final notificationsBloc = MockNotificationsBloc();
-        final dataRepository = MockDataRepository();
+        final dbBloc = MockDbBloc();
         expect(() => TodosBloc(
           carsBloc: carsBloc,
           notificationsBloc: notificationsBloc,
           repeatsBloc: null,
-          dataRepository: dataRepository
+          dbBloc: dbBloc
         ), throwsAssertionError);
       });
     });
@@ -72,8 +72,10 @@ void main() {
           final notificationsBloc = MockNotificationsBloc();
           final repeatsBloc = MockRepeatsBloc();
           whenListen(repeatsBloc, Stream.fromIterable([RepeatsLoaded([Repeat()])]));
+          final dbBloc = MockDbBloc();
+          when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
           return TodosBloc(
-            dataRepository: dataRepository,
+            dbBloc: dbBloc,
             carsBloc: carsBloc,
             notificationsBloc: notificationsBloc,
             repeatsBloc: repeatsBloc
@@ -94,8 +96,10 @@ void main() {
           final notificationsBloc = MockNotificationsBloc();
           final repeatsBloc = MockRepeatsBloc();
           whenListen(repeatsBloc, Stream.fromIterable([RepeatsLoaded([Repeat()])]));
+          final dbBloc = MockDbBloc();
+          when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
           return TodosBloc(
-            dataRepository: dataRepository,
+            dbBloc: dbBloc,
             carsBloc: carsBloc,
             notificationsBloc: notificationsBloc,
             repeatsBloc: repeatsBloc
@@ -116,8 +120,10 @@ void main() {
           final notificationsBloc = MockNotificationsBloc();
           final repeatsBloc = MockRepeatsBloc();
           whenListen(repeatsBloc, Stream.fromIterable([RepeatsLoaded([Repeat()])]));
+          final dbBloc = MockDbBloc();
+          when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
           return TodosBloc(
-            dataRepository: dataRepository,
+            dbBloc: dbBloc,
             carsBloc: carsBloc,
             notificationsBloc: notificationsBloc,
             repeatsBloc: repeatsBloc
@@ -141,8 +147,10 @@ void main() {
         final notificationsBloc = MockNotificationsBloc();
         final repeatsBloc = MockRepeatsBloc();
         whenListen(repeatsBloc, Stream.fromIterable([RepeatsLoaded([Repeat()])]));
+        final dbBloc = MockDbBloc();
+        when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
         return TodosBloc(
-          dataRepository: dataRepository,
+          dbBloc: dbBloc,
           carsBloc: carsBloc,
           notificationsBloc: notificationsBloc,
           repeatsBloc: repeatsBloc
@@ -167,8 +175,10 @@ void main() {
         final notificationsBloc = MockNotificationsBloc();
         final repeatsBloc = MockRepeatsBloc();
         whenListen(repeatsBloc, Stream.fromIterable([RepeatsLoaded([Repeat()])]));
+        final dbBloc = MockDbBloc();
+        when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
         return TodosBloc(
-          dataRepository: dataRepository,
+          dbBloc: dbBloc,
           carsBloc: carsBloc,
           notificationsBloc: notificationsBloc,
           repeatsBloc: repeatsBloc
@@ -193,8 +203,10 @@ void main() {
         final notificationsBloc = MockNotificationsBloc();
         final repeatsBloc = MockRepeatsBloc();
         whenListen(repeatsBloc, Stream.fromIterable([RepeatsLoaded([Repeat()])]));
+        final dbBloc = MockDbBloc();
+        when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
         return TodosBloc(
-          dataRepository: dataRepository,
+          dbBloc: dbBloc,
           carsBloc: carsBloc,
           notificationsBloc: notificationsBloc,
           repeatsBloc: repeatsBloc
@@ -219,8 +231,10 @@ void main() {
         final notificationsBloc = MockNotificationsBloc();
         final repeatsBloc = MockRepeatsBloc();
         whenListen(repeatsBloc, Stream.fromIterable([RepeatsLoaded([Repeat()])]));
+        final dbBloc = MockDbBloc();
+        when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
         return TodosBloc(
-          dataRepository: dataRepository,
+          dbBloc: dbBloc,
           carsBloc: carsBloc,
           notificationsBloc: notificationsBloc,
           repeatsBloc: repeatsBloc
@@ -258,8 +272,10 @@ void main() {
         final notificationsBloc = MockNotificationsBloc();
         final repeatsBloc = MockRepeatsBloc();
         whenListen(repeatsBloc, Stream.fromIterable([RepeatsLoaded([Repeat()])]));
+        final dbBloc = MockDbBloc();
+        when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
         return TodosBloc(
-          dataRepository: dataRepository,
+          dbBloc: dbBloc,
           carsBloc: carsBloc,
           notificationsBloc: notificationsBloc,
           repeatsBloc: repeatsBloc
@@ -295,8 +311,10 @@ void main() {
         final repeatsBloc = MockRepeatsBloc();
         whenListen(repeatsBloc, Stream.fromIterable([RepeatsLoaded([Repeat()])]));
         when(repeatsBloc.state).thenAnswer((_) => RepeatsLoaded([Repeat()]));
+        final dbBloc = MockDbBloc();
+        when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
         return TodosBloc(
-          dataRepository: dataRepository,
+          dbBloc: dbBloc,
           carsBloc: carsBloc,
           notificationsBloc: notificationsBloc,
           repeatsBloc: repeatsBloc
@@ -321,8 +339,10 @@ void main() {
         final notificationsBloc = MockNotificationsBloc();
         final repeatsBloc = MockRepeatsBloc();
         whenListen(repeatsBloc, Stream.fromIterable([RepeatsLoaded([Repeat()])]));
+        final dbBloc = MockDbBloc();
+        when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
         return TodosBloc(
-          dataRepository: dataRepository,
+          dbBloc: dbBloc,
           carsBloc: carsBloc,
           notificationsBloc: notificationsBloc,
           repeatsBloc: repeatsBloc
@@ -343,8 +363,10 @@ void main() {
         final carsBloc = MockCarsBloc();
         final notificationsBloc = MockNotificationsBloc();
         final repeatsBloc = MockRepeatsBloc();
+        final dbBloc = MockDbBloc();
+        when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
         final todosBloc = TodosBloc(  
-          dataRepository: dataRepository,
+          dbBloc: dbBloc,
           carsBloc: carsBloc,
           notificationsBloc: notificationsBloc,
           repeatsBloc: repeatsBloc
@@ -359,8 +381,10 @@ void main() {
         final carsBloc = MockCarsBloc();
         final notificationsBloc = MockNotificationsBloc();
         final repeatsBloc = MockRepeatsBloc();
+        final dbBloc = MockDbBloc();
+        when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
         final todosBloc = TodosBloc(  
-          dataRepository: dataRepository,
+          dbBloc: dbBloc,
           carsBloc: carsBloc,
           notificationsBloc: notificationsBloc,
           repeatsBloc: repeatsBloc
@@ -375,8 +399,10 @@ void main() {
         final carsBloc = MockCarsBloc();
         final notificationsBloc = MockNotificationsBloc();
         final repeatsBloc = MockRepeatsBloc();
+        final dbBloc = MockDbBloc();
+        when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
         final todosBloc = TodosBloc(  
-          dataRepository: dataRepository,
+          dbBloc: dbBloc,
           carsBloc: carsBloc,
           notificationsBloc: notificationsBloc,
           repeatsBloc: repeatsBloc
@@ -391,8 +417,10 @@ void main() {
         final carsBloc = MockCarsBloc();
         final notificationsBloc = MockNotificationsBloc();
         final repeatsBloc = MockRepeatsBloc();
+        final dbBloc = MockDbBloc();
+        when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
         final todosBloc = TodosBloc(  
-          dataRepository: dataRepository,
+          dbBloc: dbBloc,
           carsBloc: carsBloc,
           notificationsBloc: notificationsBloc,
           repeatsBloc: repeatsBloc

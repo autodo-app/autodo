@@ -7,23 +7,27 @@ import 'event.dart';
 import 'state.dart';
 import 'package:autodo/models/models.dart';
 import '../refuelings/barrel.dart';
+import '../database/barrel.dart';
 import 'package:autodo/util.dart' as util;
 
 class CarsBloc extends Bloc<CarsEvent, CarsState> {
   static const double EMA_GAIN = 0.9;
   static const double EMA_CUTOFF = 8;
   
-  final DataRepository _dataRepository;
+  final DatabaseBloc _dbBloc;
   StreamSubscription _refuelingsSubscription;
   final RefuelingsBloc _refuelingsBloc;
   List<Refueling> _refuelingsCache;
 
-  CarsBloc({@required DataRepository dataRepository, @required RefuelingsBloc refuelingsBloc})
-      : assert(dataRepository != null), assert(refuelingsBloc != null),
-        _dataRepository = dataRepository, _refuelingsBloc = refuelingsBloc;
+  CarsBloc({@required DatabaseBloc dbBloc, @required RefuelingsBloc refuelingsBloc})
+      : assert(dbBloc != null), assert(refuelingsBloc != null),
+        _dbBloc = dbBloc, _refuelingsBloc = refuelingsBloc;
 
   @override
   CarsState get initialState => CarsLoading();
+
+  DataRepository get repo => (_dbBloc.state is DbLoaded) ? 
+    (_dbBloc.state as DbLoaded).repository : null;
 
   @override
   Stream<CarsState> mapEventToState(CarsEvent event) async* {
@@ -42,7 +46,7 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
 
   Stream<CarsState> _mapLoadCarsToState() async* {
     try {
-      final cars = await _dataRepository.cars().first;
+      final cars = await repo.cars().first;
       if (cars != null) {
         yield CarsLoaded(cars);
       } else {
@@ -61,32 +65,32 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
   }
 
   Stream<CarsState> _mapAddCarToState(AddCar event) async* {
-    if (state is CarsLoaded) {
+    if (state is CarsLoaded && repo != null) {
       final List<Car> updatedCars = List.from((state as CarsLoaded).cars)
         ..add(event.car);
       yield CarsLoaded(updatedCars);
-      _dataRepository.addNewCar(event.car);
+      repo.addNewCar(event.car);
     }
   }
 
   Stream<CarsState> _mapUpdateCarToState(UpdateCar event) async* {
-    if (state is CarsLoaded) {
+    if (state is CarsLoaded && repo != null) {
       final List<Car> updatedCars = (state as CarsLoaded).cars.map((car) {
         return car.id == event.updatedCar.id ? event.updatedCar : car;
       }).toList();
       yield CarsLoaded(updatedCars);
-      _dataRepository.updateCar(event.updatedCar);
+      repo.updateCar(event.updatedCar);
     }
   }
 
   Stream<CarsState> _mapDeleteCarToState(DeleteCar event) async* {
-    if (state is CarsLoaded) {
+    if (state is CarsLoaded && repo != null) {
       final updatedCars = (state as CarsLoaded)
           .cars
           .where((car) => car.id != event.car.id)
           .toList();
       yield CarsLoaded(updatedCars);
-      _dataRepository.deleteCar(event.car);
+      repo.deleteCar(event.car);
     }
   }
 
@@ -126,7 +130,9 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
   }
 
   Stream<CarsState> _mapRefuelingsUpdatedToState(ExternalRefuelingsUpdated event) async* {
-    WriteBatchWrapper batch = _dataRepository.startCarWriteBatch();
+    if (repo == null) return;
+
+    WriteBatchWrapper batch = repo.startCarWriteBatch();
     // TODO cache the cars here so that updating number of refuelings will work
     List<Car> updatedCars = (state as CarsLoaded).cars;
     for (var r in event.refuelings) {

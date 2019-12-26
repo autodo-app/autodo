@@ -102,7 +102,6 @@ class _SignupFormState extends State<SignupForm> {
                         password: _password
                       )
                     );
-                    Navigator.pushNamed(context, AutodoRoutes.home);
                   }
                 } 
               ),

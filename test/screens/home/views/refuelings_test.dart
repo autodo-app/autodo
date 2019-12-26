@@ -81,7 +81,7 @@ void main() {
         mileage: 1000,
         date: DateTime.fromMillisecondsSinceEpoch(0),
       );
-      when(filteredRefuelingsBloc.state).thenAnswer((_) => FilteredRefuelingsLoaded([refueling], VisibilityFilter.all));
+      when(filteredRefuelingsBloc.state).thenAnswer((_) => FilteredRefuelingsLoaded([refueling], VisibilityFilter.all, [Car()]));
       Key refuelingsKey = Key('refuelings');
       await tester.pumpWidget(
         MultiBlocProvider(
@@ -113,7 +113,7 @@ void main() {
         mileage: 1000,
         date: DateTime.fromMillisecondsSinceEpoch(0),
       );
-      when(filteredRefuelingsBloc.state).thenAnswer((_) => FilteredRefuelingsLoaded([refueling], VisibilityFilter.all));
+      when(filteredRefuelingsBloc.state).thenAnswer((_) => FilteredRefuelingsLoaded([refueling], VisibilityFilter.all, [Car()]));
       Key refuelingsKey = Key('refuelings');
       await tester.pumpWidget(
         MultiBlocProvider(
@@ -145,7 +145,7 @@ void main() {
         mileage: 1000,
         date: DateTime.fromMillisecondsSinceEpoch(0),
       );
-      when(filteredRefuelingsBloc.state).thenAnswer((_) => FilteredRefuelingsLoaded([refueling], VisibilityFilter.all));
+      when(filteredRefuelingsBloc.state).thenAnswer((_) => FilteredRefuelingsLoaded([refueling], VisibilityFilter.all, [Car()]));
       Key refuelingsKey = Key('refuelings');
       await tester.pumpWidget(
         MultiBlocProvider(

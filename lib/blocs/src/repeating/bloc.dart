@@ -2,13 +2,15 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:bloc/bloc.dart';
-import 'event.dart';
-import 'state.dart';
+
 import 'package:autodo/repositories/repositories.dart';
 import 'package:autodo/models/models.dart';
+import '../database/barrel.dart';
+import 'event.dart';
+import 'state.dart';
 
 class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
-  final DataRepository _dataRepository;
+  final DatabaseBloc _dbBloc;
   StreamSubscription _repeatsSubscription;
 
   static final List<Repeat> defaults = [
@@ -29,12 +31,15 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
     Repeat(name: "coolantChange", mileageInterval: 100000)
   ];
 
-  RepeatsBloc({@required DataRepository dataRepository})
-      : assert(dataRepository != null),
-        _dataRepository = dataRepository;
+  RepeatsBloc({@required DatabaseBloc dbBloc})
+      : assert(dbBloc != null),
+        _dbBloc = dbBloc;
 
   @override
   RepeatsState get initialState => RepeatsLoading();
+
+  DataRepository get repo => (_dbBloc.state is DbLoaded) ? 
+    (_dbBloc.state as DbLoaded).repository : null;
 
   @override
   Stream<RepeatsState> mapEventToState(RepeatsEvent event) async* {
@@ -53,7 +58,7 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
 
   Stream<RepeatsState> _mapLoadRepeatsToState() async* {
     try {
-      final repeats = await _dataRepository.repeats().first;
+      final repeats = await repo.repeats().first;
       if (repeats != null) {
         yield RepeatsLoaded(repeats);
       } else {
@@ -69,30 +74,30 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
   }
 
   Stream<RepeatsState> _mapAddRepeatToState(AddRepeat event) async* {
-    if (state is RepeatsLoaded) {
+    if (state is RepeatsLoaded && repo != null) {
       final List<Repeat> updatedRepeats = List.from((state as RepeatsLoaded).repeats)..add(event.repeat);
       yield RepeatsLoaded(updatedRepeats);
-      _dataRepository.addNewRepeat(event.repeat);
+      repo.addNewRepeat(event.repeat);
     }
   }
 
   Stream<RepeatsState> _mapUpdateRepeatToState(UpdateRepeat event) async* {
-    if (state is RepeatsLoaded) {
+    if (state is RepeatsLoaded && repo != null) {
       final List<Repeat> updatedRepeats = (state as RepeatsLoaded).repeats
         .map((r) => r.id == event.updatedRepeat.id ? event.updatedRepeat : r)
         .toList();
       yield RepeatsLoaded(updatedRepeats);
-      _dataRepository.updateRepeat(event.updatedRepeat);
+      repo.updateRepeat(event.updatedRepeat);
     }
   }
 
   Stream<RepeatsState> _mapDeleteRepeatToState(DeleteRepeat event) async* {
-    if (state is RepeatsLoaded) {
+    if (state is RepeatsLoaded && repo != null) {
       final updatedRepeats = (state as RepeatsLoaded).repeats
         .where((r) => r.id != event.repeat.id)
         .toList();
       yield RepeatsLoaded(updatedRepeats);
-      _dataRepository.deleteRepeat(event.repeat);
+      repo.deleteRepeat(event.repeat);
     }
   }
 
@@ -176,7 +181,8 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
 
   Stream<RepeatsState> _mapAddDefaultRepeatsToState(AddDefaultRepeats event) async* {
     yield RepeatsLoaded(defaults);
-    WriteBatchWrapper batch = _dataRepository.startRepeatWriteBatch();
+    if (repo == null) return;
+    WriteBatchWrapper batch = repo.startRepeatWriteBatch();
     for (var r in defaults) {
       batch.setData(r.toEntity().toDocument());
     }

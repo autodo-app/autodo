@@ -8,11 +8,12 @@ import 'package:autodo/repositories/repositories.dart';
 
 class MockDataRepository extends Mock implements DataRepository {}
 class MockWriteBatch extends Mock implements WriteBatchWrapper {}
+class MockDbBloc extends Mock implements DatabaseBloc {}
 
 void main() {
   group('RepeatsBloc', () {
     test('Null Assertion', () {
-      expect(() => RepeatsBloc(dataRepository: null), throwsAssertionError);
+      expect(() => RepeatsBloc(dbBloc: null), throwsAssertionError);
     });
     group('LoadRepeats', () {
       blocTest<RepeatsBloc, RepeatsEvent, RepeatsState>( 
@@ -21,7 +22,9 @@ void main() {
           final dataRepository = MockDataRepository();
           when(dataRepository.repeats())
             .thenAnswer((_) => Stream.fromIterable([[Repeat()]]));
-          return RepeatsBloc(dataRepository: dataRepository);
+          final dbBloc = MockDbBloc();
+          when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
+          return RepeatsBloc(dbBloc: dbBloc);
         },
         act: (bloc) async => bloc.add(LoadRepeats()),
         expect: [
@@ -35,7 +38,9 @@ void main() {
           final dataRepository = MockDataRepository();
           when(dataRepository.repeats())
             .thenAnswer((_) => Stream.fromIterable([null]));
-          return RepeatsBloc(dataRepository: dataRepository);
+          final dbBloc = MockDbBloc();
+          when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
+          return RepeatsBloc(dbBloc: dbBloc);
         },
         act: (bloc) async => bloc.add(LoadRepeats()),
         expect: [
@@ -49,7 +54,9 @@ void main() {
           final dataRepository = MockDataRepository();
           when(dataRepository.repeats())
             .thenThrow((_) => Exception());
-          return RepeatsBloc(dataRepository: dataRepository);
+          final dbBloc = MockDbBloc();
+          when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
+          return RepeatsBloc(dbBloc: dbBloc);
         },
         act: (bloc) async => bloc.add(LoadRepeats()),
         expect: [
@@ -66,7 +73,9 @@ void main() {
             Stream.fromIterable(
               [[Repeat()]]
           ));
-        return RepeatsBloc(dataRepository: dataRepository);
+        final dbBloc = MockDbBloc();
+        when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
+        return RepeatsBloc(dbBloc: dbBloc);
       },
       act: (bloc) async {
         bloc.add(LoadRepeats());
@@ -86,7 +95,9 @@ void main() {
             Stream.fromIterable(
               [[Repeat(id: '0', name: 'test')]]
           ));
-        return RepeatsBloc(dataRepository: dataRepository);
+        final dbBloc = MockDbBloc();
+        when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
+        return RepeatsBloc(dbBloc: dbBloc);
       },
       act: (bloc) async {
         bloc.add(LoadRepeats());
@@ -106,7 +117,9 @@ void main() {
             Stream.fromIterable(
               [[Repeat(id: '0')]]
           ));
-        return RepeatsBloc(dataRepository: dataRepository);
+        final dbBloc = MockDbBloc();
+        when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
+        return RepeatsBloc(dbBloc: dbBloc);
       },
       act: (bloc) async {
         bloc.add(LoadRepeats());
@@ -127,7 +140,9 @@ void main() {
         // dynamic lambdas to effectively do nothing
         when(mockBatch.setData(dynamic)).thenAnswer((_) => ((_) => _)); 
         when(mockBatch.commit()).thenAnswer((_) => (() => _));
-        return RepeatsBloc(dataRepository: dataRepository);
+        final dbBloc = MockDbBloc();
+        when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
+        return RepeatsBloc(dbBloc: dbBloc);
       },
       act: (bloc) async {
         bloc.add(AddDefaultRepeats());

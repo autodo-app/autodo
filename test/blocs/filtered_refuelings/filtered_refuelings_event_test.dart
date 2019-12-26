@@ -50,5 +50,19 @@ void main() {
         );
       });
     });
+    group('UpdateCars', () {
+      test('toString returns correct value', () {
+        expect(
+          FilteredRefuelingsUpdateCars([Car()]).toString(),
+          'FilteredRefuelingsUpdateCars { cars: ${[Car()]} }',
+        );
+      });
+      test('props are correct', () {
+        expect(
+          FilteredRefuelingsUpdateCars([Car()]).props,
+          [[Car()]],
+        );
+      });
+    });
   });
 }

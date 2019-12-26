@@ -48,7 +48,40 @@ void run(bool signOutCurrentUser) async {
         create: (context) => DatabaseBloc(
           authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
         )..add(LoadDatabase()),
-        child: App(theme: theme, authRepository: authRepository),
+        child: MultiBlocProvider(  
+          providers: [
+            BlocProvider<NotificationsBloc>(
+              create: (context) => NotificationsBloc(  
+                dbBloc: BlocProvider.of<DatabaseBloc>(context),
+              ),
+            ),
+            BlocProvider<RefuelingsBloc>(  
+              create: (context) => RefuelingsBloc(
+                dbBloc: BlocProvider.of<DatabaseBloc>(context),
+              ),
+            ),
+            BlocProvider<RepeatsBloc>(
+              create: (context) => RepeatsBloc(  
+                dbBloc: BlocProvider.of<DatabaseBloc>(context),
+              ),
+            ),
+          ],
+          child: BlocProvider<CarsBloc>(  
+            create: (context) => CarsBloc(
+              dbBloc: BlocProvider.of<DatabaseBloc>(context),
+              refuelingsBloc: BlocProvider.of<RefuelingsBloc>(context),
+            ),
+            child: BlocProvider<TodosBloc>(
+              create: (context) => TodosBloc(  
+                dbBloc: BlocProvider.of<DatabaseBloc>(context),
+                notificationsBloc: BlocProvider.of<NotificationsBloc>(context),
+                carsBloc: BlocProvider.of<CarsBloc>(context),
+                repeatsBloc: BlocProvider.of<RepeatsBloc>(context)
+              ),
+              child: App(theme: theme, authRepository: authRepository),
+            ),
+          ),
+        ),
       ),
     ),
   );
@@ -104,7 +137,7 @@ class App extends StatelessWidget {
       AutodoRoutes.home: (context) => HomeScreenProvider(),
       AutodoRoutes.welcome: (context) => WelcomeScreenProvider(),
       AutodoRoutes.signupScreen: (context) => 
-        SignupScreenProvider(authRepository: _authRepository,),
+        SignupScreenProvider(authRepository: _authRepository),
     },
     theme: _theme,
     debugShowCheckedModeBanner: false,

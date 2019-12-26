@@ -10,12 +10,13 @@ import 'package:autodo/models/models.dart';
 
 class MockRefuelingsBloc extends MockBloc<RefuelingsEvent, RefuelingsState>
     implements RefuelingsBloc {}
+class MockCarsBloc extends MockBloc<CarsEvent, CarsState> implements CarsBloc {}
 
 void main() {
   group('FilteredRefuelingsBloc', () {
     final refueling = Refueling(
-      carName: '',
-      id: '',
+      carName: 'test',
+      id: '0',
       mileage: 0,
       date: DateTime.fromMillisecondsSinceEpoch(0),
       amount: 0,
@@ -33,12 +34,16 @@ void main() {
           refuelingsBloc,
           Stream<RefuelingsState>.fromIterable([RefuelingsLoaded([refueling])]),
         );
-        return FilteredRefuelingsBloc(refuelingsBloc: refuelingsBloc);
+        final carsBloc = MockCarsBloc();
+        when(carsBloc.state).thenAnswer((_) => CarsLoaded([Car()]));
+        whenListen(carsBloc, Stream<CarsState>.fromIterable([CarsLoaded([Car()])]));
+        return FilteredRefuelingsBloc(refuelingsBloc: refuelingsBloc, carsBloc: carsBloc);
       }, 
       expect: [
         FilteredRefuelingsLoaded(
           [refueling],
           VisibilityFilter.all,
+          [Car()]
         ),
       ]
     );
@@ -49,7 +54,10 @@ void main() {
         final refuelingsBloc = MockRefuelingsBloc();
         when(refuelingsBloc.state)
             .thenReturn(RefuelingsLoaded([refueling]));
-        return FilteredRefuelingsBloc(refuelingsBloc: refuelingsBloc);
+        final carsBloc = MockCarsBloc();
+        when(carsBloc.state).thenAnswer((_) => CarsLoaded([Car()]));
+        whenListen(carsBloc, Stream<CarsState>.fromIterable([CarsLoaded([Car()])]));
+        return FilteredRefuelingsBloc(refuelingsBloc: refuelingsBloc, carsBloc: carsBloc);
       },
       act: (FilteredRefuelingsBloc bloc) async =>
           bloc.add(UpdateRefuelingsFilter(VisibilityFilter.active)),
@@ -57,10 +65,12 @@ void main() {
         FilteredRefuelingsLoaded(
           [refueling],
           VisibilityFilter.all,
+          [Car()]
         ),
         FilteredRefuelingsLoaded(
           [refueling],
           VisibilityFilter.active,
+          [Car()]
         ),
       ],
     );
@@ -71,7 +81,10 @@ void main() {
         final refuelingsBloc = MockRefuelingsBloc();
         when(refuelingsBloc.state)
             .thenReturn(RefuelingsLoaded([refueling]));
-        return FilteredRefuelingsBloc(refuelingsBloc: refuelingsBloc);
+        final carsBloc = MockCarsBloc();
+        when(carsBloc.state).thenAnswer((_) => CarsLoaded([Car()]));
+        whenListen(carsBloc, Stream<CarsState>.fromIterable([CarsLoaded([Car()])]));
+        return FilteredRefuelingsBloc(refuelingsBloc: refuelingsBloc, carsBloc: carsBloc);
       },
       act: (FilteredRefuelingsBloc bloc) async =>
           bloc.add(UpdateRefuelingsFilter(VisibilityFilter.completed)),
@@ -79,8 +92,91 @@ void main() {
         FilteredRefuelingsLoaded(
           [refueling],
           VisibilityFilter.all,
+          [Car()]
         ),
-        FilteredRefuelingsLoaded([refueling], VisibilityFilter.completed),
+        FilteredRefuelingsLoaded([refueling], VisibilityFilter.completed, [Car()]),
+      ],
+    );
+
+    blocTest<FilteredRefuelingsBloc, FilteredRefuelingsEvent, FilteredRefuelingsState>(
+      'loading',
+      build: () {
+        final refuelingsBloc = MockRefuelingsBloc();
+        when(refuelingsBloc.state)
+            .thenReturn(RefuelingsLoading());
+        final carsBloc = MockCarsBloc();
+        when(carsBloc.state).thenAnswer((_) => CarsLoaded([Car()]));
+        whenListen(carsBloc, Stream<CarsState>.fromIterable([CarsLoaded([Car()])]));
+        return FilteredRefuelingsBloc(refuelingsBloc: refuelingsBloc, carsBloc: carsBloc);
+      },
+      expect: <FilteredRefuelingsState>[
+        FilteredRefuelingsLoading(),
+      ],
+    );
+
+    blocTest<FilteredRefuelingsBloc, FilteredRefuelingsEvent, FilteredRefuelingsState>(
+      'not loaded',
+      build: () {
+        final refuelingsBloc = MockRefuelingsBloc();
+        when(refuelingsBloc.state)
+            .thenReturn(RefuelingsNotLoaded());
+        final carsBloc = MockCarsBloc();
+        when(carsBloc.state).thenAnswer((_) => CarsLoaded([Car()]));
+        whenListen(carsBloc, Stream<CarsState>.fromIterable([CarsLoaded([Car()])]));
+        return FilteredRefuelingsBloc(refuelingsBloc: refuelingsBloc, carsBloc: carsBloc);
+      },
+      expect: <FilteredRefuelingsState>[
+        FilteredRefuelingsNotLoaded(),
+      ],
+    );
+    
+    final car = Car(  
+      name: 'test',
+      averageEfficiency: 1.0
+    );
+    blocTest<FilteredRefuelingsBloc, FilteredRefuelingsEvent, FilteredRefuelingsState>(
+      'shade efficiency',
+      build: () {
+        final refuelingsBloc = MockRefuelingsBloc();
+        when(refuelingsBloc.state)
+            .thenReturn(RefuelingsLoaded([refueling]));
+        final carsBloc = MockCarsBloc();
+        
+        when(carsBloc.state).thenAnswer((_) => CarsLoaded([car]));
+        // whenListen(carsBloc, Stream<CarsState>.fromIterable([CarsLoaded([car])]));
+        return FilteredRefuelingsBloc(refuelingsBloc: refuelingsBloc, carsBloc: carsBloc);
+      },
+      expect: <FilteredRefuelingsState>[
+        FilteredRefuelingsLoaded(
+          [refueling.copyWith(efficiencyColor: Color(0xffff0000))],
+          VisibilityFilter.all,
+          [car]
+        ),
+      ],
+    );
+    blocTest<FilteredRefuelingsBloc, FilteredRefuelingsEvent, FilteredRefuelingsState>(
+      'cars updated',
+      build: () {
+        final refuelingsBloc = MockRefuelingsBloc();
+        when(refuelingsBloc.state)
+            .thenReturn(RefuelingsLoaded([refueling]));
+        final carsBloc = MockCarsBloc();
+        
+        when(carsBloc.state).thenAnswer((_) => CarsLoaded([Car()]));
+        whenListen(carsBloc, Stream.fromIterable([CarsLoaded([car])]));
+        return FilteredRefuelingsBloc(refuelingsBloc: refuelingsBloc, carsBloc: carsBloc);
+      },
+      expect: <FilteredRefuelingsState>[
+        FilteredRefuelingsLoaded(
+          [refueling.copyWith(efficiencyColor: Color(0))],
+          VisibilityFilter.all,
+          [Car()]
+        ),
+        FilteredRefuelingsLoaded(
+          [refueling.copyWith(efficiencyColor: Color(0xffff0000))],
+          VisibilityFilter.all,
+          [car]
+        ),
       ],
     );
   }); 
