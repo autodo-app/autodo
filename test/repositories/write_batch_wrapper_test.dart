@@ -40,7 +40,7 @@ void main() {
       final wrapper = WriteBatchWrapper(
         collection: collection, 
         firestoreInstance: firestore);
-      expect(wrapper.commit(), completes);
+      expect(wrapper.commit(), null);
     });
     test('props', () {
       expect(

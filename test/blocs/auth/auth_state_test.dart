@@ -11,16 +11,16 @@ void main() {
       String displayName = "test";
       String uuid = "abcd";
       expect(
-        Authenticated(displayName, uuid).toString(),
-        'Authenticated { displayName: $displayName, uuid: $uuid }'
+        Authenticated(displayName, uuid, false).toString(),
+        'Authenticated { displayName: $displayName, uuid: $uuid, newUser: false }'
       );
     });
     test('Authenticated props', () {
       String displayName = "test";
       String uuid = "abcd";
       expect(
-        Authenticated(displayName, uuid).props,
-        [displayName, uuid]
+        Authenticated(displayName, uuid, false).props,
+        [displayName, uuid, false]
       );
     });
     test('Unauthenticated toString', () {

@@ -9,7 +9,10 @@ import 'package:autodo/repositories/repositories.dart';
 
 class MockAuthenticationBloc extends Mock implements AuthenticationBloc {}
 // EquatableMixin is needed to verify results of bloctests
-class MockFirestoreInstance extends Mock with EquatableMixin implements Firestore {}
+class MockFirestoreInstance extends Mock with EquatableMixin implements Firestore {
+  @override 
+  List<Object> get props => [];
+}
 class MockCollection extends Mock with EquatableMixin implements CollectionReference {}
 class MockDocument extends Mock with EquatableMixin implements DocumentReference {}
 
@@ -26,43 +29,29 @@ void main() {
         throwsAssertionError
       );
     });
-    blocTest('LoadDatabase', 
-      build: () {
-        final authBloc = MockAuthenticationBloc();
-        whenListen(authBloc, 
-          Stream.fromIterable([Authenticated("test@test.com", 'abcd')]));
-        return DatabaseBloc(firestoreInstance: mockFirestore, authenticationBloc: authBloc);
-      },
-      act: (bloc) => bloc.add(LoadDatabase()),
-      expect: [
-        DbUninitialized(),
-      ]
-    );
     blocTest('UserLoggedIn', 
       build: () {
         final authBloc = MockAuthenticationBloc();
         whenListen(authBloc, 
-          Stream.fromIterable([Authenticated("test@test.com", 'abcd')]));
+          Stream.fromIterable([Authenticated('test', 'abcd', false)]));
         return DatabaseBloc(firestoreInstance: mockFirestore, authenticationBloc: authBloc);
       },
       act: (bloc) async {
-        bloc.add(LoadDatabase());
-        bloc.add(UserLoggedIn('abcd'));
+        bloc.add(UserLoggedIn('abcd', false));
       },
       expect: [
         DbUninitialized(),
-        DbLoaded(FirebaseDataRepository(firestoreInstance: mockFirestore, uuid: 'abcd'))
+        DbLoaded(FirebaseDataRepository(firestoreInstance: mockFirestore, uuid: 'abcd'), false)
       ]
     );
     blocTest('UserLoggedOut', 
       build: () {
         final authBloc = MockAuthenticationBloc();
         whenListen(authBloc, 
-          Stream.fromIterable([Authenticated("test@test.com", 'abcd')]));
+          Stream.fromIterable([Unauthenticated()]));
         return DatabaseBloc(firestoreInstance: mockFirestore, authenticationBloc: authBloc);
       },
       act: (bloc) async {
-        bloc.add(LoadDatabase());
         bloc.add(UserLoggedOut());
       },
       expect: [

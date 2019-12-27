@@ -42,7 +42,7 @@ void main() {
         act: (bloc) async => bloc.add(AppStarted()),
         expect: <AuthenticationState>[ 
           Uninitialized(),
-          Authenticated(null, null)
+          Authenticated(null, null, false)
         ],
       );
       blocTest<AuthenticationBloc, AuthenticationEvent, AuthenticationState>(
@@ -68,7 +68,7 @@ void main() {
       act: (bloc) async => bloc.add(LoggedIn()),
       expect: <AuthenticationState>[ 
         Uninitialized(),
-        Authenticated(null, null)
+        Authenticated(null, null, false)
       ],
     );
     blocTest<AuthenticationBloc, AuthenticationEvent, AuthenticationState>(

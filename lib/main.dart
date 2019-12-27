@@ -63,7 +63,6 @@ void run(bool integrationTest) async {
             BlocProvider<RepeatsBloc>(
               create: (context) => RepeatsBloc(  
                 dbBloc: BlocProvider.of<DatabaseBloc>(context),
-                authBloc: BlocProvider.of<AuthenticationBloc>(context),
               )..add(LoadRepeats()),
             ),
           ],

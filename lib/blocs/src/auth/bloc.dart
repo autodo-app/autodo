@@ -12,7 +12,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
   AuthenticationBloc({@required AuthRepository userRepository})
       : assert(userRepository != null),
         _userRepository = userRepository {
-    _userRepository.stream.listen((user) {
+    _userRepository.stream?.listen((user) {
       if (user != null) {
         // sign in or sign up
         if (user.metadata.creationTime == user.metadata.lastSignInTime) {
