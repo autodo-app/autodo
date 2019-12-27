@@ -11,7 +11,7 @@ import 'state.dart';
 
 class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
   final DatabaseBloc _dbBloc;
-  StreamSubscription _repeatsSubscription;
+  StreamSubscription _dbSubscription;
 
   static final List<Repeat> defaults = [
     Repeat(name: "oil", mileageInterval: 3500),
@@ -32,8 +32,13 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
   ];
 
   RepeatsBloc({@required DatabaseBloc dbBloc})
-      : assert(dbBloc != null),
-        _dbBloc = dbBloc;
+      : assert(dbBloc != null), _dbBloc = dbBloc {
+    _dbSubscription = _dbBloc.listen((state) {
+      if (state is DbLoaded) {
+        add(LoadRepeats());
+      }
+    });
+  }
 
   @override
   RepeatsState get initialState => RepeatsLoading();
@@ -67,10 +72,6 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
     } catch (_) {
       yield RepeatsNotLoaded();
     }
-  //   _repeatsSubscription?.cancel();
-  //   _repeatsSubscription = _dataRepository.repeats().listen(
-  //     (repeats) => add(RepeatsUpdated(repeats)),
-  //   );
   }
 
   Stream<RepeatsState> _mapAddRepeatToState(AddRepeat event) async* {
@@ -218,7 +219,7 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
 
   @override
   Future<void> close() {
-    _repeatsSubscription?.cancel();
+    _dbSubscription?.cancel();
     return super.close();
   }
 }

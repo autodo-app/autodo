@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import 'auth_repository.dart';
@@ -60,8 +61,13 @@ class FirebaseAuthRepository extends AuthRepository{
   }
 
   Future<void> deleteCurrentUser() async {
-    var user = await _firebaseAuth.currentUser();
-    return user.delete();
+    try {
+      var user = await _firebaseAuth.currentUser();
+      return user.delete();
+    } on PlatformException catch(e) {
+      // if exception is thrown because user doesn't exist, ignore it for now
+      print(e);
+    }
   }
 
   Future<bool> isSignedIn() async {

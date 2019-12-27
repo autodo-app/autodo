@@ -8,6 +8,7 @@ import 'package:autodo/blocs/blocs.dart';
 class MockAuthRepository extends Mock implements AuthRepository {}
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   group('Auth Bloc', () {
     test(
       'AuthRepository must not be null',

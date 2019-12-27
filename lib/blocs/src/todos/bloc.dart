@@ -121,10 +121,11 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   }
 
   bool _shouldUpdate(car, t) => 
-    (t.carName == car.name && (t?.estimatedDueDate ?? false));
+    (t.carName == car.name && (t.estimatedDueDate ?? false) && !(t.completed ?? false));
 
   Stream<TodosState> _mapUpdateDueDatesToState(UpdateDueDates event) async* {
     List<Car> cars = event.cars;
+    if (cars == null || cars.length == 0) return;
     if (state is TodosLoaded && repo != null) {
       TodosLoaded curState = state;
       WriteBatchWrapper batch = repo.startTodoWriteBatch();
@@ -136,6 +137,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
           .map((t) => _shouldUpdate(car, t) ? _updateDueDate(car, t, batch) : t)
           .toList();
       }
+      print(event);
       yield TodosLoaded(updatedTodos);
       _carsCache = cars;
       batch.commit();
@@ -184,7 +186,6 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
 
       RepeatsLoaded curRepeatsState = _repeatsBloc.state;
       Repeat curRepeat = curRepeatsState.repeats.firstWhere((r) => r.name == curTodo.repeatName, orElse: () => null);
-      // throw Exception();
       if (!curRepeat.props.every((p) => p == null)) {
         Todo newTodo = _createNewTodoFromRepeat(curRepeat, curTodo);
         updatedTodos = updatedTodos..add(newTodo);

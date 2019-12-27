@@ -8,6 +8,10 @@ import 'screen.dart';
 /// Structures the BlocProviders for the homescreen and exports them for
 /// use by the main screen.
 class HomeScreenProvider extends StatelessWidget {
+  final bool integrationTest;
+
+  HomeScreenProvider({this.integrationTest});
+
   @override 
   build(BuildContext context) => MultiBlocProvider(
     providers: [
@@ -26,6 +30,6 @@ class HomeScreenProvider extends StatelessWidget {
         ),
       ),
     ],
-    child: HomeScreen(),
+    child: HomeScreen(integrationTest: integrationTest),
   );
 }

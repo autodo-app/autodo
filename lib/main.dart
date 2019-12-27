@@ -1,5 +1,8 @@
 import 'dart:async';
 
+import 'package:autodo/screens/add_edit/refueling.dart';
+import 'package:autodo/screens/add_edit/repeat.dart';
+import 'package:autodo/screens/add_edit/todo.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
@@ -50,24 +53,24 @@ void run(bool integrationTest) async {
             BlocProvider<NotificationsBloc>(
               create: (context) => NotificationsBloc(  
                 dbBloc: BlocProvider.of<DatabaseBloc>(context),
-              ),
+              )..add(LoadNotifications()),
             ),
             BlocProvider<RefuelingsBloc>(  
               create: (context) => RefuelingsBloc(
                 dbBloc: BlocProvider.of<DatabaseBloc>(context),
-              ),
+              )..add(LoadRefuelings()),
             ),
             BlocProvider<RepeatsBloc>(
               create: (context) => RepeatsBloc(  
                 dbBloc: BlocProvider.of<DatabaseBloc>(context),
-              ),
+              )..add(LoadRepeats()),
             ),
           ],
           child: BlocProvider<CarsBloc>(  
             create: (context) => CarsBloc(
               dbBloc: BlocProvider.of<DatabaseBloc>(context),
               refuelingsBloc: BlocProvider.of<RefuelingsBloc>(context),
-            ),
+            )..add(LoadCars()),
             child: BlocProvider<TodosBloc>(
               create: (context) => TodosBloc(  
                 dbBloc: BlocProvider.of<DatabaseBloc>(context),
@@ -75,7 +78,7 @@ void run(bool integrationTest) async {
                 carsBloc: BlocProvider.of<CarsBloc>(context),
                 repeatsBloc: BlocProvider.of<RepeatsBloc>(context)
               )..add(LoadTodos()),
-              child: App(theme: theme, authRepository: authRepository),
+              child: App(theme: theme, authRepository: authRepository, integrationTest: integrationTest),
             ),
           ),
         ),
@@ -110,8 +113,9 @@ void main() async {
 class App extends StatelessWidget {
   final ThemeData _theme;
   final AuthRepository _authRepository;
+  final bool integrationTest;
 
-  App({@required theme, @required authRepository}) : 
+  App({@required theme, @required authRepository, this.integrationTest}) : 
     assert(theme != null), assert(authRepository != null), 
     _theme = theme, _authRepository = authRepository;
 
@@ -123,7 +127,7 @@ class App extends StatelessWidget {
         // Just here as the splitter between home screen and login screen
         builder: (context, state) {
           if (state is Authenticated) {
-            return HomeScreenProvider();
+            return HomeScreenProvider(integrationTest: integrationTest);
           } else if (state is Unauthenticated) {
             return WelcomeScreenProvider();
           } else {
@@ -131,7 +135,7 @@ class App extends StatelessWidget {
           }
         },
       ),
-      AutodoRoutes.home: (context) => HomeScreenProvider(),
+      AutodoRoutes.home: (context) => HomeScreenProvider(integrationTest: integrationTest),
       AutodoRoutes.welcome: (context) => WelcomeScreenProvider(),
       AutodoRoutes.signupScreen: (context) => 
         SignupScreenProvider(authRepository: _authRepository),

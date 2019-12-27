@@ -4,8 +4,8 @@ import 'package:autodo/blocs/blocs.dart';
 
 void main() {
   group('Auth Bloc', () {
-    test('props for event are empty', () {
-      expect(AppStarted().props, []);
+    test('integrationTest is null by default', () {
+      expect(AppStarted().props, [null]);
     });
   });
 }

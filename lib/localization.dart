@@ -82,6 +82,8 @@ class AutodoLocalizations {
   static String get verifyEmail => "Verify Email";
   static String get verifyBodyText => 'An email has been sent to you with a link to verify your account.\n\nYou must verify your email to use auToDo.';
   static String get next => "Next";
+  static String get editTodo => "Edit ToDo";
+  static String get addTodo => "Add Todo";
 }
 
 class AutodoLocalizationsDelegate

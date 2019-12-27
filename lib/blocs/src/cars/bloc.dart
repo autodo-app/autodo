@@ -15,13 +15,26 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
   static const double EMA_CUTOFF = 8;
   
   final DatabaseBloc _dbBloc;
-  StreamSubscription _refuelingsSubscription;
+  StreamSubscription _refuelingsSubscription, _dbSubscription;
   final RefuelingsBloc _refuelingsBloc;
   List<Refueling> _refuelingsCache;
 
   CarsBloc({@required DatabaseBloc dbBloc, @required RefuelingsBloc refuelingsBloc})
       : assert(dbBloc != null), assert(refuelingsBloc != null),
-        _dbBloc = dbBloc, _refuelingsBloc = refuelingsBloc;
+        _dbBloc = dbBloc, _refuelingsBloc = refuelingsBloc {
+    _dbSubscription = _dbBloc.listen((state) {
+      if (state is DbLoaded) {
+        add(LoadCars());
+      }
+    });
+    _refuelingsSubscription = _refuelingsBloc.listen(
+      (state) {
+        if (state is RefuelingsLoaded) {
+          add(ExternalRefuelingsUpdated(state.refuelings));
+        }
+      }
+    );
+  }
 
   @override
   CarsState get initialState => CarsLoading();
@@ -52,16 +65,10 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
       } else {
         yield CarsNotLoaded();
       }
-    } catch (_) {
+    } catch (e) {
+      print('Error loading cars: $e');
       yield CarsNotLoaded();
     }
-    _refuelingsSubscription = _refuelingsBloc.listen(
-      (state) {
-        if (state is RefuelingsLoaded) {
-          add(ExternalRefuelingsUpdated(state.refuelings));
-        }
-      }
-    );
   }
 
   Stream<CarsState> _mapAddCarToState(AddCar event) async* {
@@ -156,6 +163,7 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
   @override
   Future<void> close() {
     _refuelingsSubscription?.cancel();
+    _dbSubscription?.cancel();
     return super.close();
   }
 

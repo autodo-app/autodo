@@ -8,6 +8,7 @@ import 'package:autodo/models/models.dart';
 import 'package:autodo/widgets/widgets.dart';
 import 'package:autodo/blocs/blocs.dart';
 import 'forms/barrel.dart';
+import 'package:autodo/integ_test_keys.dart';
 import 'package:autodo/localization.dart';
 import 'package:autodo/util.dart';
 
@@ -172,7 +173,7 @@ class _MileageForm extends StatelessWidget {
       contentPadding:
           EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
     ),
-    initialValue: todo?.dueMileage.toString() ?? '',
+    initialValue: todo?.dueMileage?.toString() ?? '',
     autofocus: false,
     focusNode: node,
     style: Theme.of(context).primaryTextTheme.subtitle,
@@ -193,7 +194,7 @@ class TodoAddEditScreen extends StatefulWidget {
   final Todo todo;
 
   TodoAddEditScreen({
-    Key key,
+    Key key = IntegrationTestKeys.addEditTodo,
     @required this.onSave,
     @required this.isEditing,
     this.todo,
@@ -240,7 +241,7 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
     resizeToAvoidBottomPadding: false,
     appBar: AppBar(  
       title: Text(
-        isEditing ? AutodoLocalizations.editRefueling : AutodoLocalizations.addRefueling,
+        isEditing ? AutodoLocalizations.editTodo : AutodoLocalizations.addTodo,
       ),
     ),
     body: Form(  
