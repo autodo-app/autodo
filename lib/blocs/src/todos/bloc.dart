@@ -31,7 +31,27 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   }) : assert(dbBloc != null), assert(carsBloc != null),
        assert(notificationsBloc != null), assert(repeatsBloc != null),
        _dbBloc = dbBloc, _repeatsBloc = repeatsBloc, 
-       _carsBloc = carsBloc, _notificationsBloc = notificationsBloc;
+       _carsBloc = carsBloc, _notificationsBloc = notificationsBloc {
+    _dataSubscription = _dbBloc.listen((state) {
+      if (state is DbLoaded) {
+        add(LoadTodos());
+      }
+    });
+    _carsSubscription = _carsBloc.listen( 
+      (state) {
+        if (state is CarsLoaded) {
+          add(UpdateDueDates(state.cars));
+        }
+      }
+    );
+    _repeatsSubscription = _repeatsBloc.listen(
+      (state) {
+        if (state is RepeatsLoaded) {
+          add(RepeatsRefresh(state.repeats));
+        }
+      }
+    );
+  }
 
   @override
   TodosState get initialState => TodosLoading();
@@ -71,24 +91,6 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     } catch (_) {
       yield TodosNotLoaded();
     }
-    _dataSubscription?.cancel();
-    // _dataSubscription = _dataRepository.todos().listen(
-    //       (todos) => add(TodosUpdated(todos)),
-    //     );
-    _carsSubscription = _carsBloc.listen( 
-      (state) {
-        if (state is CarsLoaded) {
-          add(UpdateDueDates(state.cars));
-        }
-      }
-    );
-    _repeatsSubscription = _repeatsBloc.listen(
-      (state) {
-        if (state is RepeatsLoaded) {
-          add(RepeatsRefresh(state.repeats));
-        }
-      }
-    );
   }
 
   void _scheduleNotification(Todo todo) {

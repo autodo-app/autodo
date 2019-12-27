@@ -69,7 +69,7 @@ class _SignupFormState extends State<SignupForm> {
           );
       } else if (state is SignupSuccess) {
         BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
-        Navigator.pushNamed(context, AutodoRoutes.home);
+        Navigator.popAndPushNamed(context, AutodoRoutes.home);
       }
     },
     child: BlocBuilder<SignupBloc, SignupState>(

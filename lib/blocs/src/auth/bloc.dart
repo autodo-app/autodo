@@ -21,7 +21,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     AuthenticationEvent event,
   ) async* {
     if (event is AppStarted) {
-      yield* _mapAppStartedToState();
+      yield* _mapAppStartedToState(event);
     } else if (event is LoggedIn) {
       yield* _mapLoggedInToState();
     } else if (event is LoggedOut) {
@@ -31,8 +31,20 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     }
   }
 
-  Stream<AuthenticationState> _mapAppStartedToState() async* {
+  Stream<AuthenticationState> _mapAppStartedToState(event) async* {
     try {
+      final repo = FirebaseAuthRepository();
+      if ((event as AppStarted).integrationTest ?? false) {
+        await repo.signOut()
+          .then((_) {
+            try {
+              repo.signInWithCredentials('integration-test@autodo.app', '123456')
+                .then((_) => repo.deleteCurrentUser());
+            } catch (e) {
+              print(e);
+            }
+          });
+      }
       final isSignedIn = await _userRepository.isSignedIn();
       if (isSignedIn) {
         final name = await _userRepository.getUserEmail();
@@ -41,7 +53,8 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
       } else {
         yield Unauthenticated();
       }
-    } catch (_) {
+    } catch (e) {
+      print(e);
       yield Unauthenticated();
     }
   }

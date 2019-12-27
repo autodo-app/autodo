@@ -33,17 +33,14 @@ Future<void> _reportError(dynamic error, dynamic stackTrace) async {
   }
 }
 
-void run(bool signOutCurrentUser) async { 
+void run(bool integrationTest) async { 
   final AuthRepository authRepository = FirebaseAuthRepository();
-  if (signOutCurrentUser) {
-    authRepository.signOut();
-  }
   ThemeData theme = createTheme();
   runApp(
     BlocProvider<AuthenticationBloc>(
       create: (context) => AuthenticationBloc(
           userRepository: authRepository
-        )..add(AppStarted()),
+        )..add(AppStarted(integrationTest: integrationTest)),
       child: BlocProvider<DatabaseBloc>(  
         create: (context) => DatabaseBloc(
           authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
@@ -77,7 +74,7 @@ void run(bool signOutCurrentUser) async {
                 notificationsBloc: BlocProvider.of<NotificationsBloc>(context),
                 carsBloc: BlocProvider.of<CarsBloc>(context),
                 repeatsBloc: BlocProvider.of<RepeatsBloc>(context)
-              ),
+              )..add(LoadTodos()),
               child: App(theme: theme, authRepository: authRepository),
             ),
           ),
