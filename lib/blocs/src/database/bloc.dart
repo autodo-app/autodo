@@ -15,33 +15,29 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
   StreamSubscription _authSubscription;
 
   DatabaseBloc({firestoreInstance, @required authenticationBloc}) : 
-    assert(authenticationBloc != null),
-    _authenticationBloc = authenticationBloc,
-    _firestoreInstance = firestoreInstance ?? Firestore.instance;
+      assert(authenticationBloc != null),
+      _authenticationBloc = authenticationBloc,
+      _firestoreInstance = firestoreInstance ?? Firestore.instance {
+    _authSubscription = _authenticationBloc.listen((state) {
+        if (state is Authenticated) {
+          add(UserLoggedIn(state.uuid, state.newUser));
+        } else if (state is Unauthenticated) {
+          add(UserLoggedOut());
+        }
+      }
+    );  
+  }
 
   @override
   DatabaseState get initialState => DbUninitialized();
 
   @override
   Stream<DatabaseState> mapEventToState(DatabaseEvent event) async* {
-    if (event is LoadDatabase) {
-      yield* _mapLoadDatabaseToState(event);
-    } else if (event is UserLoggedIn) {
+    if (event is UserLoggedIn) {
       yield* _mapUserLoggedInToState(event);
     } else if (event is UserLoggedOut) {
       yield* _mapUserLoggedOutToState(event);
     }
-  }
-
-  Stream<DatabaseState> _mapLoadDatabaseToState(event) async* {
-    _authSubscription?.cancel();
-    _authSubscription = _authenticationBloc.listen(
-      (state) {
-        if (state is Authenticated) {
-          add(UserLoggedIn(state.uuid));
-        }
-      }
-    );
   }
 
   Stream<DatabaseState> _mapUserLoggedInToState(event) async* {
@@ -49,7 +45,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       firestoreInstance: _firestoreInstance,
       uuid: event.uuid,
     );
-    yield DbLoaded(repository);
+    yield DbLoaded(repository, event.newUser);
   }
 
   Stream<DatabaseState> _mapUserLoggedOutToState(event) async* {

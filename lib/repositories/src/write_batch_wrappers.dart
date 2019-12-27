@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class WriteBatchWrapper extends Equatable{
   final CollectionReference _collection;
@@ -15,7 +16,16 @@ class WriteBatchWrapper extends Equatable{
 
   setData(dynamic data) => _batch.setData(_collection.document(), data);
 
-  commit() => _batch.commit();
+  commit() {
+    try {
+      _batch.commit();
+    } on PlatformException catch(e) {
+      print(e);
+      if (e.code == "Error performing commit" && e.message == "PERMISSION_DENIED: Missing or insufficient permissions.")
+        return;
+    }
+    
+  } 
 
   @override
   List<Object> get props => [_collection.path];

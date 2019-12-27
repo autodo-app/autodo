@@ -77,7 +77,7 @@ void main() {
         final authRepository = MockAuthRepository();
         return AuthenticationBloc(userRepository: authRepository);
       },
-      act: (bloc) async => bloc.add(LoggedOut()),
+      act: (bloc) async => bloc.add(LogOut()),
       expect: <AuthenticationState>[ 
         Uninitialized(),
         Unauthenticated()

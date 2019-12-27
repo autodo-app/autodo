@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:autodo/blocs/blocs.dart';
-import 'package:autodo/routes.dart';
 import 'package:autodo/localization.dart';
+import '../new_user_setup/screen.dart';
 import '../../widgets/barrel.dart';
 
 class SignupForm extends StatefulWidget {
@@ -69,7 +69,10 @@ class _SignupFormState extends State<SignupForm> {
           );
       } else if (state is SignupSuccess) {
         BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
-        Navigator.popAndPushNamed(context, AutodoRoutes.home);
+        // Navigator.popAndPushNamed(context, AutodoRoutes.home);
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) => NewUserScreen(),
+        ));
       }
     },
     child: BlocBuilder<SignupBloc, SignupState>(

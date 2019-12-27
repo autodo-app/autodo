@@ -82,6 +82,7 @@ class HomeScreen extends StatelessWidget {
         title: Text(AutodoLocalizations.appTitle),
         actions: [ExtraActions()],
       ),
+      drawer: NavDrawer(),
       body: views[activeTab],
       floatingActionButton: actionButton,
       bottomNavigationBar: TabSelector(  

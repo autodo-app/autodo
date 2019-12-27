@@ -13,4 +13,6 @@ abstract class AuthRepository {
   Future<String> getUserEmail();
   Future<String> getUserId();
   Future<void> sendPasswordReset(String email);
+
+  Stream<FirebaseUser> get stream;
 }

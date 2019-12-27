@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:autodo/blocs/blocs.dart';
 import 'package:flutter/foundation.dart';
 import 'package:bloc/bloc.dart';
 
@@ -11,7 +12,8 @@ import 'state.dart';
 
 class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
   final DatabaseBloc _dbBloc;
-  StreamSubscription _dbSubscription;
+  final AuthenticationBloc _authBloc;
+  StreamSubscription _dbSubscription, _authSubscription;
 
   static final List<Repeat> defaults = [
     Repeat(name: "oil", mileageInterval: 3500),
@@ -31,11 +33,15 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
     Repeat(name: "coolantChange", mileageInterval: 100000)
   ];
 
-  RepeatsBloc({@required DatabaseBloc dbBloc})
-      : assert(dbBloc != null), _dbBloc = dbBloc {
+  RepeatsBloc({@required DatabaseBloc dbBloc, @required AuthenticationBloc authBloc})
+      : assert(dbBloc != null), assert(authBloc != null), _dbBloc = dbBloc, _authBloc = authBloc {
     _dbSubscription = _dbBloc.listen((state) {
       if (state is DbLoaded) {
-        add(LoadRepeats());
+        if (state.newUser ?? false) {
+          add(AddDefaultRepeats());
+        } else {
+          add(LoadRepeats());
+        }
       }
     });
   }

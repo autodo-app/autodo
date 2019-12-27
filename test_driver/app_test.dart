@@ -32,6 +32,9 @@ void main() {
       await driver.tap(find.byType('SignupSubmitButton'));
       print('Signup Screen Completed');
 
+      // expect that we will hit the mileage setting screen
+      
+
       // expect that we will hit the home page
       await Future.delayed(Duration(milliseconds: 500));
       await driver.waitFor(find.byValueKey('__home_screen__'));

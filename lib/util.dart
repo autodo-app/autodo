@@ -28,6 +28,7 @@ String doubleValidator(String val) {
 }
 
 String intNoRequire(String val) {
+  if (val == null || val == '') return null;
   try {
     int.parse(val);
   } catch (e) {

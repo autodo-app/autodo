@@ -47,7 +47,7 @@ void run(bool integrationTest) async {
       child: BlocProvider<DatabaseBloc>(  
         create: (context) => DatabaseBloc(
           authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-        )..add(LoadDatabase()),
+        ),
         child: MultiBlocProvider(  
           providers: [
             BlocProvider<NotificationsBloc>(
@@ -63,6 +63,7 @@ void run(bool integrationTest) async {
             BlocProvider<RepeatsBloc>(
               create: (context) => RepeatsBloc(  
                 dbBloc: BlocProvider.of<DatabaseBloc>(context),
+                authBloc: BlocProvider.of<AuthenticationBloc>(context),
               )..add(LoadRepeats()),
             ),
           ],

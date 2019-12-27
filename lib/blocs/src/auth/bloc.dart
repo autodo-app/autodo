@@ -11,7 +11,18 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
 
   AuthenticationBloc({@required AuthRepository userRepository})
       : assert(userRepository != null),
-        _userRepository = userRepository;
+        _userRepository = userRepository {
+    _userRepository.stream.listen((user) {
+      if (user != null) {
+        // sign in or sign up
+        if (user.metadata.creationTime == user.metadata.lastSignInTime) {
+          add(SignedUp());
+        } else {
+          add(LoggedIn());
+        }
+      }
+    });
+  }
 
   @override
   AuthenticationState get initialState => Uninitialized();
@@ -24,10 +35,12 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
       yield* _mapAppStartedToState(event);
     } else if (event is LoggedIn) {
       yield* _mapLoggedInToState();
-    } else if (event is LoggedOut) {
-      yield* _mapLoggedOutToState();
+    } else if (event is LogOut) {
+      yield* _mapLogOutToState();
     } else if (event is DeletedUser) {
       yield* _mapDeletedUserToState();
+    } else if (event is SignedUp) {
+      yield* _mapSignedUpToState();
     }
   }
 
@@ -49,7 +62,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
       if (isSignedIn) {
         final name = await _userRepository.getUserEmail();
         String uuid = await _userRepository.getUserId();
-        yield Authenticated(name, uuid);
+        yield Authenticated(name, uuid, false);
       } else {
         yield Unauthenticated();
       }
@@ -62,10 +75,16 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
   Stream<AuthenticationState> _mapLoggedInToState() async* {
     var _email = await _userRepository.getUserEmail();
     var _uuid = await _userRepository.getUserId();
-    yield Authenticated(_email, _uuid);
+    yield Authenticated(_email, _uuid, false);
   }
 
-  Stream<AuthenticationState> _mapLoggedOutToState() async* {
+  Stream<AuthenticationState> _mapSignedUpToState() async* {
+    var _email = await _userRepository.getUserEmail();
+    var _uuid = await _userRepository.getUserId();
+    yield Authenticated(_email, _uuid, true);
+  }
+
+  Stream<AuthenticationState> _mapLogOutToState() async* {
     yield Unauthenticated();
     _userRepository.signOut();
   }

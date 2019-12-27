@@ -13,14 +13,15 @@ class DbUninitialized extends DatabaseState {}
 
 class DbLoaded extends DatabaseState {
   final DataRepository repository;
+  final bool newUser;
 
-  const DbLoaded(this.repository);
+  const DbLoaded(this.repository, [this.newUser]);
 
   @override 
-  List<Object> get props => [repository];
+  List<Object> get props => [repository, newUser];
 
   @override
-  toString() => "DbLoaded { repository: $repository }";
+  toString() => "DbLoaded { repository: $repository, newUser: $newUser }";
 }
 
 class DbNotLoaded extends DatabaseState {}

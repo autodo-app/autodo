@@ -21,7 +21,9 @@ class AppStarted extends AuthenticationEvent {
 
 class LoggedIn extends AuthenticationEvent {}
 
-class LoggedOut extends AuthenticationEvent {}
+class SignedUp extends AuthenticationEvent {}
+
+class LogOut extends AuthenticationEvent {}
 
 class DeletedUser extends AuthenticationEvent {}
 
