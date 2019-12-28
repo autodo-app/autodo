@@ -6,7 +6,8 @@ import 'package:autodo/repositories/repositories.dart';
 import 'event.dart';
 import 'state.dart';
 
-class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> {
+class AuthenticationBloc
+    extends Bloc<AuthenticationEvent, AuthenticationState> {
   final AuthRepository _userRepository;
 
   AuthenticationBloc({@required AuthRepository userRepository})
@@ -48,15 +49,15 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     try {
       final repo = FirebaseAuthRepository();
       if ((event as AppStarted).integrationTest ?? false) {
-        await repo.signOut()
-          .then((_) {
-            try {
-              repo.signInWithCredentials('integration-test@autodo.app', '123456')
+        await repo.signOut().then((_) {
+          try {
+            repo
+                .signInWithCredentials('integration-test@autodo.app', '123456')
                 .then((_) => repo.deleteCurrentUser());
-            } catch (e) {
-              print(e);
-            }
-          });
+          } catch (e) {
+            print(e);
+          }
+        });
       }
       final isSignedIn = await _userRepository.isSignedIn();
       if (isSignedIn) {
@@ -94,5 +95,3 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     await _userRepository.deleteCurrentUser();
   }
 }
-
-

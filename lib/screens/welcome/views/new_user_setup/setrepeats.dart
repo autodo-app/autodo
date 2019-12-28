@@ -18,25 +18,21 @@ class _OilInterval extends StatelessWidget {
 
   _OilInterval(this.repeat, this.node, this.nextNode);
 
-  @override 
+  @override
   build(context) => TextFormField(
-    maxLines: 1,
-    autofocus: false,
-    initialValue: repeat.mileageInterval.toString(),
-    decoration:
-        defaultInputDecoration('(miles)', 'Oil Change Interval (miles)'),
-    validator: (val) => intValidator(val),
-    onSaved: (val) => BlocProvider.of<RepeatsBloc>(context).add(
-      UpdateRepeat(
-        repeat.copyWith(
-          mileageInterval: int.parse(val.trim())
-        )
-      )
-    ),
-    focusNode: node,
-    textInputAction: TextInputAction.next,
-    onFieldSubmitted: (_) => changeFocus(node, nextNode),
-  );
+        maxLines: 1,
+        autofocus: false,
+        initialValue: repeat.mileageInterval.toString(),
+        decoration:
+            defaultInputDecoration('(miles)', 'Oil Change Interval (miles)'),
+        validator: (val) => intValidator(val),
+        onSaved: (val) => BlocProvider.of<RepeatsBloc>(context).add(
+            UpdateRepeat(
+                repeat.copyWith(mileageInterval: int.parse(val.trim())))),
+        focusNode: node,
+        textInputAction: TextInputAction.next,
+        onFieldSubmitted: (_) => changeFocus(node, nextNode),
+      );
 }
 
 class _TireRotationInterval extends StatelessWidget {
@@ -45,54 +41,50 @@ class _TireRotationInterval extends StatelessWidget {
 
   _TireRotationInterval(this.repeat, this.node);
 
-  @override 
+  @override
   build(context) => TextFormField(
-    maxLines: 1,
-    autofocus: false,
-    initialValue: repeat.mileageInterval.toString(),
-    decoration:
-        defaultInputDecoration('(miles)', 'Tire Rotation Interval (miles)'),
-    validator: (val) => intValidator(val),
-    onSaved: (val) => BlocProvider.of<RepeatsBloc>(context).add(
-      UpdateRepeat(
-        repeat.copyWith(
-          mileageInterval: int.parse(val.trim())
-        )
-      )
-    ),
-    focusNode: node,
-    textInputAction: TextInputAction.done,
-  );
+        maxLines: 1,
+        autofocus: false,
+        initialValue: repeat.mileageInterval.toString(),
+        decoration:
+            defaultInputDecoration('(miles)', 'Tire Rotation Interval (miles)'),
+        validator: (val) => intValidator(val),
+        onSaved: (val) => BlocProvider.of<RepeatsBloc>(context).add(
+            UpdateRepeat(
+                repeat.copyWith(mileageInterval: int.parse(val.trim())))),
+        focusNode: node,
+        textInputAction: TextInputAction.done,
+      );
 }
 
 class _HeaderText extends StatelessWidget {
   @override
   build(context) => Container(
-    padding: EdgeInsets.fromLTRB(0, 0, 0, 30),
-    height: 110,
-    child: Center(
-        child: Column(
-      children: <Widget>[
-        Padding(
-          padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-          child: Text(
-            'Before you get started,\n let\'s get some info about your car.',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 20,
-              fontFamily: 'Ubuntu',
-              fontWeight: FontWeight.w600,
-              color: Colors.white.withAlpha(230),
+        padding: EdgeInsets.fromLTRB(0, 0, 0, 30),
+        height: 110,
+        child: Center(
+            child: Column(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+              child: Text(
+                'Before you get started,\n let\'s get some info about your car.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'Ubuntu',
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white.withAlpha(230),
+                ),
+              ),
             ),
-          ),
-        ),
-        Text(
-          'How often do you want to do these tasks?',
-          style: Theme.of(context).primaryTextTheme.body1,
-        ),
-      ],
-    )),
-  );
+            Text(
+              'How often do you want to do these tasks?',
+              style: Theme.of(context).primaryTextTheme.body1,
+            ),
+          ],
+        )),
+      );
 }
 
 class _Card extends StatelessWidget {
@@ -100,53 +92,55 @@ class _Card extends StatelessWidget {
   final FocusNode oilNode, tireRotationNode;
   final Function onNext;
 
-  _Card(this.oilRepeat, this.tireRotationRepeat, this.oilNode, this.tireRotationNode, this.onNext);
+  _Card(this.oilRepeat, this.tireRotationRepeat, this.oilNode,
+      this.tireRotationNode, this.onNext);
 
-  @override 
+  @override
   build(context) => Container(
-    padding: EdgeInsets.all(10),
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-          child: _OilInterval(oilRepeat, oilNode, tireRotationNode),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-          child: _TireRotationInterval(tireRotationRepeat, tireRotationNode),
-        ),
-        Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              FlatButton(
-                padding: EdgeInsets.all(0),
-                materialTapTargetSize: MaterialTapTargetSize.padded,
-                child: Text(
-                  'Skip',
-                  style: Theme.of(context).primaryTextTheme.button,
-                ),
-                onPressed: () =>
-                    Navigator.popAndPushNamed(context, '/load'),
+        padding: EdgeInsets.all(10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+              child: _OilInterval(oilRepeat, oilNode, tireRotationNode),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+              child:
+                  _TireRotationInterval(tireRotationRepeat, tireRotationNode),
+            ),
+            Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  FlatButton(
+                    padding: EdgeInsets.all(0),
+                    materialTapTargetSize: MaterialTapTargetSize.padded,
+                    child: Text(
+                      'Skip',
+                      style: Theme.of(context).primaryTextTheme.button,
+                    ),
+                    onPressed: () =>
+                        Navigator.popAndPushNamed(context, '/load'),
+                  ),
+                  FlatButton(
+                    padding: EdgeInsets.all(0),
+                    materialTapTargetSize: MaterialTapTargetSize.padded,
+                    child: Text(
+                      'Next',
+                      style: Theme.of(context).primaryTextTheme.button,
+                    ),
+                    onPressed: () async => await onNext(),
+                  ),
+                ],
               ),
-              FlatButton(
-                padding: EdgeInsets.all(0),
-                materialTapTargetSize: MaterialTapTargetSize.padded,
-                child: Text(
-                  'Next',
-                  style: Theme.of(context).primaryTextTheme.button,
-                ),
-                onPressed: () async => await onNext(),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
-      ],
-    ),
-  );
+      );
 }
 
 class SetRepeatsScreen extends StatefulWidget {
@@ -208,24 +202,24 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen>
       pageWillBeVisible = false;
     }
 
-    return BlocBuilder<RepeatsBloc, RepeatsState>(
-      builder: (context, state) {
-        if (!(state is RepeatsLoaded) || (state as RepeatsLoaded).repeats.length == 0) {
-          return LoadingIndicator();
-        }
-        Repeat oilRepeat = (state as RepeatsLoaded).repeats
+    return BlocBuilder<RepeatsBloc, RepeatsState>(builder: (context, state) {
+      if (!(state is RepeatsLoaded) ||
+          (state as RepeatsLoaded).repeats.length == 0) {
+        return LoadingIndicator();
+      }
+      Repeat oilRepeat = (state as RepeatsLoaded)
+          .repeats
           .firstWhere((val) => val.name == 'oil');
-        Repeat tireRotationRepeat = (state as RepeatsLoaded).repeats
+      Repeat tireRotationRepeat = (state as RepeatsLoaded)
+          .repeats
           .firstWhere((val) => val.name == 'tireRotation');
 
-        return Form(
+      return Form(
           key: widget.repeatKey,
           child: AccountSetupScreen(
-            header: _HeaderText(), 
-            panel: _Card(oilRepeat, tireRotationRepeat, _oilNode, _tiresNode, _next)
-          )
-        );
-      } 
-    );
+              header: _HeaderText(),
+              panel: _Card(
+                  oilRepeat, tireRotationRepeat, _oilNode, _tiresNode, _next)));
+    });
   }
 }

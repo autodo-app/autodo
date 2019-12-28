@@ -13,15 +13,15 @@ class AutodoActionButton extends StatefulWidget {
 
   AutodoActionButton({
     Key key,
-    this.mainButtonKey = IntegrationTestKeys.mainFab, 
+    this.mainButtonKey = IntegrationTestKeys.mainFab,
     this.miniButtonKeys = IntegrationTestKeys.fabKeys,
     this.miniButtonRoutes,
     this.ticker,
   }) : super(key: key ?? IntegrationTestKeys.fabKey);
-  
+
   @override
-  _AutodoActionButtonState createState() => 
-      _AutodoActionButtonState(mainButtonKey, miniButtonKeys, miniButtonRoutes, ticker);
+  _AutodoActionButtonState createState() => _AutodoActionButtonState(
+      mainButtonKey, miniButtonKeys, miniButtonRoutes, ticker);
 }
 
 class _AutodoActionButtonState extends State<AutodoActionButton>
@@ -32,21 +32,16 @@ class _AutodoActionButtonState extends State<AutodoActionButton>
   final List<MaterialPageRoute> miniButtonRoutes;
   final TickerProvider ticker;
 
-  _AutodoActionButtonState(this.mainButtonKey, this.miniButtonKeys, this.miniButtonRoutes, this.ticker);
+  _AutodoActionButtonState(this.mainButtonKey, this.miniButtonKeys,
+      this.miniButtonRoutes, this.ticker);
 
   static const List<Map<String, dynamic>> icons = [
     {
       "data": Icons.local_gas_station,
       "semanticLabel": 'Add Refueling',
     },
-    {
-      "data": Icons.build,
-      "semanticLabel": 'Add ToDo'
-    },
-    {
-      "data": Icons.autorenew,
-      "semanticLabel": 'Add Repeat'
-    },
+    {"data": Icons.build, "semanticLabel": 'Add ToDo'},
+    {"data": Icons.autorenew, "semanticLabel": 'Add Repeat'},
   ];
 
   @override
@@ -65,13 +60,13 @@ class _AutodoActionButtonState extends State<AutodoActionButton>
     } else {
       _controller.reverse();
     }
-  } 
+  }
 
   _buttonKey(index) {
     if (miniButtonKeys == null || index >= miniButtonKeys.length) return null;
     return miniButtonKeys[index];
   }
-    
+
   @override
   Widget build(BuildContext context) {
     Color backgroundColor = Theme.of(context).primaryColor;
@@ -93,12 +88,10 @@ class _AutodoActionButtonState extends State<AutodoActionButton>
               heroTag: null,
               backgroundColor: backgroundColor,
               mini: true,
-              child: Icon(
-                icons[index]['data'], 
-                color: foregroundColor,
-                semanticLabel: icons[index]['semanticLabel'],
-                key: _buttonKey(index)
-              ),
+              child: Icon(icons[index]['data'],
+                  color: foregroundColor,
+                  semanticLabel: icons[index]['semanticLabel'],
+                  key: _buttonKey(index)),
               onPressed: () {
                 switchState();
                 print(index);

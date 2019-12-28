@@ -12,8 +12,11 @@ class LatestRepeatsScreen extends StatefulWidget {
   final page;
   final todosBloc;
 
-  LatestRepeatsScreen(this.repeatKey, this.onNext, this.page, {
-    this.todosBloc, 
+  LatestRepeatsScreen(
+    this.repeatKey,
+    this.onNext,
+    this.page, {
+    this.todosBloc,
   });
 
   @override
@@ -80,17 +83,12 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
       validator: (value) => intNoRequire(value),
       onSaved: (val) {
         if (val == null || val == '') return;
-        todosBloc.add(
-          AddTodo(
-            Todo(
-              name: 'oil', 
-              repeatName: 'oil',
-              completed: true,
-              completedDate: DateTime.now(),
-              dueMileage: int.parse(val.trim())
-            )
-          )
-        );
+        todosBloc.add(AddTodo(Todo(
+            name: 'oil',
+            repeatName: 'oil',
+            completed: true,
+            completedDate: DateTime.now(),
+            dueMileage: int.parse(val.trim()))));
       },
       focusNode: _oilNode,
       textInputAction: TextInputAction.next,
@@ -105,17 +103,12 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
       validator: (value) => intNoRequire(value),
       onSaved: (val) {
         if (val == null || val == '') return;
-        todosBloc.add(
-          AddTodo(
-            Todo(
-              name: 'tireRotation', 
-              repeatName: 'tireRotation',
-              completed: true,
-              completedDate: DateTime.now(),
-              dueMileage: int.parse(val.trim())
-            )
-          )
-        );
+        todosBloc.add(AddTodo(Todo(
+            name: 'tireRotation',
+            repeatName: 'tireRotation',
+            completed: true,
+            completedDate: DateTime.now(),
+            dueMileage: int.parse(val.trim()))));
       },
       focusNode: _tiresNode,
       textInputAction: TextInputAction.done,

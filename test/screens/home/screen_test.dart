@@ -61,7 +61,7 @@ void main() {
 
     testWidgets('tab switch', (WidgetTester tester) async {
       when(todosBloc.state).thenAnswer((_) => TodosLoaded([]));
-      when(tabBloc.state).thenAnswer((_) => AppTab.todos);  
+      when(tabBloc.state).thenAnswer((_) => AppTab.todos);
       when(tabBloc.add(UpdateTab(AppTab.todos))).thenAnswer((_) => null);
       Key scaffoldKey = Key('scaffold');
       Key todosTabKey = Key('tab');
@@ -86,7 +86,7 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      
+
       await tester.tap(find.byKey(todosTabKey));
       await tester.pump();
       verify(tabBloc.add(UpdateTab(AppTab.todos))).called(1);

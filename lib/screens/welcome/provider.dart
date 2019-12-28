@@ -5,8 +5,8 @@ import 'screen.dart';
 
 class WelcomeScreenProvider extends StatelessWidget {
   @override
-  build(context) => MultiBlocProvider(  
-    providers: [],
-    child: WelcomeScreen(),
-  );
+  build(context) => MultiBlocProvider(
+        providers: [],
+        child: WelcomeScreen(),
+      );
 }

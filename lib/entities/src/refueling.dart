@@ -10,7 +10,16 @@ class RefuelingEntity extends Equatable {
   final double amount, cost, efficiency;
   final Color carColor, efficiencyColor;
 
-  const RefuelingEntity(this.id, this.carName, this.mileage, this.date, this.amount, this.cost, this.carColor, this.efficiency, this.efficiencyColor);
+  const RefuelingEntity(
+      this.id,
+      this.carName,
+      this.mileage,
+      this.date,
+      this.amount,
+      this.cost,
+      this.carColor,
+      this.efficiency,
+      this.efficiencyColor);
 
   // Map<String, Object> toJson() {
   //   return {
@@ -27,7 +36,17 @@ class RefuelingEntity extends Equatable {
   // }
 
   @override
-  List<Object> get props => [id, carName, mileage, date, amount, cost, carColor, efficiency, efficiencyColor];
+  List<Object> get props => [
+        id,
+        carName,
+        mileage,
+        date,
+        amount,
+        cost,
+        carColor,
+        efficiency,
+        efficiencyColor
+      ];
 
   @override
   String toString() {
@@ -53,15 +72,18 @@ class RefuelingEntity extends Equatable {
       snap.documentID,
       snap.data['carName'],
       snap.data['mileage'],
-      (snap.data['date'] == null) ? null : 
-        DateTime.fromMillisecondsSinceEpoch(snap.data['date']),
+      (snap.data['date'] == null)
+          ? null
+          : DateTime.fromMillisecondsSinceEpoch(snap.data['date']),
       snap.data["amount"] as double,
       snap.data["cost"] as double,
-      (snap.data['carColor'] == null) ? null :
-        Color(snap.data["carColor"] as int),
+      (snap.data['carColor'] == null)
+          ? null
+          : Color(snap.data["carColor"] as int),
       snap.data["efficiency"] as double,
-      (snap.data['efficiencyColor'] == null) ? null :
-        Color(snap.data["efficiencyColor"] as int),
+      (snap.data['efficiencyColor'] == null)
+          ? null
+          : Color(snap.data["efficiencyColor"] as int),
     );
   }
 

@@ -19,11 +19,11 @@ class RepeatForm extends StatefulWidget {
     this.nextNode,
   }) : super(key: key);
 
-  @override 
+  @override
   _RepeatFormState createState() => _RepeatFormState();
 }
 
-class _RepeatFormState extends State<RepeatForm> { 
+class _RepeatFormState extends State<RepeatForm> {
   AutoCompleteTextField<Repeat> autoCompleteField;
   TextEditingController _autocompleteController;
   Repeat selectedRepeat;
@@ -36,21 +36,20 @@ class _RepeatFormState extends State<RepeatForm> {
     _autocompleteController = TextEditingController();
     super.initState();
   }
-  
-  @override 
+
+  @override
   dispose() {
     _autocompleteController.dispose();
     super.dispose();
   }
 
-  @override 
+  @override
   build(context) {
     autoCompleteField = AutoCompleteTextField<Repeat>(
       controller: _autocompleteController,
       decoration: defaultInputDecoration(
-        AutodoLocalizations.requiredLiteral,
-        AutodoLocalizations.carName
-      ).copyWith(errorText: _repeatError),
+              AutodoLocalizations.requiredLiteral, AutodoLocalizations.carName)
+          .copyWith(errorText: _repeatError),
       itemSubmitted: (item) => setState(() {
         _autocompleteController.text = item.name;
         selectedRepeat = item;
@@ -61,11 +60,9 @@ class _RepeatFormState extends State<RepeatForm> {
       suggestions: repeats,
       itemBuilder: (context, suggestion) => Padding(
         child: ListTile(
-          title: Text(suggestion.name),
-          trailing: Text(
-            AutodoLocalizations.interval + ": ${suggestion.mileageInterval}"
-          )
-        ),
+            title: Text(suggestion.name),
+            trailing: Text(AutodoLocalizations.interval +
+                ": ${suggestion.mileageInterval}")),
         padding: EdgeInsets.all(5.0),
       ),
       itemSorter: (a, b) => a.name.length == b.name.length
@@ -91,9 +88,9 @@ class _RepeatFormState extends State<RepeatForm> {
         // }
         autoCompleteField.updateDecoration(
           decoration: defaultInputDecoration(
-            AutodoLocalizations.requiredLiteral,
-            AutodoLocalizations.carName
-          ).copyWith(errorText: res),
+                  AutodoLocalizations.requiredLiteral,
+                  AutodoLocalizations.carName)
+              .copyWith(errorText: res),
         );
         setState(() => _repeatError = res);
         return _repeatError;

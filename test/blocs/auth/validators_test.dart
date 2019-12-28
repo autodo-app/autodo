@@ -23,7 +23,8 @@ void main() {
         expect(Validators.isValidPassword(''), 'Password can\'t be empty');
       });
       test('short password', () {
-        expect(Validators.isValidPassword('12345'), 'Password must be longer than 6 characters');
+        expect(Validators.isValidPassword('12345'),
+            'Password must be longer than 6 characters');
       });
       test('valid password', () {
         expect(Validators.isValidPassword('123456'), null);

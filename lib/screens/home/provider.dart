@@ -12,24 +12,23 @@ class HomeScreenProvider extends StatelessWidget {
 
   HomeScreenProvider({this.integrationTest});
 
-  @override 
+  @override
   build(BuildContext context) => MultiBlocProvider(
-    providers: [
-      BlocProvider<TabBloc>(
-        create: (context) => TabBloc(),
-      ),
-      BlocProvider<FilteredTodosBloc>(  
-        create: (context) => FilteredTodosBloc(  
-          todosBloc: BlocProvider.of<TodosBloc>(context),
-        ),
-      ),
-      BlocProvider<FilteredRefuelingsBloc>(
-        create: (context) => FilteredRefuelingsBloc(
-          carsBloc: BlocProvider.of<CarsBloc>(context),
-          refuelingsBloc: BlocProvider.of<RefuelingsBloc>(context)
-        ),
-      ),
-    ],
-    child: HomeScreen(integrationTest: integrationTest),
-  );
+        providers: [
+          BlocProvider<TabBloc>(
+            create: (context) => TabBloc(),
+          ),
+          BlocProvider<FilteredTodosBloc>(
+            create: (context) => FilteredTodosBloc(
+              todosBloc: BlocProvider.of<TodosBloc>(context),
+            ),
+          ),
+          BlocProvider<FilteredRefuelingsBloc>(
+            create: (context) => FilteredRefuelingsBloc(
+                carsBloc: BlocProvider.of<CarsBloc>(context),
+                refuelingsBloc: BlocProvider.of<RefuelingsBloc>(context)),
+          ),
+        ],
+        child: HomeScreen(integrationTest: integrationTest),
+      );
 }

@@ -13,10 +13,10 @@ class UserLoggedIn extends DatabaseEvent {
 
   const UserLoggedIn(this.uuid, [this.newUser]);
 
-  @override 
+  @override
   List<Object> get props => [uuid, newUser];
 
-  @override 
+  @override
   toString() => "UserLoggedIn { uuid: $uuid, newUser: $newUser }";
 }
 

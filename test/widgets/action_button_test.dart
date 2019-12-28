@@ -8,20 +8,15 @@ void main() {
     testWidgets('should render properly', (tester) async {
       var buttonKey = Key('button_key');
       var mainKey = Key('main_key');
-      var miniKeys = [
-        Key('refueling_key'),
-        Key('todo_key'),
-        Key('repeat_key')
-      ];
+      var miniKeys = [Key('refueling_key'), Key('todo_key'), Key('repeat_key')];
       Widget home = Scaffold(
-        floatingActionButton: Builder(
-          builder: (BuildContext context) => AutodoActionButton(
-            key: buttonKey,
-            mainButtonKey: mainKey,
-            miniButtonKeys: miniKeys,
-          ),
-        )
-      );
+          floatingActionButton: Builder(
+        builder: (BuildContext context) => AutodoActionButton(
+          key: buttonKey,
+          mainButtonKey: mainKey,
+          miniButtonKeys: miniKeys,
+        ),
+      ));
       Widget app = MaterialApp(
         home: home,
       );
@@ -40,10 +35,10 @@ void main() {
       await tester.pump();
       // expect(navCount, 1);
       // currently doing nothing on button press
-      
+
       await tester.tap(find.byKey(mainKey));
       await tester.pumpAndSettle(const Duration(milliseconds: 10));
-      expect(find.byKey(mainKey), findsOneWidget);  
+      expect(find.byKey(mainKey), findsOneWidget);
     });
     // testWidgets('should call onUndo when undo tapped',
     //     (WidgetTester tester) async {

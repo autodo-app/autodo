@@ -18,10 +18,8 @@ class GoogleLoginButton extends StatelessWidget {
           LoginWithGooglePressed(),
         );
       },
-      label: Text(
-        AutodoLocalizations.signInWithGoogle,
-        style: TextStyle(color: Colors.white)
-      ),
+      label: Text(AutodoLocalizations.signInWithGoogle,
+          style: TextStyle(color: Colors.white)),
       color: Colors.redAccent,
     );
   }

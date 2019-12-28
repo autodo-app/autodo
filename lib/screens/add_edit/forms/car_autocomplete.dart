@@ -19,11 +19,11 @@ class CarForm extends StatefulWidget {
     @required this.nextNode,
   }) : super(key: key);
 
-  @override 
+  @override
   _CarFormState createState() => _CarFormState();
 }
 
-class _CarFormState extends State<CarForm> { 
+class _CarFormState extends State<CarForm> {
   AutoCompleteTextField<Car> autoCompleteField;
   TextEditingController _autocompleteController;
   Car selectedCar;
@@ -36,21 +36,20 @@ class _CarFormState extends State<CarForm> {
     _autocompleteController = TextEditingController();
     super.initState();
   }
-  
-  @override 
+
+  @override
   dispose() {
     _autocompleteController.dispose();
     super.dispose();
   }
 
-  @override 
+  @override
   build(context) {
     autoCompleteField = AutoCompleteTextField<Car>(
       controller: _autocompleteController,
       decoration: defaultInputDecoration(
-        AutodoLocalizations.requiredLiteral,
-        AutodoLocalizations.carName
-      ).copyWith(errorText: _carError),
+              AutodoLocalizations.requiredLiteral, AutodoLocalizations.carName)
+          .copyWith(errorText: _carError),
       itemSubmitted: (item) => setState(() {
         _autocompleteController.text = item.name;
         selectedCar = item;
@@ -61,11 +60,9 @@ class _CarFormState extends State<CarForm> {
       suggestions: cars,
       itemBuilder: (context, suggestion) => Padding(
         child: ListTile(
-          title: Text(suggestion.name),
-          trailing: Text(
-            AutodoLocalizations.mileage + ": ${suggestion.mileage}"
-          )
-        ),
+            title: Text(suggestion.name),
+            trailing:
+                Text(AutodoLocalizations.mileage + ": ${suggestion.mileage}")),
         padding: EdgeInsets.all(5.0),
       ),
       itemSorter: (a, b) => a.name.length == b.name.length
@@ -91,9 +88,9 @@ class _CarFormState extends State<CarForm> {
         // }
         autoCompleteField.updateDecoration(
           decoration: defaultInputDecoration(
-            AutodoLocalizations.requiredLiteral,
-            AutodoLocalizations.carName
-          ).copyWith(errorText: res),
+                  AutodoLocalizations.requiredLiteral,
+                  AutodoLocalizations.carName)
+              .copyWith(errorText: res),
         );
         setState(() => _carError = res);
         return _carError;

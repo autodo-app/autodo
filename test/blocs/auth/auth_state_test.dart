@@ -10,32 +10,23 @@ void main() {
     test('Authenticated toString', () {
       String displayName = "test";
       String uuid = "abcd";
-      expect(
-        Authenticated(displayName, uuid, false).toString(),
-        'Authenticated { displayName: $displayName, uuid: $uuid, newUser: false }'
-      );
+      expect(Authenticated(displayName, uuid, false).toString(),
+          'Authenticated { displayName: $displayName, uuid: $uuid, newUser: false }');
     });
     test('Authenticated props', () {
       String displayName = "test";
       String uuid = "abcd";
-      expect(
-        Authenticated(displayName, uuid, false).props,
-        [displayName, uuid, false]
-      );
+      expect(Authenticated(displayName, uuid, false).props,
+          [displayName, uuid, false]);
     });
     test('Unauthenticated toString', () {
       String errorCode = "abcd";
-      expect(
-        Unauthenticated(errorCode: errorCode).toString(),
-        'Unauthenticated { errorCode: $errorCode }'
-      );
+      expect(Unauthenticated(errorCode: errorCode).toString(),
+          'Unauthenticated { errorCode: $errorCode }');
     });
     test('Unauthenticated props', () {
       String errorCode = "abcd";
-      expect(
-        Unauthenticated(errorCode: errorCode).props,
-        [errorCode]
-      );
+      expect(Unauthenticated(errorCode: errorCode).props, [errorCode]);
     });
   });
 }

@@ -14,7 +14,7 @@ jobs:
         java-version: '12.x'
     - uses: subosito/flutter-action@v1
       with:
-        flutter-version: '1.9.1+hotfix.5'
+        channel: 'dev'
     - run: flutter pub get
     - run: echo "${{ secrets.keys_json }}" > keys.json
     - run: echo "${{ secrets.store_file }}" | base64 --decode > ~/keystore.jks

@@ -33,7 +33,8 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
   ];
 
   RepeatsBloc({@required DatabaseBloc dbBloc})
-      : assert(dbBloc != null), _dbBloc = dbBloc {
+      : assert(dbBloc != null),
+        _dbBloc = dbBloc {
     _dbSubscription = _dbBloc.listen((state) {
       if (state is DbLoaded) {
         if (state.newUser ?? false) {
@@ -48,8 +49,9 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
   @override
   RepeatsState get initialState => RepeatsLoading();
 
-  DataRepository get repo => (_dbBloc.state is DbLoaded) ? 
-    (_dbBloc.state as DbLoaded).repository : null;
+  DataRepository get repo => (_dbBloc.state is DbLoaded)
+      ? (_dbBloc.state as DbLoaded).repository
+      : null;
 
   @override
   Stream<RepeatsState> mapEventToState(RepeatsEvent event) async* {
@@ -81,7 +83,8 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
 
   Stream<RepeatsState> _mapAddRepeatToState(AddRepeat event) async* {
     if (state is RepeatsLoaded && repo != null) {
-      final List<Repeat> updatedRepeats = List.from((state as RepeatsLoaded).repeats)..add(event.repeat);
+      final List<Repeat> updatedRepeats =
+          List.from((state as RepeatsLoaded).repeats)..add(event.repeat);
       yield RepeatsLoaded(updatedRepeats);
       repo.addNewRepeat(event.repeat);
     }
@@ -89,9 +92,10 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
 
   Stream<RepeatsState> _mapUpdateRepeatToState(UpdateRepeat event) async* {
     if (state is RepeatsLoaded && repo != null) {
-      final List<Repeat> updatedRepeats = (state as RepeatsLoaded).repeats
-        .map((r) => r.id == event.updatedRepeat.id ? event.updatedRepeat : r)
-        .toList();
+      final List<Repeat> updatedRepeats = (state as RepeatsLoaded)
+          .repeats
+          .map((r) => r.id == event.updatedRepeat.id ? event.updatedRepeat : r)
+          .toList();
       yield RepeatsLoaded(updatedRepeats);
       repo.updateRepeat(event.updatedRepeat);
     }
@@ -99,9 +103,10 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
 
   Stream<RepeatsState> _mapDeleteRepeatToState(DeleteRepeat event) async* {
     if (state is RepeatsLoaded && repo != null) {
-      final updatedRepeats = (state as RepeatsLoaded).repeats
-        .where((r) => r.id != event.repeat.id)
-        .toList();
+      final updatedRepeats = (state as RepeatsLoaded)
+          .repeats
+          .where((r) => r.id != event.repeat.id)
+          .toList();
       yield RepeatsLoaded(updatedRepeats);
       repo.deleteRepeat(event.repeat);
     }
@@ -185,7 +190,8 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
   //   });
   // }
 
-  Stream<RepeatsState> _mapAddDefaultRepeatsToState(AddDefaultRepeats event) async* {
+  Stream<RepeatsState> _mapAddDefaultRepeatsToState(
+      AddDefaultRepeats event) async* {
     yield RepeatsLoaded(defaults);
     if (repo == null) return;
     WriteBatchWrapper batch = repo.startRepeatWriteBatch();

@@ -14,18 +14,17 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
   AuthenticationBloc _authenticationBloc;
   StreamSubscription _authSubscription;
 
-  DatabaseBloc({firestoreInstance, @required authenticationBloc}) : 
-      assert(authenticationBloc != null),
-      _authenticationBloc = authenticationBloc,
-      _firestoreInstance = firestoreInstance ?? Firestore.instance {
+  DatabaseBloc({firestoreInstance, @required authenticationBloc})
+      : assert(authenticationBloc != null),
+        _authenticationBloc = authenticationBloc,
+        _firestoreInstance = firestoreInstance ?? Firestore.instance {
     _authSubscription = _authenticationBloc.listen((state) {
-        if (state is Authenticated) {
-          add(UserLoggedIn(state.uuid, state.newUser));
-        } else if (state is Unauthenticated) {
-          add(UserLoggedOut());
-        }
+      if (state is Authenticated) {
+        add(UserLoggedIn(state.uuid, state.newUser));
+      } else if (state is Unauthenticated) {
+        add(UserLoggedOut());
       }
-    );  
+    });
   }
 
   @override
@@ -52,11 +51,9 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
     yield DbNotLoaded();
   }
 
-  @override 
+  @override
   Future<void> close() {
     _authSubscription?.cancel();
     return super.close();
   }
 }
-
-

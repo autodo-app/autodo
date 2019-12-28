@@ -7,7 +7,8 @@ void main() {
       expect(UserLoggedIn('abcd').props, ['abcd', null]);
     });
     test('toString', () {
-      expect(UserLoggedIn('abcd').toString(), "UserLoggedIn { uuid: abcd, newUser: null }");
+      expect(UserLoggedIn('abcd').toString(),
+          "UserLoggedIn { uuid: abcd, newUser: null }");
     });
   });
   group('UserLoggedOut', () {

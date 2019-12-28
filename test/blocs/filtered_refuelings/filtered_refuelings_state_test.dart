@@ -11,18 +11,17 @@ class MockRefuelingsBloc extends MockBloc<RefuelingsEvent, RefuelingsState>
 void main() {
   group('FilteredRefuelingsState', () {
     final refueling = Refueling(
-      carName: '',
-      id: '',
-      mileage: 0,
-      date: DateTime.fromMillisecondsSinceEpoch(0),
-      amount: 0,
-      cost: 0,
-      carColor: Color(0),
-      efficiency: 0.0,
-      efficiencyColor: Color(0)
-    );
+        carName: '',
+        id: '',
+        mileage: 0,
+        date: DateTime.fromMillisecondsSinceEpoch(0),
+        amount: 0,
+        cost: 0,
+        carColor: Color(0),
+        efficiency: 0.0,
+        efficiencyColor: Color(0));
     test('props are correct', () {
-      expect( 
+      expect(
         FilteredRefuelingsLoading().props,
         [],
       );
@@ -30,14 +29,22 @@ void main() {
     group('FilteredRefuelingsLoaded', () {
       test('toString returns correct value', () {
         expect(
-          FilteredRefuelingsLoaded([refueling], VisibilityFilter.active, [Car()]).toString(),
-          'FilteredRefuelingsLoaded { filteredRefuelings: [$refueling], activeFilter: VisibilityFilter.active, cars: ${[Car()]} }',
+          FilteredRefuelingsLoaded(
+              [refueling], VisibilityFilter.active, [Car()]).toString(),
+          'FilteredRefuelingsLoaded { filteredRefuelings: [$refueling], activeFilter: VisibilityFilter.active, cars: ${[
+            Car()
+          ]} }',
         );
       });
       test('props are correct', () {
-        expect(  
-          FilteredRefuelingsLoaded([refueling], VisibilityFilter.active, [Car()]).props,
-          [[refueling], VisibilityFilter.active, [Car()]],
+        expect(
+          FilteredRefuelingsLoaded(
+              [refueling], VisibilityFilter.active, [Car()]).props,
+          [
+            [refueling],
+            VisibilityFilter.active,
+            [Car()]
+          ],
         );
       });
     });

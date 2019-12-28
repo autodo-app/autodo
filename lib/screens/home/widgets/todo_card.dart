@@ -25,46 +25,38 @@ class _TodoTitle extends StatelessWidget {
     }
   }
 
-  @override 
-  build(context) => RichText(  
-    text: TextSpan(
-      children: [ 
+  @override
+  build(context) => RichText(
+          text: TextSpan(children: [
         TextSpan(
-          text: preface(),
-          style: Theme.of(context).primaryTextTheme.subtitle
-        ),
-        TextSpan(  
-          text: todo.name,
-          style: Theme.of(context).primaryTextTheme.title
-        )
-      ]
-    )
-  );
+            text: preface(),
+            style: Theme.of(context).primaryTextTheme.subtitle),
+        TextSpan(
+            text: todo.name, style: Theme.of(context).primaryTextTheme.title)
+      ]));
 }
 
 class _TodoCheckbox extends StatelessWidget {
   final Todo todo;
   final ValueChanged<bool> onCheckboxChanged;
 
-  _TodoCheckbox({  
+  _TodoCheckbox({
     Key key,
     @required this.todo,
     @required this.onCheckboxChanged,
   }) : super(key: key);
 
-  @override 
-  build(context) => Transform.scale(  
-    scale: 1.5,
-    child: Container(  
-      padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-      child: Checkbox(  
-        value: todo.completed ?? false,
-        onChanged: onCheckboxChanged,
-        checkColor: Theme.of(context).primaryColor,
-        activeColor: Colors.white,
-      )
-    )
-  );
+  @override
+  build(context) => Transform.scale(
+      scale: 1.5,
+      child: Container(
+          padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+          child: Checkbox(
+            value: todo.completed ?? false,
+            onChanged: onCheckboxChanged,
+            checkColor: Theme.of(context).primaryColor,
+            activeColor: Colors.white,
+          )));
 }
 
 class _TodoDueDate extends StatelessWidget {
@@ -72,16 +64,17 @@ class _TodoDueDate extends StatelessWidget {
 
   _TodoDueDate({Key key, @required this.todo}) : super(key: key);
 
-  @override 
-  build(context) => Row(  
-    children: <Widget>[ 
-      Icon(Icons.alarm, size: 30),
-      Text(  
-        AutodoLocalizations.dueOn + ' ' + AutodoLocalizations.dateFormat(todo.dueDate),
-        style: Theme.of(context).primaryTextTheme.body1
-      ),
-    ],
-  );
+  @override
+  build(context) => Row(
+        children: <Widget>[
+          Icon(Icons.alarm, size: 30),
+          Text(
+              AutodoLocalizations.dueOn +
+                  ' ' +
+                  AutodoLocalizations.dateFormat(todo.dueDate),
+              style: Theme.of(context).primaryTextTheme.body1),
+        ],
+      );
 }
 
 class _TodoDueMileage extends StatelessWidget {
@@ -89,41 +82,37 @@ class _TodoDueMileage extends StatelessWidget {
   final commaRegex = RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))');
 
   _TodoDueMileage({Key key, @required this.todo}) : super(key: key);
-  
+
   mileageString() {
     if (todo.dueMileage != null) {
-      return todo.dueMileage.toString()
+      return todo.dueMileage
+          .toString()
           .replaceAllMapped(commaRegex, (Match m) => "${m[1]},");
     } else {
       return "";
     }
   }
 
-  @override 
-  build(context) => Row(  
-    children: <Widget>[  
-      Icon(Icons.pin_drop, size: 30),
-      Padding(padding: EdgeInsets.all(5)),
-      RichText(  
-        text: TextSpan( 
-          children: [
-            TextSpan( 
-              text: AutodoLocalizations.dueAt + ' ',
-              style: Theme.of(context).primaryTextTheme.body1
-            ),
-            TextSpan(  
-              text: mileageString(),
-              style: Theme.of(context).primaryTextTheme.subtitle
-            ),
+  @override
+  build(context) => Row(
+        children: <Widget>[
+          Icon(Icons.pin_drop, size: 30),
+          Padding(padding: EdgeInsets.all(5)),
+          RichText(
+              text: TextSpan(children: [
+            TextSpan(
+                text: AutodoLocalizations.dueAt + ' ',
+                style: Theme.of(context).primaryTextTheme.body1),
+            TextSpan(
+                text: mileageString(),
+                style: Theme.of(context).primaryTextTheme.subtitle),
             TextSpan(
               text: ' ' + AutodoLocalizations.distanceUnits,
-              style: Theme.of(context).primaryTextTheme.body1, 
+              style: Theme.of(context).primaryTextTheme.body1,
             )
-          ]
-        )
-      )
-    ],
-  );
+          ]))
+        ],
+      );
 }
 
 class _TodoLastCompleted extends StatelessWidget {
@@ -131,20 +120,19 @@ class _TodoLastCompleted extends StatelessWidget {
 
   _TodoLastCompleted({Key key, @required this.todo}) : super(key: key);
 
-  @override 
-  build(context) => Row(  
-    children: <Widget>[
-      Icon(
-        (todo.completed ?? false) ? Icons.alarm : Icons.new_releases, 
-        size: 30
-      ),
-      Padding(padding: EdgeInsets.all(5)),
-      Text(  
-        AutodoLocalizations.firstTimeDoingTask, // TODO adjust this for past completed
-        style: Theme.of(context).primaryTextTheme.body1,
-      ),
-    ],
-  );
+  @override
+  build(context) => Row(
+        children: <Widget>[
+          Icon((todo.completed ?? false) ? Icons.alarm : Icons.new_releases,
+              size: 30),
+          Padding(padding: EdgeInsets.all(5)),
+          Text(
+            AutodoLocalizations
+                .firstTimeDoingTask, // TODO adjust this for past completed
+            style: Theme.of(context).primaryTextTheme.body1,
+          ),
+        ],
+      );
 }
 
 class _TodoDueInfo extends StatelessWidget {
@@ -153,93 +141,92 @@ class _TodoDueInfo extends StatelessWidget {
   _TodoDueInfo({Key key, @required this.todo}) : super(key: key);
 
   @override
-  build(context) => Container(  
-    padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-    child: Column(  
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        (todo.dueDate != null) ? _TodoDueDate(todo: todo) : Container(),
-        Padding(padding: EdgeInsets.all(5)),
-        (todo.dueMileage != null) ? _TodoDueMileage(todo: todo) : Container(),
-        Padding(padding: EdgeInsets.all(5)),
-        _TodoLastCompleted(todo: todo),
-      ],
-    ),
-  );
+  build(context) => Container(
+        padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            (todo.dueDate != null) ? _TodoDueDate(todo: todo) : Container(),
+            Padding(padding: EdgeInsets.all(5)),
+            (todo.dueMileage != null)
+                ? _TodoDueMileage(todo: todo)
+                : Container(),
+            Padding(padding: EdgeInsets.all(5)),
+            _TodoLastCompleted(todo: todo),
+          ],
+        ),
+      );
 }
 
 class _TodoBody extends StatelessWidget {
   final Todo todo;
   final ValueChanged<bool> onCheckboxChanged;
 
-  _TodoBody({
-    Key key,
-    @required this.todo,
-    @required this.onCheckboxChanged
-  }) : super(key: key);
+  _TodoBody({Key key, @required this.todo, @required this.onCheckboxChanged})
+      : super(key: key);
 
-  @override 
-  build(context) => Container(  
-    padding: EdgeInsets.fromLTRB(10, 25, 10, 25),
-    child: Row(  
-      children: <Widget>[
-        _TodoCheckbox(todo: todo, onCheckboxChanged: onCheckboxChanged),
-        Container(  
-          padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-          child: VerticalDivider(  
-            color: Colors.white.withAlpha(230)
-          )
+  @override
+  build(context) => Container(
+        padding: EdgeInsets.fromLTRB(10, 25, 10, 25),
+        child: Row(
+          children: <Widget>[
+            _TodoCheckbox(todo: todo, onCheckboxChanged: onCheckboxChanged),
+            Container(
+                padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                child: VerticalDivider(color: Colors.white.withAlpha(230))),
+            _TodoDueInfo(todo: todo),
+          ],
         ),
-        _TodoDueInfo(todo: todo),
-      ],
-    ),
-  );
+      );
 }
 
 class _TodoEditButton extends StatelessWidget {
   final Todo todo;
 
-  _TodoEditButton({Key key, @required this.todo}) : super (key: key);
+  _TodoEditButton({Key key, @required this.todo}) : super(key: key);
 
-  @override 
+  @override
   build(context) => ButtonTheme.fromButtonThemeData(
-    data: ButtonThemeData(
-      minWidth: 0,
-    ),
-    child: FlatButton(
-      child: Icon(
-        Icons.edit,
-        color: Theme.of(context).primaryIconTheme.color,
-      ),
-      onPressed: () => Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => TodoAddEditScreen(
-            isEditing: true,
-            onSave: (dueDate, dueMileage, repeatName, carNames) {
-              for (var car in carNames) {
-                if (car == todo.carName) {
-                  // update existing
-                  var out = todo.copyWith(dueDate: dueDate, dueMileage: dueMileage, repeatName: repeatName);
-                  BlocProvider.of<TodosBloc>(context).add(UpdateTodo(out));
-                } else {
-                  var out = Todo(  
-                    dueDate: dueDate,
-                    dueMileage: dueMileage,
-                    repeatName: repeatName,
-                    carName: car,
-                  );
-                  BlocProvider.of<TodosBloc>(context).add(AddTodo(out));
-                }
-              }
-            },
-            todo: todo,
+        data: ButtonThemeData(
+          minWidth: 0,
+        ),
+        child: FlatButton(
+          child: Icon(
+            Icons.edit,
+            color: Theme.of(context).primaryIconTheme.color,
+          ),
+          onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => TodoAddEditScreen(
+                isEditing: true,
+                onSave: (dueDate, dueMileage, repeatName, carNames) {
+                  for (var car in carNames) {
+                    if (car == todo.carName) {
+                      // update existing
+                      var out = todo.copyWith(
+                          dueDate: dueDate,
+                          dueMileage: dueMileage,
+                          repeatName: repeatName);
+                      BlocProvider.of<TodosBloc>(context).add(UpdateTodo(out));
+                    } else {
+                      var out = Todo(
+                        dueDate: dueDate,
+                        dueMileage: dueMileage,
+                        repeatName: repeatName,
+                        carName: car,
+                      );
+                      BlocProvider.of<TodosBloc>(context).add(AddTodo(out));
+                    }
+                  }
+                },
+                todo: todo,
+              ),
+            ),
           ),
         ),
-      ),
-    ),
-  );
+      );
 }
 
 class _TodoFooter extends StatelessWidget {
@@ -247,19 +234,19 @@ class _TodoFooter extends StatelessWidget {
 
   _TodoFooter({Key key, @required this.todo}) : super(key: key);
 
-  @override 
-  build(context) => Row(  
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: <Widget>[
-      Row(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        _TodoEditButton(todo: todo),
-        TodoDeleteButton(todo: todo),
-      ],
-    )
-    ],
-  );
+  @override
+  build(context) => Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              _TodoEditButton(todo: todo),
+              TodoDeleteButton(todo: todo),
+            ],
+          )
+        ],
+      );
 }
 
 class TodoCard extends StatelessWidget {
@@ -307,8 +294,8 @@ class TodoCard extends StatelessWidget {
 
   TodoCard({
     Key key,
-    @required this.todo, 
-    @required this.onDismissed, 
+    @required this.todo,
+    @required this.onDismissed,
     @required this.onTap,
     @required this.onCheckboxChanged,
     @required this.emphasized,
@@ -324,30 +311,34 @@ class TodoCard extends StatelessWidget {
     }
   }
 
-  @override 
-  build(context) => InkWell( 
-    onTap: onTap,
-    child: Dismissible( 
-      key: Key("__dismissable__"), // TODO: this should be visible to remove the todo from the list
-      onDismissed: onDismissed,
-      dismissThresholds: {
-        DismissDirection.horizontal: 0.5 // must move halfway across the screen
-      },
-      child: Card(  
-        elevation: (emphasized) ? 16 : 4,
-        color: (emphasized) ? Colors.transparent : Theme.of(context).cardColor,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-        child: Container(  
-          decoration: (emphasized) ? emphasizedDecoration(todo) : BoxDecoration(),
-          child: Column(  
-            children: <Widget>[
-              _TodoTitle(todo: todo),
-              _TodoBody(todo: todo, onCheckboxChanged: onCheckboxChanged),
-              _TodoFooter(todo: todo),
-            ],
-          )
+  @override
+  build(context) => InkWell(
+        onTap: onTap,
+        child: Dismissible(
+          key: Key(
+              "__dismissable__"), // TODO: this should be visible to remove the todo from the list
+          onDismissed: onDismissed,
+          dismissThresholds: {
+            DismissDirection.horizontal:
+                0.5 // must move halfway across the screen
+          },
+          child: Card(
+            elevation: (emphasized) ? 16 : 4,
+            color:
+                (emphasized) ? Colors.transparent : Theme.of(context).cardColor,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+            child: Container(
+                decoration:
+                    (emphasized) ? emphasizedDecoration(todo) : BoxDecoration(),
+                child: Column(
+                  children: <Widget>[
+                    _TodoTitle(todo: todo),
+                    _TodoBody(todo: todo, onCheckboxChanged: onCheckboxChanged),
+                    _TodoFooter(todo: todo),
+                  ],
+                )),
+          ),
         ),
-      ),
-    ),
-  );
+      );
 }

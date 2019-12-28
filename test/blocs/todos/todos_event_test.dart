@@ -21,7 +21,8 @@ void main() {
         expect(UpdateTodo(Todo()).props, [Todo()]);
       });
       test('toString', () {
-        expect(UpdateTodo(Todo()).toString(), 'UpdateTodo { updatedTodo: ${Todo()} }');
+        expect(UpdateTodo(Todo()).toString(),
+            'UpdateTodo { updatedTodo: ${Todo()} }');
       });
     });
     group('DeleteTodo', () {
@@ -34,26 +35,37 @@ void main() {
     });
     group('UpdateDueDates', () {
       test('props', () {
-        expect(UpdateDueDates([Car()]).props, [[Car()]]);
+        expect(UpdateDueDates([Car()]).props, [
+          [Car()]
+        ]);
       });
       test('toString', () {
-        expect(UpdateDueDates([Car()]).toString(), 'UpdateDueDates { cars: ${[Car()]} }');
+        expect(UpdateDueDates([Car()]).toString(),
+            'UpdateDueDates { cars: ${[Car()]} }');
       });
     });
     group('RepeatsRefresh', () {
       test('props', () {
-        expect(RepeatsRefresh([Repeat()]).props, [[Repeat()]]);
+        expect(RepeatsRefresh([Repeat()]).props, [
+          [Repeat()]
+        ]);
       });
       test('toString', () {
-        expect(RepeatsRefresh([Repeat()]).toString(), 'RepeatsRefresh { repeats: ${[Repeat()]} }');
+        expect(RepeatsRefresh([Repeat()]).toString(),
+            'RepeatsRefresh { repeats: ${[Repeat()]} }');
       });
     });
     group('CompleteTodo', () {
       test('props', () {
-        expect(CompleteTodo(Todo(), DateTime.fromMillisecondsSinceEpoch(0)).props, [Todo(), DateTime.fromMillisecondsSinceEpoch(0)]);
+        expect(
+            CompleteTodo(Todo(), DateTime.fromMillisecondsSinceEpoch(0)).props,
+            [Todo(), DateTime.fromMillisecondsSinceEpoch(0)]);
       });
       test('toString', () {
-        expect(CompleteTodo(Todo(), DateTime.fromMillisecondsSinceEpoch(0)).toString(), "CompleteTodo { todo: ${Todo()}, completedDate: ${DateTime.fromMillisecondsSinceEpoch(0)} }");
+        expect(
+            CompleteTodo(Todo(), DateTime.fromMillisecondsSinceEpoch(0))
+                .toString(),
+            "CompleteTodo { todo: ${Todo()}, completedDate: ${DateTime.fromMillisecondsSinceEpoch(0)} }");
       });
     });
   });

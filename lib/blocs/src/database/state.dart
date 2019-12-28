@@ -5,7 +5,7 @@ import 'package:autodo/repositories/repositories.dart';
 abstract class DatabaseState extends Equatable {
   const DatabaseState();
 
-  @override 
+  @override
   List<Object> get props => [];
 }
 
@@ -17,7 +17,7 @@ class DbLoaded extends DatabaseState {
 
   const DbLoaded(this.repository, [this.newUser]);
 
-  @override 
+  @override
   List<Object> get props => [repository, newUser];
 
   @override

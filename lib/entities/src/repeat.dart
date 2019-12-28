@@ -5,9 +5,10 @@ class RepeatEntity extends Equatable {
   final String id, name;
   final int mileageInterval;
   final Duration dateInterval;
-  final List<String> cars; 
+  final List<String> cars;
 
-  const RepeatEntity(this.id, this.name, this.mileageInterval, this.dateInterval, this.cars);
+  const RepeatEntity(
+      this.id, this.name, this.mileageInterval, this.dateInterval, this.cars);
 
   // Map<String, Object> toJson() {
   //   return {
@@ -39,13 +40,13 @@ class RepeatEntity extends Equatable {
 
   static RepeatEntity fromSnapshot(DocumentSnapshot snap) {
     return RepeatEntity(
-      snap.documentID,
-      snap.data["name"] as String,
-      snap.data["mileageInterval"] as int,
-      (snap.data['dateInterval'] == null) ? null :
-        Duration(days: snap.data["dateInterval"] as int),
-      snap.data["cars"] as List<String>
-    );
+        snap.documentID,
+        snap.data["name"] as String,
+        snap.data["mileageInterval"] as int,
+        (snap.data['dateInterval'] == null)
+            ? null
+            : Duration(days: snap.data["dateInterval"] as int),
+        snap.data["cars"] as List<String>);
   }
 
   Map<String, Object> toDocument() {

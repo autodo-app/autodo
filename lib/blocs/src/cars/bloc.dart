@@ -13,34 +13,36 @@ import 'package:autodo/util.dart' as util;
 class CarsBloc extends Bloc<CarsEvent, CarsState> {
   static const double EMA_GAIN = 0.9;
   static const double EMA_CUTOFF = 8;
-  
+
   final DatabaseBloc _dbBloc;
   StreamSubscription _refuelingsSubscription, _dbSubscription;
   final RefuelingsBloc _refuelingsBloc;
   List<Refueling> _refuelingsCache;
 
-  CarsBloc({@required DatabaseBloc dbBloc, @required RefuelingsBloc refuelingsBloc})
-      : assert(dbBloc != null), assert(refuelingsBloc != null),
-        _dbBloc = dbBloc, _refuelingsBloc = refuelingsBloc {
+  CarsBloc(
+      {@required DatabaseBloc dbBloc, @required RefuelingsBloc refuelingsBloc})
+      : assert(dbBloc != null),
+        assert(refuelingsBloc != null),
+        _dbBloc = dbBloc,
+        _refuelingsBloc = refuelingsBloc {
     _dbSubscription = _dbBloc.listen((state) {
       if (state is DbLoaded) {
         add(LoadCars());
       }
     });
-    _refuelingsSubscription = _refuelingsBloc.listen(
-      (state) {
-        if (state is RefuelingsLoaded) {
-          add(ExternalRefuelingsUpdated(state.refuelings));
-        }
+    _refuelingsSubscription = _refuelingsBloc.listen((state) {
+      if (state is RefuelingsLoaded) {
+        add(ExternalRefuelingsUpdated(state.refuelings));
       }
-    );
+    });
   }
 
   @override
   CarsState get initialState => CarsLoading();
 
-  DataRepository get repo => (_dbBloc.state is DbLoaded) ? 
-    (_dbBloc.state as DbLoaded).repository : null;
+  DataRepository get repo => (_dbBloc.state is DbLoaded)
+      ? (_dbBloc.state as DbLoaded).repository
+      : null;
 
   @override
   Stream<CarsState> mapEventToState(CarsEvent event) async* {
@@ -124,7 +126,8 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
     var distanceRate =
         _distanceFilter(numRefuelings, c.distanceRate, curDistRate);
     var distanceRateHistory = c.distanceRateHistory;
-    distanceRateHistory.add(DistanceRatePoint(util.roundToDay(r.date), distanceRate));
+    distanceRateHistory
+        .add(DistanceRatePoint(util.roundToDay(r.date), distanceRate));
 
     return c.copyWith(
       mileage: mileage,
@@ -136,7 +139,8 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
     );
   }
 
-  Stream<CarsState> _mapRefuelingsUpdatedToState(ExternalRefuelingsUpdated event) async* {
+  Stream<CarsState> _mapRefuelingsUpdatedToState(
+      ExternalRefuelingsUpdated event) async* {
     if (repo == null) return;
 
     WriteBatchWrapper batch = repo.startCarWriteBatch();
@@ -146,9 +150,10 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
       if (_refuelingsCache?.contains(r) ?? false) {
         continue; // only do calculations for updated refuelings
       }
-      
-      Car cur = (state as CarsLoaded).cars.firstWhere((car) => car.name == r.carName);
-      Car update = _updateWithRefueling(cur, r); 
+
+      Car cur =
+          (state as CarsLoaded).cars.firstWhere((car) => car.name == r.carName);
+      Car update = _updateWithRefueling(cur, r);
 
       updatedCars = (state as CarsLoaded).cars.map((car) {
         return car.id == update.id ? update : car;

@@ -15,7 +15,7 @@ class AppStarted extends AuthenticationEvent {
   @override
   List<Object> get props => [integrationTest];
 
-  @override 
+  @override
   String toString() => 'AppStarted { integrationTest: $integrationTest }';
 }
 

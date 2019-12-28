@@ -52,92 +52,95 @@ class NavDrawerState extends State<NavDrawer> {
   }
 
   List<Widget> get buttons => [
-    FlatButton(
-      child: Text(
-        'Edit Repeating ToDos',
-        style: Theme.of(context).primaryTextTheme.button,
-      ),
-      onPressed: () => Navigator.popAndPushNamed(context, '/editrepeats'),
-    ),
-    FlatButton(
-      child: Text(
-        'Edit Car List',
-        style: Theme.of(context).primaryTextTheme.button,
-      ),
-      onPressed: () => Navigator.popAndPushNamed(context, '/editcarlist'),
-    ),
-    FlatButton(
-      child: Text(
-        'Settings',
-        style: Theme.of(context).primaryTextTheme.button,
-      ),
-      onPressed: () => Navigator.popAndPushNamed(context, '/settings'),
-    ),
-  ];
+        FlatButton(
+          child: Text(
+            'Edit Repeating ToDos',
+            style: Theme.of(context).primaryTextTheme.button,
+          ),
+          onPressed: () => Navigator.popAndPushNamed(context, '/editrepeats'),
+        ),
+        FlatButton(
+          child: Text(
+            'Edit Car List',
+            style: Theme.of(context).primaryTextTheme.button,
+          ),
+          onPressed: () => Navigator.popAndPushNamed(context, '/editcarlist'),
+        ),
+        FlatButton(
+          child: Text(
+            'Settings',
+            style: Theme.of(context).primaryTextTheme.button,
+          ),
+          onPressed: () => Navigator.popAndPushNamed(context, '/settings'),
+        ),
+      ];
 
   @override
-  build(BuildContext context) => BlocBuilder<AuthenticationBloc, AuthenticationState>(
-    builder: (context, state) => Drawer(
-      child: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).cardColor.withAlpha(200),
-        ),
-        child: CustomScrollView(
-          slivers: <Widget>[
-            SliverFixedExtentList(
-              itemExtent: 140.0,
-              delegate: SliverChildBuilderDelegate((context, index) {
-                return SizedBox.expand(
-                  child: DrawerHeader(
-                    child: (state is Authenticated) ? 
-                        userHeader(state.displayName) : Container(),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                    ),
+  build(BuildContext context) =>
+      BlocBuilder<AuthenticationBloc, AuthenticationState>(
+          builder: (context, state) => Drawer(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).cardColor.withAlpha(200),
                   ),
-                );
-              }, childCount: 1),
-            ),
-            SliverFixedExtentList(
-              itemExtent: 35.0,
-              delegate: SliverChildBuilderDelegate((context, index) {
-                return SizedBox.expand(
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: buttons[index],
+                  child: CustomScrollView(
+                    slivers: <Widget>[
+                      SliverFixedExtentList(
+                        itemExtent: 140.0,
+                        delegate: SliverChildBuilderDelegate((context, index) {
+                          return SizedBox.expand(
+                            child: DrawerHeader(
+                              child: (state is Authenticated)
+                                  ? userHeader(state.displayName)
+                                  : Container(),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            ),
+                          );
+                        }, childCount: 1),
+                      ),
+                      SliverFixedExtentList(
+                        itemExtent: 35.0,
+                        delegate: SliverChildBuilderDelegate((context, index) {
+                          return SizedBox.expand(
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: buttons[index],
+                            ),
+                          );
+                        }, childCount: buttons.length),
+                      ),
+                      SliverFooter(
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Column(
+                            children: <Widget>[
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: FlatButton(
+                                  child: Text('Sign Out'),
+                                  onPressed: () {
+                                    BlocProvider.of<AuthenticationBloc>(context)
+                                        .add(LogOut());
+                                    Navigator.popAndPushNamed(
+                                        context, AutodoRoutes.welcome);
+                                  },
+                                ),
+                              ),
+                              // TODO: replace this with a flat button too.
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: AboutListTile(
+                                  applicationIcon: Icon(Icons.access_alarm),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                );
-              }, childCount: buttons.length),
-            ),
-            SliverFooter(
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Column(
-                  children: <Widget>[
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: FlatButton(
-                        child: Text('Sign Out'),
-                        onPressed: () {
-                          BlocProvider.of<AuthenticationBloc>(context).add(LogOut());
-                          Navigator.popAndPushNamed(context, AutodoRoutes.welcome);
-                        },
-                      ),
-                    ),
-                    // TODO: replace this with a flat button too.
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: AboutListTile(
-                        applicationIcon: Icon(Icons.access_alarm),
-                      ),
-                    ),
-                  ],
                 ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    )
-  );
+              ));
 }

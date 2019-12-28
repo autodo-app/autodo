@@ -5,15 +5,15 @@ class EditCarListScreen extends StatelessWidget {
 
   @override
   build(context) => Scaffold(
-    resizeToAvoidBottomPadding:
-        false, // used to avoid overflow when keyboard is viewable
-    appBar: AppBar(
-      leading: IconButton(
-        icon: Icon(Icons.arrow_back),
-        onPressed: () => Navigator.pushNamed(context, '/'),
-      ),
-      title: Text('Edit Car List'),
-    ),
-    body: Text('Content to come later'),
-  );
+        resizeToAvoidBottomPadding:
+            false, // used to avoid overflow when keyboard is viewable
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () => Navigator.pushNamed(context, '/'),
+          ),
+          title: Text('Edit Car List'),
+        ),
+        body: Text('Content to come later'),
+      );
 }

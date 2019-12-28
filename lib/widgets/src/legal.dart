@@ -10,24 +10,23 @@ class PrivacyPolicy extends StatelessWidget {
 
   @override
   build(context) => AlertDialog(
-    backgroundColor: cardColor,
-    title: Text('Privacy Policy'),
-    titleTextStyle: Theme.of(context).primaryTextTheme.title,
-    content: SingleChildScrollView(
-      child: Container(
-        child: text,
-      )
-    ),
-    contentPadding: EdgeInsets.fromLTRB(20, 20, 20, 0),
-    actions: <Widget>[
-      FlatButton(
-        key: buttonKey,
-        child: Text(
-          AutodoLocalizations.gotItBang,
-          style: Theme.of(context).primaryTextTheme.button,
-        ),
-        onPressed: () => Navigator.pop(context),
-      )
-    ],
-  );
+        backgroundColor: cardColor,
+        title: Text('Privacy Policy'),
+        titleTextStyle: Theme.of(context).primaryTextTheme.title,
+        content: SingleChildScrollView(
+            child: Container(
+          child: text,
+        )),
+        contentPadding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+        actions: <Widget>[
+          FlatButton(
+            key: buttonKey,
+            child: Text(
+              AutodoLocalizations.gotItBang,
+              style: Theme.of(context).primaryTextTheme.button,
+            ),
+            onPressed: () => Navigator.pop(context),
+          )
+        ],
+      );
 }

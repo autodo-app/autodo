@@ -27,10 +27,7 @@ void main() {
           return AuthenticationBloc(userRepository: authRepository);
         },
         act: (bloc) async => bloc.add(AppStarted()),
-        expect: <AuthenticationState>[ 
-          Uninitialized(),
-          Unauthenticated()
-        ],
+        expect: <AuthenticationState>[Uninitialized(), Unauthenticated()],
       );
       blocTest<AuthenticationBloc, AuthenticationEvent, AuthenticationState>(
         'Signed In in AppStarted',
@@ -40,7 +37,7 @@ void main() {
           return AuthenticationBloc(userRepository: authRepository);
         },
         act: (bloc) async => bloc.add(AppStarted()),
-        expect: <AuthenticationState>[ 
+        expect: <AuthenticationState>[
           Uninitialized(),
           Authenticated(null, null, false)
         ],
@@ -53,10 +50,7 @@ void main() {
           return AuthenticationBloc(userRepository: authRepository);
         },
         act: (bloc) async => bloc.add(AppStarted()),
-        expect: <AuthenticationState>[ 
-          Uninitialized(),
-          Unauthenticated()
-        ],
+        expect: <AuthenticationState>[Uninitialized(), Unauthenticated()],
       );
     });
     blocTest<AuthenticationBloc, AuthenticationEvent, AuthenticationState>(
@@ -66,7 +60,7 @@ void main() {
         return AuthenticationBloc(userRepository: authRepository);
       },
       act: (bloc) async => bloc.add(LoggedIn()),
-      expect: <AuthenticationState>[ 
+      expect: <AuthenticationState>[
         Uninitialized(),
         Authenticated(null, null, false)
       ],
@@ -78,10 +72,7 @@ void main() {
         return AuthenticationBloc(userRepository: authRepository);
       },
       act: (bloc) async => bloc.add(LogOut()),
-      expect: <AuthenticationState>[ 
-        Uninitialized(),
-        Unauthenticated()
-      ],
+      expect: <AuthenticationState>[Uninitialized(), Unauthenticated()],
     );
     blocTest<AuthenticationBloc, AuthenticationEvent, AuthenticationState>(
       'Deleted User',
@@ -90,10 +81,7 @@ void main() {
         return AuthenticationBloc(userRepository: authRepository);
       },
       act: (bloc) async => bloc.add(DeletedUser()),
-      expect: <AuthenticationState>[ 
-        Uninitialized(),
-        Unauthenticated()
-      ],
+      expect: <AuthenticationState>[Uninitialized(), Unauthenticated()],
     );
   });
 }

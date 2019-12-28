@@ -31,7 +31,7 @@ void main() {
             home: RepeatAddEditScreen(
               key: key,
               isEditing: false,
-              onSave: (a,b,c) {},
+              onSave: (a, b, c) {},
             ),
           ),
         ),
@@ -54,7 +54,9 @@ void main() {
             home: RepeatAddEditScreen(
               key: key,
               isEditing: false,
-              onSave: (a,b,c) {saved = true;},
+              onSave: (a, b, c) {
+                saved = true;
+              },
             ),
           ),
         ),

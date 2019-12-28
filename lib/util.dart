@@ -17,8 +17,7 @@ String requiredValidator(String val) =>
     (val == null || val == "") ? "This field is required." : null;
 
 String doubleValidator(String val) {
-  if (requiredValidator(val) != null) 
-    return requiredValidator(val);
+  if (requiredValidator(val) != null) return requiredValidator(val);
   try {
     double.parse(val);
   } catch (e) {
@@ -38,8 +37,7 @@ String intNoRequire(String val) {
 }
 
 String intValidator(String val) {
-  if (requiredValidator(val) != null) 
-    return requiredValidator(val);
+  if (requiredValidator(val) != null) return requiredValidator(val);
   return intNoRequire(val);
 }
 
@@ -60,7 +58,7 @@ class RGB extends Equatable {
   @override
   List<Object> get props => [r, g, b];
 
-  @override 
+  @override
   toString() => 'RGB { r: $r, g: $g, b: $b }';
 }
 
@@ -73,10 +71,10 @@ class HSV extends Equatable {
 
   toValue() => hsv2rgb(this).toValue();
 
-  @override 
+  @override
   List<Object> get props => [h, s, v];
 
-  @override 
+  @override
   toString() => 'HSV { h: $h, s: $s, v: $v }';
 }
 
@@ -181,9 +179,9 @@ double scaleToUnit(double _num, double _min, double _max) {
   return clamp((_num - _min) / (_max - _min), 0.0, 1.0);
 }
 
-double roundToPrecision(double val, int places){ 
-  double mod = pow(10.0, places); 
-  return ((val * mod).round().toDouble() / mod); 
+double roundToPrecision(double val, int places) {
+  double mod = pow(10.0, places);
+  return ((val * mod).round().toDouble() / mod);
 }
 
 changeFocus(FocusNode cur, FocusNode next) {

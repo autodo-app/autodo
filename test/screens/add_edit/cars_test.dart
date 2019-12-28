@@ -9,8 +9,7 @@ void main() {
     testWidgets('render', (WidgetTester tester) async {
       await tester.pumpWidget(
         MultiBlocProvider(
-          providers: [
-          ],
+          providers: [],
           child: MaterialApp(
             home: Scaffold(
               body: EditCarListScreen(),
@@ -24,8 +23,7 @@ void main() {
     testWidgets('back', (WidgetTester tester) async {
       await tester.pumpWidget(
         MultiBlocProvider(
-          providers: [
-          ],
+          providers: [],
           child: MaterialApp(
             home: EditCarListScreen(),
           ),

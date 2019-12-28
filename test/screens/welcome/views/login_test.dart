@@ -10,8 +10,13 @@ import 'package:autodo/screens/welcome/widgets/barrel.dart';
 import 'package:autodo/blocs/blocs.dart';
 
 class MockAuthRepository extends Mock implements AuthRepository {}
-class MockLoginBloc extends MockBloc<LoginEvent, LoginState> implements LoginBloc {}
-class MockAuthenticationBloc extends MockBloc<AuthenticationEvent, AuthenticationState> implements AuthenticationBloc {}
+
+class MockLoginBloc extends MockBloc<LoginEvent, LoginState>
+    implements LoginBloc {}
+
+class MockAuthenticationBloc
+    extends MockBloc<AuthenticationEvent, AuthenticationState>
+    implements AuthenticationBloc {}
 
 void main() {
   group('WelcomeScreen', () {
@@ -24,19 +29,16 @@ void main() {
       loginBloc = MockLoginBloc();
       authBloc = MockAuthenticationBloc();
     });
-    
+
     testWidgets('renders correctly', (WidgetTester tester) async {
       Key scaffoldKey = Key('scaffold');
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
             BlocProvider<LoginBloc>.value(
-              value: LoginBloc(authRepository: authRepository)
-            ),
+                value: LoginBloc(authRepository: authRepository)),
           ],
-          child: MaterialApp(
-            home: LoginScreen(key: scaffoldKey)
-          ),
+          child: MaterialApp(home: LoginScreen(key: scaffoldKey)),
         ),
       );
       await tester.pumpAndSettle();
@@ -48,12 +50,9 @@ void main() {
         MultiBlocProvider(
           providers: [
             BlocProvider<LoginBloc>.value(
-              value: LoginBloc(authRepository: authRepository)
-            ),
+                value: LoginBloc(authRepository: authRepository)),
           ],
-          child: MaterialApp(
-            home: LoginScreen(key: scaffoldKey)
-          ),
+          child: MaterialApp(home: LoginScreen(key: scaffoldKey)),
         ),
       );
       await tester.pumpAndSettle();
@@ -63,17 +62,14 @@ void main() {
     });
     testWidgets('error', (WidgetTester tester) async {
       Key scaffoldKey = Key('scaffold');
-      whenListen(loginBloc, Stream.fromIterable([LoginEmpty(), LoginError('test')]));
+      whenListen(
+          loginBloc, Stream.fromIterable([LoginEmpty(), LoginError('test')]));
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
-            BlocProvider<LoginBloc>.value(
-              value: loginBloc
-            ),
+            BlocProvider<LoginBloc>.value(value: loginBloc),
           ],
-          child: MaterialApp(
-            home: LoginScreen(key: scaffoldKey)
-          ),
+          child: MaterialApp(home: LoginScreen(key: scaffoldKey)),
         ),
       );
       await tester.pumpAndSettle();
@@ -81,17 +77,14 @@ void main() {
     });
     testWidgets('loading', (WidgetTester tester) async {
       Key scaffoldKey = Key('scaffold');
-      whenListen(loginBloc, Stream.fromIterable([LoginEmpty(), LoginLoading()]));
+      whenListen(
+          loginBloc, Stream.fromIterable([LoginEmpty(), LoginLoading()]));
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
-            BlocProvider<LoginBloc>.value(
-              value: loginBloc
-            ),
+            BlocProvider<LoginBloc>.value(value: loginBloc),
           ],
-          child: MaterialApp(
-            home: LoginScreen(key: scaffoldKey)
-          ),
+          child: MaterialApp(home: LoginScreen(key: scaffoldKey)),
         ),
       );
       await tester.pump();
@@ -99,7 +92,8 @@ void main() {
     });
     testWidgets('loggedin', (WidgetTester tester) async {
       Key scaffoldKey = Key('scaffold');
-      whenListen(loginBloc, Stream.fromIterable([LoginEmpty(), LoginSuccess()]));
+      whenListen(
+          loginBloc, Stream.fromIterable([LoginEmpty(), LoginSuccess()]));
       when(authBloc.add(LoggedIn())).thenAnswer((_) => null);
       await tester.pumpWidget(
         MultiBlocProvider(
@@ -107,16 +101,11 @@ void main() {
             BlocProvider<AuthenticationBloc>.value(
               value: authBloc,
             ),
-            BlocProvider<LoginBloc>.value(
-              value: loginBloc
-            ),
+            BlocProvider<LoginBloc>.value(value: loginBloc),
           ],
-          child: MaterialApp(
-            home: LoginScreen(key: scaffoldKey),
-            routes: {
-              "__home__": (context) => Container(),
-            }
-          ),
+          child: MaterialApp(home: LoginScreen(key: scaffoldKey), routes: {
+            "__home__": (context) => Container(),
+          }),
         ),
       );
       await tester.pumpAndSettle();
@@ -131,16 +120,11 @@ void main() {
             BlocProvider<AuthenticationBloc>.value(
               value: authBloc,
             ),
-            BlocProvider<LoginBloc>.value(
-              value: loginBloc
-            ),
+            BlocProvider<LoginBloc>.value(value: loginBloc),
           ],
-          child: MaterialApp(
-            home: LoginScreen(key: scaffoldKey),
-            routes: {
-              "__home__": (context) => Container(),
-            }
-          ),
+          child: MaterialApp(home: LoginScreen(key: scaffoldKey), routes: {
+            "__home__": (context) => Container(),
+          }),
         ),
       );
       await tester.pumpAndSettle();
@@ -149,7 +133,9 @@ void main() {
       await tester.pump();
       await tester.tap(find.byType(LoginSubmitButton));
       await tester.pump();
-      verify(loginBloc.add(LoginWithCredentialsPressed(email: 'test@test.com',password: '123456'))).called(1);
+      verify(loginBloc.add(LoginWithCredentialsPressed(
+              email: 'test@test.com', password: '123456')))
+          .called(1);
     });
   });
 }

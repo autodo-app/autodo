@@ -6,7 +6,7 @@ class IntegrationTestKeys {
   static const homeScreen = ValueKey('__home_screen__');
   static const fabKey = ValueKey('__fab__');
   static const mainFab = ValueKey('__main_fab__');
-  static const fabKeys = [  
+  static const fabKeys = [
     ValueKey('new_refueling_fab'),
     ValueKey('new_todo_fab'),
     ValueKey('new_repeat_fab')

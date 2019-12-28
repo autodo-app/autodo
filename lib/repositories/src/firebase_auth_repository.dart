@@ -4,21 +4,23 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 import 'auth_repository.dart';
 
-typedef GetGoogleCredentialsFn = AuthCredential Function({String accessToken, String idToken});
+typedef GetGoogleCredentialsFn = AuthCredential Function(
+    {String accessToken, String idToken});
 
-class FirebaseAuthRepository extends AuthRepository{
+class FirebaseAuthRepository extends AuthRepository {
   final FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
   final GetGoogleCredentialsFn _getGoogleCredential;
 
   FirebaseAuthRepository({
-    FirebaseAuth firebaseAuth, 
+    FirebaseAuth firebaseAuth,
     GoogleSignIn googleSignin,
     GetGoogleCredentialsFn getGoogleCredential,
-  }) : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
-       _googleSignIn = googleSignin ?? GoogleSignIn(),
-       _getGoogleCredential = getGoogleCredential ?? GoogleAuthProvider.getCredential;
-  
+  })  : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
+        _googleSignIn = googleSignin ?? GoogleSignIn(),
+        _getGoogleCredential =
+            getGoogleCredential ?? GoogleAuthProvider.getCredential;
+
   Future<FirebaseUser> signInWithGoogle() async {
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
     final GoogleSignInAuthentication googleAuth =
@@ -31,7 +33,8 @@ class FirebaseAuthRepository extends AuthRepository{
     return res.user;
   }
 
-  Future<FirebaseUser> signInWithCredentials(String email, String password) async {
+  Future<FirebaseUser> signInWithCredentials(
+      String email, String password) async {
     AuthResult res = await _firebaseAuth.signInWithEmailAndPassword(
       email: email,
       password: password,
@@ -47,7 +50,8 @@ class FirebaseAuthRepository extends AuthRepository{
     return res.user;
   }
 
-  Future<FirebaseUser> signUpWithVerification(String email, String password) async {
+  Future<FirebaseUser> signUpWithVerification(
+      String email, String password) async {
     var user = await signUp(email, password);
     await user.sendEmailVerification();
     return user;
@@ -64,7 +68,7 @@ class FirebaseAuthRepository extends AuthRepository{
     try {
       var user = await _firebaseAuth.currentUser();
       return user.delete();
-    } on PlatformException catch(e) {
+    } on PlatformException catch (e) {
       // if exception is thrown because user doesn't exist, ignore it for now
       print(e);
     }
@@ -92,5 +96,5 @@ class FirebaseAuthRepository extends AuthRepository{
   }
 
   @override
-  Stream<FirebaseUser> get stream => _firebaseAuth.onAuthStateChanged; 
+  Stream<FirebaseUser> get stream => _firebaseAuth.onAuthStateChanged;
 }
