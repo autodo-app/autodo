@@ -16,7 +16,9 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
   AuthRepository _authRepository;
   final bool verifyEmail;
 
-  SignupBloc({@required authRepository, this.verifyEmail = kReleaseMode}) : assert(authRepository != null), _authRepository = authRepository;
+  SignupBloc({@required authRepository, this.verifyEmail = kReleaseMode})
+      : assert(authRepository != null),
+        _authRepository = authRepository;
 
   @override
   SignupState get initialState => SignupEmpty();
@@ -33,7 +35,8 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
     final debounceStream = observableStream.where((event) {
       return (event is SignupEmailChanged || event is SignupPasswordChanged);
     }).debounceTime(Duration(milliseconds: 300));
-    return super.transformEvents(nonDebounceStream.mergeWith([debounceStream]), next);
+    return super
+        .transformEvents(nonDebounceStream.mergeWith([debounceStream]), next);
   }
 
   @override
@@ -106,7 +109,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
       await Future.delayed(const Duration(milliseconds: 100));
       var cur = await _authRepository.getCurrentUser();
       cur.reload();
-      verified = cur.isEmailVerified; 
+      verified = cur.isEmailVerified;
     }
   }
 
@@ -117,7 +120,8 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
     yield SignupLoading();
     try {
       if (verifyEmail) {
-        var user = await _authRepository.signUpWithVerification(email, password);
+        var user =
+            await _authRepository.signUpWithVerification(email, password);
         yield VerificationSent();
         await _checkIfUserIsVerified(user);
         yield UserVerified();

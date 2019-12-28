@@ -61,7 +61,7 @@ class WelcomePageScrollerState extends State<WelcomePageScroller> {
     widget.controller..addListener(scrollListener);
   }
 
-  @override 
+  @override
   void dispose() {
     debounceTimer.cancel();
     super.dispose();

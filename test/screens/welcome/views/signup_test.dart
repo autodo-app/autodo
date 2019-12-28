@@ -10,8 +10,13 @@ import 'package:autodo/screens/welcome/widgets/barrel.dart';
 import 'package:autodo/blocs/blocs.dart';
 
 class MockAuthRepository extends Mock implements AuthRepository {}
-class MockSignupBloc extends MockBloc<SignupEvent, SignupState> implements SignupBloc {}
-class MockAuthenticationBloc extends MockBloc<AuthenticationEvent, AuthenticationState> implements AuthenticationBloc {}
+
+class MockSignupBloc extends MockBloc<SignupEvent, SignupState>
+    implements SignupBloc {}
+
+class MockAuthenticationBloc
+    extends MockBloc<AuthenticationEvent, AuthenticationState>
+    implements AuthenticationBloc {}
 
 void main() {
   group('SignupScreen', () {
@@ -24,19 +29,16 @@ void main() {
       signupBloc = MockSignupBloc();
       authBloc = MockAuthenticationBloc();
     });
-    
+
     testWidgets('renders correctly', (WidgetTester tester) async {
       Key scaffoldKey = Key('scaffold');
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
             BlocProvider<SignupBloc>.value(
-              value: SignupBloc(authRepository: authRepository)
-            ),
+                value: SignupBloc(authRepository: authRepository)),
           ],
-          child: MaterialApp(
-            home: SignupScreen(key: scaffoldKey)
-          ),
+          child: MaterialApp(home: SignupScreen(key: scaffoldKey)),
         ),
       );
       await tester.pumpAndSettle();
@@ -48,12 +50,9 @@ void main() {
         MultiBlocProvider(
           providers: [
             BlocProvider<SignupBloc>.value(
-              value: SignupBloc(authRepository: authRepository)
-            ),
+                value: SignupBloc(authRepository: authRepository)),
           ],
-          child: MaterialApp(
-            home: SignupScreen(key: scaffoldKey)
-          ),
+          child: MaterialApp(home: SignupScreen(key: scaffoldKey)),
         ),
       );
       await tester.pumpAndSettle();
@@ -63,17 +62,14 @@ void main() {
     });
     testWidgets('error', (WidgetTester tester) async {
       Key scaffoldKey = Key('scaffold');
-      whenListen(signupBloc, Stream.fromIterable([SignupEmpty(), SignupError('test')]));
+      whenListen(signupBloc,
+          Stream.fromIterable([SignupEmpty(), SignupError('test')]));
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
-            BlocProvider<SignupBloc>.value(
-              value: signupBloc
-            ),
+            BlocProvider<SignupBloc>.value(value: signupBloc),
           ],
-          child: MaterialApp(
-            home: SignupScreen(key: scaffoldKey)
-          ),
+          child: MaterialApp(home: SignupScreen(key: scaffoldKey)),
         ),
       );
       await tester.pumpAndSettle();
@@ -81,17 +77,14 @@ void main() {
     });
     testWidgets('loading', (WidgetTester tester) async {
       Key scaffoldKey = Key('scaffold');
-      whenListen(signupBloc, Stream.fromIterable([SignupEmpty(), SignupLoading()]));
+      whenListen(
+          signupBloc, Stream.fromIterable([SignupEmpty(), SignupLoading()]));
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
-            BlocProvider<SignupBloc>.value(
-              value: signupBloc
-            ),
+            BlocProvider<SignupBloc>.value(value: signupBloc),
           ],
-          child: MaterialApp(
-            home: SignupScreen(key: scaffoldKey)
-          ),
+          child: MaterialApp(home: SignupScreen(key: scaffoldKey)),
         ),
       );
       await tester.pump();
@@ -99,7 +92,8 @@ void main() {
     });
     testWidgets('signed in', (WidgetTester tester) async {
       Key scaffoldKey = Key('scaffold');
-      whenListen(signupBloc, Stream.fromIterable([SignupEmpty(), SignupSuccess()]));
+      whenListen(
+          signupBloc, Stream.fromIterable([SignupEmpty(), SignupSuccess()]));
       when(authBloc.add(LoggedIn())).thenAnswer((_) => null);
       await tester.pumpWidget(
         MultiBlocProvider(
@@ -107,16 +101,11 @@ void main() {
             BlocProvider<AuthenticationBloc>.value(
               value: authBloc,
             ),
-            BlocProvider<SignupBloc>.value(
-              value: signupBloc
-            ),
+            BlocProvider<SignupBloc>.value(value: signupBloc),
           ],
-          child: MaterialApp(
-            home: SignupScreen(key: scaffoldKey),
-            routes: {
-              "__home__": (context) => Container(),
-            }
-          ),
+          child: MaterialApp(home: SignupScreen(key: scaffoldKey), routes: {
+            "__home__": (context) => Container(),
+          }),
         ),
       );
       await tester.pumpAndSettle();
@@ -124,7 +113,9 @@ void main() {
     });
     testWidgets('submit form', (WidgetTester tester) async {
       Key scaffoldKey = Key('scaffold');
-      when(signupBloc.add(SignupWithCredentialsPressed(email: 'test@test.com', password: '123456'))).thenAnswer((_) => null);
+      when(signupBloc.add(SignupWithCredentialsPressed(
+              email: 'test@test.com', password: '123456')))
+          .thenAnswer((_) => null);
       when(authBloc.add(LoggedIn())).thenAnswer((_) => null);
       await tester.pumpWidget(
         MultiBlocProvider(
@@ -132,16 +123,11 @@ void main() {
             BlocProvider<AuthenticationBloc>.value(
               value: authBloc,
             ),
-            BlocProvider<SignupBloc>.value(
-              value: signupBloc
-            ),
+            BlocProvider<SignupBloc>.value(value: signupBloc),
           ],
-          child: MaterialApp(
-            home: SignupScreen(key: scaffoldKey),
-            routes: {
-              "__home__": (context) => Container(),
-            }
-          ),
+          child: MaterialApp(home: SignupScreen(key: scaffoldKey), routes: {
+            "__home__": (context) => Container(),
+          }),
         ),
       );
       await tester.pumpAndSettle();
@@ -150,7 +136,9 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.byType(SignupSubmitButton));
       await tester.pump();
-      verify(signupBloc.add(SignupWithCredentialsPressed(email: 'test@test.com', password: '123456'))).called(1);
+      verify(signupBloc.add(SignupWithCredentialsPressed(
+              email: 'test@test.com', password: '123456')))
+          .called(1);
     });
   });
 }

@@ -58,7 +58,7 @@ class AutodoLocalizations {
   static String get refuelings => "Refuelings";
   static String get stats => "Stats";
   static String get repeats => "Repeats";
-  static String get interval => "Interval"; 
+  static String get interval => "Interval";
   static String get dueDate => "Due Date";
   static String get signInWithGoogle => "Sign In with Google";
   static String get forgotYourPassword => "Forgot your password?";
@@ -80,7 +80,8 @@ class AutodoLocalizations {
   static String get signup => "Sign Up";
   static String get alreadyHaveAnAccount => "Already have an account?";
   static String get verifyEmail => "Verify Email";
-  static String get verifyBodyText => 'An email has been sent to you with a link to verify your account.\n\nYou must verify your email to use auToDo.';
+  static String get verifyBodyText =>
+      'An email has been sent to you with a link to verify your account.\n\nYou must verify your email to use auToDo.';
   static String get next => "Next";
 }
 

@@ -14,7 +14,7 @@ class Car extends Equatable {
   final DateTime lastMileageUpdate;
   final List<DistanceRatePoint> distanceRateHistory;
 
-  Car({ 
+  Car({
     this.id,
     this.name,
     this.mileage,
@@ -23,34 +23,41 @@ class Car extends Equatable {
     this.distanceRate = 0.0,
     lastMileageUpdate,
     distanceRateHistory,
-  }) :
-   this.lastMileageUpdate = lastMileageUpdate ?? roundToDay(DateTime.fromMillisecondsSinceEpoch(0)),
-   this.distanceRateHistory = distanceRateHistory ?? [];
+  })  : this.lastMileageUpdate = lastMileageUpdate ??
+            roundToDay(DateTime.fromMillisecondsSinceEpoch(0)),
+        this.distanceRateHistory = distanceRateHistory ?? [];
 
-  Car copyWith({
-    String id,
-    String name,
-    int mileage,
-    int numRefuelings,
-    double averageEfficiency,
-    double distanceRate,
-    DateTime lastMileageUpdate,
-    List<DistanceRatePoint> distanceRateHistory
-  }) {
+  Car copyWith(
+      {String id,
+      String name,
+      int mileage,
+      int numRefuelings,
+      double averageEfficiency,
+      double distanceRate,
+      DateTime lastMileageUpdate,
+      List<DistanceRatePoint> distanceRateHistory}) {
     return Car(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      mileage: mileage ?? this.mileage,
-      numRefuelings: numRefuelings ?? this.numRefuelings,
-      averageEfficiency: averageEfficiency ?? this.averageEfficiency,
-      distanceRate: distanceRate ?? this.distanceRate,
-      lastMileageUpdate: lastMileageUpdate ?? this.lastMileageUpdate,
-      distanceRateHistory: distanceRateHistory ?? this.distanceRateHistory
-    );
+        id: id ?? this.id,
+        name: name ?? this.name,
+        mileage: mileage ?? this.mileage,
+        numRefuelings: numRefuelings ?? this.numRefuelings,
+        averageEfficiency: averageEfficiency ?? this.averageEfficiency,
+        distanceRate: distanceRate ?? this.distanceRate,
+        lastMileageUpdate: lastMileageUpdate ?? this.lastMileageUpdate,
+        distanceRateHistory: distanceRateHistory ?? this.distanceRateHistory);
   }
 
-  @override 
-  List<Object> get props => [id, name, mileage, numRefuelings, averageEfficiency, distanceRate, lastMileageUpdate?.toUtc(), distanceRateHistory];
+  @override
+  List<Object> get props => [
+        id,
+        name,
+        mileage,
+        numRefuelings,
+        averageEfficiency,
+        distanceRate,
+        lastMileageUpdate?.toUtc(),
+        distanceRateHistory
+      ];
 
   @override
   String toString() {
@@ -58,19 +65,19 @@ class Car extends Equatable {
   }
 
   CarEntity toEntity() {
-    return CarEntity(id, name, mileage, numRefuelings, averageEfficiency, distanceRate, lastMileageUpdate, distanceRateHistory);
+    return CarEntity(id, name, mileage, numRefuelings, averageEfficiency,
+        distanceRate, lastMileageUpdate, distanceRateHistory);
   }
 
   static Car fromEntity(CarEntity entity) {
     return Car(
-      id: entity.id,
-      name: entity.name,
-      mileage: entity.mileage,
-      numRefuelings: entity.numRefuelings,
-      averageEfficiency: entity.averageEfficiency,
-      distanceRate: entity.distanceRate,
-      lastMileageUpdate: entity.lastMileageUpdate,
-      distanceRateHistory: entity.distanceRateHistory
-    );
+        id: entity.id,
+        name: entity.name,
+        mileage: entity.mileage,
+        numRefuelings: entity.numRefuelings,
+        averageEfficiency: entity.averageEfficiency,
+        distanceRate: entity.distanceRate,
+        lastMileageUpdate: entity.lastMileageUpdate,
+        distanceRateHistory: entity.distanceRateHistory);
   }
 }

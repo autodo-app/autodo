@@ -68,8 +68,8 @@ class AutoScrollFieldState extends State<AutoScrollField> {
 
     double scrollTo = widget.position ?? _getScrollPosition();
     if (scrollTo == null) return; // can't scroll
-    await widget.controller.animateTo(scrollTo,
-        duration: widget.duration, curve: widget.curve);
+    await widget.controller
+        .animateTo(scrollTo, duration: widget.duration, curve: widget.curve);
   }
 
   @override

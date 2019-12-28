@@ -8,12 +8,12 @@ import 'screen.dart';
 class LoginProvider extends StatelessWidget {
   final AuthRepository _authRepository;
 
-  LoginProvider({@required authRepository}) : assert(authRepository != null),
-    _authRepository = authRepository;
+  LoginProvider({@required authRepository})
+      : assert(authRepository != null),
+        _authRepository = authRepository;
 
-  @override 
+  @override
   build(context) => BlocProvider(
-    create: (context) => LoginBloc(authRepository: _authRepository),
-    child: LoginScreen()
-  );
+      create: (context) => LoginBloc(authRepository: _authRepository),
+      child: LoginScreen());
 }

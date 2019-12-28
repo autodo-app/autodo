@@ -6,13 +6,12 @@ import 'package:autodo/models/models.dart';
 void main() {
   group('RefuelingsEvents', () {
     final refueling = Refueling(
-      id: '0', 
-      mileage: 0, 
-      amount: 10,
-      cost: 10.0,
-      date: DateTime.fromMillisecondsSinceEpoch(0),
-      carName: 'test'
-    );
+        id: '0',
+        mileage: 0,
+        amount: 10,
+        cost: 10.0,
+        date: DateTime.fromMillisecondsSinceEpoch(0),
+        carName: 'test');
     test('LoadRefuelings props', () {
       expect(LoadRefuelings().props, []);
     });
@@ -21,7 +20,8 @@ void main() {
         expect(AddRefueling(refueling).props, [refueling]);
       });
       test('toString', () {
-        expect(AddRefueling(refueling).toString(), 'AddRefueling { refueling: $refueling }');
+        expect(AddRefueling(refueling).toString(),
+            'AddRefueling { refueling: $refueling }');
       });
     });
     group('UpdateRefueling', () {
@@ -29,7 +29,8 @@ void main() {
         expect(UpdateRefueling(refueling).props, [refueling]);
       });
       test('toString', () {
-        expect(UpdateRefueling(refueling).toString(), 'UpdateRefueling { refueling: $refueling }');
+        expect(UpdateRefueling(refueling).toString(),
+            'UpdateRefueling { refueling: $refueling }');
       });
     });
     group('DeleteRefueling', () {
@@ -37,15 +38,19 @@ void main() {
         expect(DeleteRefueling(refueling).props, [refueling]);
       });
       test('toString', () {
-        expect(DeleteRefueling(refueling).toString(), 'DeleteRefueling { refueling: $refueling }');
+        expect(DeleteRefueling(refueling).toString(),
+            'DeleteRefueling { refueling: $refueling }');
       });
     });
     group('ExternalCarsUpdated', () {
       test('props', () {
-        expect(ExternalCarsUpdated([Car()]).props, [[Car()]]);
+        expect(ExternalCarsUpdated([Car()]).props, [
+          [Car()]
+        ]);
       });
       test('toString', () {
-        expect(ExternalCarsUpdated([Car()]).toString(), 'ExternalCarsUpdated { cars: ${[Car()]} }');
+        expect(ExternalCarsUpdated([Car()]).toString(),
+            'ExternalCarsUpdated { cars: ${[Car()]} }');
       });
     });
   });

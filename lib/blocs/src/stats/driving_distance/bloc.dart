@@ -9,18 +9,21 @@ import '../../cars/barrel.dart';
 import 'event.dart';
 import 'state.dart';
 
-class DrivingDistanceStatsBloc extends Bloc<DrivingDistanceStatsEvent, DrivingDistanceStatsState> {
+class DrivingDistanceStatsBloc
+    extends Bloc<DrivingDistanceStatsEvent, DrivingDistanceStatsState> {
   final CarsBloc _carsBloc;
   StreamSubscription _carsSubscription;
 
-  DrivingDistanceStatsBloc({@required carsBloc}) :
-      assert(carsBloc != null), _carsBloc = carsBloc;
+  DrivingDistanceStatsBloc({@required carsBloc})
+      : assert(carsBloc != null),
+        _carsBloc = carsBloc;
 
   @override
   DrivingDistanceStatsState get initialState => DrivingDistanceStatsLoading();
 
   @override
-  Stream<DrivingDistanceStatsState> mapEventToState(DrivingDistanceStatsEvent event) async* {
+  Stream<DrivingDistanceStatsState> mapEventToState(
+      DrivingDistanceStatsEvent event) async* {
     if (event is LoadDrivingDistanceStats) {
       yield* _mapLoadDrivingDistanceStatsToState(event);
     } else if (event is UpdateDrivingDistanceData) {
@@ -28,19 +31,18 @@ class DrivingDistanceStatsBloc extends Bloc<DrivingDistanceStatsEvent, DrivingDi
     }
   }
 
-  Stream<DrivingDistanceStatsState> _mapLoadDrivingDistanceStatsToState(event) async* {
+  Stream<DrivingDistanceStatsState> _mapLoadDrivingDistanceStatsToState(
+      event) async* {
     if (_carsBloc.state is CarsLoaded) {
       final data = await _prepData((_carsBloc.state as CarsLoaded).cars);
       yield DrivingDistanceStatsLoaded(data);
     }
     _carsSubscription?.cancel();
-    _carsBloc.listen(
-      (state) {
-        if (state is CarsLoaded) {
-          add(UpdateDrivingDistanceData(state.cars));
-        }
+    _carsBloc.listen((state) {
+      if (state is CarsLoaded) {
+        add(UpdateDrivingDistanceData(state.cars));
       }
-    );
+    });
   }
 
   Future<List<Series<DistanceRatePoint, DateTime>>> _prepData(cars) async {
@@ -63,7 +65,8 @@ class DrivingDistanceStatsBloc extends Bloc<DrivingDistanceStatsEvent, DrivingDi
     return out;
   }
 
-  Stream<DrivingDistanceStatsState> _mapUpdateDrivingDistanceDataToState(event) async* {
+  Stream<DrivingDistanceStatsState> _mapUpdateDrivingDistanceDataToState(
+      event) async* {
     final data = await _prepData(event.cars);
     yield DrivingDistanceStatsLoaded(data);
   }

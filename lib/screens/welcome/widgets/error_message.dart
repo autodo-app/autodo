@@ -5,18 +5,18 @@ class ErrorMessage extends StatelessWidget {
 
   ErrorMessage(this.msg);
 
-  @override 
+  @override
   build(context) => Padding(
-    padding: EdgeInsets.fromLTRB(0, 25, 0, 0),
-    child: Center(
-      child: Text(
-        msg,
-        style: TextStyle(
-            fontSize: 13.0,
-            color: Colors.red,
-            height: 1.0,
-            fontWeight: FontWeight.w300),
-      ),
-    ),
-  );
+        padding: EdgeInsets.fromLTRB(0, 25, 0, 0),
+        child: Center(
+          child: Text(
+            msg,
+            style: TextStyle(
+                fontSize: 13.0,
+                color: Colors.red,
+                height: 1.0,
+                fontWeight: FontWeight.w300),
+          ),
+        ),
+      );
 }

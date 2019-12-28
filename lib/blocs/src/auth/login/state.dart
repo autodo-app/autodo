@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 abstract class LoginState extends Equatable {
   const LoginState();
 
-  @override 
+  @override
   List<Object> get props => [];
 }
 
@@ -26,13 +26,13 @@ class LoginCredentialsInvalid extends LoginState {
 
   const LoginCredentialsInvalid({this.emailError, this.passwordError});
 
-  LoginCredentialsInvalid copyWith({emailError, passwordError}) => 
-    LoginCredentialsInvalid(
-      emailError: emailError ?? this.emailError,
-      passwordError: passwordError ?? this.passwordError,
-  );
+  LoginCredentialsInvalid copyWith({emailError, passwordError}) =>
+      LoginCredentialsInvalid(
+        emailError: emailError ?? this.emailError,
+        passwordError: passwordError ?? this.passwordError,
+      );
 
-  @override 
+  @override
   List<Object> get props => [];
 }
 

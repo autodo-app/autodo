@@ -5,7 +5,9 @@ import 'package:mockito/mockito.dart';
 import 'package:autodo/repositories/repositories.dart';
 
 class MockCollection extends Mock implements CollectionReference {}
+
 class MockFirestore extends Mock implements Firestore {}
+
 class MockBatch extends Mock implements WriteBatch {}
 
 void main() {
@@ -18,38 +20,36 @@ void main() {
 
     test('Null collection', () {
       expect(
-        () => WriteBatchWrapper(firestoreInstance: firestore, collection: null), 
-        throwsAssertionError);
+          () =>
+              WriteBatchWrapper(firestoreInstance: firestore, collection: null),
+          throwsAssertionError);
     });
     test('update', () {
-      when(batch.updateData(collection.document(''), {'test': ''})).thenAnswer((_) {});
+      when(batch.updateData(collection.document(''), {'test': ''}))
+          .thenAnswer((_) {});
       final wrapper = WriteBatchWrapper(
-        collection: collection, 
-        firestoreInstance: firestore);
+          collection: collection, firestoreInstance: firestore);
       expect(wrapper.updateData('', {'test': ''}), null);
     });
     test('set', () {
-      when(batch.setData(collection.document(), {'test': ''})).thenAnswer((_) {});
+      when(batch.setData(collection.document(), {'test': ''}))
+          .thenAnswer((_) {});
       final wrapper = WriteBatchWrapper(
-        collection: collection, 
-        firestoreInstance: firestore);
+          collection: collection, firestoreInstance: firestore);
       expect(wrapper.setData({'test': ''}), null);
     });
     test('commit', () {
       when(batch.commit()).thenAnswer((_) async {});
       final wrapper = WriteBatchWrapper(
-        collection: collection, 
-        firestoreInstance: firestore);
+          collection: collection, firestoreInstance: firestore);
       expect(wrapper.commit(), completes);
     });
     test('props', () {
       expect(
-        WriteBatchWrapper(  
-          collection: collection,
-          firestoreInstance: firestore
-        ).props,
-        ['']
-      );
+          WriteBatchWrapper(
+                  collection: collection, firestoreInstance: firestore)
+              .props,
+          ['']);
     });
   });
 }

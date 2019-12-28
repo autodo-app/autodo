@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:autodo/entities/entities.dart';
 
 @immutable
-class Refueling extends Equatable{
+class Refueling extends Equatable {
   final String id;
   final String carName;
   final int mileage;
@@ -23,20 +23,22 @@ class Refueling extends Equatable{
     this.carColor,
     this.efficiency,
     this.efficiencyColor,
-  }) : assert(date != null), assert(mileage != null), assert(cost != null),
-       assert(amount != null), assert(carName != null);
+  })  : assert(date != null),
+        assert(mileage != null),
+        assert(cost != null),
+        assert(amount != null),
+        assert(carName != null);
 
-  Refueling copyWith({
-    String id, 
-    String carName, 
-    int mileage, 
-    DateTime date, 
-    double amount,
-    double cost,
-    Color carColor,
-    double efficiency,
-    Color efficiencyColor
-  }) {
+  Refueling copyWith(
+      {String id,
+      String carName,
+      int mileage,
+      DateTime date,
+      double amount,
+      double cost,
+      Color carColor,
+      double efficiency,
+      Color efficiencyColor}) {
     return Refueling(
       carName: carName ?? this.carName,
       id: id ?? this.id,
@@ -50,8 +52,18 @@ class Refueling extends Equatable{
     );
   }
 
-  @override 
-  List<Object> get props => [carName, id, mileage, date?.toUtc(), amount, cost, carColor, efficiency, efficiencyColor?.value];
+  @override
+  List<Object> get props => [
+        carName,
+        id,
+        mileage,
+        date?.toUtc(),
+        amount,
+        cost,
+        carColor,
+        efficiency,
+        efficiencyColor?.value
+      ];
 
   @override
   String toString() {
@@ -59,7 +71,8 @@ class Refueling extends Equatable{
   }
 
   RefuelingEntity toEntity() {
-    return RefuelingEntity(id, carName, mileage, date, amount, cost, carColor, efficiency, efficiencyColor);
+    return RefuelingEntity(id, carName, mileage, date, amount, cost, carColor,
+        efficiency, efficiencyColor);
   }
 
   static Refueling fromEntity(RefuelingEntity entity) {

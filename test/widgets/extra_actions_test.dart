@@ -37,14 +37,14 @@ void main() {
           ),
         ),
       );
-      expect(find.byKey((key)),
-          findsOneWidget);
+      expect(find.byKey((key)), findsOneWidget);
     });
 
     testWidgets(
         'renders PopupMenuButton with mark all done if state is TodosLoaded with incomplete todos',
         (WidgetTester tester) async {
-      when(todosBloc.state).thenReturn(TodosLoaded([Todo(name: 'test', completed: false)]));
+      when(todosBloc.state)
+          .thenReturn(TodosLoaded([Todo(name: 'test', completed: false)]));
       final actions = Key('actions');
       final toggleAll = Key('toggleAll');
       await tester.pumpWidget(
@@ -53,7 +53,12 @@ void main() {
           child: MaterialApp(
             home: Scaffold(
               appBar: AppBar(
-                actions: [ExtraActions(key: actions, toggleAllKey: toggleAll,)],
+                actions: [
+                  ExtraActions(
+                    key: actions,
+                    toggleAllKey: toggleAll,
+                  )
+                ],
               ),
               body: Container(),
             ),
@@ -80,7 +85,12 @@ void main() {
           child: MaterialApp(
             home: Scaffold(
               appBar: AppBar(
-                actions: [ExtraActions(key: actions, toggleAllKey: toggleAll,)],
+                actions: [
+                  ExtraActions(
+                    key: actions,
+                    toggleAllKey: toggleAll,
+                  )
+                ],
               ),
               body: Container(),
             ),
@@ -108,7 +118,12 @@ void main() {
           child: MaterialApp(
             home: Scaffold(
               appBar: AppBar(
-                actions: [ExtraActions(key: actions, toggleAllKey: toggleAll,)],
+                actions: [
+                  ExtraActions(
+                    key: actions,
+                    toggleAllKey: toggleAll,
+                  )
+                ],
               ),
               body: Container(),
             ),

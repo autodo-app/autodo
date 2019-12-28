@@ -7,11 +7,17 @@ import 'package:equatable/equatable.dart';
 import 'package:autodo/repositories/repositories.dart';
 
 class MockFirebaseAuth extends Mock implements FirebaseAuth {}
+
 class MockGoogleSignin extends Mock implements GoogleSignIn {}
+
 class MockGoogleAccount extends Mock implements GoogleSignInAccount {}
+
 class MockGoogleAuth extends Mock implements GoogleSignInAuthentication {}
+
 class MockCredential extends Mock implements AuthCredential {}
+
 class MockAuthResult extends Mock implements AuthResult {}
+
 class MockUser extends Mock with EquatableMixin implements FirebaseUser {}
 
 void main() {
@@ -28,19 +34,18 @@ void main() {
       final credential = MockCredential();
       final authResult = MockAuthResult();
       when(firebase.signInWithCredential(credential))
-        .thenAnswer((_) async => authResult);
+          .thenAnswer((_) async => authResult);
       when(authResult.user).thenAnswer((_) => MockUser());
       final repository = FirebaseAuthRepository(
-        firebaseAuth: firebase,
-        googleSignin: googleSignIn,
-        getGoogleCredential: ({accessToken, idToken}) => credential
-      );
+          firebaseAuth: firebase,
+          googleSignin: googleSignIn,
+          getGoogleCredential: ({accessToken, idToken}) => credential);
       expect(repository.signInWithGoogle(), completion(MockUser()));
     });
     test('normal signin', () {
       final authResult = MockAuthResult();
       when(firebase.signInWithEmailAndPassword(email: '', password: ''))
-        .thenAnswer((_) async => authResult);
+          .thenAnswer((_) async => authResult);
       when(authResult.user).thenAnswer((_) => MockUser());
       final repository = FirebaseAuthRepository(
         firebaseAuth: firebase,
@@ -50,7 +55,7 @@ void main() {
     test('normal signup', () {
       final authResult = MockAuthResult();
       when(firebase.createUserWithEmailAndPassword(email: '', password: ''))
-        .thenAnswer((_) async => authResult);
+          .thenAnswer((_) async => authResult);
       when(authResult.user).thenAnswer((_) => MockUser());
       final repository = FirebaseAuthRepository(
         firebaseAuth: firebase,
@@ -61,7 +66,7 @@ void main() {
       final authResult = MockAuthResult();
       final user = MockUser();
       when(firebase.createUserWithEmailAndPassword(email: '', password: ''))
-        .thenAnswer((_) async => authResult);
+          .thenAnswer((_) async => authResult);
       when(authResult.user).thenAnswer((_) => user);
       when(user.sendEmailVerification()).thenAnswer((_) async {});
       final repository = FirebaseAuthRepository(
@@ -74,9 +79,7 @@ void main() {
       when(firebase.signOut()).thenAnswer((_) async {});
       when(googleSignIn.signOut()).thenAnswer((_) async => MockGoogleAccount());
       final repository = FirebaseAuthRepository(
-        firebaseAuth: firebase,
-        googleSignin: googleSignIn
-      );
+          firebaseAuth: firebase, googleSignin: googleSignIn);
       expect(repository.signOut(), completes);
     });
     test('delete user', () {

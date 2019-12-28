@@ -13,7 +13,8 @@ void main() {
         expect(AddRepeat(Repeat()).props, [Repeat()]);
       });
       test('toString', () {
-        expect(AddRepeat(Repeat()).toString(), 'AddRepeat { repeat: ${Repeat()} }');
+        expect(AddRepeat(Repeat()).toString(),
+            'AddRepeat { repeat: ${Repeat()} }');
       });
     });
     group('UpdateRepeat', () {
@@ -21,7 +22,8 @@ void main() {
         expect(UpdateRepeat(Repeat()).props, [Repeat()]);
       });
       test('toString', () {
-        expect(UpdateRepeat(Repeat()).toString(), 'UpdateRepeat { updatedRepeat: ${Repeat()} }');
+        expect(UpdateRepeat(Repeat()).toString(),
+            'UpdateRepeat { updatedRepeat: ${Repeat()} }');
       });
     });
     group('DeleteRepeat', () {
@@ -29,7 +31,8 @@ void main() {
         expect(DeleteRepeat(Repeat()).props, [Repeat()]);
       });
       test('toString', () {
-        expect(DeleteRepeat(Repeat()).toString(), 'DeleteRepeat { repeat: ${Repeat()} }');
+        expect(DeleteRepeat(Repeat()).toString(),
+            'DeleteRepeat { repeat: ${Repeat()} }');
       });
     });
   });

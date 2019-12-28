@@ -11,33 +11,32 @@ class PasswordForm extends StatelessWidget {
 
   PasswordForm({this.onSaved, this.node, this.login = true});
 
-  @override 
+  @override
   build(context) => Container(
-    padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
-    child: TextFormField(
-      obscureText: true,
-      focusNode: node,
-      textInputAction: TextInputAction.done,
-      decoration: InputDecoration(
-        hintText: AutodoLocalizations.password,
-        hintStyle: TextStyle(
-          color: Colors.grey[400],
+        padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
+        child: TextFormField(
+          obscureText: true,
+          focusNode: node,
+          textInputAction: TextInputAction.done,
+          decoration: InputDecoration(
+              hintText: AutodoLocalizations.password,
+              hintStyle: TextStyle(
+                color: Colors.grey[400],
+              ),
+              icon: Icon(
+                Icons.lock,
+                color: Colors.grey[300],
+              )),
+          onChanged: (val) {
+            if (login) {
+              return BlocProvider.of<LoginBloc>(context)
+                  .add(LoginPasswordChanged(password: val));
+            } else {
+              return BlocProvider.of<SignupBloc>(context)
+                  .add(SignupPasswordChanged(password: val));
+            }
+          },
+          onSaved: (value) => onSaved(value.trim()),
         ),
-        icon: Icon(
-          Icons.lock,
-          color: Colors.grey[300],
-        )
-      ),
-      onChanged: (val) {
-        if (login) {
-          return BlocProvider.of<LoginBloc>(context).add(
-            LoginPasswordChanged(password: val));
-        } else {
-          return BlocProvider.of<SignupBloc>(context).add(
-            SignupPasswordChanged(password: val));
-        }
-      },
-      onSaved: (value) => onSaved(value.trim()),
-    ),
-  );
+      );
 }

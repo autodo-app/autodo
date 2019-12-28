@@ -20,24 +20,29 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   final NotificationsBloc _notificationsBloc;
   final RepeatsBloc _repeatsBloc;
   StreamSubscription _dataSubscription, _carsSubscription, _repeatsSubscription;
-  
+
   List<Car> _carsCache;
 
-  TodosBloc({
-    @required DatabaseBloc dbBloc, 
-    @required CarsBloc carsBloc,
-    @required NotificationsBloc notificationsBloc,
-    @required RepeatsBloc repeatsBloc
-  }) : assert(dbBloc != null), assert(carsBloc != null),
-       assert(notificationsBloc != null), assert(repeatsBloc != null),
-       _dbBloc = dbBloc, _repeatsBloc = repeatsBloc, 
-       _carsBloc = carsBloc, _notificationsBloc = notificationsBloc;
+  TodosBloc(
+      {@required DatabaseBloc dbBloc,
+      @required CarsBloc carsBloc,
+      @required NotificationsBloc notificationsBloc,
+      @required RepeatsBloc repeatsBloc})
+      : assert(dbBloc != null),
+        assert(carsBloc != null),
+        assert(notificationsBloc != null),
+        assert(repeatsBloc != null),
+        _dbBloc = dbBloc,
+        _repeatsBloc = repeatsBloc,
+        _carsBloc = carsBloc,
+        _notificationsBloc = notificationsBloc;
 
   @override
   TodosState get initialState => TodosLoading();
 
-  DataRepository get repo => (_dbBloc.state is DbLoaded) ? 
-    (_dbBloc.state as DbLoaded).repository : null;
+  DataRepository get repo => (_dbBloc.state is DbLoaded)
+      ? (_dbBloc.state as DbLoaded).repository
+      : null;
 
   @override
   Stream<TodosState> mapEventToState(TodosEvent event) async* {
@@ -75,51 +80,44 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     // _dataSubscription = _dataRepository.todos().listen(
     //       (todos) => add(TodosUpdated(todos)),
     //     );
-    _carsSubscription = _carsBloc.listen( 
-      (state) {
-        if (state is CarsLoaded) {
-          add(UpdateDueDates(state.cars));
-        }
+    _carsSubscription = _carsBloc.listen((state) {
+      if (state is CarsLoaded) {
+        add(UpdateDueDates(state.cars));
       }
-    );
-    _repeatsSubscription = _repeatsBloc.listen(
-      (state) {
-        if (state is RepeatsLoaded) {
-          add(RepeatsRefresh(state.repeats));
-        }
+    });
+    _repeatsSubscription = _repeatsBloc.listen((state) {
+      if (state is RepeatsLoaded) {
+        add(RepeatsRefresh(state.repeats));
       }
-    );
+    });
   }
 
   void _scheduleNotification(Todo todo) {
-    _notificationsBloc.add(
-      ScheduleNotification(
+    _notificationsBloc.add(ScheduleNotification(
         date: todo.dueDate,
         title: AutodoLocalizations.todoDueSoon + ': ${todo.name}',
-        body: ''
-      )
-    );
+        body: ''));
   }
 
   Todo _updateDueDate(car, todo, batch) {
     var distanceToTodo = todo.dueMileage - car.mileage;
     int daysToTodo = (distanceToTodo / car.distanceRate).round();
     Duration timeToTodo = Duration(days: daysToTodo);
-    var newDueDate = roundToDay(car.lastMileageUpdate.toUtc()).add(timeToTodo).toLocal();
+    var newDueDate =
+        roundToDay(car.lastMileageUpdate.toUtc()).add(timeToTodo).toLocal();
 
     Todo out = todo.copyWith(dueDate: newDueDate, estimatedDueDate: true);
     _notificationsBloc.add(ReScheduleNotification(
-      id: out.notificationID,
-      date: out.dueDate,
-      title: AutodoLocalizations.todoDueSoon + ': ${out.name}',
-      body: ''
-    ));
+        id: out.notificationID,
+        date: out.dueDate,
+        title: AutodoLocalizations.todoDueSoon + ': ${out.name}',
+        body: ''));
     batch.updateData(out.id, out.toEntity().toDocument());
     return out;
   }
 
-  bool _shouldUpdate(car, t) => 
-    (t.carName == car.name && (t?.estimatedDueDate ?? false));
+  bool _shouldUpdate(car, t) =>
+      (t.carName == car.name && (t?.estimatedDueDate ?? false));
 
   Stream<TodosState> _mapUpdateDueDatesToState(UpdateDueDates event) async* {
     List<Car> cars = event.cars;
@@ -131,8 +129,9 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
         if (_carsCache?.contains(car) ?? false) continue;
 
         updatedTodos = curState.todos
-          .map((t) => _shouldUpdate(car, t) ? _updateDueDate(car, t, batch) : t)
-          .toList();
+            .map((t) =>
+                _shouldUpdate(car, t) ? _updateDueDate(car, t, batch) : t)
+            .toList();
       }
       yield TodosLoaded(updatedTodos);
       _carsCache = cars;
@@ -142,7 +141,8 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
 
   Stream<TodosState> _mapAddTodoToState(AddTodo event) async* {
     if (repo == null) return;
-    final List<Todo> updatedTodos = List.from((state as TodosLoaded).todos)..add(event.todo);
+    final List<Todo> updatedTodos = List.from((state as TodosLoaded).todos)
+      ..add(event.todo);
     yield TodosLoaded(updatedTodos);
     _scheduleNotification(event.todo);
     // out = event.todo.copyWith(notificationID: notificationID);
@@ -152,8 +152,9 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   Stream<TodosState> _mapUpdateTodoToState(UpdateTodo event) async* {
     if (repo == null) return;
     final List<Todo> updatedTodos = (state as TodosLoaded)
-      .todos.map((r) => r.id == event.updatedTodo.id ? event.updatedTodo : r)
-      .toList();
+        .todos
+        .map((r) => r.id == event.updatedTodo.id ? event.updatedTodo : r)
+        .toList();
     yield TodosLoaded(updatedTodos);
     repo.updateTodo(event.updatedTodo);
   }
@@ -166,36 +167,35 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     int daysToDue = (repeat.mileageInterval / curCar.distanceRate).round();
     DateTime nextDueDate = todo.completedDate.add(Duration(days: daysToDue));
     Todo next = todo.copyWith(
-      dueMileage: nextDueMileage,
-      dueDate: nextDueDate,
-      completed: false
-    );
+        dueMileage: nextDueMileage, dueDate: nextDueDate, completed: false);
     repo.addNewTodo(next);
     return next;
   }
 
   Stream<TodosState> _mapCompleteTodoToState(CompleteTodo event) async* {
     Todo curTodo = event.todo;
-    if (_repeatsBloc.state is RepeatsLoaded && 
-        _carsBloc.state is CarsLoaded && repo != null) {
+    if (_repeatsBloc.state is RepeatsLoaded &&
+        _carsBloc.state is CarsLoaded &&
+        repo != null) {
       List<Todo> updatedTodos = (state as TodosLoaded).todos;
 
       RepeatsLoaded curRepeatsState = _repeatsBloc.state;
-      Repeat curRepeat = curRepeatsState.repeats.firstWhere((r) => r.name == curTodo.repeatName, orElse: () => null);
+      Repeat curRepeat = curRepeatsState.repeats
+          .firstWhere((r) => r.name == curTodo.repeatName, orElse: () => null);
       // throw Exception();
       if (!curRepeat.props.every((p) => p == null)) {
         Todo newTodo = _createNewTodoFromRepeat(curRepeat, curTodo);
         updatedTodos = updatedTodos..add(newTodo);
         repo.addNewTodo(newTodo);
       }
-      
+
       Todo completedTodo = curTodo.copyWith(
-        completed: true, 
+        completed: true,
         completedDate: event.completedDate ?? DateTime.now(),
       );
       updatedTodos = updatedTodos
-        .map((t) => (t.id == completedTodo.id) ? completedTodo : t)
-        .toList();
+          .map((t) => (t.id == completedTodo.id) ? completedTodo : t)
+          .toList();
       yield TodosLoaded(updatedTodos);
       repo.updateTodo(completedTodo);
     }
@@ -203,9 +203,9 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
 
   Stream<TodosState> _mapDeleteTodoToState(DeleteTodo event) async* {
     final updatedTodos = (state as TodosLoaded)
-          .todos
-          .where((r) => r.id != event.todo.id)
-          .toList();
+        .todos
+        .where((r) => r.id != event.todo.id)
+        .toList();
     yield TodosLoaded(updatedTodos);
     repo.deleteTodo(event.todo);
   }

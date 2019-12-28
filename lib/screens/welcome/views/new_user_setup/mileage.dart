@@ -11,7 +11,8 @@ class CarEntryField extends StatefulWidget {
   CarEntryField(this.next, this.onNameSaved, this.onMileageSaved);
 
   @override
-  State<CarEntryField> createState() => CarEntryFieldState(next, onNameSaved, onMileageSaved);
+  State<CarEntryField> createState() =>
+      CarEntryFieldState(next, onNameSaved, onMileageSaved);
 }
 
 class CarEntryFieldState extends State<CarEntryField> {
@@ -146,7 +147,8 @@ class MileageScreenState extends State<MileageScreen> {
     Widget card() {
       List<Widget> carFields = [];
       for (var car in cars) {
-        carFields.add(CarEntryField(_next, (val) => car['name'] = val, (val) => car['mileage'] = int.parse(val)));
+        carFields.add(CarEntryField(_next, (val) => car['name'] = val,
+            (val) => car['mileage'] = int.parse(val)));
       }
 
       return Container(

@@ -5,10 +5,11 @@ import 'package:flutter/material.dart';
 class AutodoActionButton extends StatefulWidget {
   final Key mainButtonKey;
   final List<Key> miniButtonKeys;
-  AutodoActionButton({Key key, this.mainButtonKey, this.miniButtonKeys}) : super(key: key);
-  
+  AutodoActionButton({Key key, this.mainButtonKey, this.miniButtonKeys})
+      : super(key: key);
+
   @override
-  _AutodoActionButtonState createState() => 
+  _AutodoActionButtonState createState() =>
       _AutodoActionButtonState(mainButtonKey, miniButtonKeys);
 }
 
@@ -25,14 +26,8 @@ class _AutodoActionButtonState extends State<AutodoActionButton>
       "data": Icons.local_gas_station,
       "semanticLabel": 'Add Refueling',
     },
-    {
-      "data": Icons.build,
-      "semanticLabel": 'Add ToDo'
-    },
-    {
-      "data": Icons.autorenew,
-      "semanticLabel": 'Add Repeat'
-    },
+    {"data": Icons.build, "semanticLabel": 'Add ToDo'},
+    {"data": Icons.autorenew, "semanticLabel": 'Add Repeat'},
   ];
 
   @override
@@ -51,14 +46,14 @@ class _AutodoActionButtonState extends State<AutodoActionButton>
     } else {
       _controller.reverse();
     }
-  } 
+  }
 
   _buttonKey(index) {
     if (miniButtonKeys == null) return null;
     return (miniButtonKeys == null && miniButtonKeys.length >= index)
-        ? null : miniButtonKeys[index];
+        ? null
+        : miniButtonKeys[index];
   }
-    
 
   @override
   Widget build(BuildContext context) {
@@ -81,12 +76,10 @@ class _AutodoActionButtonState extends State<AutodoActionButton>
               heroTag: null,
               backgroundColor: backgroundColor,
               mini: true,
-              child: Icon(
-                icons[index]['data'], 
-                color: foregroundColor,
-                semanticLabel: icons[index]['semanticLabel'],
-                key: _buttonKey(index)
-              ),
+              child: Icon(icons[index]['data'],
+                  color: foregroundColor,
+                  semanticLabel: icons[index]['semanticLabel'],
+                  key: _buttonKey(index)),
               onPressed: () {
                 switchState();
                 if (index == 0) {
