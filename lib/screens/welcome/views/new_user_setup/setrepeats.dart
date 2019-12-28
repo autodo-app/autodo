@@ -14,13 +14,15 @@ class SetRepeatsScreen extends StatefulWidget {
   final page;
   final repeatsBloc;
 
-  SetRepeatsScreen(this.repeatKey, this.page, {
+  SetRepeatsScreen(
+    this.repeatKey,
+    this.page, {
     this.repeatsBloc,
   });
 
   @override
-  SetRepeatsScreenState createState() =>
-      SetRepeatsScreenState(this.page == NewUserScreenPage.REPEATS, repeatsBloc);
+  SetRepeatsScreenState createState() => SetRepeatsScreenState(
+      this.page == NewUserScreenPage.REPEATS, repeatsBloc);
 }
 
 class SetRepeatsScreenState extends State<SetRepeatsScreen>
@@ -77,7 +79,8 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen>
     }
     RepeatsLoaded curState = repeatsBloc.state;
     Repeat oilRepeat = curState.repeats.firstWhere((val) => val.name == 'oil');
-    Repeat tireRotationRepeat = curState.repeats.firstWhere((val) => val.name == 'tireRotation');
+    Repeat tireRotationRepeat =
+        curState.repeats.firstWhere((val) => val.name == 'tireRotation');
 
     Widget oilInterval = TextFormField(
       maxLines: 1,
@@ -86,13 +89,8 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen>
       decoration:
           defaultInputDecoration('(miles)', 'Oil Change Interval (miles)'),
       validator: (val) => intValidator(val),
-      onSaved: (val) => repeatsBloc.add(
-        UpdateRepeat(
-          oilRepeat.copyWith(
-            mileageInterval: int.parse(val.trim())
-          )
-        )
-      ),
+      onSaved: (val) => repeatsBloc.add(UpdateRepeat(
+          oilRepeat.copyWith(mileageInterval: int.parse(val.trim())))),
       focusNode: _oilNode,
       textInputAction: TextInputAction.next,
       onFieldSubmitted: (_) => changeFocus(_oilNode, _tiresNode),
@@ -105,13 +103,8 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen>
       decoration:
           defaultInputDecoration('(miles)', 'Tire Rotation Interval (miles)'),
       validator: (val) => intValidator(val),
-      onSaved: (val) => repeatsBloc.add(
-        UpdateRepeat(
-          tireRotationRepeat.copyWith(
-            mileageInterval: int.parse(val.trim())
-          )
-        )
-      ),
+      onSaved: (val) => repeatsBloc.add(UpdateRepeat(
+          tireRotationRepeat.copyWith(mileageInterval: int.parse(val.trim())))),
       focusNode: _tiresNode,
       textInputAction: TextInputAction.done,
     );

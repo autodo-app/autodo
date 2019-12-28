@@ -21,7 +21,8 @@ void main() {
         expect(UpdateCar(Car()).props, [Car()]);
       });
       test('toString', () {
-        expect(UpdateCar(Car()).toString(), 'UpdateCar { updatedCar: ${Car()} }');
+        expect(
+            UpdateCar(Car()).toString(), 'UpdateCar { updatedCar: ${Car()} }');
       });
     });
     group('DeleteCar', () {
@@ -42,10 +43,13 @@ void main() {
         date: DateTime.fromMillisecondsSinceEpoch(0),
       );
       test('props', () {
-        expect(ExternalRefuelingsUpdated([refueling]).props, [[refueling]]);
+        expect(ExternalRefuelingsUpdated([refueling]).props, [
+          [refueling]
+        ]);
       });
       test('toString', () {
-        expect(ExternalRefuelingsUpdated([refueling]).toString(), 'ExternalRefuelingsUpdated { refuelings: ${[refueling]} }');
+        expect(ExternalRefuelingsUpdated([refueling]).toString(),
+            'ExternalRefuelingsUpdated { refuelings: ${[refueling]} }');
       });
     });
   });

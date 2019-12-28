@@ -4,7 +4,7 @@ class DetailsScreen extends StatelessWidget {
   final String id;
 
   DetailsScreen({Key key, @required this.id}) : super(key: key);
-  
-  @override 
+
+  @override
   build(context) => Container();
 }

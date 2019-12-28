@@ -18,13 +18,15 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
   final DatabaseBloc _dbBloc;
 
   RefuelingsBloc({@required dbBloc})
-      : assert(dbBloc != null), _dbBloc = dbBloc;
+      : assert(dbBloc != null),
+        _dbBloc = dbBloc;
 
   @override
   RefuelingsState get initialState => RefuelingsLoading();
 
-  DataRepository get repo => (_dbBloc.state is DbLoaded) ? 
-    (_dbBloc.state as DbLoaded).repository : null;
+  DataRepository get repo => (_dbBloc.state is DbLoaded)
+      ? (_dbBloc.state as DbLoaded).repository
+      : null;
 
   @override
   Stream<RefuelingsState> mapEventToState(RefuelingsEvent event) async* {
@@ -83,12 +85,14 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
     Refueling out = event.refueling.copyWith(efficiency: dist / item.amount);
 
     // event.carsBloc.add(AddRefuelingInfo(item.car, item.mileage, item.date, item.efficiency, prev.date, dist));
-    final List<Refueling> updatedRefuelings = List.from((state as RefuelingsLoaded).refuelings)..add(out);
+    final List<Refueling> updatedRefuelings =
+        List.from((state as RefuelingsLoaded).refuelings)..add(out);
     yield RefuelingsLoaded(updatedRefuelings);
     repo.addNewRefueling(out);
   }
 
-  Stream<RefuelingsState> _mapUpdateRefuelingToState(UpdateRefueling event) async* {
+  Stream<RefuelingsState> _mapUpdateRefuelingToState(
+      UpdateRefueling event) async* {
     if (repo == null) return;
 
     var prev = await _findLatestRefueling(event.refueling);
@@ -97,13 +101,15 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
     Refueling out = event.refueling.copyWith(efficiency: efficiency);
 
     final List<Refueling> updatedRefuelings = (state as RefuelingsLoaded)
-      .refuelings.map((r) => r.id == out.id ? out : r)
-      .toList();
+        .refuelings
+        .map((r) => r.id == out.id ? out : r)
+        .toList();
     yield RefuelingsLoaded(updatedRefuelings);
     repo.updateRefueling(out);
   }
 
-  Stream<RefuelingsState> _mapDeleteRefuelingToState(DeleteRefueling event) async* {
+  Stream<RefuelingsState> _mapDeleteRefuelingToState(
+      DeleteRefueling event) async* {
     if (state is RefuelingsLoaded && repo != null) {
       final updatedRefuelings = (state as RefuelingsLoaded)
           .refuelings

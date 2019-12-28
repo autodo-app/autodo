@@ -10,13 +10,10 @@ class TodosScreen extends StatelessWidget {
 
   onDismissed(direction, context, todo) {
     BlocProvider.of<TodosBloc>(context).add(DeleteTodo(todo));
-    Scaffold.of(context).showSnackBar(
-      DeleteTodoSnackBar(
-        todo: todo,
-        onUndo: () => BlocProvider.of<TodosBloc>(context)
-          .add(AddTodo(todo)),
-      )
-    );
+    Scaffold.of(context).showSnackBar(DeleteTodoSnackBar(
+      todo: todo,
+      onUndo: () => BlocProvider.of<TodosBloc>(context).add(AddTodo(todo)),
+    ));
   }
 
   onTap(context, todo) async {
@@ -33,33 +30,31 @@ class TodosScreen extends StatelessWidget {
     );
   }
 
-  @override 
-  build(context) => BlocBuilder<FilteredTodosBloc, FilteredTodosState>(  
-    builder: (context, state) {
-      if (state is FilteredTodosLoading) {
-        return LoadingIndicator();
-      } else if (state is FilteredTodosLoaded) {
-        final todos = state.filteredTodos;
-        return ListView.builder(  
-          itemCount: todos.length,
-          itemBuilder: (context, index) {
-            final todo = todos[index];
-            return Padding( 
-              padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-              child: TodoCard(
-                todo: todo,
-                onDismissed: (direction) => 
-                    onDismissed(direction, context, todo),
-                onTap: () => onTap(context, todo),
-                onCheckboxChanged: (_) => onCheckboxChanged(context, todo),
-                emphasized: index == 0, 
-              )
-            );
-          },
-        );
-      } else {
-        return Container();
-      }
-    }
-  );
+  @override
+  build(context) => BlocBuilder<FilteredTodosBloc, FilteredTodosState>(
+          builder: (context, state) {
+        if (state is FilteredTodosLoading) {
+          return LoadingIndicator();
+        } else if (state is FilteredTodosLoaded) {
+          final todos = state.filteredTodos;
+          return ListView.builder(
+            itemCount: todos.length,
+            itemBuilder: (context, index) {
+              final todo = todos[index];
+              return Padding(
+                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  child: TodoCard(
+                    todo: todo,
+                    onDismissed: (direction) =>
+                        onDismissed(direction, context, todo),
+                    onTap: () => onTap(context, todo),
+                    onCheckboxChanged: (_) => onCheckboxChanged(context, todo),
+                    emphasized: index == 0,
+                  ));
+            },
+          );
+        } else {
+          return Container();
+        }
+      });
 }

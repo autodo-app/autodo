@@ -8,7 +8,7 @@ class CarsForm extends StatefulWidget {
 
   CarsForm({this.cars, this.onSaved});
 
-  @override 
+  @override
   _CarsFormState createState() => _CarsFormState(cars, onSaved);
 }
 
@@ -23,26 +23,23 @@ class _CarsFormState extends State<CarsForm> {
     }
   }
 
-  @override 
+  @override
   build(context) => FormField<List<Map<String, dynamic>>>(
-    builder: (context) => Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: List.generate(
-        cars.length,
-        (index) => ListTile(
-          leading: Checkbox(
-            value: _carStates[index]['enabled'],
-            onChanged: (state) {
-              _carStates[index]['enabled'] = state;
-              setState(() {});
-            },
-            materialTapTargetSize: MaterialTapTargetSize.padded,
-          ),
-          title: Text(_carStates[index]['name'])
-        )
-      )
-    ),
-    onSaved: (_) => onSaved(_carStates),
-  );
+        builder: (context) => Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: List.generate(
+                cars.length,
+                (index) => ListTile(
+                    leading: Checkbox(
+                      value: _carStates[index]['enabled'],
+                      onChanged: (state) {
+                        _carStates[index]['enabled'] = state;
+                        setState(() {});
+                      },
+                      materialTapTargetSize: MaterialTapTargetSize.padded,
+                    ),
+                    title: Text(_carStates[index]['name'])))),
+        onSaved: (_) => onSaved(_carStates),
+      );
 }

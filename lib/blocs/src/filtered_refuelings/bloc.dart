@@ -11,7 +11,8 @@ import '../refuelings/barrel.dart';
 import 'event.dart';
 import 'state.dart';
 
-class FilteredRefuelingsBloc extends Bloc<FilteredRefuelingsEvent, FilteredRefuelingsState> {
+class FilteredRefuelingsBloc
+    extends Bloc<FilteredRefuelingsEvent, FilteredRefuelingsState> {
   static const int HUE_RANGE = 60; // range of usable hues is 0-120, or +- 60
   static const double EFF_VAR = 5.0;
   static const double HUE_MAX = 360.0;
@@ -20,10 +21,12 @@ class FilteredRefuelingsBloc extends Bloc<FilteredRefuelingsEvent, FilteredRefue
   final CarsBloc carsBloc;
   StreamSubscription refuelingsSubscription, carsSubscription;
 
-  FilteredRefuelingsBloc({@required this.refuelingsBloc, @required this.carsBloc}) {
+  FilteredRefuelingsBloc(
+      {@required this.refuelingsBloc, @required this.carsBloc}) {
     refuelingsSubscription = refuelingsBloc.listen((state) {
       if (state is RefuelingsLoaded) {
-        add(UpdateRefuelings((refuelingsBloc.state as RefuelingsLoaded).refuelings));
+        add(UpdateRefuelings(
+            (refuelingsBloc.state as RefuelingsLoaded).refuelings));
       }
     });
     carsSubscription = carsBloc.listen((state) {
@@ -35,12 +38,12 @@ class FilteredRefuelingsBloc extends Bloc<FilteredRefuelingsEvent, FilteredRefue
 
   @override
   FilteredRefuelingsState get initialState {
-    if (refuelingsBloc.state is RefuelingsLoaded && carsBloc.state is CarsLoaded) {
+    if (refuelingsBloc.state is RefuelingsLoaded &&
+        carsBloc.state is CarsLoaded) {
       return _shadeEfficiencyStats(
-        (refuelingsBloc.state as RefuelingsLoaded).refuelings,
-        (carsBloc.state as CarsLoaded).cars,
-         VisibilityFilter.all
-      );
+          (refuelingsBloc.state as RefuelingsLoaded).refuelings,
+          (carsBloc.state as CarsLoaded).cars,
+          VisibilityFilter.all);
     } else if (refuelingsBloc.state is RefuelingsLoading) {
       return FilteredRefuelingsLoading();
     } else {
@@ -49,7 +52,8 @@ class FilteredRefuelingsBloc extends Bloc<FilteredRefuelingsEvent, FilteredRefue
   }
 
   @override
-  Stream<FilteredRefuelingsState> mapEventToState(FilteredRefuelingsEvent event) async* {
+  Stream<FilteredRefuelingsState> mapEventToState(
+      FilteredRefuelingsEvent event) async* {
     if (event is UpdateRefuelingsFilter) {
       yield* _mapUpdateFilterToState(event);
     } else if (event is UpdateRefuelings) {
@@ -62,7 +66,8 @@ class FilteredRefuelingsBloc extends Bloc<FilteredRefuelingsEvent, FilteredRefue
   Stream<FilteredRefuelingsState> _mapUpdateFilterToState(
     UpdateRefuelingsFilter event,
   ) async* {
-    if (refuelingsBloc.state is RefuelingsLoaded && state is FilteredRefuelingsLoaded) {
+    if (refuelingsBloc.state is RefuelingsLoaded &&
+        state is FilteredRefuelingsLoaded) {
       final curState = state as FilteredRefuelingsLoaded;
       yield FilteredRefuelingsLoaded(
         curState.filteredRefuelings,
@@ -82,10 +87,12 @@ class FilteredRefuelingsBloc extends Bloc<FilteredRefuelingsEvent, FilteredRefue
   }
 
   int _hsv(Refueling refueling, Car car) {
-    if (refueling.efficiency == double.infinity) return HSV(1.0, 1.0, 1.0).toValue();
+    if (refueling.efficiency == double.infinity)
+      return HSV(1.0, 1.0, 1.0).toValue();
     var avgEff = car.averageEfficiency;
     // range is 0 to 120
-    var diff = (refueling.efficiency == null || refueling.efficiency == double.infinity)
+    var diff = (refueling.efficiency == null ||
+            refueling.efficiency == double.infinity)
         ? 0
         : refueling.efficiency - avgEff;
     dynamic hue = (diff * HUE_RANGE) / EFF_VAR;
@@ -94,31 +101,39 @@ class FilteredRefuelingsBloc extends Bloc<FilteredRefuelingsEvent, FilteredRefue
   }
 
   FilteredRefuelingsState _shadeEfficiencyStats(
-      List<Refueling> refuelings, List<Car> cars, [filter]) {
-    final curFilter = filter ?? (state as FilteredRefuelingsLoaded).activeFilter;
+      List<Refueling> refuelings, List<Car> cars,
+      [filter]) {
+    final curFilter =
+        filter ?? (state as FilteredRefuelingsLoaded).activeFilter;
     final shadedRefuelings = refuelings
-      .where((r) => cars.any((c) => c.name == r.carName))
-      .map((r) => r.copyWith(
-          efficiencyColor: Color(
-            _hsv(r, cars.firstWhere((c) => r.carName == c.name)))))
-      .toList();
+        .where((r) => cars.any((c) => c.name == r.carName))
+        .map((r) => r.copyWith(
+            efficiencyColor:
+                Color(_hsv(r, cars.firstWhere((c) => r.carName == c.name)))))
+        .toList();
     final updatedRefuelings = refuelings
-      .map((r) => shadedRefuelings.any((s) => s.id == r.id) ? 
-        shadedRefuelings.firstWhere((s) => s.id == r.id) : r)
-      .toList();
+        .map((r) => shadedRefuelings.any((s) => s.id == r.id)
+            ? shadedRefuelings.firstWhere((s) => s.id == r.id)
+            : r)
+        .toList();
     return FilteredRefuelingsLoaded(updatedRefuelings, curFilter, cars);
   }
 
-  Stream<FilteredRefuelingsState> _mapCarsUpdatedToState(FilteredRefuelingsUpdateCars event) async* {
+  Stream<FilteredRefuelingsState> _mapCarsUpdatedToState(
+      FilteredRefuelingsUpdateCars event) async* {
     if (state is FilteredRefuelingsLoaded) {
       FilteredRefuelingsLoaded curState = state as FilteredRefuelingsLoaded;
       final curFilter = curState.activeFilter;
       List<Refueling> updatedRefuelings = curState.filteredRefuelings;
       for (var c in event.cars) {
-        List<Refueling> toUpdate = curState.filteredRefuelings.where((r) => r.carName == c.name).toList();
+        List<Refueling> toUpdate = curState.filteredRefuelings
+            .where((r) => r.carName == c.name)
+            .toList();
         for (var r in toUpdate) {
           Refueling updated = r.copyWith(efficiencyColor: Color(_hsv(r, c)));
-          updatedRefuelings = updatedRefuelings.map((r) => r.id == updated.id ? updated : r).toList();
+          updatedRefuelings = updatedRefuelings
+              .map((r) => r.id == updated.id ? updated : r)
+              .toList();
         }
       }
       yield FilteredRefuelingsLoaded(updatedRefuelings, curFilter, event.cars);

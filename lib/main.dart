@@ -40,13 +40,12 @@ void main() async {
   Map keys = await SecretLoader(secretPath: 'keys.json').load();
   _sentry = SentryClient(dsn: keys['sentry-dsn']);
   FirebaseApp.configure(
-    name: 'autodo',
-    options: FirebaseOptions(
-      googleAppID: '1:617460744396:android:400cbb86de167047',
-      projectID: 'autodo-49f21',
-      apiKey: keys['firebase-key'],
-    )
-  );
+      name: 'autodo',
+      options: FirebaseOptions(
+        googleAppID: '1:617460744396:android:400cbb86de167047',
+        projectID: 'autodo-49f21',
+        apiKey: keys['firebase-key'],
+      ));
   BlocSupervisor.delegate = AutodoBlocDelegate();
   final AuthRepository authRepository = FirebaseAuthRepository();
   // ThemeData theme = AutodoTheme();
@@ -54,43 +53,42 @@ void main() async {
   runZoned<Future<void>>(() async {
     runApp(
       BlocProvider<AuthenticationBloc>(
-        create: (context) => AuthenticationBloc(
-            userRepository: authRepository
-          )..add(AppStarted()),
-        child: BlocProvider<DatabaseBloc>(  
+        create: (context) => AuthenticationBloc(userRepository: authRepository)
+          ..add(AppStarted()),
+        child: BlocProvider<DatabaseBloc>(
           create: (context) => DatabaseBloc(
             authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
           )..add(LoadDatabase()),
-          child: MultiBlocProvider(  
+          child: MultiBlocProvider(
             providers: [
               BlocProvider<NotificationsBloc>(
-                create: (context) => NotificationsBloc(  
+                create: (context) => NotificationsBloc(
                   dbBloc: BlocProvider.of<DatabaseBloc>(context),
                 ),
               ),
-              BlocProvider<RefuelingsBloc>(  
+              BlocProvider<RefuelingsBloc>(
                 create: (context) => RefuelingsBloc(
                   dbBloc: BlocProvider.of<DatabaseBloc>(context),
                 ),
               ),
               BlocProvider<RepeatsBloc>(
-                create: (context) => RepeatsBloc(  
+                create: (context) => RepeatsBloc(
                   dbBloc: BlocProvider.of<DatabaseBloc>(context),
                 ),
               ),
             ],
-            child: BlocProvider<CarsBloc>(  
+            child: BlocProvider<CarsBloc>(
               create: (context) => CarsBloc(
                 dbBloc: BlocProvider.of<DatabaseBloc>(context),
                 refuelingsBloc: BlocProvider.of<RefuelingsBloc>(context),
               ),
               child: BlocProvider<TodosBloc>(
-                create: (context) => TodosBloc(  
-                  dbBloc: BlocProvider.of<DatabaseBloc>(context),
-                  notificationsBloc: BlocProvider.of<NotificationsBloc>(context),
-                  carsBloc: BlocProvider.of<CarsBloc>(context),
-                  repeatsBloc: BlocProvider.of<RepeatsBloc>(context)
-                ),
+                create: (context) => TodosBloc(
+                    dbBloc: BlocProvider.of<DatabaseBloc>(context),
+                    notificationsBloc:
+                        BlocProvider.of<NotificationsBloc>(context),
+                    carsBloc: BlocProvider.of<CarsBloc>(context),
+                    repeatsBloc: BlocProvider.of<RepeatsBloc>(context)),
                 child: App(theme: theme),
               ),
             ),
@@ -104,29 +102,32 @@ void main() async {
 class App extends StatelessWidget {
   final ThemeData _theme;
 
-  App({@required theme}) : assert(theme != null), _theme = theme;
+  App({@required theme})
+      : assert(theme != null),
+        _theme = theme;
 
   @override
   build(context) => MaterialApp(
-    title: 'auToDo',
-    routes: {
-      "/": (context) => BlocBuilder<AuthenticationBloc, AuthenticationState>( 
-        // Just here as the splitter between home screen and login screen
-        builder: (context, state) {
-          if (state is Authenticated) {
-            return HomeScreenProvider();
-          } else if (state is Unauthenticated) {
-            return WelcomeScreenProvider();
-          } else {
-            return LoadingIndicator();
-          }
+        title: 'auToDo',
+        routes: {
+          "/": (context) =>
+              BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                // Just here as the splitter between home screen and login screen
+                builder: (context, state) {
+                  if (state is Authenticated) {
+                    return HomeScreenProvider();
+                  } else if (state is Unauthenticated) {
+                    return WelcomeScreenProvider();
+                  } else {
+                    return LoadingIndicator();
+                  }
+                },
+                bloc: BlocProvider.of<AuthenticationBloc>(context),
+              ),
+          AutodoRoutes.home: (context) => HomeScreenProvider(),
+          AutodoRoutes.welcome: (context) => WelcomeScreenProvider(),
         },
-        bloc: BlocProvider.of<AuthenticationBloc>(context),
-      ),
-      AutodoRoutes.home: (context) => HomeScreenProvider(),
-      AutodoRoutes.welcome: (context) => WelcomeScreenProvider(),
-    },
-    theme: _theme,
-    debugShowCheckedModeBanner: false,
-  );
+        theme: _theme,
+        debugShowCheckedModeBanner: false,
+      );
 }

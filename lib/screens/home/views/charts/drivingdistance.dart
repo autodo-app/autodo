@@ -29,19 +29,18 @@ class DrivingDistanceHistory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Column(
-    mainAxisSize: MainAxisSize.min,
-    mainAxisAlignment: MainAxisAlignment.spaceAround,
-    children: [
-      Padding(
-        padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
-      ),
-      Text('Driving Distance History',
-          style: Theme.of(context).primaryTextTheme.subtitle),
-      Container(
-        height: 300,
-        padding: EdgeInsets.all(15),
-        child: DrivingDistanceChart(data),
-      )
-    ]
-  );
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Padding(
+              padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+            ),
+            Text('Driving Distance History',
+                style: Theme.of(context).primaryTextTheme.subtitle),
+            Container(
+              height: 300,
+              padding: EdgeInsets.all(15),
+              child: DrivingDistanceChart(data),
+            )
+          ]);
 }

@@ -10,18 +10,17 @@ class MockTodosBloc extends MockBloc<TodosEvent, TodosState>
 void main() {
   group('FilteredTodosEvent', () {
     final todo = Todo(
-      name: 'Oil', 
-      id: '0',
-      carName: '',
-      repeatName: '',
-      dueState: TodoDueState.DUE_SOON,
-      dueMileage: 1000,
-      notificationID: 0,
-      completed: false,
-      estimatedDueDate: false,
-      completedDate: DateTime.fromMillisecondsSinceEpoch(0),
-      dueDate: DateTime.fromMillisecondsSinceEpoch(0)
-    );
+        name: 'Oil',
+        id: '0',
+        carName: '',
+        repeatName: '',
+        dueState: TodoDueState.DUE_SOON,
+        dueMileage: 1000,
+        notificationID: 0,
+        completed: false,
+        estimatedDueDate: false,
+        completedDate: DateTime.fromMillisecondsSinceEpoch(0),
+        dueDate: DateTime.fromMillisecondsSinceEpoch(0));
     group('UpdateFilter', () {
       test('toString returns correct value', () {
         expect(
@@ -30,7 +29,7 @@ void main() {
         );
       });
       test('props are correct', () {
-        expect(  
+        expect(
           UpdateTodosFilter(VisibilityFilter.active).props,
           [VisibilityFilter.active],
         );
@@ -47,7 +46,9 @@ void main() {
       test('props are correct', () {
         expect(
           UpdateTodos([todo]).props,
-          [[todo]],
+          [
+            [todo]
+          ],
         );
       });
     });

@@ -13,43 +13,40 @@ class MockTodosBloc extends MockBloc<TodosEvent, TodosState>
 void main() {
   group('FilteredTodosBloc', () {
     final todo = Todo(
-      name: 'Oil', 
-      id: '0',
-      carName: '',
-      repeatName: '',
-      dueState: TodoDueState.DUE_SOON,
-      dueMileage: 1000,
-      notificationID: 0,
-      completed: false,
-      estimatedDueDate: false,
-      completedDate: DateTime.now(),
-      dueDate: DateTime.now()
-    );
+        name: 'Oil',
+        id: '0',
+        carName: '',
+        repeatName: '',
+        dueState: TodoDueState.DUE_SOON,
+        dueMileage: 1000,
+        notificationID: 0,
+        completed: false,
+        estimatedDueDate: false,
+        completedDate: DateTime.now(),
+        dueDate: DateTime.now());
     blocTest<FilteredTodosBloc, FilteredTodosEvent, FilteredTodosState>(
-      'adds TodosUpdated when TodosBloc.state emits TodosLoaded',
-      build: () {
-        final todosBloc = MockTodosBloc();
-        when(todosBloc.state).thenReturn(TodosLoaded([todo]));
-        whenListen(
-          todosBloc,
-          Stream<TodosState>.fromIterable([TodosLoaded([todo])]),
-        );
-        return FilteredTodosBloc(todosBloc: todosBloc);
-      }, 
-      expect: [
-        FilteredTodosLoaded(
-          [todo],
-          VisibilityFilter.all,
-        ),
-      ]
-    );
+        'adds TodosUpdated when TodosBloc.state emits TodosLoaded', build: () {
+      final todosBloc = MockTodosBloc();
+      when(todosBloc.state).thenReturn(TodosLoaded([todo]));
+      whenListen(
+        todosBloc,
+        Stream<TodosState>.fromIterable([
+          TodosLoaded([todo])
+        ]),
+      );
+      return FilteredTodosBloc(todosBloc: todosBloc);
+    }, expect: [
+      FilteredTodosLoaded(
+        [todo],
+        VisibilityFilter.all,
+      ),
+    ]);
 
     blocTest<FilteredTodosBloc, FilteredTodosEvent, FilteredTodosState>(
       'should update the VisibilityFilter when filter is active',
       build: () {
         final todosBloc = MockTodosBloc();
-        when(todosBloc.state)
-            .thenReturn(TodosLoaded([todo]));
+        when(todosBloc.state).thenReturn(TodosLoaded([todo]));
         return FilteredTodosBloc(todosBloc: todosBloc);
       },
       act: (FilteredTodosBloc bloc) async =>
@@ -70,8 +67,7 @@ void main() {
       'should update the VisibilityFilter when filter is completed',
       build: () {
         final todosBloc = MockTodosBloc();
-        when(todosBloc.state)
-            .thenReturn(TodosLoaded([todo]));
+        when(todosBloc.state).thenReturn(TodosLoaded([todo]));
         return FilteredTodosBloc(todosBloc: todosBloc);
       },
       act: (FilteredTodosBloc bloc) async =>
@@ -84,5 +80,5 @@ void main() {
         FilteredTodosLoaded([], VisibilityFilter.completed),
       ],
     );
-  }); 
+  });
 }

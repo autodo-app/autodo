@@ -11,7 +11,8 @@ import 'forms/barrel.dart';
 import 'package:autodo/localization.dart';
 import 'package:autodo/util.dart';
 
-typedef _OnSaveCallback = Function(DateTime dueDate, int dueMileage, String repeatName, List<String> carNames);
+typedef _OnSaveCallback = Function(
+    DateTime dueDate, int dueMileage, String repeatName, List<String> carNames);
 
 class _NameForm extends StatelessWidget {
   final Todo todo;
@@ -20,27 +21,27 @@ class _NameForm extends StatelessWidget {
 
   _NameForm({this.todo, this.onSaved, this.node, this.nextNode});
 
-  @override 
+  @override
   build(context) => TextFormField(
-    decoration: InputDecoration(
-      border: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.teal),
-      ),
-      labelText: "Action Name *",
-      contentPadding:
-          EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
-    ),
-    initialValue: todo?.name ?? '',
-    autofocus: true,
-    focusNode: node,
-    style: Theme.of(context).primaryTextTheme.subtitle,
-    keyboardType: TextInputType.text,
-    textCapitalization: TextCapitalization.sentences,
-    validator: requiredValidator,
-    onSaved: onSaved,
-    textInputAction: TextInputAction.next,
-    onFieldSubmitted: (_) => changeFocus(node, nextNode),
-  );
+        decoration: InputDecoration(
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.teal),
+          ),
+          labelText: "Action Name *",
+          contentPadding:
+              EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
+        ),
+        initialValue: todo?.name ?? '',
+        autofocus: true,
+        focusNode: node,
+        style: Theme.of(context).primaryTextTheme.subtitle,
+        keyboardType: TextInputType.text,
+        textCapitalization: TextCapitalization.sentences,
+        validator: requiredValidator,
+        onSaved: onSaved,
+        textInputAction: TextInputAction.next,
+        onFieldSubmitted: (_) => changeFocus(node, nextNode),
+      );
 }
 
 class _DateForm extends StatefulWidget {
@@ -56,12 +57,9 @@ class _DateForm extends StatefulWidget {
     @required this.nextNode,
   }) : super(key: key);
 
-  @override 
-  _DateFormState createState() => _DateFormState(
-    node: node, 
-    nextNode: nextNode,
-    initial: todo?.dueDate
-  );
+  @override
+  _DateFormState createState() =>
+      _DateFormState(node: node, nextNode: nextNode, initial: todo?.dueDate);
 }
 
 class _DateFormState extends State<_DateForm> {
@@ -71,14 +69,14 @@ class _DateFormState extends State<_DateForm> {
 
   _DateFormState({this.node, this.nextNode, this.initial});
 
-  @override 
+  @override
   initState() {
     _ctrl = TextEditingController();
     if (initial != null) _ctrl.text = DateFormat.yMd().format(initial);
     super.initState();
   }
 
-  @override 
+  @override
   dispose() {
     _ctrl.dispose();
     super.dispose();
@@ -119,40 +117,37 @@ class _DateFormState extends State<_DateForm> {
     return d != null && d.isBefore(DateTime.now());
   }
 
-  @override 
-  build(context) => Row(
-    children: <Widget>[
-      Expanded(
-        child: TextFormField(
-          decoration: InputDecoration(
-            hintText: AutodoLocalizations.optional,
-            labelText: AutodoLocalizations.dueDate,
-            contentPadding: EdgeInsets.fromLTRB(16, 20, 16, 5),
-            border: OutlineInputBorder(
-              borderSide: BorderSide(
-                  color: Theme.of(context).primaryColor),
-            ),
-          ),
-          controller: _ctrl,
-          keyboardType: TextInputType.datetime,
-          validator: (val) =>
-              isValidDate(val) ? null : AutodoLocalizations.invalidDate,
-          onSaved: (val) => widget.onSaved(val),
-          textInputAction: (nextNode == null) ? TextInputAction.done : TextInputAction.next,
-          focusNode: node,
-          onFieldSubmitted: (_) {
-            if (nextNode != null)
-              return changeFocus(node, nextNode);
-          }
+  @override
+  build(context) => Row(children: <Widget>[
+        Expanded(
+          child: TextFormField(
+              decoration: InputDecoration(
+                hintText: AutodoLocalizations.optional,
+                labelText: AutodoLocalizations.dueDate,
+                contentPadding: EdgeInsets.fromLTRB(16, 20, 16, 5),
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Theme.of(context).primaryColor),
+                ),
+              ),
+              controller: _ctrl,
+              keyboardType: TextInputType.datetime,
+              validator: (val) =>
+                  isValidDate(val) ? null : AutodoLocalizations.invalidDate,
+              onSaved: (val) => widget.onSaved(val),
+              textInputAction: (nextNode == null)
+                  ? TextInputAction.done
+                  : TextInputAction.next,
+              focusNode: node,
+              onFieldSubmitted: (_) {
+                if (nextNode != null) return changeFocus(node, nextNode);
+              }),
         ),
-      ),
-      IconButton(
-        icon: Icon(Icons.calendar_today),
-        tooltip: AutodoLocalizations.chooseDate,
-        onPressed: (() => chooseDate(context, _ctrl.text)),
-      )
-    ]
-  );
+        IconButton(
+          icon: Icon(Icons.calendar_today),
+          tooltip: AutodoLocalizations.chooseDate,
+          onPressed: (() => chooseDate(context, _ctrl.text)),
+        )
+      ]);
 }
 
 class _MileageForm extends StatelessWidget {
@@ -162,30 +157,28 @@ class _MileageForm extends StatelessWidget {
 
   _MileageForm({this.todo, this.onSaved, this.node, this.nextNode});
 
-  @override 
+  @override
   build(context) => TextFormField(
-    decoration: InputDecoration(
-      border: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.teal),
-      ),
-      labelText: "Due Mileage *",
-      contentPadding:
-          EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
-    ),
-    initialValue: todo?.dueMileage.toString() ?? '',
-    autofocus: false,
-    focusNode: node,
-    style: Theme.of(context).primaryTextTheme.subtitle,
-    keyboardType: TextInputType.text,
-    textCapitalization: TextCapitalization.sentences,
-    validator: requiredValidator,
-    onSaved: onSaved,
-    textInputAction: TextInputAction.next,
-    onFieldSubmitted: (_) => changeFocus(node, nextNode),
-  );
+        decoration: InputDecoration(
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.teal),
+          ),
+          labelText: "Due Mileage *",
+          contentPadding:
+              EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
+        ),
+        initialValue: todo?.dueMileage.toString() ?? '',
+        autofocus: false,
+        focusNode: node,
+        style: Theme.of(context).primaryTextTheme.subtitle,
+        keyboardType: TextInputType.text,
+        textCapitalization: TextCapitalization.sentences,
+        validator: requiredValidator,
+        onSaved: onSaved,
+        textInputAction: TextInputAction.next,
+        onFieldSubmitted: (_) => changeFocus(node, nextNode),
+      );
 }
-
-
 
 class TodoAddEditScreen extends StatefulWidget {
   final bool isEditing;
@@ -211,7 +204,7 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
   DateTime _dueDate;
   int _dueMileage;
   String _repeatName;
-  List<Map<String, dynamic>> _cars  = [{}];
+  List<Map<String, dynamic>> _cars = [{}];
 
   bool get isEditing => widget.isEditing;
 
@@ -236,114 +229,117 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
   }
 
   @override
-  build(context) => Scaffold(  
-    resizeToAvoidBottomPadding: false,
-    appBar: AppBar(  
-      title: Text(
-        isEditing ? AutodoLocalizations.editRefueling : AutodoLocalizations.addRefueling,
-      ),
-    ),
-    body: Form(  
-      key: _formKey,
-      child: Container(  
-        padding: EdgeInsets.all(15),
-        child: ListView(  
-          controller: scrollCtrl,
-          children: <Widget>[
-            AutoScrollField(
-                controller: scrollCtrl,
-                child: _NameForm(  
-                  node: _nameNode,
-                  nextNode: _dateNode,
-                ),
-                focusNode: _nameNode,
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 15, bottom: 15),
-                child: Divider(),
-              ),
-              AutoScrollField(
-                controller: scrollCtrl,
-                child: _DateForm(
-                  todo: todo,
-                  node: _dateNode,
-                  nextNode: _mileageNode,
-                  onSaved: (val) => _dueDate = DateFormat.yMd().parseStrict(val),
-                ),
-                focusNode: _dateNode,
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 15),
-              ),
-              AutoScrollField(
-                controller: scrollCtrl,
-                child: _MileageForm(  
-                  todo: todo,
-                  node: _mileageNode,
-                  nextNode: _repeatNode,
-                  onSaved: (val) => _dueMileage = int.parse(val),
-                ),
-                focusNode: _mileageNode,
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 15),
-              ),
-              BlocBuilder<RepeatsBloc, RepeatsState>(
-                builder: (context, state) {
-                  if (state is RepeatsLoaded) {
-                    return AutoScrollField(
+  build(context) => Scaffold(
+        resizeToAvoidBottomPadding: false,
+        appBar: AppBar(
+          title: Text(
+            isEditing
+                ? AutodoLocalizations.editRefueling
+                : AutodoLocalizations.addRefueling,
+          ),
+        ),
+        body: Form(
+            key: _formKey,
+            child: Container(
+                padding: EdgeInsets.all(15),
+                child: ListView(
+                  controller: scrollCtrl,
+                  children: <Widget>[
+                    AutoScrollField(
                       controller: scrollCtrl,
-                      focusNode: _repeatNode,
-                      position: 240,
-                      child: RepeatForm(  
-                        todo: todo,
-                        node: _repeatNode,
-                        onSaved: (val) => _repeatName = val,
+                      child: _NameForm(
+                        node: _nameNode,
+                        nextNode: _dateNode,
                       ),
-                    );
-                  }
-                  return LoadingIndicator();
-                },
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 10),
-              ),
-              BlocBuilder<CarsBloc, CarsState>(
-                builder: (context, state) {
-                  if (state is CarsLoaded) {
-                    return CarsForm( 
-                      cars: state.cars,
-                      onSaved: (cars) => _cars = cars,
-                    );
-                  }
-                  return LoadingIndicator();
-                },
-              ),
-              // so there is some padding to fill the bottom of the screen
-              // when autoscrolling up
-              Container(
-                height: 10000,
-              ),
-          ],
-        )
-      )
-    ),
-    floatingActionButton: FloatingActionButton(  
-      tooltip: isEditing ? AutodoLocalizations.saveChanges : AutodoLocalizations.addRefueling,
-      child: Icon(isEditing ? Icons.check : Icons.add),
-      onPressed: () {
-        if (_formKey.currentState.validate()) {
-          _formKey.currentState.save();
-          List<String> carNames = [];
-          for (var car in _cars) {
-            if (car['enabled']) {
-              carNames.add(car['name']);
+                      focusNode: _nameNode,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 15, bottom: 15),
+                      child: Divider(),
+                    ),
+                    AutoScrollField(
+                      controller: scrollCtrl,
+                      child: _DateForm(
+                        todo: todo,
+                        node: _dateNode,
+                        nextNode: _mileageNode,
+                        onSaved: (val) =>
+                            _dueDate = DateFormat.yMd().parseStrict(val),
+                      ),
+                      focusNode: _dateNode,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 15),
+                    ),
+                    AutoScrollField(
+                      controller: scrollCtrl,
+                      child: _MileageForm(
+                        todo: todo,
+                        node: _mileageNode,
+                        nextNode: _repeatNode,
+                        onSaved: (val) => _dueMileage = int.parse(val),
+                      ),
+                      focusNode: _mileageNode,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 15),
+                    ),
+                    BlocBuilder<RepeatsBloc, RepeatsState>(
+                      builder: (context, state) {
+                        if (state is RepeatsLoaded) {
+                          return AutoScrollField(
+                            controller: scrollCtrl,
+                            focusNode: _repeatNode,
+                            position: 240,
+                            child: RepeatForm(
+                              todo: todo,
+                              node: _repeatNode,
+                              onSaved: (val) => _repeatName = val,
+                            ),
+                          );
+                        }
+                        return LoadingIndicator();
+                      },
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 10),
+                    ),
+                    BlocBuilder<CarsBloc, CarsState>(
+                      builder: (context, state) {
+                        if (state is CarsLoaded) {
+                          return CarsForm(
+                            cars: state.cars,
+                            onSaved: (cars) => _cars = cars,
+                          );
+                        }
+                        return LoadingIndicator();
+                      },
+                    ),
+                    // so there is some padding to fill the bottom of the screen
+                    // when autoscrolling up
+                    Container(
+                      height: 10000,
+                    ),
+                  ],
+                ))),
+        floatingActionButton: FloatingActionButton(
+          tooltip: isEditing
+              ? AutodoLocalizations.saveChanges
+              : AutodoLocalizations.addRefueling,
+          child: Icon(isEditing ? Icons.check : Icons.add),
+          onPressed: () {
+            if (_formKey.currentState.validate()) {
+              _formKey.currentState.save();
+              List<String> carNames = [];
+              for (var car in _cars) {
+                if (car['enabled']) {
+                  carNames.add(car['name']);
+                }
+              }
+              widget.onSave(_dueDate, _dueMileage, _repeatName, carNames);
+              Navigator.pop(context);
             }
-          }
-          widget.onSave(_dueDate, _dueMileage, _repeatName, carNames);
-          Navigator.pop(context);
-        }
-      },
-    ),
-  );
+          },
+        ),
+      );
 }

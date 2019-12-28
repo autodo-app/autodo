@@ -14,7 +14,8 @@ void main() {
       expect(LoginPasswordChanged(password: '').props, ['']);
     });
     test('LoginSubmitted props', () {
-      expect(LoginWithCredentialsPressed(email: '', password: '').props, ['', '']);
+      expect(
+          LoginWithCredentialsPressed(email: '', password: '').props, ['', '']);
     });
     test('SendPasswordResetPressed props', () {
       expect(SendPasswordResetPressed(email: '').props, ['']);

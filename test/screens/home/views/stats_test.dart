@@ -11,10 +11,12 @@ import 'package:autodo/widgets/widgets.dart';
 import 'package:autodo/screens/home/views/stats.dart';
 import 'package:autodo/screens/home/views/charts/barrel.dart';
 
-class MockEfficiencyStatsBloc extends MockBloc<EfficiencyStatsEvent, EfficiencyStatsState>
+class MockEfficiencyStatsBloc
+    extends MockBloc<EfficiencyStatsEvent, EfficiencyStatsState>
     implements EfficiencyStatsBloc {}
 
-class MockDrivingDistanceStatsBloc extends MockBloc<DrivingDistanceStatsEvent, DrivingDistanceStatsState>
+class MockDrivingDistanceStatsBloc
+    extends MockBloc<DrivingDistanceStatsEvent, DrivingDistanceStatsState>
     implements DrivingDistanceStatsBloc {}
 
 void main() {
@@ -76,46 +78,49 @@ void main() {
     });
     testWidgets('loaded', (WidgetTester tester) async {
       final refueling = Refueling(
-        id: '0', 
-        mileage: 0, 
-        amount: 10,
-        cost: 10.0,
-        efficiency: 1.0,
-        date: DateTime.fromMillisecondsSinceEpoch(0),
-        carName: 'test'
-      );
+          id: '0',
+          mileage: 0,
+          amount: 10,
+          cost: 10.0,
+          efficiency: 1.0,
+          date: DateTime.fromMillisecondsSinceEpoch(0),
+          carName: 'test');
       final effData = [
         Series<FuelMileagePoint, DateTime>(
-          id: 'Fuel Mileage vs Time', 
+          id: 'Fuel Mileage vs Time',
           domainFn: (point, _) => point.date,
           measureFn: (point, _) => point.efficiency,
-          data: [FuelMileagePoint(refueling.date, refueling.efficiency),
-          FuelMileagePoint(DateTime.fromMillisecondsSinceEpoch(100), 2.0)],
+          data: [
+            FuelMileagePoint(refueling.date, refueling.efficiency),
+            FuelMileagePoint(DateTime.fromMillisecondsSinceEpoch(100), 2.0)
+          ],
         ),
         Series<FuelMileagePoint, DateTime>(
-          id: 'EMA', 
+          id: 'EMA',
           domainFn: (point, _) => point.date,
           measureFn: (point, _) => point.efficiency,
-          data: [FuelMileagePoint(refueling.date, refueling.efficiency),
-          FuelMileagePoint(DateTime.fromMillisecondsSinceEpoch(100), EfficiencyStatsBloc.emaFilter(1.0, 2.0))],
+          data: [
+            FuelMileagePoint(refueling.date, refueling.efficiency),
+            FuelMileagePoint(DateTime.fromMillisecondsSinceEpoch(100),
+                EfficiencyStatsBloc.emaFilter(1.0, 2.0))
+          ],
         )
       ];
-      final car = Car(
-        name: 'abcd',
-        distanceRateHistory: [
+      final car = Car(name: 'abcd', distanceRateHistory: [
         DistanceRatePoint(DateTime.fromMillisecondsSinceEpoch(0), 1.0),
         DistanceRatePoint(DateTime.fromMillisecondsSinceEpoch(1000), 2.0),
       ]);
       final driveData = [
         Series<DistanceRatePoint, DateTime>(
-          id: car.name, 
+          id: car.name,
           domainFn: (point, _) => point.date,
           measureFn: (point, _) => point.distanceRate,
           data: car.distanceRateHistory,
         )
       ];
       when(effBloc.state).thenAnswer((_) => EfficiencyStatsLoaded(effData));
-      when(driveBloc.state).thenAnswer((_) => DrivingDistanceStatsLoaded(driveData));
+      when(driveBloc.state)
+          .thenAnswer((_) => DrivingDistanceStatsLoaded(driveData));
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [

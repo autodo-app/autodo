@@ -11,16 +11,15 @@ class MockRefuelingsBloc extends MockBloc<RefuelingsEvent, RefuelingsState>
 void main() {
   group('FilteredRefuelingsEvent', () {
     final refueling = Refueling(
-      carName: '',
-      id: '',
-      mileage: 0,
-      date: DateTime.fromMillisecondsSinceEpoch(0),
-      amount: 0,
-      cost: 0,
-      carColor: Color(0),
-      efficiency: 0.0,
-      efficiencyColor: Color(0)
-    );
+        carName: '',
+        id: '',
+        mileage: 0,
+        date: DateTime.fromMillisecondsSinceEpoch(0),
+        amount: 0,
+        cost: 0,
+        carColor: Color(0),
+        efficiency: 0.0,
+        efficiencyColor: Color(0));
     group('UpdateFilter', () {
       test('toString returns correct value', () {
         expect(
@@ -29,7 +28,7 @@ void main() {
         );
       });
       test('props are correct', () {
-        expect(  
+        expect(
           UpdateRefuelingsFilter(VisibilityFilter.active).props,
           [VisibilityFilter.active],
         );
@@ -46,7 +45,9 @@ void main() {
       test('props are correct', () {
         expect(
           UpdateRefuelings([refueling]).props,
-          [[refueling]],
+          [
+            [refueling]
+          ],
         );
       });
     });
@@ -60,7 +61,9 @@ void main() {
       test('props are correct', () {
         expect(
           FilteredRefuelingsUpdateCars([Car()]).props,
-          [[Car()]],
+          [
+            [Car()]
+          ],
         );
       });
     });

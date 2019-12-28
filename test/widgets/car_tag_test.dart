@@ -8,13 +8,9 @@ void main() {
     Widget app;
     final key = Key('tag');
     setUp(() {
-      app = MaterialApp(  
-        home: Scaffold( 
-          body: CarTag(
-            key: key,
-            color: Colors.blue,
-            text: 'here'
-          ),
+      app = MaterialApp(
+        home: Scaffold(
+          body: CarTag(key: key, color: Colors.blue, text: 'here'),
         ),
       );
     });

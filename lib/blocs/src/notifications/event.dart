@@ -15,10 +15,10 @@ class NotificationIdUpdated extends NotificationsEvent {
 
   const NotificationIdUpdated(this.id);
 
-  @override 
+  @override
   List<Object> get props => [id];
 
-  @override 
+  @override
   toString() => "NotificationIdUpdated { id: $id }";
 }
 
@@ -26,17 +26,15 @@ class ScheduleNotification extends NotificationsEvent {
   final String title, body;
   final DateTime date;
 
-  const ScheduleNotification({
-    @required this.date, 
-    @required this.title, 
-    @required this.body
-  });
+  const ScheduleNotification(
+      {@required this.date, @required this.title, @required this.body});
 
-  @override 
+  @override
   List<Object> get props => [date, title, body];
 
   @override
-  toString() => "ScheduleNotification { date: $date, title: $title, body: $body }";
+  toString() =>
+      "ScheduleNotification { date: $date, title: $title, body: $body }";
 }
 
 class ReScheduleNotification extends NotificationsEvent {
@@ -44,18 +42,18 @@ class ReScheduleNotification extends NotificationsEvent {
   final String title, body;
   final DateTime date;
 
-  const ReScheduleNotification({
-    @required this.id,
-    @required this.date, 
-    @required this.title, 
-    @required this.body
-  });
+  const ReScheduleNotification(
+      {@required this.id,
+      @required this.date,
+      @required this.title,
+      @required this.body});
 
-  @override 
+  @override
   List<Object> get props => [id, date, title, body];
 
   @override
-  toString() => "ReScheduleNotification { id: $id, date: $date, title: $title, body: $body }";
+  toString() =>
+      "ReScheduleNotification { id: $id, date: $date, title: $title, body: $body }";
 }
 
 class CancelNotification extends NotificationsEvent {
@@ -63,7 +61,7 @@ class CancelNotification extends NotificationsEvent {
 
   const CancelNotification(this.id);
 
-  @override 
+  @override
   List<Object> get props => [id];
 
   @override

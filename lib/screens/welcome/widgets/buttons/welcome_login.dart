@@ -4,8 +4,7 @@ import 'package:flutter/rendering.dart';
 class LoginButton extends StatelessWidget {
   final buttonPadding;
 
-  LoginButton({Key key, this.buttonPadding})
-      : super(key: key);
+  LoginButton({Key key, this.buttonPadding}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

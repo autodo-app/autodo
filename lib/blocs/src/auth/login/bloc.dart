@@ -15,7 +15,9 @@ import 'state.dart';
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   AuthRepository _authRepository;
 
-  LoginBloc({@required authRepository}) : assert(authRepository != null), _authRepository = authRepository;
+  LoginBloc({@required authRepository})
+      : assert(authRepository != null),
+        _authRepository = authRepository;
 
   @override
   LoginState get initialState => LoginEmpty();
@@ -32,7 +34,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     final debounceStream = observableStream.where((event) {
       return (event is LoginEmailChanged || event is LoginPasswordChanged);
     }).debounceTime(Duration(milliseconds: 300));
-    return super.transformEvents(nonDebounceStream.mergeWith([debounceStream]), next);
+    return super
+        .transformEvents(nonDebounceStream.mergeWith([debounceStream]), next);
   }
 
   @override
@@ -136,7 +139,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   Stream<LoginState> _mapSendPasswordResetToState(event) async* {
     yield LoginLoading();
     try {
-      // not doing this through the authbloc because it doesn't affect 
+      // not doing this through the authbloc because it doesn't affect
       // the app's global authentication state (i.e. it's not possible)
       // to login or logout this way
       await _authRepository.sendPasswordReset(event.email);

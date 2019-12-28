@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 abstract class NotificationsState extends Equatable {
   const NotificationsState();
 
-  @override 
+  @override
   List<Object> get props => [];
 }
 

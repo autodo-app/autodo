@@ -130,7 +130,9 @@ void main() {
               body: TodoCard(
                 key: todosKey,
                 todo: Todo(name: 'test'),
-                onCheckboxChanged: (_) {checkboxChanged = true;},
+                onCheckboxChanged: (_) {
+                  checkboxChanged = true;
+                },
                 onDismissed: (_) {},
                 onTap: () {},
                 emphasized: false,
@@ -146,7 +148,8 @@ void main() {
     });
     testWidgets('dismiss', (WidgetTester tester) async {
       when(todosBloc.state).thenAnswer((_) => TodosLoaded([]));
-      when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded([Todo(name: '')], VisibilityFilter.all));
+      when(filteredTodosBloc.state).thenAnswer(
+          (_) => FilteredTodosLoaded([Todo(name: '')], VisibilityFilter.all));
       Key todosKey = Key('todos');
       bool dismissed = false;
       await tester.pumpWidget(
@@ -165,7 +168,9 @@ void main() {
                 key: todosKey,
                 todo: Todo(name: 'test'),
                 onCheckboxChanged: (_) {},
-                onDismissed: (_) {dismissed = true;},
+                onDismissed: (_) {
+                  dismissed = true;
+                },
                 onTap: () {},
                 emphasized: false,
               ),
@@ -180,7 +185,8 @@ void main() {
     });
     testWidgets('tap', (WidgetTester tester) async {
       when(todosBloc.state).thenAnswer((_) => TodosLoaded([]));
-      when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded([Todo(name: '')], VisibilityFilter.all));
+      when(filteredTodosBloc.state).thenAnswer(
+          (_) => FilteredTodosLoaded([Todo(name: '')], VisibilityFilter.all));
       Key todosKey = Key('todos');
       bool tapped = false;
       await tester.pumpWidget(
@@ -200,7 +206,9 @@ void main() {
                 todo: Todo(name: 'test'),
                 onCheckboxChanged: (_) {},
                 onDismissed: (_) {},
-                onTap: () {tapped = true;},
+                onTap: () {
+                  tapped = true;
+                },
                 emphasized: false,
               ),
             ),

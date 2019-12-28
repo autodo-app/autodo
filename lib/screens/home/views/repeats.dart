@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
 class RepeatsScreen extends StatelessWidget {
-  @override 
+  @override
   build(context) => Container();
 }
