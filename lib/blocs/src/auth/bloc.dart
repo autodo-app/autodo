@@ -14,7 +14,8 @@ class AuthenticationBloc
       : assert(userRepository != null),
         _userRepository = userRepository {
     _userRepository.stream?.listen((user) {
-      if (user != null) {
+      if (user != null && (!(state is Authenticated) || 
+         (state as Authenticated).uuid != user.uid )) {
         // sign in or sign up
         if (user.metadata.creationTime == user.metadata.lastSignInTime) {
           add(SignedUp());

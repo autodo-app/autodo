@@ -13,4 +13,13 @@ class IntegrationTestKeys {
   ];
   static const addEditTodo = ValueKey('__add_edit_todo__');
   static const newUserScreen = ValueKey('__new_user_screen__');
+  static const mileageNameField = ValueKey('__mileage_name_field__');
+  static const mileageMileageField = ValueKey('__mileage_mileage_field__');
+  static const mileageNextButton = ValueKey('__mileage_next_button__');
+  static const latestOilChangeField = ValueKey('__latest_oil_change_field__');
+  static const latestTireRotationField = ValueKey('__latest_tire_rotation_field__');
+  static const latestNextButton = ValueKey('__latest_next_button__');
+  static const setOilInterval = ValueKey('__set_oil_interval__');
+  static const setTireRotationInterval = ValueKey('__set_tire_rotation_interval__');
+  static const setRepeatsNext = ValueKey('__set_repeats_next__');
 }

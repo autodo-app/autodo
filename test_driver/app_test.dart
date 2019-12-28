@@ -32,8 +32,33 @@ void main() {
       await driver.tap(find.byType('SignupSubmitButton'));
       print('Signup Screen Completed');
 
-      // expect that we will hit the mileage setting screen
+      // mileage setting screen
+      await Future.delayed(Duration(milliseconds: 500));
+      await driver.waitFor(find.byType('MileageScreen'));
+      await driver.tap(find.byValueKey('__mileage_name_field__'));
+      await driver.enterText('test');
+      await driver.tap(find.byValueKey('__mileage_mileage_field__'));
+      await driver.enterText('1000');
+      await driver.tap(find.byValueKey('__mileage_next_button__'));
+      print('mileage setting screen completed');
       
+      // last completed todo screen
+      await driver.waitFor(find.byType('LatestRepeatsScreen'));
+      await driver.tap(find.byValueKey('__latest_oil_change_field__'));
+      await driver.enterText('500');
+      await driver.tap(find.byValueKey('__latest_tire_rotation_field__'));
+      await driver.enterText('500');
+      await driver.tap(find.byValueKey('__latest_next_button__'));
+      print('latest completed repeats screen completed');
+
+      // interval screen
+      await driver.waitFor(find.byType('SetRepeatsScreen'));
+      await driver.tap(find.byValueKey('__set_oil_interval__'));
+      await driver.enterText('5000');
+      await driver.tap(find.byValueKey('__set_tire_rotation_interval__'));
+      await driver.enterText('20000');
+      await driver.tap(find.byValueKey('__set_repeats_next__'));
+      print('set repeats interval screen completed');
 
       // expect that we will hit the home page
       await Future.delayed(Duration(milliseconds: 500));

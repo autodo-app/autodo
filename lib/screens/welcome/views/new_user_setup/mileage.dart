@@ -1,3 +1,4 @@
+import 'package:autodo/integ_test_keys.dart';
 import 'package:flutter/material.dart';
 
 import 'package:autodo/util.dart';
@@ -40,6 +41,7 @@ class CarEntryFieldState extends State<CarEntryField> {
   @override
   Widget build(BuildContext context) {
     nameField() => TextFormField(
+          key: IntegrationTestKeys.mileageNameField,
           maxLines: 1,
           autofocus: true,
           decoration: defaultInputDecoration('', 'Car Name'),
@@ -52,6 +54,7 @@ class CarEntryFieldState extends State<CarEntryField> {
         );
 
     mileageField() => TextFormField(
+          key: IntegrationTestKeys.mileageMileageField,
           maxLines: 1,
           autofocus: false,
           decoration: defaultInputDecoration('', 'Mileage'),
@@ -184,6 +187,7 @@ class MileageScreenState extends State<MileageScreen> {
                     ],
                   ),
                   FlatButton(
+                    key: IntegrationTestKeys.mileageNextButton,
                     padding: EdgeInsets.all(0),
                     materialTapTargetSize: MaterialTapTargetSize.padded,
                     child: Text(

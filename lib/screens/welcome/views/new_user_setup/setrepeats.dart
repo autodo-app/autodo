@@ -1,3 +1,4 @@
+import 'package:autodo/integ_test_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -20,6 +21,7 @@ class _OilInterval extends StatelessWidget {
 
   @override
   build(context) => TextFormField(
+        key: IntegrationTestKeys.setOilInterval,
         maxLines: 1,
         autofocus: false,
         initialValue: repeat.mileageInterval.toString(),
@@ -43,6 +45,7 @@ class _TireRotationInterval extends StatelessWidget {
 
   @override
   build(context) => TextFormField(
+        key: IntegrationTestKeys.setTireRotationInterval,
         maxLines: 1,
         autofocus: false,
         initialValue: repeat.mileageInterval.toString(),
@@ -127,6 +130,7 @@ class _Card extends StatelessWidget {
                         Navigator.popAndPushNamed(context, '/load'),
                   ),
                   FlatButton(
+                    key: IntegrationTestKeys.setRepeatsNext,
                     padding: EdgeInsets.all(0),
                     materialTapTargetSize: MaterialTapTargetSize.padded,
                     child: Text(
