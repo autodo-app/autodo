@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 abstract class LegalEvent extends Equatable {
   const LegalEvent();
 
-  @override 
+  @override
   List<Object> get props => [];
 }
 

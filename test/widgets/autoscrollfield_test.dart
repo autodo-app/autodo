@@ -11,22 +11,18 @@ void main() {
     final controller = ScrollController();
     testWidgets('render properly', (tester) async {
       final app = MaterialApp(
-        home: Scaffold(  
-          body: ListView( 
+        home: Scaffold(
+            body: ListView(controller: controller, children: [
+          Container(height: 100), // padding to allow the field to scroll
+          AutoScrollField(
+            key: key,
+            child: child,
+            focusNode: node,
+            position: 100.0,
             controller: controller,
-            children : [
-              Container(height: 100), // padding to allow the field to scroll
-              AutoScrollField(  
-                key: key,
-                child: child,
-                focusNode: node,
-                position: 100.0,
-                controller: controller,
-              ),
-              Container(height: 6000) // padding to allow the field to scroll
-            ]
-          )
-        ),
+          ),
+          Container(height: 6000) // padding to allow the field to scroll
+        ])),
       );
       await tester.pumpWidget(app);
 
@@ -35,22 +31,18 @@ void main() {
 
     testWidgets('scrolls to position', (tester) async {
       final app = MaterialApp(
-        home: Scaffold(  
-          body: ListView( 
+        home: Scaffold(
+            body: ListView(controller: controller, children: [
+          Container(height: 100), // padding to allow the field to scroll
+          AutoScrollField(
+            key: key,
+            child: child,
+            focusNode: node,
+            position: 100.0,
             controller: controller,
-            children : [
-              Container(height: 100), // padding to allow the field to scroll
-              AutoScrollField(  
-                key: key,
-                child: child,
-                focusNode: node,
-                position: 100.0,
-                controller: controller,
-              ),
-              Container(height: 6000) // padding to allow the field to scroll
-            ]
-          )
-        ),
+          ),
+          Container(height: 6000) // padding to allow the field to scroll
+        ])),
       );
       await tester.pumpWidget(app);
 
@@ -63,21 +55,17 @@ void main() {
 
     testWidgets('scrolls properly without a set position', (tester) async {
       final app = MaterialApp(
-        home: Scaffold(  
-          body: ListView( 
+        home: Scaffold(
+            body: ListView(controller: controller, children: [
+          Container(height: 100), // padding to allow the field to scroll
+          AutoScrollField(
+            key: key,
+            child: child,
+            focusNode: node,
             controller: controller,
-            children : [
-              Container(height: 100), // padding to allow the field to scroll
-              AutoScrollField(  
-                key: key,
-                child: child,
-                focusNode: node,
-                controller: controller,
-              ),
-              Container(height: 6000) // padding to allow the field to scroll
-            ]
-          )
-        ),
+          ),
+          Container(height: 6000) // padding to allow the field to scroll
+        ])),
       );
       await tester.pumpWidget(app);
 

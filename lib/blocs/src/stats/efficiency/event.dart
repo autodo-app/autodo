@@ -4,7 +4,7 @@ import 'package:autodo/models/models.dart';
 abstract class EfficiencyStatsEvent extends Equatable {
   const EfficiencyStatsEvent();
 
-  @override 
+  @override
   List<Object> get props => [];
 }
 
@@ -15,9 +15,9 @@ class UpdateEfficiencyData extends EfficiencyStatsEvent {
 
   const UpdateEfficiencyData(this.refuelings);
 
-  @override 
+  @override
   List<Object> get props => [refuelings];
 
-  @override 
+  @override
   toString() => 'UpdateEfficiencyData { refuelings: $refuelings }';
 }

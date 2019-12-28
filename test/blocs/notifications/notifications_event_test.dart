@@ -12,41 +12,50 @@ void main() {
         expect(NotificationIdUpdated(0).props, [0]);
       });
       test('toString', () {
-        expect(NotificationIdUpdated(0).toString(), "NotificationIdUpdated { id: 0 }");
+        expect(NotificationIdUpdated(0).toString(),
+            "NotificationIdUpdated { id: 0 }");
       });
     });
     group('ScheduleNotification', () {
       test('props', () {
-        expect(ScheduleNotification(
-          date: DateTime.fromMillisecondsSinceEpoch(0),
-          title: 'test',
-          body: 'here'
-        ).props, [DateTime.fromMillisecondsSinceEpoch(0), 'test', 'here']);
+        expect(
+            ScheduleNotification(
+                    date: DateTime.fromMillisecondsSinceEpoch(0),
+                    title: 'test',
+                    body: 'here')
+                .props,
+            [DateTime.fromMillisecondsSinceEpoch(0), 'test', 'here']);
       });
       test('toString', () {
-        expect(ScheduleNotification(
-          date: DateTime.fromMillisecondsSinceEpoch(0),
-          title: 'test',
-          body: 'here'
-        ).toString(), "ScheduleNotification { date: ${DateTime.fromMillisecondsSinceEpoch(0)}, title: test, body: here }");
+        expect(
+            ScheduleNotification(
+                    date: DateTime.fromMillisecondsSinceEpoch(0),
+                    title: 'test',
+                    body: 'here')
+                .toString(),
+            "ScheduleNotification { date: ${DateTime.fromMillisecondsSinceEpoch(0)}, title: test, body: here }");
       });
     });
     group('ReScheduleNotification', () {
       test('props', () {
-        expect(ReScheduleNotification(
-          id: 1,
-          date: DateTime.fromMillisecondsSinceEpoch(0),
-          title: 'test',
-          body: 'here'
-        ).props, [1, DateTime.fromMillisecondsSinceEpoch(0), 'test', 'here']);
+        expect(
+            ReScheduleNotification(
+                    id: 1,
+                    date: DateTime.fromMillisecondsSinceEpoch(0),
+                    title: 'test',
+                    body: 'here')
+                .props,
+            [1, DateTime.fromMillisecondsSinceEpoch(0), 'test', 'here']);
       });
       test('toString', () {
-        expect(ReScheduleNotification(
-          id: 1,
-          date: DateTime.fromMillisecondsSinceEpoch(0),
-          title: 'test',
-          body: 'here'
-        ).toString(), "ReScheduleNotification { id: 1, date: ${DateTime.fromMillisecondsSinceEpoch(0)}, title: test, body: here }");
+        expect(
+            ReScheduleNotification(
+                    id: 1,
+                    date: DateTime.fromMillisecondsSinceEpoch(0),
+                    title: 'test',
+                    body: 'here')
+                .toString(),
+            "ReScheduleNotification { id: 1, date: ${DateTime.fromMillisecondsSinceEpoch(0)}, title: test, body: here }");
       });
     });
     group('CancelNotification', () {
@@ -54,7 +63,8 @@ void main() {
         expect(CancelNotification(0).props, [0]);
       });
       test('toString', () {
-        expect(CancelNotification(0).toString(), 'CancelNotification { id: 0 }');
+        expect(
+            CancelNotification(0).toString(), 'CancelNotification { id: 0 }');
       });
     });
   });

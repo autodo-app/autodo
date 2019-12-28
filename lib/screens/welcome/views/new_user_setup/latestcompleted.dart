@@ -12,8 +12,11 @@ class LatestRepeatsScreen extends StatefulWidget {
   final page;
   final todosBloc;
 
-  LatestRepeatsScreen(this.repeatKey, this.onNext, this.page, {
-    this.todosBloc, 
+  LatestRepeatsScreen(
+    this.repeatKey,
+    this.onNext,
+    this.page, {
+    this.todosBloc,
   });
 
   @override
@@ -78,17 +81,12 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
       onTap: () => setState(() => expanded = false),
       decoration: defaultInputDecoration('(miles)', 'Last Oil Change (miles)'),
       validator: (value) => intNoRequire(value),
-      onSaved: (val) => todosBloc.add(
-        AddTodo(
-          Todo(
-            name: 'oil', 
-            repeatName: 'oil',
-            completed: true,
-            completedDate: DateTime.now(),
-            dueMileage: int.parse(val.trim())
-          )
-        )
-      ),
+      onSaved: (val) => todosBloc.add(AddTodo(Todo(
+          name: 'oil',
+          repeatName: 'oil',
+          completed: true,
+          completedDate: DateTime.now(),
+          dueMileage: int.parse(val.trim())))),
       focusNode: _oilNode,
       textInputAction: TextInputAction.next,
       onFieldSubmitted: (_) => changeFocus(_oilNode, _tiresNode),
@@ -100,17 +98,12 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
       decoration:
           defaultInputDecoration('(miles)', 'Last Tire Rotation (miles)'),
       validator: (value) => intNoRequire(value),
-      onSaved: (val) => todosBloc.add(
-        AddTodo(
-          Todo(
-            name: 'tireRotation', 
-            repeatName: 'tireRotation',
-            completed: true,
-            completedDate: DateTime.now(),
-            dueMileage: int.parse(val.trim())
-          )
-        )
-      ),
+      onSaved: (val) => todosBloc.add(AddTodo(Todo(
+          name: 'tireRotation',
+          repeatName: 'tireRotation',
+          completed: true,
+          completedDate: DateTime.now(),
+          dueMileage: int.parse(val.trim())))),
       focusNode: _tiresNode,
       textInputAction: TextInputAction.done,
     );

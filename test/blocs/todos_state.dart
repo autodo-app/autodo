@@ -5,7 +5,7 @@ import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/models/models.dart';
 
 void main() {
-    group('TodosState', () {
+  group('TodosState', () {
     group('TodosLoading', () {
       test('toString returns correct value', () {
         expect(

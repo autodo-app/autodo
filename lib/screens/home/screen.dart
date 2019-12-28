@@ -18,21 +18,19 @@ class HomeScreen extends StatelessWidget {
 
   HomeScreen({Key key, this.todosTabKey}) : super(key: key);
 
-  @override 
-  build(context) => BlocBuilder<TabBloc, AppTab>( 
-    builder: (context, activeTab) => Scaffold(  
-      appBar: AppBar(  
-        title: Text(AutodoLocalizations.appTitle),
-        actions: [ExtraActions()],
-      ),
-      body: views[activeTab],
-      floatingActionButton: AutodoActionButton(),
-      bottomNavigationBar: TabSelector(  
-        activeTab: activeTab,
-        onTabSelected: (tab) =>
-          BlocProvider.of<TabBloc>(context).add(UpdateTab(tab)),
-        todosTabKey: todosTabKey,
-      )
-    )
-  );
+  @override
+  build(context) => BlocBuilder<TabBloc, AppTab>(
+      builder: (context, activeTab) => Scaffold(
+          appBar: AppBar(
+            title: Text(AutodoLocalizations.appTitle),
+            actions: [ExtraActions()],
+          ),
+          body: views[activeTab],
+          floatingActionButton: AutodoActionButton(),
+          bottomNavigationBar: TabSelector(
+            activeTab: activeTab,
+            onTabSelected: (tab) =>
+                BlocProvider.of<TabBloc>(context).add(UpdateTab(tab)),
+            todosTabKey: todosTabKey,
+          )));
 }

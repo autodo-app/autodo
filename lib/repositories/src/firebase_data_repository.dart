@@ -13,17 +13,17 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
   final Firestore _firestoreInstance;
   final String _uuid;
 
-  DocumentReference get _userDoc => 
-    _firestoreInstance.collection('users').document(_uuid);
+  DocumentReference get _userDoc =>
+      _firestoreInstance.collection('users').document(_uuid);
   CollectionReference get _todos => _userDoc.collection('todos');
   CollectionReference get _refuelings => _userDoc.collection('refuelings');
   CollectionReference get _cars => _userDoc.collection('cars');
   CollectionReference get _repeats => _userDoc.collection('repeats');
 
-  FirebaseDataRepository({Firestore firestoreInstance, @required String uuid}) :
-      assert(uuid != null), 
-      _firestoreInstance = firestoreInstance ?? Firestore.instance,
-      _uuid = uuid;
+  FirebaseDataRepository({Firestore firestoreInstance, @required String uuid})
+      : assert(uuid != null),
+        _firestoreInstance = firestoreInstance ?? Firestore.instance,
+        _uuid = uuid;
 
   @override
   Future<void> addNewTodo(Todo todo) {
@@ -53,10 +53,8 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
 
   @override
   WriteBatchWrapper startTodoWriteBatch() {
-    return WriteBatchWrapper(  
-      firestoreInstance: _firestoreInstance,
-      collection: _todos
-    );
+    return WriteBatchWrapper(
+        firestoreInstance: _firestoreInstance, collection: _todos);
   }
 
   @override
@@ -73,24 +71,22 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
   Stream<List<Refueling>> refuelings() {
     return _refuelings.snapshots().map((snapshot) {
       return snapshot.documents
-        .map((doc) => Refueling.fromEntity(RefuelingEntity.fromSnapshot(doc)))
-        .toList();
+          .map((doc) => Refueling.fromEntity(RefuelingEntity.fromSnapshot(doc)))
+          .toList();
     });
   }
 
   @override
   Future<void> updateRefueling(Refueling refueling) {
     return _refuelings
-      .document(refueling.id)
-      .updateData(refueling.toEntity().toDocument());
+        .document(refueling.id)
+        .updateData(refueling.toEntity().toDocument());
   }
 
   @override
   WriteBatchWrapper startRefuelingWriteBatch() {
-    return WriteBatchWrapper(  
-      firestoreInstance: _firestoreInstance,
-      collection: _refuelings
-    );
+    return WriteBatchWrapper(
+        firestoreInstance: _firestoreInstance, collection: _refuelings);
   }
 
   @override
@@ -107,24 +103,20 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
   Stream<List<Car>> cars() {
     return _cars.snapshots().map((snapshot) {
       return snapshot.documents
-        .map((doc) => Car.fromEntity(CarEntity.fromSnapshot(doc)))
-        .toList();
+          .map((doc) => Car.fromEntity(CarEntity.fromSnapshot(doc)))
+          .toList();
     });
   }
 
   @override
   Future<void> updateCar(Car car) {
-    return _cars
-      .document(car.id)
-      .updateData(car.toEntity().toDocument());
+    return _cars.document(car.id).updateData(car.toEntity().toDocument());
   }
 
   @override
   WriteBatchWrapper startCarWriteBatch() {
-    return WriteBatchWrapper(  
-      firestoreInstance: _firestoreInstance,
-      collection: _cars
-    );
+    return WriteBatchWrapper(
+        firestoreInstance: _firestoreInstance, collection: _cars);
   }
 
   @override
@@ -141,36 +133,36 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
   Stream<List<Repeat>> repeats() {
     return _repeats.snapshots().map((snapshot) {
       return snapshot.documents
-        .map((doc) => Repeat.fromEntity(RepeatEntity.fromSnapshot(doc)))
-        .toList();
+          .map((doc) => Repeat.fromEntity(RepeatEntity.fromSnapshot(doc)))
+          .toList();
     });
   }
 
   @override
   Future<void> updateRepeat(Repeat repeat) {
     return _repeats
-      .document(repeat.id)
-      .updateData(repeat.toEntity().toDocument());
+        .document(repeat.id)
+        .updateData(repeat.toEntity().toDocument());
   }
 
   @override
   WriteBatchWrapper startRepeatWriteBatch() {
-    return WriteBatchWrapper(  
-      firestoreInstance: _firestoreInstance,
-      collection: _repeats
-    );
+    return WriteBatchWrapper(
+        firestoreInstance: _firestoreInstance, collection: _repeats);
   }
 
-  @override 
+  @override
   Stream<int> notificationID() {
-    return _userDoc.snapshots().map((snap) => snap.data['lastNotificationId'] as int);
+    return _userDoc
+        .snapshots()
+        .map((snap) => snap.data['lastNotificationId'] as int);
   }
 
-  @override 
+  @override
   List<Object> get props => [_firestoreInstance, _uuid];
 
-  @override 
+  @override
   toString() => "FirebaseDataRepository { firestoreInstance: "
-    "$_firestoreInstance, uuid: $_uuid, userDoc: $_userDoc, todos: "
-    "$_todos, refuelings: $_refuelings, cars: $_cars, repeats: $_repeats }";
+      "$_firestoreInstance, uuid: $_uuid, userDoc: $_userDoc, todos: "
+      "$_todos, refuelings: $_refuelings, cars: $_cars, repeats: $_repeats }";
 }

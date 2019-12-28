@@ -69,7 +69,7 @@ void main() {
       await tester.tap(refuelingTabFinder);
       expect(selectedTab, AppTab.refuelings);
       await tester.tap(statsTabFinder);
-      expect(selectedTab, AppTab.stats);  
+      expect(selectedTab, AppTab.stats);
       await tester.tap(repeatTabFinder);
       expect(selectedTab, AppTab.repeats);
     });

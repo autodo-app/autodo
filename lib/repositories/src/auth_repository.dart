@@ -5,7 +5,7 @@ abstract class AuthRepository {
   Future<FirebaseUser> signInWithCredentials(String email, String password);
   Future<FirebaseUser> signUp(String email, String password);
   Future<FirebaseUser> signUpWithVerification(String email, String password);
-  
+
   Future<void> signOut();
   Future<void> deleteCurrentUser();
   Future<bool> isSignedIn();

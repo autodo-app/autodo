@@ -28,7 +28,8 @@ void main() {
 
   group('RefuelingsScreen', () {
     testWidgets('loading', (WidgetTester tester) async {
-      when(filteredRefuelingsBloc.state).thenAnswer((_) => FilteredRefuelingsLoading());
+      when(filteredRefuelingsBloc.state)
+          .thenAnswer((_) => FilteredRefuelingsLoading());
       Key refuelingsKey = Key('refuelings');
       await tester.pumpWidget(
         MultiBlocProvider(
@@ -51,7 +52,8 @@ void main() {
       expect(find.byType(LoadingIndicator), findsOneWidget);
     });
     testWidgets('not loaded', (WidgetTester tester) async {
-      when(filteredRefuelingsBloc.state).thenAnswer((_) => FilteredRefuelingsNotLoaded());
+      when(filteredRefuelingsBloc.state)
+          .thenAnswer((_) => FilteredRefuelingsNotLoaded());
       Key refuelingsKey = Key('refuelings');
       await tester.pumpWidget(
         MultiBlocProvider(
@@ -81,7 +83,8 @@ void main() {
         mileage: 1000,
         date: DateTime.fromMillisecondsSinceEpoch(0),
       );
-      when(filteredRefuelingsBloc.state).thenAnswer((_) => FilteredRefuelingsLoaded([refueling], VisibilityFilter.all, [Car()]));
+      when(filteredRefuelingsBloc.state).thenAnswer((_) =>
+          FilteredRefuelingsLoaded([refueling], VisibilityFilter.all, [Car()]));
       Key refuelingsKey = Key('refuelings');
       await tester.pumpWidget(
         MultiBlocProvider(
@@ -113,7 +116,8 @@ void main() {
         mileage: 1000,
         date: DateTime.fromMillisecondsSinceEpoch(0),
       );
-      when(filteredRefuelingsBloc.state).thenAnswer((_) => FilteredRefuelingsLoaded([refueling], VisibilityFilter.all, [Car()]));
+      when(filteredRefuelingsBloc.state).thenAnswer((_) =>
+          FilteredRefuelingsLoaded([refueling], VisibilityFilter.all, [Car()]));
       Key refuelingsKey = Key('refuelings');
       await tester.pumpWidget(
         MultiBlocProvider(
@@ -145,7 +149,8 @@ void main() {
         mileage: 1000,
         date: DateTime.fromMillisecondsSinceEpoch(0),
       );
-      when(filteredRefuelingsBloc.state).thenAnswer((_) => FilteredRefuelingsLoaded([refueling], VisibilityFilter.all, [Car()]));
+      when(filteredRefuelingsBloc.state).thenAnswer((_) =>
+          FilteredRefuelingsLoaded([refueling], VisibilityFilter.all, [Car()]));
       Key refuelingsKey = Key('refuelings');
       await tester.pumpWidget(
         MultiBlocProvider(

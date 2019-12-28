@@ -5,16 +5,14 @@ import 'package:autodo/routes.dart';
 class SignupButton extends StatelessWidget {
   final buttonPadding;
 
-  SignupButton({Key key, this.buttonPadding})
-      : super(key: key);
+  SignupButton({Key key, this.buttonPadding}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       child: Padding(
-        padding:
-            EdgeInsets.fromLTRB(16.0, buttonPadding, 16.0, buttonPadding),
+        padding: EdgeInsets.fromLTRB(16.0, buttonPadding, 16.0, buttonPadding),
         child: Hero(
           tag: 'SignupButton',
           transitionOnUserGestures: true,

@@ -53,6 +53,6 @@ abstract class DataRepository extends Equatable {
   // Notifications
   Stream<int> notificationID();
 
-  @override 
+  @override
   List<Object> get props => [];
 }

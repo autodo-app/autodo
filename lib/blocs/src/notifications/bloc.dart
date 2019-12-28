@@ -25,19 +25,20 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   static final platformChannelSpecifics = NotificationDetails(
       androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
 
-  NotificationsBloc({
-    notificationsPlugin,
-    @required dbBloc
-  }) : assert(dbBloc != null), _dbBloc = dbBloc,
-       flutterLocalNotificationsPlugin = notificationsPlugin ?? FlutterLocalNotificationsPlugin();
+  NotificationsBloc({notificationsPlugin, @required dbBloc})
+      : assert(dbBloc != null),
+        _dbBloc = dbBloc,
+        flutterLocalNotificationsPlugin =
+            notificationsPlugin ?? FlutterLocalNotificationsPlugin();
 
   @override
   NotificationsState get initialState => NotificationsLoading();
 
-  DataRepository get repo => (_dbBloc.state is DbLoaded) ? 
-    (_dbBloc.state as DbLoaded).repository : null;
+  DataRepository get repo => (_dbBloc.state is DbLoaded)
+      ? (_dbBloc.state as DbLoaded).repository
+      : null;
 
-  @override 
+  @override
   Stream<NotificationsState> mapEventToState(NotificationsEvent event) async* {
     if (event is LoadNotifications) {
       yield* _mapLoadNotificationsToState(event);
@@ -52,7 +53,8 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     }
   }
 
-  Stream<NotificationsState> _mapLoadNotificationsToState(LoadNotifications event) async* {
+  Stream<NotificationsState> _mapLoadNotificationsToState(
+      LoadNotifications event) async* {
     try {
       final id = await repo.notificationID().first;
       if (id != null) {
@@ -64,9 +66,8 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
       yield NotificationsNotLoaded();
     }
     _dataSubscription?.cancel();
-    _dataSubscription = repo?.notificationID()?.listen( 
-      (id) => add(NotificationIdUpdated(id))
-    );
+    _dataSubscription =
+        repo?.notificationID()?.listen((id) => add(NotificationIdUpdated(id)));
   }
 
   // Future onSelectNotification(String payload) async {
@@ -79,16 +80,17 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   //   // );
   // }
 
-  Stream<NotificationsState> _mapNotificationIdUpdateToState(NotificationIdUpdated event) async* {
+  Stream<NotificationsState> _mapNotificationIdUpdateToState(
+      NotificationIdUpdated event) async* {
     yield NotificationsLoaded(event.id);
   }
 
-  Stream<NotificationsState> _mapScheduleNotificationToState(ScheduleNotification event) async* {
+  Stream<NotificationsState> _mapScheduleNotificationToState(
+      ScheduleNotification event) async* {
     if (state is NotificationsLoaded) {
       var id = (state as NotificationsLoaded).lastID + 1;
-      await flutterLocalNotificationsPlugin.schedule(  
-        id, event.title, event.body, event.date, platformChannelSpecifics
-      );
+      await flutterLocalNotificationsPlugin.schedule(
+          id, event.title, event.body, event.date, platformChannelSpecifics);
       yield NotificationsLoaded(id);
     }
   }
@@ -111,22 +113,23 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     }
   }
 
-  Stream<NotificationsState> _mapReScheduleNotificationToState(ReScheduleNotification event) async* {
+  Stream<NotificationsState> _mapReScheduleNotificationToState(
+      ReScheduleNotification event) async* {
     await cancel(event.id);
     if (state is NotificationsLoaded) {
       var id = (state as NotificationsLoaded).lastID + 1;
-      await flutterLocalNotificationsPlugin.schedule(  
-        id, event.title, event.body, event.date, platformChannelSpecifics
-      );
+      await flutterLocalNotificationsPlugin.schedule(
+          id, event.title, event.body, event.date, platformChannelSpecifics);
       yield NotificationsLoaded(id);
     }
   }
 
-  Stream<NotificationsState> _mapCancelNotificationToState(CancelNotification event) async* {
+  Stream<NotificationsState> _mapCancelNotificationToState(
+      CancelNotification event) async* {
     await cancel(event.id);
   }
 
-  @override 
+  @override
   Future<void> close() async {
     _dataSubscription?.cancel();
     return super.close();

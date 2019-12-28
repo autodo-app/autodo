@@ -199,11 +199,12 @@ class MarkdownParser {
   }
 }
 
-
 class LegalBloc extends Bloc<LegalEvent, LegalState> {
   AssetBundle _bundle;
 
-  LegalBloc({@required bundle}) : assert(bundle != null), _bundle = bundle;
+  LegalBloc({@required bundle})
+      : assert(bundle != null),
+        _bundle = bundle;
 
   @override
   LegalState get initialState => LegalNotLoaded();
@@ -219,6 +220,6 @@ class LegalBloc extends Bloc<LegalEvent, LegalState> {
     yield LegalLoading();
     var rawText = await _bundle.loadString('legal/privacy-policy.md');
     var richText = RichText(text: MarkdownParser.parse(rawText));
-    yield LegalLoaded(text: richText); 
+    yield LegalLoaded(text: richText);
   }
 }

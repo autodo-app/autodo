@@ -11,13 +11,12 @@ void main() {
       final key = Key('screen');
       await tester.pumpWidget(
         MultiBlocProvider(
-          providers: [
-          ],
+          providers: [],
           child: MaterialApp(
             home: RefuelingAddEditScreen(
               key: key,
               isEditing: false,
-              onSave: (a,b,c,d,e) {},
+              onSave: (a, b, c, d, e) {},
             ),
           ),
         ),
@@ -30,13 +29,14 @@ void main() {
       var saved = false;
       await tester.pumpWidget(
         MultiBlocProvider(
-          providers: [
-          ],
+          providers: [],
           child: MaterialApp(
             home: RefuelingAddEditScreen(
               key: key,
               isEditing: false,
-              onSave: (a,b,c,d,e) {saved = true;},
+              onSave: (a, b, c, d, e) {
+                saved = true;
+              },
             ),
           ),
         ),
@@ -58,13 +58,12 @@ void main() {
       final key = Key('screen');
       await tester.pumpWidget(
         MultiBlocProvider(
-          providers: [
-          ],
+          providers: [],
           child: MaterialApp(
             home: RefuelingAddEditScreen(
               key: key,
               isEditing: false,
-              onSave: (a,b,c,d,e) {},
+              onSave: (a, b, c, d, e) {},
             ),
           ),
         ),

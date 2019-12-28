@@ -6,7 +6,8 @@ import 'package:autodo/repositories/repositories.dart';
 import 'event.dart';
 import 'state.dart';
 
-class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> {
+class AuthenticationBloc
+    extends Bloc<AuthenticationEvent, AuthenticationState> {
   final AuthRepository _userRepository;
 
   AuthenticationBloc({@required AuthRepository userRepository})
@@ -62,5 +63,3 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     await _userRepository.deleteCurrentUser();
   }
 }
-
-

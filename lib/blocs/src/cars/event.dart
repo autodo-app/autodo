@@ -54,6 +54,6 @@ class ExternalRefuelingsUpdated extends CarsEvent {
   @override
   List<Object> get props => [refuelings];
 
-  @override 
+  @override
   String toString() => 'ExternalRefuelingsUpdated { refuelings: $refuelings }';
 }

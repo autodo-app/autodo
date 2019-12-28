@@ -11,18 +11,17 @@ class CarEntity extends Equatable {
   final List<DistanceRatePoint> distanceRateHistory;
 
   const CarEntity(
-    this.id,
-    this.name,
-    this.mileage,
-    numRefuelings,
-    averageEfficiency,
-    distanceRate ,
-    this.lastMileageUpdate,
-    this.distanceRateHistory
-  ) : 
-    this.numRefuelings = numRefuelings ?? 0,
-    this.averageEfficiency = averageEfficiency ?? 0.0,
-    this.distanceRate = distanceRate ?? 0.0;
+      this.id,
+      this.name,
+      this.mileage,
+      numRefuelings,
+      averageEfficiency,
+      distanceRate,
+      this.lastMileageUpdate,
+      this.distanceRateHistory)
+      : this.numRefuelings = numRefuelings ?? 0,
+        this.averageEfficiency = averageEfficiency ?? 0.0,
+        this.distanceRate = distanceRate ?? 0.0;
 
   // Map<String, Object> toJson() {
   //   return {
@@ -38,7 +37,16 @@ class CarEntity extends Equatable {
   // }
 
   @override
-  List<Object> get props => [id, name, mileage, numRefuelings, averageEfficiency, distanceRate, lastMileageUpdate, distanceRateHistory];
+  List<Object> get props => [
+        id,
+        name,
+        mileage,
+        numRefuelings,
+        averageEfficiency,
+        distanceRate,
+        lastMileageUpdate,
+        distanceRateHistory
+      ];
 
   @override
   String toString() {
@@ -60,16 +68,17 @@ class CarEntity extends Equatable {
 
   static CarEntity fromSnapshot(DocumentSnapshot snap) {
     return CarEntity(
-      snap.documentID,
-      snap.data["name"] as String,
-      snap.data["mileage"] as int,
-      snap.data["numRefuelings"] as int,
-      snap.data["averageEfficiency"] as double,
-      snap.data["distanceRate"] as double,
-      (snap.data['lastMileageUpdate'] == null) ? null :
-        DateTime.fromMillisecondsSinceEpoch(snap.data["lastMileageUpdate"] as int),
-      snap.data["distanceRateHistory"] as List<DistanceRatePoint>
-    );
+        snap.documentID,
+        snap.data["name"] as String,
+        snap.data["mileage"] as int,
+        snap.data["numRefuelings"] as int,
+        snap.data["averageEfficiency"] as double,
+        snap.data["distanceRate"] as double,
+        (snap.data['lastMileageUpdate'] == null)
+            ? null
+            : DateTime.fromMillisecondsSinceEpoch(
+                snap.data["lastMileageUpdate"] as int),
+        snap.data["distanceRateHistory"] as List<DistanceRatePoint>);
   }
 
   Map<String, Object> toDocument() {

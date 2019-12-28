@@ -11,18 +11,21 @@ import 'package:autodo/util.dart';
 import 'event.dart';
 import 'state.dart';
 
-class EfficiencyStatsBloc extends Bloc<EfficiencyStatsEvent, EfficiencyStatsState> {
+class EfficiencyStatsBloc
+    extends Bloc<EfficiencyStatsEvent, EfficiencyStatsState> {
   final RefuelingsBloc _refuelingsBloc;
   StreamSubscription _refuelingsSubscription;
 
-  EfficiencyStatsBloc({@required refuelingsBloc}) :
-      assert(refuelingsBloc != null), _refuelingsBloc = refuelingsBloc;
+  EfficiencyStatsBloc({@required refuelingsBloc})
+      : assert(refuelingsBloc != null),
+        _refuelingsBloc = refuelingsBloc;
 
   @override
   EfficiencyStatsState get initialState => EfficiencyStatsLoading();
 
   @override
-  Stream<EfficiencyStatsState> mapEventToState(EfficiencyStatsEvent event) async* {
+  Stream<EfficiencyStatsState> mapEventToState(
+      EfficiencyStatsEvent event) async* {
     if (event is LoadEfficiencyStats) {
       yield* _mapLoadEfficiencyStatsToState(event);
     } else if (event is UpdateEfficiencyData) {
@@ -32,17 +35,16 @@ class EfficiencyStatsBloc extends Bloc<EfficiencyStatsEvent, EfficiencyStatsStat
 
   Stream<EfficiencyStatsState> _mapLoadEfficiencyStatsToState(event) async* {
     if (_refuelingsBloc.state is RefuelingsLoaded) {
-      final data = await _prepData((_refuelingsBloc.state as RefuelingsLoaded).refuelings);
+      final data = await _prepData(
+          (_refuelingsBloc.state as RefuelingsLoaded).refuelings);
       yield EfficiencyStatsLoaded(data);
     }
     _refuelingsSubscription?.cancel();
-    _refuelingsBloc.listen(
-      (state) {
-        if (state is RefuelingsLoaded) {
-          add(UpdateEfficiencyData(state.refuelings));
-        }
+    _refuelingsBloc.listen((state) {
+      if (state is RefuelingsLoaded) {
+        add(UpdateEfficiencyData(state.refuelings));
       }
-    );
+    });
   }
 
   _interpolateDate(DateTime prev, DateTime next) {
@@ -51,7 +53,8 @@ class EfficiencyStatsBloc extends Bloc<EfficiencyStatsEvent, EfficiencyStatsStat
             .toInt());
   }
 
-  static double emaFilter(prev, current) => roundToPrecision(0.8 * prev + 0.2 * current, 3);
+  static double emaFilter(prev, current) =>
+      roundToPrecision(0.8 * prev + 0.2 * current, 3);
 
   Future<List<Series<FuelMileagePoint, DateTime>>> _prepData(refuelings) async {
     List<FuelMileagePoint> points = [];
@@ -114,11 +117,11 @@ class EfficiencyStatsBloc extends Bloc<EfficiencyStatsEvent, EfficiencyStatsStat
           data: emaData)
         ..setAttribute(rendererIdKey, 'customLine'),
     ];
-  }  
+  }
 
   Stream<EfficiencyStatsState> _mapUpdateEfficiencyDataToState(event) async* {
     final data = await _prepData(event.refuelings);
-    yield(EfficiencyStatsLoaded(data));
+    yield (EfficiencyStatsLoaded(data));
   }
 
   @override

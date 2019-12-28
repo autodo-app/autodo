@@ -37,10 +37,7 @@ void main() {
           ],
           child: MaterialApp(
             home: Scaffold(
-              body: TodoDeleteButton(  
-                key: todosKey,
-                todo: Todo(name: 'test')
-              ),
+              body: TodoDeleteButton(key: todosKey, todo: Todo(name: 'test')),
             ),
           ),
         ),
@@ -59,10 +56,7 @@ void main() {
           ],
           child: MaterialApp(
             home: Scaffold(
-              body: TodoDeleteButton(  
-                key: todosKey,
-                todo: Todo(name: 'test')
-              ),
+              body: TodoDeleteButton(key: todosKey, todo: Todo(name: 'test')),
             ),
           ),
         ),
@@ -84,10 +78,7 @@ void main() {
           ],
           child: MaterialApp(
             home: Scaffold(
-              body: TodoDeleteButton(  
-                key: todosKey,
-                todo: Todo(name: 'test')
-              ),
+              body: TodoDeleteButton(key: todosKey, todo: Todo(name: 'test')),
             ),
           ),
         ),

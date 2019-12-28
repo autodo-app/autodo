@@ -10,18 +10,17 @@ class TodoEntity extends Equatable {
   final DateTime completedDate, dueDate;
 
   const TodoEntity(
-    this.id,
-    this.name,
-    this.carName,
-    this.repeatName,
-    this.dueState,
-    this.dueMileage,
-    this.notificationID,
-    this.completed,
-    this.estimatedDueDate,
-    this.completedDate,
-    this.dueDate
-  );
+      this.id,
+      this.name,
+      this.carName,
+      this.repeatName,
+      this.dueState,
+      this.dueMileage,
+      this.notificationID,
+      this.completed,
+      this.estimatedDueDate,
+      this.completedDate,
+      this.dueDate);
 
   // Map<String, Object> toJson() {
   //   return {
@@ -40,17 +39,26 @@ class TodoEntity extends Equatable {
   // }
 
   @override
-  List<Object> get props => [id, name, carName, repeatName, dueState, 
-      dueMileage, notificationID, completed, estimatedDueDate, completedDate, 
-      dueDate];
-
+  List<Object> get props => [
+        id,
+        name,
+        carName,
+        repeatName,
+        dueState,
+        dueMileage,
+        notificationID,
+        completed,
+        estimatedDueDate,
+        completedDate,
+        dueDate
+      ];
 
   @override
   String toString() {
     return 'TodoEntity { id: $id, name: $name, carName: $carName, repeatName: '
-    '$repeatName, dueState: $dueState, dueMileage: $dueMileage, notificationID: '
-    '$notificationID, completed: $completed, estimatedDueDate: $estimatedDueDate, '
-    'completedDate: $completedDate, dueDate: $dueDate }';
+        '$repeatName, dueState: $dueState, dueMileage: $dueMileage, notificationID: '
+        '$notificationID, completed: $completed, estimatedDueDate: $estimatedDueDate, '
+        'completedDate: $completedDate, dueDate: $dueDate }';
   }
 
   // static TodoEntity fromJson(Map<String, Object> json) {
@@ -75,16 +83,19 @@ class TodoEntity extends Equatable {
       snap.data["name"] as String,
       snap.data["carName"] as String,
       snap.data["repeatName"] as String,
-      (snap.data["dueState"] == null) ? null : 
-        TodoDueState.values[snap.data["dueState"]],
+      (snap.data["dueState"] == null)
+          ? null
+          : TodoDueState.values[snap.data["dueState"]],
       snap.data["dueMileage"] as int,
       snap.data["notificationID"] as int,
       snap.data["completed"] as bool,
       snap.data['estimatedDueDate'] as bool,
-      (snap.data["completedDate"] == null) ? null : 
-        DateTime.fromMillisecondsSinceEpoch(snap.data["completedDate"]),
-      (snap.data["dueDate"] == null) ? null : 
-        DateTime.fromMillisecondsSinceEpoch(snap.data["dueDate"]),
+      (snap.data["completedDate"] == null)
+          ? null
+          : DateTime.fromMillisecondsSinceEpoch(snap.data["completedDate"]),
+      (snap.data["dueDate"] == null)
+          ? null
+          : DateTime.fromMillisecondsSinceEpoch(snap.data["dueDate"]),
     );
   }
 

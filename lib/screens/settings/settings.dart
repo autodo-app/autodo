@@ -17,7 +17,8 @@ class SettingsScreenState extends State<SettingsScreen> {
           style: Theme.of(context).primaryTextTheme.body1),
       actions: <Widget>[
         FlatButton(
-            onPressed: () => BlocProvider.of<AuthenticationBloc>(context).add(DeletedUser()),
+            onPressed: () =>
+                BlocProvider.of<AuthenticationBloc>(context).add(DeletedUser()),
             child: Text('Yes',
                 style: Theme.of(context)
                     .primaryTextTheme

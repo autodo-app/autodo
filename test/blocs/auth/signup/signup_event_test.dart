@@ -11,7 +11,8 @@ void main() {
       expect(SignupPasswordChanged(password: '').props, ['']);
     });
     test('SignupWithCredentialsPressed props', () {
-      expect(SignupWithCredentialsPressed(email: '', password: '').props, ['', '']);
+      expect(SignupWithCredentialsPressed(email: '', password: '').props,
+          ['', '']);
     });
   });
 }

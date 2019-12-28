@@ -4,7 +4,7 @@ import 'package:autodo/models/models.dart';
 abstract class DrivingDistanceStatsEvent extends Equatable {
   const DrivingDistanceStatsEvent();
 
-  @override 
+  @override
   List<Object> get props => [];
 }
 
@@ -15,9 +15,9 @@ class UpdateDrivingDistanceData extends DrivingDistanceStatsEvent {
 
   const UpdateDrivingDistanceData(this.cars);
 
-  @override 
+  @override
   List<Object> get props => [cars];
 
-  @override 
+  @override
   toString() => "UpdateDrivingDistanceData { cars: $cars }";
 }

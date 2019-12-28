@@ -4,16 +4,14 @@ import 'package:flutter/rendering.dart';
 class TrialButton extends StatelessWidget {
   final buttonPadding;
 
-  TrialButton({Key key, this.buttonPadding})
-      : super(key: key);
+  TrialButton({Key key, this.buttonPadding}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       child: Padding(
-        padding:
-            EdgeInsets.fromLTRB(16.0, buttonPadding, 16.0, buttonPadding),
+        padding: EdgeInsets.fromLTRB(16.0, buttonPadding, 16.0, buttonPadding),
         child: RaisedButton(
           elevation: 12.0,
           onPressed: () {

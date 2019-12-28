@@ -10,20 +10,19 @@ class MockTodosBloc extends MockBloc<TodosEvent, TodosState>
 void main() {
   group('FilteredTodosState', () {
     final todo = Todo(
-      name: 'Oil', 
-      id: '0',
-      carName: '',
-      repeatName: '',
-      dueState: TodoDueState.DUE_SOON,
-      dueMileage: 1000,
-      notificationID: 0,
-      completed: false,
-      estimatedDueDate: false,
-      completedDate: DateTime.fromMillisecondsSinceEpoch(0),
-      dueDate: DateTime.fromMillisecondsSinceEpoch(0)
-    );
+        name: 'Oil',
+        id: '0',
+        carName: '',
+        repeatName: '',
+        dueState: TodoDueState.DUE_SOON,
+        dueMileage: 1000,
+        notificationID: 0,
+        completed: false,
+        estimatedDueDate: false,
+        completedDate: DateTime.fromMillisecondsSinceEpoch(0),
+        dueDate: DateTime.fromMillisecondsSinceEpoch(0));
     test('props are correct', () {
-      expect( 
+      expect(
         FilteredTodosLoading().props,
         [],
       );
@@ -36,9 +35,12 @@ void main() {
         );
       });
       test('props are correct', () {
-        expect(  
+        expect(
           FilteredTodosLoaded([todo], VisibilityFilter.active).props,
-          [[todo], VisibilityFilter.active],
+          [
+            [todo],
+            VisibilityFilter.active
+          ],
         );
       });
     });

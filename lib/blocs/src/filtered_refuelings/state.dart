@@ -18,10 +18,7 @@ class FilteredRefuelingsLoaded extends FilteredRefuelingsState {
   final VisibilityFilter activeFilter;
 
   const FilteredRefuelingsLoaded(
-    this.filteredRefuelings,
-    this.activeFilter,
-    this.cars
-  );
+      this.filteredRefuelings, this.activeFilter, this.cars);
 
   @override
   List<Object> get props => [filteredRefuelings, activeFilter, cars];

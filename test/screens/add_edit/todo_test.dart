@@ -9,7 +9,9 @@ import 'package:autodo/screens/add_edit/forms/barrel.dart';
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/models/models.dart';
 
-class MockRepeatsBloc extends MockBloc<RepeatsEvent, RepeatsState> implements RepeatsBloc {}
+class MockRepeatsBloc extends MockBloc<RepeatsEvent, RepeatsState>
+    implements RepeatsBloc {}
+
 class MockCarsBloc extends MockBloc<CarsEvent, CarsState> implements CarsBloc {}
 
 void main() {
@@ -38,7 +40,7 @@ void main() {
             home: TodoAddEditScreen(
               key: key,
               isEditing: false,
-              onSave: (a,b,c,d) {},
+              onSave: (a, b, c, d) {},
             ),
           ),
         ),
@@ -65,7 +67,9 @@ void main() {
             home: TodoAddEditScreen(
               key: key,
               isEditing: false,
-              onSave: (a,b,c,d) {saved = true;},
+              onSave: (a, b, c, d) {
+                saved = true;
+              },
             ),
           ),
         ),
@@ -103,7 +107,7 @@ void main() {
             home: TodoAddEditScreen(
               key: key,
               isEditing: false,
-              onSave: (a,b,c,d) {},
+              onSave: (a, b, c, d) {},
             ),
           ),
         ),

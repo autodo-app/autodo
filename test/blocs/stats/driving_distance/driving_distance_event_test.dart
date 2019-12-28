@@ -9,10 +9,13 @@ void main() {
       expect(LoadDrivingDistanceStats().props, []);
     });
     test('Update props', () {
-      expect(UpdateDrivingDistanceData([Car()]).props, [[Car()]]);
+      expect(UpdateDrivingDistanceData([Car()]).props, [
+        [Car()]
+      ]);
     });
     test('Update toString', () {
-      expect(UpdateDrivingDistanceData([Car()]).toString(), "UpdateDrivingDistanceData { cars: ${[Car()]} }");
+      expect(UpdateDrivingDistanceData([Car()]).toString(),
+          "UpdateDrivingDistanceData { cars: ${[Car()]} }");
     });
   });
 }
