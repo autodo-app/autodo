@@ -10,7 +10,8 @@ jobs:
         submodules: true
     - uses: subosito/flutter-action@v1
       with:
-        flutter-version: '1.13.6-pre.32'
+        # flutter-version: '1.13.6-pre.32'
+        channel: 'master'
     - run: flutter format .
     - uses: stefanzweifel/git-auto-commit-action@v2.5.0
       with:
