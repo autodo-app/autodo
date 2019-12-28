@@ -8,8 +8,28 @@ jobs:
     - uses: actions/checkout@v1
       with: 
         submodules: true
-    - uses: bltavares/actions/dartfmt@master
+    - uses: subosito/flutter-action@v1
       with:
-        args: "autofix"
+        flutter-version: '1.13.6-pre.32'
+    - run: flutter format .
+    - uses: stefanzweifel/git-auto-commit-action@v2.5.0
+      with:
+        commit_message: Apply automatic changes
+        branch: ${{ github.head_ref }}
+
+        # Optional git params
+        commit_options: '--no-verify --signoff'
+
+        # Optional glob pattern of files which should be added to the commit
+        # file_pattern: src/\*.js
+
+        # Optional repository path
+        repository: .
+
       env:
-        GITHUB_TOKEN: "${{ secrets.TOKEN }}"
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # - uses: bltavares/actions/dartfmt@master
+    #   with:
+    #     args: "autofix"
+    #   env:
+    #     GITHUB_TOKEN: "${{ secrets.TOKEN }}"
