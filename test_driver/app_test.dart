@@ -65,7 +65,7 @@ void main() {
       await driver.waitFor(find.byValueKey('__home_screen__'));
     });
 
-    // Integration tests run sequentially
     test('new todo', () async => await newTodo(driver));
+    test('edit todo', () async => await editTodo(driver));
   });
 }

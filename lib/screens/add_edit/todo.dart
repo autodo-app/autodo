@@ -13,7 +13,7 @@ import 'package:autodo/localization.dart';
 import 'package:autodo/util.dart';
 
 typedef _OnSaveCallback = Function(
-    DateTime dueDate, int dueMileage, String repeatName, String carName);
+    String name, DateTime dueDate, int dueMileage, String repeatName, String carName);
 
 class _NameForm extends StatelessWidget {
   final Todo todo;
@@ -204,8 +204,7 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
   ScrollController scrollCtrl;
   DateTime _dueDate;
   int _dueMileage;
-  String _repeatName;
-  String _car;
+  String _name, _repeatName, _car;
 
   bool get isEditing => widget.isEditing;
 
@@ -253,6 +252,7 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
                       child: _NameForm(
                         node: _nameNode,
                         nextNode: _dateNode,
+                        onSaved: (name) => _name = name,
                       ),
                       focusNode: _nameNode,
                     ),
@@ -336,7 +336,7 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
           onPressed: () {
             if (_formKey.currentState.validate()) {
               _formKey.currentState.save();
-              widget.onSave(_dueDate, _dueMileage, _repeatName, _car);
+              widget.onSave(_name, _dueDate, _dueMileage, _repeatName, _car);
               Navigator.pop(context);
             }
           },

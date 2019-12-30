@@ -44,7 +44,9 @@ class _TodoCheckbox extends StatelessWidget {
     Key key,
     @required this.todo,
     @required this.onCheckboxChanged,
-  }) : super(key: key);
+  }) : super(key: key) {
+    print('__todo_card_edit_${todo.name}');
+  }
 
   @override
   build(context) => Transform.scale(
@@ -192,6 +194,7 @@ class _TodoEditButton extends StatelessWidget {
           minWidth: 0,
         ),
         child: FlatButton(
+          key: ValueKey('__todo_card_edit_${todo.name}'),
           child: Icon(
             Icons.edit,
             color: Theme.of(context).primaryIconTheme.color,
@@ -201,16 +204,18 @@ class _TodoEditButton extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) => TodoAddEditScreen(
                 isEditing: true,
-                onSave: (dueDate, dueMileage, repeatName, carName) {
+                onSave: (name, dueDate, dueMileage, repeatName, carName) {
                     if (carName == todo.carName) {
                       // update existing
                       var out = todo.copyWith(
+                          name: name,
                           dueDate: dueDate,
                           dueMileage: dueMileage,
                           repeatName: repeatName);
                       BlocProvider.of<TodosBloc>(context).add(UpdateTodo(out));
                     } else {
                       var out = Todo(
+                        name: name,
                         dueDate: dueDate,
                         dueMileage: dueMileage,
                         repeatName: repeatName,

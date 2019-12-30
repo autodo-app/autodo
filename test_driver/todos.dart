@@ -25,8 +25,19 @@ Future<void> newTodo(driver) async {
   
   // submit
   await driver.tap(find.byType('FloatingActionButton'));
-  await driver.waitFor(find.byValueKey('__home_screen__'));
+  await driver.waitFor(find.byValueKey('__todos_screen_scroller__'));
 
-  await Future.delayed(Duration(seconds: 10));
   // check to see that the todo is placed in the queue?
+}
+
+/// Edits the previously created todo
+Future<void> editTodo(FlutterDriver driver) async {
+  // make sure we're on the home screen
+  // await driver.waitFor(find.byValueKey('__todos_screen_scroller__'));
+  
+  // edit screen
+  print('scrolling');
+  await driver.scrollUntilVisible(find.byValueKey('__todos_screen_scroller__'), find.byValueKey('__todo_card_edit_test todo'), dyScroll: -100.0);
+  print('tapping');
+  await driver.tap(find.byValueKey('__todo_card_edit_test todo'));
 }

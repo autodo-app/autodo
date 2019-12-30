@@ -134,6 +134,7 @@ class App extends StatelessWidget {
                   if (state is Authenticated) {
                     return HomeScreenProvider(integrationTest: integrationTest);
                   } else if (state is Unauthenticated) {
+                    print('here');
                     return WelcomeScreenProvider();
                   } else {
                     return LoadingIndicator();
