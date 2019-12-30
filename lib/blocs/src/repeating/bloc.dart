@@ -70,11 +70,12 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
 
   Stream<RepeatsState> _mapLoadRepeatsToState() async* {
     try {
-      final repeats = await repo.repeats().first;
+      final repeats = await repo.repeats().first
+          .timeout(Duration(seconds: 1), onTimeout: () => null);
       if (repeats != null) {
         yield RepeatsLoaded(repeats);
       } else {
-        yield RepeatsNotLoaded();
+        yield RepeatsLoaded([]);
       }
     } catch (_) {
       yield RepeatsNotLoaded();
@@ -94,7 +95,15 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
     if (state is RepeatsLoaded && repo != null) {
       final List<Repeat> updatedRepeats = (state as RepeatsLoaded)
           .repeats
-          .map((r) => r.id == event.updatedRepeat.id ? event.updatedRepeat : r)
+          .map((r) { 
+            if (r.id == null) {
+              return (r.name == event.updatedRepeat.name) ?
+                  event.updatedRepeat : r;
+            } else {
+              return (r.id == event.updatedRepeat.id) ? 
+                  event.updatedRepeat : r;
+            }
+          })
           .toList();
       yield RepeatsLoaded(updatedRepeats);
       repo.updateRepeat(event.updatedRepeat);
@@ -193,7 +202,10 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
   Stream<RepeatsState> _mapAddDefaultRepeatsToState(
       AddDefaultRepeats event) async* {
     yield RepeatsLoaded(defaults);
-    if (repo == null) return;
+    if (repo == null) {
+      print('Error: trying to add default repeats but repo is null');
+      return;
+    }
     WriteBatchWrapper batch = repo.startRepeatWriteBatch();
     for (var r in defaults) {
       batch.setData(r.toEntity().toDocument());

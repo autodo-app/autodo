@@ -86,6 +86,7 @@ class AutodoLocalizations {
   static String get next => "Next";
   static String get editTodo => "Edit ToDo";
   static String get addTodo => "Add Todo";
+  static String get repeatName => "Repeat Name";
 }
 
 class AutodoLocalizationsDelegate

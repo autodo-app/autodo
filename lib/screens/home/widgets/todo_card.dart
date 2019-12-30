@@ -201,9 +201,8 @@ class _TodoEditButton extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) => TodoAddEditScreen(
                 isEditing: true,
-                onSave: (dueDate, dueMileage, repeatName, carNames) {
-                  for (var car in carNames) {
-                    if (car == todo.carName) {
+                onSave: (dueDate, dueMileage, repeatName, carName) {
+                    if (carName == todo.carName) {
                       // update existing
                       var out = todo.copyWith(
                           dueDate: dueDate,
@@ -215,11 +214,10 @@ class _TodoEditButton extends StatelessWidget {
                         dueDate: dueDate,
                         dueMileage: dueMileage,
                         repeatName: repeatName,
-                        carName: car,
+                        carName: carName,
                       );
                       BlocProvider.of<TodosBloc>(context).add(AddTodo(out));
                     }
-                  }
                 },
                 todo: todo,
               ),

@@ -22,4 +22,5 @@ class IntegrationTestKeys {
   static const setOilInterval = ValueKey('__set_oil_interval__');
   static const setTireRotationInterval = ValueKey('__set_tire_rotation_interval__');
   static const setRepeatsNext = ValueKey('__set_repeats_next__');
+  static const todoCarForm = ValueKey('__todo_car_form__');
 }

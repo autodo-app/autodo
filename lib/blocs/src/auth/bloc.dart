@@ -50,15 +50,9 @@ class AuthenticationBloc
     try {
       final repo = FirebaseAuthRepository();
       if ((event as AppStarted).integrationTest ?? false) {
-        await repo.signOut().then((_) {
-          try {
-            repo
-                .signInWithCredentials('integration-test@autodo.app', '123456')
-                .then((_) => repo.deleteCurrentUser());
-          } catch (e) {
-            print(e);
-          }
-        });
+        await repo.signOut();
+        await repo.signInWithCredentials('integration-test@autodo.app', '123456');
+        await repo.deleteCurrentUser();
       }
       final isSignedIn = await _userRepository.isSignedIn();
       if (isSignedIn) {

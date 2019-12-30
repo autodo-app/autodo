@@ -13,7 +13,7 @@ import 'package:autodo/localization.dart';
 import 'package:autodo/util.dart';
 
 typedef _OnSaveCallback = Function(
-    DateTime dueDate, int dueMileage, String repeatName, List<String> carNames);
+    DateTime dueDate, int dueMileage, String repeatName, String carName);
 
 class _NameForm extends StatelessWidget {
   final Todo todo;
@@ -115,7 +115,7 @@ class _DateFormState extends State<_DateForm> {
   bool isValidDate(String date) {
     if (date.isEmpty) return true;
     var d = convertToDate(date);
-    return d != null && d.isBefore(DateTime.now());
+    return d != null && d.isAfter(DateTime.now());
   }
 
   @override
@@ -198,14 +198,14 @@ class TodoAddEditScreen extends StatefulWidget {
 }
 
 class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
-  FocusNode _nameNode, _dateNode, _mileageNode, _repeatNode;
+  FocusNode _nameNode, _dateNode, _mileageNode, _repeatNode, _carNode;
   Todo todo;
   final _formKey = GlobalKey<FormState>();
   ScrollController scrollCtrl;
   DateTime _dueDate;
   int _dueMileage;
   String _repeatName;
-  List<Map<String, dynamic>> _cars = [{}];
+  String _car;
 
   bool get isEditing => widget.isEditing;
 
@@ -216,6 +216,7 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
     _dateNode = FocusNode();
     _mileageNode = FocusNode();
     _repeatNode = FocusNode();
+    _carNode = FocusNode();
     scrollCtrl = ScrollController();
   }
 
@@ -225,6 +226,7 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
     _dateNode.dispose();
     _mileageNode.dispose();
     _repeatNode.dispose();
+    _carNode.dispose();
     scrollCtrl.dispose();
     super.dispose();
   }
@@ -296,6 +298,7 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
                               todo: todo,
                               node: _repeatNode,
                               onSaved: (val) => _repeatName = val,
+                              requireInput: false,
                             ),
                           );
                         }
@@ -303,14 +306,16 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
                       },
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 10),
+                      padding: EdgeInsets.only(bottom: 15),
                     ),
                     BlocBuilder<CarsBloc, CarsState>(
                       builder: (context, state) {
                         if (state is CarsLoaded) {
-                          return CarsForm(
-                            cars: state.cars,
-                            onSaved: (cars) => _cars = cars,
+                          return CarForm(
+                            key: IntegrationTestKeys.todoCarForm,
+                            onSaved: (car) => _car = car,
+                            node: _carNode,
+                            nextNode: null,
                           );
                         }
                         return LoadingIndicator();
@@ -331,13 +336,7 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
           onPressed: () {
             if (_formKey.currentState.validate()) {
               _formKey.currentState.save();
-              List<String> carNames = [];
-              for (var car in _cars) {
-                if (car['enabled']) {
-                  carNames.add(car['name']);
-                }
-              }
-              widget.onSave(_dueDate, _dueMileage, _repeatName, carNames);
+              widget.onSave(_dueDate, _dueMileage, _repeatName, _car);
               Navigator.pop(context);
             }
           },

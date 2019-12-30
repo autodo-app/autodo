@@ -83,11 +83,12 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
 
   Stream<TodosState> _mapLoadTodosToState() async* {
     try {
-      final todos = await repo.todos().first;
+      final todos = await repo.todos().first
+          .timeout(Duration(seconds: 1), onTimeout: () => null);
       if (todos != null) {
         yield TodosLoaded(todos);
       } else {
-        yield TodosNotLoaded();
+        yield TodosLoaded([]);
       }
     } catch (_) {
       yield TodosNotLoaded();
@@ -145,12 +146,14 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   }
 
   Stream<TodosState> _mapAddTodoToState(AddTodo event) async* {
-    if (repo == null) return;
+    if (repo == null) {
+      print('Error: adding todo to null repo');
+      return;
+    }
     final List<Todo> updatedTodos = List.from((state as TodosLoaded).todos)
       ..add(event.todo);
     yield TodosLoaded(updatedTodos);
     _scheduleNotification(event.todo);
-    // out = event.todo.copyWith(notificationID: notificationID);
     repo.addNewTodo(event.todo);
   }
 

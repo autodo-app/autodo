@@ -65,8 +65,6 @@ class _SignupFormState extends State<SignupForm> {
                 ),
               );
           } else if (state is SignupSuccess) {
-            BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
-            // Navigator.popAndPushNamed(context, AutodoRoutes.home);
             Navigator.push(
                 context,
                 MaterialPageRoute(

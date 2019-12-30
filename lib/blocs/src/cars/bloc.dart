@@ -61,11 +61,12 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
 
   Stream<CarsState> _mapLoadCarsToState() async* {
     try {
-      final cars = await repo.cars().first;
+      final cars = await repo.cars().first
+          .timeout(Duration(seconds: 1), onTimeout: () => null);
       if (cars != null) {
         yield CarsLoaded(cars);
       } else {
-        yield CarsNotLoaded();
+        yield CarsLoaded([]);
       }
     } catch (e) {
       print('Error loading cars: $e');
