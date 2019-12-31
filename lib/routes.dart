@@ -5,4 +5,5 @@ class AutodoRoutes {
   static final signupScreen = "__signupScreen__";
   static final loginScreen = "__loginScreen__";
   static final newUserScreens = "__newUserScreens__";
+  static final settingsScreen = "__settingsScreen__";
 }

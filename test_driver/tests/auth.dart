@@ -81,5 +81,17 @@ Future<void> signIn(FlutterDriver driver) async {
 
 /// Deletes the test user that we created
 Future<void> deleteUser(FlutterDriver driver) async {
+  print('deleting account');
+  // this tooltip exists by default as the means for opening the nav drawer
+  await driver.tap(find.byTooltip("Open navigation menu"));
+  await driver.tap(find.byValueKey('__settings_drawer_button__'));
+  
+  // settings screen
+  await driver.waitFor(find.byType('SettingsScreen'));
+  await driver.tap(find.byValueKey('__delete_account_button__'));
+  // alert dialog for confirmation
+  await driver.tap(find.byValueKey('__delete_account_confirm__'));
 
+  // should be in the welcome screen again now
+  await driver.waitFor(find.byValueKey('__welcome_screen__'));
 }

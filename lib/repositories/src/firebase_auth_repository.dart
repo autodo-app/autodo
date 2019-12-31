@@ -11,6 +11,7 @@ class FirebaseAuthRepository extends AuthRepository {
   final FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
   final GetGoogleCredentialsFn _getGoogleCredential;
+  FirebaseUser _cachedCurrentUser;
 
   FirebaseAuthRepository({
     FirebaseAuth firebaseAuth,
@@ -30,6 +31,7 @@ class FirebaseAuthRepository extends AuthRepository {
       idToken: googleAuth.idToken,
     );
     AuthResult res = await _firebaseAuth.signInWithCredential(credential);
+    _cachedCurrentUser = res.user;
     return res.user;
   }
 
@@ -39,6 +41,7 @@ class FirebaseAuthRepository extends AuthRepository {
       email: email,
       password: password,
     );
+    _cachedCurrentUser = res.user;
     return res.user;
   }
 
@@ -47,6 +50,7 @@ class FirebaseAuthRepository extends AuthRepository {
       email: email,
       password: password,
     );
+    _cachedCurrentUser = res.user;
     return res.user;
   }
 
@@ -58,6 +62,7 @@ class FirebaseAuthRepository extends AuthRepository {
   }
 
   Future<void> signOut() async {
+    _cachedCurrentUser = null;
     return Future.wait([
       _firebaseAuth.signOut(),
       _googleSignIn.signOut(),
@@ -66,7 +71,10 @@ class FirebaseAuthRepository extends AuthRepository {
 
   Future<void> deleteCurrentUser() async {
     try {
-      var user = await _firebaseAuth.currentUser();
+      var user = _cachedCurrentUser ?? await _firebaseAuth.currentUser();
+      print(user);
+      print('cache $_cachedCurrentUser');
+      _cachedCurrentUser = null;
       return user.delete();
     } on PlatformException catch (e) {
       // if exception is thrown because user doesn't exist, ignore it for now
@@ -79,8 +87,8 @@ class FirebaseAuthRepository extends AuthRepository {
     return currentUser != null;
   }
 
-  Future<FirebaseUser> getCurrentUser() async {
-    return (await _firebaseAuth.currentUser());
+  Future<FirebaseUser> getCurrentUser() {
+    return _firebaseAuth.currentUser();
   }
 
   Future<String> getUserEmail() async {

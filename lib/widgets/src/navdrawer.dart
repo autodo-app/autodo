@@ -67,11 +67,12 @@ class NavDrawerState extends State<NavDrawer> {
           onPressed: () => Navigator.popAndPushNamed(context, '/editcarlist'),
         ),
         FlatButton(
+          key: ValueKey('__settings_drawer_button__'),
           child: Text(
             'Settings',
             style: Theme.of(context).primaryTextTheme.button,
           ),
-          onPressed: () => Navigator.popAndPushNamed(context, '/settings'),
+          onPressed: () => Navigator.popAndPushNamed(context, AutodoRoutes.settingsScreen),
         ),
       ];
 

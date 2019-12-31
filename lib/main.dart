@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:autodo/screens/add_edit/refueling.dart';
 import 'package:autodo/screens/add_edit/repeat.dart';
 import 'package:autodo/screens/add_edit/todo.dart';
+import 'package:autodo/screens/settings/screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
@@ -150,6 +151,7 @@ class App extends StatelessWidget {
               SignupScreenProvider(authRepository: _authRepository),
           AutodoRoutes.loginScreen: (context) => 
             LoginScreenProvider(authRepository: _authRepository),
+          AutodoRoutes.settingsScreen: (context) => SettingsScreen(),
         },
         theme: _theme,
         debugShowCheckedModeBanner: false,
