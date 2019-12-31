@@ -66,6 +66,7 @@ void main() {
     });
 
     test('new todo', () async => await newTodo(driver));
+    test('complete todo', () async => await completeTodo(driver));
     test('edit todo', () async => await editTodo(driver));
     test('delete todo', () async => await deleteTodo(driver));
   });

@@ -30,6 +30,22 @@ Future<void> newTodo(driver) async {
   // check to see that the todo is placed in the queue?
 }
 
+/// Toggles the checkbox of a todo to mark it complete
+Future<void> completeTodo(FlutterDriver driver) async {
+  await driver.scrollUntilVisible(find.byValueKey('__todos_screen_scroller__'), find.byValueKey('__todo_card_edit_test todo'), dyScroll: -100.0);
+  print('tapping');
+  await driver.tap(find.byValueKey('__todo_checkbox_test todo'));
+
+  // toggle the filter to remove the completed todo from the list
+  await driver.tap(find.byValueKey('__extra_actions__'));
+  await driver.tap(find.byValueKey('__filter_button__'));
+  await driver.waitForAbsent(find.byValueKey('__todo_card_edit_test todo'));
+
+  // toggle the filter back
+  await driver.tap(find.byValueKey('__extra_actions__'));
+  await driver.tap(find.byValueKey('__filter_button__'));
+}
+
 /// Edits the previously created todo
 Future<void> editTodo(FlutterDriver driver) async {
   // edit button

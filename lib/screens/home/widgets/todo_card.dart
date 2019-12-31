@@ -44,14 +44,13 @@ class _TodoCheckbox extends StatelessWidget {
     Key key,
     @required this.todo,
     @required this.onCheckboxChanged,
-  }) : super(key: key) {
-    print('__todo_card_edit_${todo.name}');
-  }
+  }) : super(key: key);
 
   @override
   build(context) => Transform.scale(
       scale: 1.5,
       child: Container(
+          key: ValueKey('__todo_checkbox_${todo.name}'),
           padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
           child: Checkbox(
             value: todo.completed ?? false,
