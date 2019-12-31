@@ -119,6 +119,7 @@ class NavDrawerState extends State<NavDrawer> {
                               Align(
                                 alignment: Alignment.centerLeft,
                                 child: FlatButton(
+                                  key: ValueKey('__sign_out_button__'),
                                   child: Text('Sign Out'),
                                   onPressed: () {
                                     BlocProvider.of<AuthenticationBloc>(context)
