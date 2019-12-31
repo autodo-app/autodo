@@ -77,5 +77,6 @@ class HomeScreen extends StatelessWidget {
             onTabSelected: (tab) =>
                 BlocProvider.of<TabBloc>(context).add(UpdateTab(tab)),
             todosTabKey: todosTabKey,
+            refuelingsTabKey: ValueKey('__refuelings_tab_button__'),
           )));
 }
