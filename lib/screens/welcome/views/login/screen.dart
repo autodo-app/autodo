@@ -11,6 +11,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      key: ValueKey('__login_screen__'),
       decoration: scaffoldBackgroundGradient(),
       child: Scaffold(
         appBar: AppBar(

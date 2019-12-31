@@ -62,7 +62,21 @@ Future<void> signOut(FlutterDriver driver) async {
 
 /// Signs back in with the previously created user
 Future<void> signIn(FlutterDriver driver) async {
+  // Welcome Screen
+  await driver.waitFor(find.byValueKey('__welcome_screen__'), timeout: Duration(minutes: 2));
+  await driver.tap(find.byValueKey('__welcome_login_button__'));
+  print('Welcome Screen completed');
 
+  // Enter email and password into login screen
+  await driver.waitFor(find.byValueKey('__login_screen__'));
+  await driver.enterText('integration-test@autodo.app');
+  await driver.tap(find.byType('PasswordForm'));
+  await driver.enterText('123456');
+  await driver.tap(find.byType('LoginSubmitButton'));
+  print('Signup Screen Completed');
+
+  // home screen
+  await driver.waitFor(find.byValueKey('__home_screen__'), timeout: Duration(minutes: 2));
 }
 
 /// Deletes the test user that we created
