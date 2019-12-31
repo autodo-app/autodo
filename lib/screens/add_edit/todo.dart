@@ -191,7 +191,7 @@ class TodoAddEditScreen extends StatefulWidget {
     @required this.onSave,
     @required this.isEditing,
     this.todo,
-  }) : super(key: key);
+  }) : super(key: key) {print(todo);}
 
   @override
   _TodoAddEditScreenState createState() => _TodoAddEditScreenState();
@@ -199,7 +199,6 @@ class TodoAddEditScreen extends StatefulWidget {
 
 class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
   FocusNode _nameNode, _dateNode, _mileageNode, _repeatNode, _carNode;
-  Todo todo;
   final _formKey = GlobalKey<FormState>();
   ScrollController scrollCtrl;
   DateTime _dueDate;
@@ -250,6 +249,7 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
                     AutoScrollField(
                       controller: scrollCtrl,
                       child: _NameForm(
+                        todo: widget.todo,
                         node: _nameNode,
                         nextNode: _dateNode,
                         onSaved: (name) => _name = name,
@@ -263,7 +263,7 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
                     AutoScrollField(
                       controller: scrollCtrl,
                       child: _DateForm(
-                        todo: todo,
+                        todo: widget.todo,
                         node: _dateNode,
                         nextNode: _mileageNode,
                         onSaved: (val) =>
@@ -277,7 +277,7 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
                     AutoScrollField(
                       controller: scrollCtrl,
                       child: _MileageForm(
-                        todo: todo,
+                        todo: widget.todo,
                         node: _mileageNode,
                         nextNode: _repeatNode,
                         onSaved: (val) => _dueMileage = int.parse(val),
@@ -295,7 +295,7 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
                             focusNode: _repeatNode,
                             position: 240,
                             child: RepeatForm(
-                              todo: todo,
+                              todo: widget.todo,
                               node: _repeatNode,
                               onSaved: (val) => _repeatName = val,
                               requireInput: false,
@@ -313,6 +313,7 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
                         if (state is CarsLoaded) {
                           return CarForm(
                             key: IntegrationTestKeys.todoCarForm,
+                            initialValue: widget.todo?.carName,
                             onSaved: (car) => _car = car,
                             node: _carNode,
                             nextNode: null,

@@ -299,7 +299,7 @@ class _RefuelingAddEditScreenState extends State<RefuelingAddEditScreen> {
                         nextNode: _carNode),
                     Padding(padding: EdgeInsets.fromLTRB(0, 16, 0, 16)),
                     CarForm(
-                        refueling: widget.refueling,
+                        initialValue: widget.refueling.carName,
                         onSaved: (val) => _car = val,
                         node: _carNode,
                         nextNode: _amountNode),
