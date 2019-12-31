@@ -116,12 +116,16 @@ class App extends StatelessWidget {
   final ThemeData _theme;
   final AuthRepository _authRepository;
   final bool integrationTest;
+  Widget homeProvider, welcomeProvider; // TODO: move these to the build method
 
   App({@required theme, @required authRepository, this.integrationTest})
       : assert(theme != null),
         assert(authRepository != null),
         _theme = theme,
-        _authRepository = authRepository;
+        _authRepository = authRepository {
+    homeProvider = HomeScreenProvider(integrationTest: integrationTest);
+    welcomeProvider = WelcomeScreenProvider();
+  }
 
   @override
   build(context) => MaterialApp(
@@ -132,18 +136,16 @@ class App extends StatelessWidget {
                 // Just here as the splitter between home screen and login screen
                 builder: (context, state) {
                   if (state is Authenticated) {
-                    return HomeScreenProvider(integrationTest: integrationTest);
+                    return homeProvider;
                   } else if (state is Unauthenticated) {
-                    print('here');
-                    return WelcomeScreenProvider();
+                    return welcomeProvider;
                   } else {
                     return LoadingIndicator();
                   }
                 },
               ),
-          AutodoRoutes.home: (context) =>
-              HomeScreenProvider(integrationTest: integrationTest),
-          AutodoRoutes.welcome: (context) => WelcomeScreenProvider(),
+          AutodoRoutes.home: (context) => homeProvider,
+          AutodoRoutes.welcome: (context) => welcomeProvider,
           AutodoRoutes.signupScreen: (context) =>
               SignupScreenProvider(authRepository: _authRepository),
         },

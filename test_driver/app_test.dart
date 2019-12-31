@@ -19,7 +19,7 @@ void main() {
 
     test('sign up a new user', () async {
       // Welcome Screen
-      await driver.waitFor(find.byValueKey('__welcome_screen__'));
+      await driver.waitFor(find.byValueKey('__welcome_screen__'), timeout: Duration(minutes: 2));
       await driver.tap(find.byType("SignupButton"));
       print('Welcome Screen completed');
 
@@ -34,7 +34,7 @@ void main() {
 
       // mileage setting screen
       await Future.delayed(Duration(milliseconds: 500));
-      await driver.waitFor(find.byType('MileageScreen'));
+      await driver.waitFor(find.byType('MileageScreen'), timeout: Duration(minutes: 1));
       await driver.tap(find.byValueKey('__mileage_name_field__'));
       await driver.enterText('test');
       await driver.tap(find.byValueKey('__mileage_mileage_field__'));
@@ -67,5 +67,6 @@ void main() {
 
     test('new todo', () async => await newTodo(driver));
     test('edit todo', () async => await editTodo(driver));
+    test('delete todo', () async => await deleteTodo(driver));
   });
 }

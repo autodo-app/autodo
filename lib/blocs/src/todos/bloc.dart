@@ -158,12 +158,23 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   }
 
   Stream<TodosState> _mapUpdateTodoToState(UpdateTodo event) async* {
-    if (repo == null) return;
+    if (repo == null) {
+      print('Error: updating todo with null repo');
+      return;
+    }
+    print('todos now: ${(state as TodosLoaded).todos}');
     final List<Todo> updatedTodos = (state as TodosLoaded)
         .todos
-        .map((r) => r.id == event.updatedTodo.id ? event.updatedTodo : r)
+        .map((r) {
+          if (r.id != null && event.updatedTodo.id != null) {
+            return r.id == event.updatedTodo.id ? event.updatedTodo : r;
+          } else {
+            return (r.name == event.updatedTodo.name) ? event.updatedTodo : r;
+          }
+        })
         .toList();
     yield TodosLoaded(updatedTodos);
+    print('todos then: $updatedTodos');
     repo.updateTodo(event.updatedTodo);
   }
 
@@ -211,7 +222,13 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   Stream<TodosState> _mapDeleteTodoToState(DeleteTodo event) async* {
     final updatedTodos = (state as TodosLoaded)
         .todos
-        .where((r) => r.id != event.todo.id)
+        .where((r) {
+          if (r.id != null && event.todo.id != null) {
+            return r.id != event.todo.id;
+          } else {
+            return r.name != event.todo.name;
+          }
+        })
         .toList();
     yield TodosLoaded(updatedTodos);
     repo.deleteTodo(event.todo);

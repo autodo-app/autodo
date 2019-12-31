@@ -12,6 +12,7 @@ class TodoDeleteButton extends StatelessWidget {
 
   @override
   build(context) => ButtonTheme.fromButtonThemeData(
+        key: ValueKey('__todo_delete_button_${todo.name}'),
         data: ButtonThemeData(
           minWidth: 0,
         ),

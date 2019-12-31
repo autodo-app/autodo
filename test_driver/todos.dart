@@ -47,3 +47,16 @@ Future<void> editTodo(FlutterDriver driver) async {
   // check that we returned to home screen
   await driver.waitFor(find.byValueKey('__todos_screen_scroller__'));
 } 
+
+/// Deletes the newly created todo from the home screen
+Future<void> deleteTodo(FlutterDriver driver) async {
+  // press button
+  // await Future.delayed(Duration(minutes: 20)); // check to see what the status of the home screen is - why multiple scrollers?
+  print('scrolling');
+  await driver.scrollUntilVisible(find.byValueKey('__todos_screen_scroller__'), find.byValueKey('__todo_delete_button_test todo'), dyScroll: -100.0);
+  print('tapping');
+  await driver.tap(find.byValueKey('__todo_delete_button_test todo'));
+
+  // verify that the card no longer exists
+  await driver.waitForAbsent(find.byValueKey('__todo_card_edit_test todo'));
+}
