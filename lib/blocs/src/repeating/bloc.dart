@@ -220,33 +220,6 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
     yield RepeatsLoaded(updatedRepeats);
   }
 
-  // List sortItems(List items) {
-  //   return items
-  //     ..sort((a, b) {
-  //       var aDate = a.data['dueDate'] ?? 0;
-  //       var bDate = b.data['dueDate'] ?? 0;
-  //       var aMileage = a.data['dueMileage'] ?? 0;
-  //       var bMileage = b.data['dueMileage'] ?? 0;
-
-  //       if (aDate == 0 && bDate == 0) {
-  //         // both don't have a date, so only consider the mileages
-  //         if (aMileage > bMileage)
-  //           return 1;
-  //         else if (aMileage < bMileage)
-  //           return -1;
-  //         else
-  //           return 0;
-  //       } else {
-  //         // in case one of the two isn't a valid timestamp
-  //         if (aDate == 0) return -1;
-  //         if (bDate == 0) return 1;
-  //         // consider the dates since all todo items should have dates as a result
-  //         // of the distance rate translation function
-  //         return aDate.compareTo(bDate);
-  //       }
-  //     });
-  // }
-
   @override
   Future<void> close() {
     _dbSubscription?.cancel();

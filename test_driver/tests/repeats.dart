@@ -1,10 +1,42 @@
 import 'package:flutter_driver/flutter_driver.dart';
 
+Future<void> checkForDefaults(FlutterDriver driver) async {
+  // find each of the default repeats
+  print('scrolling');
+  await driver.scrollUntilVisible(find.byValueKey('__repeat_screen_scroller__'), find.byValueKey('__repeat_delete_button_oil'), dyScroll: -10.0);
+  print('oil found');
+  await driver.scrollUntilVisible(find.byValueKey('__repeat_screen_scroller__'), find.byValueKey('__repeat_delete_button_tireRotation'), dyScroll: -10.0);
+  print('rot found');
+  await driver.scrollUntilVisible(find.byValueKey('__repeat_screen_scroller__'), find.byValueKey('__repeat_delete_button_wiperBlades'), dyScroll: -10.0);
+  print('wiper found');
+  await driver.scrollUntilVisible(find.byValueKey('__repeat_screen_scroller__'), find.byValueKey('__repeat_delete_button_alignmentCheck'), dyScroll: -10.0);
+  print('align found');
+  await driver.scrollUntilVisible(find.byValueKey('__repeat_screen_scroller__'), find.byValueKey('__repeat_delete_button_cabinFilter'), dyScroll: -10.0);
+  print('cab found');
+  await driver.scrollUntilVisible(find.byValueKey('__repeat_screen_scroller__'), find.byValueKey('__repeat_delete_button_engineFilter'), dyScroll: -10.0);
+  print('eng found');
+  await driver.scrollUntilVisible(find.byValueKey('__repeat_screen_scroller__'), find.byValueKey('__repeat_delete_button_tires'), dyScroll: -10.0);
+  print('tire found');
+  await driver.scrollUntilVisible(find.byValueKey('__repeat_screen_scroller__'), find.byValueKey('__repeat_delete_button_brakes'), dyScroll: -10.0);
+  print('brak found');
+  await driver.scrollUntilVisible(find.byValueKey('__repeat_screen_scroller__'), find.byValueKey('__repeat_delete_button_sparkPlugs'), dyScroll: -10.0);
+  print('spark found');
+  await driver.scrollUntilVisible(find.byValueKey('__repeat_screen_scroller__'), find.byValueKey('__repeat_delete_button_battery'), dyScroll: -10.0);
+  print('bat found');
+  await driver.scrollUntilVisible(find.byValueKey('__repeat_screen_scroller__'), find.byValueKey('__repeat_delete_button_frontStruts'), dyScroll: -10.0);
+  print('front found');
+  await driver.scrollUntilVisible(find.byValueKey('__repeat_screen_scroller__'), find.byValueKey('__repeat_delete_button_rearStruts'), dyScroll: -10.0);
+  print('rear found');
+  await driver.scrollUntilVisible(find.byValueKey('__repeat_screen_scroller__'), find.byValueKey('__repeat_delete_button_coolantChange'), dyScroll: -10.0);
+  print('cool found');
+  await driver.scrollUntilVisible(find.byValueKey('__repeat_screen_scroller__'), find.byValueKey('__repeat_delete_button_transmissionFluid'), dyScroll: -10.0);
+  print('trans found');
+  await driver.scrollUntilVisible(find.byValueKey('__repeat_screen_scroller__'), find.byValueKey('__repeat_delete_button_serpentineBelt'), dyScroll: -10.0);
+  print('belt found');
+}
+
 /// Creates a new refueling
 Future<void> newRepeat(driver) async {
-  // make sure we're on the home screen
-  await driver.waitFor(find.byValueKey('__home_screen__'));
-  print('home');
   await driver.waitFor(find.byValueKey('__fab__'));
   print('found button');
   await driver.tap(find.byValueKey('__main_fab__'));

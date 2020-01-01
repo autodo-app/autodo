@@ -19,6 +19,18 @@ class RepeatsLoaded extends RepeatsState {
 
   const RepeatsLoaded([this.repeats = const [], this.changes]);
 
+  List<Repeat> sorted() {
+    return repeats..sort((a, b) {
+      if (a.mileageInterval > b.mileageInterval) {
+        return 1;
+      } else if (a.mileageInterval < b.mileageInterval) {
+         return -1;
+      } else {
+        return a.name.toLowerCase().compareTo(b.name.toLowerCase());
+      }
+    });
+  }
+
   @override
   List<Object> get props => [repeats];
 

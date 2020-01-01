@@ -1,4 +1,5 @@
 import 'package:flutter_driver/flutter_driver.dart';
+import 'package:intl/intl.dart';
 
 /// Creates a new, standalone todo (not connected to a repeat)
 Future<void> newTodo(driver) async {
@@ -17,7 +18,9 @@ Future<void> newTodo(driver) async {
   await driver.tap(find.byType('_NameForm'));
   await driver.enterText('test todo');
   await driver.tap(find.byType('_DateForm'));
-  await driver.enterText('01/01/2020');
+  var today = DateTime.now();
+  var tomorrow = today.add(Duration(days: 1));
+  await driver.enterText(DateFormat.yMd().format(tomorrow));
   await driver.tap(find.byType('_MileageForm'));
   await driver.enterText('2000');
   await driver.tap(find.byValueKey('__todo_car_form__'));

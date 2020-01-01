@@ -18,7 +18,7 @@ class RepeatsScreen extends StatelessWidget {
           key: ValueKey('__repeats_screen_scroller__'),
           itemCount: state.repeats.length,
           itemBuilder: (context, index) {
-            final repeat = state.repeats[index];
+            final repeat = state.sorted()[index];
             return Padding(  
               padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
               child: RepeatCard(repeat: repeat)   
