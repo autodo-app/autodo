@@ -78,7 +78,15 @@ class CarEntity extends Equatable {
             ? null
             : DateTime.fromMillisecondsSinceEpoch(
                 snap.data["lastMileageUpdate"] as int),
-        snap.data["distanceRateHistory"] as List<DistanceRatePoint>);
+        snap.data["distanceRateHistory"]?.map((p) => 
+          DistanceRatePoint(
+            (p['date'] == null) ? 
+              DateTime.fromMillisecondsSinceEpoch(p['date']) :
+              null,
+            p['distanceRate'],
+          )
+        )?.toList()
+      );
   }
 
   Map<String, Object> toDocument() {
@@ -89,7 +97,12 @@ class CarEntity extends Equatable {
       "averageEfficiency": averageEfficiency,
       "distanceRate": distanceRate,
       "lastMileageUpdate": lastMileageUpdate?.millisecondsSinceEpoch,
-      "distanceRateHistory": distanceRateHistory
+      "distanceRateHistory": distanceRateHistory?.map((p) => 
+        Map<String, dynamic>()..addAll({
+          'date': p.date.millisecondsSinceEpoch,
+          'distanceRate': p.distanceRate
+        })
+      )?.toList()
     };
   }
 }

@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 
 import 'package:autodo/models/models.dart';
 
-class CarsForm extends StatefulWidget {
+class CarsCheckboxForm extends StatefulWidget {
   final List<Car> cars;
   final Function(List<Map<String, dynamic>>) onSaved;
 
-  CarsForm({this.cars, this.onSaved});
+  CarsCheckboxForm({this.cars, this.onSaved});
 
   @override
   _CarsFormState createState() => _CarsFormState(cars, onSaved);
 }
 
-class _CarsFormState extends State<CarsForm> {
+class _CarsFormState extends State<CarsCheckboxForm> {
   final List<Car> cars;
   final Function(List<Map<String, dynamic>>) onSaved;
   List<Map<String, dynamic>> _carStates = [];
@@ -32,6 +32,7 @@ class _CarsFormState extends State<CarsForm> {
                 cars.length,
                 (index) => ListTile(
                     leading: Checkbox(
+                      key: ValueKey('__car_checkbox_${_carStates[index]['name']}'),
                       value: _carStates[index]['enabled'],
                       onChanged: (state) {
                         _carStates[index]['enabled'] = state;

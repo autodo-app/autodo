@@ -216,7 +216,7 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
       batch.setData(r.toEntity().toDocument());
     }
     batch.commit();
-    final updatedRepeats = await repo.repeats().first;
+    final updatedRepeats = await repo.repeats().firstWhere((s) => s.length > 0);
     yield RepeatsLoaded(updatedRepeats);
   }
 

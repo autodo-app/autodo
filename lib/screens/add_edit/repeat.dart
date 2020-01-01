@@ -57,11 +57,11 @@ class _MileageForm extends StatelessWidget {
           border: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.teal),
           ),
-          labelText: "Due Mileage *",
+          labelText: "Mileage Interval *",
           contentPadding:
               EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
         ),
-        initialValue: repeat?.mileageInterval.toString() ?? '',
+        initialValue: repeat?.mileageInterval?.toString() ?? '',
         autofocus: false,
         focusNode: node,
         style: Theme.of(context).primaryTextTheme.subtitle,
@@ -80,7 +80,7 @@ class RepeatAddEditScreen extends StatefulWidget {
   final Repeat repeat;
 
   RepeatAddEditScreen({
-    Key key,
+    Key key = const ValueKey('__add_edit_repeat__'),
     @required this.onSave,
     @required this.isEditing,
     this.repeat,
@@ -125,8 +125,8 @@ class _RepeatAddEditScreenState extends State<RepeatAddEditScreen> {
         appBar: AppBar(
           title: Text(
             isEditing
-                ? AutodoLocalizations.editRefueling
-                : AutodoLocalizations.addRefueling,
+                ? AutodoLocalizations.editRepeat
+                : AutodoLocalizations.addRepeat,
           ),
         ),
         body: Form(
@@ -164,7 +164,7 @@ class _RepeatAddEditScreenState extends State<RepeatAddEditScreen> {
                     BlocBuilder<CarsBloc, CarsState>(
                       builder: (context, state) {
                         if (state is CarsLoaded) {
-                          return CarsForm(
+                          return CarsCheckboxForm(
                             cars: state.cars,
                             onSaved: (cars) => _cars = cars,
                           );

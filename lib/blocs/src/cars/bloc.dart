@@ -142,7 +142,7 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
 
   Stream<CarsState> _mapRefuelingsUpdatedToState(
       ExternalRefuelingsUpdated event) async* {
-    if (repo == null) return;
+    if (repo == null || state is CarsNotLoaded) return;
 
     WriteBatchWrapper batch = repo.startCarWriteBatch();
     // TODO cache the cars here so that updating number of refuelings will work

@@ -46,8 +46,11 @@ Future<void> newRepeat(driver) async {
   
   print('waiting for new repeat screen');
   await driver.waitFor(find.byValueKey('__add_edit_repeat__'));
+  await driver.tap(find.byType('_NameForm'));
+  await driver.enterText('testRepeat');
   await driver.tap(find.byType('_MileageForm'));
   await driver.enterText('2000');
+  await driver.tap(find.byValueKey('__car_checkbox_test'));
   
   // submit
   await driver.tap(find.byType('FloatingActionButton'));
