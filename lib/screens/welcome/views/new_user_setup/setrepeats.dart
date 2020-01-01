@@ -217,6 +217,7 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen>
       Repeat tireRotationRepeat = (state as RepeatsLoaded)
           .repeats
           .firstWhere((val) => val.name == 'tireRotation');
+      print('oil $oilRepeat tire $tireRotationRepeat');
 
       return Form(
           key: widget.repeatKey,

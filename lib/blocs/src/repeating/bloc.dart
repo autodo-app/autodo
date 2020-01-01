@@ -12,7 +12,7 @@ import 'state.dart';
 
 class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
   final DatabaseBloc _dbBloc;
-  StreamSubscription _dbSubscription;
+  StreamSubscription _dbSubscription, _repoSubscription;
 
   static final List<Repeat> defaults = [
     Repeat(name: "oil", mileageInterval: 3500),
@@ -43,6 +43,9 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
           add(LoadRepeats());
         }
       }
+    });
+    _repoSubscription = repo?.repeats()?.listen((repeats) {
+      add(LoadRepeats());
     });
   }
 
@@ -84,10 +87,12 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
 
   Stream<RepeatsState> _mapAddRepeatToState(AddRepeat event) async* {
     if (state is RepeatsLoaded && repo != null) {
-      final List<Repeat> updatedRepeats =
-          List.from((state as RepeatsLoaded).repeats)..add(event.repeat);
+      // don't add it to the cache until it is given an id
+      // final List<Repeat> updatedRepeats =
+          // List.from((state as RepeatsLoaded).repeats)..add(event.repeat);
+      // yield RepeatsLoaded(updatedRepeats);
+      var updatedRepeats = await repo.addNewRepeat(event.repeat);
       yield RepeatsLoaded(updatedRepeats);
-      repo.addNewRepeat(event.repeat);
     }
   }
 
@@ -201,7 +206,7 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
 
   Stream<RepeatsState> _mapAddDefaultRepeatsToState(
       AddDefaultRepeats event) async* {
-    yield RepeatsLoaded(defaults);
+    // yield RepeatsLoaded(defaults);
     if (repo == null) {
       print('Error: trying to add default repeats but repo is null');
       return;
@@ -211,6 +216,8 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
       batch.setData(r.toEntity().toDocument());
     }
     batch.commit();
+    final updatedRepeats = await repo.repeats().first;
+    yield RepeatsLoaded(updatedRepeats);
   }
 
   // List sortItems(List items) {

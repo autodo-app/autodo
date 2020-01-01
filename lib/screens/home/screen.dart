@@ -78,5 +78,6 @@ class HomeScreen extends StatelessWidget {
                 BlocProvider.of<TabBloc>(context).add(UpdateTab(tab)),
             todosTabKey: todosTabKey,
             refuelingsTabKey: ValueKey('__refuelings_tab_button__'),
+            repeatsTabKey: ValueKey('__repeats_tab_button__'),
           )));
 }
