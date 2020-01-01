@@ -17,6 +17,7 @@ class AutodoLocalizations {
   static String get undo => "Undo";
   static todoDeleted(name) => "ToDo $name deleted.";
   static String get refuelingDeleted => "Refueling deleted.";
+  static String get repeatDeleted => "Repeat deleted.";
   static String get firstTimeDoingTask => "First Time Doing This Task.";
   static String get dueAt => "Due At";
   static String get distanceUnits => "miles";
