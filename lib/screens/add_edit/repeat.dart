@@ -190,7 +190,7 @@ class _RepeatAddEditScreenState extends State<RepeatAddEditScreen> {
               List<String> carNames = [];
               for (var car in _cars) {
                 if (car['enabled']) {
-                  carNames.add(car['name']);
+                  carNames.add(car['name'] as String);
                 }
               }
               widget.onSave(_name, _mileageInterval, carNames);

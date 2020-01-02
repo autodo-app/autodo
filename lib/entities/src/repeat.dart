@@ -46,7 +46,8 @@ class RepeatEntity extends Equatable {
         (snap.data['dateInterval'] == null)
             ? null
             : Duration(days: snap.data["dateInterval"] as int),
-        snap.data["cars"] as List<String>);
+        (snap.data['cars'] as List<dynamic>)?.cast<String>()
+    );
   }
 
   Map<String, Object> toDocument() {

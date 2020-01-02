@@ -85,7 +85,7 @@ class CarEntity extends Equatable {
               null,
             p['distanceRate'],
           )
-        )?.toList()
+        )?.toList()?.cast<DistanceRatePoint>()
       );
   }
 

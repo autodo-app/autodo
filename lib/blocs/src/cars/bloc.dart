@@ -60,6 +60,8 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
   }
 
   Stream<CarsState> _mapLoadCarsToState() async* {
+    if (state is CarsLoaded && (state as CarsLoaded).cars.length > 0)
+      return;
     try {
       final cars = await repo.cars().first
           .timeout(Duration(seconds: 1), onTimeout: () => null);
