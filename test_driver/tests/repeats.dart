@@ -80,10 +80,10 @@ Future<void> editRepeat(FlutterDriver driver) async {
 Future<void> deleteRepeat(FlutterDriver driver) async {
   // press button
   print('scrolling');
-  await driver.scrollUntilVisible(find.byValueKey('__repeat_screen_scroller__'), find.byValueKey('__repeat_delete_button_test_3000'), dyScroll: -100.0);
+  await driver.scrollUntilVisible(find.byValueKey('__repeats_screen_scroller__'), find.byValueKey('__repeat_card_edit_testRepeat'), dyScroll: 100.0); // our repeat will be above defaults, so scroll up
   print('tapping');
-  await driver.tap(find.byValueKey('__repeat_delete_button_test'));
+  await driver.tap(find.byValueKey('__repeat_delete_button_testRepeat'));
 
   // verify that the card no longer exists
-  await driver.waitForAbsent(find.byValueKey('__repeat_card_edit_test'));
+  await driver.waitForAbsent(find.byValueKey('__repeat_delete_button_testRepeat'));
 }

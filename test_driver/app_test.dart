@@ -35,7 +35,7 @@ void main() {
     test('check for defaults', () async => await checkForDefaults(driver));
     test('new repeat', () async => await newRepeat(driver));
     test('edit repeat', () async => await editRepeat(driver));
-    // test('delete repeat', () async => await deleteRepeat(driver));
+    test('delete repeat', () async => await deleteRepeat(driver));
   
     // last auth tests
     test('sign out', () async => await signOut(driver));
