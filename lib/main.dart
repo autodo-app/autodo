@@ -149,8 +149,8 @@ class App extends StatelessWidget {
           AutodoRoutes.welcome: (context) => welcomeProvider,
           AutodoRoutes.signupScreen: (context) =>
               SignupScreenProvider(authRepository: _authRepository),
-          AutodoRoutes.loginScreen: (context) => 
-            LoginScreenProvider(authRepository: _authRepository),
+          AutodoRoutes.loginScreen: (context) =>
+              LoginScreenProvider(authRepository: _authRepository),
           AutodoRoutes.settingsScreen: (context) => SettingsScreen(),
         },
         theme: _theme,

@@ -59,4 +59,3 @@ class DeleteRepeatSnackBar extends SnackBar {
           ),
         );
 }
-

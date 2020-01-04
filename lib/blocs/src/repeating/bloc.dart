@@ -74,8 +74,8 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
   Stream<RepeatsState> _mapLoadRepeatsToState() async* {
     try {
       final s = repo.repeats();
-      final repeats = await s.first
-          .timeout(Duration(seconds: 1), onTimeout: () => null);
+      final repeats =
+          await s.first.timeout(Duration(seconds: 1), onTimeout: () => null);
       if (repeats != null) {
         yield RepeatsLoaded(repeats);
       } else {
@@ -91,7 +91,7 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
     if (state is RepeatsLoaded && repo != null) {
       // don't add it to the cache until it is given an id
       // final List<Repeat> updatedRepeats =
-          // List.from((state as RepeatsLoaded).repeats)..add(event.repeat);
+      // List.from((state as RepeatsLoaded).repeats)..add(event.repeat);
       // yield RepeatsLoaded(updatedRepeats);
       var updatedRepeats = await repo.addNewRepeat(event.repeat);
       // yield RepeatsLoaded(updatedRepeats); redundant because of the listener to the repository
@@ -100,18 +100,14 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
 
   Stream<RepeatsState> _mapUpdateRepeatToState(UpdateRepeat event) async* {
     if (state is RepeatsLoaded && repo != null) {
-      final List<Repeat> updatedRepeats = (state as RepeatsLoaded)
-          .repeats
-          .map((r) { 
-            if (r.id == null) {
-              return (r.name == event.updatedRepeat.name) ?
-                  event.updatedRepeat : r;
-            } else {
-              return (r.id == event.updatedRepeat.id) ? 
-                  event.updatedRepeat : r;
-            }
-          })
-          .toList();
+      final List<Repeat> updatedRepeats =
+          (state as RepeatsLoaded).repeats.map((r) {
+        if (r.id == null) {
+          return (r.name == event.updatedRepeat.name) ? event.updatedRepeat : r;
+        } else {
+          return (r.id == event.updatedRepeat.id) ? event.updatedRepeat : r;
+        }
+      }).toList();
       // yield RepeatsLoaded(updatedRepeats); // redundant because of the listener to the repository
       repo.updateRepeat(event.updatedRepeat);
     }

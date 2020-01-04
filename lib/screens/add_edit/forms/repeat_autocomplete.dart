@@ -49,8 +49,8 @@ class _RepeatFormState extends State<RepeatForm> {
   build(context) {
     autoCompleteField = AutoCompleteTextField<Repeat>(
       controller: _autocompleteController,
-      decoration: defaultInputDecoration(
-              AutodoLocalizations.requiredLiteral, AutodoLocalizations.repeatName)
+      decoration: defaultInputDecoration(AutodoLocalizations.requiredLiteral,
+              AutodoLocalizations.repeatName)
           .copyWith(errorText: _repeatError),
       itemSubmitted: (item) => setState(() {
         _autocompleteController.text = item.name;
@@ -82,7 +82,7 @@ class _RepeatFormState extends State<RepeatForm> {
       validator: (val) {
         var txt = _autocompleteController.text;
         if (widget.requireInput) {
-         var res = requiredValidator(txt);
+          var res = requiredValidator(txt);
           // TODO figure this out better
           // if (selectedCar != null)
           //   widget.refueling.carName = selectedCar.name;

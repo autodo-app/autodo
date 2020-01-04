@@ -83,7 +83,9 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
 
   Stream<TodosState> _mapLoadTodosToState() async* {
     try {
-      final todos = await repo.todos().first
+      final todos = await repo
+          .todos()
+          .first
           .timeout(Duration(seconds: 1), onTimeout: () => null);
       if (todos != null) {
         yield TodosLoaded(todos);
@@ -163,16 +165,13 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       return;
     }
     print('todos now: ${(state as TodosLoaded).todos}');
-    final List<Todo> updatedTodos = (state as TodosLoaded)
-        .todos
-        .map((r) {
-          if (r.id != null && event.updatedTodo.id != null) {
-            return r.id == event.updatedTodo.id ? event.updatedTodo : r;
-          } else {
-            return (r.name == event.updatedTodo.name) ? event.updatedTodo : r;
-          }
-        })
-        .toList();
+    final List<Todo> updatedTodos = (state as TodosLoaded).todos.map((r) {
+      if (r.id != null && event.updatedTodo.id != null) {
+        return r.id == event.updatedTodo.id ? event.updatedTodo : r;
+      } else {
+        return (r.name == event.updatedTodo.name) ? event.updatedTodo : r;
+      }
+    }).toList();
     yield TodosLoaded(updatedTodos);
     print('todos then: $updatedTodos');
     repo.updateTodo(event.updatedTodo);
@@ -220,16 +219,13 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   }
 
   Stream<TodosState> _mapDeleteTodoToState(DeleteTodo event) async* {
-    final updatedTodos = (state as TodosLoaded)
-        .todos
-        .where((r) {
-          if (r.id != null && event.todo.id != null) {
-            return r.id != event.todo.id;
-          } else {
-            return r.name != event.todo.name;
-          }
-        })
-        .toList();
+    final updatedTodos = (state as TodosLoaded).todos.where((r) {
+      if (r.id != null && event.todo.id != null) {
+        return r.id != event.todo.id;
+      } else {
+        return r.name != event.todo.name;
+      }
+    }).toList();
     yield TodosLoaded(updatedTodos);
     repo.deleteTodo(event.todo);
   }
