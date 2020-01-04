@@ -11,22 +11,29 @@ import 'package:autodo/models/models.dart';
 
 class MockTodosBloc extends MockBloc<TodosEvent, TodosState>
     implements TodosBloc {}
+class MockFilteredTodosBloc extends MockBloc<FilteredTodosEvent, FilteredTodosState> implements FilteredTodosBloc {} 
 
 void main() {
   group('ExtraActions', () {
     TodosBloc todosBloc;
+    FilteredTodosBloc filteredTodosBloc;
 
     setUp(() {
       todosBloc = MockTodosBloc();
+      filteredTodosBloc = MockFilteredTodosBloc();
     });
 
     testWidgets('renders an empty Container if state is not TodosLoaded',
         (WidgetTester tester) async {
       when(todosBloc.state).thenReturn(TodosLoading());
+      when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoading());
       final key = Key('test');
       await tester.pumpWidget(
-        BlocProvider.value(
-          value: todosBloc,
+        MultiBlocProvider( 
+          providers: [
+            BlocProvider<TodosBloc>.value(value: todosBloc),
+            BlocProvider<FilteredTodosBloc>.value(value: filteredTodosBloc)
+          ],
           child: MaterialApp(
             home: Scaffold(
               appBar: AppBar(
@@ -35,7 +42,7 @@ void main() {
               body: Container(),
             ),
           ),
-        ),
+        )
       );
       expect(find.byKey((key)), findsOneWidget);
     });
@@ -43,27 +50,29 @@ void main() {
     testWidgets(
         'renders PopupMenuButton with mark all done if state is TodosLoaded with incomplete todos',
         (WidgetTester tester) async {
-      when(todosBloc.state)
-          .thenReturn(TodosLoaded([Todo(name: 'test', completed: false)]));
+      final todos = [Todo(name: 'test', completed: false)];
+      when(todosBloc.state).thenReturn(TodosLoaded(todos));
       final actions = Key('actions');
       final toggleAll = Key('toggleAll');
+      when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded(todos, VisibilityFilter.all));
       await tester.pumpWidget(
-        BlocProvider.value(
-          value: todosBloc,
+        MultiBlocProvider( 
+          providers: [
+            BlocProvider<TodosBloc>.value(value: todosBloc),
+            BlocProvider<FilteredTodosBloc>.value(value: filteredTodosBloc)
+          ],
           child: MaterialApp(
             home: Scaffold(
               appBar: AppBar(
-                actions: [
-                  ExtraActions(
+                actions: [ExtraActions(
                     key: actions,
                     toggleAllKey: toggleAll,
-                  )
-                ],
+                  )],
               ),
               body: Container(),
             ),
           ),
-        ),
+        )
       );
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(actions));
@@ -75,27 +84,29 @@ void main() {
     testWidgets(
         'renders PopupMenuButton with mark all incomplete if state is TodosLoaded with complete todos',
         (WidgetTester tester) async {
-      when(todosBloc.state)
-          .thenReturn(TodosLoaded([Todo(name: 'test', completed: true)]));
+      final todos = [Todo(name: 'test', completed: true)];
+      when(todosBloc.state).thenReturn(TodosLoaded(todos));
       final actions = Key('actions');
       final toggleAll = Key('toggleAll');
+      when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded(todos, VisibilityFilter.all));
       await tester.pumpWidget(
-        BlocProvider.value(
-          value: todosBloc,
+        MultiBlocProvider( 
+          providers: [
+            BlocProvider<TodosBloc>.value(value: todosBloc),
+            BlocProvider<FilteredTodosBloc>.value(value: filteredTodosBloc)
+          ],
           child: MaterialApp(
             home: Scaffold(
               appBar: AppBar(
-                actions: [
-                  ExtraActions(
+                actions: [ExtraActions(
                     key: actions,
                     toggleAllKey: toggleAll,
-                  )
-                ],
+                  )],
               ),
               body: Container(),
             ),
           ),
-        ),
+        )
       );
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(actions));
@@ -105,30 +116,33 @@ void main() {
     });
     testWidgets('tapping toggle all adds ToggleAll',
         (WidgetTester tester) async {
-      when(todosBloc.state).thenReturn(TodosLoaded([
+      final todos = [
         Todo(name: 'test', completed: false),
         Todo(name: 'test2', completed: true),
-      ]));
+      ];
+      when(todosBloc.state).thenReturn(TodosLoaded(todos));
       when(todosBloc.add(ToggleAll())).thenReturn(null);
       final actions = Key('actions');
       final toggleAll = Key('toggleAll');
+      when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded(todos, VisibilityFilter.all));
       await tester.pumpWidget(
-        BlocProvider.value(
-          value: todosBloc,
+        MultiBlocProvider( 
+          providers: [
+            BlocProvider<TodosBloc>.value(value: todosBloc),
+            BlocProvider<FilteredTodosBloc>.value(value: filteredTodosBloc)
+          ],
           child: MaterialApp(
             home: Scaffold(
               appBar: AppBar(
-                actions: [
-                  ExtraActions(
+                actions: [ExtraActions(
                     key: actions,
                     toggleAllKey: toggleAll,
-                  )
-                ],
+                  )],
               ),
               body: Container(),
             ),
           ),
-        ),
+        )
       );
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(actions));

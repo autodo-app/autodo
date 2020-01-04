@@ -123,9 +123,9 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
   Future<List<Repeat>> addNewRepeat(Repeat repeat) async {
     await _repeats.add(repeat.toEntity().toDocument());
     var updatedDocs = await _repeats.getDocuments();
-    return updatedDocs.documents
-      .map((doc) => Repeat.fromEntity(RepeatEntity.fromSnapshot(doc)))
-      .toList();
+    return updatedDocs?.documents
+      ?.map((doc) => Repeat.fromEntity(RepeatEntity.fromSnapshot(doc)))
+      ?.toList();
   }
 
   @override

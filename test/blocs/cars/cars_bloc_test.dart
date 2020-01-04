@@ -58,7 +58,7 @@ void main() {
             return CarsBloc(dbBloc: dbBloc, refuelingsBloc: refuelingsBloc);
           },
           act: (bloc) async => bloc.add(LoadCars()),
-          expect: [CarsLoading(), CarsNotLoaded()]);
+          expect: [CarsLoading(), CarsLoaded([])]);
       blocTest<CarsBloc, CarsEvent, CarsState>('Event from Refuelings',
           build: () {
             final refueling = Refueling(

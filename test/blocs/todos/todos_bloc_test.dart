@@ -138,7 +138,7 @@ void main() {
         act: (bloc) async => bloc.add(LoadTodos()),
         expect: [
           TodosLoading(),
-          TodosNotLoaded(),
+          TodosLoaded([]),
         ],
       );
       blocTest(

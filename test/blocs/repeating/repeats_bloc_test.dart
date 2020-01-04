@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:mockito/mockito.dart';
@@ -6,7 +8,7 @@ import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/models/models.dart';
 import 'package:autodo/repositories/repositories.dart';
 
-class MockDataRepository extends Mock implements DataRepository {}
+class MockDataRepository extends Mock implements FirebaseDataRepository {}
 
 class MockWriteBatch extends Mock implements WriteBatchWrapper {}
 
@@ -46,13 +48,13 @@ void main() {
           return RepeatsBloc(dbBloc: dbBloc);
         },
         act: (bloc) async => bloc.add(LoadRepeats()),
-        expect: [RepeatsLoading(), RepeatsNotLoaded()],
+        expect: [RepeatsLoading(), RepeatsLoaded([])],
       );
       blocTest<RepeatsBloc, RepeatsEvent, RepeatsState>(
         'exception',
         build: () {
           final dataRepository = MockDataRepository();
-          when(dataRepository.repeats()).thenThrow((_) => Exception());
+          when(dataRepository.repeats()).thenAnswer((_) => null);
           final dbBloc = MockDbBloc();
           when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
           return RepeatsBloc(dbBloc: dbBloc);
@@ -61,10 +63,10 @@ void main() {
         expect: [RepeatsLoading(), RepeatsNotLoaded()],
       );
     });
+    final dataRepository = MockDataRepository();
     blocTest(
       'AddRepeat',
       build: () {
-        final dataRepository = MockDataRepository();
         when(dataRepository.repeats()).thenAnswer((_) => Stream.fromIterable([
               [Repeat()]
             ]));
@@ -75,9 +77,19 @@ void main() {
       act: (bloc) async {
         bloc.add(LoadRepeats());
         bloc.add(AddRepeat(Repeat()));
+        await Future.doWhile(() async {
+          await Future.delayed(Duration(milliseconds: 50));
+          if (bloc.state is RepeatsLoading) {
+            return true;
+          } else {
+            return false;
+          }
+        });
+        when(dataRepository.repeats()).thenAnswer((_) => Stream.fromIterable([
+                [Repeat(), Repeat()]]));
+        bloc.add(LoadRepeats());
       },
       expect: [
-        RepeatsLoading(),
         RepeatsLoaded([Repeat()]),
         RepeatsLoaded([Repeat(), Repeat()]),
       ],
@@ -85,10 +97,8 @@ void main() {
     blocTest(
       'UpdateRepeat',
       build: () {
-        final dataRepository = MockDataRepository();
         when(dataRepository.repeats()).thenAnswer((_) => Stream.fromIterable([
-              [Repeat(id: '0', name: 'test')]
-            ]));
+              [Repeat(id: '0', name: 'test')]]));
         final dbBloc = MockDbBloc();
         when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
         return RepeatsBloc(dbBloc: dbBloc);
@@ -96,9 +106,20 @@ void main() {
       act: (bloc) async {
         bloc.add(LoadRepeats());
         bloc.add(UpdateRepeat(Repeat(id: '0', name: 'abcd')));
+        // update the repository accordingly
+        await Future.doWhile(() async {
+          await Future.delayed(Duration(milliseconds: 50));
+          if (bloc.state is RepeatsLoading) {
+            return true;
+          } else {
+            return false;
+          }
+        });
+        when(dataRepository.repeats()).thenAnswer((_) => Stream.fromIterable([
+                [Repeat(id: '0', name: 'abcd')]]));
+        bloc.add(LoadRepeats());
       },
       expect: [
-        RepeatsLoading(),
         RepeatsLoaded([Repeat(id: '0', name: 'test')]),
         RepeatsLoaded([Repeat(id: '0', name: 'abcd')]),
       ],
@@ -107,9 +128,9 @@ void main() {
       'DeleteRepeat',
       build: () {
         final dataRepository = MockDataRepository();
-        when(dataRepository.repeats()).thenAnswer((_) => Stream.fromIterable([
-              [Repeat(id: '0')]
-            ]));
+        var repeats = [Repeat(id: '0')];
+        when(dataRepository.repeats()).thenAnswer((_) => Stream.fromIterable([repeats]));
+        when(dataRepository.deleteRepeat(Repeat(id: '0'))).thenAnswer((_) => null);
         final dbBloc = MockDbBloc();
         when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
         return RepeatsBloc(dbBloc: dbBloc);
@@ -122,6 +143,7 @@ void main() {
         RepeatsLoading(),
         RepeatsLoaded([Repeat(id: '0')]),
         RepeatsLoaded([]),
+        RepeatsLoaded([Repeat(id: '0')]), // not really sure how to mock the behavior where this responds later with an empty version
       ],
     );
     blocTest(
@@ -131,6 +153,7 @@ void main() {
         final mockBatch = MockWriteBatch();
         when(dataRepository.startRepeatWriteBatch())
             .thenAnswer((_) => mockBatch);
+        when(dataRepository.repeats()).thenAnswer((_) => Stream.fromIterable([RepeatsBloc.defaults]));
         // dynamic lambdas to effectively do nothing
         when(mockBatch.setData(dynamic)).thenAnswer((_) => ((_) => _));
         when(mockBatch.commit()).thenAnswer((_) => (() => _));

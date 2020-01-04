@@ -73,14 +73,16 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
 
   Stream<RepeatsState> _mapLoadRepeatsToState() async* {
     try {
-      final repeats = await repo.repeats().first
+      final s = repo.repeats();
+      final repeats = await s.first
           .timeout(Duration(seconds: 1), onTimeout: () => null);
       if (repeats != null) {
         yield RepeatsLoaded(repeats);
       } else {
         yield RepeatsLoaded([]);
       }
-    } catch (_) {
+    } catch (e) {
+      print(e);
       yield RepeatsNotLoaded();
     }
   }
@@ -92,7 +94,7 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
           // List.from((state as RepeatsLoaded).repeats)..add(event.repeat);
       // yield RepeatsLoaded(updatedRepeats);
       var updatedRepeats = await repo.addNewRepeat(event.repeat);
-      yield RepeatsLoaded(updatedRepeats);
+      // yield RepeatsLoaded(updatedRepeats); redundant because of the listener to the repository
     }
   }
 
@@ -110,7 +112,7 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
             }
           })
           .toList();
-      yield RepeatsLoaded(updatedRepeats);
+      // yield RepeatsLoaded(updatedRepeats); // redundant because of the listener to the repository
       repo.updateRepeat(event.updatedRepeat);
     }
   }
