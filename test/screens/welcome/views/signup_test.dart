@@ -1,3 +1,4 @@
+import 'package:autodo/widgets/widgets.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -17,6 +18,8 @@ class MockSignupBloc extends MockBloc<SignupEvent, SignupState>
 class MockAuthenticationBloc
     extends MockBloc<AuthenticationEvent, AuthenticationState>
     implements AuthenticationBloc {}
+
+class MockLegalBloc extends Mock implements LegalBloc {}
 
 void main() {
   group('SignupScreen', () {
@@ -90,33 +93,10 @@ void main() {
       await tester.pump();
       expect(find.byType(SnackBar), findsOneWidget);
     });
-    testWidgets('signed in', (WidgetTester tester) async {
-      Key scaffoldKey = Key('scaffold');
-      whenListen(
-          signupBloc, Stream.fromIterable([SignupEmpty(), SignupSuccess()]));
-      when(authBloc.add(LoggedIn())).thenAnswer((_) => null);
-      await tester.pumpWidget(
-        MultiBlocProvider(
-          providers: [
-            BlocProvider<AuthenticationBloc>.value(
-              value: authBloc,
-            ),
-            BlocProvider<SignupBloc>.value(value: signupBloc),
-          ],
-          child: MaterialApp(home: SignupScreen(key: scaffoldKey), routes: {
-            "__home__": (context) => Container(),
-          }),
-        ),
-      );
-      await tester.pumpAndSettle();
-      verify(authBloc.add(LoggedIn())).called(1);
-    });
     testWidgets('submit form', (WidgetTester tester) async {
       Key scaffoldKey = Key('scaffold');
-      when(signupBloc.add(SignupWithCredentialsPressed(
-              email: 'test@test.com', password: '123456')))
-          .thenAnswer((_) => null);
-      when(authBloc.add(LoggedIn())).thenAnswer((_) => null);
+      when(signupBloc.state).thenReturn(SignupEmpty());
+      when(authBloc.add(SignedUp())).thenAnswer((_) => null);
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [

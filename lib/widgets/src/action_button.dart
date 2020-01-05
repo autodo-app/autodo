@@ -1,25 +1,39 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+
+import 'package:autodo/integ_test_keys.dart';
 
 class AutodoActionButton extends StatefulWidget {
   final Key mainButtonKey;
   final List<Key> miniButtonKeys;
-  AutodoActionButton({Key key, this.mainButtonKey, this.miniButtonKeys})
-      : super(key: key);
+  final List<MaterialPageRoute> miniButtonRoutes;
+  final TickerProvider ticker;
+
+  AutodoActionButton({
+    Key key,
+    this.mainButtonKey = IntegrationTestKeys.mainFab,
+    this.miniButtonKeys = IntegrationTestKeys.fabKeys,
+    this.miniButtonRoutes,
+    this.ticker,
+  }) : super(key: key ?? IntegrationTestKeys.fabKey);
 
   @override
-  _AutodoActionButtonState createState() =>
-      _AutodoActionButtonState(mainButtonKey, miniButtonKeys);
+  _AutodoActionButtonState createState() => _AutodoActionButtonState(
+      mainButtonKey, miniButtonKeys, miniButtonRoutes, ticker);
 }
 
 class _AutodoActionButtonState extends State<AutodoActionButton>
-    with TickerProviderStateMixin {
-  static AnimationController _controller;
+    with SingleTickerProviderStateMixin {
+  AnimationController _controller;
   final Key mainButtonKey;
   final List<Key> miniButtonKeys;
+  final List<MaterialPageRoute> miniButtonRoutes;
+  final TickerProvider ticker;
 
-  _AutodoActionButtonState(this.mainButtonKey, this.miniButtonKeys);
+  _AutodoActionButtonState(this.mainButtonKey, this.miniButtonKeys,
+      this.miniButtonRoutes, this.ticker);
 
   static const List<Map<String, dynamic>> icons = [
     {
@@ -35,7 +49,7 @@ class _AutodoActionButtonState extends State<AutodoActionButton>
     super.initState();
 
     _controller = AnimationController(
-      vsync: this,
+      vsync: ticker ?? this,
       duration: const Duration(milliseconds: 200),
     );
   }
@@ -49,10 +63,8 @@ class _AutodoActionButtonState extends State<AutodoActionButton>
   }
 
   _buttonKey(index) {
-    if (miniButtonKeys == null) return null;
-    return (miniButtonKeys == null && miniButtonKeys.length >= index)
-        ? null
-        : miniButtonKeys[index];
+    if (miniButtonKeys == null || index >= miniButtonKeys.length) return null;
+    return miniButtonKeys[index];
   }
 
   @override
@@ -82,12 +94,9 @@ class _AutodoActionButtonState extends State<AutodoActionButton>
                   key: _buttonKey(index)),
               onPressed: () {
                 switchState();
-                if (index == 0) {
-                  Navigator.pushNamed(context, '/createRefueling');
-                } else if (index == 1) {
-                  Navigator.pushNamed(context, '/createTodo');
-                } else if (index == 2) {
-                  Navigator.pushNamed(context, '/createRepeat');
+                print(index);
+                if (miniButtonRoutes != null) {
+                  Navigator.push(context, miniButtonRoutes[index]);
                 }
               },
             ),

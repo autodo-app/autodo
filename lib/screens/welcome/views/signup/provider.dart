@@ -5,10 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'screen.dart';
 
-class SignupProvider extends StatelessWidget {
+class SignupScreenProvider extends StatelessWidget {
   final AuthRepository _authRepository;
 
-  SignupProvider({@required authRepository})
+  SignupScreenProvider({@required authRepository})
       : assert(authRepository != null),
         _authRepository = authRepository;
 

@@ -126,7 +126,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
         await _checkIfUserIsVerified(user);
         yield UserVerified();
       } else {
-        await _authRepository.signInWithCredentials(email, password);
+        await _authRepository.signUp(email, password);
         yield SignupSuccess();
       }
     } on PlatformException catch (e) {

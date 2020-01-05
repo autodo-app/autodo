@@ -10,13 +10,14 @@ void main() {
     test('Authenticated toString', () {
       String displayName = "test";
       String uuid = "abcd";
-      expect(Authenticated(displayName, uuid).toString(),
-          'Authenticated { displayName: $displayName, uuid: $uuid }');
+      expect(Authenticated(displayName, uuid, false).toString(),
+          'Authenticated { displayName: $displayName, uuid: $uuid, newUser: false }');
     });
     test('Authenticated props', () {
       String displayName = "test";
       String uuid = "abcd";
-      expect(Authenticated(displayName, uuid).props, [displayName, uuid]);
+      expect(Authenticated(displayName, uuid, false).props,
+          [displayName, uuid, false]);
     });
     test('Unauthenticated toString', () {
       String errorCode = "abcd";

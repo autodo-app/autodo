@@ -1,5 +1,9 @@
 import 'dart:async';
 
+import 'package:autodo/screens/add_edit/refueling.dart';
+import 'package:autodo/screens/add_edit/repeat.dart';
+import 'package:autodo/screens/add_edit/todo.dart';
+import 'package:autodo/screens/settings/screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
@@ -9,8 +13,7 @@ import 'package:sentry/sentry.dart';
 
 import 'widgets/widgets.dart';
 import 'blocs/blocs.dart';
-import 'screens/home/provider.dart';
-import 'screens/welcome/provider.dart';
+import 'screens/screens.dart';
 import 'repositories/repositories.dart';
 import 'delegate.dart';
 import 'routes.dart';
@@ -20,7 +23,6 @@ import 'secret_loader.dart';
 SentryClient _sentry;
 
 Future<void> _reportError(dynamic error, dynamic stackTrace) async {
-  // Print the exception to the console.
   print('Caught error: $error');
   if (!kReleaseMode) {
     // Print the full stacktrace in debug mode.
@@ -35,10 +37,63 @@ Future<void> _reportError(dynamic error, dynamic stackTrace) async {
   }
 }
 
-void main() async {
+void run(bool integrationTest) async {
+  final AuthRepository authRepository = FirebaseAuthRepository();
+  ThemeData theme = createTheme();
+  runApp(
+    BlocProvider<AuthenticationBloc>(
+      create: (context) => AuthenticationBloc(userRepository: authRepository)
+        ..add(AppStarted(integrationTest: integrationTest)),
+      child: BlocProvider<DatabaseBloc>(
+        create: (context) => DatabaseBloc(
+          authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+        ),
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider<NotificationsBloc>(
+              create: (context) => NotificationsBloc(
+                dbBloc: BlocProvider.of<DatabaseBloc>(context),
+              )..add(LoadNotifications()),
+            ),
+            BlocProvider<RefuelingsBloc>(
+              create: (context) => RefuelingsBloc(
+                dbBloc: BlocProvider.of<DatabaseBloc>(context),
+              )..add(LoadRefuelings()),
+            ),
+            BlocProvider<RepeatsBloc>(
+              create: (context) => RepeatsBloc(
+                dbBloc: BlocProvider.of<DatabaseBloc>(context),
+              )..add(LoadRepeats()),
+            ),
+          ],
+          child: BlocProvider<CarsBloc>(
+            create: (context) => CarsBloc(
+              dbBloc: BlocProvider.of<DatabaseBloc>(context),
+              refuelingsBloc: BlocProvider.of<RefuelingsBloc>(context),
+            )..add(LoadCars()),
+            child: BlocProvider<TodosBloc>(
+              create: (context) => TodosBloc(
+                  dbBloc: BlocProvider.of<DatabaseBloc>(context),
+                  notificationsBloc:
+                      BlocProvider.of<NotificationsBloc>(context),
+                  carsBloc: BlocProvider.of<CarsBloc>(context),
+                  repeatsBloc: BlocProvider.of<RepeatsBloc>(context))
+                ..add(LoadTodos()),
+              child: App(
+                  theme: theme,
+                  authRepository: authRepository,
+                  integrationTest: integrationTest),
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
+Future<Map> init() async {
   WidgetsFlutterBinding.ensureInitialized();
   Map keys = await SecretLoader(secretPath: 'keys.json').load();
-  _sentry = SentryClient(dsn: keys['sentry-dsn']);
   FirebaseApp.configure(
       name: 'autodo',
       options: FirebaseOptions(
@@ -47,64 +102,31 @@ void main() async {
         apiKey: keys['firebase-key'],
       ));
   BlocSupervisor.delegate = AutodoBlocDelegate();
-  final AuthRepository authRepository = FirebaseAuthRepository();
-  // ThemeData theme = AutodoTheme();
-  ThemeData theme = createTheme();
+  return keys;
+}
+
+void main() async {
+  final keys = await init();
+  _sentry = SentryClient(dsn: keys['sentry-dsn']);
   runZoned<Future<void>>(() async {
-    runApp(
-      BlocProvider<AuthenticationBloc>(
-        create: (context) => AuthenticationBloc(userRepository: authRepository)
-          ..add(AppStarted()),
-        child: BlocProvider<DatabaseBloc>(
-          create: (context) => DatabaseBloc(
-            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-          )..add(LoadDatabase()),
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<NotificationsBloc>(
-                create: (context) => NotificationsBloc(
-                  dbBloc: BlocProvider.of<DatabaseBloc>(context),
-                ),
-              ),
-              BlocProvider<RefuelingsBloc>(
-                create: (context) => RefuelingsBloc(
-                  dbBloc: BlocProvider.of<DatabaseBloc>(context),
-                ),
-              ),
-              BlocProvider<RepeatsBloc>(
-                create: (context) => RepeatsBloc(
-                  dbBloc: BlocProvider.of<DatabaseBloc>(context),
-                ),
-              ),
-            ],
-            child: BlocProvider<CarsBloc>(
-              create: (context) => CarsBloc(
-                dbBloc: BlocProvider.of<DatabaseBloc>(context),
-                refuelingsBloc: BlocProvider.of<RefuelingsBloc>(context),
-              ),
-              child: BlocProvider<TodosBloc>(
-                create: (context) => TodosBloc(
-                    dbBloc: BlocProvider.of<DatabaseBloc>(context),
-                    notificationsBloc:
-                        BlocProvider.of<NotificationsBloc>(context),
-                    carsBloc: BlocProvider.of<CarsBloc>(context),
-                    repeatsBloc: BlocProvider.of<RepeatsBloc>(context)),
-                child: App(theme: theme),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
+    run(false);
   }, onError: (error, stackTrace) => _reportError(error, stackTrace));
 }
 
 class App extends StatelessWidget {
   final ThemeData _theme;
+  final AuthRepository _authRepository;
+  final bool integrationTest;
+  Widget homeProvider, welcomeProvider; // TODO: move these to the build method
 
-  App({@required theme})
+  App({@required theme, @required authRepository, this.integrationTest})
       : assert(theme != null),
-        _theme = theme;
+        assert(authRepository != null),
+        _theme = theme,
+        _authRepository = authRepository {
+    homeProvider = HomeScreenProvider(integrationTest: integrationTest);
+    welcomeProvider = WelcomeScreenProvider();
+  }
 
   @override
   build(context) => MaterialApp(
@@ -115,17 +137,21 @@ class App extends StatelessWidget {
                 // Just here as the splitter between home screen and login screen
                 builder: (context, state) {
                   if (state is Authenticated) {
-                    return HomeScreenProvider();
+                    return homeProvider;
                   } else if (state is Unauthenticated) {
-                    return WelcomeScreenProvider();
+                    return welcomeProvider;
                   } else {
                     return LoadingIndicator();
                   }
                 },
-                bloc: BlocProvider.of<AuthenticationBloc>(context),
               ),
-          AutodoRoutes.home: (context) => HomeScreenProvider(),
-          AutodoRoutes.welcome: (context) => WelcomeScreenProvider(),
+          AutodoRoutes.home: (context) => homeProvider,
+          AutodoRoutes.welcome: (context) => welcomeProvider,
+          AutodoRoutes.signupScreen: (context) =>
+              SignupScreenProvider(authRepository: _authRepository),
+          AutodoRoutes.loginScreen: (context) =>
+              LoginScreenProvider(authRepository: _authRepository),
+          AutodoRoutes.settingsScreen: (context) => SettingsScreen(),
         },
         theme: _theme,
         debugShowCheckedModeBanner: false,

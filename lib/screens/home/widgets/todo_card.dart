@@ -50,6 +50,7 @@ class _TodoCheckbox extends StatelessWidget {
   build(context) => Transform.scale(
       scale: 1.5,
       child: Container(
+          key: ValueKey('__todo_checkbox_${todo.name}'),
           padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
           child: Checkbox(
             value: todo.completed ?? false,
@@ -192,39 +193,31 @@ class _TodoEditButton extends StatelessWidget {
           minWidth: 0,
         ),
         child: FlatButton(
+          key: ValueKey('__todo_card_edit_${todo.name}'),
           child: Icon(
             Icons.edit,
             color: Theme.of(context).primaryIconTheme.color,
           ),
-          onPressed: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => TodoAddEditScreen(
-                isEditing: true,
-                onSave: (dueDate, dueMileage, repeatName, carNames) {
-                  for (var car in carNames) {
-                    if (car == todo.carName) {
-                      // update existing
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TodoAddEditScreen(
+                    isEditing: true,
+                    onSave: (name, dueDate, dueMileage, repeatName, carName) {
                       var out = todo.copyWith(
-                          dueDate: dueDate,
-                          dueMileage: dueMileage,
-                          repeatName: repeatName);
-                      BlocProvider.of<TodosBloc>(context).add(UpdateTodo(out));
-                    } else {
-                      var out = Todo(
+                        name: name,
                         dueDate: dueDate,
                         dueMileage: dueMileage,
                         repeatName: repeatName,
-                        carName: car,
+                        carName: carName,
                       );
-                      BlocProvider.of<TodosBloc>(context).add(AddTodo(out));
-                    }
-                  }
-                },
-                todo: todo,
-              ),
-            ),
-          ),
+                      BlocProvider.of<TodosBloc>(context).add(UpdateTodo(out));
+                    },
+                    todo: this.todo,
+                  ),
+                ));
+          },
         ),
       );
 }

@@ -48,7 +48,7 @@ void main() {
         ],
       );
       blocTest(
-        'NotLoaded',
+        'Empty',
         build: () {
           final dataRepository = MockDataRepository();
           when(dataRepository.refuelings())
@@ -60,7 +60,7 @@ void main() {
         act: (bloc) async => bloc.add(LoadRefuelings()),
         expect: [
           RefuelingsLoading(),
-          RefuelingsNotLoaded(),
+          RefuelingsLoaded([]),
         ],
       );
       blocTest(

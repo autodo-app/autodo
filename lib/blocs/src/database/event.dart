@@ -7,18 +7,17 @@ abstract class DatabaseEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadDatabase extends DatabaseEvent {}
-
 class UserLoggedIn extends DatabaseEvent {
   final String uuid;
+  final bool newUser;
 
-  const UserLoggedIn(this.uuid);
-
-  @override
-  List<Object> get props => [uuid];
+  const UserLoggedIn(this.uuid, [this.newUser]);
 
   @override
-  toString() => "UserLoggedIn { uuid: $uuid }";
+  List<Object> get props => [uuid, newUser];
+
+  @override
+  toString() => "UserLoggedIn { uuid: $uuid, newUser: $newUser }";
 }
 
 class UserLoggedOut extends DatabaseEvent {}

@@ -40,3 +40,22 @@ class DeleteRefuelingSnackBar extends SnackBar {
           ),
         );
 }
+
+class DeleteRepeatSnackBar extends SnackBar {
+  DeleteRepeatSnackBar({
+    Key key,
+    @required VoidCallback onUndo,
+  }) : super(
+          key: key,
+          content: Text(
+            AutodoLocalizations.repeatDeleted,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          duration: Duration(seconds: 2),
+          action: SnackBarAction(
+            label: AutodoLocalizations.undo,
+            onPressed: onUndo,
+          ),
+        );
+}

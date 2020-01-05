@@ -1,3 +1,4 @@
+import 'package:autodo/integ_test_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -38,6 +39,7 @@ class TodosScreen extends StatelessWidget {
         } else if (state is FilteredTodosLoaded) {
           final todos = state.filteredTodos;
           return ListView.builder(
+            key: IntegrationTestKeys.todosScreenScroller,
             itemCount: todos.length,
             itemBuilder: (context, index) {
               final todo = todos[index];

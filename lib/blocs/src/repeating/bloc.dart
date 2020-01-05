@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:autodo/blocs/blocs.dart';
 import 'package:flutter/foundation.dart';
 import 'package:bloc/bloc.dart';
 
@@ -11,7 +12,7 @@ import 'state.dart';
 
 class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
   final DatabaseBloc _dbBloc;
-  StreamSubscription _repeatsSubscription;
+  StreamSubscription _dbSubscription, _repoSubscription;
 
   static final List<Repeat> defaults = [
     Repeat(name: "oil", mileageInterval: 3500),
@@ -33,7 +34,20 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
 
   RepeatsBloc({@required DatabaseBloc dbBloc})
       : assert(dbBloc != null),
-        _dbBloc = dbBloc;
+        _dbBloc = dbBloc {
+    _dbSubscription = _dbBloc.listen((state) {
+      if (state is DbLoaded) {
+        if (state.newUser ?? false) {
+          add(AddDefaultRepeats());
+        } else {
+          add(LoadRepeats());
+        }
+      }
+    });
+    _repoSubscription = repo?.repeats()?.listen((repeats) {
+      add(LoadRepeats());
+    });
+  }
 
   @override
   RepeatsState get initialState => RepeatsLoading();
@@ -59,37 +73,42 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
 
   Stream<RepeatsState> _mapLoadRepeatsToState() async* {
     try {
-      final repeats = await repo.repeats().first;
+      final s = repo.repeats();
+      final repeats =
+          await s.first.timeout(Duration(seconds: 1), onTimeout: () => null);
       if (repeats != null) {
         yield RepeatsLoaded(repeats);
       } else {
-        yield RepeatsNotLoaded();
+        yield RepeatsLoaded([]);
       }
-    } catch (_) {
+    } catch (e) {
+      print(e);
       yield RepeatsNotLoaded();
     }
-    //   _repeatsSubscription?.cancel();
-    //   _repeatsSubscription = _dataRepository.repeats().listen(
-    //     (repeats) => add(RepeatsUpdated(repeats)),
-    //   );
   }
 
   Stream<RepeatsState> _mapAddRepeatToState(AddRepeat event) async* {
     if (state is RepeatsLoaded && repo != null) {
-      final List<Repeat> updatedRepeats =
-          List.from((state as RepeatsLoaded).repeats)..add(event.repeat);
-      yield RepeatsLoaded(updatedRepeats);
-      repo.addNewRepeat(event.repeat);
+      // don't add it to the cache until it is given an id
+      // final List<Repeat> updatedRepeats =
+      // List.from((state as RepeatsLoaded).repeats)..add(event.repeat);
+      // yield RepeatsLoaded(updatedRepeats);
+      var updatedRepeats = await repo.addNewRepeat(event.repeat);
+      // yield RepeatsLoaded(updatedRepeats); redundant because of the listener to the repository
     }
   }
 
   Stream<RepeatsState> _mapUpdateRepeatToState(UpdateRepeat event) async* {
     if (state is RepeatsLoaded && repo != null) {
-      final List<Repeat> updatedRepeats = (state as RepeatsLoaded)
-          .repeats
-          .map((r) => r.id == event.updatedRepeat.id ? event.updatedRepeat : r)
-          .toList();
-      yield RepeatsLoaded(updatedRepeats);
+      final List<Repeat> updatedRepeats =
+          (state as RepeatsLoaded).repeats.map((r) {
+        if (r.id == null) {
+          return (r.name == event.updatedRepeat.name) ? event.updatedRepeat : r;
+        } else {
+          return (r.id == event.updatedRepeat.id) ? event.updatedRepeat : r;
+        }
+      }).toList();
+      // yield RepeatsLoaded(updatedRepeats); // redundant because of the listener to the repository
       repo.updateRepeat(event.updatedRepeat);
     }
   }
@@ -185,45 +204,23 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
 
   Stream<RepeatsState> _mapAddDefaultRepeatsToState(
       AddDefaultRepeats event) async* {
-    yield RepeatsLoaded(defaults);
-    if (repo == null) return;
+    // yield RepeatsLoaded(defaults);
+    if (repo == null) {
+      print('Error: trying to add default repeats but repo is null');
+      return;
+    }
     WriteBatchWrapper batch = repo.startRepeatWriteBatch();
     for (var r in defaults) {
       batch.setData(r.toEntity().toDocument());
     }
     batch.commit();
+    final updatedRepeats = await repo.repeats().firstWhere((s) => s.length > 0);
+    yield RepeatsLoaded(updatedRepeats);
   }
-
-  // List sortItems(List items) {
-  //   return items
-  //     ..sort((a, b) {
-  //       var aDate = a.data['dueDate'] ?? 0;
-  //       var bDate = b.data['dueDate'] ?? 0;
-  //       var aMileage = a.data['dueMileage'] ?? 0;
-  //       var bMileage = b.data['dueMileage'] ?? 0;
-
-  //       if (aDate == 0 && bDate == 0) {
-  //         // both don't have a date, so only consider the mileages
-  //         if (aMileage > bMileage)
-  //           return 1;
-  //         else if (aMileage < bMileage)
-  //           return -1;
-  //         else
-  //           return 0;
-  //       } else {
-  //         // in case one of the two isn't a valid timestamp
-  //         if (aDate == 0) return -1;
-  //         if (bDate == 0) return 1;
-  //         // consider the dates since all todo items should have dates as a result
-  //         // of the distance rate translation function
-  //         return aDate.compareTo(bDate);
-  //       }
-  //     });
-  // }
 
   @override
   Future<void> close() {
-    _repeatsSubscription?.cancel();
+    _dbSubscription?.cancel();
     return super.close();
   }
 }

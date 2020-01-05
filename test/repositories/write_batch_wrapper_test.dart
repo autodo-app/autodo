@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:flutter/services.dart';
 
 import 'package:autodo/repositories/repositories.dart';
 
@@ -42,7 +43,15 @@ void main() {
       when(batch.commit()).thenAnswer((_) async {});
       final wrapper = WriteBatchWrapper(
           collection: collection, firestoreInstance: firestore);
-      expect(wrapper.commit(), completes);
+      expect(wrapper.commit(), null);
+    });
+    test('commit exception', () {
+      when(batch.commit()).thenThrow(PlatformException(
+          code: "Error performing commit",
+          message: "PERMISSION_DENIED: Missing or insufficient permissions."));
+      final wrapper = WriteBatchWrapper(
+          collection: collection, firestoreInstance: firestore);
+      expect(wrapper.commit(), null);
     });
     test('props', () {
       expect(

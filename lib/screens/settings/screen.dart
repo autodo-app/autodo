@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:autodo/blocs/blocs.dart';
+import 'package:autodo/routes.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -17,8 +18,11 @@ class SettingsScreenState extends State<SettingsScreen> {
           style: Theme.of(context).primaryTextTheme.body1),
       actions: <Widget>[
         FlatButton(
-            onPressed: () =>
-                BlocProvider.of<AuthenticationBloc>(context).add(DeletedUser()),
+            key: ValueKey('__delete_account_confirm__'),
+            onPressed: () {
+              BlocProvider.of<AuthenticationBloc>(context).add(DeletedUser());
+              Navigator.popAndPushNamed(context, AutodoRoutes.welcome);
+            },
             child: Text('Yes',
                 style: Theme.of(context)
                     .primaryTextTheme
@@ -37,6 +41,7 @@ class SettingsScreenState extends State<SettingsScreen> {
 
   Widget deleteAccountButton() {
     return FlatButton(
+      key: ValueKey('__delete_account_button__'),
       child: Text('Delete Account',
           style: Theme.of(context)
               .primaryTextTheme

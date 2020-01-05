@@ -35,7 +35,23 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
         _dbBloc = dbBloc,
         _repeatsBloc = repeatsBloc,
         _carsBloc = carsBloc,
-        _notificationsBloc = notificationsBloc;
+        _notificationsBloc = notificationsBloc {
+    _dataSubscription = _dbBloc.listen((state) {
+      if (state is DbLoaded) {
+        add(LoadTodos());
+      }
+    });
+    _carsSubscription = _carsBloc.listen((state) {
+      if (state is CarsLoaded) {
+        add(UpdateDueDates(state.cars));
+      }
+    });
+    _repeatsSubscription = _repeatsBloc.listen((state) {
+      if (state is RepeatsLoaded) {
+        add(RepeatsRefresh(state.repeats));
+      }
+    });
+  }
 
   @override
   TodosState get initialState => TodosLoading();
@@ -67,29 +83,18 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
 
   Stream<TodosState> _mapLoadTodosToState() async* {
     try {
-      final todos = await repo.todos().first;
+      final todos = await repo
+          .todos()
+          .first
+          .timeout(Duration(seconds: 1), onTimeout: () => null);
       if (todos != null) {
         yield TodosLoaded(todos);
       } else {
-        yield TodosNotLoaded();
+        yield TodosLoaded([]);
       }
     } catch (_) {
       yield TodosNotLoaded();
     }
-    _dataSubscription?.cancel();
-    // _dataSubscription = _dataRepository.todos().listen(
-    //       (todos) => add(TodosUpdated(todos)),
-    //     );
-    _carsSubscription = _carsBloc.listen((state) {
-      if (state is CarsLoaded) {
-        add(UpdateDueDates(state.cars));
-      }
-    });
-    _repeatsSubscription = _repeatsBloc.listen((state) {
-      if (state is RepeatsLoaded) {
-        add(RepeatsRefresh(state.repeats));
-      }
-    });
   }
 
   void _scheduleNotification(Todo todo) {
@@ -116,11 +121,13 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     return out;
   }
 
-  bool _shouldUpdate(car, t) =>
-      (t.carName == car.name && (t?.estimatedDueDate ?? false));
+  bool _shouldUpdate(car, t) => (t.carName == car.name &&
+      (t.estimatedDueDate ?? false) &&
+      !(t.completed ?? false));
 
   Stream<TodosState> _mapUpdateDueDatesToState(UpdateDueDates event) async* {
     List<Car> cars = event.cars;
+    if (cars == null || cars.length == 0) return;
     if (state is TodosLoaded && repo != null) {
       TodosLoaded curState = state;
       WriteBatchWrapper batch = repo.startTodoWriteBatch();
@@ -133,6 +140,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
                 _shouldUpdate(car, t) ? _updateDueDate(car, t, batch) : t)
             .toList();
       }
+      print(event);
       yield TodosLoaded(updatedTodos);
       _carsCache = cars;
       batch.commit();
@@ -140,22 +148,32 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   }
 
   Stream<TodosState> _mapAddTodoToState(AddTodo event) async* {
-    if (repo == null) return;
+    if (repo == null) {
+      print('Error: adding todo to null repo');
+      return;
+    }
     final List<Todo> updatedTodos = List.from((state as TodosLoaded).todos)
       ..add(event.todo);
     yield TodosLoaded(updatedTodos);
     _scheduleNotification(event.todo);
-    // out = event.todo.copyWith(notificationID: notificationID);
     repo.addNewTodo(event.todo);
   }
 
   Stream<TodosState> _mapUpdateTodoToState(UpdateTodo event) async* {
-    if (repo == null) return;
-    final List<Todo> updatedTodos = (state as TodosLoaded)
-        .todos
-        .map((r) => r.id == event.updatedTodo.id ? event.updatedTodo : r)
-        .toList();
+    if (repo == null) {
+      print('Error: updating todo with null repo');
+      return;
+    }
+    print('todos now: ${(state as TodosLoaded).todos}');
+    final List<Todo> updatedTodos = (state as TodosLoaded).todos.map((r) {
+      if (r.id != null && event.updatedTodo.id != null) {
+        return r.id == event.updatedTodo.id ? event.updatedTodo : r;
+      } else {
+        return (r.name == event.updatedTodo.name) ? event.updatedTodo : r;
+      }
+    }).toList();
     yield TodosLoaded(updatedTodos);
+    print('todos then: $updatedTodos');
     repo.updateTodo(event.updatedTodo);
   }
 
@@ -182,7 +200,6 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       RepeatsLoaded curRepeatsState = _repeatsBloc.state;
       Repeat curRepeat = curRepeatsState.repeats
           .firstWhere((r) => r.name == curTodo.repeatName, orElse: () => null);
-      // throw Exception();
       if (!curRepeat.props.every((p) => p == null)) {
         Todo newTodo = _createNewTodoFromRepeat(curRepeat, curTodo);
         updatedTodos = updatedTodos..add(newTodo);
@@ -202,10 +219,13 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   }
 
   Stream<TodosState> _mapDeleteTodoToState(DeleteTodo event) async* {
-    final updatedTodos = (state as TodosLoaded)
-        .todos
-        .where((r) => r.id != event.todo.id)
-        .toList();
+    final updatedTodos = (state as TodosLoaded).todos.where((r) {
+      if (r.id != null && event.todo.id != null) {
+        return r.id != event.todo.id;
+      } else {
+        return r.name != event.todo.name;
+      }
+    }).toList();
     yield TodosLoaded(updatedTodos);
     repo.deleteTodo(event.todo);
   }

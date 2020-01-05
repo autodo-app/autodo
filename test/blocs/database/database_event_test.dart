@@ -2,20 +2,18 @@ import 'package:autodo/blocs/blocs.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group('LoadDatabase', () {
-    test('props', () {
-      expect(LoadDatabase().props, []);
-    });
-    test('toString', () {
-      expect(LoadDatabase().toString(), 'LoadDatabase');
-    });
-  });
   group('UserLoggedIn', () {
     test('props', () {
-      expect(UserLoggedIn('abcd').props, ['abcd']);
+      expect(UserLoggedIn('abcd').props, ['abcd', null]);
     });
     test('toString', () {
-      expect(UserLoggedIn('abcd').toString(), "UserLoggedIn { uuid: abcd }");
+      expect(UserLoggedIn('abcd').toString(),
+          "UserLoggedIn { uuid: abcd, newUser: null }");
+    });
+  });
+  group('UserLoggedOut', () {
+    test('props', () {
+      expect(UserLoggedOut().props, []);
     });
   });
 }

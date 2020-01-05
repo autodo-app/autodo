@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
+import 'package:autodo/routes.dart';
+
 class LoginButton extends StatelessWidget {
   final buttonPadding;
 
@@ -25,7 +27,9 @@ class LoginButton extends StatelessWidget {
               ),
             ),
             FlatButton(
-              onPressed: () => Navigator.pushNamed(context, '/loginpage'),
+              key: ValueKey('__welcome_login_button__'),
+              onPressed: () =>
+                  Navigator.pushNamed(context, AutodoRoutes.loginScreen),
               textColor: Colors.white,
               padding: const EdgeInsets.all(0.0),
               child: Text(

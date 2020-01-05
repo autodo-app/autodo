@@ -6,6 +6,8 @@ import 'package:autodo/localization.dart';
 import 'package:autodo/theme.dart';
 
 class _PasswordResetDialog extends StatefulWidget {
+  _PasswordResetDialog(Key key) : super(key: key);
+
   @override
   _PasswordResetDialogState createState() => _PasswordResetDialogState();
 }
@@ -66,6 +68,10 @@ class _PasswordResetDialogState extends State<_PasswordResetDialog> {
 }
 
 class PasswordResetButton extends StatelessWidget {
+  final dialogKey;
+
+  PasswordResetButton({this.dialogKey});
+
   build(context) => FlatButton(
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         child: Text(
@@ -74,7 +80,7 @@ class PasswordResetButton extends StatelessWidget {
         ),
         onPressed: () => showDialog(
           context: context,
-          builder: (context) => _PasswordResetDialog(),
+          builder: (context) => _PasswordResetDialog(dialogKey),
         ),
       );
 }

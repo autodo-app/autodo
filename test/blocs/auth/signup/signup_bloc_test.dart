@@ -129,7 +129,7 @@ void main() {
       blocTest<SignupBloc, SignupEvent, SignupState>(
           'Can\'t communicate to servers', build: () {
         final authRepository = MockAuthRepository();
-        when(authRepository.signInWithCredentials('', ''))
+        when(authRepository.signUp('', ''))
             .thenThrow(PlatformException(code: "UNHANDLED_ERROR"));
         return SignupBloc(authRepository: authRepository);
       }, act: (bloc) async {
@@ -142,7 +142,7 @@ void main() {
       blocTest<SignupBloc, SignupEvent, SignupState>('Weak Password',
           build: () {
         final authRepository = MockAuthRepository();
-        when(authRepository.signInWithCredentials('', ''))
+        when(authRepository.signUp('', ''))
             .thenThrow(PlatformException(code: "ERROR_WEAK_PASSWORD"));
         return SignupBloc(authRepository: authRepository);
       }, act: (bloc) async {
@@ -155,8 +155,7 @@ void main() {
       blocTest<SignupBloc, SignupEvent, SignupState>('Successful login',
           build: () {
         final authRepository = MockAuthRepository();
-        when(authRepository.signInWithCredentials('', ''))
-            .thenAnswer((_) async => null);
+        when(authRepository.signUp('', '')).thenAnswer((_) async => null);
         return SignupBloc(authRepository: authRepository);
       }, act: (bloc) async {
         bloc.add(SignupWithCredentialsPressed(email: '', password: ''));

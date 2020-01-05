@@ -40,7 +40,7 @@ void main() {
             home: TodoAddEditScreen(
               key: key,
               isEditing: false,
-              onSave: (a, b, c, d) {},
+              onSave: (a, b, c, d, e) {},
             ),
           ),
         ),
@@ -67,7 +67,7 @@ void main() {
             home: TodoAddEditScreen(
               key: key,
               isEditing: false,
-              onSave: (a, b, c, d) {
+              onSave: (a, b, c, d, e) {
                 saved = true;
               },
             ),
@@ -77,14 +77,13 @@ void main() {
       await tester.pumpAndSettle();
       for (var field in find.byType(TextFormField).evaluate()) {
         if ((field.widget as TextFormField).controller != null) {
-          await tester.enterText(find.byWidget(field.widget), '01/01/1970');
+          await tester.enterText(find.byWidget(field.widget), '01/01/3000');
         } else {
           await tester.enterText(find.byWidget(field.widget), '10');
         }
       }
       await tester.enterText(find.byType(RepeatForm), 'test');
-      await tester.tap(find.byType(Checkbox));
-      await tester.pump();
+      await tester.enterText(find.byType(CarForm), 'test');
       await tester.tap(find.byType(FloatingActionButton));
       await tester.pump();
       expect(saved, true);
@@ -107,7 +106,7 @@ void main() {
             home: TodoAddEditScreen(
               key: key,
               isEditing: false,
-              onSave: (a, b, c, d) {},
+              onSave: (a, b, c, d, e) {},
             ),
           ),
         ),

@@ -17,6 +17,7 @@ class AutodoLocalizations {
   static String get undo => "Undo";
   static todoDeleted(name) => "ToDo $name deleted.";
   static String get refuelingDeleted => "Refueling deleted.";
+  static String get repeatDeleted => "Repeat deleted.";
   static String get firstTimeDoingTask => "First Time Doing This Task.";
   static String get dueAt => "Due At";
   static String get distanceUnits => "miles";
@@ -77,12 +78,18 @@ class AutodoLocalizations {
   static String get back => "Back";
   static String get loginFailure => "Login Failure";
   static String get loggingInEllipsis => "Logging in...";
+  static String get signingUpEllipsis => "Signing up...";
   static String get signup => "Sign Up";
   static String get alreadyHaveAnAccount => "Already have an account?";
   static String get verifyEmail => "Verify Email";
   static String get verifyBodyText =>
       'An email has been sent to you with a link to verify your account.\n\nYou must verify your email to use auToDo.';
   static String get next => "Next";
+  static String get editTodo => "Edit ToDo";
+  static String get addTodo => "Add Todo";
+  static String get repeatName => "Repeat Name";
+  static String get editRepeat => "Edit Repeat";
+  static String get addRepeat => "Add Repeat";
 }
 
 class AutodoLocalizationsDelegate

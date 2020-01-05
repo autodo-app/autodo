@@ -1,23 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 
+import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/models/models.dart';
 import 'package:autodo/localization.dart';
 import 'package:autodo/theme.dart';
 import 'package:autodo/util.dart';
 
 class CarForm extends StatefulWidget {
-  final Refueling refueling;
+  final String initialValue;
   final Function(String) onSaved;
   final FocusNode node, nextNode;
 
   CarForm({
     Key key,
-    this.refueling,
+    this.initialValue,
     @required this.onSaved,
     @required this.node,
     @required this.nextNode,
-  }) : super(key: key);
+  }) : super(key: key) {
+    print(initialValue);
+  }
 
   @override
   _CarFormState createState() => _CarFormState();
@@ -34,6 +38,7 @@ class _CarFormState extends State<CarForm> {
   @override
   initState() {
     _autocompleteController = TextEditingController();
+    _autocompleteController.text = widget.initialValue ?? '';
     super.initState();
   }
 
@@ -57,7 +62,8 @@ class _CarFormState extends State<CarForm> {
       key: _autocompleteKey,
       focusNode: widget.node,
       textInputAction: TextInputAction.next,
-      suggestions: cars,
+      suggestions:
+          (BlocProvider.of<CarsBloc>(context).state as CarsLoaded).cars,
       itemBuilder: (context, suggestion) => Padding(
         child: ListTile(
             title: Text(suggestion.name),
@@ -76,7 +82,7 @@ class _CarFormState extends State<CarForm> {
     );
     return FormField<String>(
       builder: (FormFieldState<String> input) => autoCompleteField,
-      initialValue: widget.refueling?.carName ?? '',
+      initialValue: widget.initialValue ?? '',
       validator: (val) {
         var txt = _autocompleteController.text;
         var res = requiredValidator(txt);
@@ -95,7 +101,9 @@ class _CarFormState extends State<CarForm> {
         setState(() => _carError = res);
         return _carError;
       },
-      onSaved: (val) => widget.onSaved(val),
+      onSaved: (val) {
+        widget.onSaved(_autocompleteController.text);
+      },
     );
   }
 }

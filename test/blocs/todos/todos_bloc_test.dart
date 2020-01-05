@@ -22,7 +22,7 @@ class MockWriteBatch extends Mock implements WriteBatchWrapper {}
 class MockDbBloc extends Mock implements DatabaseBloc {}
 
 void main() {
-  group('RefuelingsBloc', () {
+  group('TodosBloc', () {
     group('Null Assertions', () {
       test('Null Database Bloc', () {
         final carsBloc = MockCarsBloc();
@@ -81,7 +81,7 @@ void main() {
           whenListen(
               carsBloc,
               Stream.fromIterable([
-                [Car()]
+                CarsLoaded([Car()])
               ]));
           final dataRepository = MockDataRepository();
           when(dataRepository.todos()).thenAnswer((_) => Stream.fromIterable([
@@ -115,7 +115,7 @@ void main() {
           whenListen(
               carsBloc,
               Stream.fromIterable([
-                [Car()]
+                CarsLoaded([Car()])
               ]));
           final dataRepository = MockDataRepository();
           when(dataRepository.todos())
@@ -138,7 +138,7 @@ void main() {
         act: (bloc) async => bloc.add(LoadTodos()),
         expect: [
           TodosLoading(),
-          TodosNotLoaded(),
+          TodosLoaded([]),
         ],
       );
       blocTest(
@@ -148,7 +148,7 @@ void main() {
           whenListen(
               carsBloc,
               Stream.fromIterable([
-                [Car()]
+                CarsLoaded([Car()])
               ]));
           final dataRepository = MockDataRepository();
           when(dataRepository.todos()).thenThrow((_) => Exception());
@@ -183,7 +183,7 @@ void main() {
         whenListen(
             carsBloc,
             Stream.fromIterable([
-              [Car()]
+              CarsLoaded([Car()])
             ]));
         final dataRepository = MockDataRepository();
         when(dataRepository.todos()).thenAnswer((_) => Stream.fromIterable([
@@ -221,7 +221,7 @@ void main() {
         whenListen(
             carsBloc,
             Stream.fromIterable([
-              [Car()]
+              CarsLoaded([Car()])
             ]));
         final dataRepository = MockDataRepository();
         when(dataRepository.todos()).thenAnswer((_) => Stream.fromIterable([
@@ -259,7 +259,7 @@ void main() {
         whenListen(
             carsBloc,
             Stream.fromIterable([
-              [Car()]
+              CarsLoaded([Car()])
             ]));
         final dataRepository = MockDataRepository();
         when(dataRepository.todos()).thenAnswer((_) => Stream.fromIterable([
@@ -297,7 +297,7 @@ void main() {
         whenListen(
             carsBloc,
             Stream.fromIterable([
-              [Car()]
+              CarsLoaded([Car()])
             ]));
         final dataRepository = MockDataRepository();
         when(dataRepository.todos()).thenAnswer((_) => Stream.fromIterable([
@@ -372,14 +372,14 @@ void main() {
       },
       act: (bloc) async {
         bloc.add(LoadTodos());
-        bloc.add(UpdateDueDates([car.copyWith(distanceRate: 2.0)]));
+        // bloc.add(UpdateDueDates([car.copyWith(distanceRate: 2.0)]));
       },
       expect: [
         TodosLoading(),
         TodosLoaded([todo3]),
         TodosLoaded([
           todo3.copyWith(
-              dueDate: DateTime.parse('1971-05-16 00:00:00.000Z'),
+              dueDate: DateTime.parse('1972-09-27 00:00:00.000Z'),
               estimatedDueDate: true)
         ]),
       ],
@@ -445,7 +445,7 @@ void main() {
         whenListen(
             carsBloc,
             Stream.fromIterable([
-              [Car()]
+              CarsLoaded([Car()])
             ]));
         final dataRepository = MockDataRepository();
         when(dataRepository.todos()).thenAnswer((_) => Stream.fromIterable([

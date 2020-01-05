@@ -1,3 +1,4 @@
+import 'package:autodo/integ_test_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/theme.dart';
 import 'mileage.dart';
@@ -6,6 +7,9 @@ import 'setrepeats.dart';
 import 'new_user_screen_page.dart';
 
 class NewUserScreen extends StatefulWidget {
+  NewUserScreen({Key key = IntegrationTestKeys.newUserScreen})
+      : super(key: key);
+
   @override
   NewUserScreenState createState() => NewUserScreenState();
 }

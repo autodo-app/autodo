@@ -183,6 +183,7 @@ void main() {
       when(document.collection('repeats')).thenAnswer((_) => collection);
 
       test('New Repeat', () {
+        when(collection.getDocuments()).thenReturn(null);
         when(collection.add(Repeat().toEntity().toDocument()))
             .thenAnswer((_) async => MockDocument());
         expect(repository.addNewRepeat(Repeat()), completes);

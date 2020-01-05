@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/models/models.dart';
 import 'package:autodo/localization.dart';
 import 'package:autodo/theme.dart';
@@ -10,6 +12,7 @@ class RepeatForm extends StatefulWidget {
   final Todo todo;
   final Function(String) onSaved;
   final FocusNode node, nextNode;
+  final bool requireInput;
 
   RepeatForm({
     Key key,
@@ -17,6 +20,7 @@ class RepeatForm extends StatefulWidget {
     @required this.onSaved,
     @required this.node,
     this.nextNode,
+    @required this.requireInput,
   }) : super(key: key);
 
   @override
@@ -29,7 +33,6 @@ class _RepeatFormState extends State<RepeatForm> {
   Repeat selectedRepeat;
   String _repeatError;
   final _autocompleteKey = GlobalKey<AutoCompleteTextFieldState<Repeat>>();
-  List<Repeat> repeats;
 
   @override
   initState() {
@@ -47,8 +50,8 @@ class _RepeatFormState extends State<RepeatForm> {
   build(context) {
     autoCompleteField = AutoCompleteTextField<Repeat>(
       controller: _autocompleteController,
-      decoration: defaultInputDecoration(
-              AutodoLocalizations.requiredLiteral, AutodoLocalizations.carName)
+      decoration: defaultInputDecoration(AutodoLocalizations.requiredLiteral,
+              AutodoLocalizations.repeatName)
           .copyWith(errorText: _repeatError),
       itemSubmitted: (item) => setState(() {
         _autocompleteController.text = item.name;
@@ -57,7 +60,9 @@ class _RepeatFormState extends State<RepeatForm> {
       key: _autocompleteKey,
       focusNode: widget.node,
       textInputAction: TextInputAction.done,
-      suggestions: repeats,
+      suggestions:
+          (BlocProvider.of<RepeatsBloc>(context).state as RepeatsLoaded)
+              .repeats,
       itemBuilder: (context, suggestion) => Padding(
         child: ListTile(
             title: Text(suggestion.name),
@@ -79,21 +84,25 @@ class _RepeatFormState extends State<RepeatForm> {
       initialValue: widget.todo?.repeatName ?? '',
       validator: (val) {
         var txt = _autocompleteController.text;
-        var res = requiredValidator(txt);
-        // TODO figure this out better
-        // if (selectedCar != null)
-        //   widget.refueling.carName = selectedCar.name;
-        // else if (val != null && cars.any((element) => element.name == val)) {
-        //   widget.refueling.carName = val;
-        // }
-        autoCompleteField.updateDecoration(
-          decoration: defaultInputDecoration(
-                  AutodoLocalizations.requiredLiteral,
-                  AutodoLocalizations.carName)
-              .copyWith(errorText: res),
-        );
-        setState(() => _repeatError = res);
-        return _repeatError;
+        if (widget.requireInput) {
+          var res = requiredValidator(txt);
+          // TODO figure this out better
+          // if (selectedCar != null)
+          //   widget.refueling.carName = selectedCar.name;
+          // else if (val != null && cars.any((element) => element.name == val)) {
+          //   widget.refueling.carName = val;
+          // }
+          autoCompleteField.updateDecoration(
+            decoration: defaultInputDecoration(
+                    AutodoLocalizations.requiredLiteral,
+                    AutodoLocalizations.carName)
+                .copyWith(errorText: res),
+          );
+          setState(() => _repeatError = res);
+          return _repeatError;
+        } else {
+          return null;
+        }
       },
       onSaved: (val) => widget.onSaved(val),
     );

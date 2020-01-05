@@ -19,7 +19,13 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
 
   RefuelingsBloc({@required dbBloc})
       : assert(dbBloc != null),
-        _dbBloc = dbBloc;
+        _dbBloc = dbBloc {
+    _dataSubscription = _dbBloc.listen((state) {
+      if (state is DbLoaded) {
+        add(LoadRefuelings());
+      }
+    });
+  }
 
   @override
   RefuelingsState get initialState => RefuelingsLoading();
@@ -61,13 +67,17 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
 
   Stream<RefuelingsState> _mapLoadRefuelingsToState() async* {
     try {
-      final refuelings = await repo.refuelings().first;
+      final refuelings = await repo
+          .refuelings()
+          .first
+          .timeout(Duration(seconds: 1), onTimeout: () => null);
       if (refuelings != null) {
         yield RefuelingsLoaded(refuelings);
       } else {
-        yield RefuelingsNotLoaded();
+        yield RefuelingsLoaded([]);
       }
-    } catch (_) {
+    } catch (e) {
+      print(e);
       yield RefuelingsNotLoaded();
     }
     // _dataSubscription?.cancel();

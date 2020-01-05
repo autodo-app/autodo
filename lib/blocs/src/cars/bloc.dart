@@ -15,7 +15,7 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
   static const double EMA_CUTOFF = 8;
 
   final DatabaseBloc _dbBloc;
-  StreamSubscription _refuelingsSubscription;
+  StreamSubscription _refuelingsSubscription, _dbSubscription;
   final RefuelingsBloc _refuelingsBloc;
   List<Refueling> _refuelingsCache;
 
@@ -24,7 +24,18 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
       : assert(dbBloc != null),
         assert(refuelingsBloc != null),
         _dbBloc = dbBloc,
-        _refuelingsBloc = refuelingsBloc;
+        _refuelingsBloc = refuelingsBloc {
+    _dbSubscription = _dbBloc.listen((state) {
+      if (state is DbLoaded) {
+        add(LoadCars());
+      }
+    });
+    _refuelingsSubscription = _refuelingsBloc.listen((state) {
+      if (state is RefuelingsLoaded) {
+        add(ExternalRefuelingsUpdated(state.refuelings));
+      }
+    });
+  }
 
   @override
   CarsState get initialState => CarsLoading();
@@ -49,21 +60,21 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
   }
 
   Stream<CarsState> _mapLoadCarsToState() async* {
+    if (state is CarsLoaded && (state as CarsLoaded).cars.length > 0) return;
     try {
-      final cars = await repo.cars().first;
+      final cars = await repo
+          .cars()
+          .first
+          .timeout(Duration(seconds: 1), onTimeout: () => null);
       if (cars != null) {
         yield CarsLoaded(cars);
       } else {
-        yield CarsNotLoaded();
+        yield CarsLoaded([]);
       }
-    } catch (_) {
+    } catch (e) {
+      print('Error loading cars: $e');
       yield CarsNotLoaded();
     }
-    _refuelingsSubscription = _refuelingsBloc.listen((state) {
-      if (state is RefuelingsLoaded) {
-        add(ExternalRefuelingsUpdated(state.refuelings));
-      }
-    });
   }
 
   Stream<CarsState> _mapAddCarToState(AddCar event) async* {
@@ -134,7 +145,7 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
 
   Stream<CarsState> _mapRefuelingsUpdatedToState(
       ExternalRefuelingsUpdated event) async* {
-    if (repo == null) return;
+    if (repo == null || state is CarsNotLoaded) return;
 
     WriteBatchWrapper batch = repo.startCarWriteBatch();
     // TODO cache the cars here so that updating number of refuelings will work
@@ -161,6 +172,7 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
   @override
   Future<void> close() {
     _refuelingsSubscription?.cancel();
+    _dbSubscription?.cancel();
     return super.close();
   }
 

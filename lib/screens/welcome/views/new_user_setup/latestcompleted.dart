@@ -1,4 +1,6 @@
+import 'package:autodo/integ_test_keys.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/models/models.dart';
 import 'package:autodo/theme.dart';
@@ -76,34 +78,42 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
     }
 
     Widget oilMileage = TextFormField(
+      key: IntegrationTestKeys.latestOilChangeField,
       maxLines: 1,
       autofocus: false,
       onTap: () => setState(() => expanded = false),
       decoration: defaultInputDecoration('(miles)', 'Last Oil Change (miles)'),
       validator: (value) => intNoRequire(value),
-      onSaved: (val) => todosBloc.add(AddTodo(Todo(
-          name: 'oil',
-          repeatName: 'oil',
-          completed: true,
-          completedDate: DateTime.now(),
-          dueMileage: int.parse(val.trim())))),
+      onSaved: (val) {
+        if (val == null || val == '') return;
+        BlocProvider.of<TodosBloc>(context).add(AddTodo(Todo(
+            name: 'oil',
+            repeatName: 'oil',
+            completed: true,
+            completedDate: DateTime.now(),
+            dueMileage: int.parse(val.trim()))));
+      },
       focusNode: _oilNode,
       textInputAction: TextInputAction.next,
       onFieldSubmitted: (_) => changeFocus(_oilNode, _tiresNode),
     );
 
     Widget tireRotationMileage = TextFormField(
+      key: IntegrationTestKeys.latestTireRotationField,
       maxLines: 1,
       onTap: () => setState(() => expanded = true),
       decoration:
           defaultInputDecoration('(miles)', 'Last Tire Rotation (miles)'),
       validator: (value) => intNoRequire(value),
-      onSaved: (val) => todosBloc.add(AddTodo(Todo(
-          name: 'tireRotation',
-          repeatName: 'tireRotation',
-          completed: true,
-          completedDate: DateTime.now(),
-          dueMileage: int.parse(val.trim())))),
+      onSaved: (val) {
+        if (val == null || val == '') return;
+        BlocProvider.of<TodosBloc>(context).add(AddTodo(Todo(
+            name: 'tireRotation',
+            repeatName: 'tireRotation',
+            completed: true,
+            completedDate: DateTime.now(),
+            dueMileage: int.parse(val.trim()))));
+      },
       focusNode: _tiresNode,
       textInputAction: TextInputAction.done,
     );
@@ -170,6 +180,7 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
                         Navigator.popAndPushNamed(context, '/load'),
                   ),
                   FlatButton(
+                    key: IntegrationTestKeys.latestNextButton,
                     padding: EdgeInsets.all(0),
                     materialTapTargetSize: MaterialTapTargetSize.padded,
                     child: Text(
@@ -178,20 +189,20 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
                     ),
                     onPressed: () async => await _next(),
                   ),
-                  FlatButton(
-                      padding: EdgeInsets.all(0),
-                      materialTapTargetSize: MaterialTapTargetSize.padded,
-                      child: Text(
-                        'Next',
-                        style: Theme.of(context).primaryTextTheme.button,
-                      ),
-                      onPressed: () async {
-                        setState(() => pageTransition = true);
-                        await Future.delayed(Duration(
-                            milliseconds:
-                                200)); // wait for the animation to finish
-                        widget.onNext();
-                      }),
+                  // FlatButton(
+                  //     padding: EdgeInsets.all(0),
+                  //     materialTapTargetSize: MaterialTapTargetSize.padded,
+                  //     child: Text(
+                  //       'Next',
+                  //       style: Theme.of(context).primaryTextTheme.button,
+                  //     ),
+                  //     onPressed: () async {
+                  //       setState(() => pageTransition = true);
+                  //       await Future.delayed(Duration(
+                  //           milliseconds:
+                  //               200)); // wait for the animation to finish
+                  //       widget.onNext();
+                  //     }),
                 ],
               ),
             ),

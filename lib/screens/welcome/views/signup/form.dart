@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:autodo/blocs/blocs.dart';
-import 'package:autodo/routes.dart';
 import 'package:autodo/localization.dart';
+import '../new_user_setup/screen.dart';
 import '../../widgets/barrel.dart';
 
 class SignupForm extends StatefulWidget {
@@ -48,7 +48,6 @@ class _SignupFormState extends State<SignupForm> {
                       Icon(Icons.error)
                     ],
                   ),
-                  backgroundColor: Colors.red,
                 ),
               );
           } else if (state is SignupLoading) {
@@ -59,15 +58,18 @@ class _SignupFormState extends State<SignupForm> {
                   content: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(AutodoLocalizations.loggingInEllipsis),
+                      Text(AutodoLocalizations.signingUpEllipsis),
                       CircularProgressIndicator(),
                     ],
                   ),
                 ),
               );
           } else if (state is SignupSuccess) {
-            BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
-            Navigator.pushNamed(context, AutodoRoutes.home);
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => NewUserScreen(),
+                ));
           }
         },
         child: BlocBuilder<SignupBloc, SignupState>(
@@ -97,7 +99,6 @@ class _SignupFormState extends State<SignupForm> {
                             BlocProvider.of<SignupBloc>(context).add(
                                 SignupWithCredentialsPressed(
                                     email: _email, password: _password));
-                            Navigator.pushNamed(context, AutodoRoutes.home);
                           }
                         }),
                         PasswordResetButton(),

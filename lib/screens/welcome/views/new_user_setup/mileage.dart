@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:autodo/util.dart';
 import 'package:autodo/theme.dart';
+import 'package:autodo/integ_test_keys.dart';
+import 'package:autodo/blocs/blocs.dart';
+import 'package:autodo/models/models.dart';
 import 'base.dart';
 
 class CarEntryField extends StatefulWidget {
@@ -40,6 +44,7 @@ class CarEntryFieldState extends State<CarEntryField> {
   @override
   Widget build(BuildContext context) {
     nameField() => TextFormField(
+          key: IntegrationTestKeys.mileageNameField,
           maxLines: 1,
           autofocus: true,
           decoration: defaultInputDecoration('', 'Car Name'),
@@ -52,6 +57,7 @@ class CarEntryFieldState extends State<CarEntryField> {
         );
 
     mileageField() => TextFormField(
+          key: IntegrationTestKeys.mileageMileageField,
           maxLines: 1,
           autofocus: false,
           decoration: defaultInputDecoration('', 'Mileage'),
@@ -109,6 +115,10 @@ class MileageScreenState extends State<MileageScreen> {
   _next() async {
     if (widget.mileageKey.currentState.validate()) {
       widget.mileageKey.currentState.save();
+      for (var c in cars) {
+        BlocProvider.of<CarsBloc>(context)
+            .add(AddCar(Car(name: c['name'], mileage: c['mileage'])));
+      }
       // hide the keyboard
       FocusScope.of(context).requestFocus(FocusNode());
       await Future.delayed(Duration(milliseconds: 400));
@@ -184,6 +194,7 @@ class MileageScreenState extends State<MileageScreen> {
                     ],
                   ),
                   FlatButton(
+                    key: IntegrationTestKeys.mileageNextButton,
                     padding: EdgeInsets.all(0),
                     materialTapTargetSize: MaterialTapTargetSize.padded,
                     child: Text(

@@ -4,10 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/theme.dart';
+import 'package:autodo/integ_test_keys.dart';
 import 'form.dart';
 
 class SignupScreen extends StatelessWidget {
-  SignupScreen({Key key}) : super(key: key);
+  SignupScreen({Key key = IntegrationTestKeys.signupScreen}) : super(key: key);
 
   @override
   build(context) => Container(
@@ -17,10 +18,6 @@ class SignupScreen extends StatelessWidget {
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.grey[300]),
             onPressed: () => Navigator.pop(context),
-          ),
-          title: Text(
-            AutodoLocalizations.signup.toUpperCase(),
-            style: TextStyle(color: Colors.grey[300]),
           ),
         ),
         body: BlocBuilder<SignupBloc, SignupState>(

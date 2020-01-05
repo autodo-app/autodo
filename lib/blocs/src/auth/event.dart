@@ -7,11 +7,23 @@ abstract class AuthenticationEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class AppStarted extends AuthenticationEvent {}
+class AppStarted extends AuthenticationEvent {
+  final bool integrationTest;
+
+  const AppStarted({this.integrationTest});
+
+  @override
+  List<Object> get props => [integrationTest];
+
+  @override
+  String toString() => 'AppStarted { integrationTest: $integrationTest }';
+}
 
 class LoggedIn extends AuthenticationEvent {}
 
-class LoggedOut extends AuthenticationEvent {}
+class SignedUp extends AuthenticationEvent {}
+
+class LogOut extends AuthenticationEvent {}
 
 class DeletedUser extends AuthenticationEvent {}
 
