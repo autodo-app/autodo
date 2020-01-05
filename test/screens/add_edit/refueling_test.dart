@@ -1,17 +1,24 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mockito/mockito.dart';
 
+import 'package:autodo/blocs/blocs.dart';
+import 'package:autodo/models/models.dart';
 import 'package:autodo/screens/add_edit/barrel.dart';
 import 'package:autodo/screens/add_edit/forms/barrel.dart';
+
+class MockCarsBloc extends Mock implements CarsBloc {}
 
 void main() {
   group('RefuelingsScreen', () {
     testWidgets('render', (WidgetTester tester) async {
       final key = Key('screen');
+      final carsBloc = MockCarsBloc();
+      when(carsBloc.state).thenReturn(CarsLoaded([Car()]));
       await tester.pumpWidget(
         MultiBlocProvider(
-          providers: [],
+          providers: [BlocProvider<CarsBloc>.value(value: carsBloc)],
           child: MaterialApp(
             home: RefuelingAddEditScreen(
               key: key,
@@ -27,9 +34,11 @@ void main() {
     testWidgets('save', (WidgetTester tester) async {
       final key = Key('screen');
       var saved = false;
+      final carsBloc = MockCarsBloc();
+      when(carsBloc.state).thenReturn(CarsLoaded([Car()]));
       await tester.pumpWidget(
         MultiBlocProvider(
-          providers: [],
+          providers: [BlocProvider<CarsBloc>.value(value: carsBloc)],
           child: MaterialApp(
             home: RefuelingAddEditScreen(
               key: key,
@@ -56,9 +65,13 @@ void main() {
     });
     testWidgets('date button', (WidgetTester tester) async {
       final key = Key('screen');
+      final carsBloc = MockCarsBloc();
+      when(carsBloc.state).thenReturn(CarsLoaded([Car()]));
       await tester.pumpWidget(
         MultiBlocProvider(
-          providers: [],
+          providers: [
+            BlocProvider<CarsBloc>.value(value: carsBloc)
+          ],
           child: MaterialApp(
             home: RefuelingAddEditScreen(
               key: key,

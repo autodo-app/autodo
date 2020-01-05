@@ -1,11 +1,14 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:autodo/repositories/repositories.dart';
 import 'package:autodo/blocs/blocs.dart';
 
 class MockAuthRepository extends Mock implements AuthRepository {}
+class MockUser extends Mock implements FirebaseUser {}
+class MockMetadata extends Mock implements FirebaseUserMetadata {}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -82,6 +85,53 @@ void main() {
       },
       act: (bloc) async => bloc.add(DeletedUser()),
       expect: <AuthenticationState>[Uninitialized(), Unauthenticated()],
+    );
+    blocTest<AuthenticationBloc, AuthenticationEvent, AuthenticationState>(
+      'User Signed Up',
+      build: () {
+        final authRepository = MockAuthRepository();
+        when(authRepository.getUserEmail()).thenAnswer((_) async => 'test@test.com');
+        when(authRepository.getUserId()).thenAnswer((_) async => 'test');
+        return AuthenticationBloc(userRepository: authRepository);
+      },
+      act: (bloc) async => bloc.add(SignedUp()),
+      expect: <AuthenticationState>[Uninitialized(), Authenticated('test@test.com', 'test', true)],
+    );
+    blocTest('AuthRepo SignedUp event',
+      build: () {
+        final metadata = MockMetadata();
+        final user = MockUser();
+        when(user.metadata).thenReturn(metadata);
+        when(metadata.creationTime).thenReturn(DateTime.fromMillisecondsSinceEpoch(0));
+        when(metadata.lastSignInTime).thenReturn(DateTime.fromMillisecondsSinceEpoch(0));
+        final authRepository = MockAuthRepository();
+        when(authRepository.getUserEmail()).thenAnswer((_) async => 'test@test.com');
+        when(authRepository.getUserId()).thenAnswer((_) async => 'test');
+        when(authRepository.stream).thenAnswer((_) => Stream.fromIterable([user]));
+        return AuthenticationBloc(userRepository: authRepository);
+      },
+      expect: [
+        Uninitialized(),
+        Authenticated('test@test.com', 'test', true)
+      ]
+    );
+    blocTest('AuthRepo LoggedIn event',
+      build: () {
+        final metadata = MockMetadata();
+        final user = MockUser();
+        when(user.metadata).thenReturn(metadata);
+        when(metadata.creationTime).thenReturn(DateTime.fromMillisecondsSinceEpoch(0));
+        when(metadata.lastSignInTime).thenReturn(DateTime.fromMillisecondsSinceEpoch(1));
+        final authRepository = MockAuthRepository();
+        when(authRepository.getUserEmail()).thenAnswer((_) async => 'test@test.com');
+        when(authRepository.getUserId()).thenAnswer((_) async => 'test');
+        when(authRepository.stream).thenAnswer((_) => Stream.fromIterable([user]));
+        return AuthenticationBloc(userRepository: authRepository);
+      },
+      expect: [
+        Uninitialized(),
+        Authenticated('test@test.com', 'test', false)
+      ]
     );
   });
 }

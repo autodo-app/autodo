@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/models/models.dart';
 import 'package:autodo/localization.dart';
 import 'package:autodo/theme.dart';
@@ -31,7 +33,6 @@ class _RepeatFormState extends State<RepeatForm> {
   Repeat selectedRepeat;
   String _repeatError;
   final _autocompleteKey = GlobalKey<AutoCompleteTextFieldState<Repeat>>();
-  List<Repeat> repeats;
 
   @override
   initState() {
@@ -59,7 +60,7 @@ class _RepeatFormState extends State<RepeatForm> {
       key: _autocompleteKey,
       focusNode: widget.node,
       textInputAction: TextInputAction.done,
-      suggestions: repeats,
+      suggestions: (BlocProvider.of<RepeatsBloc>(context).state as RepeatsLoaded).repeats,
       itemBuilder: (context, suggestion) => Padding(
         child: ListTile(
             title: Text(suggestion.name),

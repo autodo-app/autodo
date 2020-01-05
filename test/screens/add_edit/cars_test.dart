@@ -1,8 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mockito/mockito.dart';
 
+import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/screens/add_edit/car.dart';
+
+class MockCarsBloc extends Mock implements CarsBloc {}
 
 void main() {
   group('AddEditCarScreen', () {
@@ -34,5 +38,6 @@ void main() {
       await tester.pump();
       expect(find.byType(EditCarListScreen), findsOneWidget);
     });
+    
   });
 }

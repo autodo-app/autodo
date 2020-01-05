@@ -8,6 +8,23 @@ import 'package:autodo/localization.dart';
 import 'package:autodo/theme.dart';
 
 class LegalNotice extends StatelessWidget {
+  onTap(context) {
+    BlocProvider.of<LegalBloc>(context).add(LoadLegal());
+    showDialog<Widget>(
+        context: context,
+        builder: (ctx) => BlocBuilder<LegalBloc, LegalState>(
+                builder: (context, state) {
+              if (state is LegalLoading) {
+                return LoadingIndicator();
+              } else if (state is LegalLoaded) {
+                return PrivacyPolicy(state.text);
+              } else {
+                Navigator.pop(context);
+                return Container();
+              }
+            }));
+  }
+
   @override
   build(context) => Container(
       padding: EdgeInsets.fromLTRB(5, 15, 5, 0),
@@ -32,22 +49,8 @@ class LegalNotice extends StatelessWidget {
             text: AutodoLocalizations.legal4,
             style: linkStyle(),
             recognizer: TapGestureRecognizer()
-              ..onTap = () {
-                BlocProvider.of<LegalBloc>(context).add(LoadLegal());
-                showDialog<Widget>(
-                    context: context,
-                    builder: (ctx) => BlocBuilder<LegalBloc, LegalState>(
-                            builder: (context, state) {
-                          if (state is LegalLoading) {
-                            return LoadingIndicator();
-                          } else if (state is LegalLoaded) {
-                            return PrivacyPolicy(state.text);
-                          } else {
-                            Navigator.pop(context);
-                            return Container();
-                          }
-                        }));
-              },
+              ..onTap = () => onTap(context),
+            semanticsLabel: 'Privacy Policy Button',
           ),
           TextSpan(
             text: ' ' + AutodoLocalizations.legal5,
