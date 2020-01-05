@@ -62,7 +62,8 @@ class _CarFormState extends State<CarForm> {
       key: _autocompleteKey,
       focusNode: widget.node,
       textInputAction: TextInputAction.next,
-      suggestions: (BlocProvider.of<CarsBloc>(context).state as CarsLoaded).cars,
+      suggestions:
+          (BlocProvider.of<CarsBloc>(context).state as CarsLoaded).cars,
       itemBuilder: (context, suggestion) => Padding(
         child: ListTile(
             title: Text(suggestion.name),

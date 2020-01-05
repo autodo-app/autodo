@@ -60,7 +60,9 @@ class _RepeatFormState extends State<RepeatForm> {
       key: _autocompleteKey,
       focusNode: widget.node,
       textInputAction: TextInputAction.done,
-      suggestions: (BlocProvider.of<RepeatsBloc>(context).state as RepeatsLoaded).repeats,
+      suggestions:
+          (BlocProvider.of<RepeatsBloc>(context).state as RepeatsLoaded)
+              .repeats,
       itemBuilder: (context, suggestion) => Padding(
         child: ListTile(
             title: Text(suggestion.name),

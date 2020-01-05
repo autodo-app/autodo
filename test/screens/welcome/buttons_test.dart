@@ -13,16 +13,13 @@ void main() {
     testWidgets('google signin', (tester) async {
       final loginBloc = MockLoginBloc();
       bool pressed = false;
-      when(loginBloc.add(LoginWithGooglePressed())).thenAnswer((_) {pressed = true;});
-      await tester.pumpWidget(
-        BlocProvider<LoginBloc>(  
+      when(loginBloc.add(LoginWithGooglePressed())).thenAnswer((_) {
+        pressed = true;
+      });
+      await tester.pumpWidget(BlocProvider<LoginBloc>(
           create: (context) => loginBloc,
           child: Directionality(
-            textDirection: TextDirection.ltr,  
-            child: GoogleLoginButton()
-          )
-        )
-      );
+              textDirection: TextDirection.ltr, child: GoogleLoginButton())));
       expect(find.byType(GoogleLoginButton), findsOneWidget);
       await tester.tap(find.byType(GoogleLoginButton));
       await tester.pump();
@@ -30,14 +27,10 @@ void main() {
     });
     testWidgets('password reset', (tester) async {
       final loginBloc = MockLoginBloc();
-      await tester.pumpWidget(
-        BlocProvider<LoginBloc>(  
+      await tester.pumpWidget(BlocProvider<LoginBloc>(
           create: (context) => loginBloc,
           child: MaterialApp(
-            home: PasswordResetButton(dialogKey: ValueKey('dialogKey'))
-          )
-        )
-      );
+              home: PasswordResetButton(dialogKey: ValueKey('dialogKey')))));
       expect(find.byType(PasswordResetButton), findsOneWidget);
       await tester.tap(find.byType(PasswordResetButton));
       await tester.pump();

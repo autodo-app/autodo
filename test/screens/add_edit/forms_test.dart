@@ -8,20 +8,18 @@ import 'package:autodo/models/models.dart';
 import 'package:autodo/screens/add_edit/forms/barrel.dart';
 
 class MockRepeatsBloc extends Mock implements RepeatsBloc {}
+
 class MockCarsBloc extends Mock implements CarsBloc {}
 
 void main() {
   group('add edit forms', () {
     testWidgets('car autocomplete', (WidgetTester tester) async {
       final carsBloc = MockCarsBloc();
-      when(carsBloc.state).thenReturn(CarsLoaded([Car(name: 'test'), Car(name: 'test1')]));
+      when(carsBloc.state)
+          .thenReturn(CarsLoaded([Car(name: 'test'), Car(name: 'test1')]));
       await tester.pumpWidget(
         MultiBlocProvider(
-          providers: [
-            BlocProvider<CarsBloc>.value(
-              value: carsBloc
-            )
-          ],
+          providers: [BlocProvider<CarsBloc>.value(value: carsBloc)],
           child: MaterialApp(
             home: Card(
               child: CarForm(
@@ -43,14 +41,13 @@ void main() {
     testWidgets('car checkbox', (tester) async {
       await tester.pumpWidget(
         MultiBlocProvider(
-          providers: [
-          ],
+          providers: [],
           child: MaterialApp(
             home: Card(
               child: CarsCheckboxForm(
                 cars: [Car(name: 'test')],
                 onSaved: (_) {},
-              ),  
+              ),
             ),
           ),
         ),
@@ -64,11 +61,7 @@ void main() {
       when(repeatsBloc.state).thenReturn(RepeatsLoaded([Repeat(name: 'test')]));
       await tester.pumpWidget(
         MultiBlocProvider(
-          providers: [
-            BlocProvider<RepeatsBloc>.value(
-              value: repeatsBloc
-            )
-          ],
+          providers: [BlocProvider<RepeatsBloc>.value(value: repeatsBloc)],
           child: MaterialApp(
             home: Card(
               child: RepeatForm(
@@ -90,29 +83,27 @@ void main() {
     });
     testWidgets('repeat autocomplete validate', (WidgetTester tester) async {
       final repeatsBloc = MockRepeatsBloc();
-      when(repeatsBloc.state).thenReturn(RepeatsLoaded([Repeat(name: 'test'), Repeat(name: 'test1')]));
+      when(repeatsBloc.state).thenReturn(
+          RepeatsLoaded([Repeat(name: 'test'), Repeat(name: 'test1')]));
       bool saved = false;
       final key = GlobalKey<FormState>();
       await tester.pumpWidget(
         MultiBlocProvider(
-          providers: [
-            BlocProvider<RepeatsBloc>.value(
-              value: repeatsBloc
-            )
-          ],
+          providers: [BlocProvider<RepeatsBloc>.value(value: repeatsBloc)],
           child: MaterialApp(
-            home: Card(
-              child: Form( 
-                key: key,
-                child: RepeatForm(
-                  requireInput: true,
-                  onSaved: (_) {saved = true;},
-                  node: FocusNode(),
-                  nextNode: FocusNode(),
-                ),
+              home: Card(
+            child: Form(
+              key: key,
+              child: RepeatForm(
+                requireInput: true,
+                onSaved: (_) {
+                  saved = true;
+                },
+                node: FocusNode(),
+                nextNode: FocusNode(),
               ),
-            )
-          ),
+            ),
+          )),
         ),
       );
       await tester.pump();

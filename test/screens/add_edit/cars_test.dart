@@ -38,6 +38,5 @@ void main() {
       await tester.pump();
       expect(find.byType(EditCarListScreen), findsOneWidget);
     });
-    
   });
 }

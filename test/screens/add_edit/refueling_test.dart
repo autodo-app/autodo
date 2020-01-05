@@ -69,9 +69,7 @@ void main() {
       when(carsBloc.state).thenReturn(CarsLoaded([Car()]));
       await tester.pumpWidget(
         MultiBlocProvider(
-          providers: [
-            BlocProvider<CarsBloc>.value(value: carsBloc)
-          ],
+          providers: [BlocProvider<CarsBloc>.value(value: carsBloc)],
           child: MaterialApp(
             home: RefuelingAddEditScreen(
               key: key,

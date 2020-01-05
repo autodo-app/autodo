@@ -7,24 +7,22 @@ import 'package:mockito/mockito.dart';
 import 'package:autodo/widgets/widgets.dart';
 import 'package:autodo/blocs/blocs.dart';
 
-class MockAuthenticationBloc extends MockBloc<AuthenticationEvent, AuthenticationState> implements AuthenticationBloc {}
+class MockAuthenticationBloc
+    extends MockBloc<AuthenticationEvent, AuthenticationState>
+    implements AuthenticationBloc {}
 
 void main() {
   group('nav drawer', () {
-    testWidgets('render', (tester) async  {
+    testWidgets('render', (tester) async {
       final authBloc = MockAuthenticationBloc();
       when(authBloc.state).thenReturn(Authenticated('test', 'test', false));
-      whenListen(authBloc, Stream.fromIterable([Authenticated('test', 'test', false)]));
-      await tester.pumpWidget(BlocProvider<AuthenticationBloc>( 
-        create: (context) => authBloc,
-        child: MaterialApp(  
-          home: Scaffold(  
-            appBar: AppBar(),
-            drawer: NavDrawer(),
-            body: Container()
-          )
-        )
-      ));
+      whenListen(authBloc,
+          Stream.fromIterable([Authenticated('test', 'test', false)]));
+      await tester.pumpWidget(BlocProvider<AuthenticationBloc>(
+          create: (context) => authBloc,
+          child: MaterialApp(
+              home: Scaffold(
+                  appBar: AppBar(), drawer: NavDrawer(), body: Container()))));
       await tester.tap(find.byTooltip("Open navigation menu"));
       await tester.pumpAndSettle();
       expect(find.byType(NavDrawer), findsOneWidget);

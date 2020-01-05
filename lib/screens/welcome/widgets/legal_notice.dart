@@ -12,8 +12,8 @@ class LegalNotice extends StatelessWidget {
     BlocProvider.of<LegalBloc>(context).add(LoadLegal());
     showDialog<Widget>(
         context: context,
-        builder: (ctx) => BlocBuilder<LegalBloc, LegalState>(
-                builder: (context, state) {
+        builder: (ctx) =>
+            BlocBuilder<LegalBloc, LegalState>(builder: (context, state) {
               if (state is LegalLoading) {
                 return LoadingIndicator();
               } else if (state is LegalLoaded) {
@@ -48,8 +48,7 @@ class LegalNotice extends StatelessWidget {
           TextSpan(
             text: AutodoLocalizations.legal4,
             style: linkStyle(),
-            recognizer: TapGestureRecognizer()
-              ..onTap = () => onTap(context),
+            recognizer: TapGestureRecognizer()..onTap = () => onTap(context),
             semanticsLabel: 'Privacy Policy Button',
           ),
           TextSpan(

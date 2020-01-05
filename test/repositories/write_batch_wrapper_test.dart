@@ -47,9 +47,8 @@ void main() {
     });
     test('commit exception', () {
       when(batch.commit()).thenThrow(PlatformException(
-        code: "Error performing commit",
-        message: "PERMISSION_DENIED: Missing or insufficient permissions."
-      ));
+          code: "Error performing commit",
+          message: "PERMISSION_DENIED: Missing or insufficient permissions."));
       final wrapper = WriteBatchWrapper(
           collection: collection, firestoreInstance: firestore);
       expect(wrapper.commit(), null);

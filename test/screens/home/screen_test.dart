@@ -21,7 +21,9 @@ class MockFilteredTodosBloc
 class MockTabBloc extends MockBloc<TabEvent, AppTab> implements TabBloc {}
 
 class MockCarsBloc extends MockBloc<CarsEvent, CarsState> implements CarsBloc {}
-class MockRepeatsBloc extends MockBloc<RepeatsEvent, RepeatsState> implements RepeatsBloc {}
+
+class MockRepeatsBloc extends MockBloc<RepeatsEvent, RepeatsState>
+    implements RepeatsBloc {}
 
 void main() {
   group('HomeScreen', () {
@@ -136,11 +138,19 @@ void main() {
         when(tabBloc.state).thenAnswer((_) => AppTab.todos);
         Key scaffoldKey = Key('scaffold');
         final carsBloc = MockCarsBloc();
-        whenListen(carsBloc, Stream.fromIterable([CarsLoaded([Car()])]));
+        whenListen(
+            carsBloc,
+            Stream.fromIterable([
+              CarsLoaded([Car()])
+            ]));
         when(carsBloc.state).thenReturn(CarsLoaded([Car()]));
         final repeatsBloc = MockRepeatsBloc();
         when(repeatsBloc.state).thenReturn(RepeatsLoaded([Repeat()]));
-        whenListen(repeatsBloc, Stream.fromIterable([RepeatsLoaded([Repeat()])]));
+        whenListen(
+            repeatsBloc,
+            Stream.fromIterable([
+              RepeatsLoaded([Repeat()])
+            ]));
         await tester.pumpWidget(
           MultiBlocProvider(
             providers: [
@@ -176,10 +186,18 @@ void main() {
         Key scaffoldKey = Key('scaffold');
         final carsBloc = MockCarsBloc();
         when(carsBloc.state).thenReturn(CarsLoaded([Car(name: 'test')]));
-        whenListen(carsBloc, Stream.fromIterable([CarsLoaded([Car(name: 'test')])]));
+        whenListen(
+            carsBloc,
+            Stream.fromIterable([
+              CarsLoaded([Car(name: 'test')])
+            ]));
         final repeatsBloc = MockRepeatsBloc();
         when(repeatsBloc.state).thenReturn(RepeatsLoaded([Repeat()]));
-        whenListen(repeatsBloc, Stream.fromIterable([RepeatsLoaded([Repeat()])]));
+        whenListen(
+            repeatsBloc,
+            Stream.fromIterable([
+              RepeatsLoaded([Repeat()])
+            ]));
         await tester.pumpWidget(
           MultiBlocProvider(
             providers: [

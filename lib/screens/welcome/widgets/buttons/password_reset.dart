@@ -7,7 +7,7 @@ import 'package:autodo/theme.dart';
 
 class _PasswordResetDialog extends StatefulWidget {
   _PasswordResetDialog(Key key) : super(key: key);
-  
+
   @override
   _PasswordResetDialogState createState() => _PasswordResetDialogState();
 }
