@@ -67,8 +67,10 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
 
   Stream<RefuelingsState> _mapLoadRefuelingsToState() async* {
     try {
-      final refuelings = await repo.refuelings().first
-        .timeout(Duration(seconds: 1), onTimeout: () => null);
+      final refuelings = await repo
+          .refuelings()
+          .first
+          .timeout(Duration(seconds: 1), onTimeout: () => null);
       if (refuelings != null) {
         yield RefuelingsLoaded(refuelings);
       } else {

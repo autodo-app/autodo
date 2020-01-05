@@ -3,7 +3,8 @@ import 'package:flutter_driver/flutter_driver.dart';
 /// Signs up a new user to kick off the test sequence
 Future<void> signUp(FlutterDriver driver) async {
   // Welcome Screen
-  await driver.waitFor(find.byValueKey('__welcome_screen__'), timeout: Duration(minutes: 2));
+  await driver.waitFor(find.byValueKey('__welcome_screen__'),
+      timeout: Duration(minutes: 2));
   await driver.tap(find.byType("SignupButton"));
   print('Welcome Screen completed');
 
@@ -18,14 +19,15 @@ Future<void> signUp(FlutterDriver driver) async {
 
   // mileage setting screen
   await Future.delayed(Duration(milliseconds: 500));
-  await driver.waitFor(find.byType('MileageScreen'), timeout: Duration(minutes: 1));
+  await driver.waitFor(find.byType('MileageScreen'),
+      timeout: Duration(minutes: 1));
   await driver.tap(find.byValueKey('__mileage_name_field__'));
   await driver.enterText('test');
   await driver.tap(find.byValueKey('__mileage_mileage_field__'));
   await driver.enterText('1000');
   await driver.tap(find.byValueKey('__mileage_next_button__'));
   print('mileage setting screen completed');
-  
+
   // last completed todo screen
   await driver.waitFor(find.byType('LatestRepeatsScreen'));
   await driver.tap(find.byValueKey('__latest_oil_change_field__'));
@@ -49,7 +51,7 @@ Future<void> signUp(FlutterDriver driver) async {
   await driver.waitFor(find.byValueKey('__home_screen__'));
 }
 
-/// Signs out the currently logged in user 
+/// Signs out the currently logged in user
 Future<void> signOut(FlutterDriver driver) async {
   print('signing out');
   // this tooltip exists by default as the means for opening the nav drawer
@@ -63,7 +65,8 @@ Future<void> signOut(FlutterDriver driver) async {
 /// Signs back in with the previously created user
 Future<void> signIn(FlutterDriver driver) async {
   // Welcome Screen
-  await driver.waitFor(find.byValueKey('__welcome_screen__'), timeout: Duration(minutes: 2));
+  await driver.waitFor(find.byValueKey('__welcome_screen__'),
+      timeout: Duration(minutes: 2));
   await driver.tap(find.byValueKey('__welcome_login_button__'));
   print('Welcome Screen completed');
 
@@ -76,7 +79,8 @@ Future<void> signIn(FlutterDriver driver) async {
   print('Signup Screen Completed');
 
   // home screen
-  await driver.waitFor(find.byValueKey('__home_screen__'), timeout: Duration(minutes: 2));
+  await driver.waitFor(find.byValueKey('__home_screen__'),
+      timeout: Duration(minutes: 2));
 }
 
 /// Deletes the test user that we created
@@ -85,7 +89,7 @@ Future<void> deleteUser(FlutterDriver driver) async {
   // this tooltip exists by default as the means for opening the nav drawer
   await driver.tap(find.byTooltip("Open navigation menu"));
   await driver.tap(find.byValueKey('__settings_drawer_button__'));
-  
+
   // settings screen
   await driver.waitFor(find.byType('SettingsScreen'));
   await driver.tap(find.byValueKey('__delete_account_button__'));

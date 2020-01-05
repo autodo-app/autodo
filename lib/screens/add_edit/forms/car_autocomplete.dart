@@ -19,7 +19,9 @@ class CarForm extends StatefulWidget {
     @required this.onSaved,
     @required this.node,
     @required this.nextNode,
-  }) : super(key: key) {print(initialValue);}
+  }) : super(key: key) {
+    print(initialValue);
+  }
 
   @override
   _CarFormState createState() => _CarFormState();

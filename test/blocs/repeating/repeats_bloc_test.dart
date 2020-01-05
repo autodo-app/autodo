@@ -86,7 +86,8 @@ void main() {
           }
         });
         when(dataRepository.repeats()).thenAnswer((_) => Stream.fromIterable([
-                [Repeat(), Repeat()]]));
+              [Repeat(), Repeat()]
+            ]));
         bloc.add(LoadRepeats());
       },
       expect: [
@@ -98,7 +99,8 @@ void main() {
       'UpdateRepeat',
       build: () {
         when(dataRepository.repeats()).thenAnswer((_) => Stream.fromIterable([
-              [Repeat(id: '0', name: 'test')]]));
+              [Repeat(id: '0', name: 'test')]
+            ]));
         final dbBloc = MockDbBloc();
         when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
         return RepeatsBloc(dbBloc: dbBloc);
@@ -116,7 +118,8 @@ void main() {
           }
         });
         when(dataRepository.repeats()).thenAnswer((_) => Stream.fromIterable([
-                [Repeat(id: '0', name: 'abcd')]]));
+              [Repeat(id: '0', name: 'abcd')]
+            ]));
         bloc.add(LoadRepeats());
       },
       expect: [
@@ -129,8 +132,10 @@ void main() {
       build: () {
         final dataRepository = MockDataRepository();
         var repeats = [Repeat(id: '0')];
-        when(dataRepository.repeats()).thenAnswer((_) => Stream.fromIterable([repeats]));
-        when(dataRepository.deleteRepeat(Repeat(id: '0'))).thenAnswer((_) => null);
+        when(dataRepository.repeats())
+            .thenAnswer((_) => Stream.fromIterable([repeats]));
+        when(dataRepository.deleteRepeat(Repeat(id: '0')))
+            .thenAnswer((_) => null);
         final dbBloc = MockDbBloc();
         when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
         return RepeatsBloc(dbBloc: dbBloc);
@@ -143,7 +148,9 @@ void main() {
         RepeatsLoading(),
         RepeatsLoaded([Repeat(id: '0')]),
         RepeatsLoaded([]),
-        RepeatsLoaded([Repeat(id: '0')]), // not really sure how to mock the behavior where this responds later with an empty version
+        RepeatsLoaded([
+          Repeat(id: '0')
+        ]), // not really sure how to mock the behavior where this responds later with an empty version
       ],
     );
     blocTest(
@@ -153,7 +160,8 @@ void main() {
         final mockBatch = MockWriteBatch();
         when(dataRepository.startRepeatWriteBatch())
             .thenAnswer((_) => mockBatch);
-        when(dataRepository.repeats()).thenAnswer((_) => Stream.fromIterable([RepeatsBloc.defaults]));
+        when(dataRepository.repeats())
+            .thenAnswer((_) => Stream.fromIterable([RepeatsBloc.defaults]));
         // dynamic lambdas to effectively do nothing
         when(mockBatch.setData(dynamic)).thenAnswer((_) => ((_) => _));
         when(mockBatch.commit()).thenAnswer((_) => (() => _));

@@ -12,8 +12,8 @@ import 'package:autodo/integ_test_keys.dart';
 import 'package:autodo/localization.dart';
 import 'package:autodo/util.dart';
 
-typedef _OnSaveCallback = Function(
-    String name, DateTime dueDate, int dueMileage, String repeatName, String carName);
+typedef _OnSaveCallback = Function(String name, DateTime dueDate,
+    int dueMileage, String repeatName, String carName);
 
 class _NameForm extends StatelessWidget {
   final Todo todo;
@@ -191,7 +191,9 @@ class TodoAddEditScreen extends StatefulWidget {
     @required this.onSave,
     @required this.isEditing,
     this.todo,
-  }) : super(key: key) {print(todo);}
+  }) : super(key: key) {
+    print(todo);
+  }
 
   @override
   _TodoAddEditScreenState createState() => _TodoAddEditScreenState();

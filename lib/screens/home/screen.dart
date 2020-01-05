@@ -38,8 +38,13 @@ class HomeScreen extends StatelessWidget {
         builder: (context) => TodoAddEditScreen(
               isEditing: false,
               onSave: (n, d, m, r, c) {
-                  BlocProvider.of<TodosBloc>(context).add(AddTodo(Todo(
-                      name: n, dueDate: d, dueMileage: m, repeatName: r, carName: c, completed: false)));
+                BlocProvider.of<TodosBloc>(context).add(AddTodo(Todo(
+                    name: n,
+                    dueDate: d,
+                    dueMileage: m,
+                    repeatName: r,
+                    carName: c,
+                    completed: false)));
               },
             )),
     MaterialPageRoute(

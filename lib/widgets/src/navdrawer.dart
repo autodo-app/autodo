@@ -72,7 +72,8 @@ class NavDrawerState extends State<NavDrawer> {
             'Settings',
             style: Theme.of(context).primaryTextTheme.button,
           ),
-          onPressed: () => Navigator.popAndPushNamed(context, AutodoRoutes.settingsScreen),
+          onPressed: () =>
+              Navigator.popAndPushNamed(context, AutodoRoutes.settingsScreen),
         ),
       ];
 

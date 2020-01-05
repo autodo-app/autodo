@@ -12,7 +12,7 @@ Future<void> newTodo(driver) async {
   print('waiting on buttons');
   await driver.waitFor(find.byValueKey('new_todo_fab'));
   await driver.tap(find.byValueKey('new_todo_fab'));
-  
+
   print('waiting for new todo screen');
   await driver.waitFor(find.byValueKey('__add_edit_todo__'));
   await driver.tap(find.byType('_NameForm'));
@@ -25,7 +25,7 @@ Future<void> newTodo(driver) async {
   await driver.enterText('2000');
   await driver.tap(find.byValueKey('__todo_car_form__'));
   await driver.enterText('test');
-  
+
   // submit
   await driver.tap(find.byType('FloatingActionButton'));
   await driver.waitFor(find.byValueKey('__todos_screen_scroller__'));
@@ -35,7 +35,9 @@ Future<void> newTodo(driver) async {
 
 /// Toggles the checkbox of a todo to mark it complete
 Future<void> completeTodo(FlutterDriver driver) async {
-  await driver.scrollUntilVisible(find.byValueKey('__todos_screen_scroller__'), find.byValueKey('__todo_card_edit_test todo'), dyScroll: -100.0);
+  await driver.scrollUntilVisible(find.byValueKey('__todos_screen_scroller__'),
+      find.byValueKey('__todo_card_edit_test todo'),
+      dyScroll: -100.0);
   print('tapping');
   await driver.tap(find.byValueKey('__todo_checkbox_test todo'));
 
@@ -53,7 +55,9 @@ Future<void> completeTodo(FlutterDriver driver) async {
 Future<void> editTodo(FlutterDriver driver) async {
   // edit button
   print('scrolling');
-  await driver.scrollUntilVisible(find.byValueKey('__todos_screen_scroller__'), find.byValueKey('__todo_card_edit_test todo'), dyScroll: -100.0);
+  await driver.scrollUntilVisible(find.byValueKey('__todos_screen_scroller__'),
+      find.byValueKey('__todo_card_edit_test todo'),
+      dyScroll: -100.0);
   print('tapping');
   await driver.tap(find.byValueKey('__todo_card_edit_test todo'));
 
@@ -65,14 +69,16 @@ Future<void> editTodo(FlutterDriver driver) async {
 
   // check that we returned to home screen
   await driver.waitFor(find.byValueKey('__todos_screen_scroller__'));
-} 
+}
 
 /// Deletes the newly created todo from the home screen
 Future<void> deleteTodo(FlutterDriver driver) async {
   // press button
   // await Future.delayed(Duration(minutes: 20)); // check to see what the status of the home screen is - why multiple scrollers?
   print('scrolling');
-  await driver.scrollUntilVisible(find.byValueKey('__todos_screen_scroller__'), find.byValueKey('__todo_delete_button_test todo'), dyScroll: -100.0);
+  await driver.scrollUntilVisible(find.byValueKey('__todos_screen_scroller__'),
+      find.byValueKey('__todo_delete_button_test todo'),
+      dyScroll: -100.0);
   print('tapping');
   await driver.tap(find.byValueKey('__todo_delete_button_test todo'));
 

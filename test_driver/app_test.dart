@@ -25,10 +25,11 @@ void main() {
     test('delete todo', () async => await deleteTodo(driver));
 
     // Refuelings
-    test('switch to refuelings tab', () async => await showRefuelingsTab(driver));
+    test('switch to refuelings tab',
+        () async => await showRefuelingsTab(driver));
     test('new refueling', () async => await newRefueling(driver));
     test('edit refueling', () async => await editRefueling(driver));
-    test ('delete refueling', () async => await deleteRefueling(driver));
+    test('delete refueling', () async => await deleteRefueling(driver));
 
     // Repeats
     test('switch to repeats tab', () async => await showRepeatsTab(driver));
@@ -36,7 +37,7 @@ void main() {
     test('new repeat', () async => await newRepeat(driver));
     test('edit repeat', () async => await editRepeat(driver));
     test('delete repeat', () async => await deleteRepeat(driver));
-  
+
     // last auth tests
     test('sign out', () async => await signOut(driver));
     test('sign back in', () async => await signIn(driver));

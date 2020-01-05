@@ -83,8 +83,7 @@ class FilteredRefuelingsBloc
     if (state is FilteredRefuelingsLoaded) {
       final curState = (state as FilteredRefuelingsLoaded);
       yield _shadeEfficiencyStats(
-        (refuelingsBloc.state as RefuelingsLoaded).refuelings, 
-        curState.cars);
+          (refuelingsBloc.state as RefuelingsLoaded).refuelings, curState.cars);
     }
   }
 

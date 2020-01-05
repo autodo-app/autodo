@@ -9,10 +9,9 @@ import 'package:autodo/localization.dart';
 class ExtraActions extends StatelessWidget {
   final Key toggleAllKey;
 
-  ExtraActions({
-    Key key = const ValueKey('__extra_actions__'),
-    this.toggleAllKey
-  }) : super(key: key);
+  ExtraActions(
+      {Key key = const ValueKey('__extra_actions__'), this.toggleAllKey})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +22,9 @@ class ExtraActions extends StatelessWidget {
               (BlocProvider.of<TodosBloc>(context).state as TodosLoaded)
                   .todos
                   .every((todo) => todo.completed);
-          final filterState = 
-            (BlocProvider.of<FilteredTodosBloc>(context)
-            .state as FilteredTodosLoaded).activeFilter;
+          final filterState = (BlocProvider.of<FilteredTodosBloc>(context).state
+                  as FilteredTodosLoaded)
+              .activeFilter;
           return PopupMenuButton<ExtraAction>(
             onSelected: (action) {
               switch (action) {
@@ -33,9 +32,11 @@ class ExtraActions extends StatelessWidget {
                   BlocProvider.of<TodosBloc>(context).add(ToggleAll());
                   break;
                 case ExtraAction.toggleFilter:
-                  var nextFilter = (filterState == VisibilityFilter.all) ?
-                      VisibilityFilter.active : VisibilityFilter.all;
-                  BlocProvider.of<FilteredTodosBloc>(context).add(UpdateTodosFilter(nextFilter));
+                  var nextFilter = (filterState == VisibilityFilter.all)
+                      ? VisibilityFilter.active
+                      : VisibilityFilter.all;
+                  BlocProvider.of<FilteredTodosBloc>(context)
+                      .add(UpdateTodosFilter(nextFilter));
                   break;
                 default:
                   break;
@@ -51,13 +52,12 @@ class ExtraActions extends StatelessWidget {
                       : AutodoLocalizations.markAllComplete,
                 ),
               ),
-              PopupMenuItem<ExtraAction>(  
+              PopupMenuItem<ExtraAction>(
                 key: ValueKey('__filter_button__'),
                 value: ExtraAction.toggleFilter,
-                child: Text(  
-                  (filterState == VisibilityFilter.all) ? 
-                    'Only Show Active ToDos' : 'Show All ToDos' 
-                ),
+                child: Text((filterState == VisibilityFilter.all)
+                    ? 'Only Show Active ToDos'
+                    : 'Show All ToDos'),
               )
             ],
           );

@@ -122,7 +122,8 @@ class _RefuelingEditButton extends StatelessWidget {
           minWidth: 0,
         ),
         child: FlatButton(
-          key: ValueKey('__refueling_card_edit_${refueling.carName}_${refueling.mileage}'),
+          key: ValueKey(
+              '__refueling_card_edit_${refueling.carName}_${refueling.mileage}'),
           child: const Icon(Icons.edit),
           onPressed: () => Navigator.push(
             context,
@@ -158,7 +159,8 @@ class _RefuelingDeleteButton extends StatelessWidget {
           minWidth: 0,
         ),
         child: FlatButton(
-          key: ValueKey('__refueling_delete_button_${refueling.carName}_${refueling.mileage}'),
+          key: ValueKey(
+              '__refueling_delete_button_${refueling.carName}_${refueling.mileage}'),
           child: const Icon(Icons.delete),
           onPressed: () {
             BlocProvider.of<RefuelingsBloc>(context)

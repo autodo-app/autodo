@@ -28,7 +28,8 @@ class LoginButton extends StatelessWidget {
             ),
             FlatButton(
               key: ValueKey('__welcome_login_button__'),
-              onPressed: () => Navigator.pushNamed(context, AutodoRoutes.loginScreen),
+              onPressed: () =>
+                  Navigator.pushNamed(context, AutodoRoutes.loginScreen),
               textColor: Colors.white,
               padding: const EdgeInsets.all(0.0),
               child: Text(

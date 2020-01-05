@@ -14,8 +14,9 @@ class AuthenticationBloc
       : assert(userRepository != null),
         _userRepository = userRepository {
     _userRepository.stream?.listen((user) {
-      if (user != null && (!(state is Authenticated) || 
-         (state as Authenticated).uuid != user.uid )) {
+      if (user != null &&
+          (!(state is Authenticated) ||
+              (state as Authenticated).uuid != user.uid)) {
         // sign in or sign up
         if (user.metadata.creationTime == user.metadata.lastSignInTime) {
           add(SignedUp());
@@ -51,7 +52,8 @@ class AuthenticationBloc
       final repo = FirebaseAuthRepository();
       if ((event as AppStarted).integrationTest ?? false) {
         await repo.signOut();
-        await repo.signInWithCredentials('integration-test@autodo.app', '123456');
+        await repo.signInWithCredentials(
+            'integration-test@autodo.app', '123456');
         await repo.deleteCurrentUser();
       }
       final isSignedIn = await _userRepository.isSignedIn();

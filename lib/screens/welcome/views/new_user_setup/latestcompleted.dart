@@ -77,7 +77,7 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
       pageWillBeVisible = false;
     }
 
-    Widget oilMileage = TextFormField(  
+    Widget oilMileage = TextFormField(
       key: IntegrationTestKeys.latestOilChangeField,
       maxLines: 1,
       autofocus: false,

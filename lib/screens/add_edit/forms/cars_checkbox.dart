@@ -32,7 +32,8 @@ class _CarsFormState extends State<CarsCheckboxForm> {
                 cars.length,
                 (index) => ListTile(
                     leading: Checkbox(
-                      key: ValueKey('__car_checkbox_${_carStates[index]['name']}'),
+                      key: ValueKey(
+                          '__car_checkbox_${_carStates[index]['name']}'),
                       value: _carStates[index]['enabled'],
                       onChanged: (state) {
                         _carStates[index]['enabled'] = state;

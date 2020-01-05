@@ -116,9 +116,8 @@ class MileageScreenState extends State<MileageScreen> {
     if (widget.mileageKey.currentState.validate()) {
       widget.mileageKey.currentState.save();
       for (var c in cars) {
-        BlocProvider.of<CarsBloc>(context).add(AddCar(
-          Car(name: c['name'], mileage: c['mileage'])
-        ));
+        BlocProvider.of<CarsBloc>(context)
+            .add(AddCar(Car(name: c['name'], mileage: c['mileage'])));
       }
       // hide the keyboard
       FocusScope.of(context).requestFocus(FocusNode());

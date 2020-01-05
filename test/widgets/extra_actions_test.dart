@@ -11,7 +11,10 @@ import 'package:autodo/models/models.dart';
 
 class MockTodosBloc extends MockBloc<TodosEvent, TodosState>
     implements TodosBloc {}
-class MockFilteredTodosBloc extends MockBloc<FilteredTodosEvent, FilteredTodosState> implements FilteredTodosBloc {} 
+
+class MockFilteredTodosBloc
+    extends MockBloc<FilteredTodosEvent, FilteredTodosState>
+    implements FilteredTodosBloc {}
 
 void main() {
   group('ExtraActions', () {
@@ -28,22 +31,20 @@ void main() {
       when(todosBloc.state).thenReturn(TodosLoading());
       when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoading());
       final key = Key('test');
-      await tester.pumpWidget(
-        MultiBlocProvider( 
-          providers: [
-            BlocProvider<TodosBloc>.value(value: todosBloc),
-            BlocProvider<FilteredTodosBloc>.value(value: filteredTodosBloc)
-          ],
-          child: MaterialApp(
-            home: Scaffold(
-              appBar: AppBar(
-                actions: [ExtraActions(key: key)],
-              ),
-              body: Container(),
+      await tester.pumpWidget(MultiBlocProvider(
+        providers: [
+          BlocProvider<TodosBloc>.value(value: todosBloc),
+          BlocProvider<FilteredTodosBloc>.value(value: filteredTodosBloc)
+        ],
+        child: MaterialApp(
+          home: Scaffold(
+            appBar: AppBar(
+              actions: [ExtraActions(key: key)],
             ),
+            body: Container(),
           ),
-        )
-      );
+        ),
+      ));
       expect(find.byKey((key)), findsOneWidget);
     });
 
@@ -54,26 +55,27 @@ void main() {
       when(todosBloc.state).thenReturn(TodosLoaded(todos));
       final actions = Key('actions');
       final toggleAll = Key('toggleAll');
-      when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded(todos, VisibilityFilter.all));
-      await tester.pumpWidget(
-        MultiBlocProvider( 
-          providers: [
-            BlocProvider<TodosBloc>.value(value: todosBloc),
-            BlocProvider<FilteredTodosBloc>.value(value: filteredTodosBloc)
-          ],
-          child: MaterialApp(
-            home: Scaffold(
-              appBar: AppBar(
-                actions: [ExtraActions(
-                    key: actions,
-                    toggleAllKey: toggleAll,
-                  )],
-              ),
-              body: Container(),
+      when(filteredTodosBloc.state)
+          .thenAnswer((_) => FilteredTodosLoaded(todos, VisibilityFilter.all));
+      await tester.pumpWidget(MultiBlocProvider(
+        providers: [
+          BlocProvider<TodosBloc>.value(value: todosBloc),
+          BlocProvider<FilteredTodosBloc>.value(value: filteredTodosBloc)
+        ],
+        child: MaterialApp(
+          home: Scaffold(
+            appBar: AppBar(
+              actions: [
+                ExtraActions(
+                  key: actions,
+                  toggleAllKey: toggleAll,
+                )
+              ],
             ),
+            body: Container(),
           ),
-        )
-      );
+        ),
+      ));
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(actions));
       await tester.pump();
@@ -88,26 +90,27 @@ void main() {
       when(todosBloc.state).thenReturn(TodosLoaded(todos));
       final actions = Key('actions');
       final toggleAll = Key('toggleAll');
-      when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded(todos, VisibilityFilter.all));
-      await tester.pumpWidget(
-        MultiBlocProvider( 
-          providers: [
-            BlocProvider<TodosBloc>.value(value: todosBloc),
-            BlocProvider<FilteredTodosBloc>.value(value: filteredTodosBloc)
-          ],
-          child: MaterialApp(
-            home: Scaffold(
-              appBar: AppBar(
-                actions: [ExtraActions(
-                    key: actions,
-                    toggleAllKey: toggleAll,
-                  )],
-              ),
-              body: Container(),
+      when(filteredTodosBloc.state)
+          .thenAnswer((_) => FilteredTodosLoaded(todos, VisibilityFilter.all));
+      await tester.pumpWidget(MultiBlocProvider(
+        providers: [
+          BlocProvider<TodosBloc>.value(value: todosBloc),
+          BlocProvider<FilteredTodosBloc>.value(value: filteredTodosBloc)
+        ],
+        child: MaterialApp(
+          home: Scaffold(
+            appBar: AppBar(
+              actions: [
+                ExtraActions(
+                  key: actions,
+                  toggleAllKey: toggleAll,
+                )
+              ],
             ),
+            body: Container(),
           ),
-        )
-      );
+        ),
+      ));
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(actions));
       await tester.pump();
@@ -124,26 +127,27 @@ void main() {
       when(todosBloc.add(ToggleAll())).thenReturn(null);
       final actions = Key('actions');
       final toggleAll = Key('toggleAll');
-      when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded(todos, VisibilityFilter.all));
-      await tester.pumpWidget(
-        MultiBlocProvider( 
-          providers: [
-            BlocProvider<TodosBloc>.value(value: todosBloc),
-            BlocProvider<FilteredTodosBloc>.value(value: filteredTodosBloc)
-          ],
-          child: MaterialApp(
-            home: Scaffold(
-              appBar: AppBar(
-                actions: [ExtraActions(
-                    key: actions,
-                    toggleAllKey: toggleAll,
-                  )],
-              ),
-              body: Container(),
+      when(filteredTodosBloc.state)
+          .thenAnswer((_) => FilteredTodosLoaded(todos, VisibilityFilter.all));
+      await tester.pumpWidget(MultiBlocProvider(
+        providers: [
+          BlocProvider<TodosBloc>.value(value: todosBloc),
+          BlocProvider<FilteredTodosBloc>.value(value: filteredTodosBloc)
+        ],
+        child: MaterialApp(
+          home: Scaffold(
+            appBar: AppBar(
+              actions: [
+                ExtraActions(
+                  key: actions,
+                  toggleAllKey: toggleAll,
+                )
+              ],
             ),
+            body: Container(),
           ),
-        )
-      );
+        ),
+      ));
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(actions));
       await tester.pump();
