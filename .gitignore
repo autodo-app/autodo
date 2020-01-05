@@ -34,3 +34,4 @@ google-services.json
 doc/**
 .flutter-plugins**
 keys.json
+*.log
