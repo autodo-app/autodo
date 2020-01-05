@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 
 import 'package:autodo/models/models.dart';
-import 'write_batch_wrappers.dart';
+import 'write_batch_wrapper.dart';
 
 abstract class DataRepository extends Equatable {
   // Todos
@@ -15,7 +15,7 @@ abstract class DataRepository extends Equatable {
 
   Future<void> updateTodo(Todo todo);
 
-  WriteBatchWrapper startTodoWriteBatch();
+  FutureOr<WriteBatchWrapper> startTodoWriteBatch();
 
   // Refuelings
   Future<void> addNewRefueling(Refueling refueling);
@@ -26,7 +26,7 @@ abstract class DataRepository extends Equatable {
 
   Future<void> updateRefueling(Refueling refueling);
 
-  WriteBatchWrapper startRefuelingWriteBatch();
+  FutureOr<WriteBatchWrapper> startRefuelingWriteBatch();
 
   // Cars
   Future<void> addNewCar(Car car);
@@ -37,7 +37,7 @@ abstract class DataRepository extends Equatable {
 
   Future<void> updateCar(Car car);
 
-  WriteBatchWrapper startCarWriteBatch();
+  FutureOr<WriteBatchWrapper> startCarWriteBatch();
 
   // Repeats
   Future<List<Repeat>> addNewRepeat(Repeat repeat);
@@ -48,11 +48,8 @@ abstract class DataRepository extends Equatable {
 
   Future<void> updateRepeat(Repeat repeat);
 
-  WriteBatchWrapper startRepeatWriteBatch();
+  FutureOr<WriteBatchWrapper> startRepeatWriteBatch();
 
   // Notifications
   Stream<int> notificationID();
-
-  @override
-  List<Object> get props => [];
 }

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:sembast/sembast.dart';
 
 import 'package:autodo/models/models.dart';
 
@@ -23,19 +24,6 @@ class CarEntity extends Equatable {
         this.averageEfficiency = averageEfficiency ?? 0.0,
         this.distanceRate = distanceRate ?? 0.0;
 
-  // Map<String, Object> toJson() {
-  //   return {
-  //     "id": id,
-  //     "name": name,
-  //     "mileage": mileage,
-  //     "numRefuelings": numRefuelings,
-  //     "averageEfficiency": averageEfficiency,
-  //     "distanceRate": distanceRate,
-  //     "lastMileageUpdate": lastMileageUpdate,
-  //     "distanceRateHistory": distanceRateHistory
-  //   };
-  // }
-
   @override
   List<Object> get props => [
         id,
@@ -53,19 +41,6 @@ class CarEntity extends Equatable {
     return 'CarEntity { id: $id, name: $name, mileage: $mileage, numRefuelings: $numRefuelings, averageEfficiency: $averageEfficiency, distanceRate: $distanceRate, lastMileageUpdate: $lastMileageUpdate, distanceRateHistory: $distanceRateHistory }';
   }
 
-  // static CarEntity fromJson(Map<String, Object> json) {
-  //   return CarEntity(
-  //     json["id"] as String,
-  //     json["name"] as String,
-  //     json["mileage"] as int,
-  //     json["numRefuelings"] as int,
-  //     json["averageEfficiency"] as double,
-  //     json["distanceRate"] as double,
-  //     DateTime.fromMillisecondsSinceEpoch(json["lastMileageUpdate"] as int),
-  //     json["distanceRateHistory"] as List<DistanceRatePoint>
-  //   );
-  // }
-
   static CarEntity fromSnapshot(DocumentSnapshot snap) {
     return CarEntity(
         snap.documentID,
@@ -79,6 +54,29 @@ class CarEntity extends Equatable {
             : DateTime.fromMillisecondsSinceEpoch(
                 snap.data["lastMileageUpdate"] as int),
         snap.data["distanceRateHistory"]
+            ?.map((p) => DistanceRatePoint(
+                  (p['date'] == null)
+                      ? DateTime.fromMillisecondsSinceEpoch(p['date'])
+                      : null,
+                  p['distanceRate'],
+                ))
+            ?.toList()
+            ?.cast<DistanceRatePoint>());
+  }
+
+  factory CarEntity.fromRecord(RecordSnapshot snap) {
+    return CarEntity(
+        (snap.key is String) ? snap.key : '${snap.key}',
+        snap.value["name"] as String,
+        snap.value["mileage"] as int,
+        snap.value["numRefuelings"] as int,
+        snap.value["averageEfficiency"] as double,
+        snap.value["distanceRate"] as double,
+        (snap.value['lastMileageUpdate'] == null)
+            ? null
+            : DateTime.fromMillisecondsSinceEpoch(
+                snap.value["lastMileageUpdate"] as int),
+        snap.value["distanceRateHistory"]
             ?.map((p) => DistanceRatePoint(
                   (p['date'] == null)
                       ? DateTime.fromMillisecondsSinceEpoch(p['date'])

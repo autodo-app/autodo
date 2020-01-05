@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:autodo/repositories/src/sembast_data_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -36,6 +37,8 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       yield* _mapUserLoggedInToState(event);
     } else if (event is UserLoggedOut) {
       yield* _mapUserLoggedOutToState(event);
+    } else if (event is TrialLogin) {
+      yield* _mapTrialLoginToState(event);
     }
   }
 
@@ -49,6 +52,11 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
 
   Stream<DatabaseState> _mapUserLoggedOutToState(event) async* {
     yield DbNotLoaded();
+  }
+
+  Stream<DatabaseState> _mapTrialLoginToState(event) async* {
+    final repo = SembastDataRepository();
+    yield DbLoaded(repo, false);
   }
 
   @override

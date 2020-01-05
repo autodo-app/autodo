@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter/services.dart';
 
-import 'package:autodo/repositories/repositories.dart';
+import 'package:autodo/repositories/src/firebase_write_batch.dart';
 
 class MockCollection extends Mock implements CollectionReference {}
 
@@ -12,7 +12,7 @@ class MockFirestore extends Mock implements Firestore {}
 class MockBatch extends Mock implements WriteBatch {}
 
 void main() {
-  group('WriteBatchWrapper', () {
+  group('FirebaseWriteBatch', () {
     final firestore = MockFirestore();
     final batch = MockBatch();
     when(firestore.batch()).thenAnswer((_) => batch);
@@ -22,40 +22,40 @@ void main() {
     test('Null collection', () {
       expect(
           () =>
-              WriteBatchWrapper(firestoreInstance: firestore, collection: null),
+              FirebaseWriteBatch(firestoreInstance: firestore, collection: null),
           throwsAssertionError);
     });
     test('update', () {
       when(batch.updateData(collection.document(''), {'test': ''}))
           .thenAnswer((_) {});
-      final wrapper = WriteBatchWrapper(
+      final wrapper = FirebaseWriteBatch(
           collection: collection, firestoreInstance: firestore);
-      expect(wrapper.updateData('', {'test': ''}), null);
+      wrapper.updateData('', {'test': ''});
     });
     test('set', () {
       when(batch.setData(collection.document(), {'test': ''}))
           .thenAnswer((_) {});
-      final wrapper = WriteBatchWrapper(
+      final wrapper = FirebaseWriteBatch(
           collection: collection, firestoreInstance: firestore);
-      expect(wrapper.setData({'test': ''}), null);
+      wrapper.setData({'test': ''});
     });
     test('commit', () {
       when(batch.commit()).thenAnswer((_) async {});
-      final wrapper = WriteBatchWrapper(
+      final wrapper = FirebaseWriteBatch(
           collection: collection, firestoreInstance: firestore);
-      expect(wrapper.commit(), null);
+      wrapper.commit();
     });
     test('commit exception', () {
       when(batch.commit()).thenThrow(PlatformException(
           code: "Error performing commit",
           message: "PERMISSION_DENIED: Missing or insufficient permissions."));
-      final wrapper = WriteBatchWrapper(
+      final wrapper = FirebaseWriteBatch(
           collection: collection, firestoreInstance: firestore);
-      expect(wrapper.commit(), null);
+      wrapper.commit();
     });
     test('props', () {
       expect(
-          WriteBatchWrapper(
+          FirebaseWriteBatch(
                   collection: collection, firestoreInstance: firestore)
               .props,
           ['']);

@@ -1,0 +1,2 @@
+{"version":1,"sembast":1}
+{"key":1,"store":"refuelings","value":{"carName":"test","mileage":1000,"date":0,"amount":20.0,"cost":20.0,"carColor":null,"efficiency":null,"efficiencyColor":null}}

@@ -21,3 +21,5 @@ class UserLoggedIn extends DatabaseEvent {
 }
 
 class UserLoggedOut extends DatabaseEvent {}
+
+class TrialLogin extends DatabaseEvent {}

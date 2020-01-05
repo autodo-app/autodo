@@ -1,8 +1,5 @@
 import 'dart:async';
 
-import 'package:autodo/screens/add_edit/refueling.dart';
-import 'package:autodo/screens/add_edit/repeat.dart';
-import 'package:autodo/screens/add_edit/todo.dart';
 import 'package:autodo/screens/settings/screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -117,19 +114,18 @@ class App extends StatelessWidget {
   final ThemeData _theme;
   final AuthRepository _authRepository;
   final bool integrationTest;
-  Widget homeProvider, welcomeProvider; // TODO: move these to the build method
 
   App({@required theme, @required authRepository, this.integrationTest})
       : assert(theme != null),
         assert(authRepository != null),
         _theme = theme,
-        _authRepository = authRepository {
-    homeProvider = HomeScreenProvider(integrationTest: integrationTest);
-    welcomeProvider = WelcomeScreenProvider();
-  }
+        _authRepository = authRepository;
 
   @override
-  build(context) => MaterialApp(
+  build(context) {
+    Widget homeProvider = HomeScreenProvider(integrationTest: integrationTest);
+    Widget welcomeProvider = WelcomeScreenProvider();
+    return MaterialApp(
         title: 'auToDo',
         routes: {
           "/": (context) =>
@@ -156,4 +152,5 @@ class App extends StatelessWidget {
         theme: _theme,
         debugShowCheckedModeBanner: false,
       );
+  }
 }
