@@ -35,7 +35,6 @@ class SembastDataRepository extends Equatable implements DataRepository {
     dbFactory,
     this.dbPath = 'sample.db'
   }) : this.dbFactory = dbFactory ?? databaseFactoryIo {
-    print(databaseFactoryIo);
     dbCompleter.complete(this.dbFactory.openDatabase(dbPath));
   }
 
