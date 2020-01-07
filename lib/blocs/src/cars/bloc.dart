@@ -147,7 +147,7 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
       ExternalRefuelingsUpdated event) async* {
     if (repo == null || state is CarsNotLoaded) return;
 
-    WriteBatchWrapper batch = repo.startCarWriteBatch();
+    WriteBatchWrapper batch = await repo.startCarWriteBatch();
     // TODO cache the cars here so that updating number of refuelings will work
     List<Car> updatedCars = (state as CarsLoaded).cars;
     for (var r in event.refuelings) {
@@ -156,7 +156,11 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
       }
 
       Car cur =
-          (state as CarsLoaded).cars.firstWhere((car) => car.name == r.carName);
+          (state as CarsLoaded).cars.firstWhere((car) => car.name == r.carName, orElse: () => null);
+      if (cur == null) {
+        print('cannot find the specified car when updating refuelings');
+        return;
+      }
       Car update = _updateWithRefueling(cur, r);
 
       updatedCars = (state as CarsLoaded).cars.map((car) {

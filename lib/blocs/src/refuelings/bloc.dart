@@ -22,6 +22,7 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
         _dbBloc = dbBloc {
     _dataSubscription = _dbBloc.listen((state) {
       if (state is DbLoaded) {
+        print('aslsdf');
         add(LoadRefuelings());
       }
     });
@@ -36,9 +37,11 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
 
   @override
   Stream<RefuelingsState> mapEventToState(RefuelingsEvent event) async* {
+    print('salkdfja');
     if (event is LoadRefuelings) {
       yield* _mapLoadRefuelingsToState();
     } else if (event is AddRefueling) {
+      print('evsa');
       yield* _mapAddRefuelingToState(event);
     } else if (event is UpdateRefueling) {
       yield* _mapUpdateRefuelingToState(event);
@@ -48,11 +51,14 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
   }
 
   Future<Refueling> _findLatestRefueling(Refueling refueling) async {
-    var refuelings = await repo.refuelings().take(1).toList();
+    var refuelings = await repo
+          .refuelings()
+          .first
+          .timeout(Duration(milliseconds: 200), onTimeout: () => []);
 
     int smallestDiff = MAX_MPG;
     Refueling out;
-    for (var r in refuelings[0]) {
+    for (var r in refuelings) {
       if (r.carName == refueling.carName) {
         var mileageDiff = refueling.mileage - r.mileage;
         if (mileageDiff <= 0) continue; // only looking for past refuelings
@@ -87,12 +93,16 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
   }
 
   Stream<RefuelingsState> _mapAddRefuelingToState(AddRefueling event) async* {
-    if (repo == null) return;
+    if (repo == null) {
+      print('trying to add refueling to empty repo');
+      return;
+    }
 
     var item = event.refueling;
     var prev = await _findLatestRefueling(item);
     var dist = (prev == null) ? 0 : item.mileage - prev.mileage;
     Refueling out = event.refueling.copyWith(efficiency: dist / item.amount);
+    print('her: $out');
 
     // event.carsBloc.add(AddRefuelingInfo(item.car, item.mileage, item.date, item.efficiency, prev.date, dist));
     final List<Refueling> updatedRefuelings =
@@ -103,7 +113,10 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
 
   Stream<RefuelingsState> _mapUpdateRefuelingToState(
       UpdateRefueling event) async* {
-    if (repo == null) return;
+    if (repo == null) {
+      print('trying to update refueling with a null repository');
+      return;
+    } 
 
     var prev = await _findLatestRefueling(event.refueling);
     var dist = (prev == null) ? 0 : event.refueling.mileage - prev.mileage;

@@ -80,10 +80,18 @@ class FilteredRefuelingsBloc
   Stream<FilteredRefuelingsState> _mapRefuelingsUpdatedToState(
     UpdateRefuelings event,
   ) async* {
+    print('filtered refuelings $state');
     if (state is FilteredRefuelingsLoaded) {
       final curState = (state as FilteredRefuelingsLoaded);
       yield _shadeEfficiencyStats(
           (refuelingsBloc.state as RefuelingsLoaded).refuelings, curState.cars);
+    } else if (carsBloc.state is RefuelingsLoaded) {
+      // this allows the initial state to still be created even if the carsBloc
+      // and/or the refuelingsBloc are not loaded when this bloc is created
+      yield _shadeEfficiencyStats(
+          (refuelingsBloc.state as RefuelingsLoaded).refuelings,
+          (carsBloc.state as CarsLoaded).cars,
+          VisibilityFilter.all);  
     }
   }
 
@@ -136,8 +144,13 @@ class FilteredRefuelingsBloc
               .map((r) => r.id == updated.id ? updated : r)
               .toList();
         }
-      }
+      } 
       yield FilteredRefuelingsLoaded(updatedRefuelings, curFilter, event.cars);
+    } else if (refuelingsBloc.state is RefuelingsLoaded) {
+      yield _shadeEfficiencyStats(
+          (refuelingsBloc.state as RefuelingsLoaded).refuelings,
+          (carsBloc.state as CarsLoaded).cars,
+          VisibilityFilter.all);  
     }
   }
 

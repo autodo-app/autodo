@@ -4,6 +4,7 @@ import 'package:autodo/repositories/repositories.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
 import 'package:equatable/equatable.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'package:autodo/models/models.dart';
 import 'package:autodo/entities/entities.dart';
@@ -17,25 +18,31 @@ class SembastDataRepository extends Equatable implements DataRepository {
   final DatabaseFactory dbFactory;
   StoreRef get _todos => StoreRef('todos');
   final StreamController<List<Todo>> _todosStream = 
-    StreamController<List<Todo>>();
+    StreamController<List<Todo>>.broadcast();
   StoreRef get _refuelings => StoreRef('refuelings');
   final StreamController<List<Refueling>> _refuelingsStream = 
-    StreamController<List<Refueling>>();
+    StreamController<List<Refueling>>.broadcast();
   StoreRef get _cars => StoreRef('cars');
   final StreamController<List<Car>> _carsStream = 
-    StreamController<List<Car>>();
+    StreamController<List<Car>>.broadcast();
   StoreRef get _repeats => StoreRef('repeats');
   final StreamController<List<Repeat>> _repeatsStream = 
-    StreamController<List<Repeat>>();
+    StreamController<List<Repeat>>.broadcast();
   final StreamController<int> _notificationIdStream = 
-    StreamController<int>();
+    StreamController<int>.broadcast();
   final Completer<Database> dbCompleter = Completer<Database>();
+
+  Future<Database> openDb() async {
+    final path = await getApplicationDocumentsDirectory();
+    final filePath = path.path + dbPath;
+    return dbFactory.openDatabase(filePath);
+  }
 
   SembastDataRepository({
     dbFactory,
     this.dbPath = 'sample.db'
   }) : this.dbFactory = dbFactory ?? databaseFactoryIo {
-    dbCompleter.complete(this.dbFactory.openDatabase(dbPath));
+    dbCompleter.complete(openDb());
   }
 
   Future<Database> get db => dbCompleter.future;
@@ -79,7 +86,9 @@ class SembastDataRepository extends Equatable implements DataRepository {
   // Refuelings
 
   Future<List<Refueling>> refuelingList() async {
-    var list = await _refuelings.find(await db);
+    final _db = await db;
+    var list = await _refuelings.find(_db, finder: Finder(sortOrders: [SortOrder('mileage')]));
+    print('list $list db $db');
     return list.map((snap) => Refueling.fromEntity(RefuelingEntity.fromRecord(snap))).toList();
   }
 
@@ -89,6 +98,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
 
   @override 
   Future<void> addNewRefueling(Refueling refueling) async {
+    print('here');
     await _refuelings.add(await db, refueling.toEntity().toDocument());
     refuelingStreamUpdate();
   }
@@ -125,7 +135,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
   // Cars
 
   Future<List<Car>> carList() async {
-    var list = await _cars.find(await db);
+    var list = await _cars.find(await db, finder: Finder(sortOrders: [SortOrder('mileage')]));
     return list.map((snap) => Car.fromEntity(CarEntity.fromRecord(snap))).toList();
   } 
 
