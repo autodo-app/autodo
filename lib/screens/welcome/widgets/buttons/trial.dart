@@ -3,7 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:autodo/blocs/blocs.dart';
-import 'package:autodo/routes.dart';
+import '../../views/new_user_setup/screen.dart';
 
 class TrialButton extends StatelessWidget {
   final buttonPadding;
@@ -20,7 +20,11 @@ class TrialButton extends StatelessWidget {
           elevation: 12.0,
           onPressed: () {
             BlocProvider.of<DatabaseBloc>(context).add(TrialLogin());
-            Navigator.pushNamed(context, AutodoRoutes.home);
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => NewUserScreen(),
+                ));
           },
           textColor: Colors.white,
           padding: const EdgeInsets.all(0.0),

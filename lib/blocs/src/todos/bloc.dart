@@ -130,7 +130,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     if (cars == null || cars.length == 0) return;
     if (state is TodosLoaded && repo != null) {
       TodosLoaded curState = state;
-      WriteBatchWrapper batch = repo.startTodoWriteBatch();
+      WriteBatchWrapper batch = await repo.startTodoWriteBatch();
       List<Todo> updatedTodos;
       for (var car in cars) {
         if (_carsCache?.contains(car) ?? false) continue;

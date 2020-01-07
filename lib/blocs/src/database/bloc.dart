@@ -56,7 +56,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
 
   Stream<DatabaseState> _mapTrialLoginToState(event) async* {
     final repo = SembastDataRepository();
-    yield DbLoaded(repo, false);
+    yield DbLoaded(repo, true);
   }
 
   @override

@@ -209,7 +209,7 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
       print('Error: trying to add default repeats but repo is null');
       return;
     }
-    WriteBatchWrapper batch = repo.startRepeatWriteBatch();
+    WriteBatchWrapper batch = await repo.startRepeatWriteBatch();
     for (var r in defaults) {
       batch.setData(r.toEntity().toDocument());
     }

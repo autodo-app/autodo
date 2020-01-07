@@ -98,7 +98,6 @@ class SembastDataRepository extends Equatable implements DataRepository {
 
   @override 
   Future<void> addNewRefueling(Refueling refueling) async {
-    print('here');
     await _refuelings.add(await db, refueling.toEntity().toDocument());
     refuelingStreamUpdate();
   }
@@ -177,6 +176,10 @@ class SembastDataRepository extends Equatable implements DataRepository {
     return list.map((snap) => Repeat.fromEntity(RepeatEntity.fromRecord(snap))).toList();
   } 
 
+  Future<void> _repeatsUpdateStream() async {
+    _repeatsStream.add(await repeatList());
+  }
+
   @override 
   Future<List<Repeat>> addNewRepeat(Repeat repeat) async {
     await _repeats.add(await db, repeat.toEntity().toDocument());
@@ -207,7 +210,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
 
   @override
   FutureOr<WriteBatchWrapper> startRepeatWriteBatch() async {
-    return SembastWriteBatch(database: await db, store: _repeats);
+    return SembastWriteBatch(database: await db, store: _repeats, streamControllerUpdate: _repeatsUpdateStream);
   }
 
   @override 
