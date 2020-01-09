@@ -74,6 +74,7 @@ class NewUserScreenState extends State<NewUserScreen> {
   Widget build(BuildContext context) => BlocBuilder<AuthenticationBloc, AuthenticationState>(  
     builder: (context, authState) => BlocBuilder<DatabaseBloc, DatabaseState>(
       builder: (context, dbState) {
+        print('auth $authState db $dbState');
         if (authState is Authenticated && dbState is DbLoaded) {
           return Container(
             decoration: scaffoldBackgroundGradient(),

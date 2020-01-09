@@ -40,7 +40,7 @@ void main() {
     blocTest('UserLoggedIn', build: () {
       final authBloc = MockAuthenticationBloc();
       whenListen(authBloc,
-          Stream.fromIterable([Authenticated('test', 'abcd', false)]));
+          Stream.fromIterable([RemoteAuthenticated('test', 'abcd', false)]));
       return DatabaseBloc(
           firestoreInstance: mockFirestore, authenticationBloc: authBloc);
     }, act: (bloc) async {

@@ -1,3 +1,4 @@
+import 'package:autodo/repositories/repositories.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,18 +16,36 @@ class MockCarsBloc extends Mock implements CarsBloc {}
 
 class MockRepeatsBloc extends MockBloc<RepeatsEvent, RepeatsState>
     implements RepeatsBloc {}
+class MockAuthenticationBloc extends MockBloc<AuthenticationEvent, AuthenticationState> implements AuthenticationBloc {}
+class MockDatabaseBloc extends MockBloc<DatabaseEvent, DatabaseState> implements DatabaseBloc {}
+class MockRepo extends Mock implements DataRepository {}
 
 void main() {
   group('new user screens', () {
+    TestWidgetsFlutterBinding.ensureInitialized();
+    final authBloc = MockAuthenticationBloc();
+    whenListen(authBloc, Stream.fromIterable([RemoteAuthenticated('', '', false)]));
+    when(authBloc.state).thenReturn(RemoteAuthenticated('', '', false));
+    final dbBloc = MockDatabaseBloc();
+    whenListen(dbBloc, Stream.fromIterable([DbLoaded(MockRepo())]));
+    when(dbBloc.state).thenReturn(DbLoaded(MockRepo()));
     testWidgets('mileage', (tester) async {
       await tester.pumpWidget(MultiBlocProvider(
-          providers: [], child: MaterialApp(home: NewUserScreen())));
+          providers: [
+            BlocProvider<AuthenticationBloc>.value(value: authBloc),
+            BlocProvider<DatabaseBloc>.value(value: dbBloc)
+          ], 
+          child: MaterialApp(home: NewUserScreen())));
       expect(find.byType(NewUserScreen), findsOneWidget);
     });
     testWidgets('Latest complete', (tester) async {
       final carsBloc = MockCarsBloc();
       await tester.pumpWidget(MultiBlocProvider(
-          providers: [BlocProvider<CarsBloc>.value(value: carsBloc)],
+          providers: [
+            BlocProvider<AuthenticationBloc>.value(value: authBloc),
+            BlocProvider<DatabaseBloc>.value(value: dbBloc),
+            BlocProvider<CarsBloc>.value(value: carsBloc),
+          ],
           child: MaterialApp(home: NewUserScreen())));
       expect(find.byType(NewUserScreen), findsOneWidget);
       for (var w in find.byType(TextFormField).evaluate()) {
@@ -54,6 +73,8 @@ void main() {
         Repeat(name: 'tireRotation', mileageInterval: 1000)
       ]));
       await tester.pumpWidget(MultiBlocProvider(providers: [
+        BlocProvider<AuthenticationBloc>.value(value: authBloc),
+        BlocProvider<DatabaseBloc>.value(value: dbBloc),
         BlocProvider<CarsBloc>.value(value: carsBloc),
         BlocProvider<RepeatsBloc>.value(value: repeatsBloc),
       ], child: MaterialApp(home: NewUserScreen())));
@@ -86,6 +107,8 @@ void main() {
         Repeat(name: 'tireRotation', mileageInterval: 1000)
       ]));
       await tester.pumpWidget(MultiBlocProvider(providers: [
+        BlocProvider<AuthenticationBloc>.value(value: authBloc),
+        BlocProvider<DatabaseBloc>.value(value: dbBloc),
         BlocProvider<CarsBloc>.value(value: carsBloc),
         BlocProvider<RepeatsBloc>.value(value: repeatsBloc),
       ], child: MaterialApp(home: NewUserScreen())));
@@ -122,6 +145,8 @@ void main() {
       ]));
       await tester.pumpWidget(MultiBlocProvider(
           providers: [
+            BlocProvider<AuthenticationBloc>.value(value: authBloc),
+            BlocProvider<DatabaseBloc>.value(value: dbBloc),
             BlocProvider<CarsBloc>.value(value: carsBloc),
             BlocProvider<RepeatsBloc>.value(value: repeatsBloc),
           ],

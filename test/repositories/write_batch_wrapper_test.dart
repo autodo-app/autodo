@@ -12,6 +12,8 @@ class MockFirestore extends Mock implements Firestore {}
 class MockBatch extends Mock implements WriteBatch {}
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  
   group('FirebaseWriteBatch', () {
     final firestore = MockFirestore();
     final batch = MockBatch();

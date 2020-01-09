@@ -2,6 +2,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:autodo/repositories/repositories.dart';
 import 'package:autodo/blocs/blocs.dart';
@@ -39,6 +40,7 @@ void main() {
         build: () {
           final authRepository = MockAuthRepository();
           when(authRepository.isSignedIn()).thenAnswer((_) async => true);
+          SharedPreferences.setMockInitialValues({'trialUserLoggedIn': false});
           return AuthenticationBloc(userRepository: authRepository);
         },
         act: (bloc) async => bloc.add(AppStarted()),
