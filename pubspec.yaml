@@ -22,7 +22,7 @@ dependencies:
   intl: ^0.16.0
   cloud_firestore: ^0.12.9
   firebase_auth: any
-  shared_preferences: ^0.5.3
+  shared_preferences: ^0.5.6
   flutter_typeahead: ^1.6.1
   flutter_local_notifications: ^0.8.4 
   url_launcher: ^5.2.3

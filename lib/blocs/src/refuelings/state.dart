@@ -19,7 +19,7 @@ class RefuelingsLoaded extends RefuelingsState {
   List<Object> get props => [refuelings];
 
   @override
-  String toString() => 'RefuelingsLoaded { todos: $refuelings }';
+  String toString() => 'RefuelingsLoaded { refuelings: $refuelings }';
 }
 
 class RefuelingsNotLoaded extends RefuelingsState {}

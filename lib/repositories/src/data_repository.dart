@@ -13,6 +13,8 @@ abstract class DataRepository extends Equatable {
 
   Stream<List<Todo>> todos();
 
+  Future<List<Todo>> getCurrentTodos();
+
   Future<void> updateTodo(Todo todo);
 
   FutureOr<WriteBatchWrapper> startTodoWriteBatch();
@@ -22,7 +24,9 @@ abstract class DataRepository extends Equatable {
 
   Future<void> deleteRefueling(Refueling refueling);
 
-  Stream<List<Refueling>> refuelings();
+  Stream<List<Refueling>> refuelings([bool forceRefresh]);
+
+  Future<List<Refueling>> getCurrentRefuelings();
 
   Future<void> updateRefueling(Refueling refueling);
 

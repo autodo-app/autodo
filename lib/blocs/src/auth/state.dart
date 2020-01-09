@@ -9,18 +9,34 @@ abstract class AuthenticationState extends Equatable {
 
 class Uninitialized extends AuthenticationState {}
 
-class Authenticated extends AuthenticationState {
+abstract class Authenticated extends AuthenticationState {
+  const Authenticated();
+}
+
+class RemoteAuthenticated extends Authenticated {
   final String displayName, uuid;
   final bool newUser;
 
-  const Authenticated(this.displayName, this.uuid, this.newUser);
+  const RemoteAuthenticated(this.displayName, this.uuid, this.newUser);
 
   @override
   List<Object> get props => [displayName, uuid, newUser];
 
   @override
   String toString() =>
-      'Authenticated { displayName: $displayName, uuid: $uuid, newUser: $newUser }';
+      'RemoteAuthenticated { displayName: $displayName, uuid: $uuid, newUser: $newUser }';
+}
+
+class LocalAuthenticated extends Authenticated {
+  final bool newUser;
+
+  const LocalAuthenticated(this.newUser);
+
+  @override 
+  List<Object> get props => [newUser];
+
+  @override 
+  toString() => 'LocalAuthenticated { newUser: $newUser }';
 }
 
 class Unauthenticated extends AuthenticationState {

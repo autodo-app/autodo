@@ -1,3 +1,4 @@
+import 'package:autodo/blocs/blocs.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class AuthenticationEvent extends Equatable {
@@ -28,3 +29,5 @@ class LogOut extends AuthenticationEvent {}
 class DeletedUser extends AuthenticationEvent {}
 
 class SignInWithGoogle extends AuthenticationEvent {}
+
+class TrialUserSignedUp extends AuthenticationEvent {}

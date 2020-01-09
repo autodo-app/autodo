@@ -46,6 +46,11 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
   }
 
   @override
+  Future<List<Todo>> getCurrentTodos() async {
+    return todos().first;
+  }
+
+  @override
   Future<void> updateTodo(Todo update) {
     return _todos
         .document(update.id)
@@ -69,12 +74,17 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
   }
 
   @override
-  Stream<List<Refueling>> refuelings() {
+  Stream<List<Refueling>> refuelings([bool forceRefresh]) {
     return _refuelings.snapshots().map((snapshot) {
       return snapshot.documents
           .map((doc) => Refueling.fromEntity(RefuelingEntity.fromSnapshot(doc)))
           .toList();
     });
+  }
+
+  @override 
+  Future<List<Refueling>> getCurrentRefuelings() async {
+    return refuelings().first; 
   }
 
   @override

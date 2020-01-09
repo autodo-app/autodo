@@ -19,10 +19,12 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       : assert(authenticationBloc != null),
         _authenticationBloc = authenticationBloc,
         _firestoreInstance = firestoreInstance ?? Firestore.instance {
-    _authSubscription = _authenticationBloc.listen((state) {
-      if (state is Authenticated) {
-        add(UserLoggedIn(state.uuid, state.newUser));
-      } else if (state is Unauthenticated) {
+    _authSubscription = _authenticationBloc.listen((authState) {
+      if (authState is RemoteAuthenticated) {
+        add(UserLoggedIn(authState.uuid, authState.newUser));
+      } else if (!(state is DbLoaded) && authState is LocalAuthenticated) {
+        add(TrialLogin(false));
+      } else if (authState is Unauthenticated) {
         add(UserLoggedOut());
       }
     });
@@ -55,8 +57,9 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
   }
 
   Stream<DatabaseState> _mapTrialLoginToState(event) async* {
-    final repo = SembastDataRepository();
-    yield DbLoaded(repo, true);
+    final repo = await SembastDataRepository(createDb: event.newUser);
+    await repo.load();
+    yield DbLoaded(repo, event.newUser);
   }
 
   @override

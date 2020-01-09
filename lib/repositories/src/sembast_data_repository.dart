@@ -32,30 +32,34 @@ class SembastDataRepository extends Equatable implements DataRepository {
     StreamController<int>.broadcast();
   final Completer<Database> dbCompleter = Completer<Database>();
 
-  Future<Database> openDb() async {
+  Future<Database> openDb(createDb) async {
     final path = await getApplicationDocumentsDirectory();
     final filePath = path.path + dbPath;
-    return dbFactory.openDatabase(filePath);
+    if (createDb) {
+      return dbFactory.openDatabase(filePath, mode: DatabaseMode.create);
+    } else {
+      return dbFactory.openDatabase(filePath, mode: DatabaseMode.existing);
+    }
   }
 
   SembastDataRepository({
+    createDb,
     dbFactory,
     this.dbPath = 'sample.db'
   }) : this.dbFactory = dbFactory ?? databaseFactoryIo {
-    dbCompleter.complete(openDb());
+    dbCompleter.complete(openDb(createDb));
   }
 
   Future<Database> get db => dbCompleter.future;
 
-  Future<List<Todo>> todoList() async {
-    var list = await _todos.find(await db);
-    return list.map((snap) => Todo.fromEntity(TodoEntity.fromRecord(snap))).toList();
-  } 
+  Future<void> load() async {
+    await refuelingStreamUpdate();
+  }
 
   @override 
   Future<void> addNewTodo(Todo todo) async {
     await _todos.add(await db, todo.toEntity().toDocument());
-    _todosStream.add(await todoList());
+    _todosStream.add(await getCurrentTodos());
   }
 
   @override 
@@ -64,18 +68,23 @@ class SembastDataRepository extends Equatable implements DataRepository {
       await db, 
       todo.toEntity().toDocument(), 
       finder: Finder(filter: Filter.byKey(todo.id)));
-    _todosStream.add(await todoList());
+    _todosStream.add(await getCurrentTodos());
   }
 
   @override 
   Future<void> deleteTodo(Todo todo) async {
     await _todos.delete(await db, finder: Finder(filter: Filter.byKey(todo.id)));
-    _todosStream.add(await todoList());
+    _todosStream.add(await getCurrentTodos());
   }
 
   @override 
   Stream<List<Todo>> todos() {
     return _todosStream.stream;
+  }
+
+  Future<List<Todo>> getCurrentTodos() async {
+    var list = await _todos.find(await db);
+    return list.map((snap) => Todo.fromEntity(TodoEntity.fromRecord(snap))).toList();
   }
 
   @override
@@ -84,16 +93,14 @@ class SembastDataRepository extends Equatable implements DataRepository {
   }
 
   // Refuelings
-
-  Future<List<Refueling>> refuelingList() async {
-    final _db = await db;
-    var list = await _refuelings.find(_db, finder: Finder(sortOrders: [SortOrder('mileage')]));
-    print('list $list db $db');
+  @override
+  Future<List<Refueling>> getCurrentRefuelings() async {
+    var list = await _refuelings.find(await db, finder: Finder(sortOrders: [SortOrder('mileage')]));
     return list.map((snap) => Refueling.fromEntity(RefuelingEntity.fromRecord(snap))).toList();
   }
 
-  void refuelingStreamUpdate() async {
-    _refuelingsStream.add(await refuelingList());
+  Future<void> refuelingStreamUpdate() async {
+    _refuelingsStream.add(await getCurrentRefuelings());
   } 
 
   @override 
@@ -108,18 +115,19 @@ class SembastDataRepository extends Equatable implements DataRepository {
       await db, 
       refueling.toEntity().toDocument(), 
       finder: Finder(filter: Filter.byKey(refueling.id)));
-    _refuelingsStream.add(await refuelingList());
+    refuelingStreamUpdate();
   }
 
   @override 
   Future<void> deleteRefueling(Refueling refueling) async {
     await _refuelings.delete(await db, finder: Finder(filter: Filter.byKey(refueling.id)));
-    _refuelingsStream.add(await refuelingList());
+    refuelingStreamUpdate();
   }
 
   @override 
-  Stream<List<Refueling>> refuelings() {
-    return _refuelingsStream.stream;
+  Stream<List<Refueling>> refuelings([bool forceRefresh]) async* {
+    await refuelingStreamUpdate(); 
+    yield* _refuelingsStream.stream;
   }
 
   @override

@@ -22,7 +22,6 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
         _dbBloc = dbBloc {
     _dataSubscription = _dbBloc.listen((state) {
       if (state is DbLoaded) {
-        print('aslsdf');
         add(LoadRefuelings());
       }
     });
@@ -37,11 +36,9 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
 
   @override
   Stream<RefuelingsState> mapEventToState(RefuelingsEvent event) async* {
-    print('salkdfja');
     if (event is LoadRefuelings) {
       yield* _mapLoadRefuelingsToState();
     } else if (event is AddRefueling) {
-      print('evsa');
       yield* _mapAddRefuelingToState(event);
     } else if (event is UpdateRefueling) {
       yield* _mapUpdateRefuelingToState(event);
@@ -51,10 +48,8 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
   }
 
   Future<Refueling> _findLatestRefueling(Refueling refueling) async {
-    var refuelings = await repo
-          .refuelings()
-          .first
-          .timeout(Duration(milliseconds: 200), onTimeout: () => []);
+    List<Refueling> refuelings = await repo.getCurrentRefuelings()
+        .timeout(Duration(milliseconds: 200), onTimeout: () => []);
 
     int smallestDiff = MAX_MPG;
     Refueling out;
@@ -73,23 +68,13 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
 
   Stream<RefuelingsState> _mapLoadRefuelingsToState() async* {
     try {
-      final refuelings = await repo
-          .refuelings()
-          .first
-          .timeout(Duration(seconds: 1), onTimeout: () => null);
-      if (refuelings != null) {
-        yield RefuelingsLoaded(refuelings);
-      } else {
-        yield RefuelingsLoaded([]);
-      }
+      final refuelings = await repo.getCurrentRefuelings()
+        .timeout(Duration(milliseconds: 200), onTimeout: () => []);
+      yield RefuelingsLoaded(refuelings);
     } catch (e) {
       print(e);
       yield RefuelingsNotLoaded();
     }
-    // _dataSubscription?.cancel();
-    // _dataSubscription = _dataRepository.refuelings().listen(
-    //   (refuelings) => add(LoadRefuelings(refuelings)),
-    // );
   }
 
   Stream<RefuelingsState> _mapAddRefuelingToState(AddRefueling event) async* {
