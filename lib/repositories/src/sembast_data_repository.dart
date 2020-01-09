@@ -32,9 +32,12 @@ class SembastDataRepository extends Equatable implements DataRepository {
     StreamController<int>.broadcast();
   final Completer<Database> dbCompleter = Completer<Database>();
 
-  Future<Database> openDb(createDb) async {
+  Future<String> _getFullFilePath() async {
     final path = await getApplicationDocumentsDirectory();
-    final filePath = path.path + dbPath;
+    return path.path + dbPath;
+  }
+  Future<Database> openDb(createDb) async {
+    final filePath = await _getFullFilePath();
     if (createDb) {
       return dbFactory.openDatabase(filePath, mode: DatabaseMode.create);
     } else {
@@ -141,15 +144,19 @@ class SembastDataRepository extends Equatable implements DataRepository {
 
   // Cars
 
-  Future<List<Car>> carList() async {
+  Future<List<Car>> getCurrentCars() async {
     var list = await _cars.find(await db, finder: Finder(sortOrders: [SortOrder('mileage')]));
     return list.map((snap) => Car.fromEntity(CarEntity.fromRecord(snap))).toList();
   } 
 
+  Future<void> carStreamUpdate() async {
+    _carsStream.add(await getCurrentCars());
+  }
+
   @override 
   Future<void> addNewCar(Car car) async {
     await _cars.add(await db, car.toEntity().toDocument());
-    _carsStream.add(await carList());
+    carStreamUpdate();
   }
 
   @override 
@@ -158,13 +165,13 @@ class SembastDataRepository extends Equatable implements DataRepository {
       await db, 
       car.toEntity().toDocument(), 
       finder: Finder(filter: Filter.byKey(car.id)));
-    _carsStream.add(await carList());
+    carStreamUpdate();
   }
 
   @override 
   Future<void> deleteCar(Car car) async {
     await _cars.delete(await db, finder: Finder(filter: Filter.byKey(car.id)));
-    _carsStream.add(await carList());
+    carStreamUpdate();
   }
 
   @override 
@@ -174,24 +181,24 @@ class SembastDataRepository extends Equatable implements DataRepository {
 
   @override
   FutureOr<WriteBatchWrapper> startCarWriteBatch() async {
-    return SembastWriteBatch(database: await db, store: _cars);
+    return SembastWriteBatch(database: await db, store: _cars, streamControllerUpdate: carStreamUpdate);
   }
 
   // Repeats
 
-  Future<List<Repeat>> repeatList() async {
+  Future<List<Repeat>> getCurrentRepeats() async {
     var list = await _repeats.find(await db);
     return list.map((snap) => Repeat.fromEntity(RepeatEntity.fromRecord(snap))).toList();
   } 
 
   Future<void> _repeatsUpdateStream() async {
-    _repeatsStream.add(await repeatList());
+    _repeatsStream.add(await getCurrentRepeats());
   }
 
   @override 
   Future<List<Repeat>> addNewRepeat(Repeat repeat) async {
     await _repeats.add(await db, repeat.toEntity().toDocument());
-    _repeatsStream.add(await repeatList());
+    _repeatsUpdateStream();
     var list = await _repeats.find(await db);
     return list.map((snap) => Repeat.fromEntity(RepeatEntity.fromRecord(snap))).toList();
   }
@@ -202,13 +209,13 @@ class SembastDataRepository extends Equatable implements DataRepository {
       await db, 
       repeat.toEntity().toDocument(), 
       finder: Finder(filter: Filter.byKey(repeat.id)));
-    _repeatsStream.add(await repeatList());
+    _repeatsUpdateStream();
   }
 
   @override 
   Future<void> deleteRepeat(Repeat repeat) async {
     await _repeats.delete(await db, finder: Finder(filter: Filter.byKey(repeat.id)));
-    _repeatsStream.add(await repeatList());
+    _repeatsUpdateStream();
   }
 
   @override 
@@ -224,6 +231,10 @@ class SembastDataRepository extends Equatable implements DataRepository {
   @override 
   Stream<int> notificationID() {
     return _notificationIdStream.stream;
+  }
+
+  Future<void> deleteDb() async {
+    dbFactory.deleteDatabase(await _getFullFilePath());
   }
 
   @override 

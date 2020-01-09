@@ -39,6 +39,8 @@ abstract class DataRepository extends Equatable {
 
   Stream<List<Car>> cars();
 
+  Future<List<Car>> getCurrentCars();
+
   Future<void> updateCar(Car car);
 
   FutureOr<WriteBatchWrapper> startCarWriteBatch();
@@ -49,6 +51,8 @@ abstract class DataRepository extends Equatable {
   Future<void> deleteRepeat(Repeat repeat);
 
   Stream<List<Repeat>> repeats();
+
+  Future<List<Repeat>> getCurrentRepeats();
 
   Future<void> updateRepeat(Repeat repeat);
 

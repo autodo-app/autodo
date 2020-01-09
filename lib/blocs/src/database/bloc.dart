@@ -22,7 +22,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
     _authSubscription = _authenticationBloc.listen((authState) {
       if (authState is RemoteAuthenticated) {
         add(UserLoggedIn(authState.uuid, authState.newUser));
-      } else if (!(state is DbLoaded) && authState is LocalAuthenticated) {
+      } else if (((state is DbNotLoaded) || (state is DbUninitialized)) && authState is LocalAuthenticated) {
         add(TrialLogin(false));
       } else if (authState is Unauthenticated) {
         add(UserLoggedOut());
@@ -53,12 +53,21 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
   }
 
   Stream<DatabaseState> _mapUserLoggedOutToState(event) async* {
+    if (state is DbLoaded && (state as DbLoaded).repository is SembastDataRepository) {
+      await ((state as DbLoaded).repository as SembastDataRepository).deleteDb();
+    }
     yield DbNotLoaded();
   }
 
   Stream<DatabaseState> _mapTrialLoginToState(event) async* {
+    if (state is DbLoaded) {
+      print('ignoring outdated trial login event');
+      return;
+    }
+    print('initializing repo');
     final repo = await SembastDataRepository(createDb: event.newUser);
     await repo.load();
+    print('repo initialized');
     yield DbLoaded(repo, event.newUser);
   }
 

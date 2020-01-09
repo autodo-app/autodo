@@ -119,6 +119,11 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
     });
   }
 
+  @override 
+  Future<List<Car>> getCurrentCars() async {
+    return cars().first;
+  }
+
   @override
   Future<void> updateCar(Car car) {
     return _cars.document(car.id).updateData(car.toEntity().toDocument());
@@ -151,6 +156,11 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
           .map((doc) => Repeat.fromEntity(RepeatEntity.fromSnapshot(doc)))
           .toList();
     });
+  }
+
+  @override 
+  Future<List<Repeat>> getCurrentRepeats() async {
+    return repeats().first;
   }
 
   @override

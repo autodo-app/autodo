@@ -21,9 +21,9 @@ class FirebaseWriteBatch extends Equatable implements WriteBatchWrapper {
   setData(dynamic data) => _batch.setData(_collection.document(), data);
 
   @override
-  commit() {
+  Future<void> commit() async {
     try {
-      _batch.commit();
+      await _batch.commit();
     } on PlatformException catch (e) {
       print(e);
       if (e.code == "Error performing commit" &&

@@ -5,5 +5,5 @@ abstract class WriteBatchWrapper extends Equatable {
 
   void setData(dynamic data);
 
-  void commit();
+  Future<void> commit();
 }
