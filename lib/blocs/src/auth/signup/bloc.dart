@@ -1,3 +1,17 @@
+// Copyright 2020 Jonathan Bayless
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 import 'dart:async';
 
 import 'package:autodo/repositories/repositories.dart';
@@ -12,8 +26,13 @@ import 'package:autodo/blocs/validators.dart';
 import 'event.dart';
 import 'state.dart';
 
+/// A [Bloc] used for validating and submitting the information for the 
+/// [SignupScreen].
 class SignupBloc extends Bloc<SignupEvent, SignupState> {
   AuthRepository _authRepository;
+
+  /// A flag that determines whether a verification email will be sent to the 
+  /// user that is signing up.
   final bool verifyEmail;
 
   SignupBloc({@required authRepository, this.verifyEmail = kReleaseMode})
@@ -23,6 +42,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
   @override
   SignupState get initialState => SignupEmpty();
 
+  /// Debounces incoming events to prevent the validator from running too often.
   @override
   Stream<SignupState> transformEvents(
     Stream<SignupEvent> events,
@@ -39,6 +59,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
         .transformEvents(nonDebounceStream.mergeWith([debounceStream]), next);
   }
 
+  /// Takes a [SignupEvent] as an input and outputs a [SignupState].
   @override
   Stream<SignupState> mapEventToState(SignupEvent event) async* {
     if (event is SignupEmailChanged) {

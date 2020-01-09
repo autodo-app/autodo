@@ -1,3 +1,17 @@
+// Copyright 2020 Jonathan Bayless
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 import 'dart:async';
 
 import 'package:autodo/repositories/repositories.dart';
@@ -12,9 +26,20 @@ import 'package:autodo/blocs/validators.dart';
 import 'event.dart';
 import 'state.dart';
 
+/// A [Bloc] used for handling the logic of the [LoginScreen] GUI.
+/// 
+/// This Bloc is intended to have an [AuthenticationBloc] as a parent that is 
+/// listening to the same [authRepository] as this Bloc.
+/// 
+/// This Bloc handles the login form validation and saving when interacting with
+/// the GUI, and is responsible for delegating the proper login action to the 
+/// [authRepository] upon submission of the [LoginForm].
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   AuthRepository _authRepository;
 
+  /// Creates a LoginBloc.
+  /// 
+  /// The [authRepository] parameter must be non-null.
   LoginBloc({@required authRepository})
       : assert(authRepository != null),
         _authRepository = authRepository;
@@ -22,6 +47,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   @override
   LoginState get initialState => LoginEmpty();
 
+  /// Debounces the input events.
+  /// 
+  /// This is to avoid trying to update the results of the validator in the GUI 
+  /// too quickly.
   @override
   Stream<LoginState> transformEvents(
     Stream<LoginEvent> events,
@@ -38,6 +67,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         .transformEvents(nonDebounceStream.mergeWith([debounceStream]), next);
   }
 
+  /// Transforms an input of [LoginEvent] to an output of [LoginState].
   @override
   Stream<LoginState> mapEventToState(LoginEvent event) async* {
     if (event is LoginEmailChanged) {
