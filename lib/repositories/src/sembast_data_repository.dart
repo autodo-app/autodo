@@ -37,14 +37,25 @@ class SembastDataRepository extends Equatable implements DataRepository {
 
   Future<String> _getFullFilePath() async {
     final path = await pathProvider();
-    return path.path + dbPath;
+    return path.path + '/' + dbPath;
   }
   Future<Database> openDb(createDb) async {
     final filePath = await _getFullFilePath();
     if (createDb) {
-      return dbFactory.openDatabase(filePath, mode: DatabaseMode.create);
+      await dbFactory.deleteDatabase(await _getFullFilePath());
+      final db = await dbFactory.openDatabase(filePath, mode: DatabaseMode.create);
+      return db;
     } else {
-      return dbFactory.openDatabase(filePath, mode: DatabaseMode.existing);
+      try {
+        final db = await dbFactory.openDatabase(filePath, mode: DatabaseMode.existing);
+        return db;
+      } on DatabaseException catch (e) {
+        print(e);
+        // Just create the db when we can't find an existing one? 
+        // not sure how to best handle this scenario...
+        return dbFactory.openDatabase(filePath, mode: DatabaseMode.create);
+      }
+      
     }
   }
 
@@ -52,8 +63,9 @@ class SembastDataRepository extends Equatable implements DataRepository {
     @required createDb,
     dbFactory,
     this.dbPath = 'sample.db',
-    this.pathProvider = getApplicationDocumentsDirectory
-  }) : this.dbFactory = dbFactory ?? databaseFactoryIo {
+    pathProvider
+  }) : this.dbFactory = dbFactory ?? databaseFactoryIo, 
+      this.pathProvider = pathProvider ?? getApplicationDocumentsDirectory {
     dbCompleter.complete(openDb(createDb));
   }
 
@@ -238,7 +250,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
   }
 
   Future<void> deleteDb() async {
-    dbFactory.deleteDatabase(await _getFullFilePath());
+    await dbFactory.deleteDatabase(await _getFullFilePath());
   }
 
   @override 

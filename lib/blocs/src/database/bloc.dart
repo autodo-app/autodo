@@ -25,7 +25,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       if (authState is RemoteAuthenticated) {
         add(UserLoggedIn(authState.uuid, authState.newUser));
       } else if (((state is DbNotLoaded) || (state is DbUninitialized)) && authState is LocalAuthenticated) {
-        add(TrialLogin(false));
+        add(TrialLogin(authState.newUser));
       } else if (authState is Unauthenticated) {
         add(UserLoggedOut());
       }
@@ -56,6 +56,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
 
   Stream<DatabaseState> _mapUserLoggedOutToState(event) async* {
     if (state is DbLoaded && (state as DbLoaded).repository is SembastDataRepository) {
+      print('deleting db');
       await ((state as DbLoaded).repository as SembastDataRepository).deleteDb();
     }
     yield DbNotLoaded();
