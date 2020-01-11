@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:autodo/repositories/repositories.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
@@ -31,9 +33,10 @@ class SembastDataRepository extends Equatable implements DataRepository {
   final StreamController<int> _notificationIdStream = 
     StreamController<int>.broadcast();
   final Completer<Database> dbCompleter = Completer<Database>();
+  Future<Directory> Function() pathProvider;
 
   Future<String> _getFullFilePath() async {
-    final path = await getApplicationDocumentsDirectory();
+    final path = await pathProvider();
     return path.path + dbPath;
   }
   Future<Database> openDb(createDb) async {
@@ -46,9 +49,10 @@ class SembastDataRepository extends Equatable implements DataRepository {
   }
 
   SembastDataRepository({
-    createDb,
+    @required createDb,
     dbFactory,
-    this.dbPath = 'sample.db'
+    this.dbPath = 'sample.db',
+    this.pathProvider = getApplicationDocumentsDirectory
   }) : this.dbFactory = dbFactory ?? databaseFactoryIo {
     dbCompleter.complete(openDb(createDb));
   }

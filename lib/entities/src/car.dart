@@ -56,8 +56,8 @@ class CarEntity extends Equatable {
         snap.data["distanceRateHistory"]
             ?.map((p) => DistanceRatePoint(
                   (p['date'] == null)
-                      ? DateTime.fromMillisecondsSinceEpoch(p['date'])
-                      : null,
+                      ? null
+                      : DateTime.fromMillisecondsSinceEpoch(p['date']),
                   p['distanceRate'],
                 ))
             ?.toList()
@@ -79,8 +79,8 @@ class CarEntity extends Equatable {
         snap.value["distanceRateHistory"]
             ?.map((p) => DistanceRatePoint(
                   (p['date'] == null)
-                      ? DateTime.fromMillisecondsSinceEpoch(p['date'])
-                      : null,
+                      ? null
+                      : DateTime.fromMillisecondsSinceEpoch(p['date']),
                   p['distanceRate'],
                 ))
             ?.toList()

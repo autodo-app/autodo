@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:autodo/repositories/src/sembast_data_repository.dart';
 import 'package:bloc/bloc.dart';
@@ -14,8 +15,9 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
   final Firestore _firestoreInstance;
   AuthenticationBloc _authenticationBloc;
   StreamSubscription _authSubscription;
+  Future<Directory> Function() pathProvider;
 
-  DatabaseBloc({firestoreInstance, @required authenticationBloc})
+  DatabaseBloc({firestoreInstance, @required authenticationBloc, this.pathProvider})
       : assert(authenticationBloc != null),
         _authenticationBloc = authenticationBloc,
         _firestoreInstance = firestoreInstance ?? Firestore.instance {
@@ -64,10 +66,8 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       print('ignoring outdated trial login event');
       return;
     }
-    print('initializing repo');
-    final repo = await SembastDataRepository(createDb: event.newUser);
+    final repo = await SembastDataRepository(createDb: event.newUser, pathProvider: pathProvider);
     await repo.load();
-    print('repo initialized');
     yield DbLoaded(repo, event.newUser);
   }
 

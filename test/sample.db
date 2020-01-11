@@ -1,5 +1,0 @@
-{"version":1,"sembast":1}
-{"key":1,"store":"todos","value":{"name":null,"carName":null,"repeatName":null,"dueState":null,"dueMileage":null,"notificationID":null,"completed":null,"estimatedDueDate":null,"completedDate":null,"dueDate":null}}
-{"key":1,"store":"refuelings","value":{"carName":"test","mileage":1000,"date":0,"amount":20.0,"cost":20.0,"carColor":null,"efficiency":null,"efficiencyColor":null}}
-{"key":1,"store":"cars","value":{"name":null,"mileage":null,"numRefuelings":0,"averageEfficiency":0.0,"distanceRate":0.0,"lastMileageUpdate":-68400000,"distanceRateHistory":[]}}
-{"key":1,"store":"repeats","value":{"name":null,"mileageInterval":null,"dateInterval":null,"cars":null}}
