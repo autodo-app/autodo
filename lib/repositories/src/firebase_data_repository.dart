@@ -82,9 +82,9 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
     });
   }
 
-  @override 
+  @override
   Future<List<Refueling>> getCurrentRefuelings() async {
-    return refuelings().first; 
+    return refuelings().first;
   }
 
   @override
@@ -119,7 +119,7 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
     });
   }
 
-  @override 
+  @override
   Future<List<Car>> getCurrentCars() async {
     return cars().first;
   }
@@ -158,7 +158,7 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
     });
   }
 
-  @override 
+  @override
   Future<List<Repeat>> getCurrentRepeats() async {
     return repeats().first;
   }

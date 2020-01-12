@@ -126,31 +126,30 @@ class App extends StatelessWidget {
     Widget homeProvider = HomeScreenProvider(integrationTest: integrationTest);
     Widget welcomeProvider = WelcomeScreenProvider();
     return MaterialApp(
-        title: 'auToDo',
-        routes: {
-          "/": (context) =>
-              BlocBuilder<AuthenticationBloc, AuthenticationState>(
-                // Just here as the splitter between home screen and login screen
-                builder: (context, state) {
-                  if (state is Authenticated) {
-                    return homeProvider;
-                  } else if (state is Unauthenticated) {
-                    return welcomeProvider;
-                  } else {
-                    return LoadingIndicator();
-                  }
-                },
-              ),
-          AutodoRoutes.home: (context) => homeProvider,
-          AutodoRoutes.welcome: (context) => welcomeProvider,
-          AutodoRoutes.signupScreen: (context) =>
-              SignupScreenProvider(authRepository: _authRepository),
-          AutodoRoutes.loginScreen: (context) =>
-              LoginScreenProvider(authRepository: _authRepository),
-          AutodoRoutes.settingsScreen: (context) => SettingsScreen(),
-        },
-        theme: _theme,
-        debugShowCheckedModeBanner: false,
-      );
+      title: 'auToDo',
+      routes: {
+        "/": (context) => BlocBuilder<AuthenticationBloc, AuthenticationState>(
+              // Just here as the splitter between home screen and login screen
+              builder: (context, state) {
+                if (state is Authenticated) {
+                  return homeProvider;
+                } else if (state is Unauthenticated) {
+                  return welcomeProvider;
+                } else {
+                  return LoadingIndicator();
+                }
+              },
+            ),
+        AutodoRoutes.home: (context) => homeProvider,
+        AutodoRoutes.welcome: (context) => welcomeProvider,
+        AutodoRoutes.signupScreen: (context) =>
+            SignupScreenProvider(authRepository: _authRepository),
+        AutodoRoutes.loginScreen: (context) =>
+            LoginScreenProvider(authRepository: _authRepository),
+        AutodoRoutes.settingsScreen: (context) => SettingsScreen(),
+      },
+      theme: _theme,
+      debugShowCheckedModeBanner: false,
+    );
   }
 }

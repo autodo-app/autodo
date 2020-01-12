@@ -72,23 +72,31 @@ void main() {
       final authBloc = MockAuthenticationBloc();
       // whenListen(authBloc, Stream.fromIterable([Unauthenticated()]));
       return DatabaseBloc(
-          firestoreInstance: mockFirestore, authenticationBloc: authBloc, pathProvider: pathProvider);
+          firestoreInstance: mockFirestore,
+          authenticationBloc: authBloc,
+          pathProvider: pathProvider);
     }, act: (bloc) async {
       bloc.add(TrialLogin(true));
     }, expect: [
       DbUninitialized(),
-      DbLoaded(SembastDataRepository(createDb: true, pathProvider: pathProvider), true),
+      DbLoaded(
+          SembastDataRepository(createDb: true, pathProvider: pathProvider),
+          true),
     ]);
     blocTest('TrialLogin from authBloc', build: () {
       final authBloc = MockAuthenticationBloc();
       whenListen(authBloc, Stream.fromIterable([LocalAuthenticated(false)]));
       return DatabaseBloc(
-          firestoreInstance: mockFirestore, authenticationBloc: authBloc, pathProvider: pathProvider);
-    // }, act: (bloc) async {
+          firestoreInstance: mockFirestore,
+          authenticationBloc: authBloc,
+          pathProvider: pathProvider);
+      // }, act: (bloc) async {
       // bloc.add(TrialLogin(true));
     }, expect: [
       DbUninitialized(),
-      DbLoaded(SembastDataRepository(createDb: false, pathProvider: pathProvider), false),
+      DbLoaded(
+          SembastDataRepository(createDb: false, pathProvider: pathProvider),
+          false),
     ]);
   });
 }

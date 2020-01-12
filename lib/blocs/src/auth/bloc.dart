@@ -1,5 +1,5 @@
 // Copyright 2020 Jonathan Bayless
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -22,24 +22,24 @@ import 'event.dart';
 import 'state.dart';
 
 /// A [Bloc] used for determining if there is an active, authenticated user.
-/// 
-/// This is intended to be at the highest level of the Bloc hierarchy, as the 
-/// behavior of most of the other Blocs in the system rely on the assumption 
+///
+/// This is intended to be at the highest level of the Bloc hierarchy, as the
+/// behavior of most of the other Blocs in the system rely on the assumption
 /// that there is a user logged in.
-/// 
-/// The AuthenticationBloc is intended to perform the action of logging out 
+///
+/// The AuthenticationBloc is intended to perform the action of logging out
 /// and deleting users, but not logging in or signing in. The intent behind this
-/// distinction is to provide the logout/deletion actions to the home screen 
-/// presentation layers as they do not warrant their own Blocs. The signup and 
+/// distinction is to provide the logout/deletion actions to the home screen
+/// presentation layers as they do not warrant their own Blocs. The signup and
 /// login actions are provided by the [SignupBloc] and [LoginBloc] respectively.
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   final AuthRepository _userRepository;
   static const String trialUserKey = 'trialUserLoggedIn';
 
-  /// Creates an AuthenticationBloc. 
-  /// 
-  /// The [userRepository] parameter must be non-null. The [userRepository] 
+  /// Creates an AuthenticationBloc.
+  ///
+  /// The [userRepository] parameter must be non-null. The [userRepository]
   /// is responsible for providing a stream of changes to the authentication
   /// database that will be translated into [AuthenticationEvent]s and then
   /// [AuthenticationState]s.
@@ -63,10 +63,10 @@ class AuthenticationBloc
   @override
   AuthenticationState get initialState => Uninitialized();
 
-  /// Transforms an input of type [AuthenticationEvent] into an output of type 
+  /// Transforms an input of type [AuthenticationEvent] into an output of type
   /// [AuthenticationState].
-  /// 
-  /// The behavior of the Bloc varies based on the child class of 
+  ///
+  /// The behavior of the Bloc varies based on the child class of
   /// [AuthenticationEvent] that is given.
   @override
   Stream<AuthenticationState> mapEventToState(
@@ -88,7 +88,7 @@ class AuthenticationBloc
   }
 
   /// Transforms an [AppStarted] event into an [AuthenticationState].
-  /// 
+  ///
   /// Under normal conditions, this checks the user repository for a logged in
   /// user and collects the necesary information for the user. In an integration
   /// test, however, this is responsible for creating a dummy user.
@@ -120,8 +120,8 @@ class AuthenticationBloc
   }
 
   /// Responds to a [LoggedIn] event with an [Authenticated] state.
-  /// 
-  /// Always yields [Authenticated]. This differs from the [SignedUp] event 
+  ///
+  /// Always yields [Authenticated]. This differs from the [SignedUp] event
   /// handler simply by passing a corresponding flag to the yielded state.
   Stream<AuthenticationState> _mapLoggedInToState() async* {
     var _email = await _userRepository.getUserEmail();
@@ -134,8 +134,8 @@ class AuthenticationBloc
   }
 
   /// Responds to a [SignedUp] event with an [Authenticated] state.
-  /// 
-  /// Always yields [Authenticated]. This differs from the [LoggedIn] event 
+  ///
+  /// Always yields [Authenticated]. This differs from the [LoggedIn] event
   /// handler simply by passing a corresponding flag to the yielded state.
   Stream<AuthenticationState> _mapSignedUpToState() async* {
     var _email = await _userRepository.getUserEmail();
@@ -148,8 +148,8 @@ class AuthenticationBloc
   }
 
   /// Signs out the currently logged in user and yields [Unauthenticated].
-  /// 
-  /// This is responsible for the business logic of signing out, unlike the 
+  ///
+  /// This is responsible for the business logic of signing out, unlike the
   /// [LoggedIn] and [SignedUp] events to make the action more easily accessible
   /// to the home screen presentation layer.
   Stream<AuthenticationState> _mapLogOutToState() async* {
@@ -157,10 +157,10 @@ class AuthenticationBloc
     _userRepository.signOut();
   }
 
-  /// Deletes all data associated with the currently logged in user and yields 
+  /// Deletes all data associated with the currently logged in user and yields
   /// [Unauthenticated].
-  /// 
-  /// This is responsible for the business logic of signing out, unlike the 
+  ///
+  /// This is responsible for the business logic of signing out, unlike the
   /// [LoggedIn] and [SignedUp] events to make the action more easily accessible
   /// to the home screen presentation layer.
   Stream<AuthenticationState> _mapDeletedUserToState() async* {

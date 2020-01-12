@@ -6,6 +6,7 @@ import 'package:mockito/mockito.dart';
 import 'package:autodo/entities/entities.dart';
 
 class MockDocumentSnapshot extends Mock implements DocumentSnapshot {}
+
 class MockRecordSnapshot extends Mock implements RecordSnapshot {}
 
 void main() {

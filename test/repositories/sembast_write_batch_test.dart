@@ -48,8 +48,7 @@ void main() {
           SembastWriteBatch(
             store: StoreRef.main(),
             database: db,
-          )
-              .props,
+          ).props,
           [StoreRef.main(), db]);
     });
   });

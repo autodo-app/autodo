@@ -1,5 +1,5 @@
 // Copyright 2020 Jonathan Bayless
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -28,8 +28,8 @@ class LoginEmpty extends LoginState {}
 
 /// Indicates that there was an error with the submission of the contents of the
 /// [LoginForm].
-/// 
-/// This does not indicate a fatal error, the [errorMsg] string is displayed 
+///
+/// This does not indicate a fatal error, the [errorMsg] string is displayed
 /// as direction to the user for resolving the error.
 class LoginError extends LoginState {
   /// A description of the cause and/or resolution of the login error.
@@ -41,7 +41,7 @@ class LoginError extends LoginState {
   List<Object> get props => [];
 }
 
-/// Indicates that the [LoginBloc] has sent an action to the authentication 
+/// Indicates that the [LoginBloc] has sent an action to the authentication
 /// database and is waiting for a response.
 class LoginLoading extends LoginState {}
 
@@ -66,10 +66,10 @@ class LoginCredentialsInvalid extends LoginState {
   List<Object> get props => [];
 }
 
-/// Indicates that the contents of the [LoginForm] are properly validated and 
+/// Indicates that the contents of the [LoginForm] are properly validated and
 /// ready for submission to the authentication database.
 class LoginCredentialsValid extends LoginState {}
 
-/// The response from the authentication database indicated a successful login 
+/// The response from the authentication database indicated a successful login
 /// for the specified user.
 class LoginSuccess extends LoginState {}

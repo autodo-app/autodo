@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:autodo/entities/entities.dart';
 
 class MockDocumentSnapshot extends Mock implements DocumentSnapshot {}
+
 class MockRecordSnapshot extends Mock implements RecordSnapshot {}
 
 void main() {
@@ -57,7 +58,16 @@ void main() {
       DocumentSnapshot snap = MockDocumentSnapshot();
       when(snap.documentID).thenReturn(docID);
       when(snap.data).thenReturn(doc);
-      final refueling = RefuelingEntity(docID, 'name', 0, DateTime.fromMillisecondsSinceEpoch(0), 0.0, 0.0, Color(0), 0.0, Color(0));
+      final refueling = RefuelingEntity(
+          docID,
+          'name',
+          0,
+          DateTime.fromMillisecondsSinceEpoch(0),
+          0.0,
+          0.0,
+          Color(0),
+          0.0,
+          Color(0));
       expect(RefuelingEntity.fromSnapshot(snap), refueling);
     });
     test('fromRecord', () {
@@ -75,7 +85,16 @@ void main() {
       RecordSnapshot snap = MockRecordSnapshot();
       when(snap.key).thenReturn(docID);
       when(snap.value).thenReturn(doc);
-      final refueling = RefuelingEntity(docID, 'name', 0, DateTime.fromMillisecondsSinceEpoch(0), 0.0, 0.0, Color(0), 0.0, Color(0));
+      final refueling = RefuelingEntity(
+          docID,
+          'name',
+          0,
+          DateTime.fromMillisecondsSinceEpoch(0),
+          0.0,
+          0.0,
+          Color(0),
+          0.0,
+          Color(0));
       expect(RefuelingEntity.fromRecord(snap), refueling);
     });
   });

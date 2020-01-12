@@ -91,7 +91,7 @@ class FilteredRefuelingsBloc
       yield _shadeEfficiencyStats(
           (refuelingsBloc.state as RefuelingsLoaded).refuelings,
           (carsBloc.state as CarsLoaded).cars,
-          VisibilityFilter.all);  
+          VisibilityFilter.all);
     }
   }
 
@@ -144,13 +144,13 @@ class FilteredRefuelingsBloc
               .map((r) => r.id == updated.id ? updated : r)
               .toList();
         }
-      } 
+      }
       yield FilteredRefuelingsLoaded(updatedRefuelings, curFilter, event.cars);
     } else if (refuelingsBloc.state is RefuelingsLoaded) {
       yield _shadeEfficiencyStats(
           (refuelingsBloc.state as RefuelingsLoaded).refuelings,
           (carsBloc.state as CarsLoaded).cars,
-          VisibilityFilter.all);  
+          VisibilityFilter.all);
     }
   }
 

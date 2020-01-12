@@ -19,19 +19,19 @@ class SembastDataRepository extends Equatable implements DataRepository {
   final String dbPath;
   final DatabaseFactory dbFactory;
   StoreRef get _todos => StoreRef('todos');
-  final StreamController<List<Todo>> _todosStream = 
-    StreamController<List<Todo>>.broadcast();
+  final StreamController<List<Todo>> _todosStream =
+      StreamController<List<Todo>>.broadcast();
   StoreRef get _refuelings => StoreRef('refuelings');
-  final StreamController<List<Refueling>> _refuelingsStream = 
-    StreamController<List<Refueling>>.broadcast();
+  final StreamController<List<Refueling>> _refuelingsStream =
+      StreamController<List<Refueling>>.broadcast();
   StoreRef get _cars => StoreRef('cars');
-  final StreamController<List<Car>> _carsStream = 
-    StreamController<List<Car>>.broadcast();
+  final StreamController<List<Car>> _carsStream =
+      StreamController<List<Car>>.broadcast();
   StoreRef get _repeats => StoreRef('repeats');
-  final StreamController<List<Repeat>> _repeatsStream = 
-    StreamController<List<Repeat>>.broadcast();
-  final StreamController<int> _notificationIdStream = 
-    StreamController<int>.broadcast();
+  final StreamController<List<Repeat>> _repeatsStream =
+      StreamController<List<Repeat>>.broadcast();
+  final StreamController<int> _notificationIdStream =
+      StreamController<int>.broadcast();
   final Completer<Database> dbCompleter = Completer<Database>();
   Future<Directory> Function() pathProvider;
 
@@ -39,33 +39,32 @@ class SembastDataRepository extends Equatable implements DataRepository {
     final path = await pathProvider();
     return path.path + '/' + dbPath;
   }
+
   Future<Database> openDb(createDb) async {
     final filePath = await _getFullFilePath();
     if (createDb) {
       await dbFactory.deleteDatabase(await _getFullFilePath());
-      final db = await dbFactory.openDatabase(filePath, mode: DatabaseMode.create);
+      final db =
+          await dbFactory.openDatabase(filePath, mode: DatabaseMode.create);
       return db;
     } else {
       try {
-        final db = await dbFactory.openDatabase(filePath, mode: DatabaseMode.existing);
+        final db =
+            await dbFactory.openDatabase(filePath, mode: DatabaseMode.existing);
         return db;
       } on DatabaseException catch (e) {
         print(e);
-        // Just create the db when we can't find an existing one? 
+        // Just create the db when we can't find an existing one?
         // not sure how to best handle this scenario...
         return dbFactory.openDatabase(filePath, mode: DatabaseMode.create);
       }
-      
     }
   }
 
-  SembastDataRepository({
-    @required createDb,
-    dbFactory,
-    this.dbPath = 'sample.db',
-    pathProvider
-  }) : this.dbFactory = dbFactory ?? databaseFactoryIo, 
-      this.pathProvider = pathProvider ?? getApplicationDocumentsDirectory {
+  SembastDataRepository(
+      {@required createDb, dbFactory, this.dbPath = 'sample.db', pathProvider})
+      : this.dbFactory = dbFactory ?? databaseFactoryIo,
+        this.pathProvider = pathProvider ?? getApplicationDocumentsDirectory {
     dbCompleter.complete(openDb(createDb));
   }
 
@@ -75,35 +74,36 @@ class SembastDataRepository extends Equatable implements DataRepository {
     await refuelingStreamUpdate();
   }
 
-  @override 
+  @override
   Future<void> addNewTodo(Todo todo) async {
     await _todos.add(await db, todo.toEntity().toDocument());
     _todosStream.add(await getCurrentTodos());
   }
 
-  @override 
+  @override
   Future<void> updateTodo(Todo todo) async {
-    await _todos.update(
-      await db, 
-      todo.toEntity().toDocument(), 
-      finder: Finder(filter: Filter.byKey(todo.id)));
+    await _todos.update(await db, todo.toEntity().toDocument(),
+        finder: Finder(filter: Filter.byKey(todo.id)));
     _todosStream.add(await getCurrentTodos());
   }
 
-  @override 
+  @override
   Future<void> deleteTodo(Todo todo) async {
-    await _todos.delete(await db, finder: Finder(filter: Filter.byKey(todo.id)));
+    await _todos.delete(await db,
+        finder: Finder(filter: Filter.byKey(todo.id)));
     _todosStream.add(await getCurrentTodos());
   }
 
-  @override 
+  @override
   Stream<List<Todo>> todos() {
     return _todosStream.stream;
   }
 
   Future<List<Todo>> getCurrentTodos() async {
     var list = await _todos.find(await db);
-    return list.map((snap) => Todo.fromEntity(TodoEntity.fromRecord(snap))).toList();
+    return list
+        .map((snap) => Todo.fromEntity(TodoEntity.fromRecord(snap)))
+        .toList();
   }
 
   @override
@@ -114,137 +114,148 @@ class SembastDataRepository extends Equatable implements DataRepository {
   // Refuelings
   @override
   Future<List<Refueling>> getCurrentRefuelings() async {
-    var list = await _refuelings.find(await db, finder: Finder(sortOrders: [SortOrder('mileage')]));
-    return list.map((snap) => Refueling.fromEntity(RefuelingEntity.fromRecord(snap))).toList();
+    var list = await _refuelings.find(await db,
+        finder: Finder(sortOrders: [SortOrder('mileage')]));
+    return list
+        .map((snap) => Refueling.fromEntity(RefuelingEntity.fromRecord(snap)))
+        .toList();
   }
 
   Future<void> refuelingStreamUpdate() async {
     _refuelingsStream.add(await getCurrentRefuelings());
-  } 
+  }
 
-  @override 
+  @override
   Future<void> addNewRefueling(Refueling refueling) async {
     await _refuelings.add(await db, refueling.toEntity().toDocument());
     refuelingStreamUpdate();
   }
 
-  @override 
+  @override
   Future<void> updateRefueling(Refueling refueling) async {
-    await _refuelings.update(
-      await db, 
-      refueling.toEntity().toDocument(), 
-      finder: Finder(filter: Filter.byKey(refueling.id)));
+    await _refuelings.update(await db, refueling.toEntity().toDocument(),
+        finder: Finder(filter: Filter.byKey(refueling.id)));
     refuelingStreamUpdate();
   }
 
-  @override 
+  @override
   Future<void> deleteRefueling(Refueling refueling) async {
-    await _refuelings.delete(await db, finder: Finder(filter: Filter.byKey(refueling.id)));
+    await _refuelings.delete(await db,
+        finder: Finder(filter: Filter.byKey(refueling.id)));
     refuelingStreamUpdate();
   }
 
-  @override 
+  @override
   Stream<List<Refueling>> refuelings([bool forceRefresh]) async* {
-    await refuelingStreamUpdate(); 
+    await refuelingStreamUpdate();
     yield* _refuelingsStream.stream;
   }
 
   @override
   FutureOr<WriteBatchWrapper> startRefuelingWriteBatch() async {
     return SembastWriteBatch(
-      store: _refuelings,
-      database: await db,
-      streamControllerUpdate: refuelingStreamUpdate
-    );
+        store: _refuelings,
+        database: await db,
+        streamControllerUpdate: refuelingStreamUpdate);
   }
 
   // Cars
 
   Future<List<Car>> getCurrentCars() async {
-    var list = await _cars.find(await db, finder: Finder(sortOrders: [SortOrder('mileage')]));
-    return list.map((snap) => Car.fromEntity(CarEntity.fromRecord(snap))).toList();
-  } 
+    var list = await _cars.find(await db,
+        finder: Finder(sortOrders: [SortOrder('mileage')]));
+    return list
+        .map((snap) => Car.fromEntity(CarEntity.fromRecord(snap)))
+        .toList();
+  }
 
   Future<void> carStreamUpdate() async {
     _carsStream.add(await getCurrentCars());
   }
 
-  @override 
+  @override
   Future<void> addNewCar(Car car) async {
     await _cars.add(await db, car.toEntity().toDocument());
     carStreamUpdate();
   }
 
-  @override 
+  @override
   Future<void> updateCar(Car car) async {
-    await _cars.update(
-      await db, 
-      car.toEntity().toDocument(), 
-      finder: Finder(filter: Filter.byKey(car.id)));
+    await _cars.update(await db, car.toEntity().toDocument(),
+        finder: Finder(filter: Filter.byKey(car.id)));
     carStreamUpdate();
   }
 
-  @override 
+  @override
   Future<void> deleteCar(Car car) async {
     await _cars.delete(await db, finder: Finder(filter: Filter.byKey(car.id)));
     carStreamUpdate();
   }
 
-  @override 
+  @override
   Stream<List<Car>> cars() {
     return _carsStream.stream;
   }
 
   @override
   FutureOr<WriteBatchWrapper> startCarWriteBatch() async {
-    return SembastWriteBatch(database: await db, store: _cars, streamControllerUpdate: carStreamUpdate);
+    return SembastWriteBatch(
+        database: await db,
+        store: _cars,
+        streamControllerUpdate: carStreamUpdate);
   }
 
   // Repeats
 
   Future<List<Repeat>> getCurrentRepeats() async {
     var list = await _repeats.find(await db);
-    return list.map((snap) => Repeat.fromEntity(RepeatEntity.fromRecord(snap))).toList();
-  } 
+    return list
+        .map((snap) => Repeat.fromEntity(RepeatEntity.fromRecord(snap)))
+        .toList();
+  }
 
   Future<void> _repeatsUpdateStream() async {
     _repeatsStream.add(await getCurrentRepeats());
   }
 
-  @override 
+  @override
   Future<List<Repeat>> addNewRepeat(Repeat repeat) async {
     await _repeats.add(await db, repeat.toEntity().toDocument());
     _repeatsUpdateStream();
     var list = await _repeats.find(await db);
-    return list.map((snap) => Repeat.fromEntity(RepeatEntity.fromRecord(snap))).toList();
+    return list
+        .map((snap) => Repeat.fromEntity(RepeatEntity.fromRecord(snap)))
+        .toList();
   }
 
-  @override 
+  @override
   Future<void> updateRepeat(Repeat repeat) async {
-    await _repeats.update(
-      await db, 
-      repeat.toEntity().toDocument(), 
-      finder: Finder(filter: Filter.byKey(repeat.id)));
+    await _repeats.update(await db, repeat.toEntity().toDocument(),
+        finder: Finder(filter: Filter.byKey(repeat.id)));
     _repeatsUpdateStream();
   }
 
-  @override 
+  @override
   Future<void> deleteRepeat(Repeat repeat) async {
-    await _repeats.delete(await db, finder: Finder(filter: Filter.byKey(repeat.id)));
+    await _repeats.delete(await db,
+        finder: Finder(filter: Filter.byKey(repeat.id)));
     _repeatsUpdateStream();
   }
 
-  @override 
+  @override
   Stream<List<Repeat>> repeats() {
     return _repeatsStream.stream;
   }
 
   @override
   FutureOr<WriteBatchWrapper> startRepeatWriteBatch() async {
-    return SembastWriteBatch(database: await db, store: _repeats, streamControllerUpdate: _repeatsUpdateStream);
+    return SembastWriteBatch(
+        database: await db,
+        store: _repeats,
+        streamControllerUpdate: _repeatsUpdateStream);
   }
 
-  @override 
+  @override
   Stream<int> notificationID() {
     return _notificationIdStream.stream;
   }
@@ -253,6 +264,6 @@ class SembastDataRepository extends Equatable implements DataRepository {
     await dbFactory.deleteDatabase(await _getFullFilePath());
   }
 
-  @override 
+  @override
   List<Object> get props => [];
 }

@@ -27,9 +27,9 @@ class TrialLogin extends DatabaseEvent {
 
   const TrialLogin(this.newUser);
 
-  @override 
+  @override
   List<Object> get props => [newUser];
 
-  @override 
+  @override
   toString() => 'TrialLogin { newUser: $newUser }';
 }

@@ -27,7 +27,8 @@ void main() {
           when(dataRepository.repeats()).thenAnswer((_) => Stream.fromIterable([
                 [Repeat()]
               ]));
-          when(dataRepository.getCurrentRepeats()).thenAnswer((_) async => [Repeat()]);
+          when(dataRepository.getCurrentRepeats())
+              .thenAnswer((_) async => [Repeat()]);
           final dbBloc = MockDbBloc();
           when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
           return RepeatsBloc(dbBloc: dbBloc);
@@ -74,7 +75,8 @@ void main() {
             ]));
         final dbBloc = MockDbBloc();
         when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
-        when(dataRepository.getCurrentRepeats()).thenAnswer((_) async => [Repeat()]);
+        when(dataRepository.getCurrentRepeats())
+            .thenAnswer((_) async => [Repeat()]);
         return RepeatsBloc(dbBloc: dbBloc);
       },
       act: (bloc) async {
@@ -88,7 +90,8 @@ void main() {
             return false;
           }
         });
-        when(dataRepository.getCurrentRepeats()).thenAnswer((_) async => [Repeat(), Repeat()]);
+        when(dataRepository.getCurrentRepeats())
+            .thenAnswer((_) async => [Repeat(), Repeat()]);
         bloc.add(LoadRepeats());
       },
       expect: [
@@ -104,7 +107,8 @@ void main() {
             ]));
         final dbBloc = MockDbBloc();
         when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
-        when(dataRepository.getCurrentRepeats()).thenAnswer((_) async => [Repeat(id: '0', name: 'test')]);
+        when(dataRepository.getCurrentRepeats())
+            .thenAnswer((_) async => [Repeat(id: '0', name: 'test')]);
         return RepeatsBloc(dbBloc: dbBloc);
       },
       act: (bloc) async {
@@ -119,7 +123,8 @@ void main() {
             return false;
           }
         });
-        when(dataRepository.getCurrentRepeats()).thenAnswer((_) async => [Repeat(id: '0', name: 'abcd')]);
+        when(dataRepository.getCurrentRepeats())
+            .thenAnswer((_) async => [Repeat(id: '0', name: 'abcd')]);
         bloc.add(LoadRepeats());
       },
       expect: [
@@ -138,7 +143,8 @@ void main() {
             .thenAnswer((_) => null);
         final dbBloc = MockDbBloc();
         when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
-        when(dataRepository.getCurrentRepeats()).thenAnswer((_) async => [Repeat(id: '0')]);
+        when(dataRepository.getCurrentRepeats())
+            .thenAnswer((_) async => [Repeat(id: '0')]);
         return RepeatsBloc(dbBloc: dbBloc);
       },
       act: (bloc) async {
@@ -163,7 +169,8 @@ void main() {
             .thenAnswer((_) => mockBatch);
         when(dataRepository.repeats())
             .thenAnswer((_) => Stream.fromIterable([RepeatsBloc.defaults]));
-        when(dataRepository.getCurrentRepeats()).thenAnswer((_) async => RepeatsBloc.defaults);
+        when(dataRepository.getCurrentRepeats())
+            .thenAnswer((_) async => RepeatsBloc.defaults);
         // dynamic lambdas to effectively do nothing
         when(mockBatch.setData(dynamic)).thenAnswer((_) => ((_) => _));
         when(mockBatch.commit()).thenAnswer((_) async {});
