@@ -244,9 +244,46 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     }
   }
 
+  int _calculateNextTodo(List<Todo> pastTodos, int mileageInterval) {
+    pastTodos.sort((a, b) {
+      if (a.dueMileage < b.dueMileage) return 1;
+      else if (b.dueMileage < a.dueMileage) return -1;
+      return 0;
+    });
+    Todo latest = pastTodos.toList().last;
+    return latest.dueMileage + mileageInterval;
+  }
+
   Stream<TodosState> _mapRepeatsRefreshToState(RepeatsRefresh event) async* {
     // TODO figure out what was/wasn't updated based on metadata?
     // new repeats, updated repeats, and deleted repeats affect this
+    // TODO currently not removing todos with a deleted repeat
+    if (!(state is TodosLoaded)) return;
+
+    final todos = (state as TodosLoaded).todos;
+    List<Todo> updatedTodos = todos;
+    for (var r in event.repeats) {
+      if (todos.any((t) => (!t.completed && t.repeatName == r.name))) {
+        // redo the calculation for due date
+        Todo upcoming = todos.firstWhere((t) => (!t.completed && t.repeatName == r.name));
+        Todo updated = upcoming.copyWith(dueMileage: _calculateNextTodo(todos.where((t) => t.repeatName == r.name), r.mileageInterval));
+        updatedTodos = updatedTodos.map((t) => (t.id == updated.id) ? updated : t);
+      } else {
+        // create a new todo for every car
+        List<Car> cars = (_carsBloc.state as CarsLoaded).cars;
+        Iterable<Todo> newTodos = cars
+          .where((c) => r.cars.contains(c.name))
+          .map((c) {
+            List<Todo> pastRepeats = todos.where((t) => (t.repeatName == r.name) && (t.carName == c.name));
+            if (pastRepeats.length == 0) {
+              return Todo(name: r.name, repeatName: r.name, dueMileage: c.mileage + r.mileageInterval);
+            } else {
+              return Todo(name: r.name, repeatName: r.name, dueMileage: _calculateNextTodo(pastRepeats, r.mileageInterval));
+            }
+          });
+        updatedTodos.addAll(newTodos);
+      }
+    }
   }
 
   List sortItems(List items) {
