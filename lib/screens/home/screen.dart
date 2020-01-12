@@ -22,42 +22,43 @@ class HomeScreen extends StatelessWidget {
   // this has to be a function so that it returns a different route each time
   // the lifecycle of a MaterialPageRoute requires that it not be reused.
   final List<MaterialPageRoute> Function() fabRoutes = () => [
-    MaterialPageRoute(
-      builder: (context) => RefuelingAddEditScreen(
-        isEditing: false,
-        onSave: (m, d, a, c, n) {
-          BlocProvider.of<RefuelingsBloc>(context).add(AddRefueling(Refueling(
-            mileage: m,
-            date: d,
-            amount: a,
-            cost: c,
-            carName: n,
-          )));
-        },
-      ),
-    ),
-    MaterialPageRoute(
-        builder: (context) => TodoAddEditScreen(
-              isEditing: false,
-              onSave: (n, d, m, r, c) {
-                BlocProvider.of<TodosBloc>(context).add(AddTodo(Todo(
-                    name: n,
-                    dueDate: d,
-                    dueMileage: m,
-                    repeatName: r,
-                    carName: c,
-                    completed: false)));
-              },
-            )),
-    MaterialPageRoute(
-        builder: (context) => RepeatAddEditScreen(
-              isEditing: false,
-              onSave: (n, i, c) {
-                BlocProvider.of<RepeatsBloc>(context).add(
-                    AddRepeat(Repeat(name: n, mileageInterval: i, cars: c)));
-              },
-            ))
-  ];
+        MaterialPageRoute(
+          builder: (context) => RefuelingAddEditScreen(
+            isEditing: false,
+            onSave: (m, d, a, c, n) {
+              BlocProvider.of<RefuelingsBloc>(context)
+                  .add(AddRefueling(Refueling(
+                mileage: m,
+                date: d,
+                amount: a,
+                cost: c,
+                carName: n,
+              )));
+            },
+          ),
+        ),
+        MaterialPageRoute(
+            builder: (context) => TodoAddEditScreen(
+                  isEditing: false,
+                  onSave: (n, d, m, r, c) {
+                    BlocProvider.of<TodosBloc>(context).add(AddTodo(Todo(
+                        name: n,
+                        dueDate: d,
+                        dueMileage: m,
+                        repeatName: r,
+                        carName: c,
+                        completed: false)));
+                  },
+                )),
+        MaterialPageRoute(
+            builder: (context) => RepeatAddEditScreen(
+                  isEditing: false,
+                  onSave: (n, i, c) {
+                    BlocProvider.of<RepeatsBloc>(context).add(AddRepeat(
+                        Repeat(name: n, mileageInterval: i, cars: c)));
+                  },
+                ))
+      ];
 
   HomeScreen(
       {Key key = IntegrationTestKeys.homeScreen,
