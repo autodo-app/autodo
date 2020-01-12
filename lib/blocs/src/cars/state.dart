@@ -16,7 +16,7 @@ class CarsLoaded extends CarsState {
   const CarsLoaded([this.cars = const []]);
 
   @override
-  List<Object> get props => [cars];
+  List<Object> get props => [...cars];
 
   @override
   String toString() => 'CarsLoaded { cars: $cars }';

@@ -20,7 +20,7 @@ class FilteredTodosLoaded extends FilteredTodosState {
   );
 
   @override
-  List<Object> get props => [filteredTodos, activeFilter];
+  List<Object> get props => [...filteredTodos, activeFilter];
 
   @override
   String toString() {
