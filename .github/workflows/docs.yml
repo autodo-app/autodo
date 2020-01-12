@@ -1,16 +1,16 @@
-on: push
-name: update documentation
-jobs:
-  dartdoc:
-    name: Generate Docs
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v1
-      with:
-        submodules: true
-    - uses: subosito/flutter-action@v1
-      with:
-        channel: dev
-    - run: dartdoc --auto-include-dependencies
-    # eventually use the same auto-commit action to push to the website repo
-    # with the html and the github token for that repo but not right now
+# on: push
+# name: update documentation
+# jobs:
+#   dartdoc:
+#     name: Generate Docs
+#     runs-on: ubuntu-latest
+#     steps:
+#     - uses: actions/checkout@v1
+#       with:
+#         submodules: true
+#     - uses: subosito/flutter-action@v1
+#       with:
+#         channel: dev
+#     - run: dartdoc --auto-include-dependencies
+#     # eventually use the same auto-commit action to push to the website repo
+#     # with the html and the github token for that repo but not right now
