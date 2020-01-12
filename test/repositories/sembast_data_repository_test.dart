@@ -12,7 +12,7 @@ import 'package:autodo/models/models.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   group('SembastDataRepository', () {
-    var repository = SembastDataRepository(createDb: true, pathProvider: () async => Directory(''));
+    var repository = SembastDataRepository(createDb: true, pathProvider: () async => Directory('.'));
 
     group('todos', () {
       test('New Todo', () {
@@ -26,14 +26,14 @@ void main() {
       });
       test('todos', () async {
         await databaseFactoryIo.deleteDatabase('todos.db');
-        repository = SembastDataRepository(createDb: true, pathProvider: () async => Directory(''), dbPath: 'todos.db');
+        repository = SembastDataRepository(createDb: true, pathProvider: () async => Directory('.'), dbPath: 'todos.db');
         repository.addNewTodo(Todo(name: 'test'));
         expect(repository.todos(), emits([Todo(id: '1', name: 'test')]));
         await databaseFactoryIo.deleteDatabase('todos.db');
       });
       test('batch', () async {
         WidgetsFlutterBinding.ensureInitialized();
-        repository = SembastDataRepository(createDb: true, pathProvider: () async => Directory(''),);
+        repository = SembastDataRepository(createDb: true, pathProvider: () async => Directory('.'),);
         expect(
             await repository.startTodoWriteBatch(),
             SembastWriteBatch(database: await repository.db, store: StoreRef('todos')));
@@ -59,14 +59,14 @@ void main() {
       });
       test('refuelings', () async {
         await databaseFactoryIo.deleteDatabase('refuelings.db');
-        repository = SembastDataRepository(createDb: true, pathProvider: () async => Directory(''), dbPath: 'refuelings.db');
+        repository = SembastDataRepository(createDb: true, pathProvider: () async => Directory('.'), dbPath: 'refuelings.db');
         repository.addNewRefueling(ref);
         expect(repository.refuelings(), emits([ref]));
         await databaseFactoryIo.deleteDatabase('refuelings.db');
       });
       test('batch', () async {
         WidgetsFlutterBinding.ensureInitialized();
-        repository = SembastDataRepository(createDb: true, pathProvider: () async => Directory(''),);
+        repository = SembastDataRepository(createDb: true, pathProvider: () async => Directory('.'),);
         expect(
             await repository.startRefuelingWriteBatch(),
             SembastWriteBatch(database: await repository.db, store: StoreRef('refuelings')));
@@ -84,14 +84,14 @@ void main() {
       });
       test('cars', () async {
         await databaseFactoryIo.deleteDatabase('cars.db');
-        repository = SembastDataRepository(createDb: true, pathProvider: () async => Directory(''), dbPath: 'cars.db');
+        repository = SembastDataRepository(createDb: true, pathProvider: () async => Directory('.'), dbPath: 'cars.db');
         repository.addNewCar(Car());
         expect(repository.cars(), emits([Car(id: '1')]));
         await databaseFactoryIo.deleteDatabase('cars.db');
       });
       test('batch', () async {
         WidgetsFlutterBinding.ensureInitialized();
-        repository = SembastDataRepository(createDb: true, pathProvider: () async => Directory(''));
+        repository = SembastDataRepository(createDb: true, pathProvider: () async => Directory('.'));
         expect(
             await repository.startCarWriteBatch(),
             SembastWriteBatch(database: await repository.db, store: StoreRef('cars')));
@@ -109,14 +109,14 @@ void main() {
       });
       test('repeats', () async {
         await databaseFactoryIo.deleteDatabase('repeats.db');
-        repository = SembastDataRepository(createDb: true, pathProvider: () async => Directory(''), dbPath: 'repeats.db');
+        repository = SembastDataRepository(createDb: true, pathProvider: () async => Directory('.'), dbPath: 'repeats.db');
         repository.addNewRepeat(Repeat());
         expect(repository.repeats(), emits([Repeat(id: '1')]));
         await databaseFactoryIo.deleteDatabase('repeats.db');
       });
       test('batch', () async {
         WidgetsFlutterBinding.ensureInitialized();
-        repository = SembastDataRepository(createDb: true, pathProvider: () async => Directory(''));
+        repository = SembastDataRepository(createDb: true, pathProvider: () async => Directory('.'));
         expect(
             await repository.startRepeatWriteBatch(),
             SembastWriteBatch(database: await repository.db, store: StoreRef('repeats')));

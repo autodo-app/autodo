@@ -75,7 +75,7 @@ class NewUserScreenState extends State<NewUserScreen> {
     builder: (context, authState) => BlocBuilder<DatabaseBloc, DatabaseState>(
       builder: (context, dbState) {
         print('auth $authState db $dbState');
-        if (authState is Authenticated && dbState is DbLoaded) {
+        if ((authState is RemoteAuthenticated || authState is LocalAuthenticated) && dbState is DbLoaded) {
           return Container(
             decoration: scaffoldBackgroundGradient(),
             child: Scaffold(

@@ -189,20 +189,6 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
                     ),
                     onPressed: () async => await _next(),
                   ),
-                  // FlatButton(
-                  //     padding: EdgeInsets.all(0),
-                  //     materialTapTargetSize: MaterialTapTargetSize.padded,
-                  //     child: Text(
-                  //       'Next',
-                  //       style: Theme.of(context).primaryTextTheme.button,
-                  //     ),
-                  //     onPressed: () async {
-                  //       setState(() => pageTransition = true);
-                  //       await Future.delayed(Duration(
-                  //           milliseconds:
-                  //               200)); // wait for the animation to finish
-                  //       widget.onNext();
-                  //     }),
                 ],
               ),
             ),

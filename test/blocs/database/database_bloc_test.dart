@@ -67,7 +67,7 @@ void main() {
       DbUninitialized(),
       DbNotLoaded(),
     ]);
-    final pathProvider = () async => Directory('');
+    final pathProvider = () async => Directory('.');
     blocTest('TrialLogin', build: () {
       final authBloc = MockAuthenticationBloc();
       // whenListen(authBloc, Stream.fromIterable([Unauthenticated()]));

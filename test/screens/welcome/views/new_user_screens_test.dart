@@ -27,8 +27,8 @@ void main() {
     whenListen(authBloc, Stream.fromIterable([RemoteAuthenticated('', '', false)]));
     when(authBloc.state).thenReturn(RemoteAuthenticated('', '', false));
     final dbBloc = MockDatabaseBloc();
-    whenListen(dbBloc, Stream.fromIterable([DbLoaded(MockRepo())]));
-    when(dbBloc.state).thenReturn(DbLoaded(MockRepo()));
+    // whenListen(dbBloc, Stream.fromIterable([DbLoaded(MockRepo())]));
+    when(dbBloc.state).thenReturn(DbLoaded(MockRepo(), true));
     testWidgets('mileage', (tester) async {
       await tester.pumpWidget(MultiBlocProvider(
           providers: [
@@ -40,6 +40,7 @@ void main() {
     });
     testWidgets('Latest complete', (tester) async {
       final carsBloc = MockCarsBloc();
+      when(carsBloc.state).thenReturn(CarsLoaded([]));
       await tester.pumpWidget(MultiBlocProvider(
           providers: [
             BlocProvider<AuthenticationBloc>.value(value: authBloc),
@@ -51,7 +52,7 @@ void main() {
       for (var w in find.byType(TextFormField).evaluate()) {
         // put values in for mileage form
         await tester.enterText(find.byWidget(w.widget), '2000');
-        await tester.pump();
+        await tester.pumpAndSettle();
       }
       await tester.tap(find.text('Next'));
       await tester.pumpAndSettle();
