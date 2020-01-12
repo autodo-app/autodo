@@ -71,28 +71,30 @@ class NewUserScreenState extends State<NewUserScreen> {
   }
 
   @override
-  Widget build(BuildContext context) => BlocBuilder<AuthenticationBloc, AuthenticationState>(  
-    builder: (context, authState) => BlocBuilder<DatabaseBloc, DatabaseState>(
-      builder: (context, dbState) {
-        print('auth $authState db $dbState');
-        if ((authState is RemoteAuthenticated || authState is LocalAuthenticated) && dbState is DbLoaded) {
-          return Container(
-            decoration: scaffoldBackgroundGradient(),
-            child: Scaffold(
-              appBar: AppBar(
-                leading: IconButton(
-                  icon: Icon(Icons.arrow_back),
-                  onPressed: () => backAction(),
-                ),
-              ),
-              body: currentPage(),
-              backgroundColor: Colors.transparent,
-            ),
-          );
-        } else {
-          return LoadingIndicator();
-        }
-      }
-    )
-  );
+  Widget build(BuildContext context) =>
+      BlocBuilder<AuthenticationBloc, AuthenticationState>(
+          builder: (context, authState) =>
+              BlocBuilder<DatabaseBloc, DatabaseState>(
+                  builder: (context, dbState) {
+                print('auth $authState db $dbState');
+                if ((authState is RemoteAuthenticated ||
+                        authState is LocalAuthenticated) &&
+                    dbState is DbLoaded) {
+                  return Container(
+                    decoration: scaffoldBackgroundGradient(),
+                    child: Scaffold(
+                      appBar: AppBar(
+                        leading: IconButton(
+                          icon: Icon(Icons.arrow_back),
+                          onPressed: () => backAction(),
+                        ),
+                      ),
+                      body: currentPage(),
+                      backgroundColor: Colors.transparent,
+                    ),
+                  );
+                } else {
+                  return LoadingIndicator();
+                }
+              }));
 }

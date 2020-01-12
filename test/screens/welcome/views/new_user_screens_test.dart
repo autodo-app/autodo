@@ -16,38 +16,41 @@ class MockCarsBloc extends Mock implements CarsBloc {}
 
 class MockRepeatsBloc extends MockBloc<RepeatsEvent, RepeatsState>
     implements RepeatsBloc {}
-class MockAuthenticationBloc extends MockBloc<AuthenticationEvent, AuthenticationState> implements AuthenticationBloc {}
-class MockDatabaseBloc extends MockBloc<DatabaseEvent, DatabaseState> implements DatabaseBloc {}
+
+class MockAuthenticationBloc
+    extends MockBloc<AuthenticationEvent, AuthenticationState>
+    implements AuthenticationBloc {}
+
+class MockDatabaseBloc extends MockBloc<DatabaseEvent, DatabaseState>
+    implements DatabaseBloc {}
+
 class MockRepo extends Mock implements DataRepository {}
 
 void main() {
   group('new user screens', () {
     TestWidgetsFlutterBinding.ensureInitialized();
     final authBloc = MockAuthenticationBloc();
-    whenListen(authBloc, Stream.fromIterable([RemoteAuthenticated('', '', false)]));
+    whenListen(
+        authBloc, Stream.fromIterable([RemoteAuthenticated('', '', false)]));
     when(authBloc.state).thenReturn(RemoteAuthenticated('', '', false));
     final dbBloc = MockDatabaseBloc();
     // whenListen(dbBloc, Stream.fromIterable([DbLoaded(MockRepo())]));
     when(dbBloc.state).thenReturn(DbLoaded(MockRepo(), true));
     testWidgets('mileage', (tester) async {
-      await tester.pumpWidget(MultiBlocProvider(
-          providers: [
-            BlocProvider<AuthenticationBloc>.value(value: authBloc),
-            BlocProvider<DatabaseBloc>.value(value: dbBloc)
-          ], 
-          child: MaterialApp(home: NewUserScreen())));
+      await tester.pumpWidget(MultiBlocProvider(providers: [
+        BlocProvider<AuthenticationBloc>.value(value: authBloc),
+        BlocProvider<DatabaseBloc>.value(value: dbBloc)
+      ], child: MaterialApp(home: NewUserScreen())));
       expect(find.byType(NewUserScreen), findsOneWidget);
     });
     testWidgets('Latest complete', (tester) async {
       final carsBloc = MockCarsBloc();
       when(carsBloc.state).thenReturn(CarsLoaded([]));
-      await tester.pumpWidget(MultiBlocProvider(
-          providers: [
-            BlocProvider<AuthenticationBloc>.value(value: authBloc),
-            BlocProvider<DatabaseBloc>.value(value: dbBloc),
-            BlocProvider<CarsBloc>.value(value: carsBloc),
-          ],
-          child: MaterialApp(home: NewUserScreen())));
+      await tester.pumpWidget(MultiBlocProvider(providers: [
+        BlocProvider<AuthenticationBloc>.value(value: authBloc),
+        BlocProvider<DatabaseBloc>.value(value: dbBloc),
+        BlocProvider<CarsBloc>.value(value: carsBloc),
+      ], child: MaterialApp(home: NewUserScreen())));
       expect(find.byType(NewUserScreen), findsOneWidget);
       for (var w in find.byType(TextFormField).evaluate()) {
         // put values in for mileage form

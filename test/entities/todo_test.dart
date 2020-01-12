@@ -7,6 +7,7 @@ import 'package:autodo/entities/entities.dart';
 import 'package:autodo/models/models.dart';
 
 class MockDocumentSnapshot extends Mock implements DocumentSnapshot {}
+
 class MockRecordSnapshot extends Mock implements RecordSnapshot {}
 
 void main() {
@@ -63,7 +64,18 @@ void main() {
       DocumentSnapshot snap = MockDocumentSnapshot();
       when(snap.documentID).thenReturn(docID);
       when(snap.data).thenReturn(doc);
-      final todo = TodoEntity('0', 'name', 'car', 'repeat', TodoDueState.values[0], 0, 0, false, false, DateTime.fromMillisecondsSinceEpoch(0), DateTime.fromMillisecondsSinceEpoch(0));
+      final todo = TodoEntity(
+          '0',
+          'name',
+          'car',
+          'repeat',
+          TodoDueState.values[0],
+          0,
+          0,
+          false,
+          false,
+          DateTime.fromMillisecondsSinceEpoch(0),
+          DateTime.fromMillisecondsSinceEpoch(0));
       expect(TodoEntity.fromSnapshot(snap), todo);
     });
     test('fromRecord', () {
@@ -83,7 +95,18 @@ void main() {
       RecordSnapshot snap = MockRecordSnapshot();
       when(snap.key).thenReturn(docID);
       when(snap.value).thenReturn(doc);
-      final todo = TodoEntity('0', 'name', 'car', 'repeat', TodoDueState.values[0], 0, 0, false, false, DateTime.fromMillisecondsSinceEpoch(0), DateTime.fromMillisecondsSinceEpoch(0));
+      final todo = TodoEntity(
+          '0',
+          'name',
+          'car',
+          'repeat',
+          TodoDueState.values[0],
+          0,
+          0,
+          false,
+          false,
+          DateTime.fromMillisecondsSinceEpoch(0),
+          DateTime.fromMillisecondsSinceEpoch(0));
       expect(TodoEntity.fromRecord(snap), todo);
     });
   });

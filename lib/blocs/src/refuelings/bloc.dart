@@ -48,7 +48,8 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
   }
 
   Future<Refueling> _findLatestRefueling(Refueling refueling) async {
-    List<Refueling> refuelings = await repo.getCurrentRefuelings()
+    List<Refueling> refuelings = await repo
+        .getCurrentRefuelings()
         .timeout(Duration(milliseconds: 200), onTimeout: () => []);
 
     int smallestDiff = MAX_MPG;
@@ -68,8 +69,9 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
 
   Stream<RefuelingsState> _mapLoadRefuelingsToState() async* {
     try {
-      final refuelings = await repo.getCurrentRefuelings()
-        .timeout(Duration(milliseconds: 200), onTimeout: () => []);
+      final refuelings = await repo
+          .getCurrentRefuelings()
+          .timeout(Duration(milliseconds: 200), onTimeout: () => []);
       yield RefuelingsLoaded(refuelings);
     } catch (e) {
       print(e);
@@ -101,7 +103,7 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
     if (repo == null) {
       print('trying to update refueling with a null repository');
       return;
-    } 
+    }
 
     var prev = await _findLatestRefueling(event.refueling);
     var dist = (prev == null) ? 0 : event.refueling.mileage - prev.mileage;

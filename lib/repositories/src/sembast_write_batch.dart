@@ -17,16 +17,14 @@ class SembastWriteBatch extends Equatable implements WriteBatchWrapper {
     this.streamControllerUpdate,
   }) : this.transactionList = transactionList ?? [];
 
-
-  @override 
-  updateData(id, data) => transactionList.add(
-    (txn) => store.update(txn, data, finder: Finder(filter: Filter.byKey(id))));
+  @override
+  updateData(id, data) => transactionList.add((txn) =>
+      store.update(txn, data, finder: Finder(filter: Filter.byKey(id))));
 
   @override
-  setData(data) => transactionList.add(  
-    (txn) => store.add(txn, data));
+  setData(data) => transactionList.add((txn) => store.add(txn, data));
 
-  @override 
+  @override
   Future<void> commit() async {
     await database.transaction((txn) async {
       for (var t in transactionList) {
@@ -36,9 +34,9 @@ class SembastWriteBatch extends Equatable implements WriteBatchWrapper {
     if (streamControllerUpdate != null) streamControllerUpdate();
   }
 
-  @override 
+  @override
   List<Object> get props => [store, database];
 
-  @override 
+  @override
   toString() => "SembastWriteBatch { store: $store, database: $database }";
 }

@@ -28,7 +28,7 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
     _dbSubscription = _dbBloc.listen((state) {
       if (state is DbLoaded) {
         add(LoadCars());
-      } 
+      }
     });
     _refuelingsSubscription = _refuelingsBloc.listen((state) {
       if (state is RefuelingsLoaded) {
@@ -61,8 +61,9 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
 
   Stream<CarsState> _mapLoadCarsToState() async* {
     try {
-      final cars = await repo.getCurrentCars()
-        .timeout(Duration(milliseconds: 200), onTimeout: () => []);
+      final cars = await repo
+          .getCurrentCars()
+          .timeout(Duration(milliseconds: 200), onTimeout: () => []);
       print('loaded: $cars');
       if (cars != null) {
         yield CarsLoaded(cars);
@@ -153,8 +154,9 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
         continue; // only do calculations for updated refuelings
       }
 
-      Car cur =
-          (state as CarsLoaded).cars.firstWhere((car) => car.name == r.carName, orElse: () => null);
+      Car cur = (state as CarsLoaded)
+          .cars
+          .firstWhere((car) => car.name == r.carName, orElse: () => null);
       if (cur == null) {
         print('cannot find the specified car when updating refuelings');
         return;

@@ -1,5 +1,5 @@
 // Copyright 2020 Jonathan Bayless
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -26,12 +26,12 @@ import 'package:autodo/blocs/validators.dart';
 import 'event.dart';
 import 'state.dart';
 
-/// A [Bloc] used for validating and submitting the information for the 
+/// A [Bloc] used for validating and submitting the information for the
 /// [SignupScreen].
 class SignupBloc extends Bloc<SignupEvent, SignupState> {
   AuthRepository _authRepository;
 
-  /// A flag that determines whether a verification email will be sent to the 
+  /// A flag that determines whether a verification email will be sent to the
   /// user that is signing up.
   final bool verifyEmail;
 

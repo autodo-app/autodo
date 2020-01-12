@@ -7,6 +7,7 @@ import 'package:autodo/entities/entities.dart';
 import 'package:autodo/models/models.dart';
 
 class MockDocumentSnapshot extends Mock implements DocumentSnapshot {}
+
 class MockRecordSnapshot extends Mock implements RecordSnapshot {}
 
 void main() {
@@ -32,13 +33,23 @@ void main() {
         'averageEfficiency': 0.0,
         'distanceRate': 0.0,
         'lastMileageUpdate': 0,
-        'distanceRateHistory': [{'date': 0, 'distanceRate': 0.0}],
+        'distanceRateHistory': [
+          {'date': 0, 'distanceRate': 0.0}
+        ],
       };
       final docID = '0';
       DocumentSnapshot snap = MockDocumentSnapshot();
       when(snap.documentID).thenReturn(docID);
       when(snap.data).thenReturn(doc);
-      final car = CarEntity('0', 'name', 0, 0, 0.0, 0.0, DateTime.fromMillisecondsSinceEpoch(0), [DistanceRatePoint(DateTime.fromMillisecondsSinceEpoch(0), 0.0)]);
+      final car = CarEntity(
+          '0',
+          'name',
+          0,
+          0,
+          0.0,
+          0.0,
+          DateTime.fromMillisecondsSinceEpoch(0),
+          [DistanceRatePoint(DateTime.fromMillisecondsSinceEpoch(0), 0.0)]);
       expect(CarEntity.fromSnapshot(snap), car);
     });
     test('fromRecord', () {
@@ -49,13 +60,23 @@ void main() {
         'averageEfficiency': 0.0,
         'distanceRate': 0.0,
         'lastMileageUpdate': 0,
-        'distanceRateHistory': [{'date': 0, 'distanceRate': 0.0}],
+        'distanceRateHistory': [
+          {'date': 0, 'distanceRate': 0.0}
+        ],
       };
       final docID = '0';
       RecordSnapshot snap = MockRecordSnapshot();
       when(snap.key).thenReturn(docID);
       when(snap.value).thenReturn(doc);
-      final car = CarEntity('0', 'name', 0, 0, 0.0, 0.0, DateTime.fromMillisecondsSinceEpoch(0), [DistanceRatePoint(DateTime.fromMillisecondsSinceEpoch(0), 0.0)]);
+      final car = CarEntity(
+          '0',
+          'name',
+          0,
+          0,
+          0.0,
+          0.0,
+          DateTime.fromMillisecondsSinceEpoch(0),
+          [DistanceRatePoint(DateTime.fromMillisecondsSinceEpoch(0), 0.0)]);
       expect(CarEntity.fromRecord(snap), car);
     });
   });

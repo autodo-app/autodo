@@ -73,8 +73,9 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
 
   Stream<RepeatsState> _mapLoadRepeatsToState() async* {
     try {
-      final repeats = await repo.getCurrentRepeats()
-        .timeout(Duration(milliseconds: 200), onTimeout: () => []);
+      final repeats = await repo
+          .getCurrentRepeats()
+          .timeout(Duration(milliseconds: 200), onTimeout: () => []);
       yield RepeatsLoaded(repeats);
     } catch (e) {
       print(e);
@@ -209,8 +210,9 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
     for (var r in defaults) {
       batch.setData(r.toEntity().toDocument());
     }
-    await batch.commit(); // need to wait on this, otherwise the "currentRepeats"
-                          // call will return the old state
+    await batch
+        .commit(); // need to wait on this, otherwise the "currentRepeats"
+    // call will return the old state
     print('waiting on current repeats');
     final updatedRepeats = await repo.getCurrentRepeats();
     yield RepeatsLoaded(updatedRepeats);

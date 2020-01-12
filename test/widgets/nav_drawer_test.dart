@@ -15,7 +15,8 @@ void main() {
   group('nav drawer', () {
     testWidgets('render', (tester) async {
       final authBloc = MockAuthenticationBloc();
-      when(authBloc.state).thenReturn(RemoteAuthenticated('test', 'test', false));
+      when(authBloc.state)
+          .thenReturn(RemoteAuthenticated('test', 'test', false));
       whenListen(authBloc,
           Stream.fromIterable([RemoteAuthenticated('test', 'test', false)]));
       await tester.pumpWidget(BlocProvider<AuthenticationBloc>(

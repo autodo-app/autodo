@@ -13,7 +13,7 @@ class MockBatch extends Mock implements WriteBatch {}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  
+
   group('FirebaseWriteBatch', () {
     final firestore = MockFirestore();
     final batch = MockBatch();
@@ -23,8 +23,8 @@ void main() {
 
     test('Null collection', () {
       expect(
-          () =>
-              FirebaseWriteBatch(firestoreInstance: firestore, collection: null),
+          () => FirebaseWriteBatch(
+              firestoreInstance: firestore, collection: null),
           throwsAssertionError);
     });
     test('update', () {

@@ -120,7 +120,10 @@ void main() {
       when(authRepository.stream)
           .thenAnswer((_) => Stream.fromIterable([user]));
       return AuthenticationBloc(userRepository: authRepository);
-    }, expect: [Uninitialized(), RemoteAuthenticated('test@test.com', 'test', true)]);
+    }, expect: [
+      Uninitialized(),
+      RemoteAuthenticated('test@test.com', 'test', true)
+    ]);
     blocTest('AuthRepo LoggedIn event', build: () {
       final metadata = MockMetadata();
       final user = MockUser();

@@ -1,5 +1,5 @@
 // Copyright 2020 Jonathan Bayless
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -22,7 +22,7 @@ abstract class AuthenticationState extends Equatable {
   List<Object> get props => [];
 }
 
-/// The initial state of the [AuthenticationBloc] prior to receiving the 
+/// The initial state of the [AuthenticationBloc] prior to receiving the
 /// [AppStarted] event.
 class Uninitialized extends AuthenticationState {}
 
@@ -39,7 +39,7 @@ class RemoteAuthenticated extends AuthenticationState {
   /// for internal purposes.
   final String uuid;
 
-  /// A flag that is raised when this is the first time the app is run with the 
+  /// A flag that is raised when this is the first time the app is run with the
   /// currently authenticated user. This flag is responsible for triggering
   /// setup routines to prepare the initial set of data for the user's account.
   final bool newUser;
@@ -59,10 +59,10 @@ class LocalAuthenticated extends Authenticated {
 
   const LocalAuthenticated(this.newUser);
 
-  @override 
+  @override
   List<Object> get props => [newUser];
 
-  @override 
+  @override
   toString() => 'LocalAuthenticated { newUser: $newUser }';
 }
 

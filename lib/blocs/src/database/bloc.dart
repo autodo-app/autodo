@@ -17,14 +17,16 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
   StreamSubscription _authSubscription;
   Future<Directory> Function() pathProvider;
 
-  DatabaseBloc({firestoreInstance, @required authenticationBloc, this.pathProvider})
+  DatabaseBloc(
+      {firestoreInstance, @required authenticationBloc, this.pathProvider})
       : assert(authenticationBloc != null),
         _authenticationBloc = authenticationBloc,
         _firestoreInstance = firestoreInstance ?? Firestore.instance {
     _authSubscription = _authenticationBloc.listen((authState) {
       if (authState is RemoteAuthenticated) {
         add(UserLoggedIn(authState.uuid, authState.newUser));
-      } else if (((state is DbNotLoaded) || (state is DbUninitialized)) && authState is LocalAuthenticated) {
+      } else if (((state is DbNotLoaded) || (state is DbUninitialized)) &&
+          authState is LocalAuthenticated) {
         add(TrialLogin(authState.newUser));
       } else if (authState is Unauthenticated) {
         add(UserLoggedOut());
@@ -55,9 +57,11 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
   }
 
   Stream<DatabaseState> _mapUserLoggedOutToState(event) async* {
-    if (state is DbLoaded && (state as DbLoaded).repository is SembastDataRepository) {
+    if (state is DbLoaded &&
+        (state as DbLoaded).repository is SembastDataRepository) {
       print('deleting db');
-      await ((state as DbLoaded).repository as SembastDataRepository).deleteDb();
+      await ((state as DbLoaded).repository as SembastDataRepository)
+          .deleteDb();
     }
     yield DbNotLoaded();
   }
@@ -67,7 +71,8 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       print('ignoring outdated trial login event');
       return;
     }
-    final repo = await SembastDataRepository(createDb: event.newUser, pathProvider: pathProvider);
+    final repo = await SembastDataRepository(
+        createDb: event.newUser, pathProvider: pathProvider);
     await repo.load();
     yield DbLoaded(repo, event.newUser);
   }
