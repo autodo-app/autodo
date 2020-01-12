@@ -34,7 +34,7 @@ class RepeatsLoaded extends RepeatsState {
 
   // use spread operator so differences in individual repeats matter
   @override
-  List<Object> get props => repeats; 
+  List<Object> get props => repeats;
 
   @override
   String toString() => 'RepeatsLoaded { repeats: $repeats }';

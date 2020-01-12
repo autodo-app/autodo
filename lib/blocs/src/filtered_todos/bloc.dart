@@ -12,7 +12,7 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
 
   FilteredTodosBloc({@required this.todosBloc}) {
     todosSubscription = todosBloc.listen((state) {
-      print(';asdfas'); 
+      print(';asdfas');
       if (state is TodosLoaded) {
         add(UpdateTodos((todosBloc.state as TodosLoaded).todos));
       }
