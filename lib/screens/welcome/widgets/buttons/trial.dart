@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:autodo/blocs/blocs.dart';
+import '../../views/new_user_setup/screen.dart';
 
 class TrialButton extends StatelessWidget {
   final buttonPadding;
@@ -15,7 +19,14 @@ class TrialButton extends StatelessWidget {
         child: RaisedButton(
           elevation: 12.0,
           onPressed: () {
-            Navigator.pushNamed(context, '/');
+            BlocProvider.of<DatabaseBloc>(context).add(TrialLogin(true));
+            BlocProvider.of<AuthenticationBloc>(context)
+                .add(TrialUserSignedUp());
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => NewUserScreen(),
+                ));
           },
           textColor: Colors.white,
           padding: const EdgeInsets.all(0.0),

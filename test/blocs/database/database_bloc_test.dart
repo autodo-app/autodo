@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:autodo/repositories/src/sembast_data_repository.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -26,6 +29,7 @@ class MockDocument extends Mock
     implements DocumentReference {}
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   final mockFirestore = MockFirestoreInstance();
   final mockUsersCollection = MockCollection();
   when(mockUsersCollection.document('abcd')).thenAnswer((_) => MockDocument());
@@ -40,7 +44,7 @@ void main() {
     blocTest('UserLoggedIn', build: () {
       final authBloc = MockAuthenticationBloc();
       whenListen(authBloc,
-          Stream.fromIterable([Authenticated('test', 'abcd', false)]));
+          Stream.fromIterable([RemoteAuthenticated('test', 'abcd', false)]));
       return DatabaseBloc(
           firestoreInstance: mockFirestore, authenticationBloc: authBloc);
     }, act: (bloc) async {
@@ -62,6 +66,37 @@ void main() {
     }, expect: [
       DbUninitialized(),
       DbNotLoaded(),
+    ]);
+    final pathProvider = () async => Directory('.');
+    blocTest('TrialLogin', build: () {
+      final authBloc = MockAuthenticationBloc();
+      // whenListen(authBloc, Stream.fromIterable([Unauthenticated()]));
+      return DatabaseBloc(
+          firestoreInstance: mockFirestore,
+          authenticationBloc: authBloc,
+          pathProvider: pathProvider);
+    }, act: (bloc) async {
+      bloc.add(TrialLogin(true));
+    }, expect: [
+      DbUninitialized(),
+      DbLoaded(
+          SembastDataRepository(createDb: true, pathProvider: pathProvider),
+          true),
+    ]);
+    blocTest('TrialLogin from authBloc', build: () {
+      final authBloc = MockAuthenticationBloc();
+      whenListen(authBloc, Stream.fromIterable([LocalAuthenticated(false)]));
+      return DatabaseBloc(
+          firestoreInstance: mockFirestore,
+          authenticationBloc: authBloc,
+          pathProvider: pathProvider);
+      // }, act: (bloc) async {
+      // bloc.add(TrialLogin(true));
+    }, expect: [
+      DbUninitialized(),
+      DbLoaded(
+          SembastDataRepository(createDb: false, pathProvider: pathProvider),
+          false),
     ]);
   });
 }

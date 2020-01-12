@@ -73,14 +73,10 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
 
   Stream<RepeatsState> _mapLoadRepeatsToState() async* {
     try {
-      final s = repo.repeats();
-      final repeats =
-          await s.first.timeout(Duration(seconds: 1), onTimeout: () => null);
-      if (repeats != null) {
-        yield RepeatsLoaded(repeats);
-      } else {
-        yield RepeatsLoaded([]);
-      }
+      final repeats = await repo
+          .getCurrentRepeats()
+          .timeout(Duration(milliseconds: 200), onTimeout: () => []);
+      yield RepeatsLoaded(repeats);
     } catch (e) {
       print(e);
       yield RepeatsNotLoaded();
@@ -94,6 +90,7 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
       // List.from((state as RepeatsLoaded).repeats)..add(event.repeat);
       // yield RepeatsLoaded(updatedRepeats);
       var updatedRepeats = await repo.addNewRepeat(event.repeat);
+      yield RepeatsLoaded(updatedRepeats);
       // yield RepeatsLoaded(updatedRepeats); redundant because of the listener to the repository
     }
   }
@@ -209,18 +206,23 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
       print('Error: trying to add default repeats but repo is null');
       return;
     }
-    WriteBatchWrapper batch = repo.startRepeatWriteBatch();
+    WriteBatchWrapper batch = await repo.startRepeatWriteBatch();
     for (var r in defaults) {
       batch.setData(r.toEntity().toDocument());
     }
-    batch.commit();
-    final updatedRepeats = await repo.repeats().firstWhere((s) => s.length > 0);
+    await batch
+        .commit(); // need to wait on this, otherwise the "currentRepeats"
+    // call will return the old state
+    print('waiting on current repeats');
+    final updatedRepeats = await repo.getCurrentRepeats();
     yield RepeatsLoaded(updatedRepeats);
+    print('yielded repeats');
   }
 
   @override
   Future<void> close() {
     _dbSubscription?.cancel();
+    _repoSubscription?.cancel();
     return super.close();
   }
 }

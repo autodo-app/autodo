@@ -1,25 +1,29 @@
+import 'package:autodo/repositories/src/write_batch_wrapper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class WriteBatchWrapper extends Equatable {
+class FirebaseWriteBatch extends Equatable implements WriteBatchWrapper {
   final CollectionReference _collection;
   final WriteBatch _batch;
 
-  WriteBatchWrapper({@required firestoreInstance, @required collection})
+  FirebaseWriteBatch({@required firestoreInstance, @required collection})
       : this._batch = firestoreInstance?.batch() ?? Firestore.instance.batch(),
         assert(collection != null),
         this._collection = collection;
 
+  @override
   updateData(String id, dynamic data) =>
       _batch.updateData(_collection.document(id), data);
 
+  @override
   setData(dynamic data) => _batch.setData(_collection.document(), data);
 
-  commit() {
+  @override
+  Future<void> commit() async {
     try {
-      _batch.commit();
+      await _batch.commit();
     } on PlatformException catch (e) {
       print(e);
       if (e.code == "Error performing commit" &&

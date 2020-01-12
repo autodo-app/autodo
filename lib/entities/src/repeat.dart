@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:sembast/sembast.dart';
 
 class RepeatEntity extends Equatable {
   final String id, name;
@@ -10,16 +11,6 @@ class RepeatEntity extends Equatable {
   const RepeatEntity(
       this.id, this.name, this.mileageInterval, this.dateInterval, this.cars);
 
-  // Map<String, Object> toJson() {
-  //   return {
-  //     "id": id,
-  //     "name": name,
-  //     "mileageInterval": mileageInterval,
-  //     "dateInterval": dateInterval,
-  //     "cars": cars
-  //   };
-  // }
-
   @override
   List<Object> get props => [id, name, mileageInterval, dateInterval, cars];
 
@@ -27,16 +18,6 @@ class RepeatEntity extends Equatable {
   String toString() {
     return 'RepeatEntity { id: $id, name: $name, mileageInterval: $mileageInterval, dateInterval: $dateInterval, cars: $cars}';
   }
-
-  // static RepeatEntity fromJson(Map<String, Object> json) {
-  //   return RepeatEntity(
-  //     json["id"] as String,
-  //     json["name"] as String,
-  //     json["mileageInterval"] as int,
-  //     Duration(days: json["dateInterval"] as int),
-  //     json["cars"] as List<String>
-  //   );
-  // }
 
   static RepeatEntity fromSnapshot(DocumentSnapshot snap) {
     return RepeatEntity(
@@ -47,6 +28,17 @@ class RepeatEntity extends Equatable {
             ? null
             : Duration(days: snap.data["dateInterval"] as int),
         (snap.data['cars'] as List<dynamic>)?.cast<String>());
+  }
+
+  static RepeatEntity fromRecord(RecordSnapshot snap) {
+    return RepeatEntity(
+        (snap.key is String) ? snap.key : '${snap.key}',
+        snap.value["name"] as String,
+        snap.value["mileageInterval"] as int,
+        (snap.value['dateInterval'] == null)
+            ? null
+            : Duration(days: snap.value["dateInterval"] as int),
+        (snap.value['cars'] as List<dynamic>)?.cast<String>());
   }
 
   Map<String, Object> toDocument() {

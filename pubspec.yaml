@@ -22,7 +22,7 @@ dependencies:
   intl: ^0.16.0
   cloud_firestore: ^0.12.9
   firebase_auth: any
-  shared_preferences: ^0.5.3
+  shared_preferences: ^0.5.6
   flutter_typeahead: ^1.6.1
   flutter_local_notifications: ^0.8.4 
   url_launcher: ^5.2.3
@@ -38,6 +38,8 @@ dependencies:
       url: git://github.com/baylessj/flutter-autocomplete-textfield.git
       ref: master
   sentry: ^3.0.0
+  sembast: ^2.1.2
+  path_provider: ^1.5.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

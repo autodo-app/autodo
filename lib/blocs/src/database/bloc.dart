@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:autodo/repositories/src/sembast_data_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -13,15 +15,20 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
   final Firestore _firestoreInstance;
   AuthenticationBloc _authenticationBloc;
   StreamSubscription _authSubscription;
+  Future<Directory> Function() pathProvider;
 
-  DatabaseBloc({firestoreInstance, @required authenticationBloc})
+  DatabaseBloc(
+      {firestoreInstance, @required authenticationBloc, this.pathProvider})
       : assert(authenticationBloc != null),
         _authenticationBloc = authenticationBloc,
         _firestoreInstance = firestoreInstance ?? Firestore.instance {
-    _authSubscription = _authenticationBloc.listen((state) {
-      if (state is Authenticated) {
-        add(UserLoggedIn(state.uuid, state.newUser));
-      } else if (state is Unauthenticated) {
+    _authSubscription = _authenticationBloc.listen((authState) {
+      if (authState is RemoteAuthenticated) {
+        add(UserLoggedIn(authState.uuid, authState.newUser));
+      } else if (((state is DbNotLoaded) || (state is DbUninitialized)) &&
+          authState is LocalAuthenticated) {
+        add(TrialLogin(authState.newUser));
+      } else if (authState is Unauthenticated) {
         add(UserLoggedOut());
       }
     });
@@ -36,6 +43,8 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       yield* _mapUserLoggedInToState(event);
     } else if (event is UserLoggedOut) {
       yield* _mapUserLoggedOutToState(event);
+    } else if (event is TrialLogin) {
+      yield* _mapTrialLoginToState(event);
     }
   }
 
@@ -48,7 +57,24 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
   }
 
   Stream<DatabaseState> _mapUserLoggedOutToState(event) async* {
+    if (state is DbLoaded &&
+        (state as DbLoaded).repository is SembastDataRepository) {
+      print('deleting db');
+      await ((state as DbLoaded).repository as SembastDataRepository)
+          .deleteDb();
+    }
     yield DbNotLoaded();
+  }
+
+  Stream<DatabaseState> _mapTrialLoginToState(event) async* {
+    if (state is DbLoaded) {
+      print('ignoring outdated trial login event');
+      return;
+    }
+    final repo = await SembastDataRepository(
+        createDb: event.newUser, pathProvider: pathProvider);
+    await repo.load();
+    yield DbLoaded(repo, event.newUser);
   }
 
   @override

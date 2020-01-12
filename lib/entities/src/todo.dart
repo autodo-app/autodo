@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:sembast/sembast.dart';
+
 import 'package:autodo/models/models.dart';
 
 class TodoEntity extends Equatable {
@@ -21,22 +23,6 @@ class TodoEntity extends Equatable {
       this.estimatedDueDate,
       this.completedDate,
       this.dueDate);
-
-  // Map<String, Object> toJson() {
-  //   return {
-  //     "id": id,
-  //     "name": name,
-  //     "carName": carName,
-  //     "repeatName": repeatName,
-  //     "dueState": dueState.index,
-  //     "dueMileage": dueMileage,
-  //     "notificationID": notificationID,
-  //     "completed": completed,
-  //     "estimatedDueDate": estimatedDueDate,
-  //     "completedDate": completedDate.millisecondsSinceEpoch,
-  //     "dueDate": completedDate.millisecondsSinceEpoch
-  //   };
-  // }
 
   @override
   List<Object> get props => [
@@ -61,22 +47,6 @@ class TodoEntity extends Equatable {
         'completedDate: $completedDate, dueDate: $dueDate }';
   }
 
-  // static TodoEntity fromJson(Map<String, Object> json) {
-  //   return TodoEntity(
-  //     json["id"] as String,
-  //     json["name"] as String,
-  //     json["carName"] as String,
-  //     json["repeatName"] as String,
-  //     TodoDueState.values[json["dueState"] as int],
-  //     json["dueMileage"] as int,
-  //     json["notificationID"] as int,
-  //     json["completed"] as bool,
-  //     json['estimatedDueDate'] as bool,
-  //     DateTime.fromMillisecondsSinceEpoch(json["completedDate"] as int),
-  //     DateTime.fromMillisecondsSinceEpoch(json["dueDate"] as int),
-  //   );
-  // }
-
   static TodoEntity fromSnapshot(DocumentSnapshot snap) {
     return TodoEntity(
       snap.documentID,
@@ -96,6 +66,28 @@ class TodoEntity extends Equatable {
       (snap.data["dueDate"] == null)
           ? null
           : DateTime.fromMillisecondsSinceEpoch(snap.data["dueDate"]),
+    );
+  }
+
+  static TodoEntity fromRecord(RecordSnapshot snap) {
+    return TodoEntity(
+      (snap.key is String) ? snap.key : '${snap.key}',
+      snap.value["name"] as String,
+      snap.value["carName"] as String,
+      snap.value["repeatName"] as String,
+      (snap.value["dueState"] == null)
+          ? null
+          : TodoDueState.values[snap.value["dueState"]],
+      snap.value["dueMileage"] as int,
+      snap.value["notificationID"] as int,
+      snap.value["completed"] as bool,
+      snap.value['estimatedDueDate'] as bool,
+      (snap.value["completedDate"] == null)
+          ? null
+          : DateTime.fromMillisecondsSinceEpoch(snap.value["completedDate"]),
+      (snap.value["dueDate"] == null)
+          ? null
+          : DateTime.fromMillisecondsSinceEpoch(snap.value["dueDate"]),
     );
   }
 

@@ -21,3 +21,15 @@ class UserLoggedIn extends DatabaseEvent {
 }
 
 class UserLoggedOut extends DatabaseEvent {}
+
+class TrialLogin extends DatabaseEvent {
+  final bool newUser;
+
+  const TrialLogin(this.newUser);
+
+  @override
+  List<Object> get props => [newUser];
+
+  @override
+  toString() => 'TrialLogin { newUser: $newUser }';
+}

@@ -7,7 +7,8 @@ import 'package:equatable/equatable.dart';
 import 'data_repository.dart';
 import 'package:autodo/models/models.dart';
 import 'package:autodo/entities/entities.dart';
-import 'write_batch_wrappers.dart';
+import 'write_batch_wrapper.dart';
+import 'firebase_write_batch.dart';
 
 class FirebaseDataRepository extends Equatable implements DataRepository {
   final Firestore _firestoreInstance;
@@ -45,6 +46,11 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
   }
 
   @override
+  Future<List<Todo>> getCurrentTodos() async {
+    return todos().first;
+  }
+
+  @override
   Future<void> updateTodo(Todo update) {
     return _todos
         .document(update.id)
@@ -53,7 +59,7 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
 
   @override
   WriteBatchWrapper startTodoWriteBatch() {
-    return WriteBatchWrapper(
+    return FirebaseWriteBatch(
         firestoreInstance: _firestoreInstance, collection: _todos);
   }
 
@@ -68,12 +74,17 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
   }
 
   @override
-  Stream<List<Refueling>> refuelings() {
+  Stream<List<Refueling>> refuelings([bool forceRefresh]) {
     return _refuelings.snapshots().map((snapshot) {
       return snapshot.documents
           .map((doc) => Refueling.fromEntity(RefuelingEntity.fromSnapshot(doc)))
           .toList();
     });
+  }
+
+  @override
+  Future<List<Refueling>> getCurrentRefuelings() async {
+    return refuelings().first;
   }
 
   @override
@@ -84,8 +95,8 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
   }
 
   @override
-  WriteBatchWrapper startRefuelingWriteBatch() {
-    return WriteBatchWrapper(
+  FutureOr<WriteBatchWrapper> startRefuelingWriteBatch() {
+    return FirebaseWriteBatch(
         firestoreInstance: _firestoreInstance, collection: _refuelings);
   }
 
@@ -109,13 +120,18 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
   }
 
   @override
+  Future<List<Car>> getCurrentCars() async {
+    return cars().first;
+  }
+
+  @override
   Future<void> updateCar(Car car) {
     return _cars.document(car.id).updateData(car.toEntity().toDocument());
   }
 
   @override
   WriteBatchWrapper startCarWriteBatch() {
-    return WriteBatchWrapper(
+    return FirebaseWriteBatch(
         firestoreInstance: _firestoreInstance, collection: _cars);
   }
 
@@ -143,6 +159,11 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
   }
 
   @override
+  Future<List<Repeat>> getCurrentRepeats() async {
+    return repeats().first;
+  }
+
+  @override
   Future<void> updateRepeat(Repeat repeat) {
     return _repeats
         .document(repeat.id)
@@ -151,7 +172,7 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
 
   @override
   WriteBatchWrapper startRepeatWriteBatch() {
-    return WriteBatchWrapper(
+    return FirebaseWriteBatch(
         firestoreInstance: _firestoreInstance, collection: _repeats);
   }
 

@@ -2,6 +2,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:autodo/repositories/repositories.dart';
 import 'package:autodo/blocs/blocs.dart';
@@ -39,12 +40,13 @@ void main() {
         build: () {
           final authRepository = MockAuthRepository();
           when(authRepository.isSignedIn()).thenAnswer((_) async => true);
+          SharedPreferences.setMockInitialValues({'trialUserLoggedIn': false});
           return AuthenticationBloc(userRepository: authRepository);
         },
         act: (bloc) async => bloc.add(AppStarted()),
         expect: <AuthenticationState>[
           Uninitialized(),
-          Authenticated(null, null, false)
+          RemoteAuthenticated(null, null, false)
         ],
       );
       blocTest<AuthenticationBloc, AuthenticationEvent, AuthenticationState>(
@@ -67,7 +69,7 @@ void main() {
       act: (bloc) async => bloc.add(LoggedIn()),
       expect: <AuthenticationState>[
         Uninitialized(),
-        Authenticated(null, null, false)
+        RemoteAuthenticated(null, null, false)
       ],
     );
     blocTest<AuthenticationBloc, AuthenticationEvent, AuthenticationState>(
@@ -100,7 +102,7 @@ void main() {
       act: (bloc) async => bloc.add(SignedUp()),
       expect: <AuthenticationState>[
         Uninitialized(),
-        Authenticated('test@test.com', 'test', true)
+        RemoteAuthenticated('test@test.com', 'test', true)
       ],
     );
     blocTest('AuthRepo SignedUp event', build: () {
@@ -118,7 +120,10 @@ void main() {
       when(authRepository.stream)
           .thenAnswer((_) => Stream.fromIterable([user]));
       return AuthenticationBloc(userRepository: authRepository);
-    }, expect: [Uninitialized(), Authenticated('test@test.com', 'test', true)]);
+    }, expect: [
+      Uninitialized(),
+      RemoteAuthenticated('test@test.com', 'test', true)
+    ]);
     blocTest('AuthRepo LoggedIn event', build: () {
       final metadata = MockMetadata();
       final user = MockUser();
@@ -136,7 +141,7 @@ void main() {
       return AuthenticationBloc(userRepository: authRepository);
     }, expect: [
       Uninitialized(),
-      Authenticated('test@test.com', 'test', false)
+      RemoteAuthenticated('test@test.com', 'test', false)
     ]);
   });
 }

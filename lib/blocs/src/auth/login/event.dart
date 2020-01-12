@@ -1,5 +1,5 @@
 // Copyright 2020 Jonathan Bayless
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -66,7 +66,7 @@ class LoginWithCredentialsPressed extends LoginEvent {
   List<Object> get props => [email, password];
 }
 
-/// Prompts the [LoginBloc] to send a password reset email for the given 
+/// Prompts the [LoginBloc] to send a password reset email for the given
 /// address.
 class SendPasswordResetPressed extends LoginEvent {
   /// The email address where the password reset email will be sent.

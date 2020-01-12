@@ -352,7 +352,7 @@ void main() {
         final writeBatch = MockWriteBatch();
         when(writeBatch.updateData(todo3.id, dynamic))
             .thenAnswer((_) => ((_) => _));
-        when(writeBatch.commit()).thenAnswer((_) => (() => _));
+        when(writeBatch.commit()).thenAnswer((_) async {});
         when(dataRepository.startTodoWriteBatch())
             .thenAnswer((_) => writeBatch);
         final notificationsBloc = MockNotificationsBloc();
@@ -404,7 +404,7 @@ void main() {
         final writeBatch = MockWriteBatch();
         when(writeBatch.updateData(todo3.id, dynamic))
             .thenAnswer((_) => ((_) => _));
-        when(writeBatch.commit()).thenAnswer((_) => (() => _));
+        when(writeBatch.commit()).thenAnswer((_) async {});
         when(dataRepository.startTodoWriteBatch())
             .thenAnswer((_) => writeBatch);
 

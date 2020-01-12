@@ -92,7 +92,7 @@ class NavDrawerState extends State<NavDrawer> {
                         delegate: SliverChildBuilderDelegate((context, index) {
                           return SizedBox.expand(
                             child: DrawerHeader(
-                              child: (state is Authenticated)
+                              child: (state is RemoteAuthenticated)
                                   ? userHeader(state.displayName)
                                   : Container(),
                               decoration: BoxDecoration(

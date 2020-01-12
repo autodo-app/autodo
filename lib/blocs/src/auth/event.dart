@@ -1,5 +1,5 @@
 // Copyright 2020 Jonathan Bayless
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -14,7 +14,7 @@
 
 import 'package:equatable/equatable.dart';
 
-/// Prompts a change to the state of an [AuthenticationBloc]. 
+/// Prompts a change to the state of an [AuthenticationBloc].
 abstract class AuthenticationEvent extends Equatable {
   const AuthenticationEvent();
 
@@ -23,7 +23,7 @@ abstract class AuthenticationEvent extends Equatable {
 }
 
 /// Tells the [AuthenticationBloc] to check for a signed in user.
-/// 
+///
 /// Also used to prep a dummy user for an integration test if applicable.
 class AppStarted extends AuthenticationEvent {
   /// A flag used to change the transformation's behavior to prep a dummy user
@@ -48,10 +48,12 @@ class SignedUp extends AuthenticationEvent {}
 /// Tells the [AuthenticationBloc] to sign out the currently authenticated user.
 class LogOut extends AuthenticationEvent {}
 
-/// Tells the [AuthenticationBloc] to delete the data associated with the 
+/// Tells the [AuthenticationBloc] to delete the data associated with the
 /// currently authenticated user.
 class DeletedUser extends AuthenticationEvent {}
 
 /// Added when a [UserRepository] stream notifies of a login with the Google
 /// Account Auth Provider.
 class SignInWithGoogle extends AuthenticationEvent {}
+
+class TrialUserSignedUp extends AuthenticationEvent {}

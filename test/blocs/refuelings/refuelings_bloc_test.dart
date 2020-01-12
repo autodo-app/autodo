@@ -37,6 +37,8 @@ void main() {
               .thenAnswer((_) => Stream<List<Refueling>>.fromIterable([
                     [refueling]
                   ]));
+          when(dataRepository.getCurrentRefuelings())
+              .thenAnswer((_) async => [refueling]);
           final dbBloc = MockDbBloc();
           when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
           return RefuelingsBloc(dbBloc: dbBloc);
@@ -53,6 +55,8 @@ void main() {
           final dataRepository = MockDataRepository();
           when(dataRepository.refuelings())
               .thenAnswer((_) => Stream<List<Refueling>>.fromIterable([null]));
+          when(dataRepository.getCurrentRefuelings())
+              .thenAnswer((_) async => []);
           final dbBloc = MockDbBloc();
           when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
           return RefuelingsBloc(dbBloc: dbBloc);
@@ -104,6 +108,8 @@ void main() {
             .thenAnswer((_) => Stream<List<Refueling>>.fromIterable([
                   [refueling1]
                 ]));
+        when(dataRepository.getCurrentRefuelings())
+            .thenAnswer((_) async => [refueling1]);
         when(dataRepository.startRefuelingWriteBatch())
             .thenAnswer((_) => writeBatch);
         final dbBloc = MockDbBloc();
@@ -129,6 +135,8 @@ void main() {
             .thenAnswer((_) => Stream<List<Refueling>>.fromIterable([
                   [refueling1]
                 ]));
+        when(dataRepository.getCurrentRefuelings())
+            .thenAnswer((_) async => [refueling1]);
         when(dataRepository.startRefuelingWriteBatch())
             .thenAnswer((_) => writeBatch);
         final dbBloc = MockDbBloc();
@@ -154,6 +162,8 @@ void main() {
             .thenAnswer((_) => Stream<List<Refueling>>.fromIterable([
                   [refueling1]
                 ]));
+        when(dataRepository.getCurrentRefuelings())
+            .thenAnswer((_) async => [refueling1]);
         when(dataRepository.startRefuelingWriteBatch())
             .thenAnswer((_) => writeBatch);
         final dbBloc = MockDbBloc();
