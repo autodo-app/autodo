@@ -1,5 +1,9 @@
-import 'package:autodo/integ_test_keys.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
+
+import 'package:autodo/widgets/widgets.dart';
+import 'package:autodo/blocs/blocs.dart';
+import 'package:autodo/integ_test_keys.dart';
 import 'package:autodo/theme.dart';
 import 'mileage.dart';
 import 'latestcompleted.dart';
@@ -67,19 +71,30 @@ class NewUserScreenState extends State<NewUserScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: scaffoldBackgroundGradient(),
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () => backAction(),
-          ),
-        ),
-        body: currentPage(),
-        backgroundColor: Colors.transparent,
-      ),
-    );
-  }
+  Widget build(BuildContext context) =>
+      BlocBuilder<AuthenticationBloc, AuthenticationState>(
+          builder: (context, authState) =>
+              BlocBuilder<DatabaseBloc, DatabaseState>(
+                  builder: (context, dbState) {
+                print('auth $authState db $dbState');
+                if ((authState is RemoteAuthenticated ||
+                        authState is LocalAuthenticated) &&
+                    dbState is DbLoaded) {
+                  return Container(
+                    decoration: scaffoldBackgroundGradient(),
+                    child: Scaffold(
+                      appBar: AppBar(
+                        leading: IconButton(
+                          icon: Icon(Icons.arrow_back),
+                          onPressed: () => backAction(),
+                        ),
+                      ),
+                      body: currentPage(),
+                      backgroundColor: Colors.transparent,
+                    ),
+                  );
+                } else {
+                  return LoadingIndicator();
+                }
+              }));
 }

@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:autodo/repositories/repositories.dart';
+import 'package:autodo/repositories/src/firebase_write_batch.dart';
 import 'package:autodo/models/models.dart';
 
 class MockFirestore extends Mock implements Firestore {}
@@ -19,7 +20,7 @@ class MockDocSnapshot extends Mock implements DocumentSnapshot {}
 class MockWriteBatch extends Mock implements WriteBatch {}
 
 void main() {
-  group('DataRepository', () {
+  group('FirebaseDataRepository', () {
     final firestore = MockFirestore();
     final document = MockDocument();
     final collection = MockCollection();
@@ -72,7 +73,7 @@ void main() {
         when(firestore.batch()).thenAnswer((_) => MockWriteBatch());
         expect(
             repository.startTodoWriteBatch(),
-            WriteBatchWrapper(
+            FirebaseWriteBatch(
                 firestoreInstance: firestore, collection: collection));
       });
     });
@@ -139,7 +140,7 @@ void main() {
         when(firestore.batch()).thenAnswer((_) => MockWriteBatch());
         expect(
             repository.startRefuelingWriteBatch(),
-            WriteBatchWrapper(
+            FirebaseWriteBatch(
                 firestoreInstance: firestore, collection: collection));
       });
     });
@@ -175,7 +176,7 @@ void main() {
         when(firestore.batch()).thenAnswer((_) => MockWriteBatch());
         expect(
             repository.startCarWriteBatch(),
-            WriteBatchWrapper(
+            FirebaseWriteBatch(
                 firestoreInstance: firestore, collection: collection));
       });
     });
@@ -212,7 +213,7 @@ void main() {
         when(firestore.batch()).thenAnswer((_) => MockWriteBatch());
         expect(
             repository.startRepeatWriteBatch(),
-            WriteBatchWrapper(
+            FirebaseWriteBatch(
                 firestoreInstance: firestore, collection: collection));
       });
     });

@@ -16,4 +16,12 @@ void main() {
       expect(UserLoggedOut().props, []);
     });
   });
+  group('triallogin', () {
+    test('props', () {
+      expect(TrialLogin(false).props, [false]);
+    });
+    test('toString', () {
+      expect(TrialLogin(false).toString(), 'TrialLogin { newUser: false }');
+    });
+  });
 }

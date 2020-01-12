@@ -164,6 +164,7 @@ class _RepeatAddEditScreenState extends State<RepeatAddEditScreen> {
                     BlocBuilder<CarsBloc, CarsState>(
                       builder: (context, state) {
                         if (state is CarsLoaded) {
+                          print('CARSSS ${state.cars}');
                           return CarsCheckboxForm(
                             cars: state.cars,
                             onSaved: (cars) => _cars = cars,

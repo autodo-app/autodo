@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:sembast/sembast.dart';
 
 class RefuelingEntity extends Equatable {
   final String id;
@@ -21,20 +22,6 @@ class RefuelingEntity extends Equatable {
       this.efficiency,
       this.efficiencyColor);
 
-  // Map<String, Object> toJson() {
-  //   return {
-  //     "id": id,
-  //     "carName": carName,
-  //     "mileage": mileage,
-  //     "date": date.millisecondsSinceEpoch,
-  //     "amount": amount,
-  //     "cost": cost,
-  //     "carColor": carColor.value,
-  //     "efficiency": efficiency,
-  //     "efficiencyColor": efficiencyColor.value,
-  //   };
-  // }
-
   @override
   List<Object> get props => [
         id,
@@ -53,20 +40,6 @@ class RefuelingEntity extends Equatable {
     return 'RefuelingEntity { id: $id, name: $carName, carColor: $carColor, mileage: $mileage, date: $date, amount: $amount, cost: $cost, efficiency: $efficiency, efficiencyColor: $efficiencyColor }';
   }
 
-  // static RefuelingEntity fromJson(Map<String, Object> json) {
-  //   return RefuelingEntity(
-  //     json["id"] as String,
-  //     json["carName"] as String,
-  //     json["mileage"] as int,
-  //     DateTime.fromMillisecondsSinceEpoch(json["date"] as int),
-  //     json["amount"] as double,
-  //     json["cost"] as double,
-  //     Color(json["carColor"] as int),
-  //     json["efficiency"] as double,
-  //     Color(json["efficiencyColor"] as int),
-  //   );
-  // }
-
   static RefuelingEntity fromSnapshot(DocumentSnapshot snap) {
     return RefuelingEntity(
       snap.documentID,
@@ -84,6 +57,26 @@ class RefuelingEntity extends Equatable {
       (snap.data['efficiencyColor'] == null)
           ? null
           : Color(snap.data["efficiencyColor"] as int),
+    );
+  }
+
+  factory RefuelingEntity.fromRecord(RecordSnapshot snap) {
+    return RefuelingEntity(
+      (snap.key is String) ? snap.key : '${snap.key}',
+      snap.value['carName'],
+      snap.value['mileage'],
+      (snap.value['date'] == null)
+          ? null
+          : DateTime.fromMillisecondsSinceEpoch(snap.value['date']),
+      snap.value["amount"] as double,
+      snap.value["cost"] as double,
+      (snap.value['carColor'] == null)
+          ? null
+          : Color(snap.value["carColor"] as int),
+      snap.value["efficiency"] as double,
+      (snap.value['efficiencyColor'] == null)
+          ? null
+          : Color(snap.value["efficiencyColor"] as int),
     );
   }
 

@@ -33,10 +33,8 @@ void main() {
       blocTest<CarsBloc, CarsEvent, CarsState>('CarsLoaded',
           build: () {
             final dataRepository = MockDataRepository();
-            when(dataRepository.cars())
-                .thenAnswer((_) => Stream<List<Car>>.fromIterable([
-                      [Car()]
-                    ]));
+            when(dataRepository.getCurrentCars())
+                .thenAnswer((_) async => [Car()]);
             final dbBloc = MockDbBloc();
             when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
             final refuelingsBloc = MockRefuelingsBloc();
@@ -50,8 +48,7 @@ void main() {
       blocTest<CarsBloc, CarsEvent, CarsState>('Cars is null',
           build: () {
             final dataRepository = MockDataRepository();
-            when(dataRepository.cars())
-                .thenAnswer((_) => Stream<List<Car>>.fromIterable([null]));
+            when(dataRepository.getCurrentCars()).thenAnswer((_) async => []);
             final refuelingsBloc = MockRefuelingsBloc();
             final dbBloc = MockDbBloc();
             when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
@@ -71,10 +68,8 @@ void main() {
             );
             final dataRepository = MockDataRepository();
             final refuelingsBloc = MockRefuelingsBloc();
-            when(dataRepository.cars())
-                .thenAnswer((_) => Stream<List<Car>>.fromIterable([
-                      [Car()]
-                    ]));
+            when(dataRepository.getCurrentCars())
+                .thenAnswer((_) async => [Car()]);
             whenListen(
                 refuelingsBloc,
                 Stream<RefuelingsState>.fromIterable([
@@ -103,10 +98,7 @@ void main() {
     group('AddCar', () {
       blocTest<CarsBloc, CarsEvent, CarsState>('Proper behavior', build: () {
         final dataRepository = MockDataRepository();
-        when(dataRepository.cars())
-            .thenAnswer((_) => Stream<List<Car>>.fromIterable([
-                  [Car()]
-                ]));
+        when(dataRepository.getCurrentCars()).thenAnswer((_) async => [Car()]);
         final refuelingsBloc = MockRefuelingsBloc();
         final dbBloc = MockDbBloc();
         when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
@@ -123,10 +115,8 @@ void main() {
     group('UpdateCar', () {
       blocTest<CarsBloc, CarsEvent, CarsState>('Proper behavior', build: () {
         final dataRepository = MockDataRepository();
-        when(dataRepository.cars())
-            .thenAnswer((_) => Stream<List<Car>>.fromIterable([
-                  [Car(id: '0', name: 'abcd')]
-                ]));
+        when(dataRepository.getCurrentCars())
+            .thenAnswer((_) async => [Car(id: '0', name: 'abcd')]);
         final refuelingsBloc = MockRefuelingsBloc();
         final dbBloc = MockDbBloc();
         when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
@@ -143,10 +133,8 @@ void main() {
     group('DeleteCar', () {
       blocTest<CarsBloc, CarsEvent, CarsState>('Proper behavior', build: () {
         final dataRepository = MockDataRepository();
-        when(dataRepository.cars())
-            .thenAnswer((_) => Stream<List<Car>>.fromIterable([
-                  [Car(id: '0', name: 'abcd')]
-                ]));
+        when(dataRepository.getCurrentCars())
+            .thenAnswer((_) async => [Car(id: '0', name: 'abcd')]);
         final refuelingsBloc = MockRefuelingsBloc();
         final dbBloc = MockDbBloc();
         when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
@@ -173,10 +161,8 @@ void main() {
           build: () {
         final dataRepository = MockDataRepository();
         final writeBatch = MockWriteBatch();
-        when(dataRepository.cars())
-            .thenAnswer((_) => Stream<List<Car>>.fromIterable([
-                  [Car(id: '0', name: 'abcd', mileage: 10000)]
-                ]));
+        when(dataRepository.getCurrentCars()).thenAnswer(
+            (_) async => [Car(id: '0', name: 'abcd', mileage: 10000)]);
         when(dataRepository.startCarWriteBatch()).thenAnswer((_) => writeBatch);
         final refuelingsBloc = MockRefuelingsBloc();
         final dbBloc = MockDbBloc();
@@ -214,10 +200,8 @@ void main() {
           build: () {
         final dataRepository = MockDataRepository();
         final writeBatch = MockWriteBatch();
-        when(dataRepository.cars())
-            .thenAnswer((_) => Stream<List<Car>>.fromIterable([
-                  [Car(id: '0', name: 'abcd', mileage: 10000, numRefuelings: 1)]
-                ]));
+        when(dataRepository.getCurrentCars()).thenAnswer((_) async =>
+            [Car(id: '0', name: 'abcd', mileage: 10000, numRefuelings: 1)]);
         when(dataRepository.startCarWriteBatch()).thenAnswer((_) => writeBatch);
         final refuelingsBloc = MockRefuelingsBloc();
         final dbBloc = MockDbBloc();
@@ -261,10 +245,8 @@ void main() {
       blocTest<CarsBloc, CarsEvent, CarsState>('Efficiency EMA', build: () {
         final dataRepository = MockDataRepository();
         final writeBatch = MockWriteBatch();
-        when(dataRepository.cars())
-            .thenAnswer((_) => Stream<List<Car>>.fromIterable([
-                  [Car(id: '0', name: 'abcd', mileage: 10000, numRefuelings: 8)]
-                ]));
+        when(dataRepository.getCurrentCars()).thenAnswer((_) async =>
+            [Car(id: '0', name: 'abcd', mileage: 10000, numRefuelings: 8)]);
         when(dataRepository.startCarWriteBatch()).thenAnswer((_) => writeBatch);
         final refuelingsBloc = MockRefuelingsBloc();
         final dbBloc = MockDbBloc();

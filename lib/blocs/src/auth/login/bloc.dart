@@ -1,5 +1,5 @@
 // Copyright 2020 Jonathan Bayless
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -27,18 +27,18 @@ import 'event.dart';
 import 'state.dart';
 
 /// A [Bloc] used for handling the logic of the [LoginScreen] GUI.
-/// 
-/// This Bloc is intended to have an [AuthenticationBloc] as a parent that is 
+///
+/// This Bloc is intended to have an [AuthenticationBloc] as a parent that is
 /// listening to the same [authRepository] as this Bloc.
-/// 
+///
 /// This Bloc handles the login form validation and saving when interacting with
-/// the GUI, and is responsible for delegating the proper login action to the 
+/// the GUI, and is responsible for delegating the proper login action to the
 /// [authRepository] upon submission of the [LoginForm].
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   AuthRepository _authRepository;
 
   /// Creates a LoginBloc.
-  /// 
+  ///
   /// The [authRepository] parameter must be non-null.
   LoginBloc({@required authRepository})
       : assert(authRepository != null),
@@ -48,8 +48,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginState get initialState => LoginEmpty();
 
   /// Debounces the input events.
-  /// 
-  /// This is to avoid trying to update the results of the validator in the GUI 
+  ///
+  /// This is to avoid trying to update the results of the validator in the GUI
   /// too quickly.
   @override
   Stream<LoginState> transformEvents(

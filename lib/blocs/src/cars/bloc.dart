@@ -60,12 +60,11 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
   }
 
   Stream<CarsState> _mapLoadCarsToState() async* {
-    if (state is CarsLoaded && (state as CarsLoaded).cars.length > 0) return;
     try {
       final cars = await repo
-          .cars()
-          .first
-          .timeout(Duration(seconds: 1), onTimeout: () => null);
+          .getCurrentCars()
+          .timeout(Duration(milliseconds: 200), onTimeout: () => []);
+      print('loaded: $cars');
       if (cars != null) {
         yield CarsLoaded(cars);
       } else {
@@ -147,7 +146,7 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
       ExternalRefuelingsUpdated event) async* {
     if (repo == null || state is CarsNotLoaded) return;
 
-    WriteBatchWrapper batch = repo.startCarWriteBatch();
+    WriteBatchWrapper batch = await repo.startCarWriteBatch();
     // TODO cache the cars here so that updating number of refuelings will work
     List<Car> updatedCars = (state as CarsLoaded).cars;
     for (var r in event.refuelings) {
@@ -155,8 +154,13 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
         continue; // only do calculations for updated refuelings
       }
 
-      Car cur =
-          (state as CarsLoaded).cars.firstWhere((car) => car.name == r.carName);
+      Car cur = (state as CarsLoaded)
+          .cars
+          .firstWhere((car) => car.name == r.carName, orElse: () => null);
+      if (cur == null) {
+        print('cannot find the specified car when updating refuelings');
+        return;
+      }
       Car update = _updateWithRefueling(cur, r);
 
       updatedCars = (state as CarsLoaded).cars.map((car) {

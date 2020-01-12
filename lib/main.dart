@@ -1,8 +1,5 @@
 import 'dart:async';
 
-import 'package:autodo/screens/add_edit/refueling.dart';
-import 'package:autodo/screens/add_edit/repeat.dart';
-import 'package:autodo/screens/add_edit/todo.dart';
 import 'package:autodo/screens/settings/screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -117,43 +114,42 @@ class App extends StatelessWidget {
   final ThemeData _theme;
   final AuthRepository _authRepository;
   final bool integrationTest;
-  Widget homeProvider, welcomeProvider; // TODO: move these to the build method
 
   App({@required theme, @required authRepository, this.integrationTest})
       : assert(theme != null),
         assert(authRepository != null),
         _theme = theme,
-        _authRepository = authRepository {
-    homeProvider = HomeScreenProvider(integrationTest: integrationTest);
-    welcomeProvider = WelcomeScreenProvider();
-  }
+        _authRepository = authRepository;
 
   @override
-  build(context) => MaterialApp(
-        title: 'auToDo',
-        routes: {
-          "/": (context) =>
-              BlocBuilder<AuthenticationBloc, AuthenticationState>(
-                // Just here as the splitter between home screen and login screen
-                builder: (context, state) {
-                  if (state is Authenticated) {
-                    return homeProvider;
-                  } else if (state is Unauthenticated) {
-                    return welcomeProvider;
-                  } else {
-                    return LoadingIndicator();
-                  }
-                },
-              ),
-          AutodoRoutes.home: (context) => homeProvider,
-          AutodoRoutes.welcome: (context) => welcomeProvider,
-          AutodoRoutes.signupScreen: (context) =>
-              SignupScreenProvider(authRepository: _authRepository),
-          AutodoRoutes.loginScreen: (context) =>
-              LoginScreenProvider(authRepository: _authRepository),
-          AutodoRoutes.settingsScreen: (context) => SettingsScreen(),
-        },
-        theme: _theme,
-        debugShowCheckedModeBanner: false,
-      );
+  build(context) {
+    Widget homeProvider = HomeScreenProvider(integrationTest: integrationTest);
+    Widget welcomeProvider = WelcomeScreenProvider();
+    return MaterialApp(
+      title: 'auToDo',
+      routes: {
+        "/": (context) => BlocBuilder<AuthenticationBloc, AuthenticationState>(
+              // Just here as the splitter between home screen and login screen
+              builder: (context, state) {
+                if (state is Authenticated) {
+                  return homeProvider;
+                } else if (state is Unauthenticated) {
+                  return welcomeProvider;
+                } else {
+                  return LoadingIndicator();
+                }
+              },
+            ),
+        AutodoRoutes.home: (context) => homeProvider,
+        AutodoRoutes.welcome: (context) => welcomeProvider,
+        AutodoRoutes.signupScreen: (context) =>
+            SignupScreenProvider(authRepository: _authRepository),
+        AutodoRoutes.loginScreen: (context) =>
+            LoginScreenProvider(authRepository: _authRepository),
+        AutodoRoutes.settingsScreen: (context) => SettingsScreen(),
+      },
+      theme: _theme,
+      debugShowCheckedModeBanner: false,
+    );
+  }
 }
