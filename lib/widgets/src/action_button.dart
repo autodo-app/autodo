@@ -8,7 +8,7 @@ import 'package:autodo/integ_test_keys.dart';
 class AutodoActionButton extends StatefulWidget {
   final Key mainButtonKey;
   final List<Key> miniButtonKeys;
-  final List<MaterialPageRoute> miniButtonRoutes;
+  final List<MaterialPageRoute> Function() miniButtonRoutes;
   final TickerProvider ticker;
 
   AutodoActionButton({
@@ -29,7 +29,7 @@ class _AutodoActionButtonState extends State<AutodoActionButton>
   AnimationController _controller;
   final Key mainButtonKey;
   final List<Key> miniButtonKeys;
-  final List<MaterialPageRoute> miniButtonRoutes;
+  final List<MaterialPageRoute> Function() miniButtonRoutes;
   final TickerProvider ticker;
 
   _AutodoActionButtonState(this.mainButtonKey, this.miniButtonKeys,
@@ -96,7 +96,7 @@ class _AutodoActionButtonState extends State<AutodoActionButton>
                 switchState();
                 print(index);
                 if (miniButtonRoutes != null) {
-                  Navigator.push(context, miniButtonRoutes[index]);
+                  Navigator.push(context, miniButtonRoutes()[index]);
                 }
               },
             ),

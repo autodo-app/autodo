@@ -19,7 +19,9 @@ class HomeScreen extends StatelessWidget {
   };
   final Key todosTabKey;
   final bool integrationTest;
-  final List<MaterialPageRoute> fabRoutes = [
+  // this has to be a function so that it returns a different route each time
+  // the lifecycle of a MaterialPageRoute requires that it not be reused.
+  final List<MaterialPageRoute> Function() fabRoutes = () => [
     MaterialPageRoute(
       builder: (context) => RefuelingAddEditScreen(
         isEditing: false,
