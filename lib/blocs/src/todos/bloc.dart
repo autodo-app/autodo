@@ -279,7 +279,10 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
           .map((c) {
             final pastRepeats = todos.where((t) => (t.repeatName == r.name) && (t.carName == c.name));
             if (pastRepeats.length == 0) {
-              return Todo(name: r.name, carName: c.name, repeatName: r.name, dueMileage: c.mileage + r.mileageInterval, completed: false);
+              // if the mileage interval is bigger than the car's current mileage,
+              // then assume that it has not been done before.
+              int dueMileage = (r.mileageInterval > c.mileage) ? r.mileageInterval : c.mileage + r.mileageInterval;
+              return Todo(name: r.name, carName: c.name, repeatName: r.name, dueMileage: dueMileage, completed: false);
             } else {
               return Todo(name: r.name, carName: c.name, repeatName: r.name, dueMileage: _calculateNextTodo(pastRepeats, r.mileageInterval), completed: false);
             }
@@ -289,6 +292,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       }
     }
     print('asdasa $updatedTodos');
+    yield TodosNotLoaded(); // this should not work
     yield TodosLoaded(updatedTodos);
   }
 
