@@ -292,7 +292,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       }
     }
     print('asdasa $updatedTodos');
-    yield TodosNotLoaded(); // this should not work
+    yield TodosNotLoaded(); // HACK: this should not work
     yield TodosLoaded(updatedTodos);
   }
 
