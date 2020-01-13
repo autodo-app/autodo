@@ -12,10 +12,11 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
 
   FilteredTodosBloc({@required this.todosBloc}) {
     todosSubscription = todosBloc.listen((state) {
+      print(';asdfas');
       if (state is TodosLoaded) {
         add(UpdateTodos((todosBloc.state as TodosLoaded).todos));
       }
-    });
+    }, onError: (_) => print('err'), onDone: () => print('done'));
   }
 
   @override
@@ -68,7 +69,7 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
 
   List<Todo> _mapTodosToFilteredTodos(
       List<Todo> todos, VisibilityFilter filter) {
-    return todos.where((todo) {
+    final out = todos.where((todo) {
       if (filter == VisibilityFilter.all) {
         return true;
       } else if (filter == VisibilityFilter.active) {
@@ -77,6 +78,8 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
         return todo.completed;
       }
     }).toList();
+    print('dfasdf $out');
+    return out;
   }
 
   @override

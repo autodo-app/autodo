@@ -216,7 +216,7 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
     print('waiting on current repeats');
     final updatedRepeats = await repo.getCurrentRepeats();
     yield RepeatsLoaded(updatedRepeats);
-    print('yielded repeats');
+    print('yielded repeats $state');
   }
 
   @override

@@ -16,7 +16,7 @@ class RefuelingsLoaded extends RefuelingsState {
   const RefuelingsLoaded([this.refuelings = const []]);
 
   @override
-  List<Object> get props => [refuelings];
+  List<Object> get props => [...refuelings];
 
   @override
   String toString() => 'RefuelingsLoaded { refuelings: $refuelings }';
