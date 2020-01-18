@@ -21,9 +21,10 @@ class HomeScreen extends StatefulWidget {
       this.todosTabKey,
       this.integrationTest})
       : super(key: key);
-  
-  @override 
-  _HomeScreenState createState() => _HomeScreenState(todosTabKey, integrationTest);
+
+  @override
+  _HomeScreenState createState() =>
+      _HomeScreenState(todosTabKey, integrationTest);
 }
 
 class _ScreenWithBanner extends StatelessWidget {
@@ -32,19 +33,18 @@ class _ScreenWithBanner extends StatelessWidget {
 
   _ScreenWithBanner({this.child, this.bannerShown = true});
 
-  @override 
+  @override
   build(context) => Center(
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Expanded( 
-          child: child
-        ),
-        ...((bannerShown) ? [Container(height: 50, color: Theme.of(context).cardColor)] : [])
-      ],
-    )
-  );
+          child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Expanded(child: child),
+          ...((bannerShown)
+              ? [Container(height: 50, color: Theme.of(context).cardColor)]
+              : [])
+        ],
+      ));
 }
 
 class _HomeScreenState extends State<HomeScreen> {
@@ -63,8 +63,8 @@ class _HomeScreenState extends State<HomeScreen> {
   // the lifecycle of a MaterialPageRoute requires that it not be reused.
   final List<MaterialPageRoute> Function() fabRoutes = () => [
         MaterialPageRoute(
-          builder: (context) => _ScreenWithBanner(  
-            child: RefuelingAddEditScreen(
+          builder: (context) => _ScreenWithBanner(
+              child: RefuelingAddEditScreen(
             isEditing: false,
             onSave: (m, d, a, c, n) {
               BlocProvider.of<RefuelingsBloc>(context)
@@ -79,8 +79,8 @@ class _HomeScreenState extends State<HomeScreen> {
           )),
         ),
         MaterialPageRoute(
-            builder: (context) => _ScreenWithBanner(  
-              child: TodoAddEditScreen(
+            builder: (context) => _ScreenWithBanner(
+                    child: TodoAddEditScreen(
                   isEditing: false,
                   onSave: (n, d, m, r, c) {
                     BlocProvider.of<TodosBloc>(context).add(AddTodo(Todo(
@@ -93,8 +93,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ))),
         MaterialPageRoute(
-            builder: (context) => _ScreenWithBanner(  
-              child: RepeatAddEditScreen(
+            builder: (context) => _ScreenWithBanner(
+                    child: RepeatAddEditScreen(
                   isEditing: false,
                   onSave: (n, i, c) {
                     BlocProvider.of<RepeatsBloc>(context).add(AddRepeat(
@@ -103,9 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ))),
       ];
 
-  _HomeScreenState(
-      this.todosTabKey,
-      this.integrationTest);
+  _HomeScreenState(this.todosTabKey, this.integrationTest);
 
   Widget get actionButton => (integrationTest ?? false)
       ? AutodoActionButton(miniButtonRoutes: fabRoutes, ticker: TestVSync())
@@ -115,19 +113,26 @@ class _HomeScreenState extends State<HomeScreen> {
   initState() {
     FirebaseAdMob.instance.initialize(appId: BannerAd.testAdUnitId);
     _bannerAd = AutodoBannerAd(
-      adUnitId: (kReleaseMode) ? 'ca-app-pub-6809809089648617/3864738913' : BannerAd.testAdUnitId,
-      listener: (event) {
-        if (event == MobileAdEvent.loaded) {
-          setState(() {_bannerShown = true;});
-        } else if (event == MobileAdEvent.failedToLoad) {
-          setState(() {_bannerShown = false;});
-        }
-      }
-    )..load()..show();
+        adUnitId: (kReleaseMode)
+            ? 'ca-app-pub-6809809089648617/3864738913'
+            : BannerAd.testAdUnitId,
+        listener: (event) {
+          if (event == MobileAdEvent.loaded) {
+            setState(() {
+              _bannerShown = true;
+            });
+          } else if (event == MobileAdEvent.failedToLoad) {
+            setState(() {
+              _bannerShown = false;
+            });
+          }
+        })
+      ..load()
+      ..show();
     super.initState();
   }
-  
-  @override 
+
+  @override
   dispose() {
     _bannerAd.dispose();
     super.dispose();
@@ -137,22 +142,22 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   build(context) => BlocBuilder<TabBloc, AppTab>(
-      builder: (context, activeTab) => _ScreenWithBanner(  
-        bannerShown: _bannerShown,
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text(AutodoLocalizations.appTitle),
-            actions: [ExtraActions()],
-          ),
-          drawer: NavDrawer(),
-          body: views[activeTab],
-          floatingActionButton: actionButton,
-          bottomNavigationBar: TabSelector(
-            activeTab: activeTab,
-            onTabSelected: (tab) =>
-                BlocProvider.of<TabBloc>(context).add(UpdateTab(tab)),
-            todosTabKey: todosTabKey,
-            refuelingsTabKey: ValueKey('__refuelings_tab_button__'),
-            repeatsTabKey: ValueKey('__repeats_tab_button__'),
-          ))));
+      builder: (context, activeTab) => _ScreenWithBanner(
+          bannerShown: _bannerShown,
+          child: Scaffold(
+              appBar: AppBar(
+                title: Text(AutodoLocalizations.appTitle),
+                actions: [ExtraActions()],
+              ),
+              drawer: NavDrawer(),
+              body: views[activeTab],
+              floatingActionButton: actionButton,
+              bottomNavigationBar: TabSelector(
+                activeTab: activeTab,
+                onTabSelected: (tab) =>
+                    BlocProvider.of<TabBloc>(context).add(UpdateTab(tab)),
+                todosTabKey: todosTabKey,
+                refuelingsTabKey: ValueKey('__refuelings_tab_button__'),
+                repeatsTabKey: ValueKey('__repeats_tab_button__'),
+              ))));
 }
