@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -27,8 +28,9 @@ class HomeScreen extends StatefulWidget {
 
 class _ScreenWithBanner extends StatelessWidget {
   final Widget child;
+  final bool bannerShown;
 
-  _ScreenWithBanner({this.child});
+  _ScreenWithBanner({this.child, this.bannerShown = true});
 
   @override 
   build(context) => Center(
@@ -39,7 +41,7 @@ class _ScreenWithBanner extends StatelessWidget {
         Expanded( 
           child: child
         ),
-        Container(height: 50, color: Theme.of(context).cardColor,)
+        ...((bannerShown) ? [Container(height: 50, color: Theme.of(context).cardColor)] : [])
       ],
     )
   );
@@ -55,6 +57,8 @@ class _HomeScreenState extends State<HomeScreen> {
   final Key todosTabKey;
   final bool integrationTest;
   BannerAd _bannerAd;
+  bool _bannerShown = false;
+
   // this has to be a function so that it returns a different route each time
   // the lifecycle of a MaterialPageRoute requires that it not be reused.
   final List<MaterialPageRoute> Function() fabRoutes = () => [
@@ -110,7 +114,16 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   initState() {
     FirebaseAdMob.instance.initialize(appId: BannerAd.testAdUnitId);
-    _bannerAd = AutodoBannerAd()..load()..show();
+    _bannerAd = AutodoBannerAd(
+      adUnitId: (kReleaseMode) ? 'ca-app-pub-6809809089648617/3864738913' : BannerAd.testAdUnitId,
+      listener: (event) {
+        if (event == MobileAdEvent.loaded) {
+          setState(() {_bannerShown = true;});
+        } else if (event == MobileAdEvent.failedToLoad) {
+          setState(() {_bannerShown = false;});
+        }
+      }
+    )..load()..show();
     super.initState();
   }
   
@@ -125,6 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   build(context) => BlocBuilder<TabBloc, AppTab>(
       builder: (context, activeTab) => _ScreenWithBanner(  
+        bannerShown: _bannerShown,
         child: Scaffold(
           appBar: AppBar(
             title: Text(AutodoLocalizations.appTitle),
