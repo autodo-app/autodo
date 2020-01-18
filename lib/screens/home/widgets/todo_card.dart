@@ -130,7 +130,7 @@ class _TodoLastCompleted extends StatelessWidget {
           Text(
             AutodoLocalizations
                 .firstTimeDoingTask, // TODO adjust this for past completed
-            style: Theme.of(context).primaryTextTheme.body1,
+            style: Theme.of(context).primaryTextTheme.body1.copyWith(fontSize: 14),
           ),
         ],
       );
