@@ -11,7 +11,7 @@ description: A new Flutter project.
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 0.1.4+5
+version: 0.1.5+6
 
 environment:
   sdk: ">=2.2.2 <3.0.0"
@@ -19,15 +19,27 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  intl: ^0.15.2
+  intl: ^0.16.0
   cloud_firestore: ^0.12.9
   firebase_auth: any
-  shared_preferences: ^0.5.3
+  shared_preferences: ^0.5.6
   flutter_typeahead: ^1.6.1
   flutter_local_notifications: ^0.8.4 
   url_launcher: ^5.2.3
   charts_flutter: ^0.8.1
   sliding_up_panel: ^0.3.6
+  bloc: ^2.0.0
+  flutter_bloc: ^2.1.1
+  google_sign_in: any
+  equatable: any
+  font_awesome_flutter: any
+  autocomplete_textfield:
+    git:
+      url: git://github.com/baylessj/flutter-autocomplete-textfield.git
+      ref: master
+  sentry: ^3.0.0
+  sembast: ^2.1.2
+  path_provider: ^1.5.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -36,7 +48,12 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_driver: 
+    sdk: flutter
   test: ^1.6.3
+  bloc_test: any
+  mockito: any
+  
 
 
 # For information on the generic Dart part of this file, see the
@@ -57,6 +74,7 @@ flutter:
    - img/icon-only.png
    - img/icon-only-green.png
    - legal/privacy-policy.md
+   - keys.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

@@ -1,12 +1,4 @@
-export './homescreen.dart';
-export './createitems/createmaintenancetodo.dart';
-export './createitems/createrefueling.dart';
-export './createitems/createrepeat.dart';
-export './settings.dart';
-export './welcome.dart';
-export './logins.dart';
-export './loadingpage.dart';
-export './statistics.dart';
-export './editcarlist.dart';
-export './editrepeats.dart';
-export './newuser.dart';
+export 'welcome/provider.dart';
+export 'welcome/views/signup/provider.dart';
+export 'welcome/views/login/provider.dart';
+export 'home/provider.dart';

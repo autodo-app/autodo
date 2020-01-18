@@ -30,6 +30,8 @@ doc/api/
 
 google-services.json
 
-
-
-google-services.json
+**/coverage/**
+doc/**
+.flutter-plugins**
+keys.json
+*.log

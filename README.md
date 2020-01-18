@@ -1,6 +1,6 @@
 # auToDo
 
-[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fautodo-app%2Fautodo%2Fbadge%3Fref%3Ddevelop&style=popout)](https://actions-badge.atrox.dev/autodo-app/autodo/goto?ref=develop)
+[![GitHub release](https://img.shields.io/github/v/release/autodo-app/autodo?include_prereleases)]() [![GitHub Build](https://github.com/autodo-app/autodo/workflows/Build%20APK/badge.svg)]() [![GitHub Test Status](https://github.com/autodo-app/autodo/workflows/Unit%20and%20Widget%20Tests/badge.svg)]() [![codecov](https://codecov.io/gh/autodo-app/autodo/branch/develop/graph/badge.svg)](https://codecov.io/gh/autodo-app/autodo) 
 
 A flexible, intuitive ToDo list app for keeping track of your cars' maintenance needs.
 
