@@ -40,34 +40,5 @@ void main() {
       await tester.pumpAndSettle(const Duration(milliseconds: 10));
       expect(find.byKey(mainKey), findsOneWidget);
     });
-    // testWidgets('should call onUndo when undo tapped',
-    //     (WidgetTester tester) async {
-    //   int tapCount = 0;
-    //   await tester.pumpWidget(MaterialApp(
-    //     home: Scaffold(
-    //       body: Builder(builder: (BuildContext context) {
-    //         return GestureDetector(
-    //           onTap: () {
-    //             Scaffold.of(context).showSnackBar(DeleteTodoSnackBar(
-    //               onUndo: () {
-    //                 ++tapCount;
-    //               },
-    //               localizations: ArchSampleLocalizations(Locale('en')),
-    //               todo: Todo('take out trash'),
-    //             ));
-    //           },
-    //           child: const Text('X'),
-    //         );
-    //       }),
-    //     ),
-    //   ));
-    //   await tester.tap(find.text('X'));
-    //   await tester.pump(); // start animation
-    //   await tester.pump(const Duration(milliseconds: 750));
-
-    //   expect(tapCount, equals(0));
-    //   await tester.tap(find.text('Undo'));
-    //   expect(tapCount, equals(1));
-    // });
   });
 }
