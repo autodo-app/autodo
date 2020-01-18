@@ -13,7 +13,9 @@ void main() {
       Widget app = MaterialApp(
         home: home,
       );
-      AutodoBannerAd()..load()..show();
+      AutodoBannerAd()
+        ..load()
+        ..show();
       AutodoBannerAd.defaultListener(MobileAdEvent.loaded);
       await tester.pumpWidget(app);
       expect(find.byType(Scaffold), findsOneWidget);
