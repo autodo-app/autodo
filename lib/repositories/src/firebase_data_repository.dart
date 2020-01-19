@@ -184,6 +184,12 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
   }
 
   @override
+  Future<bool> getPaidStatus() async {
+    DocumentSnapshot snap = await _userDoc.get();
+    return snap.data['paid'] as bool;
+  }
+
+  @override
   List<Object> get props => [_firestoreInstance, _uuid];
 
   @override
