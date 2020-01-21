@@ -131,7 +131,8 @@ class App extends StatelessWidget {
         "/": (context) => BlocBuilder<AuthenticationBloc, AuthenticationState>(
               // Just here as the splitter between home screen and login screen
               builder: (context, state) {
-                if (state is Authenticated) {
+                if (state is RemoteAuthenticated ||
+                    state is LocalAuthenticated) {
                   return homeProvider;
                 } else if (state is Unauthenticated) {
                   return welcomeProvider;
