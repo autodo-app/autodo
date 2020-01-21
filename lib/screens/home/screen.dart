@@ -141,23 +141,32 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Widget> fakeBottomButtons = [Container(height: 50)];
 
   @override
-  build(context) => BlocBuilder<TabBloc, AppTab>(
-      builder: (context, activeTab) => _ScreenWithBanner(
-          bannerShown: _bannerShown,
-          child: Scaffold(
-              appBar: AppBar(
-                title: Text(AutodoLocalizations.appTitle),
-                actions: [ExtraActions()],
-              ),
-              drawer: NavDrawer(),
-              body: views[activeTab],
-              floatingActionButton: actionButton,
-              bottomNavigationBar: TabSelector(
-                activeTab: activeTab,
-                onTabSelected: (tab) =>
-                    BlocProvider.of<TabBloc>(context).add(UpdateTab(tab)),
-                todosTabKey: todosTabKey,
-                refuelingsTabKey: ValueKey('__refuelings_tab_button__'),
-                repeatsTabKey: ValueKey('__repeats_tab_button__'),
-              ))));
+  build(context) =>
+      BlocBuilder<PaidVersionBloc, PaidVersionState>(builder: (context, paid) {
+        if (paid is PaidVersion && _bannerShown) {
+          _bannerAd?.dispose();
+          _bannerShown = false;
+        } else if (paid is BasicVersion && !_bannerShown) {
+          // not really sure when a user would downgrade, so leaving this empty
+        }
+        return BlocBuilder<TabBloc, AppTab>(
+            builder: (context, activeTab) => _ScreenWithBanner(
+                bannerShown: _bannerShown,
+                child: Scaffold(
+                    appBar: AppBar(
+                      title: Text(AutodoLocalizations.appTitle),
+                      actions: [ExtraActions()],
+                    ),
+                    drawer: NavDrawer(),
+                    body: views[activeTab],
+                    floatingActionButton: actionButton,
+                    bottomNavigationBar: TabSelector(
+                      activeTab: activeTab,
+                      onTabSelected: (tab) =>
+                          BlocProvider.of<TabBloc>(context).add(UpdateTab(tab)),
+                      todosTabKey: todosTabKey,
+                      refuelingsTabKey: ValueKey('__refuelings_tab_button__'),
+                      repeatsTabKey: ValueKey('__repeats_tab_button__'),
+                    ))));
+      });
 }

@@ -60,4 +60,7 @@ abstract class DataRepository extends Equatable {
 
   // Notifications
   Stream<int> notificationID();
+
+  // Paid or Ad-supported version
+  Future<bool> getPaidStatus();
 }

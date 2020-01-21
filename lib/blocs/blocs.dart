@@ -12,3 +12,4 @@ export 'src/todos/barrel.dart';
 export 'src/database/barrel.dart';
 export 'src/auth/barrel.dart';
 export 'src/repeating/barrel.dart';
+export 'src/paid_version/barrel.dart';

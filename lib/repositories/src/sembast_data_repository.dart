@@ -260,6 +260,12 @@ class SembastDataRepository extends Equatable implements DataRepository {
     return _notificationIdStream.stream;
   }
 
+  @override
+  Future<bool> getPaidStatus() async {
+    return await StoreRef.main()
+        .findKey(await db, finder: Finder(filter: Filter.byKey('paid')));
+  }
+
   Future<void> deleteDb() async {
     await dbFactory.deleteDatabase(await _getFullFilePath());
   }
