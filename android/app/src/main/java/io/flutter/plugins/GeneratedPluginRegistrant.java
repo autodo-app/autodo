@@ -8,6 +8,7 @@ import io.flutter.plugins.firebase.core.FirebaseCorePlugin;
 import com.flutter.keyboardvisibility.KeyboardVisibilityPlugin;
 import com.dexterous.flutterlocalnotifications.FlutterLocalNotificationsPlugin;
 import io.flutter.plugins.googlesignin.GoogleSignInPlugin;
+import io.flutter.plugins.inapppurchase.InAppPurchasePlugin;
 import io.flutter.plugins.pathprovider.PathProviderPlugin;
 import io.flutter.plugins.sharedpreferences.SharedPreferencesPlugin;
 import io.flutter.plugins.urllauncher.UrlLauncherPlugin;
@@ -27,6 +28,7 @@ public final class GeneratedPluginRegistrant {
     KeyboardVisibilityPlugin.registerWith(registry.registrarFor("com.flutter.keyboardvisibility.KeyboardVisibilityPlugin"));
     FlutterLocalNotificationsPlugin.registerWith(registry.registrarFor("com.dexterous.flutterlocalnotifications.FlutterLocalNotificationsPlugin"));
     GoogleSignInPlugin.registerWith(registry.registrarFor("io.flutter.plugins.googlesignin.GoogleSignInPlugin"));
+    InAppPurchasePlugin.registerWith(registry.registrarFor("io.flutter.plugins.inapppurchase.InAppPurchasePlugin"));
     PathProviderPlugin.registerWith(registry.registrarFor("io.flutter.plugins.pathprovider.PathProviderPlugin"));
     SharedPreferencesPlugin.registerWith(registry.registrarFor("io.flutter.plugins.sharedpreferences.SharedPreferencesPlugin"));
     UrlLauncherPlugin.registerWith(registry.registrarFor("io.flutter.plugins.urllauncher.UrlLauncherPlugin"));
