@@ -48,10 +48,10 @@ void run(bool integrationTest) async {
         ),
         child: MultiBlocProvider(
           providers: [
-            BlocProvider<PaidVersionBloc>(  
-              create: (context) => PaidVersionBloc(  
-                dbBloc: BlocProvider.of<DatabaseBloc>(context)
-              )..add(LoadPaidVersion()),
+            BlocProvider<PaidVersionBloc>(
+              create: (context) => PaidVersionBloc(
+                  dbBloc: BlocProvider.of<DatabaseBloc>(context))
+                ..add(LoadPaidVersion()),
             ),
             BlocProvider<NotificationsBloc>(
               create: (context) => NotificationsBloc(
@@ -104,7 +104,8 @@ Future<Map> init() async {
         projectID: 'autodo-49f21',
         apiKey: keys['firebase-key'],
       ));
-  InAppPurchaseConnection.enablePendingPurchases(); // required in init for Android
+  InAppPurchaseConnection
+      .enablePendingPurchases(); // required in init for Android
   BlocSupervisor.delegate = AutodoBlocDelegate();
   return keys;
 }

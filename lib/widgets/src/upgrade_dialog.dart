@@ -25,9 +25,16 @@ class UpgradeDialog extends AlertDialog {
                   ]
                 : [
                     FlatButton(
-                        onPressed: () {BlocProvider.of<PaidVersionBloc>(context).add(PaidVersionUpgrade());},
+                        onPressed: () {
+                          BlocProvider.of<PaidVersionBloc>(context)
+                              .add(PaidVersionUpgrade());
+                        },
                         child: Text('PURCHASE',
-                            style: Theme.of(context).primaryTextTheme.button.copyWith(color: Theme.of(context).primaryColor))),
+                            style: Theme.of(context)
+                                .primaryTextTheme
+                                .button
+                                .copyWith(
+                                    color: Theme.of(context).primaryColor))),
                     FlatButton(
                         onPressed: () => Navigator.pop(context),
                         child: Text('BACK',

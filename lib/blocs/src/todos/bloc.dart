@@ -273,10 +273,12 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
             todos.firstWhere((t) => (!t.completed && t.repeatName == r.name));
         Todo updated = upcoming.copyWith(
             dueMileage: _calculateNextTodo(
-                todos.where((t) => t.repeatName == r.name).toList(), r.mileageInterval));
+                todos.where((t) => t.repeatName == r.name).toList(),
+                r.mileageInterval));
         repo.updateTodo(updated);
-        updatedTodos =
-            updatedTodos.map((t) => (t.id == updated.id) ? updated : t).toList();
+        updatedTodos = updatedTodos
+            .map((t) => (t.id == updated.id) ? updated : t)
+            .toList();
       } else {
         // create a new todo for every car
         List<Car> cars = (_carsBloc.state as CarsLoaded).cars;
