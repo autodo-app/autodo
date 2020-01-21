@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:sentry/sentry.dart';
 
 import 'widgets/widgets.dart';
@@ -47,6 +48,11 @@ void run(bool integrationTest) async {
         ),
         child: MultiBlocProvider(
           providers: [
+            BlocProvider<PaidVersionBloc>(  
+              create: (context) => PaidVersionBloc(  
+                dbBloc: BlocProvider.of<DatabaseBloc>(context)
+              )..add(LoadPaidVersion()),
+            ),
             BlocProvider<NotificationsBloc>(
               create: (context) => NotificationsBloc(
                 dbBloc: BlocProvider.of<DatabaseBloc>(context),
@@ -98,6 +104,7 @@ Future<Map> init() async {
         projectID: 'autodo-49f21',
         apiKey: keys['firebase-key'],
       ));
+  InAppPurchaseConnection.enablePendingPurchases(); // required in init for Android
   BlocSupervisor.delegate = AutodoBlocDelegate();
   return keys;
 }
@@ -131,7 +138,7 @@ class App extends StatelessWidget {
         "/": (context) => BlocBuilder<AuthenticationBloc, AuthenticationState>(
               // Just here as the splitter between home screen and login screen
               builder: (context, state) {
-                if (state is Authenticated) {
+                if (state is RemoteAuthenticated || state is LocalAuthenticated) {
                   return homeProvider;
                 } else if (state is Unauthenticated) {
                   return welcomeProvider;

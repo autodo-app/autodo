@@ -33,7 +33,8 @@ class PaidVersionBloc extends Bloc<PaidVersionEvent, PaidVersionState> {
           print('Error in purchase: ${purchase.error}');
           continue;
         }
-        if (purchase.status == PurchaseStatus.purchased && _verifyPurchase(purchase)) {
+        if (purchase.status == PurchaseStatus.purchased &&
+            _verifyPurchase(purchase)) {
           add(PaidVersionPurchased());
         }
       }
@@ -60,7 +61,9 @@ class PaidVersionBloc extends Bloc<PaidVersionEvent, PaidVersionState> {
 
   /// This methodology will vary by platform, currently just handling Android
   bool _verifyPurchase(PurchaseDetails p) {
-    return (p.productID == paidVersionId && p.verificationData.localVerificationData == localVerificationKey);
+    print(p.verificationData.localVerificationData);
+    return (p.productID == paidVersionId &&
+        p.verificationData.localVerificationData == localVerificationKey);
   }
 
   /// Currently just checking the respective app store, store this on the server
