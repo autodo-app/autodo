@@ -30,11 +30,12 @@ class PaidVersionBloc extends Bloc<PaidVersionEvent, PaidVersionState> {
     _purchaseSubscription = _purchaseConn.purchaseUpdatedStream.listen((p) {
       for (var purchase in p) {
         if (purchase.status == PurchaseStatus.error) {
-          print('Error in purchase: ${purchase.error}');
+          print('Error in purchase: ${purchase.error.message}');
           continue;
         }
         if (purchase.status == PurchaseStatus.purchased &&
             _verifyPurchase(purchase)) {
+          print('purchased');
           add(PaidVersionPurchased());
         }
       }
@@ -61,16 +62,15 @@ class PaidVersionBloc extends Bloc<PaidVersionEvent, PaidVersionState> {
 
   /// This methodology will vary by platform, currently just handling Android
   bool _verifyPurchase(PurchaseDetails p) {
-    print(p.verificationData.localVerificationData);
-    return (p.productID == paidVersionId &&
-        p.verificationData.localVerificationData == localVerificationKey);
+    print('verifying: ${p.verificationData.localVerificationData}');
+    return (p.productID == paidVersionId);
   }
 
   /// Currently just checking the respective app store, store this on the server
   /// in the future? Would help for transitioning to web app
   Stream<PaidVersionState> _mapLoadPaidVersionToState(event) async* {
     final trialUser = repo is SembastDataRepository;
-    if (!trialUser) {
+    if (trialUser) {
       yield BasicVersion();
       return;
     }
@@ -86,6 +86,7 @@ class PaidVersionBloc extends Bloc<PaidVersionEvent, PaidVersionState> {
     }
 
     for (PurchaseDetails p in response.pastPurchases) {
+      print('verifying $p');
       if (!_verifyPurchase(p)) {
         continue;
       }
