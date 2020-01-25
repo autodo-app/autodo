@@ -64,6 +64,21 @@ class _SignupFormState extends State<SignupForm> {
                   ),
                 ),
               );
+          } else if (state is VerificationSent) {
+            Scaffold.of(context).hideCurrentSnackBar();
+            showDialog(  
+              context: context,
+              builder: (context) => AlertDialog(  
+                title: Text(AutodoLocalizations.verificationSent, style: Theme.of(context).primaryTextTheme.title),
+                content: Text(AutodoLocalizations.verificationDialogContent, style: Theme.of(context).primaryTextTheme.body1), 
+                actions: [  
+                  FlatButton(  
+                    child: Text(AutodoLocalizations.back, style: Theme.of(context).primaryTextTheme.button),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
+              ),
+            );
           } else if (state is SignupSuccess) {
             Navigator.push(
                 context,

@@ -90,6 +90,8 @@ class AutodoLocalizations {
   static String get repeatName => "Repeat Name";
   static String get editRepeat => "Edit Repeat";
   static String get addRepeat => "Add Repeat";
+  static String get verificationSent => "Verification Email Sent";
+  static String get verificationDialogContent => "Please check the specified email address for an email from auToDo. This email will contain a link through which you can verify your account and use the app.";
 }
 
 class AutodoLocalizationsDelegate
