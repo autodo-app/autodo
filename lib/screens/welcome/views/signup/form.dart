@@ -48,6 +48,9 @@ class _SignupFormState extends State<SignupForm> {
                       Icon(Icons.error)
                     ],
                   ),
+                  duration: Duration(
+                      hours:
+                          1), // overkill to make sure that it never goes away
                 ),
               );
           } else if (state is SignupLoading) {
@@ -62,9 +65,13 @@ class _SignupFormState extends State<SignupForm> {
                       CircularProgressIndicator(),
                     ],
                   ),
+                  duration: Duration(
+                      hours:
+                          1), // overkill to make sure that it never goes away
                 ),
               );
           } else if (state is SignupSuccess) {
+            Scaffold.of(context).hideCurrentSnackBar();
             Navigator.push(
                 context,
                 MaterialPageRoute(
