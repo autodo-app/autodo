@@ -83,7 +83,7 @@ class _CarFormState extends State<CarForm> {
       textSubmitted: (_) => changeFocus(widget.node, widget.nextNode),
     );
     return FormField<String>(
-      builder: (FormFieldState<String> input) { 
+      builder: (FormFieldState<String> input) {
         // workaround for the fact that the text is cleared on rebuild?
         _autocompleteController.text = selectedCar?.name ?? '';
         return autoCompleteField;
