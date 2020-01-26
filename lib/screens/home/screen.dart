@@ -76,6 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 carName: n,
               )));
             },
+            cars: (BlocProvider.of<CarsBloc>(context).state as CarsLoaded).cars
           )),
         ),
         MaterialPageRoute(
