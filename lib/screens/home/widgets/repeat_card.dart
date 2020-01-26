@@ -100,8 +100,8 @@ class RepeatCard extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         _RepeatTitle(repeat),
-        Row(  
-          children: [  
+        Row(
+          children: [
             CarTag(text: repeat.cars.first, color: Color(0xffffffff)),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,

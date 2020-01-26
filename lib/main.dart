@@ -76,12 +76,12 @@ void run(bool integrationTest) async {
               )..add(LoadRepeats()),
               child: BlocProvider<TodosBloc>(
                 create: (context) => TodosBloc(
-                  dbBloc: BlocProvider.of<DatabaseBloc>(context),
-                  notificationsBloc:
-                      BlocProvider.of<NotificationsBloc>(context),
-                  carsBloc: BlocProvider.of<CarsBloc>(context),
-                  repeatsBloc: BlocProvider.of<RepeatsBloc>(context))
-                ..add(LoadTodos()),
+                    dbBloc: BlocProvider.of<DatabaseBloc>(context),
+                    notificationsBloc:
+                        BlocProvider.of<NotificationsBloc>(context),
+                    carsBloc: BlocProvider.of<CarsBloc>(context),
+                    repeatsBloc: BlocProvider.of<RepeatsBloc>(context))
+                  ..add(LoadTodos()),
                 child: App(
                     theme: theme,
                     authRepository: authRepository,

@@ -34,14 +34,16 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
   ];
 
   RepeatsBloc({@required DatabaseBloc dbBloc, @required CarsBloc carsBloc})
-      : assert(dbBloc != null), assert(carsBloc != null),
-        _dbBloc = dbBloc, _carsBloc = carsBloc {
+      : assert(dbBloc != null),
+        assert(carsBloc != null),
+        _dbBloc = dbBloc,
+        _carsBloc = carsBloc {
     _dbSubscription = _dbBloc.listen((state) {
       if (state is DbLoaded) {
         // if (state.newUser ?? false) {
         //   add(AddDefaultRepeats());
         // } else {
-          add(LoadRepeats());
+        add(LoadRepeats());
         // }
       }
     });
@@ -218,14 +220,15 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
     for (var r in defaults) {
       batch.setData(r.toEntity().toDocument());
     }
-    // need to wait on this, otherwise the "currentRepeats" call will return the 
+    // need to wait on this, otherwise the "currentRepeats" call will return the
     // old state
     await batch.commit();
     final updatedRepeats = await repo.getCurrentRepeats();
     yield RepeatsLoaded(updatedRepeats);
   }
-  
-  Stream<RepeatsState> _mapRepeatCarsUpdatedToState(RepeatCarsUpdated event) async* {
+
+  Stream<RepeatsState> _mapRepeatCarsUpdatedToState(
+      RepeatCarsUpdated event) async* {
     if (repo == null) {
       print('Error: trying to update repeats for cars update but repo is null');
       return;
@@ -233,8 +236,8 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
     final curRepeats = (state as RepeatsLoaded).repeats;
     // gets the list of cars that do not yet have a repeat associated with them
     List<Car> newCars = event.cars
-      .map((c) => (curRepeats.any((r) => r.cars.contains(c.name)) ? null : c))
-      .toList();
+        .map((c) => (curRepeats.any((r) => r.cars.contains(c.name)) ? null : c))
+        .toList();
     if (newCars.length == 0) {
       print('all cars have repeats, not adding defaults');
       return;
@@ -245,8 +248,8 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
         batch.setData(r.copyWith(cars: [c.name]).toEntity().toDocument());
       });
     });
-    
-    // need to wait on this, otherwise the "currentRepeats" call will return the 
+
+    // need to wait on this, otherwise the "currentRepeats" call will return the
     // old state
     await batch.commit();
     final updatedRepeats = await repo.getCurrentRepeats();

@@ -53,9 +53,9 @@ class RepeatCarsUpdated extends RepeatsEvent {
 
   const RepeatCarsUpdated(this.cars);
 
-  @override 
+  @override
   List<Object> get props => [cars];
 
-  @override 
+  @override
   String toString() => 'Repeat Cars Updated { cars: $cars }';
 }
