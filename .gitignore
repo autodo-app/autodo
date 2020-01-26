@@ -35,3 +35,5 @@ doc/**
 .flutter-plugins**
 keys.json
 *.log
+.vscode/
+.vscode/**
