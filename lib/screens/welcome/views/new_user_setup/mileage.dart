@@ -27,7 +27,8 @@ class CarEntryFieldState extends State<CarEntryField> {
   final Function onNameSaved, onMileageSaved;
   final GlobalKey<FormState> formKey;
 
-  CarEntryFieldState(this.nextNode, this.onNameSaved, this.onMileageSaved, this.formKey);
+  CarEntryFieldState(
+      this.nextNode, this.onNameSaved, this.onMileageSaved, this.formKey);
 
   @override
   initState() {
@@ -73,7 +74,7 @@ class CarEntryFieldState extends State<CarEntryField> {
 
     return Container(
       padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-      child: Form(  
+      child: Form(
         key: formKey,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -127,8 +128,9 @@ class MileageScreenState extends State<MileageScreen> {
       }
     });
     if (allValidated) {
-      cars.forEach((c) {BlocProvider.of<CarsBloc>(context)
-          .add(AddCar(c));});
+      cars.forEach((c) {
+        BlocProvider.of<CarsBloc>(context).add(AddCar(c));
+      });
       // hide the keyboard
       FocusScope.of(context).requestFocus(FocusNode());
       await Future.delayed(Duration(milliseconds: 400));
@@ -167,14 +169,11 @@ class MileageScreenState extends State<MileageScreen> {
     Widget card() {
       List<Widget> carFields = [];
       for (var i in Iterable.generate(cars.length)) {
-        carFields.add(CarEntryField(
-          (i == cars.length - 1) ? _next : null,
-          (val) {
-            cars[i] = cars[i].copyWith(name: val);
-          },
-          (val) => cars[i] = cars[i].copyWith(mileage: int.parse(val)),
-          formKeys[i]
-        ));
+        carFields.add(CarEntryField((i == cars.length - 1) ? _next : null,
+            (val) {
+          cars[i] = cars[i].copyWith(name: val);
+        }, (val) => cars[i] = cars[i].copyWith(mileage: int.parse(val)),
+            formKeys[i]));
       }
 
       return Container(

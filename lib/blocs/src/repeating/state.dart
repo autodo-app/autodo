@@ -37,7 +37,8 @@ class RepeatsLoaded extends RepeatsState {
   List<Object> get props => repeats;
 
   @override
-  String toString() => 'RepeatsLoaded { repeats: ${repeats.map((r) => "{${r.name}, ${r.cars}}")} }';
+  String toString() =>
+      'RepeatsLoaded { repeats: ${repeats.map((r) => "{${r.name}, ${r.cars}}")} }';
 }
 
 class RepeatsNotLoaded extends RepeatsState {}
