@@ -268,8 +268,9 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
                         todo: widget.todo,
                         node: _dateNode,
                         nextNode: _mileageNode,
-                        onSaved: (val) =>
-                            _dueDate = DateFormat.yMd().parseStrict(val),
+                        onSaved: (val) => _dueDate = (val == null || val == '')
+                            ? null
+                            : DateFormat.yMd().parseStrict(val),
                       ),
                       focusNode: _dateNode,
                     ),
