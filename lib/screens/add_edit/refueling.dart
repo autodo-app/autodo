@@ -151,7 +151,11 @@ class _DateFormState extends State<_DateForm> {
   @override
   initState() {
     _ctrl = TextEditingController();
-    if (initial != null) _ctrl.text = DateFormat.yMd().format(initial);
+    if (initial != null)  {
+      _ctrl.text = DateFormat.yMd().format(initial);
+    } else {
+      _ctrl.text = DateFormat.yMd().format(DateTime.now());
+    }
     super.initState();
   }
 
@@ -198,6 +202,11 @@ class _DateFormState extends State<_DateForm> {
 
   @override
   build(context) => Row(children: <Widget>[
+    IconButton(
+          icon: Icon(Icons.calendar_today),
+          tooltip: AutodoLocalizations.chooseDate,
+          onPressed: (() => chooseDate(context, _ctrl.text)),
+        ),
         Expanded(
           child: TextFormField(
               decoration: InputDecoration(
@@ -221,11 +230,6 @@ class _DateFormState extends State<_DateForm> {
                 if (nextNode != null) return changeFocus(node, nextNode);
               }),
         ),
-        IconButton(
-          icon: Icon(Icons.calendar_today),
-          tooltip: AutodoLocalizations.chooseDate,
-          onPressed: (() => chooseDate(context, _ctrl.text)),
-        )
       ]);
 }
 
