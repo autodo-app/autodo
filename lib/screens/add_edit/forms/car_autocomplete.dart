@@ -50,6 +50,8 @@ class _CarFormState extends State<CarForm> {
 
   @override
   build(context) {
+    print(_autocompleteController.text);
+    // pulled out into the function so that the validator can access it
     autoCompleteField = AutoCompleteTextField<Car>(
       controller: _autocompleteController,
       decoration: defaultInputDecoration(
@@ -81,17 +83,14 @@ class _CarFormState extends State<CarForm> {
       textSubmitted: (_) => changeFocus(widget.node, widget.nextNode),
     );
     return FormField<String>(
-      builder: (FormFieldState<String> input) => autoCompleteField,
-      initialValue: widget.initialValue ?? '',
+      builder: (FormFieldState<String> input) { 
+        // workaround for the fact that the text is cleared on rebuild?
+        _autocompleteController.text = selectedCar?.name ?? '';
+        return autoCompleteField;
+      },
       validator: (val) {
         var txt = _autocompleteController.text;
         var res = requiredValidator(txt);
-        // TODO figure this out better
-        // if (selectedCar != null)
-        //   widget.refueling.carName = selectedCar.name;
-        // else if (val != null && cars.any((element) => element.name == val)) {
-        //   widget.refueling.carName = val;
-        // }
         autoCompleteField.updateDecoration(
           decoration: defaultInputDecoration(
                   AutodoLocalizations.requiredLiteral,
