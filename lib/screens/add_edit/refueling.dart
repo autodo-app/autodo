@@ -151,7 +151,7 @@ class _DateFormState extends State<_DateForm> {
   @override
   initState() {
     _ctrl = TextEditingController();
-    if (initial != null)  {
+    if (initial != null) {
       _ctrl.text = DateFormat.yMd().format(initial);
     } else {
       _ctrl.text = DateFormat.yMd().format(DateTime.now());
@@ -202,7 +202,7 @@ class _DateFormState extends State<_DateForm> {
 
   @override
   build(context) => Row(children: <Widget>[
-    IconButton(
+        IconButton(
           icon: Icon(Icons.calendar_today),
           tooltip: AutodoLocalizations.chooseDate,
           onPressed: (() => chooseDate(context, _ctrl.text)),
@@ -240,8 +240,9 @@ class _CarToggleForm extends StatefulWidget {
 
   _CarToggleForm(this.initialState, this.cars, this.onSaved);
 
-  @override 
-  _CarToggleFormState createState() => _CarToggleFormState(initialState, cars, onSaved);
+  @override
+  _CarToggleFormState createState() =>
+      _CarToggleFormState(initialState, cars, onSaved);
 }
 
 class _CarToggleFormState extends State<_CarToggleForm> {
@@ -251,36 +252,42 @@ class _CarToggleFormState extends State<_CarToggleForm> {
 
   _CarToggleFormState(this.isSelected, this.cars, this.onSaved);
 
-  @override 
-  build(context) => FormField(  
-    builder: (state) => Center(
-      child: ToggleButtons(
-        children: cars.map((c) => Text(c.name)).toList(),
-        onPressed: (int index) {
-          setState(() {
-            for (int buttonIndex = 0; buttonIndex < isSelected.length; buttonIndex++) {
-              if (buttonIndex == index) {
-                isSelected[buttonIndex] = true;
-              } else {
-                isSelected[buttonIndex] = false;
-              }
-            }
-          });
-        },
-        isSelected: isSelected,
-        // Constraints are per the Material spec
-        constraints: BoxConstraints(minWidth: 88, minHeight: 36),
-        textStyle: Theme.of(context).primaryTextTheme.button,
-        color: Theme.of(context).primaryTextTheme.button.color.withOpacity(0.7),
-        selectedColor: Theme.of(context).accentTextTheme.button.color,
-        fillColor: Theme.of(context).primaryColor,
-        borderWidth: 2.0,
-        borderRadius: BorderRadius.circular(5),
-      ),
-    ),
-    onSaved: (_) => onSaved(isSelected),
-    validator: (_) => null,
-  );
+  @override
+  build(context) => FormField(
+        builder: (state) => Center(
+          child: ToggleButtons(
+            children: cars.map((c) => Text(c.name)).toList(),
+            onPressed: (int index) {
+              setState(() {
+                for (int buttonIndex = 0;
+                    buttonIndex < isSelected.length;
+                    buttonIndex++) {
+                  if (buttonIndex == index) {
+                    isSelected[buttonIndex] = true;
+                  } else {
+                    isSelected[buttonIndex] = false;
+                  }
+                }
+              });
+            },
+            isSelected: isSelected,
+            // Constraints are per the Material spec
+            constraints: BoxConstraints(minWidth: 88, minHeight: 36),
+            textStyle: Theme.of(context).primaryTextTheme.button,
+            color: Theme.of(context)
+                .primaryTextTheme
+                .button
+                .color
+                .withOpacity(0.7),
+            selectedColor: Theme.of(context).accentTextTheme.button.color,
+            fillColor: Theme.of(context).primaryColor,
+            borderWidth: 2.0,
+            borderRadius: BorderRadius.circular(5),
+          ),
+        ),
+        onSaved: (_) => onSaved(isSelected),
+        validator: (_) => null,
+      );
 }
 
 class RefuelingAddEditScreen extends StatefulWidget {
@@ -332,11 +339,12 @@ class _RefuelingAddEditScreenState extends State<RefuelingAddEditScreen> {
     _costNode.dispose();
     super.dispose();
   }
-  
-  List<bool> _carsToInitialState() => 
-    (widget.cars.map((c) => c.name).contains(widget.refueling?.carName)) ? 
-      widget.cars.map((c) => c.name == widget.refueling?.carName) :
-      List.generate(widget.cars.length, (idx) => (idx == 0) ? true : false);
+
+  List<bool> _carsToInitialState() => (widget.cars
+          .map((c) => c.name)
+          .contains(widget.refueling?.carName))
+      ? widget.cars.map((c) => c.name == widget.refueling?.carName)
+      : List.generate(widget.cars.length, (idx) => (idx == 0) ? true : false);
 
   @override
   build(context) => Scaffold(
@@ -353,21 +361,24 @@ class _RefuelingAddEditScreenState extends State<RefuelingAddEditScreen> {
                 padding: EdgeInsets.all(15),
                 child: ListView(
                   children: <Widget>[
-                    (widget.cars.length <= 1) 
-                      ? Container() : (widget.cars.length < 4) ?
-                        _CarToggleForm(
-                          _carsToInitialState(),
-                          widget.cars,
-                          (List<bool> isSelected) => _car = widget.cars[isSelected.indexWhere((i) => i)].name,
-                        )
-                      : CarForm(
-                        key: ValueKey('__refueling_car_form__'),
-                        initialValue: widget.refueling?.carName,
-                        onSaved: (val) => _car = val,
-                        node: _carNode,
-                        nextNode: _amountNode),
-                    (widget.cars.length <= 1) 
-                      ? Container() : Padding(padding: EdgeInsets.fromLTRB(0, 16, 0, 16)),
+                    (widget.cars.length <= 1)
+                        ? Container()
+                        : (widget.cars.length < 4)
+                            ? _CarToggleForm(
+                                _carsToInitialState(),
+                                widget.cars,
+                                (List<bool> isSelected) => _car = widget
+                                    .cars[isSelected.indexWhere((i) => i)].name,
+                              )
+                            : CarForm(
+                                key: ValueKey('__refueling_car_form__'),
+                                initialValue: widget.refueling?.carName,
+                                onSaved: (val) => _car = val,
+                                node: _carNode,
+                                nextNode: _amountNode),
+                    (widget.cars.length <= 1)
+                        ? Container()
+                        : Padding(padding: EdgeInsets.fromLTRB(0, 16, 0, 16)),
                     _MileageForm(
                         refueling: widget.refueling,
                         onSaved: (val) => _mileage = int.parse(val),

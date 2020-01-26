@@ -65,19 +65,19 @@ class _HomeScreenState extends State<HomeScreen> {
         MaterialPageRoute(
           builder: (context) => _ScreenWithBanner(
               child: RefuelingAddEditScreen(
-            isEditing: false,
-            onSave: (m, d, a, c, n) {
-              BlocProvider.of<RefuelingsBloc>(context)
-                  .add(AddRefueling(Refueling(
-                mileage: m,
-                date: d,
-                amount: a,
-                cost: c,
-                carName: n,
-              )));
-            },
-            cars: (BlocProvider.of<CarsBloc>(context).state as CarsLoaded).cars
-          )),
+                  isEditing: false,
+                  onSave: (m, d, a, c, n) {
+                    BlocProvider.of<RefuelingsBloc>(context)
+                        .add(AddRefueling(Refueling(
+                      mileage: m,
+                      date: d,
+                      amount: a,
+                      cost: c,
+                      carName: n,
+                    )));
+                  },
+                  cars: (BlocProvider.of<CarsBloc>(context).state as CarsLoaded)
+                      .cars)),
         ),
         MaterialPageRoute(
             builder: (context) => _ScreenWithBanner(
