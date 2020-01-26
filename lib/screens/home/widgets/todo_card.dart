@@ -16,7 +16,9 @@ class _TodoTitle extends StatelessWidget {
   _TodoTitle({Key key, @required this.todo}) : super(key: key);
 
   preface() {
-    if (todo.dueState == TodoDueState.PAST_DUE) {
+    if (todo.completed) {
+      return AutodoLocalizations.completed;
+    } else if (todo.dueState == TodoDueState.PAST_DUE) {
       return AutodoLocalizations.pastDue;
     } else if (todo.dueState == TodoDueState.DUE_SOON) {
       return AutodoLocalizations.dueSoon;
