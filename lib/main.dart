@@ -101,20 +101,20 @@ Future<Map> init() async {
   Map keys = await SecretLoader(secretPath: 'keys.json').load();
   if (Platform.isIOS) {
     FirebaseApp.configure(
-      name: 'autodo',
-      options: FirebaseOptions(
-        googleAppID: '1:617460744396:ios:7da25d96edce10cefc4269',
-        projectID: 'autodo-49f21',
-        apiKey: keys['firebase-key'],
-      )); 
+        name: 'autodo',
+        options: FirebaseOptions(
+          googleAppID: '1:617460744396:ios:7da25d96edce10cefc4269',
+          projectID: 'autodo-49f21',
+          apiKey: keys['firebase-key'],
+        ));
   } else {
-  FirebaseApp.configure(
-      name: 'autodo',
-      options: FirebaseOptions(
-        googleAppID: '1:617460744396:android:400cbb86de167047',
-        projectID: 'autodo-49f21',
-        apiKey: keys['firebase-key'],
-      ));
+    FirebaseApp.configure(
+        name: 'autodo',
+        options: FirebaseOptions(
+          googleAppID: '1:617460744396:android:400cbb86de167047',
+          projectID: 'autodo-49f21',
+          apiKey: keys['firebase-key'],
+        ));
   }
   InAppPurchaseConnection
       .enablePendingPurchases(); // required in init for Android
