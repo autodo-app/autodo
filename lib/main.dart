@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:async';
 
 import 'package:autodo/screens/settings/screen.dart';
@@ -98,6 +99,15 @@ void run(bool integrationTest) async {
 Future<Map> init() async {
   WidgetsFlutterBinding.ensureInitialized();
   Map keys = await SecretLoader(secretPath: 'keys.json').load();
+  if (Platform.isIOS) {
+    FirebaseApp.configure(
+      name: 'autodo',
+      options: FirebaseOptions(
+        googleAppID: '1:617460744396:ios:7da25d96edce10cefc4269',
+        projectID: 'autodo-49f21',
+        apiKey: keys['firebase-key'],
+      )); 
+  } else {
   FirebaseApp.configure(
       name: 'autodo',
       options: FirebaseOptions(
@@ -105,6 +115,7 @@ Future<Map> init() async {
         projectID: 'autodo-49f21',
         apiKey: keys['firebase-key'],
       ));
+  }
   InAppPurchaseConnection
       .enablePendingPurchases(); // required in init for Android
   BlocSupervisor.delegate = AutodoBlocDelegate();
