@@ -80,7 +80,11 @@ class _RepeatFormState extends State<RepeatForm> {
       textSubmitted: (_) {},
     );
     return FormField<String>(
-      builder: (FormFieldState<String> input) => autoCompleteField,
+      builder: (FormFieldState<String> input) {
+        // workaround because the autocomplete controller seems to clear it?
+        _autocompleteController.text = selectedRepeat?.name ?? '';
+        return autoCompleteField;
+      },
       initialValue: widget.todo?.repeatName ?? '',
       validator: (val) {
         var txt = _autocompleteController.text;

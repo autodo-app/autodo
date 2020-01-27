@@ -101,11 +101,16 @@ class RepeatCard extends StatelessWidget {
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         _RepeatTitle(repeat),
         Row(
-          mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            _RepeatEditButton(repeat),
-            _RepeatDeleteButton(repeat),
+            CarTag(text: repeat.cars.first, color: Color(0xffffffff)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                _RepeatEditButton(repeat),
+                _RepeatDeleteButton(repeat),
+              ],
+            ),
           ],
-        )
+        ),
       ]));
 }

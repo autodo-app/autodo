@@ -64,29 +64,30 @@ void run(bool integrationTest) async {
                 dbBloc: BlocProvider.of<DatabaseBloc>(context),
               )..add(LoadRefuelings()),
             ),
-            BlocProvider<RepeatsBloc>(
-              create: (context) => RepeatsBloc(
-                dbBloc: BlocProvider.of<DatabaseBloc>(context),
-              )..add(LoadRepeats()),
-            ),
           ],
           child: BlocProvider<CarsBloc>(
             create: (context) => CarsBloc(
               dbBloc: BlocProvider.of<DatabaseBloc>(context),
               refuelingsBloc: BlocProvider.of<RefuelingsBloc>(context),
             )..add(LoadCars()),
-            child: BlocProvider<TodosBloc>(
-              create: (context) => TodosBloc(
-                  dbBloc: BlocProvider.of<DatabaseBloc>(context),
-                  notificationsBloc:
-                      BlocProvider.of<NotificationsBloc>(context),
-                  carsBloc: BlocProvider.of<CarsBloc>(context),
-                  repeatsBloc: BlocProvider.of<RepeatsBloc>(context))
-                ..add(LoadTodos()),
-              child: App(
-                  theme: theme,
-                  authRepository: authRepository,
-                  integrationTest: integrationTest),
+            child: BlocProvider<RepeatsBloc>(
+              create: (context) => RepeatsBloc(
+                dbBloc: BlocProvider.of<DatabaseBloc>(context),
+                carsBloc: BlocProvider.of<CarsBloc>(context),
+              )..add(LoadRepeats()),
+              child: BlocProvider<TodosBloc>(
+                create: (context) => TodosBloc(
+                    dbBloc: BlocProvider.of<DatabaseBloc>(context),
+                    notificationsBloc:
+                        BlocProvider.of<NotificationsBloc>(context),
+                    carsBloc: BlocProvider.of<CarsBloc>(context),
+                    repeatsBloc: BlocProvider.of<RepeatsBloc>(context))
+                  ..add(LoadTodos()),
+                child: App(
+                    theme: theme,
+                    authRepository: authRepository,
+                    integrationTest: integrationTest),
+              ),
             ),
           ),
         ),
@@ -100,20 +101,20 @@ Future<Map> init() async {
   Map keys = await SecretLoader(secretPath: 'keys.json').load();
   if (Platform.isIOS) {
     FirebaseApp.configure(
-      name: 'autodo',
-      options: FirebaseOptions(
-        googleAppID: '1:617460744396:ios:7da25d96edce10cefc4269',
-        projectID: 'autodo-49f21',
-        apiKey: keys['firebase-key'],
-      )); 
+        name: 'autodo',
+        options: FirebaseOptions(
+          googleAppID: '1:617460744396:ios:7da25d96edce10cefc4269',
+          projectID: 'autodo-49f21',
+          apiKey: keys['firebase-key'],
+        ));
   } else {
-  FirebaseApp.configure(
-      name: 'autodo',
-      options: FirebaseOptions(
-        googleAppID: '1:617460744396:android:400cbb86de167047',
-        projectID: 'autodo-49f21',
-        apiKey: keys['firebase-key'],
-      ));
+    FirebaseApp.configure(
+        name: 'autodo',
+        options: FirebaseOptions(
+          googleAppID: '1:617460744396:android:400cbb86de167047',
+          projectID: 'autodo-49f21',
+          apiKey: keys['firebase-key'],
+        ));
   }
   InAppPurchaseConnection
       .enablePendingPurchases(); // required in init for Android

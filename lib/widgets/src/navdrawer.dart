@@ -55,13 +55,6 @@ class NavDrawerState extends State<NavDrawer> {
   List<Widget> buttons(bool trialUser) => [
         FlatButton(
           child: Text(
-            'Edit Repeating ToDos',
-            style: Theme.of(context).primaryTextTheme.button,
-          ),
-          onPressed: () => Navigator.popAndPushNamed(context, '/editrepeats'),
-        ),
-        FlatButton(
-          child: Text(
             'Edit Car List',
             style: Theme.of(context).primaryTextTheme.button,
           ),

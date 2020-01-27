@@ -12,7 +12,8 @@ import 'state.dart';
 
 class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
   final DatabaseBloc _dbBloc;
-  StreamSubscription _dbSubscription, _repoSubscription;
+  final CarsBloc _carsBloc;
+  StreamSubscription _dbSubscription, _repoSubscription, _carsSubscription;
 
   static final List<Repeat> defaults = [
     Repeat(name: "oil", mileageInterval: 3500),
@@ -32,20 +33,27 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
     Repeat(name: "coolantChange", mileageInterval: 100000)
   ];
 
-  RepeatsBloc({@required DatabaseBloc dbBloc})
+  RepeatsBloc({@required DatabaseBloc dbBloc, @required CarsBloc carsBloc})
       : assert(dbBloc != null),
-        _dbBloc = dbBloc {
+        assert(carsBloc != null),
+        _dbBloc = dbBloc,
+        _carsBloc = carsBloc {
     _dbSubscription = _dbBloc.listen((state) {
       if (state is DbLoaded) {
-        if (state.newUser ?? false) {
-          add(AddDefaultRepeats());
-        } else {
-          add(LoadRepeats());
-        }
+        // if (state.newUser ?? false) {
+        //   add(AddDefaultRepeats());
+        // } else {
+        add(LoadRepeats());
+        // }
       }
     });
     _repoSubscription = repo?.repeats()?.listen((repeats) {
       add(LoadRepeats());
+    });
+    _carsSubscription = _carsBloc.listen((state) {
+      if (state is CarsLoaded) {
+        add(RepeatCarsUpdated(state.cars));
+      }
     });
   }
 
@@ -68,6 +76,8 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
       yield* _mapDeleteRepeatToState(event);
     } else if (event is AddDefaultRepeats) {
       yield* _mapAddDefaultRepeatsToState(event);
+    } else if (event is RepeatCarsUpdated) {
+      yield* _mapRepeatCarsUpdatedToState(event);
     }
   }
 
@@ -210,19 +220,48 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
     for (var r in defaults) {
       batch.setData(r.toEntity().toDocument());
     }
-    await batch
-        .commit(); // need to wait on this, otherwise the "currentRepeats"
-    // call will return the old state
-    print('waiting on current repeats');
+    // need to wait on this, otherwise the "currentRepeats" call will return the
+    // old state
+    await batch.commit();
     final updatedRepeats = await repo.getCurrentRepeats();
     yield RepeatsLoaded(updatedRepeats);
-    print('yielded repeats $state');
+  }
+
+  Stream<RepeatsState> _mapRepeatCarsUpdatedToState(
+      RepeatCarsUpdated event) async* {
+    if (repo == null) {
+      print('Error: trying to update repeats for cars update but repo is null');
+      return;
+    }
+    final curRepeats = (state as RepeatsLoaded).repeats;
+    // gets the list of cars that do not yet have a repeat associated with them
+    List<Car> newCars = event.cars
+        .map((c) => (curRepeats.any((r) => r.cars.contains(c.name)) ? null : c))
+        .toList();
+    newCars.removeWhere((c) => c == null);
+    if (newCars.length == 0) {
+      print('all cars have repeats, not adding defaults');
+      return;
+    }
+    WriteBatchWrapper batch = await repo.startRepeatWriteBatch();
+    newCars.forEach((c) {
+      defaults.forEach((r) {
+        batch.setData(r.copyWith(cars: [c.name]).toEntity().toDocument());
+      });
+    });
+
+    // need to wait on this, otherwise the "currentRepeats" call will return the
+    // old state
+    await batch.commit();
+    final updatedRepeats = await repo.getCurrentRepeats();
+    yield RepeatsLoaded(updatedRepeats);
   }
 
   @override
   Future<void> close() {
     _dbSubscription?.cancel();
     _repoSubscription?.cancel();
+    _carsSubscription?.cancel();
     return super.close();
   }
 }

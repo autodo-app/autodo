@@ -5,6 +5,7 @@ import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/theme.dart';
 import 'package:autodo/integ_test_keys.dart';
 import 'form.dart';
+import 'package:autodo/routes.dart';
 
 class SignupScreen extends StatelessWidget {
   SignupScreen({Key key = IntegrationTestKeys.signupScreen}) : super(key: key);
@@ -16,7 +17,7 @@ class SignupScreen extends StatelessWidget {
         appBar: AppBar(
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.grey[300]),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pushNamed(context, AutodoRoutes.welcome),
           ),
         ),
         body: BlocBuilder<SignupBloc, SignupState>(

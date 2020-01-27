@@ -48,6 +48,9 @@ class _SignupFormState extends State<SignupForm> {
                       Icon(Icons.error)
                     ],
                   ),
+                  duration: Duration(
+                      hours:
+                          1), // overkill to make sure that it never goes away
                 ),
               );
           } else if (state is SignupLoading) {
@@ -62,9 +65,31 @@ class _SignupFormState extends State<SignupForm> {
                       CircularProgressIndicator(),
                     ],
                   ),
+                  duration: Duration(
+                      hours:
+                          1), // overkill to make sure that it never goes away
                 ),
               );
+          } else if (state is VerificationSent) {
+            Scaffold.of(context).hideCurrentSnackBar();
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: Text(AutodoLocalizations.verificationSent,
+                    style: Theme.of(context).primaryTextTheme.title),
+                content: Text(AutodoLocalizations.verificationDialogContent,
+                    style: Theme.of(context).primaryTextTheme.body1),
+                actions: [
+                  FlatButton(
+                    child: Text(AutodoLocalizations.back,
+                        style: Theme.of(context).primaryTextTheme.button),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
+              ),
+            );
           } else if (state is SignupSuccess) {
+            Scaffold.of(context).hideCurrentSnackBar();
             Navigator.push(
                 context,
                 MaterialPageRoute(
