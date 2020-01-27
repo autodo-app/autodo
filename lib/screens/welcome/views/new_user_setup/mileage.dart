@@ -11,12 +11,13 @@ import 'base.dart';
 class CarEntryField extends StatefulWidget {
   final Function next;
   final Function onNameSaved, onMileageSaved;
+  final GlobalKey<FormState> formKey;
 
-  CarEntryField(this.next, this.onNameSaved, this.onMileageSaved);
+  CarEntryField(this.next, this.onNameSaved, this.onMileageSaved, this.formKey);
 
   @override
   State<CarEntryField> createState() =>
-      CarEntryFieldState(next, onNameSaved, onMileageSaved);
+      CarEntryFieldState(next, onNameSaved, onMileageSaved, formKey);
 }
 
 class CarEntryFieldState extends State<CarEntryField> {
@@ -24,8 +25,10 @@ class CarEntryFieldState extends State<CarEntryField> {
   FocusNode _nameNode, _mileageNode;
   Function nextNode;
   final Function onNameSaved, onMileageSaved;
+  final GlobalKey<FormState> formKey;
 
-  CarEntryFieldState(this.nextNode, this.onNameSaved, this.onMileageSaved);
+  CarEntryFieldState(
+      this.nextNode, this.onNameSaved, this.onMileageSaved, this.formKey);
 
   @override
   initState() {
@@ -71,24 +74,27 @@ class CarEntryFieldState extends State<CarEntryField> {
 
     return Container(
       padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Expanded(
-            flex: 2,
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-              child: nameField(),
+      child: Form(
+        key: formKey,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Expanded(
+              flex: 2,
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                child: nameField(),
+              ),
             ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-              child: mileageField(),
+            Expanded(
+              flex: 1,
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                child: mileageField(),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -107,18 +113,24 @@ class MileageScreen extends StatefulWidget {
 
 class MileageScreenState extends State<MileageScreen> {
   var mileageEntry;
-  static final emptyCar = {'name': '', 'mileage': 0};
-  List<Map<String, dynamic>> cars = [emptyCar];
+  List<GlobalKey<FormState>> formKeys = [GlobalKey<FormState>()];
+  List<Car> cars = [Car()];
 
   MileageScreenState(this.mileageEntry);
 
   _next() async {
-    if (widget.mileageKey.currentState.validate()) {
-      widget.mileageKey.currentState.save();
-      for (var c in cars) {
-        BlocProvider.of<CarsBloc>(context)
-            .add(AddCar(Car(name: c['name'], mileage: c['mileage'])));
+    bool allValidated = true;
+    formKeys.forEach((k) {
+      if (k.currentState.validate()) {
+        k.currentState.save();
+      } else {
+        allValidated = false;
       }
+    });
+    if (allValidated) {
+      cars.forEach((c) {
+        BlocProvider.of<CarsBloc>(context).add(AddCar(c));
+      });
       // hide the keyboard
       FocusScope.of(context).requestFocus(FocusNode());
       await Future.delayed(Duration(milliseconds: 400));
@@ -156,9 +168,12 @@ class MileageScreenState extends State<MileageScreen> {
 
     Widget card() {
       List<Widget> carFields = [];
-      for (var car in cars) {
-        carFields.add(CarEntryField(_next, (val) => car['name'] = val,
-            (val) => car['mileage'] = int.parse(val)));
+      for (var i in Iterable.generate(cars.length)) {
+        carFields.add(CarEntryField((i == cars.length - 1) ? _next : null,
+            (val) {
+          cars[i] = cars[i].copyWith(name: val);
+        }, (val) => cars[i] = cars[i].copyWith(mileage: int.parse(val)),
+            formKeys[i]));
       }
 
       return Container(
@@ -180,7 +195,10 @@ class MileageScreenState extends State<MileageScreen> {
                         padding: EdgeInsets.all(0),
                         icon: Icon(Icons.add),
                         label: Text('Add'),
-                        onPressed: () => setState(() => cars.add(emptyCar)),
+                        onPressed: () => setState(() {
+                          cars.add(Car());
+                          formKeys.add(GlobalKey<FormState>());
+                        }),
                       ),
                       FlatButton.icon(
                         padding: EdgeInsets.all(0),

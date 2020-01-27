@@ -48,6 +48,9 @@ class _LoginFormState extends State<LoginForm> {
                       Icon(Icons.error)
                     ],
                   ),
+                  duration: Duration(
+                      hours:
+                          1), // overkill to make sure that it never goes away
                   backgroundColor: Colors.red,
                 ),
               );
@@ -63,6 +66,9 @@ class _LoginFormState extends State<LoginForm> {
                       CircularProgressIndicator(),
                     ],
                   ),
+                  duration: Duration(
+                      hours:
+                          1), // overkill to make sure that it never goes away
                 ),
               );
           } else if (state is LoginSuccess) {

@@ -65,3 +65,6 @@ keys.json
 **/ios/Flutter/flutter_export_environment.sh
 **/ios/ServiceDefinitions.json
 **/ios/Runner/GeneratedPluginRegistrant.*
+
+.vscode/
+.vscode/**
