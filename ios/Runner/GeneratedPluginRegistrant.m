@@ -16,14 +16,14 @@
 @import firebase_admob;
 #endif
 
-#if __has_include(<firebase_auth/FirebaseAuthPlugin.h>)
-#import <firebase_auth/FirebaseAuthPlugin.h>
+#if __has_include(<firebase_auth/FLTFirebaseAuthPlugin.h>)
+#import <firebase_auth/FLTFirebaseAuthPlugin.h>
 #else
 @import firebase_auth;
 #endif
 
-#if __has_include(<firebase_core/FirebaseCorePlugin.h>)
-#import <firebase_core/FirebaseCorePlugin.h>
+#if __has_include(<firebase_core/FLTFirebaseCorePlugin.h>)
+#import <firebase_core/FLTFirebaseCorePlugin.h>
 #else
 @import firebase_core;
 #endif
@@ -64,8 +64,8 @@
 @import shared_preferences;
 #endif
 
-#if __has_include(<url_launcher/UrlLauncherPlugin.h>)
-#import <url_launcher/UrlLauncherPlugin.h>
+#if __has_include(<url_launcher/FLTURLLauncherPlugin.h>)
+#import <url_launcher/FLTURLLauncherPlugin.h>
 #else
 @import url_launcher;
 #endif
@@ -83,7 +83,7 @@
   [InAppPurchasePlugin registerWithRegistrar:[registry registrarForPlugin:@"InAppPurchasePlugin"]];
   [FLTPathProviderPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTPathProviderPlugin"]];
   [FLTSharedPreferencesPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTSharedPreferencesPlugin"]];
-  [FLTUrlLauncherPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTUrlLauncherPlugin"]];
+  [FLTURLLauncherPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTURLLauncherPlugin"]];
 }
 
 @end
