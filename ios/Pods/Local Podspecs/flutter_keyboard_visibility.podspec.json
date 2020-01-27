@@ -1,0 +1,26 @@
+{
+  "name": "flutter_keyboard_visibility",
+  "version": "0.7.0",
+  "summary": "Flutter keyboard visibility.",
+  "description": "Flutter keyboard visibility project.",
+  "homepage": "https://github.com/MisterJimson/flutter_keyboard_visibility",
+  "license": {
+    "file": "../LICENSE"
+  },
+  "authors": {
+    "Jason Rai": "jason.c.rai@gmail.com"
+  },
+  "source": {
+    "path": "."
+  },
+  "source_files": "Classes/**/*",
+  "public_header_files": "Classes/**/*.h",
+  "dependencies": {
+    "Flutter": [
+
+    ]
+  },
+  "platforms": {
+    "ios": "8.0"
+  }
+}
