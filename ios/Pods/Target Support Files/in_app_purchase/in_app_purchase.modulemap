@@ -1,0 +1,6 @@
+framework module in_app_purchase {
+  umbrella header "in_app_purchase-umbrella.h"
+
+  export *
+  module * { export * }
+}

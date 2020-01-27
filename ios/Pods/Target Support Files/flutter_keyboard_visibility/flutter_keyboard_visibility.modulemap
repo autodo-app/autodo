@@ -1,0 +1,6 @@
+framework module flutter_keyboard_visibility {
+  umbrella header "flutter_keyboard_visibility-umbrella.h"
+
+  export *
+  module * { export * }
+}
