@@ -58,19 +58,19 @@ class LoginCredentialsInvalid extends LoginState {
   /// An optional parameter describing the error with the password field if applicable.
   final String passwordError;
 
-
   /// The current password
   final String password;
 
-  const LoginCredentialsInvalid({this.emailError, this.passwordError, this.email, this.password});
+  const LoginCredentialsInvalid(
+      {this.emailError, this.passwordError, this.email, this.password});
 
-  LoginCredentialsInvalid copyWith({emailError, passwordError, email, password}) =>
+  LoginCredentialsInvalid copyWith(
+          {emailError, passwordError, email, password}) =>
       LoginCredentialsInvalid(
-        emailError: emailError ?? this.emailError,
-        passwordError: passwordError ?? this.passwordError,
-        email: email ?? this.email,
-        password: password ?? this.password
-      );
+          emailError: emailError ?? this.emailError,
+          passwordError: passwordError ?? this.passwordError,
+          email: email ?? this.email,
+          password: password ?? this.password);
 
   @override
   List<Object> get props => [];
@@ -83,13 +83,10 @@ class LoginCredentialsValid extends LoginState {
 
   const LoginCredentialsValid({this.email, this.password});
 
-  LoginCredentialsValid copyWith({email, password}) => 
-    LoginCredentialsValid(  
-      email: email ?? this.email,
-      password: password ?? this.password
-    );
+  LoginCredentialsValid copyWith({email, password}) => LoginCredentialsValid(
+      email: email ?? this.email, password: password ?? this.password);
 
-  @override 
+  @override
   List<Object> get props => [email, password];
 }
 

@@ -97,7 +97,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   LoginState _clearEmailError(email) {
     if (state is LoginCredentialsInvalid) {
-      return (state as LoginCredentialsInvalid).copyWith(emailError: null, email: email);
+      return (state as LoginCredentialsInvalid)
+          .copyWith(emailError: null, email: email);
     } else {
       return (state as LoginCredentialsValid).copyWith(email: email);
     }
@@ -105,7 +106,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   LoginState _addEmailError(emailError, email) {
     if (state is LoginCredentialsInvalid) {
-      return (state as LoginCredentialsInvalid).copyWith(emailError: "", email: email);
+      return (state as LoginCredentialsInvalid)
+          .copyWith(emailError: "", email: email);
     } else {
       return LoginCredentialsInvalid(emailError: "", email: email);
     }
@@ -122,7 +124,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   LoginState _clearPasswordError(password) {
     if (state is LoginCredentialsInvalid) {
-      return (state as LoginCredentialsInvalid).copyWith(passwordError: null, password: password);
+      return (state as LoginCredentialsInvalid)
+          .copyWith(passwordError: null, password: password);
     } else {
       return (state as LoginCredentialsValid).copyWith(password: password);
     }
@@ -130,7 +133,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   LoginState _addPasswordError(passwordError, password) {
     if (state is LoginCredentialsInvalid) {
-      return (state as LoginCredentialsInvalid).copyWith(passwordError: "", password: password);
+      return (state as LoginCredentialsInvalid)
+          .copyWith(passwordError: "", password: password);
     } else {
       return LoginCredentialsInvalid(passwordError: "", password: password);
     }

@@ -9,7 +9,8 @@ import 'package:autodo/theme.dart';
 class _PasswordResetDialog extends StatefulWidget {
   final String email;
   final AuthRepository authRepository;
-  _PasswordResetDialog(Key key, this.email, this.authRepository) : super(key: key);
+  _PasswordResetDialog(Key key, this.email, this.authRepository)
+      : super(key: key);
 
   @override
   _PasswordResetDialogState createState() => _PasswordResetDialogState();
@@ -47,7 +48,7 @@ class _PasswordResetDialogState extends State<_PasswordResetDialog> {
                         color: Colors.grey[300],
                       )),
                   // onChanged: (val) => BlocProvider.of<LoginBloc>(context)
-                      // .add(LoginEmailChanged(email: val)),
+                  // .add(LoginEmailChanged(email: val)),
                   onSaved: (value) => _email = value.trim(),
                 ),
               ],
@@ -95,7 +96,8 @@ class PasswordResetButton extends StatelessWidget {
           if (email == null) return;
           showDialog(
             context: context,
-            builder: (context) => _PasswordResetDialog(dialogKey, email, bloc.authRepository),
+            builder: (context) =>
+                _PasswordResetDialog(dialogKey, email, bloc.authRepository),
           );
         },
       );
