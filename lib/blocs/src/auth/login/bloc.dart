@@ -35,14 +35,12 @@ import 'state.dart';
 /// the GUI, and is responsible for delegating the proper login action to the
 /// [authRepository] upon submission of the [LoginForm].
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  AuthRepository _authRepository;
+  AuthRepository authRepository;
 
   /// Creates a LoginBloc.
   ///
   /// The [authRepository] parameter must be non-null.
-  LoginBloc({@required authRepository})
-      : assert(authRepository != null),
-        _authRepository = authRepository;
+  LoginBloc({@required this.authRepository});
 
   @override
   LoginState get initialState => LoginEmpty();
@@ -90,56 +88,56 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     String errorString = Validators.isValidEmail(email);
     LoginState out;
     if (errorString == null) {
-      out = _clearEmailError();
+      out = _clearEmailError(email);
     } else {
-      out = _addEmailError(errorString);
+      out = _addEmailError(errorString, email);
     }
     yield out;
   }
 
-  LoginState _clearEmailError() {
+  LoginState _clearEmailError(email) {
     if (state is LoginCredentialsInvalid) {
-      return (state as LoginCredentialsInvalid).copyWith(emailError: null);
+      return (state as LoginCredentialsInvalid).copyWith(emailError: null, email: email);
     } else {
-      return LoginCredentialsValid();
+      return (state as LoginCredentialsValid).copyWith(email: email);
     }
   }
 
-  LoginState _addEmailError(emailError) {
+  LoginState _addEmailError(emailError, email) {
     if (state is LoginCredentialsInvalid) {
-      return (state as LoginCredentialsInvalid).copyWith(emailError: "");
+      return (state as LoginCredentialsInvalid).copyWith(emailError: "", email: email);
     } else {
-      return LoginCredentialsInvalid(emailError: "");
+      return LoginCredentialsInvalid(emailError: "", email: email);
     }
   }
 
   Stream<LoginState> _mapPasswordChangedToState(String password) async* {
     String errorString = Validators.isValidPassword(password);
     if (errorString == null) {
-      yield _clearPasswordError();
+      yield _clearPasswordError(password);
     } else {
-      yield _addPasswordError(errorString);
+      yield _addPasswordError(errorString, password);
     }
   }
 
-  LoginState _clearPasswordError() {
+  LoginState _clearPasswordError(password) {
     if (state is LoginCredentialsInvalid) {
-      return (state as LoginCredentialsInvalid).copyWith(emailError: null);
+      return (state as LoginCredentialsInvalid).copyWith(passwordError: null, password: password);
     } else {
-      return LoginCredentialsValid();
+      return (state as LoginCredentialsValid).copyWith(password: password);
     }
   }
 
-  LoginState _addPasswordError(passwordError) {
+  LoginState _addPasswordError(passwordError, password) {
     if (state is LoginCredentialsInvalid) {
-      return (state as LoginCredentialsInvalid).copyWith(passwordError: "");
+      return (state as LoginCredentialsInvalid).copyWith(passwordError: "", password: password);
     } else {
-      return LoginCredentialsInvalid(passwordError: "");
+      return LoginCredentialsInvalid(passwordError: "", password: password);
     }
   }
 
   Stream<LoginState> _mapLoginWithGooglePressedToState() async* {
-    _authRepository.signInWithGoogle();
+    authRepository.signInWithGoogle();
     yield LoginEmpty();
   }
 
@@ -149,7 +147,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }) async* {
     yield LoginLoading();
     try {
-      await _authRepository.signInWithCredentials(email, password);
+      await authRepository.signInWithCredentials(email, password);
       yield LoginSuccess();
     } on PlatformException catch (e) {
       var errorString = "Error communicating to the auToDo servers.";
@@ -172,7 +170,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       // not doing this through the authbloc because it doesn't affect
       // the app's global authentication state (i.e. it's not possible)
       // to login or logout this way
-      await _authRepository.sendPasswordReset(event.email);
+      await authRepository.sendPasswordReset(event.email);
       yield LoginEmpty();
     } on PlatformException catch (e) {
       var errorString = "Error communicating to the auToDo servers.";

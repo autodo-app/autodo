@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'package:autodo/blocs/blocs.dart';
 import 'package:equatable/equatable.dart';
 
 /// Represents the current state of the [LoginForm] fields and validation.
@@ -51,15 +52,24 @@ class LoginCredentialsInvalid extends LoginState {
   /// An optional parameter describing the error with the email field if applicable.
   final String emailError;
 
+  /// The current email
+  final String email;
+
   /// An optional parameter describing the error with the password field if applicable.
   final String passwordError;
 
-  const LoginCredentialsInvalid({this.emailError, this.passwordError});
 
-  LoginCredentialsInvalid copyWith({emailError, passwordError}) =>
+  /// The current password
+  final String password;
+
+  const LoginCredentialsInvalid({this.emailError, this.passwordError, this.email, this.password});
+
+  LoginCredentialsInvalid copyWith({emailError, passwordError, email, password}) =>
       LoginCredentialsInvalid(
         emailError: emailError ?? this.emailError,
         passwordError: passwordError ?? this.passwordError,
+        email: email ?? this.email,
+        password: password ?? this.password
       );
 
   @override
@@ -68,7 +78,20 @@ class LoginCredentialsInvalid extends LoginState {
 
 /// Indicates that the contents of the [LoginForm] are properly validated and
 /// ready for submission to the authentication database.
-class LoginCredentialsValid extends LoginState {}
+class LoginCredentialsValid extends LoginState {
+  final String email, password;
+
+  const LoginCredentialsValid({this.email, this.password});
+
+  LoginCredentialsValid copyWith({email, password}) => 
+    LoginCredentialsValid(  
+      email: email ?? this.email,
+      password: password ?? this.password
+    );
+
+  @override 
+  List<Object> get props => [email, password];
+}
 
 /// The response from the authentication database indicated a successful login
 /// for the specified user.
