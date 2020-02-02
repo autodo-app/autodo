@@ -12,7 +12,8 @@ class SignupToLoginButton extends StatelessWidget {
           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
           child: Text(AutodoLocalizations.alreadyHaveAnAccount,
               style: linkStyle()),
-          onPressed: () => Navigator.of(context).pushNamed(AutodoRoutes.loginScreen),
+          onPressed: () =>
+              Navigator.of(context).pushNamed(AutodoRoutes.loginScreen),
         ),
       );
 }

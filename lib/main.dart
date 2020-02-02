@@ -134,8 +134,11 @@ class App extends StatelessWidget {
   build(context) {
     Widget homeProvider = HomeScreenProvider(integrationTest: integrationTest);
     Widget welcomeProvider = WelcomeScreenProvider();
-    Widget signupProvider = SignupScreenProvider(authRepository: _authRepository);
-    Widget loginProvider = LoginScreenProvider(authRepository: _authRepository,);
+    Widget signupProvider =
+        SignupScreenProvider(authRepository: _authRepository);
+    Widget loginProvider = LoginScreenProvider(
+      authRepository: _authRepository,
+    );
     return MaterialApp(
       title: 'auToDo',
       routes: {
