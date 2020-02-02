@@ -88,7 +88,7 @@ class _SignupFormState extends State<SignupForm> {
                 ],
               ),
             );
-          } else if (state is SignupSuccess) {
+          } else if (state is SignupSuccess || state is UserVerified) {
             Scaffold.of(context).hideCurrentSnackBar();
             Navigator.push(
                 context,
