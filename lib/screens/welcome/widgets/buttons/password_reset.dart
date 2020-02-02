@@ -1,3 +1,4 @@
+import 'package:autodo/repositories/repositories.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -6,7 +7,10 @@ import 'package:autodo/localization.dart';
 import 'package:autodo/theme.dart';
 
 class _PasswordResetDialog extends StatefulWidget {
-  _PasswordResetDialog(Key key) : super(key: key);
+  final String email;
+  final AuthRepository authRepository;
+  _PasswordResetDialog(Key key, this.email, this.authRepository)
+      : super(key: key);
 
   @override
   _PasswordResetDialogState createState() => _PasswordResetDialogState();
@@ -29,6 +33,7 @@ class _PasswordResetDialogState extends State<_PasswordResetDialog> {
                 // roll own email box
                 TextFormField(
                   // initialValue: _emailController.text,
+                  initialValue: widget.email,
                   maxLines: 1,
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.done,
@@ -42,8 +47,8 @@ class _PasswordResetDialogState extends State<_PasswordResetDialog> {
                         Icons.mail,
                         color: Colors.grey[300],
                       )),
-                  onChanged: (val) => BlocProvider.of<LoginBloc>(context)
-                      .add(LoginEmailChanged(email: val)),
+                  // onChanged: (val) => BlocProvider.of<LoginBloc>(context)
+                  // .add(LoginEmailChanged(email: val)),
                   onSaved: (value) => _email = value.trim(),
                 ),
               ],
@@ -60,8 +65,10 @@ class _PasswordResetDialogState extends State<_PasswordResetDialog> {
                   style: Theme.of(context).primaryTextTheme.button,
                 ),
                 onPressed: () {
-                  BlocProvider.of<LoginBloc>(context)
-                      .add(SendPasswordResetPressed(email: _email));
+                  // BlocProvider.of<LoginBloc>(context)
+                  //     .add(SendPasswordResetPressed(email: _email));
+                  _passwordResetKey.currentState.save();
+                  widget.authRepository.sendPasswordReset(_email);
                   Navigator.pop(context); // dialog
                 })
           ]);
@@ -78,9 +85,20 @@ class PasswordResetButton extends StatelessWidget {
           AutodoLocalizations.forgotYourPassword,
           style: linkStyle(),
         ),
-        onPressed: () => showDialog(
-          context: context,
-          builder: (context) => _PasswordResetDialog(dialogKey),
-        ),
+        onPressed: () {
+          final bloc = BlocProvider.of<LoginBloc>(context);
+          var email;
+          if (bloc.state is LoginCredentialsValid) {
+            email = (bloc.state as LoginCredentialsValid).email;
+          } else {
+            email = (bloc.state as LoginCredentialsInvalid).email;
+          }
+          if (email == null) return;
+          showDialog(
+            context: context,
+            builder: (context) =>
+                _PasswordResetDialog(dialogKey, email, bloc.authRepository),
+          );
+        },
       );
 }
