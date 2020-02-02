@@ -39,7 +39,7 @@ class _MileageForm extends StatelessWidget {
         ),
         autofocus: true,
         initialValue: refueling?.mileage?.toString() ?? '',
-        keyboardType: TextInputType.number,
+        keyboardType: TextInputType.numberWithOptions(decimal: false),
         validator: intValidator,
         onSaved: (val) => onSaved(val),
         textInputAction: TextInputAction.next,
@@ -77,7 +77,7 @@ class _AmountForm extends StatelessWidget {
         ),
         autofocus: true,
         initialValue: refueling?.amount?.toString() ?? '',
-        keyboardType: TextInputType.number,
+        keyboardType: TextInputType.numberWithOptions(decimal: true),
         validator: doubleValidator,
         onSaved: (val) => onSaved(val),
         textInputAction: TextInputAction.next,
@@ -114,7 +114,7 @@ class _CostForm extends StatelessWidget {
         ),
         autofocus: true,
         initialValue: refueling?.cost?.toString() ?? '',
-        keyboardType: TextInputType.number,
+        keyboardType: TextInputType.numberWithOptions(decimal: true),
         validator: doubleValidator,
         onSaved: (val) => onSaved(val),
         textInputAction: TextInputAction.next,
@@ -413,6 +413,7 @@ class _RefuelingAddEditScreenState extends State<RefuelingAddEditScreen> {
           onPressed: () {
             if (_formKey.currentState.validate()) {
               _formKey.currentState.save();
+              if (_car == null) _car = widget.cars.first.name;
               widget.onSave(_mileage, _date, _amount, _cost, _car);
               Navigator.pop(context);
             }
