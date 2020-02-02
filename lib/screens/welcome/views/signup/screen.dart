@@ -19,6 +19,10 @@ class SignupScreen extends StatelessWidget {
             icon: Icon(Icons.arrow_back, color: Colors.grey[300]),
             onPressed: () => Navigator.pushNamed(context, AutodoRoutes.welcome),
           ),
+          title: Text(  
+            'SIGN UP',
+            style: TextStyle(color: Colors.grey[300]),
+          )
         ),
         body: BlocBuilder<SignupBloc, SignupState>(
           builder: (context, state) => SignupForm(),

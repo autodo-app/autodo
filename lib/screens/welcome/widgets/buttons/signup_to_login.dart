@@ -1,3 +1,4 @@
+import 'package:autodo/routes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:autodo/localization.dart';
@@ -11,7 +12,7 @@ class SignupToLoginButton extends StatelessWidget {
           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
           child: Text(AutodoLocalizations.alreadyHaveAnAccount,
               style: linkStyle()),
-          onPressed: () => Navigator.of(context).pushNamed('/signup'),
+          onPressed: () => Navigator.of(context).pushNamed(AutodoRoutes.loginScreen),
         ),
       );
 }
