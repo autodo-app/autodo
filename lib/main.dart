@@ -134,6 +134,11 @@ class App extends StatelessWidget {
   build(context) {
     Widget homeProvider = HomeScreenProvider(integrationTest: integrationTest);
     Widget welcomeProvider = WelcomeScreenProvider();
+    Widget signupProvider =
+        SignupScreenProvider(authRepository: _authRepository);
+    Widget loginProvider = LoginScreenProvider(
+      authRepository: _authRepository,
+    );
     return MaterialApp(
       title: 'auToDo',
       routes: {
@@ -152,10 +157,8 @@ class App extends StatelessWidget {
             ),
         AutodoRoutes.home: (context) => homeProvider,
         AutodoRoutes.welcome: (context) => welcomeProvider,
-        AutodoRoutes.signupScreen: (context) =>
-            SignupScreenProvider(authRepository: _authRepository),
-        AutodoRoutes.loginScreen: (context) =>
-            LoginScreenProvider(authRepository: _authRepository),
+        AutodoRoutes.signupScreen: (context) => signupProvider,
+        AutodoRoutes.loginScreen: (context) => loginProvider,
         AutodoRoutes.settingsScreen: (context) => SettingsScreen(),
       },
       theme: _theme,
