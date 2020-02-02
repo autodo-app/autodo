@@ -71,8 +71,10 @@ Coding Guide
 
 ## Branch Model
 
-**TODO: git flow link/explanation here**
+This project uses the [Git Flow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow) model. The use of the `git flow` tool is not needed, instead the basic practices of the git flow method are performed with normal git commands.
 
 ## Unit Testing
 
-**TODO: more info will come on this when unit testing gets set up**
+Unit testing is run automatically through Github Actions when code is pushed to any branch. 
+
+You can run the unit tests locally with the `flutter test -j 4 --coverage && genhtml coverage/lcov.info --output=coverage` command.
