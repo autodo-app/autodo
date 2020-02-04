@@ -127,9 +127,9 @@ class _HomeScreenState extends State<HomeScreen> {
               _bannerShown = false;
             });
           }
-        });
-    // ..load()
-    // ..show();
+        })
+    ..load()
+    ..show();
     super.initState();
   }
 
