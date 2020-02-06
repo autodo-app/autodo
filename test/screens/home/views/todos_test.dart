@@ -55,8 +55,8 @@ void main() {
 
     testWidgets('renders simple todo list', (WidgetTester tester) async {
       when(todosBloc.state).thenAnswer((_) => TodosLoaded([]));
-      when(filteredTodosBloc.state).thenAnswer(
-          (_) => FilteredTodosLoaded([Todo(name: '', completed: true)], VisibilityFilter.all));
+      when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded(
+          [Todo(name: '', completed: true)], VisibilityFilter.all));
       Key todosKey = Key('todos');
       await tester.pumpWidget(
         MultiBlocProvider(
