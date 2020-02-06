@@ -35,5 +35,7 @@ doc/**
 .flutter-plugins**
 keys.json
 *.log
+
+# ios stuff
 .vscode/
 .vscode/**
