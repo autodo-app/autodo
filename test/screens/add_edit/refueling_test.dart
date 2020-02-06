@@ -21,11 +21,10 @@ void main() {
           providers: [BlocProvider<CarsBloc>.value(value: carsBloc)],
           child: MaterialApp(
             home: RefuelingAddEditScreen(
-              key: key,
-              isEditing: false,
-              onSave: (a, b, c, d, e) {},
-              cars: []
-            ),
+                key: key,
+                isEditing: false,
+                onSave: (a, b, c, d, e) {},
+                cars: []),
           ),
         ),
       );
@@ -42,13 +41,12 @@ void main() {
           providers: [BlocProvider<CarsBloc>.value(value: carsBloc)],
           child: MaterialApp(
             home: RefuelingAddEditScreen(
-              key: key,
-              isEditing: false,
-              onSave: (a, b, c, d, e) {
-                saved = true;
-              },
-              cars: [Car(name: 'test')]
-            ),
+                key: key,
+                isEditing: false,
+                onSave: (a, b, c, d, e) {
+                  saved = true;
+                },
+                cars: [Car(name: 'test')]),
           ),
         ),
       );
@@ -73,11 +71,10 @@ void main() {
           providers: [BlocProvider<CarsBloc>.value(value: carsBloc)],
           child: MaterialApp(
             home: RefuelingAddEditScreen(
-              key: key,
-              isEditing: false,
-              onSave: (a, b, c, d, e) {},
-              cars: []
-            ),
+                key: key,
+                isEditing: false,
+                onSave: (a, b, c, d, e) {},
+                cars: []),
           ),
         ),
       );
