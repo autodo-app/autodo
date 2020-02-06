@@ -27,6 +27,7 @@ void main() {
     });
     testWidgets('password reset', (tester) async {
       final loginBloc = MockLoginBloc();
+      when(loginBloc.state).thenReturn(LoginCredentialsValid(email: ''));
       await tester.pumpWidget(BlocProvider<LoginBloc>(
           create: (context) => loginBloc,
           child: MaterialApp(

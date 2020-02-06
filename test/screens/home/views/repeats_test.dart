@@ -19,7 +19,7 @@ void main() {
     repeatsBloc = MockRepeatsBloc();
   });
 
-  group('RefuelingsScreen', () {
+  group('RepeatsScreen', () {
     testWidgets('loading', (WidgetTester tester) async {
       when(repeatsBloc.state).thenReturn(RepeatsLoading());
       await tester.pumpWidget(
@@ -41,7 +41,7 @@ void main() {
     });
     testWidgets('loaded', (WidgetTester tester) async {
       when(repeatsBloc.state).thenReturn(
-          RepeatsLoaded([Repeat(name: 'test', mileageInterval: 0)]));
+          RepeatsLoaded([Repeat(name: 'test', mileageInterval: 0, cars: ['test'])]));
       Key repeatsKey = Key('repeats');
       await tester.pumpWidget(
         MultiBlocProvider(

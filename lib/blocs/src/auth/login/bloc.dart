@@ -40,7 +40,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   /// Creates a LoginBloc.
   ///
   /// The [authRepository] parameter must be non-null.
-  LoginBloc({@required this.authRepository});
+  LoginBloc({@required this.authRepository}) : assert(authRepository != null);
 
   @override
   LoginState get initialState => LoginEmpty();
@@ -99,8 +99,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     if (state is LoginCredentialsInvalid) {
       return (state as LoginCredentialsInvalid)
           .copyWith(emailError: null, email: email);
-    } else {
+    } else if (state is LoginCredentialsInvalid) {
       return (state as LoginCredentialsValid).copyWith(email: email);
+    } else {
+      // LoginEmpty
+      return LoginCredentialsValid(email: email);
     }
   }
 
@@ -126,8 +129,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     if (state is LoginCredentialsInvalid) {
       return (state as LoginCredentialsInvalid)
           .copyWith(passwordError: null, password: password);
-    } else {
+    } else if (state is LoginCredentialsValid) {
       return (state as LoginCredentialsValid).copyWith(password: password);
+    } else {
+      return LoginCredentialsValid(password: password);
     }
   }
 

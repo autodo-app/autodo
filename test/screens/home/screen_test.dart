@@ -25,16 +25,20 @@ class MockCarsBloc extends MockBloc<CarsEvent, CarsState> implements CarsBloc {}
 class MockRepeatsBloc extends MockBloc<RepeatsEvent, RepeatsState>
     implements RepeatsBloc {}
 
+class MockPaidVersionBloc extends MockBloc<PaidVersionEvent, PaidVersionState> implements PaidVersionBloc {}
+
 void main() {
   group('HomeScreen', () {
     TodosBloc todosBloc;
     FilteredTodosBloc filteredTodosBloc;
     TabBloc tabBloc;
+    PaidVersionBloc paidBloc;
 
     setUp(() {
       todosBloc = MockTodosBloc();
       filteredTodosBloc = MockFilteredTodosBloc();
       tabBloc = MockTabBloc();
+      paidBloc = MockPaidVersionBloc();
     });
 
     testWidgets('renders correctly', (WidgetTester tester) async {
@@ -53,6 +57,7 @@ void main() {
             BlocProvider<TabBloc>.value(
               value: tabBloc,
             ),
+            BlocProvider<PaidVersionBloc>.value(value: paidBloc),
           ],
           child: MaterialApp(
             home: Scaffold(
@@ -84,6 +89,7 @@ void main() {
             BlocProvider<TabBloc>.value(
               value: tabBloc,
             ),
+            BlocProvider<PaidVersionBloc>.value(value: paidBloc),
           ],
           child: MaterialApp(
             home: Scaffold(
@@ -117,7 +123,8 @@ void main() {
               BlocProvider<TabBloc>.value(
                 value: tabBloc,
               ),
-              BlocProvider<CarsBloc>.value(value: carsBloc)
+              BlocProvider<CarsBloc>.value(value: carsBloc),
+              BlocProvider<PaidVersionBloc>.value(value: paidBloc),
             ],
             child: MaterialApp(
               home: Scaffold(
@@ -164,7 +171,8 @@ void main() {
                 value: tabBloc,
               ),
               BlocProvider<CarsBloc>.value(value: carsBloc),
-              BlocProvider<RepeatsBloc>.value(value: repeatsBloc)
+              BlocProvider<RepeatsBloc>.value(value: repeatsBloc),
+              BlocProvider<PaidVersionBloc>.value(value: paidBloc),
             ],
             child: MaterialApp(
               home: Scaffold(
@@ -211,7 +219,8 @@ void main() {
                 value: tabBloc,
               ),
               BlocProvider<CarsBloc>.value(value: carsBloc),
-              BlocProvider<RepeatsBloc>.value(value: repeatsBloc)
+              BlocProvider<RepeatsBloc>.value(value: repeatsBloc),
+              BlocProvider<PaidVersionBloc>.value(value: paidBloc),
             ],
             child: MaterialApp(
               home: Scaffold(

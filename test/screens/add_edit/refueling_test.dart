@@ -24,6 +24,7 @@ void main() {
               key: key,
               isEditing: false,
               onSave: (a, b, c, d, e) {},
+              cars: []
             ),
           ),
         ),
@@ -46,6 +47,7 @@ void main() {
               onSave: (a, b, c, d, e) {
                 saved = true;
               },
+              cars: [Car(name: 'test')]
             ),
           ),
         ),
@@ -58,7 +60,6 @@ void main() {
           await tester.enterText(find.byWidget(field.widget), '10');
         }
       }
-      await tester.enterText(find.byType(CarForm), 'test');
       await tester.tap(find.byType(FloatingActionButton));
       await tester.pump();
       expect(saved, true);
@@ -75,6 +76,7 @@ void main() {
               key: key,
               isEditing: false,
               onSave: (a, b, c, d, e) {},
+              cars: []
             ),
           ),
         ),

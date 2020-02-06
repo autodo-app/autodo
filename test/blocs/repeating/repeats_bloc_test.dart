@@ -14,8 +14,11 @@ class MockWriteBatch extends Mock implements WriteBatchWrapper {}
 
 class MockDbBloc extends Mock implements DatabaseBloc {}
 
+class MockCarsBloc extends MockBloc<CarsEvent, CarsState> implements CarsBloc {}
+
 void main() {
   group('RepeatsBloc', () {
+    CarsBloc carsBloc = MockCarsBloc();
     test('Null Assertion', () {
       expect(() => RepeatsBloc(dbBloc: null), throwsAssertionError);
     });
@@ -31,7 +34,7 @@ void main() {
               .thenAnswer((_) async => [Repeat()]);
           final dbBloc = MockDbBloc();
           when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
-          return RepeatsBloc(dbBloc: dbBloc);
+          return RepeatsBloc(dbBloc: dbBloc, carsBloc: carsBloc);
         },
         act: (bloc) async => bloc.add(LoadRepeats()),
         expect: [
@@ -48,7 +51,7 @@ void main() {
           final dbBloc = MockDbBloc();
           when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
           when(dataRepository.getCurrentRepeats()).thenAnswer((_) async => []);
-          return RepeatsBloc(dbBloc: dbBloc);
+          return RepeatsBloc(dbBloc: dbBloc, carsBloc: carsBloc);
         },
         act: (bloc) async => bloc.add(LoadRepeats()),
         expect: [RepeatsLoading(), RepeatsLoaded([])],
@@ -60,7 +63,7 @@ void main() {
           when(dataRepository.repeats()).thenAnswer((_) => null);
           final dbBloc = MockDbBloc();
           when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
-          return RepeatsBloc(dbBloc: dbBloc);
+          return RepeatsBloc(dbBloc: dbBloc, carsBloc: carsBloc);
         },
         act: (bloc) async => bloc.add(LoadRepeats()),
         expect: [RepeatsLoading(), RepeatsNotLoaded()],
@@ -77,7 +80,7 @@ void main() {
         when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
         when(dataRepository.getCurrentRepeats())
             .thenAnswer((_) async => [Repeat()]);
-        return RepeatsBloc(dbBloc: dbBloc);
+        return RepeatsBloc(dbBloc: dbBloc, carsBloc: carsBloc);
       },
       act: (bloc) async {
         bloc.add(LoadRepeats());
@@ -109,7 +112,7 @@ void main() {
         when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
         when(dataRepository.getCurrentRepeats())
             .thenAnswer((_) async => [Repeat(id: '0', name: 'test')]);
-        return RepeatsBloc(dbBloc: dbBloc);
+        return RepeatsBloc(dbBloc: dbBloc, carsBloc: carsBloc);
       },
       act: (bloc) async {
         bloc.add(LoadRepeats());
@@ -145,7 +148,7 @@ void main() {
         when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
         when(dataRepository.getCurrentRepeats())
             .thenAnswer((_) async => [Repeat(id: '0')]);
-        return RepeatsBloc(dbBloc: dbBloc);
+        return RepeatsBloc(dbBloc: dbBloc, carsBloc: carsBloc);
       },
       act: (bloc) async {
         bloc.add(LoadRepeats());
@@ -176,7 +179,7 @@ void main() {
         when(mockBatch.commit()).thenAnswer((_) async {});
         final dbBloc = MockDbBloc();
         when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
-        return RepeatsBloc(dbBloc: dbBloc);
+        return RepeatsBloc(dbBloc: dbBloc, carsBloc: carsBloc);
       },
       act: (bloc) async {
         bloc.add(AddDefaultRepeats());

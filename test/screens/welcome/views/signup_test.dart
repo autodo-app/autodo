@@ -1,10 +1,10 @@
-import 'package:autodo/widgets/widgets.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bloc_test/bloc_test.dart';
 
+import 'package:autodo/routes.dart';
 import 'package:autodo/repositories/repositories.dart';
 import 'package:autodo/screens/welcome/views/signup/screen.dart';
 import 'package:autodo/screens/welcome/widgets/barrel.dart';
@@ -55,7 +55,12 @@ void main() {
             BlocProvider<SignupBloc>.value(
                 value: SignupBloc(authRepository: authRepository)),
           ],
-          child: MaterialApp(home: SignupScreen(key: scaffoldKey)),
+          child: MaterialApp(
+            home: SignupScreen(key: scaffoldKey),
+            routes: {
+              AutodoRoutes.welcome: (context) => Container()
+            }
+          ),
         ),
       );
       await tester.pumpAndSettle();

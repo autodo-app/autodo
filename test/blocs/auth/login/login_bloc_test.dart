@@ -53,7 +53,7 @@ void main() {
         // account for the debounce time
         await Future.delayed(Duration(milliseconds: 500));
       }, expect: [
-        LoginCredentialsValid(),
+        LoginCredentialsValid(email: 'test@test.com'),
       ]);
       blocTest<LoginBloc, LoginEvent, LoginState>('Valid Email, previous error',
           build: () {
@@ -104,7 +104,7 @@ void main() {
         // account for the debounce time
         await Future.delayed(Duration(milliseconds: 500));
       }, expect: [
-        LoginCredentialsValid(),
+        LoginCredentialsValid(password: '123456'),
       ]);
       blocTest<LoginBloc, LoginEvent, LoginState>(
           'Valid password, previous error', build: () {
