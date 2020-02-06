@@ -70,7 +70,10 @@ void main() {
             home: Scaffold(
               body: TodoCard(
                 key: todosKey,
-                todo: Todo(name: 'test', dueState: TodoDueState.PAST_DUE, completed: false),
+                todo: Todo(
+                    name: 'test',
+                    dueState: TodoDueState.PAST_DUE,
+                    completed: false),
                 onCheckboxChanged: (_) {},
                 onDismissed: (_) {},
                 onTap: () {},
@@ -99,7 +102,10 @@ void main() {
             home: Scaffold(
               body: TodoCard(
                 key: todosKey,
-                todo: Todo(name: 'test', dueState: TodoDueState.DUE_SOON, completed: false),
+                todo: Todo(
+                    name: 'test',
+                    dueState: TodoDueState.DUE_SOON,
+                    completed: false),
                 onCheckboxChanged: (_) {},
                 onDismissed: (_) {},
                 onTap: () {},
@@ -148,8 +154,8 @@ void main() {
     });
     testWidgets('dismiss', (WidgetTester tester) async {
       when(todosBloc.state).thenAnswer((_) => TodosLoaded([]));
-      when(filteredTodosBloc.state).thenAnswer(
-          (_) => FilteredTodosLoaded([Todo(name: '', completed: false)], VisibilityFilter.all));
+      when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded(
+          [Todo(name: '', completed: false)], VisibilityFilter.all));
       Key todosKey = Key('todos');
       bool dismissed = false;
       await tester.pumpWidget(
@@ -185,8 +191,8 @@ void main() {
     });
     testWidgets('tap', (WidgetTester tester) async {
       when(todosBloc.state).thenAnswer((_) => TodosLoaded([]));
-      when(filteredTodosBloc.state).thenAnswer(
-          (_) => FilteredTodosLoaded([Todo(name: '', completed: false)], VisibilityFilter.all));
+      when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded(
+          [Todo(name: '', completed: false)], VisibilityFilter.all));
       Key todosKey = Key('todos');
       bool tapped = false;
       await tester.pumpWidget(
