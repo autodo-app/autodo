@@ -317,7 +317,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     // yield TodosNotLoaded(); // HACK: this should not work
     yield TodosLoaded(updatedTodos);
   }
-  
+
   @override
   Future<void> close() {
     _dataSubscription?.cancel();
