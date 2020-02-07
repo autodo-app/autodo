@@ -42,7 +42,7 @@ jobs:
     - run: echo "${{ secrets.keys_json }}" > keys.json
     - run: echo "${{ secrets.store_file }}" | base64 --decode > ~/keystore.jks
     - run: echo "${{ secrets.google_services }}" | base64 --decode > ./android/app/google-services.json
-    - run: flutter build ios --debug --release --no-codesign
+    - run: flutter build ios --release --no-codesign
       env:
         KEY_ALIAS: ${{ secrets.key_alias }}
         KEY_PASSWORD: ${{ secrets.key_password }}
