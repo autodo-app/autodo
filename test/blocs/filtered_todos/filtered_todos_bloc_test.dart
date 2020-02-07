@@ -80,5 +80,46 @@ void main() {
         FilteredTodosLoaded([], VisibilityFilter.completed),
       ],
     );
+
+    group('Sort Items', () {
+      final todo1 = Todo(id: '0', dueMileage: 0);
+      final todo2 = Todo(id: '0', dueMileage: 1000);
+      test('No dates', () {
+        expect(FilteredTodosBloc.sortItems([todo1, todo2]), [todo1, todo2]);
+      });
+      test('Valid Date A', () {
+        expect(
+            FilteredTodosBloc.sortItems([
+              todo1.copyWith(dueDate: DateTime.fromMillisecondsSinceEpoch(0)),
+              todo2
+            ]),
+            [
+              todo2,
+              todo1.copyWith(dueDate: DateTime.fromMillisecondsSinceEpoch(0)),
+            ]);
+      });
+      test('Valid Date B', () {
+        expect(
+            FilteredTodosBloc.sortItems([
+              todo1,
+              todo2.copyWith(dueDate: DateTime.fromMillisecondsSinceEpoch(0))
+            ]),
+            [
+              todo1,
+              todo2.copyWith(dueDate: DateTime.fromMillisecondsSinceEpoch(0))
+            ]);
+      });
+      test('Both valid dates', () {
+        expect(
+            FilteredTodosBloc.sortItems([
+              todo1.copyWith(dueDate: DateTime.fromMillisecondsSinceEpoch(0)),
+              todo2.copyWith(dueDate: DateTime.fromMillisecondsSinceEpoch(100))
+            ]),
+            [
+              todo1.copyWith(dueDate: DateTime.fromMillisecondsSinceEpoch(0)),
+              todo2.copyWith(dueDate: DateTime.fromMillisecondsSinceEpoch(100))
+            ]);
+      });
+    });
   });
 }
