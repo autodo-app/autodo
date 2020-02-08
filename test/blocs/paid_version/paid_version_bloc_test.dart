@@ -1,4 +1,3 @@
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:mockito/mockito.dart';
@@ -13,197 +12,225 @@ class MockDataRepository extends Mock
     with EquatableMixin
     implements DataRepository {}
 
-class MockSembast extends Mock with EquatableMixin implements SembastDataRepository {}
+class MockSembast extends Mock
+    with EquatableMixin
+    implements SembastDataRepository {}
 
 class MockDbBloc extends Mock implements DatabaseBloc {}
 
-class MockInAppPurchaseConnection extends Mock implements InAppPurchaseConnection {}
+class MockInAppPurchaseConnection extends Mock
+    implements InAppPurchaseConnection {}
 
 void main() {
   group('PaidVersionBloc', () {
     DataRepository dataRepo = MockDataRepository();
     SembastDataRepository sembast = MockSembast();
     InAppPurchaseConnection conn = MockInAppPurchaseConnection();
-    final emptyVerificationData = PurchaseVerificationData(localVerificationData: '', serverVerificationData: '', source: IAPSource.GooglePlay);
-    final emptyDetails = PurchaseDetails(productID: '', purchaseID: '', transactionDate: '', verificationData: emptyVerificationData);
-    final validDetails = PurchaseDetails(productID: 'autodo_paid', purchaseID: '', transactionDate: '', verificationData: emptyVerificationData);
+    final emptyVerificationData = PurchaseVerificationData(
+        localVerificationData: '',
+        serverVerificationData: '',
+        source: IAPSource.GooglePlay);
+    final emptyDetails = PurchaseDetails(
+        productID: '',
+        purchaseID: '',
+        transactionDate: '',
+        verificationData: emptyVerificationData);
+    final validDetails = PurchaseDetails(
+        productID: 'autodo_paid',
+        purchaseID: '',
+        transactionDate: '',
+        verificationData: emptyVerificationData);
 
     group('LoadPaidVersion', () {
       blocTest<PaidVersionBloc, PaidVersionEvent, PaidVersionState>(
-        'no valid purchases',
-        build: () {
-          when(conn.purchaseUpdatedStream).thenAnswer((_) => Stream.fromIterable([]));
-          when(conn.queryPastPurchases()).thenAnswer((_) async =>
-          QueryPurchaseDetailsResponse(pastPurchases: [emptyDetails]));
+          'no valid purchases',
+          build: () {
+            when(conn.purchaseUpdatedStream)
+                .thenAnswer((_) => Stream.fromIterable([]));
+            when(conn.queryPastPurchases()).thenAnswer((_) async =>
+                QueryPurchaseDetailsResponse(pastPurchases: [emptyDetails]));
 
-          final dbBloc = MockDbBloc();
-          when(dbBloc.state).thenReturn(DbLoaded(dataRepo));
-          return PaidVersionBloc(conn: conn, dbBloc: dbBloc);
-        },
-        act: (bloc) async => bloc.add(LoadPaidVersion()),
-        expect: [PaidVersionLoading(), BasicVersion()]
-      );
+            final dbBloc = MockDbBloc();
+            when(dbBloc.state).thenReturn(DbLoaded(dataRepo));
+            return PaidVersionBloc(conn: conn, dbBloc: dbBloc);
+          },
+          act: (bloc) async => bloc.add(LoadPaidVersion()),
+          expect: [PaidVersionLoading(), BasicVersion()]);
       blocTest<PaidVersionBloc, PaidVersionEvent, PaidVersionState>(
-        'valid purchase',
-        build: () {
-          when(conn.purchaseUpdatedStream).thenAnswer((_) => Stream.fromIterable([]));
-          when(conn.queryPastPurchases()).thenAnswer((_) async =>
-          QueryPurchaseDetailsResponse(pastPurchases: [validDetails]));
+          'valid purchase',
+          build: () {
+            when(conn.purchaseUpdatedStream)
+                .thenAnswer((_) => Stream.fromIterable([]));
+            when(conn.queryPastPurchases()).thenAnswer((_) async =>
+                QueryPurchaseDetailsResponse(pastPurchases: [validDetails]));
 
-          final dbBloc = MockDbBloc();
-          when(dbBloc.state).thenReturn(DbLoaded(dataRepo));
-          return PaidVersionBloc(conn: conn, dbBloc: dbBloc);
-        },
-        act: (bloc) async => bloc.add(LoadPaidVersion()),
-        expect: [PaidVersionLoading(), PaidVersion()]
-      );
+            final dbBloc = MockDbBloc();
+            when(dbBloc.state).thenReturn(DbLoaded(dataRepo));
+            return PaidVersionBloc(conn: conn, dbBloc: dbBloc);
+          },
+          act: (bloc) async => bloc.add(LoadPaidVersion()),
+          expect: [PaidVersionLoading(), PaidVersion()]);
       blocTest<PaidVersionBloc, PaidVersionEvent, PaidVersionState>(
-        'trial version',
-        build: () {
-          when(conn.purchaseUpdatedStream).thenAnswer((_) => Stream.fromIterable([]));
-          when(conn.queryPastPurchases()).thenAnswer((_) async =>
-          QueryPurchaseDetailsResponse(pastPurchases: [emptyDetails]));
+          'trial version',
+          build: () {
+            when(conn.purchaseUpdatedStream)
+                .thenAnswer((_) => Stream.fromIterable([]));
+            when(conn.queryPastPurchases()).thenAnswer((_) async =>
+                QueryPurchaseDetailsResponse(pastPurchases: [emptyDetails]));
 
-          final dbBloc = MockDbBloc();
-          when(dbBloc.state).thenReturn(DbLoaded(sembast));
-          return PaidVersionBloc(conn: conn, dbBloc: dbBloc);
-        },
-        act: (bloc) async => bloc.add(LoadPaidVersion()),
-        expect: [PaidVersionLoading(), BasicVersion()]
-      );
+            final dbBloc = MockDbBloc();
+            when(dbBloc.state).thenReturn(DbLoaded(sembast));
+            return PaidVersionBloc(conn: conn, dbBloc: dbBloc);
+          },
+          act: (bloc) async => bloc.add(LoadPaidVersion()),
+          expect: [PaidVersionLoading(), BasicVersion()]);
       blocTest<PaidVersionBloc, PaidVersionEvent, PaidVersionState>(
-        'response error',
-        build: () {
-          when(conn.purchaseUpdatedStream).thenAnswer((_) => Stream.fromIterable([]));
-          when(conn.queryPastPurchases()).thenAnswer((_) async =>
-          QueryPurchaseDetailsResponse(pastPurchases: [], error: IAPError(code: '', message: '', source: IAPSource.GooglePlay)));
+          'response error',
+          build: () {
+            when(conn.purchaseUpdatedStream)
+                .thenAnswer((_) => Stream.fromIterable([]));
+            when(conn.queryPastPurchases()).thenAnswer((_) async =>
+                QueryPurchaseDetailsResponse(
+                    pastPurchases: [],
+                    error: IAPError(
+                        code: '', message: '', source: IAPSource.GooglePlay)));
 
-          final dbBloc = MockDbBloc();
-          when(dbBloc.state).thenReturn(DbLoaded(dataRepo));
-          return PaidVersionBloc(conn: conn, dbBloc: dbBloc);
-        },
-        act: (bloc) async => bloc.add(LoadPaidVersion()),
-        expect: [PaidVersionLoading(), BasicVersion()]
-      );
+            final dbBloc = MockDbBloc();
+            when(dbBloc.state).thenReturn(DbLoaded(dataRepo));
+            return PaidVersionBloc(conn: conn, dbBloc: dbBloc);
+          },
+          act: (bloc) async => bloc.add(LoadPaidVersion()),
+          expect: [PaidVersionLoading(), BasicVersion()]);
     });
 
     group('PaidVersionUpgrade', () {
       blocTest<PaidVersionBloc, PaidVersionEvent, PaidVersionState>(
-        'not available',
-        build: () {
-          when(conn.purchaseUpdatedStream).thenAnswer((_) => Stream.fromIterable([]));
-          when(conn.isAvailable()).thenAnswer((_) async => false);
+          'not available',
+          build: () {
+            when(conn.purchaseUpdatedStream)
+                .thenAnswer((_) => Stream.fromIterable([]));
+            when(conn.isAvailable()).thenAnswer((_) async => false);
 
-          final dbBloc = MockDbBloc();
-          when(dbBloc.state).thenReturn(DbLoaded(dataRepo));
-          return PaidVersionBloc(conn: conn, dbBloc: dbBloc);
-        },
-        act: (bloc) async => bloc.add(PaidVersionUpgrade()),
-        expect: [PaidVersionLoading()]
-      );
+            final dbBloc = MockDbBloc();
+            when(dbBloc.state).thenReturn(DbLoaded(dataRepo));
+            return PaidVersionBloc(conn: conn, dbBloc: dbBloc);
+          },
+          act: (bloc) async => bloc.add(PaidVersionUpgrade()),
+          expect: [PaidVersionLoading()]);
       blocTest<PaidVersionBloc, PaidVersionEvent, PaidVersionState>(
-        'could not find id',
-        build: () {
-          when(conn.purchaseUpdatedStream).thenAnswer((_) => Stream.fromIterable([]));
-          when(conn.isAvailable()).thenAnswer((_) async => true);
-          Set<String> ids = Set()..add('autodo_paid');
-          when(conn.queryProductDetails(ids)).thenAnswer((_) async =>
-          ProductDetailsResponse(productDetails: [], notFoundIDs: ['']));
+          'could not find id',
+          build: () {
+            when(conn.purchaseUpdatedStream)
+                .thenAnswer((_) => Stream.fromIterable([]));
+            when(conn.isAvailable()).thenAnswer((_) async => true);
+            Set<String> ids = Set()..add('autodo_paid');
+            when(conn.queryProductDetails(ids)).thenAnswer((_) async =>
+                ProductDetailsResponse(productDetails: [], notFoundIDs: ['']));
 
-          final dbBloc = MockDbBloc();
-          when(dbBloc.state).thenReturn(DbLoaded(dataRepo));
-          return PaidVersionBloc(conn: conn, dbBloc: dbBloc);
-        },
-        act: (bloc) async => bloc.add(PaidVersionUpgrade()),
-        expect: [PaidVersionLoading()]
-      );
+            final dbBloc = MockDbBloc();
+            when(dbBloc.state).thenReturn(DbLoaded(dataRepo));
+            return PaidVersionBloc(conn: conn, dbBloc: dbBloc);
+          },
+          act: (bloc) async => bloc.add(PaidVersionUpgrade()),
+          expect: [PaidVersionLoading()]);
       blocTest<PaidVersionBloc, PaidVersionEvent, PaidVersionState>(
-        'failed purchase',
-        build: () {
-          when(conn.purchaseUpdatedStream).thenAnswer((_) => Stream.fromIterable([]));
-          when(conn.isAvailable()).thenAnswer((_) async => true);
-          Set<String> ids = Set()..add('autodo_paid');
-          final deets = ProductDetails(id: 'autodo_paid', price: '', title: '', description: '');
-          when(conn.queryProductDetails(ids)).thenAnswer((_) async =>
-              ProductDetailsResponse(productDetails: [deets], notFoundIDs: []));
-          when(conn.buyNonConsumable(purchaseParam: anyNamed('purchaseParam'))).thenAnswer((_) async => false);
+          'failed purchase',
+          build: () {
+            when(conn.purchaseUpdatedStream)
+                .thenAnswer((_) => Stream.fromIterable([]));
+            when(conn.isAvailable()).thenAnswer((_) async => true);
+            Set<String> ids = Set()..add('autodo_paid');
+            final deets = ProductDetails(
+                id: 'autodo_paid', price: '', title: '', description: '');
+            when(conn.queryProductDetails(ids)).thenAnswer((_) async =>
+                ProductDetailsResponse(
+                    productDetails: [deets], notFoundIDs: []));
+            when(conn.buyNonConsumable(
+                    purchaseParam: anyNamed('purchaseParam')))
+                .thenAnswer((_) async => false);
 
-          final dbBloc = MockDbBloc();
-          when(dbBloc.state).thenReturn(DbLoaded(dataRepo));
-          return PaidVersionBloc(conn: conn, dbBloc: dbBloc);
-        },
-        act: (bloc) async => bloc.add(PaidVersionUpgrade()),
-        expect: [PaidVersionLoading()]
-      );
+            final dbBloc = MockDbBloc();
+            when(dbBloc.state).thenReturn(DbLoaded(dataRepo));
+            return PaidVersionBloc(conn: conn, dbBloc: dbBloc);
+          },
+          act: (bloc) async => bloc.add(PaidVersionUpgrade()),
+          expect: [PaidVersionLoading()]);
       blocTest<PaidVersionBloc, PaidVersionEvent, PaidVersionState>(
-        'successful purchase',
-        build: () {
-          when(conn.purchaseUpdatedStream).thenAnswer((_) => Stream.fromIterable([]));
-          when(conn.isAvailable()).thenAnswer((_) async => true);
-          Set<String> ids = Set()..add('autodo_paid');
-          final deets = ProductDetails(id: 'autodo_paid', price: '', title: '', description: '');
-          when(conn.queryProductDetails(ids)).thenAnswer((_) async =>
-          ProductDetailsResponse(productDetails: [deets], notFoundIDs: []));
-          when(conn.buyNonConsumable(purchaseParam: anyNamed('purchaseParam'))).thenAnswer((_) async => false);
+          'successful purchase',
+          build: () {
+            when(conn.purchaseUpdatedStream)
+                .thenAnswer((_) => Stream.fromIterable([]));
+            when(conn.isAvailable()).thenAnswer((_) async => true);
+            Set<String> ids = Set()..add('autodo_paid');
+            final deets = ProductDetails(
+                id: 'autodo_paid', price: '', title: '', description: '');
+            when(conn.queryProductDetails(ids)).thenAnswer((_) async =>
+                ProductDetailsResponse(
+                    productDetails: [deets], notFoundIDs: []));
+            when(conn.buyNonConsumable(
+                    purchaseParam: anyNamed('purchaseParam')))
+                .thenAnswer((_) async => false);
 
-          final dbBloc = MockDbBloc();
-          when(dbBloc.state).thenReturn(DbLoaded(dataRepo));
-          return PaidVersionBloc(conn: conn, dbBloc: dbBloc);
-        },
-        act: (bloc) async => bloc.add(PaidVersionUpgrade()),
-        expect: [PaidVersionLoading()]
-      );
+            final dbBloc = MockDbBloc();
+            when(dbBloc.state).thenReturn(DbLoaded(dataRepo));
+            return PaidVersionBloc(conn: conn, dbBloc: dbBloc);
+          },
+          act: (bloc) async => bloc.add(PaidVersionUpgrade()),
+          expect: [PaidVersionLoading()]);
     });
 
     group('listeners', () {
-      blocTest<PaidVersionBloc, PaidVersionEvent, PaidVersionState>(
-        'dbBloc',
-        build: () {
-          when(conn.purchaseUpdatedStream).thenAnswer((_) => Stream.fromIterable([]));
+      blocTest<PaidVersionBloc, PaidVersionEvent, PaidVersionState>('dbBloc',
+          build: () {
+        when(conn.purchaseUpdatedStream)
+            .thenAnswer((_) => Stream.fromIterable([]));
 
-          final dbBloc = MockDbBloc();
-          when(dbBloc.state).thenReturn(DbLoaded(dataRepo));
-          whenListen(dbBloc, Stream.fromIterable([DbLoaded(sembast)]));
-          return PaidVersionBloc(conn: conn, dbBloc: dbBloc);
-        },
-        // act: (bloc) async => bloc.add(LoadPaidVersion()),
-        expect: [PaidVersionLoading(), BasicVersion()]
-      );
+        final dbBloc = MockDbBloc();
+        when(dbBloc.state).thenReturn(DbLoaded(dataRepo));
+        whenListen(dbBloc, Stream.fromIterable([DbLoaded(sembast)]));
+        return PaidVersionBloc(conn: conn, dbBloc: dbBloc);
+      },
+          // act: (bloc) async => bloc.add(LoadPaidVersion()),
+          expect: [PaidVersionLoading(), BasicVersion()]);
       blocTest<PaidVersionBloc, PaidVersionEvent, PaidVersionState>(
-        'conn, not purchased',
-        build: () {
-          var details = validDetails;
-          details.status = PurchaseStatus.error;
-          details.error = IAPError(code: '', message: '', source: IAPSource.GooglePlay);
-          when(conn.purchaseUpdatedStream).thenAnswer((_) => Stream.fromIterable([[details],]));
+          'conn, not purchased', build: () {
+        var details = validDetails;
+        details.status = PurchaseStatus.error;
+        details.error =
+            IAPError(code: '', message: '', source: IAPSource.GooglePlay);
+        when(conn.purchaseUpdatedStream).thenAnswer((_) => Stream.fromIterable([
+              [details],
+            ]));
 
-          final dbBloc = MockDbBloc();
-          when(dbBloc.state).thenReturn(DbLoaded(dataRepo));
-          return PaidVersionBloc(conn: conn, dbBloc: dbBloc);
-        },
-        // act: (bloc) async => bloc.add(LoadPaidVersion()),
-        expect: [PaidVersionLoading(), ]
-      );
+        final dbBloc = MockDbBloc();
+        when(dbBloc.state).thenReturn(DbLoaded(dataRepo));
+        return PaidVersionBloc(conn: conn, dbBloc: dbBloc);
+      },
+          // act: (bloc) async => bloc.add(LoadPaidVersion()),
+          expect: [
+            PaidVersionLoading(),
+          ]);
       blocTest<PaidVersionBloc, PaidVersionEvent, PaidVersionState>(
-        'conn, purchased',
-        build: () {
-          var details = validDetails;
-          details.status = PurchaseStatus.purchased;
-          when(conn.purchaseUpdatedStream).thenAnswer((_) => Stream.fromIterable([[details],]));
+          'conn, purchased', build: () {
+        var details = validDetails;
+        details.status = PurchaseStatus.purchased;
+        when(conn.purchaseUpdatedStream).thenAnswer((_) => Stream.fromIterable([
+              [details],
+            ]));
 
-          final dbBloc = MockDbBloc();
-          when(dbBloc.state).thenReturn(DbLoaded(dataRepo));
-          return PaidVersionBloc(conn: conn, dbBloc: dbBloc);
-        },
-        // act: (bloc) async => bloc.add(LoadPaidVersion()),
-        expect: [PaidVersionLoading(), PaidVersion()]
-      );
+        final dbBloc = MockDbBloc();
+        when(dbBloc.state).thenReturn(DbLoaded(dataRepo));
+        return PaidVersionBloc(conn: conn, dbBloc: dbBloc);
+      },
+          // act: (bloc) async => bloc.add(LoadPaidVersion()),
+          expect: [PaidVersionLoading(), PaidVersion()]);
     });
 
     blocTest<PaidVersionBloc, PaidVersionEvent, PaidVersionState>(
         'PaidVersionPurchased',
         build: () {
-          when(conn.purchaseUpdatedStream).thenAnswer((_) => Stream.fromIterable([]));
+          when(conn.purchaseUpdatedStream)
+              .thenAnswer((_) => Stream.fromIterable([]));
           when(conn.isAvailable()).thenAnswer((_) async => false);
 
           final dbBloc = MockDbBloc();
@@ -211,7 +238,6 @@ void main() {
           return PaidVersionBloc(conn: conn, dbBloc: dbBloc);
         },
         act: (bloc) async => bloc.add(PaidVersionPurchased()),
-        expect: [PaidVersionLoading(), PaidVersion()]
-      );
+        expect: [PaidVersionLoading(), PaidVersion()]);
   });
 }
