@@ -19,7 +19,7 @@ class HomeScreen extends StatefulWidget {
   HomeScreen(
       {Key key = IntegrationTestKeys.homeScreen,
       this.todosTabKey,
-      this.integrationTest})
+      this.integrationTest = false})
       : super(key: key);
 
   @override
