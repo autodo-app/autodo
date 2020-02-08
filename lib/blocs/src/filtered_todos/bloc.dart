@@ -12,7 +12,6 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
 
   FilteredTodosBloc({@required this.todosBloc}) {
     todosSubscription = todosBloc.listen((state) {
-      print(';asdfas');
       if (state is TodosLoaded) {
         add(UpdateTodos((todosBloc.state as TodosLoaded).todos));
       }
@@ -36,6 +35,33 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
     } else if (event is UpdateTodos) {
       yield* _mapTodosUpdatedToState(event);
     }
+  }
+
+  static List sortItems(List items) {
+    return items
+      ..sort((a, b) {
+        var aDate = a?.dueDate ?? 0;
+        var bDate = b?.dueDate ?? 0;
+        var aMileage = a?.dueMileage ?? 0;
+        var bMileage = b?.dueMileage ?? 0;
+
+        if (aDate == 0 && bDate == 0) {
+          // both don't have a date, so only consider the mileages
+          if (aMileage > bMileage)
+            return 1;
+          else if (aMileage < bMileage)
+            return -1;
+          else
+            return 0;
+        } else {
+          // in case one of the two isn't a valid timestamp
+          if (aDate == 0) return -1;
+          if (bDate == 0) return 1;
+          // consider the dates since all todo items should have dates as a result
+          // of the distance rate translation function
+          return aDate.compareTo(bDate);
+        }
+      });
   }
 
   Stream<FilteredTodosState> _mapUpdateFilterToState(
@@ -69,7 +95,7 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
 
   List<Todo> _mapTodosToFilteredTodos(
       List<Todo> todos, VisibilityFilter filter) {
-    final out = todos.where((todo) {
+    var out = todos.where((todo) {
       if (filter == VisibilityFilter.all) {
         return true;
       } else if (filter == VisibilityFilter.active) {
@@ -78,7 +104,7 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
         return todo.completed;
       }
     }).toList();
-    print('dfasdf $out');
+    out = sortItems(out);
     return out;
   }
 

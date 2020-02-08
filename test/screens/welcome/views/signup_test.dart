@@ -56,11 +56,8 @@ void main() {
                 value: SignupBloc(authRepository: authRepository)),
           ],
           child: MaterialApp(
-            home: SignupScreen(key: scaffoldKey),
-            routes: {
-              AutodoRoutes.welcome: (context) => Container()
-            }
-          ),
+              home: SignupScreen(key: scaffoldKey),
+              routes: {AutodoRoutes.welcome: (context) => Container()}),
         ),
       );
       await tester.pumpAndSettle();

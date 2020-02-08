@@ -40,8 +40,9 @@ void main() {
       expect(find.byType(LoadingIndicator), findsOneWidget);
     });
     testWidgets('loaded', (WidgetTester tester) async {
-      when(repeatsBloc.state).thenReturn(
-          RepeatsLoaded([Repeat(name: 'test', mileageInterval: 0, cars: ['test'])]));
+      when(repeatsBloc.state).thenReturn(RepeatsLoaded([
+        Repeat(name: 'test', mileageInterval: 0, cars: ['test'])
+      ]));
       Key repeatsKey = Key('repeats');
       await tester.pumpWidget(
         MultiBlocProvider(
