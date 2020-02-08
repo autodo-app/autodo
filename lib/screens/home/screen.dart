@@ -61,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // this has to be a function so that it returns a different route each time
   // the lifecycle of a MaterialPageRoute requires that it not be reused.
-  final List<MaterialPageRoute> Function() fabRoutes = () => [
+  List<MaterialPageRoute> Function() fabRoutes(cars) => () => [
         MaterialPageRoute(
           builder: (context) => _ScreenWithBanner(
               child: RefuelingAddEditScreen(
@@ -76,8 +76,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       carName: n,
                     )));
                   },
-                  cars: (BlocProvider.of<CarsBloc>(context).state as CarsLoaded)
-                      .cars)),
+                  cars: cars,
+                ),
+          ),
         ),
         MaterialPageRoute(
             builder: (context) => _ScreenWithBanner(
@@ -106,9 +107,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   _HomeScreenState(this.todosTabKey, this.integrationTest);
 
-  Widget get actionButton => (integrationTest ?? false)
-      ? AutodoActionButton(miniButtonRoutes: fabRoutes, ticker: TestVSync())
-      : AutodoActionButton(miniButtonRoutes: fabRoutes);
+  Widget get actionButton => BlocBuilder<CarsBloc, CarsState>(
+    builder: (context, state) {
+      if (!(state is CarsLoaded)) {
+        print('Cannot show fab without cars');
+        return Container();
+      } else if (integrationTest) {
+        return AutodoActionButton(miniButtonRoutes: fabRoutes((state as CarsLoaded).cars), ticker: TestVSync());
+      } else {
+        return AutodoActionButton(miniButtonRoutes: fabRoutes((state as CarsLoaded).cars));
+      }
+    }
+  );
 
   @override
   initState() {
