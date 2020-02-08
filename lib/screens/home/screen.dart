@@ -64,20 +64,20 @@ class _HomeScreenState extends State<HomeScreen> {
   List<MaterialPageRoute> Function() fabRoutes(cars) => () => [
         MaterialPageRoute(
           builder: (context) => _ScreenWithBanner(
-              child: RefuelingAddEditScreen(
-                  isEditing: false,
-                  onSave: (m, d, a, c, n) {
-                    BlocProvider.of<RefuelingsBloc>(context)
-                        .add(AddRefueling(Refueling(
-                      mileage: m,
-                      date: d,
-                      amount: a,
-                      cost: c,
-                      carName: n,
-                    )));
-                  },
-                  cars: cars,
-                ),
+            child: RefuelingAddEditScreen(
+              isEditing: false,
+              onSave: (m, d, a, c, n) {
+                BlocProvider.of<RefuelingsBloc>(context)
+                    .add(AddRefueling(Refueling(
+                  mileage: m,
+                  date: d,
+                  amount: a,
+                  cost: c,
+                  carName: n,
+                )));
+              },
+              cars: cars,
+            ),
           ),
         ),
         MaterialPageRoute(
@@ -107,18 +107,20 @@ class _HomeScreenState extends State<HomeScreen> {
 
   _HomeScreenState(this.todosTabKey, this.integrationTest);
 
-  Widget get actionButton => BlocBuilder<CarsBloc, CarsState>(
-    builder: (context, state) {
-      if (!(state is CarsLoaded)) {
-        print('Cannot show fab without cars');
-        return Container();
-      } else if (integrationTest) {
-        return AutodoActionButton(miniButtonRoutes: fabRoutes((state as CarsLoaded).cars), ticker: TestVSync());
-      } else {
-        return AutodoActionButton(miniButtonRoutes: fabRoutes((state as CarsLoaded).cars));
-      }
-    }
-  );
+  Widget get actionButton =>
+      BlocBuilder<CarsBloc, CarsState>(builder: (context, state) {
+        if (!(state is CarsLoaded)) {
+          print('Cannot show fab without cars');
+          return Container();
+        } else if (integrationTest) {
+          return AutodoActionButton(
+              miniButtonRoutes: fabRoutes((state as CarsLoaded).cars),
+              ticker: TestVSync());
+        } else {
+          return AutodoActionButton(
+              miniButtonRoutes: fabRoutes((state as CarsLoaded).cars));
+        }
+      });
 
   @override
   initState() {
