@@ -135,13 +135,15 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
         //     setState(() {
         //       _bannerShown = false;
         //     });
-          // }}
-        );
+        // }}
+      );
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    BlocProvider.of<PaidVersionBloc>(context).observer.subscribe(this, ModalRoute.of(context));
+    BlocProvider.of<PaidVersionBloc>(context)
+        .observer
+        .subscribe(this, ModalRoute.of(context));
   }
 
   @override
@@ -151,7 +153,9 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
       print('didPush');
       _bannerShown = true;
       await _bannerAd?.dispose(); // clear old banner ad if one exists
-      _bannerAd = _bannerAdConfig()..load()..show();
+      _bannerAd = _bannerAdConfig()
+        ..load()
+        ..show();
     }
   }
 
@@ -178,7 +182,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
     super.didPushNext();
   }
 
-
   @override
   initState() {
     FirebaseAdMob.instance.initialize(appId: BannerAd.testAdUnitId);
@@ -191,7 +194,9 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
   build(context) =>
       BlocBuilder<PaidVersionBloc, PaidVersionState>(builder: (context, paid) {
         if (paid is PaidVersion && _bannerShown) {
-          _bannerAd?.dispose()?.then((_) {_bannerShown = false;});
+          _bannerAd?.dispose()?.then((_) {
+            _bannerShown = false;
+          });
         }
         return BlocBuilder<TabBloc, AppTab>(
             builder: (context, activeTab) => _ScreenWithBanner(
