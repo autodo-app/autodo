@@ -47,7 +47,7 @@ class _ScreenWithBanner extends StatelessWidget {
       ));
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with RouteAware {
   final Map<AppTab, Widget> views = {
     AppTab.todos: TodosScreen(),
     AppTab.refuelings: RefuelingsScreen(),
@@ -122,33 +122,67 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       });
 
-  @override
-  initState() {
-    FirebaseAdMob.instance.initialize(appId: BannerAd.testAdUnitId);
-    _bannerAd = AutodoBannerAd(
+  _bannerAdConfig() => AutodoBannerAd(
         adUnitId: (kReleaseMode)
             ? 'ca-app-pub-6809809089648617/3864738913'
             : BannerAd.testAdUnitId,
-        listener: (event) {
-          if (event == MobileAdEvent.loaded) {
-            setState(() {
-              _bannerShown = true;
-            });
-          } else if (event == MobileAdEvent.failedToLoad) {
-            setState(() {
-              _bannerShown = false;
-            });
-          }
-        })
-      ..load()
-      ..show();
-    super.initState();
+        // listener: (event) {
+        //   if (event == MobileAdEvent.loaded) {
+        //     setState(() {
+        //       _bannerShown = true;
+        //     });
+        //   } else if (event == MobileAdEvent.failedToLoad) {
+        //     setState(() {
+        //       _bannerShown = false;
+        //     });
+          // }}
+        );
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    BlocProvider.of<PaidVersionBloc>(context).observer.subscribe(this, ModalRoute.of(context));
   }
 
   @override
-  dispose() {
-    _bannerAd.dispose();
-    super.dispose();
+  void didPush() async {
+    // Route was pushed onto navigator and is now topmost route.
+    if (ModalRoute.of(context).isCurrent) {
+      print('didPush');
+      _bannerShown = true;
+      await _bannerAd?.dispose(); // clear old banner ad if one exists
+      _bannerAd = _bannerAdConfig()..load()..show();
+    }
+  }
+
+  @override
+  void didPop() async {
+    // Current route was popped off the navigator.
+    print('didPop + $_bannerShown');
+    if (_bannerShown) {
+      _bannerShown = false;
+      var res = await _bannerAd?.dispose(); // clear old banner ad if one exists
+      print('result: $res');
+    }
+  }
+
+  @override
+  void didPushNext() async {
+    // Another route is now above this route
+    print('didPushNext + $_bannerShown + $_bannerAd');
+    if (_bannerShown) {
+      _bannerShown = false;
+      var res = await _bannerAd?.dispose(); // clear old banner ad if one exists
+      print('result: $res');
+    }
+    super.didPushNext();
+  }
+
+
+  @override
+  initState() {
+    FirebaseAdMob.instance.initialize(appId: BannerAd.testAdUnitId);
+    super.initState();
   }
 
   List<Widget> fakeBottomButtons = [Container(height: 50)];
@@ -157,10 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
   build(context) =>
       BlocBuilder<PaidVersionBloc, PaidVersionState>(builder: (context, paid) {
         if (paid is PaidVersion && _bannerShown) {
-          _bannerAd?.dispose();
-          _bannerShown = false;
-        } else if (paid is BasicVersion && !_bannerShown) {
-          // not really sure when a user would downgrade, so leaving this empty
+          _bannerAd?.dispose()?.then((_) {_bannerShown = false;});
         }
         return BlocBuilder<TabBloc, AppTab>(
             builder: (context, activeTab) => _ScreenWithBanner(

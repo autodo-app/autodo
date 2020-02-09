@@ -18,6 +18,7 @@ class PaidVersionBloc extends Bloc<PaidVersionEvent, PaidVersionState> {
   final DatabaseBloc _dbBloc;
   final InAppPurchaseConnection _purchaseConn;
   StreamSubscription _dbSubscription, _purchaseSubscription;
+  RouteObserver observer = RouteObserver();
 
   PaidVersionBloc({InAppPurchaseConnection conn, @required DatabaseBloc dbBloc})
       : _dbBloc = dbBloc,
