@@ -41,6 +41,7 @@ void main() {
       filteredTodosBloc = MockFilteredTodosBloc();
       tabBloc = MockTabBloc();
       paidBloc = MockPaidVersionBloc();
+      when(paidBloc.observer).thenReturn(RouteObserver());
       carsBloc = MockCarsBloc();
       when(carsBloc.state).thenReturn(CarsLoaded([Car(name: 'test')]));
     });
