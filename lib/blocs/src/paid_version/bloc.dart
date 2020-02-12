@@ -18,6 +18,7 @@ class PaidVersionBloc extends Bloc<PaidVersionEvent, PaidVersionState> {
   final DatabaseBloc _dbBloc;
   final InAppPurchaseConnection _purchaseConn;
   StreamSubscription _dbSubscription, _purchaseSubscription;
+  RouteObserver observer = RouteObserver();
 
   PaidVersionBloc({InAppPurchaseConnection conn, @required DatabaseBloc dbBloc})
       : _dbBloc = dbBloc,
@@ -35,7 +36,6 @@ class PaidVersionBloc extends Bloc<PaidVersionEvent, PaidVersionState> {
         }
         if (purchase.status == PurchaseStatus.purchased &&
             _verifyPurchase(purchase)) {
-          print('purchased');
           add(PaidVersionPurchased());
         }
       }
@@ -75,7 +75,7 @@ class PaidVersionBloc extends Bloc<PaidVersionEvent, PaidVersionState> {
       return;
     }
 
-    // pull the JSON purchase validation string from assets bundle
+    // TODO: pull the JSON purchase validation string from assets bundle
 
     final QueryPurchaseDetailsResponse response =
         await _purchaseConn.queryPastPurchases();
@@ -86,7 +86,6 @@ class PaidVersionBloc extends Bloc<PaidVersionEvent, PaidVersionState> {
     }
 
     for (PurchaseDetails p in response.pastPurchases) {
-      print('verifying $p');
       if (!_verifyPurchase(p)) {
         continue;
       }
