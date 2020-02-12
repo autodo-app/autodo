@@ -34,12 +34,16 @@ void main() {
     FilteredTodosBloc filteredTodosBloc;
     TabBloc tabBloc;
     PaidVersionBloc paidBloc;
+    CarsBloc carsBloc;
 
     setUp(() {
       todosBloc = MockTodosBloc();
       filteredTodosBloc = MockFilteredTodosBloc();
       tabBloc = MockTabBloc();
       paidBloc = MockPaidVersionBloc();
+      when(paidBloc.observer).thenReturn(RouteObserver());
+      carsBloc = MockCarsBloc();
+      when(carsBloc.state).thenReturn(CarsLoaded([Car(name: 'test')]));
     });
 
     testWidgets('renders correctly', (WidgetTester tester) async {
@@ -59,6 +63,7 @@ void main() {
               value: tabBloc,
             ),
             BlocProvider<PaidVersionBloc>.value(value: paidBloc),
+            BlocProvider<CarsBloc>.value(value: carsBloc),
           ],
           child: MaterialApp(
             home: Scaffold(
@@ -91,6 +96,7 @@ void main() {
               value: tabBloc,
             ),
             BlocProvider<PaidVersionBloc>.value(value: paidBloc),
+            BlocProvider<CarsBloc>.value(value: carsBloc),
           ],
           child: MaterialApp(
             home: Scaffold(

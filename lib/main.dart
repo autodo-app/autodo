@@ -174,6 +174,7 @@ class App extends StatelessWidget {
       },
       theme: _theme,
       debugShowCheckedModeBanner: false,
+      navigatorObservers: [BlocProvider.of<PaidVersionBloc>(context).observer],
     );
   }
 }
