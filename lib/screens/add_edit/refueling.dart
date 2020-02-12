@@ -413,6 +413,7 @@ class _RefuelingAddEditScreenState extends State<RefuelingAddEditScreen> {
           onPressed: () {
             if (_formKey.currentState.validate()) {
               _formKey.currentState.save();
+             print(widget.cars);
               if (_car == null) _car = widget.cars.first.name;
               widget.onSave(_mileage, _date, _amount, _cost, _car);
               Navigator.pop(context);
