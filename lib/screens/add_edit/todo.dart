@@ -238,7 +238,6 @@ class _CarToggleFormState extends State<_CarToggleForm> {
       );
 }
 
-
 class TodoAddEditScreen extends StatefulWidget {
   final bool isEditing;
   final _OnSaveCallback onSave;
@@ -289,11 +288,10 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
     super.dispose();
   }
 
-  List<bool> _carsToInitialState(cars) => (cars
-          .map((c) => c.name)
-          .contains(widget.todo?.carName))
-      ? cars.map((c) => c.name == widget.todo?.carName)
-      : List.generate(cars.length, (idx) => (idx == 0) ? true : false);
+  List<bool> _carsToInitialState(cars) =>
+      (cars.map((c) => c.name).contains(widget.todo?.carName))
+          ? cars.map((c) => c.name == widget.todo?.carName)
+          : List.generate(cars.length, (idx) => (idx == 0) ? true : false);
 
   @override
   build(context) => Scaffold(
@@ -392,7 +390,8 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
                                 key: ValueKey('__refueling_car_form__'),
                                 initialValue: widget.todo?.carName,
                                 onSaved: (val) => _car = val,
-                                node: _carNode, nextNode: null);
+                                node: _carNode,
+                                nextNode: null);
                           }
                         } else {
                           return LoadingIndicator();
