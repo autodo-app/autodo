@@ -34,9 +34,18 @@ class PaidVersionBloc extends Bloc<PaidVersionEvent, PaidVersionState> {
           print('Error in purchase: ${purchase.error.message}');
           continue;
         }
-        if (purchase.status == PurchaseStatus.purchased &&
+        print('status: ${purchase.status} + id: ${purchase.productID}');
+        // HACK: App Store payments currently show as pending even when they have been purchased
+        if ((purchase.status == PurchaseStatus.purchased ||
+                purchase.status == PurchaseStatus.pending) &&
             _verifyPurchase(purchase)) {
           add(PaidVersionPurchased());
+        }
+        if (purchase.status == PurchaseStatus.purchased && Platform.isIOS) {
+          print('completing purchase');
+          // Mark that you've delivered the purchase. Only the App Store requires
+          // this final confirmation.
+          _purchaseConn.completePurchase(purchase);
         }
       }
     });
@@ -71,6 +80,7 @@ class PaidVersionBloc extends Bloc<PaidVersionEvent, PaidVersionState> {
   Stream<PaidVersionState> _mapLoadPaidVersionToState(event) async* {
     final trialUser = repo is SembastDataRepository;
     if (trialUser) {
+      print('trial user');
       yield BasicVersion();
       return;
     }
@@ -80,21 +90,18 @@ class PaidVersionBloc extends Bloc<PaidVersionEvent, PaidVersionState> {
     final QueryPurchaseDetailsResponse response =
         await _purchaseConn.queryPastPurchases();
     if (response.error != null) {
-      print('Error querying past purchases: ${response.error}');
+      print('Error querying past purchases: ${response.error.message}');
       yield BasicVersion();
       return;
     }
 
+    print('purchases: ${response.pastPurchases}');
     for (PurchaseDetails p in response.pastPurchases) {
+      print('past purchase: $p');
       if (!_verifyPurchase(p)) {
         continue;
       }
       yield PaidVersion();
-      if (Platform.isIOS) {
-        // Mark that you've delivered the purchase. Only the App Store requires
-        // this final confirmation.
-        _purchaseConn.completePurchase(p);
-      }
       return;
     }
 

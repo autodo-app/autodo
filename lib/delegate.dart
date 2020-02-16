@@ -4,7 +4,7 @@ class AutodoBlocDelegate extends BlocDelegate {
   @override
   void onEvent(Bloc bloc, Object event) {
     super.onEvent(bloc, event);
-    print('Event: $event\n\n');
+    // print('Event: $event\n\n');
   }
 
   @override
@@ -16,6 +16,6 @@ class AutodoBlocDelegate extends BlocDelegate {
   @override
   void onTransition(Bloc bloc, Transition transition) {
     super.onTransition(bloc, transition);
-    print('Transition: $transition\n\n');
+    // print('Transition: $transition\n\n');
   }
 }

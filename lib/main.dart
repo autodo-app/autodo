@@ -98,7 +98,7 @@ void run(bool integrationTest) async {
 
 Future<Map> init() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Map keys = await SecretLoader(secretPath: 'keys.json').load();
+  Map keys = await SecretLoader(secretPath: 'assets/keys.json').load();
   if (Platform.isIOS) {
     FirebaseApp.configure(
         name: 'autodo',
