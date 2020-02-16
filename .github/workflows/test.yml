@@ -1,19 +1,19 @@
 on: push
 name: Unit and Widget Tests
 jobs:
-  test: 
+  test:
     name: Unit and Widget Tests
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-      with: 
+      with:
         submodules: true
     - uses: subosito/flutter-action@v1
       with:
         channel: 'dev'
     - run: flutter pub get
-    - run: echo "${{ secrets.keys_json }}" > keys.json
-    - run: flutter test --coverage  
+    - run: echo "${{ secrets.keys_json }}" > assets/keys.json
+    - run: flutter test --coverage
     - uses: codecov/codecov-action@v1.0.2
       with:
         token: ${{secrets.CODECOV_TOKEN}}

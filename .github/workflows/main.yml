@@ -16,7 +16,7 @@ jobs:
       with:
         channel: 'dev'
     - run: flutter pub get
-    - run: echo "${{ secrets.keys_json }}" > keys.json
+    - run: echo "${{ secrets.keys_json }}" > assets/keys.json
     - run: echo "${{ secrets.store_file }}" | base64 --decode > ~/keystore.jks
     - run: echo "${{ secrets.google_services }}" | base64 --decode > ./android/app/google-services.json
     - run: flutter build apk --debug --split-per-abi
@@ -39,7 +39,7 @@ jobs:
       with:
         channel: 'dev'
     - run: flutter pub get
-    - run: echo "${{ secrets.keys_json }}" > keys.json
+    - run: echo "${{ secrets.keys_json }}" > assets/keys.json
     - run: echo "${{ secrets.store_file }}" | base64 --decode > ~/keystore.jks
     - run: echo "${{ secrets.google_services }}" | base64 --decode > ./android/app/google-services.json
     - run: echo "${{ secrets.google_services_plist }}" > /Users/runner/runners/2.164.0/work/autodo/autodo/ios/GoogleService-Info.plist
