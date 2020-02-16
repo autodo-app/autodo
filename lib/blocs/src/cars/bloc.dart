@@ -64,7 +64,7 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
       final cars = await repo
           .getCurrentCars()
           .timeout(Duration(milliseconds: 200), onTimeout: () => []);
-      print('loaded: $cars');
+      // print('loaded: $cars');
       if (cars != null) {
         yield CarsLoaded(cars);
       } else {
