@@ -47,7 +47,9 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
 
   @override
   Future<List<Todo>> getCurrentTodos() async {
-    return todos().first;
+    final snap = await _todos.getDocuments();
+    return snap.documents.map((doc) => Todo.fromEntity(TodoEntity.fromSnapshot(doc)))
+          .toList();
   }
 
   @override
@@ -84,7 +86,9 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
 
   @override
   Future<List<Refueling>> getCurrentRefuelings() async {
-    return refuelings().first;
+    final snap = await _refuelings.getDocuments();
+    return snap.documents.map((doc) => Refueling.fromEntity(RefuelingEntity.fromSnapshot(doc)))
+          .toList();
   }
 
   @override
@@ -121,7 +125,9 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
 
   @override
   Future<List<Car>> getCurrentCars() async {
-    return cars().first;
+    final snap = await _cars.getDocuments();
+    return snap.documents.map((doc) => Car.fromEntity(CarEntity.fromSnapshot(doc)))
+          .toList();
   }
 
   @override
@@ -160,7 +166,9 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
 
   @override
   Future<List<Repeat>> getCurrentRepeats() async {
-    return repeats().first;
+    final snap = await _repeats.getDocuments();
+    return snap.documents.map((doc) => Repeat.fromEntity(RepeatEntity.fromSnapshot(doc)))
+          .toList();
   }
 
   @override
