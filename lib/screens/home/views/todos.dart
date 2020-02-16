@@ -46,6 +46,7 @@ class TodosScreen extends StatelessWidget {
               return Padding(
                   padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                   child: TodoCard(
+                    key: UniqueKey(),
                     todo: todo,
                     onDismissed: (direction) =>
                         onDismissed(direction, context, todo),
