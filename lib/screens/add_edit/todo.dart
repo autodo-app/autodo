@@ -181,6 +181,64 @@ class _MileageForm extends StatelessWidget {
       );
 }
 
+class _CarToggleForm extends StatefulWidget {
+  final List<bool> initialState;
+  final List<Car> cars;
+  final Function onSaved;
+
+  _CarToggleForm(this.initialState, this.cars, this.onSaved);
+
+  @override
+  _CarToggleFormState createState() =>
+      _CarToggleFormState(initialState, cars, onSaved);
+}
+
+class _CarToggleFormState extends State<_CarToggleForm> {
+  List<bool> isSelected;
+  final List<Car> cars;
+  final Function onSaved;
+
+  _CarToggleFormState(this.isSelected, this.cars, this.onSaved);
+
+  @override
+  build(context) => FormField(
+        builder: (state) => Center(
+          child: ToggleButtons(
+            children: cars.map((c) => Text(c.name)).toList(),
+            onPressed: (int index) {
+              setState(() {
+                for (int buttonIndex = 0;
+                    buttonIndex < isSelected.length;
+                    buttonIndex++) {
+                  if (buttonIndex == index) {
+                    isSelected[buttonIndex] = true;
+                  } else {
+                    isSelected[buttonIndex] = false;
+                  }
+                }
+              });
+            },
+            isSelected: isSelected,
+            // Constraints are per the Material spec
+            constraints: BoxConstraints(minWidth: 88, minHeight: 36),
+            textStyle: Theme.of(context).primaryTextTheme.button,
+            color: Theme.of(context)
+                .primaryTextTheme
+                .button
+                .color
+                .withOpacity(0.7),
+            selectedColor: Theme.of(context).accentTextTheme.button.color,
+            fillColor: Theme.of(context).primaryColor,
+            borderWidth: 2.0,
+            borderRadius: BorderRadius.circular(5),
+          ),
+        ),
+        onSaved: (_) => onSaved(isSelected),
+        validator: (_) => null,
+      );
+}
+
+
 class TodoAddEditScreen extends StatefulWidget {
   final bool isEditing;
   final _OnSaveCallback onSave;
@@ -230,6 +288,12 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
     scrollCtrl.dispose();
     super.dispose();
   }
+
+  List<bool> _carsToInitialState(cars) => (cars
+          .map((c) => c.name)
+          .contains(widget.todo?.carName))
+      ? cars.map((c) => c.name == widget.todo?.carName)
+      : List.generate(cars.length, (idx) => (idx == 0) ? true : false);
 
   @override
   build(context) => Scaffold(
@@ -314,15 +378,25 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
                     BlocBuilder<CarsBloc, CarsState>(
                       builder: (context, state) {
                         if (state is CarsLoaded) {
-                          return CarForm(
-                            key: IntegrationTestKeys.todoCarForm,
-                            initialValue: widget.todo?.carName,
-                            onSaved: (car) => _car = car,
-                            node: _carNode,
-                            nextNode: null,
-                          );
+                          if (state.cars.length <= 1) {
+                            return Container();
+                          } else if (state.cars.length < 4) {
+                            return _CarToggleForm(
+                              _carsToInitialState(state.cars),
+                              state.cars,
+                              (List<bool> isSelected) => _car = state
+                                  .cars[isSelected.indexWhere((i) => i)].name,
+                            );
+                          } else {
+                            return CarForm(
+                                key: ValueKey('__refueling_car_form__'),
+                                initialValue: widget.todo?.carName,
+                                onSaved: (val) => _car = val,
+                                node: _carNode, nextNode: null);
+                          }
+                        } else {
+                          return LoadingIndicator();
                         }
-                        return LoadingIndicator();
                       },
                     ),
                     // so there is some padding to fill the bottom of the screen

@@ -18,8 +18,8 @@ Future<void> newRefueling(driver) async {
   await driver.waitFor(find.byValueKey('__add_edit_refueling__'));
   await driver.tap(find.byType('_MileageForm'));
   await driver.enterText('2000');
-  await driver.tap(find.byValueKey('__refueling_car_form__'));
-  await driver.enterText('test');
+  // await driver.tap(find.byValueKey('__refueling_car_form__'));
+  // await driver.enterText('test');
   await driver.tap(find.byType('_CostForm'));
   await driver.enterText('20');
   await driver.tap(find.byType('_AmountForm'));

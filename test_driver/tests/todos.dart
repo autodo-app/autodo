@@ -23,8 +23,8 @@ Future<void> newTodo(driver) async {
   await driver.enterText(DateFormat.yMd().format(tomorrow));
   await driver.tap(find.byType('_MileageForm'));
   await driver.enterText('2000');
-  await driver.tap(find.byValueKey('__todo_car_form__'));
-  await driver.enterText('test');
+  // await driver.tap(find.byValueKey('__todo_car_form__'));
+  // await driver.enterText('test');
 
   // submit
   await driver.tap(find.byType('FloatingActionButton'));
@@ -37,7 +37,7 @@ Future<void> newTodo(driver) async {
 Future<void> completeTodo(FlutterDriver driver) async {
   await driver.scrollUntilVisible(find.byValueKey('__todos_screen_scroller__'),
       find.byValueKey('__todo_card_edit_test todo'),
-      dyScroll: -100.0);
+      dyScroll: -500.0);
   print('tapping');
   await driver.tap(find.byValueKey('__todo_checkbox_test todo'));
 
@@ -57,7 +57,7 @@ Future<void> editTodo(FlutterDriver driver) async {
   print('scrolling');
   await driver.scrollUntilVisible(find.byValueKey('__todos_screen_scroller__'),
       find.byValueKey('__todo_card_edit_test todo'),
-      dyScroll: -100.0);
+      dyScroll: -500.0);
   print('tapping');
   await driver.tap(find.byValueKey('__todo_card_edit_test todo'));
 
@@ -78,7 +78,7 @@ Future<void> deleteTodo(FlutterDriver driver) async {
   print('scrolling');
   await driver.scrollUntilVisible(find.byValueKey('__todos_screen_scroller__'),
       find.byValueKey('__todo_delete_button_test todo'),
-      dyScroll: -100.0);
+      dyScroll: -500.0);
   print('tapping');
   await driver.tap(find.byValueKey('__todo_delete_button_test todo'));
 

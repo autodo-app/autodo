@@ -129,6 +129,8 @@ class _RefuelingEditButton extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => RefuelingAddEditScreen(
+                // this below is an assumption, not the safest option
+                cars: (BlocProvider.of<CarsBloc>(context).state as CarsLoaded).cars,
                 refueling: refueling,
                 isEditing: true,
                 onSave: (m, d, a, c, n) {
