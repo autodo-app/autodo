@@ -36,7 +36,8 @@ class PaidVersionBloc extends Bloc<PaidVersionEvent, PaidVersionState> {
         }
         print('status: ${purchase.status} + id: ${purchase.productID}');
         // HACK: App Store payments currently show as pending even when they have been purchased
-        if ((purchase.status == PurchaseStatus.purchased || purchase.status == PurchaseStatus.pending) &&
+        if ((purchase.status == PurchaseStatus.purchased ||
+                purchase.status == PurchaseStatus.pending) &&
             _verifyPurchase(purchase)) {
           add(PaidVersionPurchased());
         }
