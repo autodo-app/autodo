@@ -14,7 +14,7 @@ jobs:
     - run: flutter pub get
     - run: mkdir assets && echo "${{ secrets.keys_json }}" > assets/keys.json
     - run: flutter test --coverage
-    - uses: codecov/codecov-action@v1.0.2
+    - uses: codecov/codecov-action@v1.0.5
       with:
         token: ${{secrets.CODECOV_TOKEN}}
         file: ./coverage/lcov.info
