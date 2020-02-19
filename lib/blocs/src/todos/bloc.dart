@@ -38,6 +38,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
         _notificationsBloc = notificationsBloc {
     _dataSubscription = _dbBloc.listen((state) {
       if (state is DbLoaded) {
+        print('loaded');
         add(LoadTodos());
       }
     });
@@ -47,7 +48,6 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       }
     });
     _repeatsSubscription = _repeatsBloc.listen((state) {
-      print('sadf $state');
       if (state is RepeatsLoaded) {
         add(RepeatsRefresh(state.repeats));
       }
@@ -85,15 +85,15 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   Stream<TodosState> _mapLoadTodosToState() async* {
     try {
       final todos = await repo
-          .todos()
-          .first
-          .timeout(Duration(seconds: 1), onTimeout: () => null);
+          .getCurrentTodos()
+          .timeout(Duration(seconds: 10), onTimeout: () => []);
       if (todos != null) {
         yield TodosLoaded(todos);
       } else {
         yield TodosLoaded([]);
       }
-    } catch (_) {
+    } catch (e) {
+      print('Error loading todos: $e');
       yield TodosNotLoaded();
     }
   }
