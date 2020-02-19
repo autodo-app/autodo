@@ -28,6 +28,8 @@ class MockRepeatsBloc extends MockBloc<RepeatsEvent, RepeatsState>
 class MockPaidVersionBloc extends MockBloc<PaidVersionEvent, PaidVersionState>
     implements PaidVersionBloc {}
 
+class MockRefuelingsBloc extends MockBloc<RefuelingsEvent, RefuelingsState> implements RefuelingsBloc {}
+
 void main() {
   group('HomeScreen', () {
     TodosBloc todosBloc;
@@ -35,6 +37,7 @@ void main() {
     TabBloc tabBloc;
     PaidVersionBloc paidBloc;
     CarsBloc carsBloc;
+    RefuelingsBloc refuelingsBloc;
 
     setUp(() {
       todosBloc = MockTodosBloc();
@@ -44,6 +47,7 @@ void main() {
       when(paidBloc.observer).thenReturn(RouteObserver());
       carsBloc = MockCarsBloc();
       when(carsBloc.state).thenReturn(CarsLoaded([Car(name: 'test')]));
+      refuelingsBloc = MockRefuelingsBloc();
     });
 
     testWidgets('renders correctly', (WidgetTester tester) async {
@@ -64,6 +68,7 @@ void main() {
             ),
             BlocProvider<PaidVersionBloc>.value(value: paidBloc),
             BlocProvider<CarsBloc>.value(value: carsBloc),
+            BlocProvider<RefuelingsBloc>.value(value: refuelingsBloc),
           ],
           child: MaterialApp(
             home: Scaffold(
@@ -97,6 +102,7 @@ void main() {
             ),
             BlocProvider<PaidVersionBloc>.value(value: paidBloc),
             BlocProvider<CarsBloc>.value(value: carsBloc),
+            BlocProvider<RefuelingsBloc>.value(value: refuelingsBloc),
           ],
           child: MaterialApp(
             home: Scaffold(
@@ -132,6 +138,7 @@ void main() {
               ),
               BlocProvider<CarsBloc>.value(value: carsBloc),
               BlocProvider<PaidVersionBloc>.value(value: paidBloc),
+              BlocProvider<RefuelingsBloc>.value(value: refuelingsBloc),
             ],
             child: MaterialApp(
               home: Scaffold(
@@ -180,6 +187,7 @@ void main() {
               BlocProvider<CarsBloc>.value(value: carsBloc),
               BlocProvider<RepeatsBloc>.value(value: repeatsBloc),
               BlocProvider<PaidVersionBloc>.value(value: paidBloc),
+              BlocProvider<RefuelingsBloc>.value(value: refuelingsBloc),
             ],
             child: MaterialApp(
               home: Scaffold(
@@ -228,6 +236,7 @@ void main() {
               BlocProvider<CarsBloc>.value(value: carsBloc),
               BlocProvider<RepeatsBloc>.value(value: repeatsBloc),
               BlocProvider<PaidVersionBloc>.value(value: paidBloc),
+              BlocProvider<RefuelingsBloc>.value(value: refuelingsBloc),
             ],
             child: MaterialApp(
               home: Scaffold(

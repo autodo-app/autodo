@@ -87,6 +87,7 @@ void main() {
           when(dataRepository.todos()).thenAnswer((_) => Stream.fromIterable([
                 [Todo()]
               ]));
+          when(dataRepository.getCurrentTodos()).thenAnswer((_) async => [Todo()]);
           final notificationsBloc = MockNotificationsBloc();
           final repeatsBloc = MockRepeatsBloc();
           whenListen(
@@ -120,6 +121,7 @@ void main() {
           final dataRepository = MockDataRepository();
           when(dataRepository.todos())
               .thenAnswer((_) => Stream.fromIterable([null]));
+          when(dataRepository.getCurrentTodos()).thenAnswer((_) async => []);
           final notificationsBloc = MockNotificationsBloc();
           final repeatsBloc = MockRepeatsBloc();
           whenListen(
@@ -189,6 +191,7 @@ void main() {
         when(dataRepository.todos()).thenAnswer((_) => Stream.fromIterable([
               [todo1]
             ]));
+        when(dataRepository.getCurrentTodos()).thenAnswer((_) async => [todo1]);
         final notificationsBloc = MockNotificationsBloc();
         final repeatsBloc = MockRepeatsBloc();
         whenListen(
@@ -227,6 +230,7 @@ void main() {
         when(dataRepository.todos()).thenAnswer((_) => Stream.fromIterable([
               [todo1]
             ]));
+        when(dataRepository.getCurrentTodos()).thenAnswer((_) async => [todo1]);
         final notificationsBloc = MockNotificationsBloc();
         final repeatsBloc = MockRepeatsBloc();
         whenListen(
@@ -265,6 +269,7 @@ void main() {
         when(dataRepository.todos()).thenAnswer((_) => Stream.fromIterable([
               [todo1]
             ]));
+        when(dataRepository.getCurrentTodos()).thenAnswer((_) async => [todo1]);
         final notificationsBloc = MockNotificationsBloc();
         final repeatsBloc = MockRepeatsBloc();
         whenListen(
@@ -303,6 +308,7 @@ void main() {
         when(dataRepository.todos()).thenAnswer((_) => Stream.fromIterable([
               [todo1.copyWith(completed: false)]
             ]));
+        when(dataRepository.getCurrentTodos()).thenAnswer((_) async => [todo1.copyWith(completed: false)]);
         final notificationsBloc = MockNotificationsBloc();
         final repeatsBloc = MockRepeatsBloc();
         whenListen(
@@ -349,6 +355,7 @@ void main() {
         when(dataRepository.todos()).thenAnswer((_) => Stream.fromIterable([
               [todo3]
             ]));
+        when(dataRepository.getCurrentTodos()).thenAnswer((_) async => [todo3]);
         final writeBatch = MockWriteBatch();
         when(writeBatch.updateData(todo3.id, dynamic))
             .thenAnswer((_) => ((_) => _));
@@ -399,6 +406,7 @@ void main() {
         when(dataRepository.todos()).thenAnswer((_) => Stream.fromIterable([
               [todo3]
             ]));
+        when(dataRepository.getCurrentTodos()).thenAnswer((_) async => [todo3]);
         when(dataRepository.addNewTodo(todo3)).thenAnswer((_) async {});
         when(dataRepository.updateTodo(todo3)).thenAnswer((_) async {});
         final writeBatch = MockWriteBatch();
@@ -451,6 +459,7 @@ void main() {
         when(dataRepository.todos()).thenAnswer((_) => Stream.fromIterable([
               [todo1]
             ]));
+        when(dataRepository.getCurrentTodos()).thenAnswer((_) async => [todo1]);
         final notificationsBloc = MockNotificationsBloc();
         final repeatsBloc = MockRepeatsBloc();
         whenListen(
