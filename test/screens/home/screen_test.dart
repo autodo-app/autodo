@@ -28,7 +28,8 @@ class MockRepeatsBloc extends MockBloc<RepeatsEvent, RepeatsState>
 class MockPaidVersionBloc extends MockBloc<PaidVersionEvent, PaidVersionState>
     implements PaidVersionBloc {}
 
-class MockRefuelingsBloc extends MockBloc<RefuelingsEvent, RefuelingsState> implements RefuelingsBloc {}
+class MockRefuelingsBloc extends MockBloc<RefuelingsEvent, RefuelingsState>
+    implements RefuelingsBloc {}
 
 void main() {
   group('HomeScreen', () {
