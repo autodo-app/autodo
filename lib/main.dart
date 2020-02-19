@@ -62,7 +62,7 @@ void run(bool integrationTest) async {
             BlocProvider<RefuelingsBloc>(
               create: (context) => RefuelingsBloc(
                 dbBloc: BlocProvider.of<DatabaseBloc>(context),
-              // )..add(LoadRefuelings()),
+                // )..add(LoadRefuelings()),
               ),
             ),
           ],
@@ -70,13 +70,13 @@ void run(bool integrationTest) async {
             create: (context) => CarsBloc(
               dbBloc: BlocProvider.of<DatabaseBloc>(context),
               refuelingsBloc: BlocProvider.of<RefuelingsBloc>(context),
-            // )..add(LoadCars()),
+              // )..add(LoadCars()),
             ),
             child: BlocProvider<RepeatsBloc>(
               create: (context) => RepeatsBloc(
                 dbBloc: BlocProvider.of<DatabaseBloc>(context),
                 carsBloc: BlocProvider.of<CarsBloc>(context),
-              // )..add(LoadRepeats()),
+                // )..add(LoadRepeats()),
               ),
               child: BlocProvider<TodosBloc>(
                 create: (context) => TodosBloc(
@@ -85,8 +85,8 @@ void run(bool integrationTest) async {
                         BlocProvider.of<NotificationsBloc>(context),
                     carsBloc: BlocProvider.of<CarsBloc>(context),
                     repeatsBloc: BlocProvider.of<RepeatsBloc>(context))
-                  // ..add(LoadTodos()),
-                  ,
+                // ..add(LoadTodos()),
+                ,
                 child: App(
                     theme: theme,
                     authRepository: authRepository,

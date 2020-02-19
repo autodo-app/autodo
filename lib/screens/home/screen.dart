@@ -177,40 +177,42 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
 
   @override
   build(context) => MultiBlocProvider(
-    providers: [
-      BlocProvider<FilteredRefuelingsBloc>(
-        create: (context) => FilteredRefuelingsBloc(carsBloc: BlocProvider.of<CarsBloc>(context), refuelingsBloc: BlocProvider.of<RefuelingsBloc>(context))
-      ),
-      BlocProvider<FilteredTodosBloc>(
-        create: (context) => FilteredTodosBloc(todosBloc: BlocProvider.of<TodosBloc>(context))
-      ),
-    ],
-    child: BlocBuilder<PaidVersionBloc, PaidVersionState>(
-      builder: (context, paid) {
-        if (paid is PaidVersion && _bannerShown) {
-          _bannerAd?.dispose()?.then((_) {
-            _bannerShown = false;
-          });
-        }
-        return BlocBuilder<TabBloc, AppTab>(
-            builder: (context, activeTab) => _ScreenWithBanner(
-                bannerShown: _bannerShown,
-                child: Scaffold(
-                    appBar: AppBar(
-                      title: Text(AutodoLocalizations.appTitle),
-                      actions: [ExtraActions()],
-                    ),
-                    drawer: NavDrawer(),
-                    body: views[activeTab],
-                    floatingActionButton: actionButton,
-                    bottomNavigationBar: TabSelector(
-                      activeTab: activeTab,
-                      onTabSelected: (tab) =>
-                          BlocProvider.of<TabBloc>(context).add(UpdateTab(tab)),
-                      todosTabKey: todosTabKey,
-                      refuelingsTabKey: ValueKey('__refuelings_tab_button__'),
-                      repeatsTabKey: ValueKey('__repeats_tab_button__'),
-                    ))));
-    })
-  );
+          providers: [
+            BlocProvider<FilteredRefuelingsBloc>(
+                create: (context) => FilteredRefuelingsBloc(
+                    carsBloc: BlocProvider.of<CarsBloc>(context),
+                    refuelingsBloc: BlocProvider.of<RefuelingsBloc>(context))),
+            BlocProvider<FilteredTodosBloc>(
+                create: (context) => FilteredTodosBloc(
+                    todosBloc: BlocProvider.of<TodosBloc>(context))),
+          ],
+          child: BlocBuilder<PaidVersionBloc, PaidVersionState>(
+              builder: (context, paid) {
+            if (paid is PaidVersion && _bannerShown) {
+              _bannerAd?.dispose()?.then((_) {
+                _bannerShown = false;
+              });
+            }
+            return BlocBuilder<TabBloc, AppTab>(
+                builder: (context, activeTab) => _ScreenWithBanner(
+                    bannerShown: _bannerShown,
+                    child: Scaffold(
+                        appBar: AppBar(
+                          title: Text(AutodoLocalizations.appTitle),
+                          actions: [ExtraActions()],
+                        ),
+                        drawer: NavDrawer(),
+                        body: views[activeTab],
+                        floatingActionButton: actionButton,
+                        bottomNavigationBar: TabSelector(
+                          activeTab: activeTab,
+                          onTabSelected: (tab) =>
+                              BlocProvider.of<TabBloc>(context)
+                                  .add(UpdateTab(tab)),
+                          todosTabKey: todosTabKey,
+                          refuelingsTabKey:
+                              ValueKey('__refuelings_tab_button__'),
+                          repeatsTabKey: ValueKey('__repeats_tab_button__'),
+                        ))));
+          }));
 }
