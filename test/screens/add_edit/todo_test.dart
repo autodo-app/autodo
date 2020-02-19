@@ -83,7 +83,6 @@ void main() {
         }
       }
       await tester.enterText(find.byType(RepeatForm), 'test');
-      await tester.enterText(find.byType(CarForm), 'test');
       await tester.tap(find.byType(FloatingActionButton));
       await tester.pump();
       expect(saved, true);

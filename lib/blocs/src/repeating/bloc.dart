@@ -85,7 +85,7 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
     try {
       final repeats = await repo
           .getCurrentRepeats()
-          .timeout(Duration(milliseconds: 200), onTimeout: () => []);
+          .timeout(Duration(seconds: 10), onTimeout: () => []);
       yield RepeatsLoaded(repeats);
     } catch (e) {
       print(e);

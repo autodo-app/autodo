@@ -32,7 +32,6 @@ class RefuelingsScreen extends StatelessWidget {
           return LoadingIndicator();
         } else if (state is FilteredRefuelingsLoaded) {
           final refuelings = state.filteredRefuelings;
-          print(refuelings);
           return ListView.builder(
               key: ValueKey('__refuelings_screen_scroller__'),
               itemCount: refuelings.length,

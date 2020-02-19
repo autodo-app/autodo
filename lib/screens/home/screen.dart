@@ -126,16 +126,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
         adUnitId: (kReleaseMode)
             ? 'ca-app-pub-6809809089648617/3864738913'
             : BannerAd.testAdUnitId,
-        // listener: (event) {
-        //   if (event == MobileAdEvent.loaded) {
-        //     setState(() {
-        //       _bannerShown = true;
-        //     });
-        //   } else if (event == MobileAdEvent.failedToLoad) {
-        //     setState(() {
-        //       _bannerShown = false;
-        //     });
-        // }}
       );
 
   @override
@@ -150,7 +140,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
   void didPush() async {
     // Route was pushed onto navigator and is now topmost route.
     if (ModalRoute.of(context).isCurrent) {
-      print('didPush');
       _bannerShown = true;
       await _bannerAd?.dispose(); // clear old banner ad if one exists
       _bannerAd = _bannerAdConfig()
@@ -162,22 +151,18 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
   @override
   void didPop() async {
     // Current route was popped off the navigator.
-    print('didPop + $_bannerShown');
     if (_bannerShown) {
       _bannerShown = false;
-      var res = await _bannerAd?.dispose(); // clear old banner ad if one exists
-      print('result: $res');
+      await _bannerAd?.dispose(); // clear old banner ad if one exists
     }
   }
 
   @override
   void didPushNext() async {
     // Another route is now above this route
-    print('didPushNext + $_bannerShown + $_bannerAd');
     if (_bannerShown) {
       _bannerShown = false;
-      var res = await _bannerAd?.dispose(); // clear old banner ad if one exists
-      print('result: $res');
+      await _bannerAd?.dispose(); // clear old banner ad if one exists
     }
     super.didPushNext();
   }
@@ -191,33 +176,45 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
   List<Widget> fakeBottomButtons = [Container(height: 50)];
 
   @override
-  build(context) =>
-      BlocBuilder<PaidVersionBloc, PaidVersionState>(builder: (context, paid) {
-        if (paid is PaidVersion && _bannerShown) {
-          _bannerAd?.dispose()?.then((_) {
-            setState(() {
-              _bannerShown = false;
-            });
-          });
-        }
-        return BlocBuilder<TabBloc, AppTab>(
-            builder: (context, activeTab) => _ScreenWithBanner(
-                bannerShown: _bannerShown,
-                child: Scaffold(
-                    appBar: AppBar(
-                      title: Text(AutodoLocalizations.appTitle),
-                      actions: [ExtraActions()],
-                    ),
-                    drawer: NavDrawer(),
-                    body: views[activeTab],
-                    floatingActionButton: actionButton,
-                    bottomNavigationBar: TabSelector(
-                      activeTab: activeTab,
-                      onTabSelected: (tab) =>
-                          BlocProvider.of<TabBloc>(context).add(UpdateTab(tab)),
-                      todosTabKey: todosTabKey,
-                      refuelingsTabKey: ValueKey('__refuelings_tab_button__'),
-                      repeatsTabKey: ValueKey('__repeats_tab_button__'),
-                    ))));
-      });
+  build(context) => MultiBlocProvider(
+          providers: [
+            BlocProvider<FilteredRefuelingsBloc>(
+                create: (context) => FilteredRefuelingsBloc(
+                    carsBloc: BlocProvider.of<CarsBloc>(context),
+                    refuelingsBloc: BlocProvider.of<RefuelingsBloc>(context))),
+            BlocProvider<FilteredTodosBloc>(
+                create: (context) => FilteredTodosBloc(
+                    todosBloc: BlocProvider.of<TodosBloc>(context))),
+          ],
+          child: BlocBuilder<PaidVersionBloc, PaidVersionState>(
+              builder: (context, paid) {
+            if (paid is PaidVersion && _bannerShown) {
+              _bannerAd?.dispose()?.then((_) {
+                setState(() {
+                  _bannerShown = false;
+                });
+              });
+            }
+            return BlocBuilder<TabBloc, AppTab>(
+                builder: (context, activeTab) => _ScreenWithBanner(
+                    bannerShown: _bannerShown,
+                    child: Scaffold(
+                        appBar: AppBar(
+                          title: Text(AutodoLocalizations.appTitle),
+                          actions: [ExtraActions()],
+                        ),
+                        drawer: NavDrawer(),
+                        body: views[activeTab],
+                        floatingActionButton: actionButton,
+                        bottomNavigationBar: TabSelector(
+                          activeTab: activeTab,
+                          onTabSelected: (tab) =>
+                              BlocProvider.of<TabBloc>(context)
+                                  .add(UpdateTab(tab)),
+                          todosTabKey: todosTabKey,
+                          refuelingsTabKey:
+                              ValueKey('__refuelings_tab_button__'),
+                          repeatsTabKey: ValueKey('__repeats_tab_button__'),
+                        ))));
+          }));
 }

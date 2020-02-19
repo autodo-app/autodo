@@ -38,6 +38,7 @@ class TodosScreen extends StatelessWidget {
           return LoadingIndicator();
         } else if (state is FilteredTodosLoaded) {
           final todos = state.filteredTodos;
+          print('num todos: ${todos.length}');
           return ListView.builder(
             key: IntegrationTestKeys.todosScreenScroller,
             itemCount: todos.length,
