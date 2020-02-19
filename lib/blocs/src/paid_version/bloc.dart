@@ -4,7 +4,9 @@ import 'dart:io';
 import 'package:autodo/repositories/src/sembast_data_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
+import 'package:flutter/services.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:in_app_purchase/store_kit_wrappers.dart';
 
 import 'package:autodo/repositories/repositories.dart';
 import '../database/barrel.dart';
@@ -19,6 +21,7 @@ class PaidVersionBloc extends Bloc<PaidVersionEvent, PaidVersionState> {
   final InAppPurchaseConnection _purchaseConn;
   StreamSubscription _dbSubscription, _purchaseSubscription;
   RouteObserver observer = RouteObserver();
+  static const platform = const MethodChannel('com.jonathanbayless.autodo/iap');
 
   PaidVersionBloc({InAppPurchaseConnection conn, @required DatabaseBloc dbBloc})
       : _dbBloc = dbBloc,
@@ -40,6 +43,9 @@ class PaidVersionBloc extends Bloc<PaidVersionEvent, PaidVersionState> {
                 purchase.status == PurchaseStatus.pending) &&
             _verifyPurchase(purchase)) {
           add(PaidVersionPurchased());
+          print(purchase.skPaymentTransaction);
+          // SKPaymentQueueWrapper()..finishTransaction(purchase.skPaymentTransaction);
+          // _purchaseConn.completePurchase(purchase);
         }
         if (purchase.status == PurchaseStatus.purchased && Platform.isIOS) {
           print('completing purchase');
@@ -71,7 +77,6 @@ class PaidVersionBloc extends Bloc<PaidVersionEvent, PaidVersionState> {
 
   /// This methodology will vary by platform, currently just handling Android
   bool _verifyPurchase(PurchaseDetails p) {
-    print('verifying: ${p.verificationData.localVerificationData}');
     return (p.productID == paidVersionId);
   }
 
@@ -84,6 +89,9 @@ class PaidVersionBloc extends Bloc<PaidVersionEvent, PaidVersionState> {
       yield BasicVersion();
       return;
     }
+
+    // See if we have any pending transactions
+    // await SKPaymentQueueWrapper()..restoreTransactions();
 
     // TODO: pull the JSON purchase validation string from assets bundle
 
@@ -99,6 +107,7 @@ class PaidVersionBloc extends Bloc<PaidVersionEvent, PaidVersionState> {
     for (PurchaseDetails p in response.pastPurchases) {
       print('past purchase: $p');
       if (!_verifyPurchase(p)) {
+        print('cannot verify purchase');
         continue;
       }
       yield PaidVersion();
