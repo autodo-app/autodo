@@ -190,7 +190,9 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
               builder: (context, paid) {
             if (paid is PaidVersion && _bannerShown) {
               _bannerAd?.dispose()?.then((_) {
-                _bannerShown = false;
+                setState(() {
+                  _bannerShown = false;
+                });
               });
             }
             return BlocBuilder<TabBloc, AppTab>(
