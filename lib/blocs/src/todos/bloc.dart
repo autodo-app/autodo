@@ -19,7 +19,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   final CarsBloc _carsBloc;
   final NotificationsBloc _notificationsBloc;
   final RepeatsBloc _repeatsBloc;
-  StreamSubscription _dataSubscription, _carsSubscription, _repeatsSubscription;
+  StreamSubscription _dataSubscription, _carsSubscription, _repeatsSubscription, _repoSubscription;
 
   List<Car> _carsCache;
 
@@ -38,8 +38,11 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
         _notificationsBloc = notificationsBloc {
     _dataSubscription = _dbBloc.listen((state) {
       if (state is DbLoaded) {
-        print('loaded');
+        print('loaded $repo   ${repo.todos()}');
         add(LoadTodos());
+        _repoSubscription = repo?.todos()?.listen((event) {
+          add(LoadTodos());
+        });
       }
     });
     _carsSubscription = _carsBloc.listen((state) {
@@ -239,9 +242,11 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
           .map((todo) => todo.copyWith(completed: !allComplete))
           .toList();
       yield TodosLoaded(updatedTodos);
+      final batch = await repo.startTodoWriteBatch();
       updatedTodos.forEach((updatedTodo) {
-        repo.updateTodo(updatedTodo);
+        batch.updateData(updatedTodo.id, updatedTodo.toEntity().toDocument());
       });
+      batch.commit();
     }
   }
 
@@ -323,6 +328,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     _dataSubscription?.cancel();
     _carsSubscription?.cancel();
     _repeatsSubscription?.cancel();
+    _repoSubscription?.cancel();
     return super.close();
   }
 }
