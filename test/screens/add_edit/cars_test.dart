@@ -12,26 +12,26 @@ void main() {
   group('AddEditCarScreen', () {
     testWidgets('render', (WidgetTester tester) async {
       await tester.pumpWidget(
-        MultiBlocProvider(
-          providers: [],
-          child: MaterialApp(
+        // MultiBlocProvider(
+        //   providers: [],
+          MaterialApp(
             home: Scaffold(
               body: EditCarListScreen(),
             ),
           ),
-        ),
+        // ),
       );
       await tester.pump();
       expect(find.byType(EditCarListScreen), findsOneWidget);
     });
     testWidgets('back', (WidgetTester tester) async {
       await tester.pumpWidget(
-        MultiBlocProvider(
-          providers: [],
-          child: MaterialApp(
+        // MultiBlocProvider(
+        //   providers: [],
+          MaterialApp(
             home: EditCarListScreen(),
           ),
-        ),
+        // ),
       );
       await tester.pump();
       await tester.tap(find.byType(IconButton));

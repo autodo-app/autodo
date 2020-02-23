@@ -17,7 +17,7 @@ class RepeatsLoaded extends RepeatsState {
   // of figuring out what repeats have/haven't been updated
   final List<DocumentChange> changes;
 
-  const RepeatsLoaded([this.repeats = const [], this.changes]);
+  const RepeatsLoaded([this.repeats = const [], this.changes = const []]);
 
   List<Repeat> sorted() {
     return repeats
@@ -34,11 +34,11 @@ class RepeatsLoaded extends RepeatsState {
 
   // use spread operator so differences in individual repeats matter
   @override
-  List<Object> get props => repeats;
+  List<Object> get props => (repeats == null) ? [null] : repeats.map((r) => r.props).toList();
 
   @override
   String toString() =>
-      'RepeatsLoaded { repeats: ${repeats.map((r) => "{${r.name}, ${r.cars}}")} }';
+      'RepeatsLoaded { repeats: ${repeats?.map((r) => "{${r.name}, ${r.cars}}")} }';
 }
 
 class RepeatsNotLoaded extends RepeatsState {}
