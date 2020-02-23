@@ -12,8 +12,8 @@ void main() {
       Key scaffoldKey = Key('scaffold');
       await tester.pumpWidget(
         // MultiBlocProvider(
-          // providers: [],
-          MaterialApp(home: WelcomeScreen(key: scaffoldKey)),
+        // providers: [],
+        MaterialApp(home: WelcomeScreen(key: scaffoldKey)),
         // ),
       );
       await tester.pumpAndSettle();
@@ -25,11 +25,11 @@ void main() {
       await tester.pumpWidget(
         // MultiBlocProvider(
         //   providers: [],
-          MaterialApp(
-              home: WelcomeScreen(
-            key: scaffoldKey,
-            dotKeys: dotKeys,
-          )),
+        MaterialApp(
+            home: WelcomeScreen(
+          key: scaffoldKey,
+          dotKeys: dotKeys,
+        )),
         // ),
       );
       await tester.pumpAndSettle();
@@ -42,12 +42,12 @@ void main() {
       List<Key> dotKeys = [Key('dot1'), Key('dot2'), Key('dot3')];
       await tester.pumpWidget(
         // MultiBlocProvider(
-          // providers: [],
-          MaterialApp(
-              home: WelcomeScreen(
-            key: scaffoldKey,
-            dotKeys: dotKeys,
-          )),
+        // providers: [],
+        MaterialApp(
+            home: WelcomeScreen(
+          key: scaffoldKey,
+          dotKeys: dotKeys,
+        )),
         // ),
       );
       await tester.pumpAndSettle();

@@ -34,7 +34,8 @@ class RepeatsLoaded extends RepeatsState {
 
   // use spread operator so differences in individual repeats matter
   @override
-  List<Object> get props => (repeats == null) ? [null] : repeats.map((r) => r.props).toList();
+  List<Object> get props =>
+      (repeats == null) ? [null] : repeats.map((r) => r.props).toList();
 
   @override
   String toString() =>

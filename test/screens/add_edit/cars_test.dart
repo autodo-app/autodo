@@ -14,11 +14,11 @@ void main() {
       await tester.pumpWidget(
         // MultiBlocProvider(
         //   providers: [],
-          MaterialApp(
-            home: Scaffold(
-              body: EditCarListScreen(),
-            ),
+        MaterialApp(
+          home: Scaffold(
+            body: EditCarListScreen(),
           ),
+        ),
         // ),
       );
       await tester.pump();
@@ -28,9 +28,9 @@ void main() {
       await tester.pumpWidget(
         // MultiBlocProvider(
         //   providers: [],
-          MaterialApp(
-            home: EditCarListScreen(),
-          ),
+        MaterialApp(
+          home: EditCarListScreen(),
+        ),
         // ),
       );
       await tester.pump();
