@@ -15,7 +15,7 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
   static const double EMA_CUTOFF = 8;
 
   final DatabaseBloc _dbBloc;
-  StreamSubscription _refuelingsSubscription, _dbSubscription;
+  StreamSubscription _refuelingsSubscription, _dbSubscription, _repoSubscription;
   final RefuelingsBloc _refuelingsBloc;
   List<Refueling> _refuelingsCache;
 
@@ -28,6 +28,9 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
     _dbSubscription = _dbBloc.listen((state) {
       if (state is DbLoaded) {
         add(LoadCars());
+        _repoSubscription = repo?.cars()?.listen((event) {
+          add(LoadCars());
+        });
       }
     });
     _refuelingsSubscription = _refuelingsBloc.listen((state) {
@@ -176,6 +179,7 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
   Future<void> close() {
     _refuelingsSubscription?.cancel();
     _dbSubscription?.cancel();
+    _repoSubscription?.cancel();
     return super.close();
   }
 

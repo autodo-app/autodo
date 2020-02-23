@@ -14,7 +14,7 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
   // don't know why anyone would enter this many, but preventing overflow here
   static const int MAX_NUM_REFUELINGS = 0xffff;
 
-  StreamSubscription _dataSubscription;
+  StreamSubscription _dataSubscription, _repoSubscription;
   final DatabaseBloc _dbBloc;
 
   RefuelingsBloc({@required dbBloc})
@@ -23,6 +23,9 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
     _dataSubscription = _dbBloc.listen((state) {
       if (state is DbLoaded) {
         add(LoadRefuelings());
+        _repoSubscription = repo?.refuelings()?.listen((event) {
+          add(LoadRefuelings());
+        });
       }
     });
   }
@@ -133,6 +136,7 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
   @override
   Future<void> close() {
     _dataSubscription?.cancel();
+    _repoSubscription?.cancel();
     return super.close();
   }
 }
