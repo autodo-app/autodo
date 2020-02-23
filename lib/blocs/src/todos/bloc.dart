@@ -19,7 +19,10 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   final CarsBloc _carsBloc;
   final NotificationsBloc _notificationsBloc;
   final RepeatsBloc _repeatsBloc;
-  StreamSubscription _dataSubscription, _carsSubscription, _repeatsSubscription, _repoSubscription;
+  StreamSubscription _dataSubscription,
+      _carsSubscription,
+      _repeatsSubscription,
+      _repoSubscription;
 
   List<Car> _carsCache;
 

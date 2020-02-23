@@ -15,7 +15,9 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
   static const double EMA_CUTOFF = 8;
 
   final DatabaseBloc _dbBloc;
-  StreamSubscription _refuelingsSubscription, _dbSubscription, _repoSubscription;
+  StreamSubscription _refuelingsSubscription,
+      _dbSubscription,
+      _repoSubscription;
   final RefuelingsBloc _refuelingsBloc;
   List<Refueling> _refuelingsCache;
 
