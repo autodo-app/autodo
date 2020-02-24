@@ -28,6 +28,12 @@ class HomeScreenProvider extends StatelessWidget {
                 carsBloc: BlocProvider.of<CarsBloc>(context),
                 refuelingsBloc: BlocProvider.of<RefuelingsBloc>(context)),
           ),
+          BlocProvider<EfficiencyStatsBloc>(
+            create: (context) => EfficiencyStatsBloc(refuelingsBloc: BlocProvider.of<RefuelingsBloc>(context),)..add(LoadEfficiencyStats()),
+          ),
+          BlocProvider<DrivingDistanceStatsBloc>(
+            create: (context) => DrivingDistanceStatsBloc(carsBloc: BlocProvider.of<CarsBloc>(context),)..add(LoadDrivingDistanceStats()),
+          )
         ],
         child: HomeScreen(integrationTest: integrationTest),
       );

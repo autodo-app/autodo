@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart';
 import 'package:autodo/models/models.dart';
+import 'shared.dart';
 
 class DrivingDistanceChart extends StatelessWidget {
   final List<Series<DistanceRatePoint, DateTime>> seriesList;
   final bool animate;
 
   DrivingDistanceChart(this.seriesList, {this.animate});
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +22,8 @@ class DrivingDistanceChart extends StatelessWidget {
       seriesList,
       animate: animate,
       // add configurations here eventually
+      domainAxis: dateAxisSpec,
+      primaryMeasureAxis: numberAxisSpec,
     );
   }
 }
@@ -35,12 +40,13 @@ class DrivingDistanceHistory extends StatelessWidget {
             Padding(
               padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
             ),
-            Text('Driving Distance History',
+            Text('Driving Distance History (mi/day)',
                 style: Theme.of(context).primaryTextTheme.subtitle),
             Container(
               height: 300,
               padding: EdgeInsets.all(15),
               child: DrivingDistanceChart(data),
-            )
+            ),
+            Text('Refueling Date', style: Theme.of(context).primaryTextTheme.body1, textAlign: TextAlign.center,),
           ]);
 }
