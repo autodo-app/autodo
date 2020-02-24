@@ -56,8 +56,8 @@ class _RefuelingCost extends StatelessWidget {
                 text: JsonIntl.of(context).get(IntlKeys.totalCost) + ': ',
                 style: Theme.of(context).primaryTextTheme.body1),
             TextSpan(
-                text: JsonIntl.of(context).get(IntlKeys.moneyUnits) +
-                    refueling.cost.toStringAsFixed(2),
+                text: NumberFormat.simpleCurrency(name: 'USD')
+                    .format(refueling.cost), // TODO: check unit
                 style: Theme.of(context).primaryTextTheme.subtitle),
           ],
         ),
