@@ -11,10 +11,10 @@ void main() {
     testWidgets('renders correctly', (WidgetTester tester) async {
       Key scaffoldKey = Key('scaffold');
       await tester.pumpWidget(
-        MultiBlocProvider(
-          providers: [],
-          child: MaterialApp(home: WelcomeScreen(key: scaffoldKey)),
-        ),
+        // MultiBlocProvider(
+        // providers: [],
+        MaterialApp(home: WelcomeScreen(key: scaffoldKey)),
+        // ),
       );
       await tester.pumpAndSettle();
       expect(find.byKey(scaffoldKey), findsOneWidget);
@@ -23,14 +23,14 @@ void main() {
       Key scaffoldKey = Key('scaffold');
       List<Key> dotKeys = [Key('dot1'), Key('dot2'), Key('dot3')];
       await tester.pumpWidget(
-        MultiBlocProvider(
-          providers: [],
-          child: MaterialApp(
-              home: WelcomeScreen(
-            key: scaffoldKey,
-            dotKeys: dotKeys,
-          )),
-        ),
+        // MultiBlocProvider(
+        //   providers: [],
+        MaterialApp(
+            home: WelcomeScreen(
+          key: scaffoldKey,
+          dotKeys: dotKeys,
+        )),
+        // ),
       );
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(dotKeys[1]));
@@ -41,14 +41,14 @@ void main() {
       Key scaffoldKey = Key('scaffold');
       List<Key> dotKeys = [Key('dot1'), Key('dot2'), Key('dot3')];
       await tester.pumpWidget(
-        MultiBlocProvider(
-          providers: [],
-          child: MaterialApp(
-              home: WelcomeScreen(
-            key: scaffoldKey,
-            dotKeys: dotKeys,
-          )),
-        ),
+        // MultiBlocProvider(
+        // providers: [],
+        MaterialApp(
+            home: WelcomeScreen(
+          key: scaffoldKey,
+          dotKeys: dotKeys,
+        )),
+        // ),
       );
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(dotKeys[2]));

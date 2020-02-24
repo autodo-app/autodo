@@ -32,6 +32,7 @@ void main() {
         // account for the debounce time
         await Future.delayed(Duration(milliseconds: 500));
       }, expect: [
+        SignupEmpty(),
         SignupCredentialsInvalid(emailError: ""),
       ]);
       blocTest<SignupBloc, SignupEvent, SignupState>(
@@ -46,6 +47,7 @@ void main() {
         // account for the debounce time
         await Future.delayed(Duration(milliseconds: 500));
       }, expect: [
+        SignupEmpty(),
         SignupCredentialsInvalid(emailError: "", passwordError: ""),
       ]);
       blocTest<SignupBloc, SignupEvent, SignupState>('Valid Email', build: () {
@@ -56,6 +58,7 @@ void main() {
         // account for the debounce time
         await Future.delayed(Duration(milliseconds: 500));
       }, expect: [
+        SignupEmpty(),
         SignupCredentialsValid(),
       ]);
       blocTest<SignupBloc, SignupEvent, SignupState>(
@@ -70,6 +73,7 @@ void main() {
         // account for the debounce time
         await Future.delayed(Duration(milliseconds: 500));
       }, expect: [
+        SignupEmpty(),
         SignupCredentialsInvalid(),
       ]);
     });
@@ -83,6 +87,7 @@ void main() {
         // account for the debounce time
         await Future.delayed(Duration(milliseconds: 500));
       }, expect: [
+        SignupEmpty(),
         SignupCredentialsInvalid(emailError: ""),
       ]);
       blocTest<SignupBloc, SignupEvent, SignupState>(
@@ -97,6 +102,7 @@ void main() {
         // account for the debounce time
         await Future.delayed(Duration(milliseconds: 500));
       }, expect: [
+        SignupEmpty(),
         SignupCredentialsInvalid(emailError: ""),
       ]);
       blocTest<SignupBloc, SignupEvent, SignupState>('Valid password',
@@ -108,6 +114,7 @@ void main() {
         // account for the debounce time
         await Future.delayed(Duration(milliseconds: 500));
       }, expect: [
+        SignupEmpty(),
         SignupCredentialsValid(),
       ]);
       blocTest<SignupBloc, SignupEvent, SignupState>(
@@ -122,6 +129,7 @@ void main() {
         // account for the debounce time
         await Future.delayed(Duration(milliseconds: 500));
       }, expect: [
+        SignupEmpty(),
         SignupCredentialsInvalid(),
       ]);
     });

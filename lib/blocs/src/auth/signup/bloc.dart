@@ -48,7 +48,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
     Stream<SignupEvent> events,
     Stream<SignupState> Function(SignupEvent event) next,
   ) {
-    final observableStream = events as Observable<SignupEvent>;
+    final observableStream = events;
     final nonDebounceStream = observableStream.where((event) {
       return (event is! SignupEmailChanged && event is! SignupPasswordChanged);
     });

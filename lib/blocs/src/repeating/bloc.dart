@@ -99,7 +99,11 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
       // final List<Repeat> updatedRepeats =
       // List.from((state as RepeatsLoaded).repeats)..add(event.repeat);
       // yield RepeatsLoaded(updatedRepeats);
-      var updatedRepeats = await repo.addNewRepeat(event.repeat);
+      await repo.addNewRepeat(event.repeat);
+      var updatedRepeats = (state as RepeatsLoaded).repeats;
+      print(updatedRepeats);
+      updatedRepeats.add(event.repeat);
+      print(updatedRepeats);
       yield RepeatsLoaded(updatedRepeats);
       // yield RepeatsLoaded(updatedRepeats); redundant because of the listener to the repository
     }
