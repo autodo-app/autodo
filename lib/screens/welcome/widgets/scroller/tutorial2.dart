@@ -1,5 +1,7 @@
+import 'package:autodo/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:json_intl/json_intl.dart';
 
 class Tutorial2 extends StatelessWidget {
   @override
@@ -22,7 +24,7 @@ class Tutorial2 extends StatelessWidget {
             padding: EdgeInsets.all(10.0),
           ),
           Text(
-            "Track Maintenance",
+            JsonIntl.of(context).get(IntlKeys.trackMaintenance),
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 30,
@@ -37,7 +39,7 @@ class Tutorial2 extends StatelessWidget {
           Container(
             padding: EdgeInsets.fromLTRB(40.0, 0, 20.0, 0),
             child: Text(
-              "Create todo items and recurring events that notify you on your terms.",
+              JsonIntl.of(context).get(IntlKeys.trackMaintenanceDesc),
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: 16.0,

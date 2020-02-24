@@ -29,7 +29,7 @@ class _NameForm extends StatelessWidget {
           border: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.teal),
           ),
-          labelText: "Action Name *",
+          labelText: JsonIntl.of(context).get(IntlKeys.actionName),
           contentPadding:
               EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
         ),
