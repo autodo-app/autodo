@@ -1,111 +1,243 @@
-import 'dart:async';
+// This file is generated automatically, do not modify
 
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+class IntlKeys {
+  /// strings.json: 'auToDo'
+  static const appTitle = 'app_title';
 
-class AutodoLocalizations {
-  static AutodoLocalizations of(BuildContext context) {
-    return Localizations.of<AutodoLocalizations>(
-      context,
-      AutodoLocalizations,
-    );
-  }
+  /// strings.json: 'Undo'
+  static const undo = 'undo';
 
-  static String get appTitle => "auToDo";
-  // TODO: change this for non-US locales
-  static dateFormat(date) => (DateFormat("MM/dd/yyyy").format(date));
-  static String get undo => "Undo";
-  static todoDeleted(name) => "ToDo $name deleted.";
-  static String get refuelingDeleted => "Refueling deleted.";
-  static String get repeatDeleted => "Repeat deleted.";
-  static String get firstTimeDoingTask => "First Time Doing This Task.";
-  static String get dueAt => "Due At";
-  static String get distanceUnits => "miles";
-  static String get distanceUnitsShort => "(mi)";
-  static String get dueOn => "Due on";
-  static String get pastDue => "Past Due";
-  static String get dueSoon => "Due Soon";
-  static String get upcoming => "Upcoming";
-  static String get totalCost => "Total Cost";
-  static String get moneyUnits => "\$";
-  static String get moneyUnitsSuffix => "(USD)";
-  static String get totalAmount => "Total Amount";
-  static String get fuelUnits => "gal";
-  static String get onLiteral => "on";
-  static String get refueling => "Refueling";
-  static String get at => "at";
-  static String get requiredLiteral => "Required";
-  static String get optional => "Optional";
-  static String get odomReading => "Odometer Reading";
-  static String get totalPrice => "Total Price";
-  static String get refuelingDate => "Refueling Date";
-  static String get refuelingAmount => "Refueling Amount";
-  static String get chooseDate => "Choose Date";
-  static String get invalidDate => "Not a valid date";
-  static String get addRefueling => "Add Refueling";
-  static String get editRefueling => "Edit Refueling";
-  static String get saveChanges => "Save Changes";
-  static String get carName => "Car Name";
-  static String get mileage => "Mileage";
-  static String get todoDueSoon => "Maintenance ToDo Due Soon";
-  static String get markAllIncomplete => "Mark All Incomplete";
-  static String get markAllComplete => "Mark All Complete";
-  static String get clearCompleted => "Clear Completed";
-  static String get filterTodos => "Filter ToDos";
-  static String get showAll => "Show All";
-  static String get showActive => "Show Active";
-  static String get showCompleted => "Show Completed";
-  static String get todos => "ToDos";
-  static String get refuelings => "Refuelings";
-  static String get stats => "Stats";
-  static String get repeats => "Repeats";
-  static String get interval => "Interval";
-  static String get dueDate => "Due Date";
-  static String get signInWithGoogle => "Sign In with Google";
-  static String get forgotYourPassword => "Forgot your password?";
-  static String get login => "Login";
-  static String get email => "Email";
-  static String get password => "Password";
-  static String get sendPasswordReset => "Send Password Reset";
-  static String get createAnAccount => "Create an Account";
-  static String get legal1 => "By signing up, you agree to the";
-  static String get legal2 => "terms and conditions";
-  static String get legal3 => "and";
-  static String get legal4 => "privacy policy";
-  static String get legal5 => "of the auToDo app.";
-  static String get gotItBang => "Got It!";
-  static String get send => "Send";
-  static String get back => "Back";
-  static String get loginFailure => "Login Failure";
-  static String get loggingInEllipsis => "Logging in...";
-  static String get signingUpEllipsis => "Signing up...";
-  static String get signup => "Sign Up";
-  static String get alreadyHaveAnAccount => "Already have an account?";
-  static String get verifyEmail => "Verify Email";
-  static String get verifyBodyText =>
-      'An email has been sent to you with a link to verify your account.\n\nYou must verify your email to use auToDo.';
-  static String get next => "Next";
-  static String get editTodo => "Edit ToDo";
-  static String get addTodo => "Add Todo";
-  static String get repeatName => "Repeat Name";
-  static String get editRepeat => "Edit Repeat";
-  static String get addRepeat => "Add Repeat";
-  static String get verificationSent => "Verification Email Sent";
-  static String get verificationDialogContent =>
-      "Please check the specified email address for an email from auToDo. This email will contain a link through which you can verify your account and use the app.";
-  static String get completed => "Completed: ";
-}
+  /// strings.json: 'ToDo {{ name }} deleted.'
+  static const todoDeleted = 'todo_deleted';
 
-class AutodoLocalizationsDelegate
-    extends LocalizationsDelegate<AutodoLocalizations> {
-  @override
-  Future<AutodoLocalizations> load(Locale locale) =>
-      Future(() => AutodoLocalizations());
+  /// strings.json: 'Refueling deleted.'
+  static const refuelingDeleted = 'refueling_deleted';
 
-  @override
-  bool shouldReload(AutodoLocalizationsDelegate old) => false;
+  /// strings.json: 'Repeat deleted.'
+  static const repeatDeleted = 'repeat_deleted';
 
-  @override
-  bool isSupported(Locale locale) =>
-      locale.languageCode.toLowerCase().contains("en");
+  /// strings.json: 'First Time Doing This Task.'
+  static const firstTimeDoingTask = 'first_time_doing_task';
+
+  /// strings.json: 'Due At'
+  static const dueAt = 'due_at';
+
+  /// strings.json: 'miles'
+  static const distanceUnits = 'distance_units';
+
+  /// strings.json: '(mi)'
+  static const distanceUnitsShort = 'distance_units_short';
+
+  /// strings.json: 'Due on'
+  static const dueOn = 'due_on';
+
+  /// strings.json: 'Past Due'
+  static const pastDue = 'past_due';
+
+  /// strings.json: 'Due Soon'
+  static const dueSoon = 'due_soon';
+
+  /// strings.json: 'Upcoming'
+  static const upcoming = 'upcoming';
+
+  /// strings.json: 'Total Cost'
+  static const totalCost = 'total_cost';
+
+  /// strings.json: '$'
+  static const moneyUnits = 'money_units';
+
+  /// strings.json: '(USD)'
+  static const moneyUnitsSuffix = 'money_units_suffix';
+
+  /// strings.json: 'Total Amount'
+  static const totalAmount = 'total_amount';
+
+  /// strings.json: 'gal'
+  static const fuelUnits = 'fuel_units';
+
+  /// strings.json: 'on'
+  static const onLiteral = 'on_literal';
+
+  /// strings.json: 'Refueling'
+  static const refueling = 'refueling';
+
+  /// strings.json: 'at'
+  static const at = 'at';
+
+  /// strings.json: 'Required'
+  static const requiredLiteral = 'required_literal';
+
+  /// strings.json: 'Optional'
+  static const optional = 'optional';
+
+  /// strings.json: 'Odometer Reading'
+  static const odomReading = 'odom_reading';
+
+  /// strings.json: 'Total Price'
+  static const totalPrice = 'total_price';
+
+  /// strings.json: 'Refueling Date'
+  static const refuelingDate = 'refueling_date';
+
+  /// strings.json: 'Refueling Amount'
+  static const refuelingAmount = 'refueling_amount';
+
+  /// strings.json: 'Choose Date'
+  static const chooseDate = 'choose_date';
+
+  /// strings.json: 'Not a valid date'
+  static const invalidDate = 'invalid_date';
+
+  /// strings.json: 'Add Refueling'
+  static const addRefueling = 'add_refueling';
+
+  /// strings.json: 'Edit Refueling'
+  static const editRefueling = 'edit_refueling';
+
+  /// strings.json: 'Save Changes'
+  static const saveChanges = 'save_changes';
+
+  /// strings.json: 'Car Name'
+  static const carName = 'car_name';
+
+  /// strings.json: 'Mileage'
+  static const mileage = 'mileage';
+
+  /// strings.json: 'Maintenance ToDo Due Soon'
+  static const todoDueSoon = 'todo_due_soon';
+
+  /// strings.json: 'Mark All Incomplete'
+  static const markAllIncomplete = 'mark_all_incomplete';
+
+  /// strings.json: 'Mark All Complete'
+  static const markAllComplete = 'mark_all_complete';
+
+  /// strings.json: 'Clear Completed'
+  static const clearCompleted = 'clear_completed';
+
+  /// strings.json: 'Filter ToDos'
+  static const filterTodos = 'filter_todos';
+
+  /// strings.json: 'Show All'
+  static const showAll = 'show_all';
+
+  /// strings.json: 'Show Active'
+  static const showActive = 'show_active';
+
+  /// strings.json: 'Show Completed'
+  static const showCompleted = 'show_completed';
+
+  /// strings.json: 'ToDos'
+  static const todos = 'todos';
+
+  /// strings.json: 'Refuelings'
+  static const refuelings = 'refuelings';
+
+  /// strings.json: 'Stats'
+  static const stats = 'stats';
+
+  /// strings.json: 'Repeats'
+  static const repeats = 'repeats';
+
+  /// strings.json: 'Interval'
+  static const interval = 'interval';
+
+  /// strings.json: 'Due Date'
+  static const dueDate = 'due_date';
+
+  /// strings.json: 'Due Mileage *'
+  static const dueMileage = 'due_mileage';
+
+  /// strings.json: 'Sign In with Google'
+  static const signInWithGoogle = 'sign_in_with_google';
+
+  /// strings.json: 'Forgot your password?'
+  static const forgotYourPassword = 'forgot_your_password';
+
+  /// strings.json: 'Login'
+  static const login = 'login';
+
+  /// strings.json: 'Email'
+  static const email = 'email';
+
+  /// strings.json: 'Password'
+  static const password = 'password';
+
+  /// strings.json: 'Send Password Reset'
+  static const sendPasswordReset = 'send_password_reset';
+
+  /// strings.json: 'Create an Account'
+  static const createAnAccount = 'create_an_account';
+
+  /// strings.json: 'By signing up, you agree to the'
+  static const legal1 = 'legal1';
+
+  /// strings.json: 'terms and conditions'
+  static const legal2 = 'legal2';
+
+  /// strings.json: 'and'
+  static const legal3 = 'legal3';
+
+  /// strings.json: 'privacy policy'
+  static const legal4 = 'legal4';
+
+  /// strings.json: 'of the auToDo app.'
+  static const legal5 = 'legal5';
+
+  /// strings.json: 'Got It!'
+  static const gotItBang = 'got_it_bang';
+
+  /// strings.json: 'Send'
+  static const send = 'send';
+
+  /// strings.json: 'Back'
+  static const back = 'back';
+
+  /// strings.json: 'Login Failure'
+  static const loginFailure = 'login_failure';
+
+  /// strings.json: 'Logging in...'
+  static const loggingInEllipsis = 'logging_in_ellipsis';
+
+  /// strings.json: 'Signing up...'
+  static const signingUpEllipsis = 'signing_up_ellipsis';
+
+  /// strings.json: 'Sign Up'
+  static const signup = 'signup';
+
+  /// strings.json: 'Already have an account?'
+  static const alreadyHaveAnAccount = 'already_have_an_account';
+
+  /// strings.json: 'Verify Email'
+  static const verifyEmail = 'verify_email';
+
+  /// strings.json: 'An email has been sent to you with a link to verify your account.\n\nYou must verify your email to use auToDo.'
+  static const verifyBodyText = 'verify_body_text';
+
+  /// strings.json: 'Next'
+  static const next = 'next';
+
+  /// strings.json: 'Edit ToDo'
+  static const editTodo = 'edit_todo';
+
+  /// strings.json: 'Add Todo'
+  static const addTodo = 'add_todo';
+
+  /// strings.json: 'Repeat Name'
+  static const repeatName = 'repeat_name';
+
+  /// strings.json: 'Edit Repeat'
+  static const editRepeat = 'edit_repeat';
+
+  /// strings.json: 'Add Repeat'
+  static const addRepeat = 'add_repeat';
+
+  /// strings.json: 'Verification Email Sent'
+  static const verificationSent = 'verification_sent';
+
+  /// strings.json: 'Please check the specified email address for an email from auToDo. This email will contain a link through which you can verify your account and use the app.'
+  static const verificationDialogContent = 'verification_dialog_content';
+
+  /// strings.json: 'Completed: '
+  static const completed = 'completed';
 }

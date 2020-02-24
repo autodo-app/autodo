@@ -9,6 +9,7 @@ import 'package:autodo/widgets/widgets.dart';
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/localization.dart';
 import 'package:autodo/util.dart';
+import 'package:json_intl/json_intl.dart';
 import 'forms/barrel.dart';
 
 typedef _OnSaveCallback = Function(
@@ -125,8 +126,8 @@ class _RepeatAddEditScreenState extends State<RepeatAddEditScreen> {
         appBar: AppBar(
           title: Text(
             isEditing
-                ? AutodoLocalizations.editRepeat
-                : AutodoLocalizations.addRepeat,
+                ? JsonIntl.of(context).get(IntlKeys.editRepeat)
+                : JsonIntl.of(context).get(IntlKeys.addRepeat),
           ),
         ),
         body: Form(
@@ -181,8 +182,8 @@ class _RepeatAddEditScreenState extends State<RepeatAddEditScreen> {
                 ))),
         floatingActionButton: FloatingActionButton(
           tooltip: isEditing
-              ? AutodoLocalizations.saveChanges
-              : AutodoLocalizations.addRefueling,
+              ? JsonIntl.of(context).get(IntlKeys.saveChanges)
+              : JsonIntl.of(context).get(IntlKeys.addRefueling),
           child: Icon(isEditing ? Icons.check : Icons.add),
           onPressed: () {
             if (_formKey.currentState.validate()) {

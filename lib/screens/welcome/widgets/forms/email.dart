@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/localization.dart';
+import 'package:json_intl/json_intl.dart';
 
 class EmailForm extends StatelessWidget {
   final Function onSaved;
@@ -18,7 +19,7 @@ class EmailForm extends StatelessWidget {
         autofocus: true,
         focusNode: node,
         decoration: InputDecoration(
-            hintText: AutodoLocalizations.email,
+            hintText: JsonIntl.of(context).get(IntlKeys.email),
             hintStyle: TextStyle(
               color: Colors.grey[400],
             ),

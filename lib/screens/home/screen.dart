@@ -10,6 +10,7 @@ import 'package:autodo/models/models.dart';
 import 'package:autodo/widgets/widgets.dart';
 import 'package:autodo/integ_test_keys.dart';
 import 'package:autodo/screens/add_edit/barrel.dart';
+import 'package:json_intl/json_intl.dart';
 import 'views/barrel.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -200,7 +201,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                     bannerShown: _bannerShown,
                     child: Scaffold(
                         appBar: AppBar(
-                          title: Text(AutodoLocalizations.appTitle),
+                          title:
+                              Text(JsonIntl.of(context).get(IntlKeys.appTitle)),
                           actions: [ExtraActions()],
                         ),
                         drawer: NavDrawer(),

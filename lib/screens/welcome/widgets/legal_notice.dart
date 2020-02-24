@@ -6,6 +6,7 @@ import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/widgets/widgets.dart';
 import 'package:autodo/localization.dart';
 import 'package:autodo/theme.dart';
+import 'package:json_intl/json_intl.dart';
 
 class LegalNotice extends StatelessWidget {
   onTap(context) {
@@ -33,26 +34,26 @@ class LegalNotice extends StatelessWidget {
         textAlign: TextAlign.center,
         text: TextSpan(children: [
           TextSpan(
-            text: AutodoLocalizations.legal1 + ' ',
+            text: JsonIntl.of(context).get(IntlKeys.legal1) + ' ',
             style: finePrint(),
           ),
           TextSpan(
-            text: AutodoLocalizations.legal2,
+            text: JsonIntl.of(context).get(IntlKeys.legal2),
             style: linkStyle(),
             recognizer: TapGestureRecognizer()..onTap = () {},
           ),
           TextSpan(
-            text: ' ' + AutodoLocalizations.legal3 + ' ',
+            text: ' ' + JsonIntl.of(context).get(IntlKeys.legal3) + ' ',
             style: finePrint(),
           ),
           TextSpan(
-            text: AutodoLocalizations.legal4,
+            text: JsonIntl.of(context).get(IntlKeys.legal4),
             style: linkStyle(),
             recognizer: TapGestureRecognizer()..onTap = () => onTap(context),
             semanticsLabel: 'Privacy Policy Button',
           ),
           TextSpan(
-            text: ' ' + AutodoLocalizations.legal5,
+            text: ' ' + JsonIntl.of(context).get(IntlKeys.legal5),
             style: finePrint(),
           ),
         ]),
