@@ -137,6 +137,7 @@ void main() {
         bloc.add(LoadRepeats());
       },
       expect: [
+        RepeatsLoading(),
         RepeatsLoaded([Repeat(id: '0', name: 'test')]),
         RepeatsLoaded([Repeat(id: '0', name: 'abcd')]),
       ],
