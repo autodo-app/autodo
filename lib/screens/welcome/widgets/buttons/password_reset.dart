@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/localization.dart';
 import 'package:autodo/theme.dart';
+import 'package:json_intl/json_intl.dart';
 
 class _PasswordResetDialog extends StatefulWidget {
   final String email;
@@ -22,7 +23,7 @@ class _PasswordResetDialogState extends State<_PasswordResetDialog> {
 
   @override
   build(context) => AlertDialog(
-          title: Text(AutodoLocalizations.sendPasswordReset,
+          title: Text(JsonIntl.of(context).get(IntlKeys.sendPasswordReset),
               style: Theme.of(context).primaryTextTheme.title),
           content: Form(
             key: _passwordResetKey,
@@ -39,7 +40,7 @@ class _PasswordResetDialogState extends State<_PasswordResetDialog> {
                   textInputAction: TextInputAction.done,
                   autofocus: true,
                   decoration: InputDecoration(
-                      hintText: AutodoLocalizations.email,
+                      hintText: JsonIntl.of(context).get(IntlKeys.email),
                       hintStyle: TextStyle(
                         color: Colors.grey[400],
                       ),
@@ -56,12 +57,17 @@ class _PasswordResetDialogState extends State<_PasswordResetDialog> {
           ),
           actions: [
             FlatButton(
-                child: Text(AutodoLocalizations.back.toUpperCase(),
+                child: Text(
+                    JsonIntl.of(context)
+                        .get(IntlKeys.back)
+                        .toUpperCase(), // TODO: Check uppercase
                     style: Theme.of(context).primaryTextTheme.button),
                 onPressed: () => Navigator.pop(context)),
             FlatButton(
                 child: Text(
-                  AutodoLocalizations.send.toUpperCase(),
+                  JsonIntl.of(context)
+                      .get(IntlKeys.send)
+                      .toUpperCase(), // TODO: Check Uppercase
                   style: Theme.of(context).primaryTextTheme.button,
                 ),
                 onPressed: () {
@@ -82,7 +88,7 @@ class PasswordResetButton extends StatelessWidget {
   build(context) => FlatButton(
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         child: Text(
-          AutodoLocalizations.forgotYourPassword,
+          JsonIntl.of(context).get(IntlKeys.forgotYourPassword),
           style: linkStyle(),
         ),
         onPressed: () {

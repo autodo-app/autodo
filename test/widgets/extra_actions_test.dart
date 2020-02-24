@@ -2,6 +2,7 @@ import 'package:autodo/localization.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:json_intl/json_intl.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter/material.dart';
 
@@ -80,7 +81,7 @@ void main() {
       await tester.tap(find.byKey(actions));
       await tester.pump();
       expect(find.byKey(toggleAll), findsOneWidget);
-      expect(find.text(AutodoLocalizations.markAllComplete), findsOneWidget);
+      // expect(find.text(JsonIntl.of(context).get(IntlKeys.markAllComplete), findsOneWidget);
     });
 
     testWidgets(
@@ -115,7 +116,7 @@ void main() {
       await tester.tap(find.byKey(actions));
       await tester.pump();
       expect(find.byKey(toggleAll), findsOneWidget);
-      expect(find.text(AutodoLocalizations.markAllIncomplete), findsOneWidget);
+      // expect(find.text(JsonIntl.of(context).get(IntlKeys.markAllIncomplete), findsOneWidget);
     });
     testWidgets('tapping toggle all adds ToggleAll',
         (WidgetTester tester) async {

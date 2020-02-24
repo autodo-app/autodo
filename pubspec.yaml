@@ -20,6 +20,8 @@ dependencies:
   flutter:
     sdk: flutter
   intl: ^0.16.0
+  json_intl:
+    git: https://github.com/DavBfr/json_intl
   cloud_firestore: ^0.12.9
   firebase_auth: any
   shared_preferences: ^0.5.6

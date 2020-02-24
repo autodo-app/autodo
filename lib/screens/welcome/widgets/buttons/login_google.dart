@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:autodo/localization.dart';
 import 'package:autodo/blocs/blocs.dart';
+import 'package:json_intl/json_intl.dart';
 
 class GoogleLoginButton extends StatelessWidget {
   @override
@@ -18,7 +19,7 @@ class GoogleLoginButton extends StatelessWidget {
           LoginWithGooglePressed(),
         );
       },
-      label: Text(AutodoLocalizations.signInWithGoogle,
+      label: Text(JsonIntl.of(context).get(IntlKeys.signInWithGoogle),
           style: TextStyle(color: Colors.white)),
       color: Colors.redAccent,
     );

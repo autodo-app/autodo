@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/localization.dart';
+import 'package:json_intl/json_intl.dart';
 import '../new_user_setup/screen.dart';
 import '../../widgets/barrel.dart';
 
@@ -43,7 +44,7 @@ class _SignupFormState extends State<SignupForm> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        AutodoLocalizations.loginFailure,
+                        JsonIntl.of(context).get(IntlKeys.loginFailure),
                       ),
                       Icon(Icons.error)
                     ],
@@ -61,7 +62,8 @@ class _SignupFormState extends State<SignupForm> {
                   content: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(AutodoLocalizations.signingUpEllipsis),
+                      Text(
+                          JsonIntl.of(context).get(IntlKeys.signingUpEllipsis)),
                       CircularProgressIndicator(),
                     ],
                   ),
@@ -75,13 +77,15 @@ class _SignupFormState extends State<SignupForm> {
             showDialog(
               context: context,
               builder: (context) => AlertDialog(
-                title: Text(AutodoLocalizations.verificationSent,
+                title: Text(JsonIntl.of(context).get(IntlKeys.verificationSent),
                     style: Theme.of(context).primaryTextTheme.title),
-                content: Text(AutodoLocalizations.verificationDialogContent,
+                content: Text(
+                    JsonIntl.of(context)
+                        .get(IntlKeys.verificationDialogContent),
                     style: Theme.of(context).primaryTextTheme.body1),
                 actions: [
                   FlatButton(
-                    child: Text(AutodoLocalizations.back,
+                    child: Text(JsonIntl.of(context).get(IntlKeys.back),
                         style: Theme.of(context).primaryTextTheme.button),
                     onPressed: () => Navigator.pop(context),
                   ),

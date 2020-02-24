@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:autodo/localization.dart';
 import 'package:autodo/models/models.dart';
 import 'package:autodo/util.dart';
+import 'package:json_intl/json_intl.dart';
 import 'forms/barrel.dart';
 
 typedef _OnSaveCallback = Function(
@@ -27,13 +28,13 @@ class _MileageForm extends StatelessWidget {
   @override
   build(context) => TextFormField(
         decoration: InputDecoration(
-          hintText: AutodoLocalizations.requiredLiteral,
+          hintText: JsonIntl.of(context).get(IntlKeys.requiredLiteral),
           border: OutlineInputBorder(
             borderSide: BorderSide(color: Theme.of(context).primaryColor),
           ),
-          labelText: AutodoLocalizations.odomReading +
+          labelText: JsonIntl.of(context).get(IntlKeys.odomReading) +
               ' ' +
-              AutodoLocalizations.distanceUnitsShort,
+              JsonIntl.of(context).get(IntlKeys.distanceUnitsShort),
           contentPadding:
               EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
         ),
@@ -64,13 +65,13 @@ class _AmountForm extends StatelessWidget {
   @override
   build(context) => TextFormField(
         decoration: InputDecoration(
-          hintText: AutodoLocalizations.requiredLiteral,
+          hintText: JsonIntl.of(context).get(IntlKeys.requiredLiteral),
           border: OutlineInputBorder(
             borderSide: BorderSide(color: Theme.of(context).primaryColor),
           ),
-          labelText: AutodoLocalizations.refuelingAmount +
+          labelText: JsonIntl.of(context).get(IntlKeys.refuelingAmount) +
               ' (' +
-              AutodoLocalizations.fuelUnits +
+              JsonIntl.of(context).get(IntlKeys.fuelUnits) +
               ')',
           contentPadding:
               EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
@@ -102,13 +103,13 @@ class _CostForm extends StatelessWidget {
   @override
   build(context) => TextFormField(
         decoration: InputDecoration(
-          hintText: AutodoLocalizations.requiredLiteral,
+          hintText: JsonIntl.of(context).get(IntlKeys.requiredLiteral),
           border: OutlineInputBorder(
             borderSide: BorderSide(color: Theme.of(context).primaryColor),
           ),
-          labelText: AutodoLocalizations.totalPrice +
+          labelText: JsonIntl.of(context).get(IntlKeys.totalPrice) +
               ' ' +
-              AutodoLocalizations.moneyUnitsSuffix,
+              JsonIntl.of(context).get(IntlKeys.moneyUnitsSuffix),
           contentPadding:
               EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
         ),
@@ -204,14 +205,14 @@ class _DateFormState extends State<_DateForm> {
   build(context) => Row(children: <Widget>[
         IconButton(
           icon: Icon(Icons.calendar_today),
-          tooltip: AutodoLocalizations.chooseDate,
+          tooltip: JsonIntl.of(context).get(IntlKeys.chooseDate),
           onPressed: (() => chooseDate(context, _ctrl.text)),
         ),
         Expanded(
           child: TextFormField(
               decoration: InputDecoration(
-                hintText: AutodoLocalizations.optional,
-                labelText: AutodoLocalizations.refuelingDate,
+                hintText: JsonIntl.of(context).get(IntlKeys.optional),
+                labelText: JsonIntl.of(context).get(IntlKeys.refuelingDate),
                 contentPadding: EdgeInsets.fromLTRB(16, 20, 16, 5),
                 border: OutlineInputBorder(
                   borderSide: BorderSide(color: Theme.of(context).primaryColor),
@@ -219,8 +220,9 @@ class _DateFormState extends State<_DateForm> {
               ),
               controller: _ctrl,
               keyboardType: TextInputType.datetime,
-              validator: (val) =>
-                  isValidDate(val) ? null : AutodoLocalizations.invalidDate,
+              validator: (val) => isValidDate(val)
+                  ? null
+                  : JsonIntl.of(context).get(IntlKeys.invalidDate),
               onSaved: (val) => widget.onSaved(val),
               textInputAction: (nextNode == null)
                   ? TextInputAction.done
@@ -351,8 +353,8 @@ class _RefuelingAddEditScreenState extends State<RefuelingAddEditScreen> {
         appBar: AppBar(
           title: Text(
             isEditing
-                ? AutodoLocalizations.editRefueling
-                : AutodoLocalizations.addRefueling,
+                ? JsonIntl.of(context).get(IntlKeys.editRefueling)
+                : JsonIntl.of(context).get(IntlKeys.addRefueling),
           ),
         ),
         body: Form(
@@ -407,8 +409,8 @@ class _RefuelingAddEditScreenState extends State<RefuelingAddEditScreen> {
                 ))),
         floatingActionButton: FloatingActionButton(
           tooltip: isEditing
-              ? AutodoLocalizations.saveChanges
-              : AutodoLocalizations.addRefueling,
+              ? JsonIntl.of(context).get(IntlKeys.saveChanges)
+              : JsonIntl.of(context).get(IntlKeys.addRefueling),
           child: Icon(isEditing ? Icons.check : Icons.add),
           onPressed: () {
             if (_formKey.currentState.validate()) {

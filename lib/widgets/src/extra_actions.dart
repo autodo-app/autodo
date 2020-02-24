@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/models/models.dart';
 import 'package:autodo/localization.dart';
+import 'package:json_intl/json_intl.dart';
 
 class ExtraActions extends StatelessWidget {
   final Key toggleAllKey;
@@ -48,8 +49,8 @@ class ExtraActions extends StatelessWidget {
                 value: ExtraAction.toggleAllComplete,
                 child: Text(
                   allComplete
-                      ? AutodoLocalizations.markAllIncomplete
-                      : AutodoLocalizations.markAllComplete,
+                      ? JsonIntl.of(context).get(IntlKeys.markAllIncomplete)
+                      : JsonIntl.of(context).get(IntlKeys.markAllComplete),
                 ),
               ),
               PopupMenuItem<ExtraAction>(
