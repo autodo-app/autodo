@@ -1,4 +1,6 @@
+import 'package:autodo/localization.dart';
 import 'package:flutter/material.dart';
+import 'package:json_intl/json_intl.dart';
 
 class Tutorial1 extends StatelessWidget {
   @override
@@ -21,7 +23,7 @@ class Tutorial1 extends StatelessWidget {
             padding: EdgeInsets.all(10.0),
           ),
           Text(
-            "Simplify Your Tasks",
+            JsonIntl.of(context).get(IntlKeys.simplifyTasks),
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 30,
@@ -36,7 +38,7 @@ class Tutorial1 extends StatelessWidget {
           Container(
             padding: EdgeInsets.fromLTRB(40.0, 0, 20.0, 0),
             child: Text(
-              "Set recurring tasks to never worry about forgetting a maintenance task again.",
+              JsonIntl.of(context).get(IntlKeys.simplifyTasksDesc),
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: 16.0,

@@ -1,8 +1,10 @@
+import 'package:autodo/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/routes.dart';
+import 'package:json_intl/json_intl.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -73,7 +75,7 @@ class SettingsScreenState extends State<SettingsScreen> {
           icon: Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text('Settings'),
+        title: Text(JsonIntl.of(context).get(IntlKeys.settings)),
       ),
       body: body(),
     );

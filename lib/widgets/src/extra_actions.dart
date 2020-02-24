@@ -57,8 +57,8 @@ class ExtraActions extends StatelessWidget {
                 key: ValueKey('__filter_button__'),
                 value: ExtraAction.toggleFilter,
                 child: Text((filterState == VisibilityFilter.all)
-                    ? 'Only Show Active ToDos'
-                    : 'Show All ToDos'),
+                    ? JsonIntl.of(context).get(IntlKeys.onlyShowActiveTodos)
+                    : JsonIntl.of(context).get(IntlKeys.showAllTodos)),
               )
             ],
           );

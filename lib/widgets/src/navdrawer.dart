@@ -1,7 +1,9 @@
 import 'dart:math';
 
+import 'package:autodo/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:json_intl/json_intl.dart';
 
 import 'sliverfooter.dart';
 import 'package:autodo/blocs/blocs.dart';
@@ -55,7 +57,7 @@ class NavDrawerState extends State<NavDrawer> {
   List<Widget> buttons(bool trialUser) => [
         FlatButton(
           child: Text(
-            'Edit Car List',
+            JsonIntl.of(context).get(IntlKeys.editCarList),
             style: Theme.of(context).primaryTextTheme.button,
           ),
           onPressed: () => Navigator.popAndPushNamed(context, '/editcarlist'),
@@ -63,7 +65,7 @@ class NavDrawerState extends State<NavDrawer> {
         FlatButton(
           key: ValueKey('__settings_drawer_button__'),
           child: Text(
-            'Settings',
+            JsonIntl.of(context).get(IntlKeys.settings),
             style: Theme.of(context).primaryTextTheme.button,
           ),
           onPressed: () =>
@@ -71,7 +73,7 @@ class NavDrawerState extends State<NavDrawer> {
         ),
         FlatButton(
           key: ValueKey('__upgrade_drawer_button__'),
-          child: Text('UPGRADE',
+          child: Text(JsonIntl.of(context).get(IntlKeys.upgrade),
               style: Theme.of(context)
                   .primaryTextTheme
                   .button
@@ -130,7 +132,8 @@ class NavDrawerState extends State<NavDrawer> {
                             alignment: Alignment.centerLeft,
                             child: FlatButton(
                               key: ValueKey('__sign_out_button__'),
-                              child: Text('Sign Out'),
+                              child: Text(
+                                  JsonIntl.of(context).get(IntlKeys.signOut)),
                               onPressed: () {
                                 BlocProvider.of<AuthenticationBloc>(context)
                                     .add(LogOut());

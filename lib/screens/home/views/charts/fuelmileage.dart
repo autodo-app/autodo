@@ -1,5 +1,7 @@
+import 'package:autodo/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart';
+import 'package:json_intl/json_intl.dart';
 
 class FuelMileageChart extends StatelessWidget {
   final List<Series> seriesList;
@@ -41,7 +43,7 @@ class FuelMileageChart extends StatelessWidget {
   Widget build(BuildContext context) {
     if (seriesList.length == 0 || seriesList[0].data.length == 0) {
       return Center(
-          child: Text('No Data Available to Display.',
+          child: Text(JsonIntl.of(context).get(IntlKeys.noData),
               style: Theme.of(context).primaryTextTheme.body1));
     }
     return TimeSeriesChart(
