@@ -6,6 +6,7 @@ import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/widgets/widgets.dart';
 import 'package:autodo/screens/add_edit/barrel.dart';
 import 'package:autodo/localization.dart';
+import 'package:intl/intl.dart';
 import 'package:json_intl/json_intl.dart';
 
 class _RefuelingTitle extends StatelessWidget {
@@ -15,8 +16,8 @@ class _RefuelingTitle extends StatelessWidget {
 
   dateField(context) => TextSpan(
       text: JsonIntl.of(context).get(IntlKeys.onLiteral) +
-          ' ' +
-          JsonIntl.dateFormat(refueling.date) +
+          ' ' + // TODO: Can't concat verb and date
+          DateFormat.yMd().format(refueling.date) +
           ' ',
       style: Theme.of(context).primaryTextTheme.body1);
 
