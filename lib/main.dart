@@ -1,13 +1,16 @@
 import 'dart:io';
 import 'dart:async';
 
+import 'package:autodo/localization.dart';
 import 'package:autodo/screens/settings/screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:json_intl/json_intl.dart';
 import 'package:sentry/sentry.dart';
 
 import 'widgets/widgets.dart';
@@ -155,7 +158,17 @@ class App extends StatelessWidget {
       authRepository: _authRepository,
     );
     return MaterialApp(
-      title: 'auToDo',
+      onGenerateTitle: (BuildContext context) =>
+          JsonIntl.of(context).get(IntlKeys.appTitle),
+      localizationsDelegates: [
+        const JsonIntlDelegate(),
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('en'),
+        const Locale('fr'),
+      ],
       routes: {
         "/": (context) => BlocBuilder<AuthenticationBloc, AuthenticationState>(
               // Just here as the splitter between home screen and login screen
