@@ -6,6 +6,7 @@ import 'package:autodo/models/models.dart';
 import 'package:autodo/localization.dart';
 import 'package:autodo/theme.dart';
 import 'package:autodo/screens/add_edit/barrel.dart';
+import 'package:intl/intl.dart';
 import 'package:json_intl/json_intl.dart';
 import 'todo_delete_button.dart';
 
@@ -75,7 +76,7 @@ class _TodoDueDate extends StatelessWidget {
           Text(
               JsonIntl.of(context).get(IntlKeys.dueOn) +
                   ' ' +
-                  JsonIntl.dateFormat(todo.dueDate),
+                  DateFormat.yMd().format(todo.dueDate),
               style: Theme.of(context).primaryTextTheme.body1),
         ],
       );

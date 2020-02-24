@@ -11,13 +11,15 @@ class DeleteTodoSnackBar extends SnackBar {
   }) : super(
           key: key,
           content: Text(
-            JsonIntl.of(context).get(IntlKeys.todoDeleted, {'name': todo.name}),
+            'todoDeleted',
+            // TODO: JsonIntl.of(context).get(IntlKeys.todoDeleted, {'name': todo.name}),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
           duration: Duration(seconds: 2),
           action: SnackBarAction(
-            label: JsonIntl.of(context).get(IntlKeys.undo),
+            label: 'undo',
+            // TODO: JsonIntl.of(context).get(IntlKeys.undo),
             onPressed: onUndo,
           ),
         );
@@ -30,13 +32,14 @@ class DeleteRefuelingSnackBar extends SnackBar {
   }) : super(
           key: key,
           content: Text(
-            JsonIntl.of(context).get(IntlKeys.refuelingDeleted),
+            'refuelingDeleted',
+            // TODO: JsonIntl.of(context).get(IntlKeys.refuelingDeleted),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
           duration: Duration(seconds: 2),
           action: SnackBarAction(
-            label: JsonIntl.of(context).get(IntlKeys.undo),
+            label: 'undo', // TODO: JsonIntl.of(context).get(IntlKeys.undo),
             onPressed: onUndo,
           ),
         );
@@ -49,13 +52,14 @@ class DeleteRepeatSnackBar extends SnackBar {
   }) : super(
           key: key,
           content: Text(
-            JsonIntl.of(context).get(IntlKeys.repeatDeleted),
+            'repeatDeleted',
+            // TODO: JsonIntl.of(context).get(IntlKeys.repeatDeleted),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
           duration: Duration(seconds: 2),
           action: SnackBarAction(
-            label: JsonIntl.of(context).get(IntlKeys.undo),
+            label: 'undo', // TODO: JsonIntl.of(context).get(IntlKeys.undo),
             onPressed: onUndo,
           ),
         );
