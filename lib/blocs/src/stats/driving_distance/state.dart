@@ -19,7 +19,7 @@ class DrivingDistanceStatsLoaded extends DrivingDistanceStatsState {
 
   @override
   List<Object> get props =>
-      [drivingDistanceData?.map((r) => r.id)?.reduce((val, id) => val + id)];
+      [(drivingDistanceData.length > 0) ? drivingDistanceData?.map((r) => r.id)?.reduce((val, id) => val + id) : null];
 
   @override
   String toString() {
