@@ -16,6 +16,7 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
   StreamSubscription _dbSubscription, _repoSubscription, _carsSubscription;
 
   static final List<Repeat> defaults = [
+    // TODO: Translate this
     Repeat(name: "oil", mileageInterval: 3500),
     Repeat(name: "tireRotation", mileageInterval: 7500),
     Repeat(name: "engineFilter", mileageInterval: 45000),

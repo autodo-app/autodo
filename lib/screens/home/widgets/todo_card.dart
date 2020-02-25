@@ -33,7 +33,7 @@ class _TodoTitle extends StatelessWidget {
   build(context) => RichText(
           text: TextSpan(children: [
         TextSpan(
-            text: preface(context),
+            text: preface(context) + ' ',
             style: Theme.of(context).primaryTextTheme.subtitle),
         TextSpan(
             text: todo.name, style: Theme.of(context).primaryTextTheme.title)
@@ -76,7 +76,7 @@ class _TodoDueDate extends StatelessWidget {
           Text(
               JsonIntl.of(context).get(IntlKeys.dueOn) +
                   ' ' +
-                  DateFormat.yMd().format(todo.dueDate),
+                  DateFormat.yMMMd().format(todo.dueDate),
               style: Theme.of(context).primaryTextTheme.body1),
         ],
       );

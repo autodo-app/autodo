@@ -1,6 +1,10 @@
 // This file is generated automatically, do not modify
 
 class IntlKeys {
+  /// strings-fr.json: 'Nom de l\'action *'
+  /// strings.json: 'Action Name *'
+  static const actionName = 'action_name';
+
   /// strings-fr.json: 'Ajouter un plein'
   /// strings.json: 'Add Refueling'
   static const addRefueling = 'add_refueling';
@@ -12,6 +16,14 @@ class IntlKeys {
   /// strings-fr.json: 'Ajouter une tâche'
   /// strings.json: 'Add Todo'
   static const addTodo = 'add_todo';
+
+  /// strings-fr.json: 'Ajouter'
+  /// strings.json: 'Add'
+  static const add = 'add';
+
+  /// strings-fr.json: 'Vous avez déjà un compte?'
+  /// strings.json: 'Already have an account?'
+  static const alreadyHaveAccount = 'already_have_account';
 
   /// strings-fr.json: 'Avez-vous déjà un compte ?'
   /// strings.json: 'Already have an account?'
@@ -29,6 +41,10 @@ class IntlKeys {
   /// strings.json: 'Back'
   static const back = 'back';
 
+  /// strings-fr.json: 'Avant de commencer,\n obtenons quelques informations sur votre (vos) voiture (s).'
+  /// strings.json: 'Before you get started,\n let\'s get some info about your car(s).'
+  static const carAddTitle = 'car_add_title';
+
   /// strings-fr.json: 'Nom de la voiture'
   /// strings.json: 'Car Name'
   static const carName = 'car_name';
@@ -41,13 +57,21 @@ class IntlKeys {
   /// strings.json: 'Clear Completed'
   static const clearCompleted = 'clear_completed';
 
-  /// strings-fr.json: 'Terminé : '
-  /// strings.json: 'Completed: '
+  /// strings-fr.json: 'Terminé :'
+  /// strings.json: 'Completed:'
   static const completed = 'completed';
 
   /// strings-fr.json: 'Créer un compte'
   /// strings.json: 'Create an Account'
   static const createAnAccount = 'create_an_account';
+
+  /// strings-fr.json: 'La suppression de votre compte supprimera définitivement toutes les données associées à votre compte.\n\n Êtes-vous sur de vouloir continuer?'
+  /// strings.json: 'Deleting your account will permanently remove all data associated with your account.\n\n Are you sure you want to proceed?'
+  static const deleteAccountMessage = 'delete_account_message';
+
+  /// strings-fr.json: 'Supprimer le compte'
+  /// strings.json: 'Delete Account'
+  static const deleteAccount = 'delete_account';
 
   /// strings-fr.json: '(mi)'
   /// strings.json: '(mi)'
@@ -56,6 +80,10 @@ class IntlKeys {
   /// strings-fr.json: 'miles'
   /// strings.json: 'miles'
   static const distanceUnits = 'distance_units';
+
+  /// strings-fr.json: 'Historique des distances de conduite'
+  /// strings.json: 'Driving Distance History'
+  static const drivingDistanceHistory = 'driving_distance_history';
 
   /// strings-fr.json: 'Dû à'
   /// strings.json: 'Due At'
@@ -73,9 +101,13 @@ class IntlKeys {
   /// strings.json: 'Due on'
   static const dueOn = 'due_on';
 
-  /// strings-fr.json: 'À venir bientôt'
-  /// strings.json: 'Due Soon'
+  /// strings-fr.json: 'À venir bientôt :'
+  /// strings.json: 'Due Soon:'
   static const dueSoon = 'due_soon';
+
+  /// strings-fr.json: 'Modifier la liste des voitures'
+  /// strings.json: 'Edit Car List'
+  static const editCarList = 'edit_car_list';
 
   /// strings-fr.json: 'Modifier le plein'
   /// strings.json: 'Edit Refueling'
@@ -105,6 +137,10 @@ class IntlKeys {
   /// strings.json: 'Forgot your password?'
   static const forgotYourPassword = 'forgot_your_password';
 
+  /// strings-fr.json: 'Historique de l\'efficacité énergétique'
+  /// strings.json: 'Fuel Efficiency History'
+  static const fuelEfficiencyHistory = 'fuel_efficiency_history';
+
   /// strings-fr.json: 'gal'
   /// strings.json: 'gal'
   static const fuelUnits = 'fuel_units';
@@ -114,7 +150,7 @@ class IntlKeys {
   static const gotItBang = 'got_it_bang';
 
   /// strings-fr.json: 'Intervalle'
-  /// strings.json: 'Interval'
+  /// strings.json: 'Interval:'
   static const interval = 'interval';
 
   /// strings-fr.json: 'Date invalide'
@@ -141,6 +177,10 @@ class IntlKeys {
   /// strings.json: 'of the auToDo app.'
   static const legal5 = 'legal5';
 
+  /// strings-fr.json: 'S\'IDENTIFIER'
+  /// strings.json: 'LOG IN'
+  static const logIn = 'log_in';
+
   /// strings-fr.json: 'Se connecter...'
   /// strings.json: 'Logging in...'
   static const loggingInEllipsis = 'logging_in_ellipsis';
@@ -161,6 +201,10 @@ class IntlKeys {
   /// strings.json: 'Mark All Incomplete'
   static const markAllIncomplete = 'mark_all_incomplete';
 
+  /// strings-fr.json: 'Intervalle de kilométrage *'
+  /// strings.json: 'Mileage Interval *'
+  static const mileageInterval = 'mileage_interval';
+
   /// strings-fr.json: 'Kilométrage'
   /// strings.json: 'Mileage'
   static const mileage = 'mileage';
@@ -173,17 +217,29 @@ class IntlKeys {
   /// strings.json: '$'
   static const moneyUnits = 'money_units';
 
-  /// strings-fr.json: 'Prochain'
+  /// strings-fr.json: 'Suite'
   /// strings.json: 'Next'
   static const next = 'next';
+
+  /// strings-fr.json: 'Aucune donnée disponible à afficher.'
+  /// strings.json: 'No Data Available to Display.'
+  static const noData = 'no_data';
+
+  /// strings-fr.json: 'non'
+  /// strings.json: 'no'
+  static const no = 'no';
 
   /// strings-fr.json: 'Relevé du compteur kilométrique'
   /// strings.json: 'Odometer Reading'
   static const odomReading = 'odom_reading';
 
-  /// strings-fr.json: 'sur'
+  /// strings-fr.json: 'le'
   /// strings.json: 'on'
   static const onLiteral = 'on_literal';
+
+  /// strings-fr.json: 'Afficher uniquement les tâches actives'
+  /// strings.json: 'Only Show Active ToDos'
+  static const onlyShowActiveTodos = 'only_show_active_todos';
 
   /// strings-fr.json: 'Optionnel'
   /// strings.json: 'Optional'
@@ -193,9 +249,17 @@ class IntlKeys {
   /// strings.json: 'Password'
   static const password = 'password';
 
-  /// strings-fr.json: 'En souffrance'
-  /// strings.json: 'Past Due'
+  /// strings-fr.json: 'Échéance passeée :'
+  /// strings.json: 'Past Due:'
   static const pastDue = 'past_due';
+
+  /// strings-fr.json: 'Politique de confidentialité'
+  /// strings.json: 'Privacy Policy'
+  static const privacyPolicy = 'privacy_policy';
+
+  /// strings-fr.json: 'achat'
+  /// strings.json: 'Purchase'
+  static const purchase = 'purchase';
 
   /// strings-fr.json: 'Quantité du plein'
   /// strings.json: 'Refueling Amount'
@@ -216,6 +280,10 @@ class IntlKeys {
   /// strings-fr.json: 'pleins'
   /// strings.json: 'Refuelings'
   static const refuelings = 'refuelings';
+
+  /// strings-fr.json: 'Retirer'
+  /// strings.json: 'Remove'
+  static const remove = 'remove';
 
   /// strings-fr.json: 'Tâche répétitive supprimée.'
   /// strings.json: 'Repeat deleted.'
@@ -245,9 +313,17 @@ class IntlKeys {
   /// strings.json: 'Send'
   static const send = 'send';
 
+  /// strings-fr.json: 'Réglages'
+  /// strings.json: 'Settings'
+  static const settings = 'settings';
+
   /// strings-fr.json: 'Afficher les tâches actives'
   /// strings.json: 'Show Active'
   static const showActive = 'show_active';
+
+  /// strings-fr.json: 'Afficher toutes les tâches'
+  /// strings.json: 'Show All ToDos'
+  static const showAllTodos = 'show_all_toDos';
 
   /// strings-fr.json: 'Afficher tout'
   /// strings.json: 'Show All'
@@ -261,6 +337,14 @@ class IntlKeys {
   /// strings.json: 'Sign In with Google'
   static const signInWithGoogle = 'sign_in_with_google';
 
+  /// strings-fr.json: 'Déconnexion'
+  /// strings.json: 'Sign Out'
+  static const signOut = 'sign_out';
+
+  /// strings-fr.json: 'S\'INSCRIRE'
+  /// strings.json: 'SIGN UP'
+  static const signUp = 'sign_up';
+
   /// strings-fr.json: 'S\'enregistrer...'
   /// strings.json: 'Signing up...'
   static const signingUpEllipsis = 'signing_up_ellipsis';
@@ -269,11 +353,23 @@ class IntlKeys {
   /// strings.json: 'Sign Up'
   static const signup = 'signup';
 
+  /// strings-fr.json: 'Définissez des tâches récurrentes pour ne plus jamais vous soucier d\'oublier une tâche de maintenance.'
+  /// strings.json: 'Set recurring tasks to never worry about forgetting a maintenance task again.'
+  static const simplifyTasksDesc = 'simplify_tasks_desc';
+
+  /// strings-fr.json: 'Simplifiez vos tâches'
+  /// strings.json: 'Simplify Your Tasks'
+  static const simplifyTasks = 'simplify_tasks';
+
   /// strings-fr.json: 'Statistiques'
   /// strings.json: 'Stats'
   static const stats = 'stats';
 
-  /// strings-fr.json: 'ToDo {{name}} supprimé.'
+  /// strings-fr.json: 'Appuyez sur "Ajouter" pour configurer plusieurs voitures.'
+  /// strings.json: 'Tap "Add" to configure multiple cars.'
+  static const tapAddCars = 'tap_add_cars';
+
+  /// strings-fr.json: 'Tâche {{name}} supprimé.'
   /// strings.json: 'ToDo {{ name }} deleted.'
   static const todoDeleted = 'todo_deleted';
 
@@ -281,7 +377,7 @@ class IntlKeys {
   /// strings.json: 'Maintenance ToDo Due Soon'
   static const todoDueSoon = 'todo_due_soon';
 
-  /// strings-fr.json: 'ToDos'
+  /// strings-fr.json: 'Tâches'
   /// strings.json: 'ToDos'
   static const todos = 'todos';
 
@@ -297,19 +393,47 @@ class IntlKeys {
   /// strings.json: 'Total Price'
   static const totalPrice = 'total_price';
 
+  /// strings-fr.json: 'Créez des tâches et des événements récurrents qui vous informent sur vos conditions.'
+  /// strings.json: 'Create todo items and recurring events that notify you on your terms.'
+  static const trackMaintenanceDesc = 'track_maintenance_desc';
+
+  /// strings-fr.json: 'Maintenance des voies'
+  /// strings.json: 'Track Maintenance'
+  static const trackMaintenance = 'track_maintenance';
+
+  /// strings-fr.json: 'ESSAYEZ SANS COMPTE'
+  /// strings.json: 'TRY WITHOUT AN ACCOUNT'
+  static const tryWithoutAccount = 'try_without_account';
+
   /// strings-fr.json: 'annuler'
   /// strings.json: 'Undo'
   static const undo = 'undo';
 
-  /// strings-fr.json: 'A venir'
-  /// strings.json: 'Upcoming'
+  /// strings-fr.json: 'À venir :'
+  /// strings.json: 'Upcoming:'
   static const upcoming = 'upcoming';
 
-  /// strings-fr.json: 'Veuillez vérifier l\'adresse e-mail spécifiée pour un e-mail de la part d\'auToDo. Cet e-mail contiendra un lien par lequel vous pourrez vérifier votre compte et utiliser l\'application.'
+  /// strings-fr.json: 'Pour une somme modique, vous pouvez mettre à niveau votre compte vers la version payante d’auToDo, où les publicités sont supprimées.'
+  /// strings.json: 'For a small, one time fee you can upgrade your account to the Paid Version of auToDo, where ads are removed.'
+  static const upgradePaidVersionDesc = 'upgrade_paid_version_desc';
+
+  /// strings-fr.json: 'Les utilisateurs d\'essai ne peuvent pas passer à la version payante d\'auToDo. Veuillez d\'abord créer un compte.'
+  /// strings.json: 'Trial Users cannot upgrade to the paid version of auToDo. Please create an account first.'
+  static const upgradePaidVersionTrial = 'upgrade_paid_version_trial';
+
+  /// strings-fr.json: 'Mettre à niveau vers la version payante'
+  /// strings.json: 'Upgrade to Paid Version'
+  static const upgradePaidVersion = 'upgrade_paid_version';
+
+  /// strings-fr.json: 'METTRE À JOUR'
+  /// strings.json: 'UPGRADE'
+  static const upgrade = 'upgrade';
+
+  /// strings-fr.json: 'Veuillez vérifier votre boite de courriel pour un courriel de la part d\'auToDo. Ce courriel contiendra un lien par lequel vous pourrez vérifier votre compte et utiliser l\'application.'
   /// strings.json: 'Please check the specified email address for an email from auToDo. This email will contain a link through which you can verify your account and use the app.'
   static const verificationDialogContent = 'verification_dialog_content';
 
-  /// strings-fr.json: 'L\'email de vérification a été envoyé'
+  /// strings-fr.json: 'Le courriel de vérification a été envoyé'
   /// strings.json: 'Verification Email Sent'
   static const verificationSent = 'verification_sent';
 
@@ -321,99 +445,79 @@ class IntlKeys {
   /// strings.json: 'Verify Email'
   static const verifyEmail = 'verify_email';
 
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'Action Name *'
-  static const actionName = 'action_name';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'Add'
-  static const add = 'add';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'Already have an account?'
-  static const alreadyHaveAccount = 'already_have_account';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'Before you get started,\n let\'s get some info about your car(s).'
-  static const carAddTitle = 'car_add_title';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'Driving Distance History'
-  static const drivingDistanceHistory = 'driving_distance_history';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'Edit Car List'
-  static const editCarList = 'edit_car_list';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'LOG IN'
-  static const logIn = 'log_in';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'Mileage Interval *'
-  static const mileageInterval = 'mileage_interval';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'No Data Available to Display.'
-  static const noData = 'no_data';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'Only Show Active ToDos'
-  static const onlyShowActiveTodos = 'only_show_active_todos';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'Remove'
-  static const remove = 'remove';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'Settings'
-  static const settings = 'settings';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'Show All ToDos'
-  static const showAllTodos = 'show_all_toDos';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'Sign Out'
-  static const signOut = 'sign_out';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'SIGN UP'
-  static const signUp = 'sign_up';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'Set recurring tasks to never worry about forgetting a maintenance task again.'
-  static const simplifyTasksDesc = 'simplify_tasks_desc';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'Simplify Your Tasks'
-  static const simplifyTasks = 'simplify_tasks';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'Tap "Add" to configure multiple cars.'
-  static const tapAddCars = 'tap_add_cars';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'Create todo items and recurring events that notify you on your terms.'
-  static const trackMaintenanceDesc = 'track_maintenance_desc';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'Track Maintenance'
-  static const trackMaintenance = 'track_maintenance';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'TRY WITHOUT AN ACCOUNT'
-  static const tryWithoutAccount = 'try_without_account';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'UPGRADE'
-  static const upgrade = 'upgrade';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings-fr.json: 'L\'entretien des voitures en toute simplicité.'
   /// strings.json: 'Car maintenance made simple.'
   static const welcomeDesc = 'welcome_desc';
 
-  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings-fr.json: 'Bienvenue chez auToDo!'
   /// strings.json: 'Welcome to auToDo!'
   static const welcome = 'welcome';
+
+  /// strings-fr.json: 'Oui'
+  /// strings.json: 'Yes'
+  static const yes = 'yes';
+
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings.json: 'Alignment Check'
+  static const repeatAlignmentCheck = 'repeat_alignment_check';
+
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings.json: 'Battery'
+  static const repeatBattery = 'repeat_battery';
+
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings.json: 'Brakes'
+  static const repeatBrakes = 'repeat_brakes';
+
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings.json: 'Cabin Filter'
+  static const repeatCabinFilter = 'repeat_cabin_filter';
+
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings.json: 'Coolant Change'
+  static const repeatCoolantChange = 'repeat_coolant_change';
+
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings.json: 'Engine Filter'
+  static const repeatEngineFilter = 'repeat_engine_filter';
+
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings.json: 'Front Struts'
+  static const repeatFrontStruts = 'repeat_front_struts';
+
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings.json: 'Oil'
+  static const repeatOil = 'repeat_oil';
+
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings.json: 'Rear Struts'
+  static const repeatRearStruts = 'repeat_rear_struts';
+
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings.json: 'Serpentine Belt'
+  static const repeatSerpentineBelt = 'repeat_serpentine_belt';
+
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings.json: 'Spark Plugs'
+  static const repeatSparkPlugs = 'repeat_spark_plugs';
+
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings.json: 'Tire Rotation'
+  static const repeatTireRotation = 'repeat_tire_rotation';
+
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings.json: 'Tires'
+  static const repeatTires = 'repeat_tires';
+
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings.json: 'Transmission Fluid'
+  static const repeatTransmissionFluid = 'repeat_transmission_fluid';
+
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings.json: 'Wiper Blades'
+  static const repeatWiperBlades = 'repeat_wiper_blades';
+
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings.json: 'Task:'
+  static const task = 'task';
 }

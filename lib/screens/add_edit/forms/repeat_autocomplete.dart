@@ -69,7 +69,7 @@ class _RepeatFormState extends State<RepeatForm> {
         child: ListTile(
             title: Text(suggestion.name),
             trailing: Text(JsonIntl.of(context).get(IntlKeys.interval) +
-                ": ${suggestion.mileageInterval}")),
+                " ${suggestion.mileageInterval}")),
         padding: EdgeInsets.all(5.0),
       ),
       itemSorter: (a, b) => a.name.length == b.name.length
