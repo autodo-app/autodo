@@ -287,6 +287,26 @@ void main() {
               ])
         ])
       ]);
+      blocTest(
+        'Subscription',
+        build: () {
+          final dataRepository = MockDataRepository();
+          when(dataRepository.cars())
+              .thenAnswer((_) => Stream<List<Car>>.fromIterable([
+                    [Car()]
+                  ]));
+          when(dataRepository.getCurrentCars())
+              .thenAnswer((_) async => [Car()]);
+          final dbBloc = MockDbBloc();
+          whenListen(dbBloc, Stream.fromIterable([DbLoaded(dataRepository)]));
+          when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
+          return CarsBloc(dbBloc: dbBloc, refuelingsBloc: MockRefuelingsBloc());
+        },
+        expect: [
+          CarsLoading(),
+          CarsLoaded([Car()]),
+        ],
+      );
     });
   });
 }
