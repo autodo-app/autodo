@@ -12,7 +12,7 @@ class PrivacyPolicy extends StatelessWidget {
   @override
   build(context) => AlertDialog(
         backgroundColor: cardColor,
-        title: Text('Privacy Policy'),
+        title: Text(JsonIntl.of(context).get(IntlKeys.privacyPolicy)),
         titleTextStyle: Theme.of(context).primaryTextTheme.title,
         content: SingleChildScrollView(
             child: Container(

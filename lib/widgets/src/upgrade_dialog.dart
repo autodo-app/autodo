@@ -1,26 +1,31 @@
+import 'package:autodo/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:autodo/blocs/blocs.dart';
+import 'package:json_intl/json_intl.dart';
 
 class UpgradeDialog extends AlertDialog {
   UpgradeDialog({Key key, @required context, @required trialUser})
       : super(
             key: key,
-            title: Text('Upgrade to Paid Version',
+            title: Text(JsonIntl.of(context).get(IntlKeys.upgradePaidVersion),
                 style: Theme.of(context).primaryTextTheme.subtitle),
             content: (trialUser)
                 ? Text(
-                    'Trial Users cannot upgrade to the paid version of auToDo. Please create an account first.',
+                    JsonIntl.of(context).get(IntlKeys.upgradePaidVersionTrial),
                     style: Theme.of(context).primaryTextTheme.body1)
                 : Text(
-                    'For a small, one time fee you can upgrade your account to the Paid Version of auToDo, where ads are removed.',
+                    JsonIntl.of(context).get(IntlKeys.upgradePaidVersionDesc),
                     style: Theme.of(context).primaryTextTheme.body1),
             actions: (trialUser)
                 ? [
                     FlatButton(
                         onPressed: () => Navigator.pop(context),
-                        child: Text('BACK',
+                        child: Text(
+                            JsonIntl.of(context)
+                                .get(IntlKeys.back)
+                                .toUpperCase(),
                             style: Theme.of(context).primaryTextTheme.button))
                   ]
                 : [
@@ -29,7 +34,10 @@ class UpgradeDialog extends AlertDialog {
                           BlocProvider.of<PaidVersionBloc>(context)
                               .add(PaidVersionUpgrade());
                         },
-                        child: Text('PURCHASE',
+                        child: Text(
+                            JsonIntl.of(context)
+                                .get(IntlKeys.purchase)
+                                .toUpperCase(),
                             style: Theme.of(context)
                                 .primaryTextTheme
                                 .button
@@ -37,7 +45,10 @@ class UpgradeDialog extends AlertDialog {
                                     color: Theme.of(context).primaryColor))),
                     FlatButton(
                         onPressed: () => Navigator.pop(context),
-                        child: Text('BACK',
+                        child: Text(
+                            JsonIntl.of(context)
+                                .get(IntlKeys.back)
+                                .toUpperCase(),
                             style: Theme.of(context).primaryTextTheme.button))
                   ]);
 }

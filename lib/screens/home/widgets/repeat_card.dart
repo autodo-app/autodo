@@ -1,3 +1,4 @@
+import 'package:autodo/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -5,6 +6,7 @@ import 'package:autodo/models/models.dart';
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/screens/add_edit/repeat.dart';
 import 'package:autodo/widgets/widgets.dart';
+import 'package:json_intl/json_intl.dart';
 
 class _RepeatTitle extends StatelessWidget {
   final Repeat repeat;
@@ -18,7 +20,7 @@ class _RepeatTitle extends StatelessWidget {
         RichText(
           text: TextSpan(children: [
             TextSpan(
-                text: 'Task: ',
+                text: JsonIntl.of(context).get(IntlKeys.task) + ' ',
                 style: Theme.of(context).primaryTextTheme.body1),
             TextSpan(
                 text: this.repeat.name,
@@ -28,7 +30,7 @@ class _RepeatTitle extends StatelessWidget {
         RichText(
             text: TextSpan(children: [
           TextSpan(
-              text: 'Interval: ',
+              text: JsonIntl.of(context).get(IntlKeys.interval) + ' ',
               style: Theme.of(context).primaryTextTheme.body1),
           TextSpan(
               text: this.repeat.mileageInterval.toString(),

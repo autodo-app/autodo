@@ -17,7 +17,7 @@ class _RefuelingTitle extends StatelessWidget {
   dateField(context) => TextSpan(
       text: JsonIntl.of(context).get(IntlKeys.onLiteral) +
           ' ' + // TODO: Can't concat verb and date
-          DateFormat.yMd().format(refueling.date) +
+          DateFormat.yMMMd().format(refueling.date) +
           ' ',
       style: Theme.of(context).primaryTextTheme.body1);
 
@@ -33,7 +33,8 @@ class _RefuelingTitle extends StatelessWidget {
                 text: JsonIntl.of(context).get(IntlKeys.at) + ' ',
                 style: Theme.of(context).primaryTextTheme.body1),
             TextSpan(
-                text: refueling.mileage.toString() + ' ',
+                text: NumberFormat.decimalPattern().format(refueling.mileage) +
+                    ' ',
                 style: Theme.of(context).primaryTextTheme.subtitle),
             TextSpan(
                 text: JsonIntl.of(context).get(IntlKeys.distanceUnits),
@@ -77,7 +78,7 @@ class _RefuelingAmount extends StatelessWidget {
                 text: JsonIntl.of(context).get(IntlKeys.totalAmount) + ': ',
                 style: Theme.of(context).primaryTextTheme.body1),
             TextSpan(
-                text: refueling.amount.toStringAsFixed(2),
+                text: NumberFormat(',###.0#').format(refueling.amount),
                 style: Theme.of(context).primaryTextTheme.subtitle),
             TextSpan(
                 text: ' ' + JsonIntl.of(context).get(IntlKeys.fuelUnits),

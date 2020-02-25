@@ -14,9 +14,8 @@ class SettingsScreen extends StatefulWidget {
 class SettingsScreenState extends State<SettingsScreen> {
   Widget deleteAccountDialog() {
     return AlertDialog(
-      title: Text('Delete Account'),
-      content: Text(
-          'Deleting your account will permanently remove all data associated with your account.\n\n Are you sure you want to proceed?',
+      title: Text(JsonIntl.of(context).get(IntlKeys.deleteAccount)),
+      content: Text(JsonIntl.of(context).get(IntlKeys.deleteAccountMessage),
           style: Theme.of(context).primaryTextTheme.body1),
       actions: <Widget>[
         FlatButton(
@@ -25,14 +24,14 @@ class SettingsScreenState extends State<SettingsScreen> {
               BlocProvider.of<AuthenticationBloc>(context).add(DeletedUser());
               Navigator.popAndPushNamed(context, AutodoRoutes.welcome);
             },
-            child: Text('Yes',
+            child: Text(JsonIntl.of(context).get(IntlKeys.yes),
                 style: Theme.of(context)
                     .primaryTextTheme
                     .button
                     .copyWith(color: Colors.red))),
         FlatButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('No',
+            child: Text(JsonIntl.of(context).get(IntlKeys.no),
                 style: Theme.of(context)
                     .primaryTextTheme
                     .button
@@ -44,7 +43,7 @@ class SettingsScreenState extends State<SettingsScreen> {
   Widget deleteAccountButton() {
     return FlatButton(
       key: ValueKey('__delete_account_button__'),
-      child: Text('Delete Account',
+      child: Text(JsonIntl.of(context).get(IntlKeys.deleteAccount),
           style: Theme.of(context)
               .primaryTextTheme
               .button

@@ -86,7 +86,7 @@ class FuelMileageHistory extends StatelessWidget {
             Padding(
               padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
             ),
-            Text('Fuel Efficiency History (mpg)',
+            Text(JsonIntl.of(context).get(IntlKeys.fuelEfficiencyHistory),
                 style: Theme.of(context).primaryTextTheme.subtitle),
             Container(
               height: 300,
