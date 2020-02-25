@@ -39,3 +39,5 @@ keys.json
 # ios stuff
 .vscode/
 .vscode/**
+
+**.db
