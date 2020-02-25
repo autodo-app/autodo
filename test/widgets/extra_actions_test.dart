@@ -81,7 +81,7 @@ void main() {
       await tester.tap(find.byKey(actions));
       await tester.pump();
       expect(find.byKey(toggleAll), findsOneWidget);
-      // expect(find.text(JsonIntl.of(context).get(IntlKeys.markAllComplete), findsOneWidget);
+      expect(find.text(IntlKeys.markAllComplete), findsOneWidget);
     });
 
     testWidgets(
@@ -116,7 +116,7 @@ void main() {
       await tester.tap(find.byKey(actions));
       await tester.pump();
       expect(find.byKey(toggleAll), findsOneWidget);
-      // expect(find.text(JsonIntl.of(context).get(IntlKeys.markAllIncomplete), findsOneWidget);
+      expect(find.text(IntlKeys.markAllIncomplete), findsOneWidget);
     });
     testWidgets('tapping toggle all adds ToggleAll',
         (WidgetTester tester) async {
