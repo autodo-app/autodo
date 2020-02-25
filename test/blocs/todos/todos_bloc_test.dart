@@ -487,31 +487,32 @@ void main() {
       ],
     );
     blocTest(
-        'Subscription',
-        build: () {
-          final dataRepository = MockDataRepository();
-          when(dataRepository.todos())
-              .thenAnswer((_) => Stream<List<Todo>>.fromIterable([
-                    [Todo()]
-                  ]));
-          when(dataRepository.getCurrentTodos())
-              .thenAnswer((_) async => [Todo()]);
-          final dbBloc = MockDbBloc();
-          whenListen(dbBloc, Stream.fromIterable([DbLoaded(dataRepository)]));
-          when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
+      'Subscription',
+      build: () {
+        final dataRepository = MockDataRepository();
+        when(dataRepository.todos())
+            .thenAnswer((_) => Stream<List<Todo>>.fromIterable([
+                  [Todo()]
+                ]));
+        when(dataRepository.getCurrentTodos())
+            .thenAnswer((_) async => [Todo()]);
+        final dbBloc = MockDbBloc();
+        whenListen(dbBloc, Stream.fromIterable([DbLoaded(dataRepository)]));
+        when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
 
-          final carsBloc = MockCarsBloc();
-          final notificationsBloc = MockNotificationsBloc();
-          final repeatsBloc = MockRepeatsBloc();
-          return TodosBloc(dbBloc: dbBloc,
+        final carsBloc = MockCarsBloc();
+        final notificationsBloc = MockNotificationsBloc();
+        final repeatsBloc = MockRepeatsBloc();
+        return TodosBloc(
+            dbBloc: dbBloc,
             carsBloc: carsBloc,
             notificationsBloc: notificationsBloc,
             repeatsBloc: repeatsBloc);
-        },
-        expect: [
-          TodosLoading(),
-          TodosLoaded([Todo()]),
-        ],
-      );
+      },
+      expect: [
+        TodosLoading(),
+        TodosLoaded([Todo()]),
+      ],
+    );
   });
 }
