@@ -108,7 +108,7 @@
   "tap_add_cars": "Tap \"Add\" to configure multiple cars.",
   "task": "Task:",
   "todo_deleted": "ToDo {{ name }} deleted.",
-  "todo_due_soon": "Maintenance ToDo Due Soon",
+  "todo_due_soon": "Maintenance ToDo Due Soon: {{ name }}",
   "todos": "ToDos",
   "total_amount": "Total Amount",
   "total_cost": "Total Cost",
