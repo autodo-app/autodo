@@ -12,6 +12,7 @@ class TodosScreen extends StatelessWidget {
   onDismissed(direction, context, todo) {
     BlocProvider.of<TodosBloc>(context).add(DeleteTodo(todo));
     Scaffold.of(context).showSnackBar(DeleteTodoSnackBar(
+      context: context,
       todo: todo,
       onUndo: () => BlocProvider.of<TodosBloc>(context).add(AddTodo(todo)),
     ));

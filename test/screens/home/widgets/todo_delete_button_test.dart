@@ -1,3 +1,4 @@
+import 'package:autodo/localization.dart';
 import 'package:autodo/screens/home/widgets/todo_delete_button.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
@@ -87,7 +88,7 @@ void main() {
       await tester.tap(find.byKey(todosKey));
       await tester.pumpAndSettle();
 
-      await tester.tap(find.text('Undo'));
+      await tester.tap(find.text(IntlKeys.undo));
       await tester.pump();
       verify(todosBloc.add(AddTodo(Todo(name: 'test')))).called(1);
     });

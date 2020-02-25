@@ -1,3 +1,4 @@
+import 'package:autodo/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -15,6 +16,7 @@ void main() {
             return GestureDetector(
               onTap: () {
                 Scaffold.of(context).showSnackBar(DeleteTodoSnackBar(
+                  context: context,
                   key: snackBarKey,
                   onUndo: () {},
                   todo: Todo(name: 'test'),
@@ -39,9 +41,9 @@ void main() {
       expect(
         ((snackBarFinder.evaluate().first.widget as SnackBar).content as Text)
             .data,
-        'ToDo test deleted.',
+        IntlKeys.todoDeleted,
       );
-      expect(find.text('Undo'), findsOneWidget);
+      expect(find.text(IntlKeys.undo), findsOneWidget);
     });
 
     testWidgets('should call onUndo when undo tapped',
@@ -53,6 +55,7 @@ void main() {
             return GestureDetector(
               onTap: () {
                 Scaffold.of(context).showSnackBar(DeleteTodoSnackBar(
+                  context: context,
                   onUndo: () {
                     ++tapCount;
                   },
@@ -69,7 +72,7 @@ void main() {
       await tester.pump(const Duration(milliseconds: 750));
 
       expect(tapCount, equals(0));
-      await tester.tap(find.text('Undo'));
+      await tester.tap(find.text(IntlKeys.undo));
       expect(tapCount, equals(1));
     });
   });
@@ -84,6 +87,7 @@ void main() {
             return GestureDetector(
               onTap: () {
                 Scaffold.of(context).showSnackBar(DeleteRefuelingSnackBar(
+                  context: context,
                   key: snackBarKey,
                   onUndo: () {},
                 ));
@@ -104,7 +108,7 @@ void main() {
       Finder snackBarFinder = find.byKey(snackBarKey);
 
       expect(snackBarFinder, findsOneWidget);
-      expect(find.text('Undo'), findsOneWidget);
+      expect(find.text(IntlKeys.undo), findsOneWidget);
     });
 
     testWidgets('should call onUndo when undo tapped',
@@ -116,6 +120,7 @@ void main() {
             return GestureDetector(
               onTap: () {
                 Scaffold.of(context).showSnackBar(DeleteRefuelingSnackBar(
+                  context: context,
                   onUndo: () {
                     ++tapCount;
                   },
@@ -131,7 +136,7 @@ void main() {
       await tester.pump(const Duration(milliseconds: 750));
 
       expect(tapCount, equals(0));
-      await tester.tap(find.text('Undo'));
+      await tester.tap(find.text(IntlKeys.undo));
       expect(tapCount, equals(1));
     });
   });
@@ -145,6 +150,7 @@ void main() {
             return GestureDetector(
               onTap: () {
                 Scaffold.of(context).showSnackBar(DeleteRepeatSnackBar(
+                  context: context,
                   key: snackBarKey,
                   onUndo: () {},
                 ));
@@ -165,7 +171,7 @@ void main() {
       Finder snackBarFinder = find.byKey(snackBarKey);
 
       expect(snackBarFinder, findsOneWidget);
-      expect(find.text('Undo'), findsOneWidget);
+      expect(find.text(IntlKeys.undo), findsOneWidget);
     });
 
     testWidgets('should call onUndo when undo tapped',
@@ -177,6 +183,7 @@ void main() {
             return GestureDetector(
               onTap: () {
                 Scaffold.of(context).showSnackBar(DeleteRepeatSnackBar(
+                  context: context,
                   onUndo: () {
                     ++tapCount;
                   },
@@ -192,7 +199,7 @@ void main() {
       await tester.pump(const Duration(milliseconds: 750));
 
       expect(tapCount, equals(0));
-      await tester.tap(find.text('Undo'));
+      await tester.tap(find.text(IntlKeys.undo));
       expect(tapCount, equals(1));
     });
   });

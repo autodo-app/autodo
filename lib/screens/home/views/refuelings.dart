@@ -10,10 +10,13 @@ class RefuelingsScreen extends StatelessWidget {
 
   onDismissed(direction, context, refueling) {
     BlocProvider.of<RefuelingsBloc>(context).add(DeleteRefueling(refueling));
-    Scaffold.of(context).showSnackBar(DeleteRefuelingSnackBar(
-      onUndo: () =>
-          BlocProvider.of<RefuelingsBloc>(context).add(AddRefueling(refueling)),
-    ));
+    Scaffold.of(context).showSnackBar(
+      DeleteRefuelingSnackBar(
+        context: context,
+        onUndo: () => BlocProvider.of<RefuelingsBloc>(context)
+            .add(AddRefueling(refueling)),
+      ),
+    );
   }
 
   onTap(context, refueling) async {
