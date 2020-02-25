@@ -9,6 +9,7 @@ import 'package:autodo/models/models.dart';
 import '../refuelings/barrel.dart';
 import '../database/barrel.dart';
 import 'package:autodo/util.dart' as util;
+import 'package:autodo/repositories/src/sembast_write_batch.dart';
 
 class CarsBloc extends Bloc<CarsEvent, CarsState> {
   static const double EMA_GAIN = 0.9;
@@ -186,6 +187,7 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
           rates.add(_findDifference(reversedList[1], reversedList[0]));
         }
       });
+      print('rates $rates points $points');
 
       // Set the car's mileage to the furthest distance value in the refueling
       // list
@@ -193,13 +195,15 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
 
       Car updated = c.copyWith(distanceRateHistory: rates, mileage: currentMileage);
       batch.updateData(updated.id, updated.toEntity().toDocument());
-      updatedCars = (state as CarsLoaded).cars.map((car) {
-        return car.id == updated.id ? updated : car;
-      }).toList();
-      yield CarsLoaded(updatedCars);
+      updatedCars = updatedCars.map((car) => car.id == updated.id ? updated : car).toList();
+
+      print('yield $updatedCars');
     }
     _refuelingsCache = event.refuelings;
-    batch.commit();
+    print('list1: $updatedCars');
+    await batch.commit();
+    yield CarsLoaded(updatedCars);
+    print('committed $updatedCars');
 
     // for (var r in event.refuelings) {
     //   if (_refuelingsCache?.contains(r) ?? false) {
