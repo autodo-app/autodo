@@ -108,7 +108,7 @@
   "tap_add_cars": "Appuyez sur \"Ajouter\" pour configurer plusieurs voitures.",
   "task": "Tâche :",
   "todo_deleted": "Tâche {{name}} supprimé.",
-  "todo_due_soon": "Maintenance à faire bientôt",
+  "todo_due_soon": "Maintenance à faire bientôt : {{ name }}",
   "todos": "Tâches",
   "total_amount": "Montant total",
   "total_cost": "Coût total",
