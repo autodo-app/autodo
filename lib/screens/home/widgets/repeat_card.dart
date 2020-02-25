@@ -81,10 +81,13 @@ class _RepeatDeleteButton extends StatelessWidget {
         child: const Icon(Icons.delete),
         onPressed: () {
           BlocProvider.of<RepeatsBloc>(context).add(DeleteRepeat(repeat));
-          Scaffold.of(context).showSnackBar(DeleteRepeatSnackBar(
-            onUndo: () =>
-                BlocProvider.of<RepeatsBloc>(context).add(AddRepeat(repeat)),
-          ));
+          Scaffold.of(context).showSnackBar(
+            DeleteRepeatSnackBar(
+              context: context,
+              onUndo: () =>
+                  BlocProvider.of<RepeatsBloc>(context).add(AddRepeat(repeat)),
+            ),
+          );
         },
       ));
 }

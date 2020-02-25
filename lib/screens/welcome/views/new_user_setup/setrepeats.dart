@@ -1,4 +1,5 @@
 import 'package:autodo/integ_test_keys.dart';
+import 'package:autodo/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -8,6 +9,7 @@ import 'package:autodo/widgets/widgets.dart';
 import 'package:autodo/theme.dart';
 import 'package:autodo/util.dart';
 import 'package:autodo/routes.dart';
+import 'package:json_intl/json_intl.dart';
 import 'new_user_screen_page.dart';
 import 'base.dart';
 
@@ -134,7 +136,7 @@ class _Card extends StatelessWidget {
                     padding: EdgeInsets.all(0),
                     materialTapTargetSize: MaterialTapTargetSize.padded,
                     child: Text(
-                      'Next',
+                      JsonIntl.of(context).get(IntlKeys.next),
                       style: Theme.of(context).primaryTextTheme.button,
                     ),
                     onPressed: () async => await onNext(),

@@ -8,18 +8,17 @@ class DeleteTodoSnackBar extends SnackBar {
     Key key,
     @required Todo todo,
     @required VoidCallback onUndo,
+    @required BuildContext context,
   }) : super(
           key: key,
           content: Text(
-            'todoDeleted',
-            // TODO: JsonIntl.of(context).get(IntlKeys.todoDeleted, {'name': todo.name}),
+            JsonIntl.of(context).get(IntlKeys.todoDeleted, {'name': todo.name}),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
           duration: Duration(seconds: 2),
           action: SnackBarAction(
-            label: 'undo',
-            // TODO: JsonIntl.of(context).get(IntlKeys.undo),
+            label: JsonIntl.of(context).get(IntlKeys.undo),
             onPressed: onUndo,
           ),
         );
@@ -29,17 +28,17 @@ class DeleteRefuelingSnackBar extends SnackBar {
   DeleteRefuelingSnackBar({
     Key key,
     @required VoidCallback onUndo,
+    @required BuildContext context,
   }) : super(
           key: key,
           content: Text(
-            'refuelingDeleted',
-            // TODO: JsonIntl.of(context).get(IntlKeys.refuelingDeleted),
+            JsonIntl.of(context).get(IntlKeys.refuelingDeleted),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
           duration: Duration(seconds: 2),
           action: SnackBarAction(
-            label: 'undo', // TODO: JsonIntl.of(context).get(IntlKeys.undo),
+            label: JsonIntl.of(context).get(IntlKeys.undo),
             onPressed: onUndo,
           ),
         );
@@ -49,17 +48,17 @@ class DeleteRepeatSnackBar extends SnackBar {
   DeleteRepeatSnackBar({
     Key key,
     @required VoidCallback onUndo,
+    @required BuildContext context,
   }) : super(
           key: key,
           content: Text(
-            'repeatDeleted',
-            // TODO: JsonIntl.of(context).get(IntlKeys.repeatDeleted),
+            JsonIntl.of(context).get(IntlKeys.repeatDeleted),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
           duration: Duration(seconds: 2),
           action: SnackBarAction(
-            label: 'undo', // TODO: JsonIntl.of(context).get(IntlKeys.undo),
+            label: JsonIntl.of(context).get(IntlKeys.undo),
             onPressed: onUndo,
           ),
         );
