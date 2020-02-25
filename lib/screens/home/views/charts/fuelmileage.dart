@@ -23,10 +23,6 @@ class FuelMileageChart extends StatelessWidget {
     return (1.25 * maxVal).round();
   }
 
-  lerp(min, max, count) =>  List
-      .generate(count, (index) => (index * ((max - min) / count) + min).truncate())
-      .map((e) => TickSpec(e)).toList();
-
   @override
   Widget build(BuildContext context) {
     if (seriesList.length == 0 || seriesList[0].data.length == 0) {
@@ -47,7 +43,7 @@ class FuelMileageChart extends StatelessWidget {
           // TickSpec(lowerBound()),
           // TickSpec(upperBound())
         // ])),
-      tickProviderSpec: StaticNumericTickProviderSpec(lerp(lowerBound(), upperBound(), 6))),
+      tickProviderSpec: StaticNumericTickProviderSpec(lerp(lowerBound(), upperBound(), 6, 1))),
       defaultRenderer: PointRendererConfig(
         customRendererId: 'customPoint',
         layoutPaintOrder: LayoutViewPaintOrder.point,

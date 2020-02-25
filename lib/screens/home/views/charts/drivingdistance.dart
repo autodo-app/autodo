@@ -9,7 +9,17 @@ class DrivingDistanceChart extends StatelessWidget {
 
   DrivingDistanceChart(this.seriesList, {this.animate});
 
+  lowerBound() {
+    final minVal = seriesList[0].data.reduce((value, element) =>
+        (value.distanceRate < element.distanceRate) ? value : element).distanceRate;
+    return (0.75 * minVal).round();
+  }
 
+  upperBound() {
+    final maxVal = seriesList[0].data.reduce((value, element) =>
+        (value.distanceRate > element.distanceRate) ? value : element).distanceRate;
+    return (1.25 * maxVal).round();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +31,10 @@ class DrivingDistanceChart extends StatelessWidget {
     return TimeSeriesChart(
       seriesList,
       animate: animate,
+      primaryMeasureAxis: NumericAxisSpec.from(numberAxisSpec, tickProviderSpec: StaticNumericTickProviderSpec(lerp(lowerBound(), upperBound(), 6, 4))),
       // add configurations here eventually
       domainAxis: dateAxisSpec,
-      primaryMeasureAxis: numberAxisSpec,
+      // primaryMeasureAxis: numberAxisSpec,
     );
   }
 }

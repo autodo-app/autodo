@@ -110,6 +110,7 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
     // update mileage
     if (c.mileage < r.mileage) {
       mileage = r.mileage;
+      print('updating mileage: ${c.mileage}');
       lastMileageUpdate = util.roundToDay(r.date);
     }
     var numRefuelings = c.numRefuelings + 1;
@@ -125,6 +126,9 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
     var elapsedDuration = r.date.difference(c.lastMileageUpdate);
     var dist = r.mileage - c.mileage;
     var curDistRate = dist.toDouble() / elapsedDuration.inDays.toDouble();
+    // lastMileageUpdate is always unix epoch
+    // this function is getting called each time that app is loaded
+    print('curDistRate: $curDistRate mileage $dist duration ${c.lastMileageUpdate}');
     var distanceRate =
         _distanceFilter(numRefuelings, c.distanceRate, curDistRate);
     var distanceRateHistory = c.distanceRateHistory;
@@ -141,35 +145,90 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
     );
   }
 
+  DistanceRatePoint _findDifference(DistancePoint prev, DistancePoint cur) {
+    var elapsedDuration = cur.date.difference(prev.date);
+    var dist = cur.distance - prev.distance;
+    var curDistRate = dist.toDouble() / elapsedDuration.inDays.toDouble();
+    return DistanceRatePoint(cur.date, curDistRate);
+  }
+
   Stream<CarsState> _mapRefuelingsUpdatedToState(
       ExternalRefuelingsUpdated event) async* {
     if (repo == null || state is CarsNotLoaded) return;
 
     WriteBatchWrapper batch = await repo.startCarWriteBatch();
-    // TODO cache the cars here so that updating number of refuelings will work
     List<Car> updatedCars = (state as CarsLoaded).cars;
-    for (var r in event.refuelings) {
-      if (_refuelingsCache?.contains(r) ?? false) {
-        continue; // only do calculations for updated refuelings
-      }
+    for (var c in (state as CarsLoaded).cars) {
+      // Get a list of all refuelings for the car in order
+      List<Refueling> thisCarsRefuelings = event.refuelings
+          .where((r) => r.carName == c.name)
+          .toList()
+          ..sort((a, b) => (a.mileage > b.mileage) ? 1 : (a.mileage < b.mileage) ? -1 : 0);
 
-      Car cur = (state as CarsLoaded)
-          .cars
-          .firstWhere((car) => car.name == r.carName, orElse: () => null);
-      if (cur == null) {
-        print('cannot find the specified car when updating refuelings');
-        return;
-      }
-      Car update = _updateWithRefueling(cur, r);
+      // Create a list of the distances and dates from the refuelings, and use
+      // the difference between them to find the distance rate values
+      //
+      // This assumes that the refuelings are in chronological and distance order,
+      // there should be no invalid refuelings where the car's mileage seemed to
+      // go backwards
+      List<DistancePoint> points = [];
+      List<DistanceRatePoint> rates = [];
+      thisCarsRefuelings.forEach((r) {
+        points.add(DistancePoint(r.date, r.mileage));
+        if (points.length >= 2) {
+          // reverse the list to get the most recently added values
+          final reversedList = points.reversed.toList();
+          rates.add(_findDifference(reversedList[1], reversedList[0]));
+        }
+      });
 
+      // Set the car's mileage to the furthest distance value in the refueling
+      // list
+      final currentMileage = thisCarsRefuelings.last.mileage;
+
+      Car updated = c.copyWith(distanceRateHistory: rates, mileage: currentMileage);
+      batch.updateData(updated.id, updated.toEntity().toDocument());
       updatedCars = (state as CarsLoaded).cars.map((car) {
-        return car.id == update.id ? update : car;
+        return car.id == updated.id ? updated : car;
       }).toList();
-      batch.updateData(update.id, update.toEntity().toDocument());
+      yield CarsLoaded(updatedCars);
     }
     _refuelingsCache = event.refuelings;
-    yield CarsLoaded(updatedCars);
     batch.commit();
+
+    // for (var r in event.refuelings) {
+    //   if (_refuelingsCache?.contains(r) ?? false) {
+    //     continue; // only do calculations for updated refuelings
+    //   }
+
+    //   Car cur = (state as CarsLoaded)
+    //       .cars
+    //       .firstWhere((car) => car.name == r.carName, orElse: () => null);
+    //   if (cur == null) {
+    //     print('cannot find the specified car when updating refuelings');
+    //     return;
+    //   }
+    //   Car update;
+    //   if (cur.lastMileageUpdate == null || cur.lastMileageUpdate == DateTime.fromMillisecondsSinceEpoch(0)) {
+    //     // cannot find distance rate if there isn't a past distance point to reference
+    //     final lastMileageUpdate = r.date;
+    //     update = cur.copyWith(lastMileageUpdate: lastMileageUpdate);
+    //   } else {
+    //     update = _updateWithRefueling(cur, r);
+    //   }
+
+    //   updatedCars = (state as CarsLoaded).cars.map((car) {
+    //     return car.id == update.id ? update : car;
+    //   }).toList();
+
+    //   // yield the updated list as we go to ensure that the calculations
+    //   // that rely on past values above will be correct
+    //   yield CarsLoaded(updatedCars);
+    //   batch.updateData(update.id, update.toEntity().toDocument());
+    // }
+    // _refuelingsCache = event.refuelings;
+    // // yield CarsLoaded(updatedCars);
+    // batch.commit();
   }
 
   @override

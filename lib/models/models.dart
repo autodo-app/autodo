@@ -10,4 +10,5 @@ export 'src/refueling.dart';
 export 'src/car.dart';
 export 'src/repeat.dart';
 export 'src/distanceratepoint.dart';
+export 'src/distancepoint.dart';
 export 'src/fuel_mileage_point.dart';

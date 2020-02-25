@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:charts_flutter/flutter.dart';
 
 final dateAxisSpec = DateTimeAxisSpec(
@@ -29,3 +30,13 @@ final numberAxisSpec = NumericAxisSpec(
     ),
   ),
 );
+
+
+double floorToPrecision(double val, int places) {
+  double mod = pow(10.0, places);
+  return ((val * mod).floor().toDouble() / mod);
+}
+
+lerp(min, max, count, places) => List
+      .generate(count, (index) => floorToPrecision(index * ((max - min) / count) + min, places))
+      .map((e) => TickSpec(e)).toList();
