@@ -38,4 +38,6 @@ keys.json
 
 .vscode/
 .vscode/**
+
+**.db
 *.workspace

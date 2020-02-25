@@ -127,6 +127,34 @@ void main() {
       ],
     );
     blocTest(
+      'AddRefueling null repo',
+      build: () {
+        final dbBloc = MockDbBloc();
+        when(dbBloc.state).thenAnswer((_) => DbLoaded(null));
+        return RefuelingsBloc(dbBloc: dbBloc);
+      },
+      act: (bloc) async {
+        bloc.add(AddRefueling(refueling2));
+      },
+      expect: [
+        RefuelingsLoading(),
+      ],
+    );
+    blocTest(
+      'UpdateRefueling null repo',
+      build: () {
+        final dbBloc = MockDbBloc();
+        when(dbBloc.state).thenAnswer((_) => DbLoaded(null));
+        return RefuelingsBloc(dbBloc: dbBloc);
+      },
+      act: (bloc) async {
+        bloc.add(UpdateRefueling(refueling2));
+      },
+      expect: [
+        RefuelingsLoading(),
+      ],
+    );
+    blocTest(
       'UpdateRefueling',
       build: () {
         final writeBatch = MockWriteBatch();
@@ -178,6 +206,27 @@ void main() {
         RefuelingsLoading(),
         RefuelingsLoaded([refueling1]),
         RefuelingsLoaded([]),
+      ],
+    );
+    blocTest(
+      'Subscription',
+      build: () {
+        final dataRepository = MockDataRepository();
+        when(dataRepository.refuelings())
+            .thenAnswer((_) => Stream<List<Refueling>>.fromIterable([
+                  [refueling1]
+                ]));
+        when(dataRepository.getCurrentRefuelings())
+            .thenAnswer((_) async => [refueling1]);
+        final dbBloc = MockDbBloc();
+        whenListen(dbBloc, Stream.fromIterable([DbLoaded(dataRepository)]));
+        when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
+        return RefuelingsBloc(dbBloc: dbBloc);
+      },
+      // act: (bloc) async => bloc.add(LoadRefuelings()),
+      expect: [
+        RefuelingsLoading(),
+        RefuelingsLoaded([refueling1]),
       ],
     );
     // final refueling3 = Refueling(
