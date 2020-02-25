@@ -70,38 +70,44 @@ void main() {
       );
     });
     final dataRepository = MockDataRepository();
-    blocTest(
-      'AddRepeat',
-      build: () {
-        when(dataRepository.repeats()).thenAnswer((_) => Stream.fromIterable([
-              [Repeat()]
-            ]));
-        final dbBloc = MockDbBloc();
-        when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
-        when(dataRepository.getCurrentRepeats())
-            .thenAnswer((_) async => [Repeat()]);
-        return RepeatsBloc(dbBloc: dbBloc, carsBloc: carsBloc);
-      },
-      act: (bloc) async {
-        bloc.add(LoadRepeats());
-        bloc.add(AddRepeat(Repeat()));
-        await Future.doWhile(() async {
-          await Future.delayed(Duration(milliseconds: 50));
-          if (bloc.state is RepeatsLoading) {
-            return true;
-          } else {
-            return false;
-          }
-        });
-        when(dataRepository.getCurrentRepeats())
-            .thenAnswer((_) async => [Repeat(), Repeat()]);
-        bloc.add(LoadRepeats());
-      },
-      expect: [
-        RepeatsLoaded([Repeat()]),
-        RepeatsLoaded([Repeat(), Repeat()]),
-      ],
-    );
+    // XXX: this isn't recognizing the state with only one repeat for some reason
+    // It seems to be a bloc_test issue
+    // blocTest(
+    //   'AddRepeat',
+    //   build: () {
+    //     final dbBloc = MockDbBloc();
+    //     when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
+    //     when(dataRepository.getCurrentRepeats())
+    //         .thenAnswer((_) async => [Repeat(name: 'test')]);
+    //     return RepeatsBloc(dbBloc: dbBloc, carsBloc: carsBloc)..add(LoadRepeats());
+    //   },
+    //   act: (bloc) async {
+    //     bloc.add(LoadRepeats());
+    //     bloc.add(AddRepeat(Repeat(name: 'test2')));
+    //   },
+    //   expect: [
+    //     RepeatsLoading(),
+    //     RepeatsLoaded([Repeat(name: 'test')]),
+    //     RepeatsLoaded([Repeat(name: 'test'), Repeat(name: 'test2')]),
+    //   ],
+    //   wait: Duration(milliseconds: 200)
+    // );
+    test('AddRepeat', () async {
+      final dbBloc = MockDbBloc();
+      when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
+      when(dataRepository.getCurrentRepeats())
+          .thenAnswer((_) async => [Repeat(name: 'test')]);
+      final bloc = RepeatsBloc(dbBloc: dbBloc, carsBloc: carsBloc)
+        ..add(LoadRepeats());
+      assert(bloc.state == RepeatsLoading());
+      bloc.add(LoadRepeats());
+      await Future.delayed(Duration(milliseconds: 200));
+      assert(bloc.state == RepeatsLoaded([Repeat(name: 'test')]));
+      bloc.add(AddRepeat(Repeat(name: 'test2')));
+      await Future.delayed(Duration(milliseconds: 200));
+      assert(bloc.state ==
+          RepeatsLoaded([Repeat(name: 'test'), Repeat(name: 'test2')]));
+    });
     blocTest(
       'UpdateRepeat',
       build: () {
@@ -131,6 +137,7 @@ void main() {
         bloc.add(LoadRepeats());
       },
       expect: [
+        RepeatsLoading(),
         RepeatsLoaded([Repeat(id: '0', name: 'test')]),
         RepeatsLoaded([Repeat(id: '0', name: 'abcd')]),
       ],

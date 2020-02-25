@@ -1,12 +1,9 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'screen.dart';
 
 class WelcomeScreenProvider extends StatelessWidget {
+  // Placeholder for any blocs that need provided to this widget
   @override
-  build(context) => MultiBlocProvider(
-        providers: [],
-        child: WelcomeScreen(),
-      );
+  build(context) => WelcomeScreen();
 }

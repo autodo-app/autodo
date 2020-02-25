@@ -40,17 +40,17 @@ void main() {
     });
     testWidgets('car checkbox', (tester) async {
       await tester.pumpWidget(
-        MultiBlocProvider(
-          providers: [],
-          child: MaterialApp(
-            home: Card(
-              child: CarsCheckboxForm(
-                cars: [Car(name: 'test')],
-                onSaved: (_) {},
-              ),
+        // MultiBlocProvider(
+        //   providers: [],
+        MaterialApp(
+          home: Card(
+            child: CarsCheckboxForm(
+              cars: [Car(name: 'test')],
+              onSaved: (_) {},
             ),
           ),
         ),
+        // ),
       );
       await tester.pump();
       await tester.tap(find.byType(Checkbox));

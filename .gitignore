@@ -36,8 +36,8 @@ doc/**
 keys.json
 *.log
 
-# ios stuff
 .vscode/
 .vscode/**
 
 **.db
+*.workspace

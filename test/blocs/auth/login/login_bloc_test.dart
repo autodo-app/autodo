@@ -29,6 +29,7 @@ void main() {
         // account for the debounce time
         await Future.delayed(Duration(milliseconds: 500));
       }, expect: [
+        LoginEmpty(),
         LoginCredentialsInvalid(emailError: ""),
       ]);
       blocTest<LoginBloc, LoginEvent, LoginState>(
@@ -43,6 +44,7 @@ void main() {
         // account for the debounce time
         await Future.delayed(Duration(milliseconds: 500));
       }, expect: [
+        LoginEmpty(),
         LoginCredentialsInvalid(emailError: "", passwordError: ""),
       ]);
       blocTest<LoginBloc, LoginEvent, LoginState>('Valid Email', build: () {
@@ -53,6 +55,7 @@ void main() {
         // account for the debounce time
         await Future.delayed(Duration(milliseconds: 500));
       }, expect: [
+        LoginEmpty(),
         LoginCredentialsValid(email: 'test@test.com'),
       ]);
       blocTest<LoginBloc, LoginEvent, LoginState>('Valid Email, previous error',
@@ -67,6 +70,7 @@ void main() {
         // account for the debounce time
         await Future.delayed(Duration(milliseconds: 500));
       }, expect: [
+        LoginEmpty(),
         LoginCredentialsInvalid(),
       ]);
     });
@@ -80,6 +84,7 @@ void main() {
         // account for the debounce time
         await Future.delayed(Duration(milliseconds: 500));
       }, expect: [
+        LoginEmpty(),
         LoginCredentialsInvalid(emailError: ""),
       ]);
       blocTest<LoginBloc, LoginEvent, LoginState>(
@@ -94,6 +99,7 @@ void main() {
         // account for the debounce time
         await Future.delayed(Duration(milliseconds: 500));
       }, expect: [
+        LoginEmpty(),
         LoginCredentialsInvalid(emailError: ""),
       ]);
       blocTest<LoginBloc, LoginEvent, LoginState>('Valid password', build: () {
@@ -104,6 +110,7 @@ void main() {
         // account for the debounce time
         await Future.delayed(Duration(milliseconds: 500));
       }, expect: [
+        LoginEmpty(),
         LoginCredentialsValid(password: '123456'),
       ]);
       blocTest<LoginBloc, LoginEvent, LoginState>(
@@ -118,6 +125,7 @@ void main() {
         // account for the debounce time
         await Future.delayed(Duration(milliseconds: 500));
       }, expect: [
+        LoginEmpty(),
         LoginCredentialsInvalid(),
       ]);
     });

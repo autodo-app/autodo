@@ -283,6 +283,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
             dueMileage: _calculateNextTodo(
                 todos.where((t) => t.repeatName == r.name).toList(),
                 r.mileageInterval));
+        print('updated todo: $updated');
         repo.updateTodo(updated);
         updatedTodos = updatedTodos
             .map((t) => (t.id == updated.id) ? updated : t)
@@ -322,7 +323,6 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
         updatedTodos.addAll(newTodos);
       }
     }
-    // yield TodosNotLoaded(); // HACK: this should not work
     yield TodosLoaded(updatedTodos);
   }
 
