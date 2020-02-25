@@ -12,7 +12,7 @@ jobs:
       with:
         channel: 'dev'
     - run: flutter pub get
-    - run: mkdir assets && echo "${{ secrets.keys_json }}" > assets/keys.json
+    - run: mkdir -p assets && echo "${{ secrets.keys_json }}" > assets/keys.json
     - run: flutter test --coverage
     - uses: codecov/codecov-action@v1.0.5
       with:
