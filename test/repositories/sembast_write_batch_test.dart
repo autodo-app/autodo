@@ -22,36 +22,33 @@ void main() {
 
     test('update', () async {
       final wrapper = SembastWriteBatch(
-        store: StoreRef.main(),
-        dbFactory: databaseFactoryIo,
-        dbPath: './test.db'
-      );
+          store: StoreRef.main(),
+          dbFactory: databaseFactoryIo,
+          dbPath: './test.db');
       wrapper.updateData('', {'test': ''});
     });
     test('set', () async {
       final wrapper = SembastWriteBatch(
-        store: StoreRef.main(),
-        dbFactory: databaseFactoryIo,
-        dbPath: './test.db'
-      );
+          store: StoreRef.main(),
+          dbFactory: databaseFactoryIo,
+          dbPath: './test.db');
       wrapper.setData({'test': ''});
     });
     test('commit', () async {
       final wrapper = SembastWriteBatch(
-        store: StoreRef.main(),
-        dbFactory: databaseFactoryIo,
-        dbPath: './test.db'
-      );
+          store: StoreRef.main(),
+          dbFactory: databaseFactoryIo,
+          dbPath: './test.db');
       wrapper.setData({'test': ''});
       wrapper.commit();
     });
     test('props', () async {
       expect(
           SembastWriteBatch(
-            store: StoreRef.main(),
-            dbFactory: databaseFactoryIo,
-            dbPath: './test.db'
-          ).props,
+                  store: StoreRef.main(),
+                  dbFactory: databaseFactoryIo,
+                  dbPath: './test.db')
+              .props,
           [StoreRef.main(), './test.db']);
     });
   });

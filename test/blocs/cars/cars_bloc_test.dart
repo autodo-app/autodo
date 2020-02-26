@@ -174,7 +174,11 @@ void main() {
       }, expect: [
         CarsLoading(),
         CarsLoaded([
-          Car(id: '0', name: 'abcd', mileage: 10000, distanceRateHistory: List<DistanceRatePoint>())
+          Car(
+              id: '0',
+              name: 'abcd',
+              mileage: 10000,
+              distanceRateHistory: List<DistanceRatePoint>())
         ]),
         CarsLoaded([
           Car(
@@ -201,8 +205,8 @@ void main() {
         return CarsBloc(dbBloc: dbBloc, refuelingsBloc: refuelingsBloc);
       }, act: (bloc) async {
         bloc.add(LoadCars());
-        bloc.add(
-            ExternalRefuelingsUpdated([refueling, refueling.copyWith(efficiency: 1.0, mileage: 12000)]));
+        bloc.add(ExternalRefuelingsUpdated(
+            [refueling, refueling.copyWith(efficiency: 1.0, mileage: 12000)]));
       }, expect: [
         CarsLoading(),
         CarsLoaded([
@@ -223,9 +227,10 @@ void main() {
               distanceRate: 0.0,
               lastMileageUpdate:
                   roundToDay(DateTime.fromMillisecondsSinceEpoch(0)),
-              distanceRateHistory: [DistanceRatePoint(
-                    DateTime.fromMillisecondsSinceEpoch(0),
-                    double.infinity)])
+              distanceRateHistory: [
+                DistanceRatePoint(
+                    DateTime.fromMillisecondsSinceEpoch(0), double.infinity)
+              ])
         ])
       ]);
       blocTest(
