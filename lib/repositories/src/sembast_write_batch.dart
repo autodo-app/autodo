@@ -40,8 +40,8 @@ class SembastWriteBatch extends Equatable implements WriteBatchWrapper {
   }
 
   @override
-  List<Object> get props => [store, dbFactory, dbPath];
+  List<Object> get props => [store, dbPath];
 
   @override
-  toString() => "SembastWriteBatch { store: $store, database: $dbFactory }";
+  toString() => "SembastWriteBatch { store: $store, path: $dbPath }";
 }

@@ -111,46 +111,6 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
     }
   }
 
-  Car _updateWithRefueling(Car c, Refueling r) {
-    var mileage, lastMileageUpdate, averageEfficiency;
-    // update mileage
-    if (c.mileage < r.mileage) {
-      mileage = r.mileage;
-      print('updating mileage: ${c.mileage}');
-      lastMileageUpdate = util.roundToDay(r.date);
-    }
-    var numRefuelings = c.numRefuelings + 1;
-    // Update efficiency
-    if (numRefuelings == 1) {
-      // first refueling for this car
-      averageEfficiency = r.efficiency;
-    } else {
-      averageEfficiency =
-          _efficiencyFilter(numRefuelings, c.averageEfficiency, r.efficiency);
-    }
-    // Distance Rate
-    var elapsedDuration = r.date.difference(c.lastMileageUpdate);
-    var dist = r.mileage - c.mileage;
-    var curDistRate = dist.toDouble() / elapsedDuration.inDays.toDouble();
-    // lastMileageUpdate is always unix epoch
-    // this function is getting called each time that app is loaded
-    print('curDistRate: $curDistRate mileage $dist duration ${c.lastMileageUpdate}');
-    var distanceRate =
-        _distanceFilter(numRefuelings, c.distanceRate, curDistRate);
-    var distanceRateHistory = c.distanceRateHistory;
-    distanceRateHistory
-        .add(DistanceRatePoint(util.roundToDay(r.date), distanceRate));
-
-    return c.copyWith(
-      mileage: mileage,
-      lastMileageUpdate: lastMileageUpdate,
-      averageEfficiency: averageEfficiency,
-      distanceRate: distanceRate,
-      distanceRateHistory: distanceRateHistory,
-      numRefuelings: numRefuelings,
-    );
-  }
-
   DistanceRatePoint _findDifference(DistancePoint prev, DistancePoint cur) {
     var elapsedDuration = cur.date.difference(prev.date);
     var dist = cur.distance - prev.distance;
@@ -170,6 +130,22 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
           .where((r) => r.carName == c.name)
           .toList()
           ..sort((a, b) => (a.mileage > b.mileage) ? 1 : (a.mileage < b.mileage) ? -1 : 0);
+
+      // Historical tracking of the car's number of refuelings
+      final numRefuelings = thisCarsRefuelings.length;
+
+
+      // Update average efficiency across all refuelings
+      var averageEfficiency;
+      if (numRefuelings == 1) {
+        // first refueling for this car
+        averageEfficiency = thisCarsRefuelings[0].efficiency;
+      } else {
+        var sum = thisCarsRefuelings.map((e) => e.efficiency ?? 0.0).reduce((value, element) => value + element);
+        averageEfficiency = sum / numRefuelings;
+        print(averageEfficiency);
+      }
+      print(thisCarsRefuelings);
 
       // Create a list of the distances and dates from the refuelings, and use
       // the difference between them to find the distance rate values
@@ -193,7 +169,7 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
       // list
       final currentMileage = thisCarsRefuelings.last.mileage;
 
-      Car updated = c.copyWith(distanceRateHistory: rates, mileage: currentMileage);
+      Car updated = c.copyWith(distanceRateHistory: rates, mileage: currentMileage, numRefuelings: numRefuelings, averageEfficiency: averageEfficiency);
       batch.updateData(updated.id, updated.toEntity().toDocument());
       updatedCars = updatedCars.map((car) => car.id == updated.id ? updated : car).toList();
 
