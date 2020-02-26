@@ -18,8 +18,13 @@ class DrivingDistanceStatsLoaded extends DrivingDistanceStatsState {
   const DrivingDistanceStatsLoaded(this.drivingDistanceData);
 
   @override
-  List<Object> get props =>
-      [(drivingDistanceData.length > 0) ? drivingDistanceData?.map((r) => r.id)?.reduce((val, id) => val + id) : null];
+  List<Object> get props => [
+        (drivingDistanceData.length > 0)
+            ? drivingDistanceData
+                ?.map((r) => r.id)
+                ?.reduce((val, id) => val + id)
+            : null
+      ];
 
   @override
   String toString() {

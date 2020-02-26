@@ -12,14 +12,20 @@ class FuelMileageChart extends StatelessWidget {
   FuelMileageChart(this.seriesList, this.animate);
 
   lowerBound() {
-    final minVal = seriesList[0].data.reduce((value, element) =>
-        (value.efficiency < element.efficiency) ? value : element).efficiency;
+    final minVal = seriesList[0]
+        .data
+        .reduce((value, element) =>
+            (value.efficiency < element.efficiency) ? value : element)
+        .efficiency;
     return (0.75 * minVal).round();
   }
 
   upperBound() {
-    final maxVal = seriesList[0].data.reduce((value, element) =>
-        (value.efficiency > element.efficiency) ? value : element).efficiency;
+    final maxVal = seriesList[0]
+        .data
+        .reduce((value, element) =>
+            (value.efficiency > element.efficiency) ? value : element)
+        .efficiency;
     return (1.25 * maxVal).round();
   }
 
@@ -28,22 +34,23 @@ class FuelMileageChart extends StatelessWidget {
     if (seriesList.length == 0 || seriesList[0].data.length == 0) {
       print(seriesList);
       return Padding(
-        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-        child: Center(
-          child: Text('Need at least 3 refuelings to see efficiency data.',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).primaryTextTheme.body1)));
+          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+          child: Center(
+              child: Text('Need at least 3 refuelings to see efficiency data.',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).primaryTextTheme.body1)));
     }
     return TimeSeriesChart(
       seriesList,
       animate: animate,
       domainAxis: dateAxisSpec,
       primaryMeasureAxis: NumericAxisSpec.from(numberAxisSpec,
-        // tickProviderSpec: StaticNumericTickProviderSpec([
+          // tickProviderSpec: StaticNumericTickProviderSpec([
           // TickSpec(lowerBound()),
           // TickSpec(upperBound())
-        // ])),
-      tickProviderSpec: StaticNumericTickProviderSpec(lerp(lowerBound(), upperBound(), 6, 1))),
+          // ])),
+          tickProviderSpec: StaticNumericTickProviderSpec(
+              lerp(lowerBound(), upperBound(), 6, 1))),
       defaultRenderer: PointRendererConfig(
         customRendererId: 'customPoint',
         layoutPaintOrder: LayoutViewPaintOrder.point,
@@ -84,6 +91,10 @@ class FuelMileageHistory extends StatelessWidget {
               padding: EdgeInsets.all(15),
               child: FuelMileageChart(data, false),
             ),
-            Text('Refueling Date', style: Theme.of(context).primaryTextTheme.body1, textAlign: TextAlign.center,),
+            Text(
+              'Refueling Date',
+              style: Theme.of(context).primaryTextTheme.body1,
+              textAlign: TextAlign.center,
+            ),
           ]);
 }

@@ -43,8 +43,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
   SembastDataRepository(
       {@required createDb, dbFactory, this.dbPath = 'sample.db', pathProvider})
       : this.dbFactory = dbFactory ?? databaseFactoryIo,
-        this.pathProvider = pathProvider ?? getApplicationDocumentsDirectory {
-  }
+        this.pathProvider = pathProvider ?? getApplicationDocumentsDirectory {}
 
   Future<Database> _openDb() async {
     final path = await _getFullFilePath();
@@ -96,7 +95,8 @@ class SembastDataRepository extends Equatable implements DataRepository {
 
   @override
   FutureOr<WriteBatchWrapper> startTodoWriteBatch() async {
-    return SembastWriteBatch(dbFactory: dbFactory, dbPath: await _getFullFilePath(), store: _todos);
+    return SembastWriteBatch(
+        dbFactory: dbFactory, dbPath: await _getFullFilePath(), store: _todos);
   }
 
   // Refuelings
@@ -127,7 +127,9 @@ class SembastDataRepository extends Equatable implements DataRepository {
   @override
   Future<void> updateRefueling(Refueling refueling) async {
     final db = await _openDb();
-    await _refuelings.record(refueling.id).put(db, refueling.toEntity().toDocument());
+    await _refuelings
+        .record(refueling.id)
+        .put(db, refueling.toEntity().toDocument());
     refuelingStreamUpdate();
     db.close();
   }
@@ -150,7 +152,8 @@ class SembastDataRepository extends Equatable implements DataRepository {
   FutureOr<WriteBatchWrapper> startRefuelingWriteBatch() async {
     return SembastWriteBatch(
         store: _refuelings,
-        dbFactory: dbFactory, dbPath: await _getFullFilePath(),
+        dbFactory: dbFactory,
+        dbPath: await _getFullFilePath(),
         streamControllerUpdate: refuelingStreamUpdate);
   }
 
@@ -160,9 +163,8 @@ class SembastDataRepository extends Equatable implements DataRepository {
     final db = await _openDb();
     var list = await _cars.find(db,
         finder: Finder(sortOrders: [SortOrder('mileage')]));
-    final out = list
-        .map((snap) => Car.fromEntity(CarEntity.fromRecord(snap)))
-        .toList();
+    final out =
+        list.map((snap) => Car.fromEntity(CarEntity.fromRecord(snap))).toList();
     db.close();
     return out;
   }
@@ -203,7 +205,8 @@ class SembastDataRepository extends Equatable implements DataRepository {
   @override
   FutureOr<WriteBatchWrapper> startCarWriteBatch() async {
     return SembastWriteBatch(
-        dbFactory: dbFactory, dbPath: await _getFullFilePath(),
+        dbFactory: dbFactory,
+        dbPath: await _getFullFilePath(),
         store: _cars,
         streamControllerUpdate: carStreamUpdate);
   }
@@ -261,7 +264,8 @@ class SembastDataRepository extends Equatable implements DataRepository {
   @override
   FutureOr<WriteBatchWrapper> startRepeatWriteBatch() async {
     return SembastWriteBatch(
-        dbFactory: dbFactory, dbPath: await _getFullFilePath(),
+        dbFactory: dbFactory,
+        dbPath: await _getFullFilePath(),
         store: _repeats,
         streamControllerUpdate: _repeatsUpdateStream);
   }

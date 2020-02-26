@@ -127,7 +127,8 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
       List<Refueling> thisCarsRefuelings = event.refuelings
           .where((r) => r.carName == c.name)
           .toList()
-          ..sort((a, b) => (a.mileage > b.mileage) ? 1 : (a.mileage < b.mileage) ? -1 : 0);
+            ..sort((a, b) =>
+                (a.mileage > b.mileage) ? 1 : (a.mileage < b.mileage) ? -1 : 0);
 
       // Historical tracking of the car's number of refuelings
       final numRefuelings = thisCarsRefuelings.length;
@@ -138,7 +139,9 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
         // first refueling for this car
         averageEfficiency = thisCarsRefuelings[0].efficiency;
       } else {
-        var sum = thisCarsRefuelings.map((e) => e.efficiency ?? 0.0).reduce((value, element) => value + element);
+        var sum = thisCarsRefuelings
+            .map((e) => e.efficiency ?? 0.0)
+            .reduce((value, element) => value + element);
         averageEfficiency = sum / numRefuelings;
         print(averageEfficiency);
       }
@@ -164,7 +167,11 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
       // list
       final currentMileage = thisCarsRefuelings.last.mileage;
 
-      Car updated = c.copyWith(distanceRateHistory: rates, mileage: currentMileage, numRefuelings: numRefuelings, averageEfficiency: averageEfficiency);
+      Car updated = c.copyWith(
+          distanceRateHistory: rates,
+          mileage: currentMileage,
+          numRefuelings: numRefuelings,
+          averageEfficiency: averageEfficiency);
       batch.updateData(updated.id, updated.toEntity().toDocument());
       updatedCars = updatedCars.map((car) => car.id == updated.id ? updated : car).toList();
     }
