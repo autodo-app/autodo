@@ -173,7 +173,9 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
           numRefuelings: numRefuelings,
           averageEfficiency: averageEfficiency);
       batch.updateData(updated.id, updated.toEntity().toDocument());
-      updatedCars = updatedCars.map((car) => car.id == updated.id ? updated : car).toList();
+      updatedCars = updatedCars
+          .map((car) => car.id == updated.id ? updated : car)
+          .toList();
     }
     _refuelingsCache = event.refuelings;
     await batch.commit();
