@@ -174,11 +174,11 @@ void main() {
       }, expect: [
         CarsLoading(),
         CarsLoaded([
-          Car(id: '0', name: 'abcd', mileage: 10000, distanceRateHistory: [
-            DistanceRatePoint(
-                roundToDay(DateTime.fromMillisecondsSinceEpoch(0)),
-                double.infinity)
-          ])
+          Car(
+              id: '0',
+              name: 'abcd',
+              mileage: 10000,
+              distanceRateHistory: List<DistanceRatePoint>())
         ]),
         CarsLoaded([
           Car(
@@ -186,14 +186,10 @@ void main() {
               name: 'abcd',
               mileage: 11000,
               numRefuelings: 1,
-              distanceRate: double.infinity,
+              distanceRate: 0.0,
               lastMileageUpdate:
                   roundToDay(DateTime.fromMillisecondsSinceEpoch(0)),
-              distanceRateHistory: [
-                DistanceRatePoint(
-                    roundToDay(DateTime.fromMillisecondsSinceEpoch(0)),
-                    double.infinity)
-              ])
+              distanceRateHistory: List<DistanceRatePoint>())
         ])
       ]);
       blocTest<CarsBloc, CarsEvent, CarsState>('Second New Refueling',
@@ -209,8 +205,8 @@ void main() {
         return CarsBloc(dbBloc: dbBloc, refuelingsBloc: refuelingsBloc);
       }, act: (bloc) async {
         bloc.add(LoadCars());
-        bloc.add(
-            ExternalRefuelingsUpdated([refueling.copyWith(efficiency: 1.0)]));
+        bloc.add(ExternalRefuelingsUpdated(
+            [refueling, refueling.copyWith(efficiency: 1.0, mileage: 12000)]));
       }, expect: [
         CarsLoading(),
         CarsLoaded([
@@ -219,71 +215,21 @@ void main() {
               name: 'abcd',
               mileage: 10000,
               numRefuelings: 1,
-              distanceRateHistory: [
-                DistanceRatePoint(
-                    roundToDay(DateTime.fromMillisecondsSinceEpoch(0)),
-                    double.infinity)
-              ])
+              distanceRateHistory: List<DistanceRatePoint>())
         ]),
         CarsLoaded([
           Car(
               id: '0',
               name: 'abcd',
-              mileage: 11000,
+              mileage: 12000,
               numRefuelings: 2,
               averageEfficiency: 0.5,
-              distanceRate: double.infinity,
+              distanceRate: 0.0,
               lastMileageUpdate:
                   roundToDay(DateTime.fromMillisecondsSinceEpoch(0)),
               distanceRateHistory: [
                 DistanceRatePoint(
-                    roundToDay(DateTime.fromMillisecondsSinceEpoch(0)),
-                    double.infinity)
-              ])
-        ])
-      ]);
-      blocTest<CarsBloc, CarsEvent, CarsState>('Efficiency EMA', build: () {
-        final dataRepository = MockDataRepository();
-        final writeBatch = MockWriteBatch();
-        when(dataRepository.getCurrentCars()).thenAnswer((_) async =>
-            [Car(id: '0', name: 'abcd', mileage: 10000, numRefuelings: 8)]);
-        when(dataRepository.startCarWriteBatch()).thenAnswer((_) => writeBatch);
-        final refuelingsBloc = MockRefuelingsBloc();
-        final dbBloc = MockDbBloc();
-        when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
-        return CarsBloc(dbBloc: dbBloc, refuelingsBloc: refuelingsBloc);
-      }, act: (bloc) async {
-        bloc.add(LoadCars());
-        bloc.add(
-            ExternalRefuelingsUpdated([refueling.copyWith(efficiency: 1.0)]));
-      }, expect: [
-        CarsLoading(),
-        CarsLoaded([
-          Car(
-              id: '0',
-              name: 'abcd',
-              mileage: 10000,
-              numRefuelings: 8,
-              distanceRateHistory: [
-                DistanceRatePoint(
-                    roundToDay(DateTime.fromMillisecondsSinceEpoch(0)),
-                    double.infinity)
-              ])
-        ]),
-        CarsLoaded([
-          Car(
-              id: '0',
-              name: 'abcd',
-              mileage: 11000,
-              numRefuelings: 9,
-              averageEfficiency: 0.1,
-              distanceRate: double.infinity,
-              lastMileageUpdate:
-                  roundToDay(DateTime.fromMillisecondsSinceEpoch(0)),
-              distanceRateHistory: [
-                DistanceRatePoint(
-                    roundToDay(DateTime.fromMillisecondsSinceEpoch(0)),
-                    double.infinity)
+                    DateTime.fromMillisecondsSinceEpoch(0), double.infinity)
               ])
         ])
       ]);

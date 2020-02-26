@@ -49,6 +49,7 @@ class DrivingDistanceStatsBloc
     var out = List<Series<DistanceRatePoint, DateTime>>();
     for (var car in cars) {
       var points = car.distanceRateHistory;
+      print(points);
       if (points == null || points.length == 0) continue;
 
       out.add(Series<DistanceRatePoint, DateTime>(

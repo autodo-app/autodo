@@ -15,6 +15,7 @@ class EfficiencyStatsBloc
     extends Bloc<EfficiencyStatsEvent, EfficiencyStatsState> {
   final RefuelingsBloc _refuelingsBloc;
   StreamSubscription _refuelingsSubscription;
+  static const EMA_CUTOFF = 8;
 
   EfficiencyStatsBloc({@required refuelingsBloc})
       : assert(refuelingsBloc != null),
@@ -47,11 +48,11 @@ class EfficiencyStatsBloc
     });
   }
 
-  _interpolateDate(DateTime prev, DateTime next) {
-    return DateTime.fromMillisecondsSinceEpoch(
-        (prev.millisecondsSinceEpoch + next.millisecondsSinceEpoch / 2)
-            .toInt());
-  }
+  // _interpolateDate(DateTime prev, DateTime next) {
+  //   return DateTime.fromMillisecondsSinceEpoch(
+  //       (prev.millisecondsSinceEpoch + next.millisecondsSinceEpoch / 2)
+  //           .toInt());
+  // }
 
   static double emaFilter(prev, current) =>
       roundToPrecision(0.8 * prev + 0.2 * current, 3);
@@ -71,11 +72,18 @@ class EfficiencyStatsBloc
       }
       FuelMileagePoint last = emaData[emaData.length - 1];
       var newDate = point.date;
-      var newEfficiency = emaFilter(last.efficiency, point.efficiency);
+      var newEfficiency;
+      if (points.indexOf(point) < EMA_CUTOFF) {
+        // for first few values, just do simple moving average
+        newEfficiency = (last.efficiency + point.efficiency) / 2;
+      } else {
+        newEfficiency = emaFilter(last.efficiency, point.efficiency);
+      }
+
       var newPoint = FuelMileagePoint(newDate, newEfficiency);
-      var interDate = _interpolateDate(last.date, point.date);
-      var interEfficiency = last.efficiency * 0.8 + newPoint.efficiency * 0.2;
-      var interpolate = FuelMileagePoint(interDate, interEfficiency);
+      // var interDate = _interpolateDate(last.date, point.date);
+      // var interEfficiency = last.efficiency * 0.8 + newPoint.efficiency * 0.2;
+      // var interpolate = FuelMileagePoint(interDate, interEfficiency);
       // emaData.add(interpolate);
       emaData.add(newPoint);
     }
@@ -114,6 +122,8 @@ class EfficiencyStatsBloc
           colorFn: (_, __) => MaterialPalette.blue.shadeDefault,
           domainFn: (FuelMileagePoint point, _) => point.date,
           measureFn: (FuelMileagePoint point, _) => point.efficiency,
+          // measureUpperBoundFn: (p, idx) => 1.5 * p.efficiency, // used to shade area above/below curve
+          // measureLowerBoundFn: (p, idx) => 0.667 * p.efficiency,
           data: emaData)
         ..setAttribute(rendererIdKey, 'customLine'),
     ];

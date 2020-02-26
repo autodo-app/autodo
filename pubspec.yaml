@@ -38,7 +38,8 @@ dependencies:
       url: git://github.com/baylessj/flutter-autocomplete-textfield.git
       ref: master
   sentry: ^3.0.0
-  sembast: ^2.1.2
+  sembast: ^2.2.0
+      # path: /home/bayle/Documents/git/sembast.dart/sembast/ # used for getting more in-depth debugging
   path_provider: ^1.5.1
   firebase_admob:
     git:

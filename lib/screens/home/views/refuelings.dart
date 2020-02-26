@@ -38,7 +38,10 @@ class RefuelingsScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 final refueling = refuelings[index];
                 return Padding(
-                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  padding: (index == refuelings.length - 1)
+                      ? EdgeInsets.fromLTRB(10, 5, 10, 100)
+                      : // add extra padding for last card
+                      EdgeInsets.fromLTRB(10, 5, 10, 5),
                   child: RefuelingCard(
                       refueling: refueling,
                       onDismissed: (direction) =>

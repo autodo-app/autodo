@@ -1,54 +1,56 @@
+import 'dart:math';
+
+import 'package:autodo/models/models.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart';
+import 'shared.dart';
 
 class FuelMileageChart extends StatelessWidget {
-  final List<Series> seriesList;
+  final List<Series<FuelMileagePoint, DateTime>> seriesList;
   final bool animate;
 
   FuelMileageChart(this.seriesList, this.animate);
 
-  final horizAxisSpec = DateTimeAxisSpec(
-    tickFormatterSpec: AutoDateTimeTickFormatterSpec(
-      day: TimeFormatterSpec(format: 'd', transitionFormat: 'MM/dd/yyyy'),
-    ),
-    renderSpec: GridlineRendererSpec(
-      lineStyle: LineStyleSpec(
-        color: Color(r: 0x99, g: 0x99, b: 0x99, a: 100),
-      ),
-      labelOffsetFromAxisPx: 10,
-      labelStyle: TextStyleSpec(
-        fontSize: 12,
-        color: MaterialPalette.white,
-      ),
-    ),
-  );
+  lowerBound() {
+    final minVal = seriesList[0]
+        .data
+        .reduce((value, element) =>
+            (value.efficiency < element.efficiency) ? value : element)
+        .efficiency;
+    return (0.75 * minVal).round();
+  }
 
-  final vertAxisSpec = NumericAxisSpec(
-    tickProviderSpec: BasicNumericTickProviderSpec(desiredTickCount: 6),
-    renderSpec: GridlineRendererSpec(
-      lineStyle: LineStyleSpec(
-        color: Color(r: 0x99, g: 0x99, b: 0x99, a: 100),
-      ),
-      labelOffsetFromAxisPx: 10,
-      labelStyle: TextStyleSpec(
-        fontSize: 12,
-        color: MaterialPalette.white,
-      ),
-    ),
-  );
+  upperBound() {
+    final maxVal = seriesList[0]
+        .data
+        .reduce((value, element) =>
+            (value.efficiency > element.efficiency) ? value : element)
+        .efficiency;
+    return (1.25 * maxVal).round();
+  }
 
   @override
   Widget build(BuildContext context) {
     if (seriesList.length == 0 || seriesList[0].data.length == 0) {
-      return Center(
-          child: Text('No Data Available to Display.',
-              style: Theme.of(context).primaryTextTheme.body1));
+      print(seriesList);
+      return Padding(
+          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+          child: Center(
+              child: Text('Need at least 3 refuelings to see efficiency data.',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).primaryTextTheme.body1)));
     }
     return TimeSeriesChart(
       seriesList,
       animate: animate,
-      domainAxis: horizAxisSpec,
-      primaryMeasureAxis: vertAxisSpec,
+      domainAxis: dateAxisSpec,
+      primaryMeasureAxis: NumericAxisSpec.from(numberAxisSpec,
+          // tickProviderSpec: StaticNumericTickProviderSpec([
+          // TickSpec(lowerBound()),
+          // TickSpec(upperBound())
+          // ])),
+          tickProviderSpec: StaticNumericTickProviderSpec(
+              lerp(lowerBound(), upperBound(), 6, 1))),
       defaultRenderer: PointRendererConfig(
         customRendererId: 'customPoint',
         layoutPaintOrder: LayoutViewPaintOrder.point,
@@ -82,12 +84,17 @@ class FuelMileageHistory extends StatelessWidget {
             Padding(
               padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
             ),
-            Text('Fuel Efficiency History',
+            Text('Fuel Efficiency History (mpg)',
                 style: Theme.of(context).primaryTextTheme.subtitle),
             Container(
               height: 300,
               padding: EdgeInsets.all(15),
               child: FuelMileageChart(data, false),
-            )
+            ),
+            Text(
+              'Refueling Date',
+              style: Theme.of(context).primaryTextTheme.body1,
+              textAlign: TextAlign.center,
+            ),
           ]);
 }

@@ -78,7 +78,7 @@ void main() {
           data: [
             FuelMileagePoint(refueling.date, refueling.efficiency),
             FuelMileagePoint(DateTime.fromMillisecondsSinceEpoch(100),
-                EfficiencyStatsBloc.emaFilter(1.0, 2.0))
+                ([1.0, 2.0].reduce((v, e) => v + e) / 2))
           ],
         )
       ])

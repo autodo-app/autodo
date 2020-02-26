@@ -92,7 +92,6 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
     var prev = await _findLatestRefueling(item);
     var dist = (prev == null) ? 0 : item.mileage - prev.mileage;
     Refueling out = event.refueling.copyWith(efficiency: dist / item.amount);
-    print('her: $out');
 
     // event.carsBloc.add(AddRefuelingInfo(item.car, item.mileage, item.date, item.efficiency, prev.date, dist));
     final List<Refueling> updatedRefuelings =

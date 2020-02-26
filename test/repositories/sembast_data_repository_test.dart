@@ -44,7 +44,9 @@ void main() {
         expect(
             await repository.startTodoWriteBatch(),
             SembastWriteBatch(
-                database: await repository.db, store: StoreRef('todos')));
+                dbFactory: repository.dbFactory,
+                dbPath: './sample.db',
+                store: StoreRef('todos')));
       });
     });
     group('refuelings', () {
@@ -83,7 +85,9 @@ void main() {
         expect(
             await repository.startRefuelingWriteBatch(),
             SembastWriteBatch(
-                database: await repository.db, store: StoreRef('refuelings')));
+                dbFactory: repository.dbFactory,
+                dbPath: './sample.db',
+                store: StoreRef('refuelings')));
       });
     });
     group('cars', () {
@@ -113,7 +117,9 @@ void main() {
         expect(
             await repository.startCarWriteBatch(),
             SembastWriteBatch(
-                database: await repository.db, store: StoreRef('cars')));
+                dbFactory: repository.dbFactory,
+                dbPath: './sample.db',
+                store: StoreRef('cars')));
       });
     });
     group('repeats', () {
@@ -143,7 +149,9 @@ void main() {
         expect(
             await repository.startRepeatWriteBatch(),
             SembastWriteBatch(
-                database: await repository.db, store: StoreRef('repeats')));
+                dbFactory: repository.dbFactory,
+                dbPath: './sample.db',
+                store: StoreRef('repeats')));
       });
     });
   });
