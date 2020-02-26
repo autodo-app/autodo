@@ -21,7 +21,7 @@ class StatisticsScreen extends StatelessWidget {
             },
           ),
           Padding(
-            padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+            padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
             child: Divider(),
           ),
           BlocBuilder<DrivingDistanceStatsBloc, DrivingDistanceStatsState>(
@@ -33,6 +33,10 @@ class StatisticsScreen extends StatelessWidget {
               }
             },
           ),
+          Padding(
+            padding: EdgeInsets.fromLTRB(0, 40, 0, 40),
+            // used to allow the user to scroll the chart above the FAB
+          )
         ],
       );
 }

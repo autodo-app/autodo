@@ -414,8 +414,11 @@ class _RefuelingAddEditScreenState extends State<RefuelingAddEditScreen> {
           child: Icon(isEditing ? Icons.check : Icons.add),
           onPressed: () {
             if (_formKey.currentState.validate()) {
+              // Check to see if the mileage/date combo is valid for this
+              // car
+
               _formKey.currentState.save();
-              print(widget.cars);
+
               if (_car == null) _car = widget.cars.first.name;
               widget.onSave(_mileage, _date, _amount, _cost, _car);
               Navigator.pop(context);
