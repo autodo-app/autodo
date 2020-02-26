@@ -8,8 +8,6 @@ import 'state.dart';
 import 'package:autodo/models/models.dart';
 import '../refuelings/barrel.dart';
 import '../database/barrel.dart';
-import 'package:autodo/util.dart' as util;
-import 'package:autodo/repositories/src/sembast_write_batch.dart';
 
 class CarsBloc extends Bloc<CarsEvent, CarsState> {
   static const double EMA_GAIN = 0.9;
@@ -134,7 +132,6 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
       // Historical tracking of the car's number of refuelings
       final numRefuelings = thisCarsRefuelings.length;
 
-
       // Update average efficiency across all refuelings
       var averageEfficiency;
       if (numRefuelings == 1) {
@@ -145,7 +142,6 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
         averageEfficiency = sum / numRefuelings;
         print(averageEfficiency);
       }
-      print(thisCarsRefuelings);
 
       // Create a list of the distances and dates from the refuelings, and use
       // the difference between them to find the distance rate values
@@ -163,7 +159,6 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
           rates.add(_findDifference(reversedList[1], reversedList[0]));
         }
       });
-      print('rates $rates points $points');
 
       // Set the car's mileage to the furthest distance value in the refueling
       // list
@@ -172,48 +167,10 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
       Car updated = c.copyWith(distanceRateHistory: rates, mileage: currentMileage, numRefuelings: numRefuelings, averageEfficiency: averageEfficiency);
       batch.updateData(updated.id, updated.toEntity().toDocument());
       updatedCars = updatedCars.map((car) => car.id == updated.id ? updated : car).toList();
-
-      print('yield $updatedCars');
     }
     _refuelingsCache = event.refuelings;
-    print('list1: $updatedCars');
     await batch.commit();
     yield CarsLoaded(updatedCars);
-    print('committed $updatedCars');
-
-    // for (var r in event.refuelings) {
-    //   if (_refuelingsCache?.contains(r) ?? false) {
-    //     continue; // only do calculations for updated refuelings
-    //   }
-
-    //   Car cur = (state as CarsLoaded)
-    //       .cars
-    //       .firstWhere((car) => car.name == r.carName, orElse: () => null);
-    //   if (cur == null) {
-    //     print('cannot find the specified car when updating refuelings');
-    //     return;
-    //   }
-    //   Car update;
-    //   if (cur.lastMileageUpdate == null || cur.lastMileageUpdate == DateTime.fromMillisecondsSinceEpoch(0)) {
-    //     // cannot find distance rate if there isn't a past distance point to reference
-    //     final lastMileageUpdate = r.date;
-    //     update = cur.copyWith(lastMileageUpdate: lastMileageUpdate);
-    //   } else {
-    //     update = _updateWithRefueling(cur, r);
-    //   }
-
-    //   updatedCars = (state as CarsLoaded).cars.map((car) {
-    //     return car.id == update.id ? update : car;
-    //   }).toList();
-
-    //   // yield the updated list as we go to ensure that the calculations
-    //   // that rely on past values above will be correct
-    //   yield CarsLoaded(updatedCars);
-    //   batch.updateData(update.id, update.toEntity().toDocument());
-    // }
-    // _refuelingsCache = event.refuelings;
-    // // yield CarsLoaded(updatedCars);
-    // batch.commit();
   }
 
   @override
@@ -224,31 +181,35 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
     return super.close();
   }
 
-  double _efficiencyFilter(int numRefuelings, double prev, double cur) {
-    if (numRefuelings > EMA_CUTOFF) {
-      return util.roundToPrecision(EMA_GAIN * prev + (1 - EMA_GAIN) * cur, 3);
-    } else {
-      double fac1 = (numRefuelings - 1) / numRefuelings;
-      double fac2 = 1 / numRefuelings;
-      return prev * fac1 + cur * fac2;
-    }
-  }
+  // No longer using these filters, instead computing a simple moving average.
+  // TODO: might be worth returning to using these eventually, but for now the
+  // simple average should be fine.
 
-  double _distanceFilter(int numItems, double prev, double cur) {
-    if (numItems == 1 || prev == double.infinity) {
-      // no point in averaging only one value
-      return cur;
-    } else if (numItems > EMA_CUTOFF) {
-      // Use the EMA when we have enough data to get
-      // good results from it
-      return EMA_GAIN * prev + (1 - EMA_GAIN) * cur;
-    } else {
-      // simple moving average when we don't have much
-      // data to work with
-      numItems--; // we don't track distanceRate between first two refuelings
-      double fac1 = (numItems - 1) / numItems;
-      double fac2 = 1 / numItems;
-      return prev * fac1 + cur * fac2;
-    }
-  }
+  // double _efficiencyFilter(int numRefuelings, double prev, double cur) {
+  //   if (numRefuelings > EMA_CUTOFF) {
+  //     return util.roundToPrecision(EMA_GAIN * prev + (1 - EMA_GAIN) * cur, 3);
+  //   } else {
+  //     double fac1 = (numRefuelings - 1) / numRefuelings;
+  //     double fac2 = 1 / numRefuelings;
+  //     return prev * fac1 + cur * fac2;
+  //   }
+  // }
+
+  // double _distanceFilter(int numItems, double prev, double cur) {
+  //   if (numItems == 1 || prev == double.infinity) {
+  //     // no point in averaging only one value
+  //     return cur;
+  //   } else if (numItems > EMA_CUTOFF) {
+  //     // Use the EMA when we have enough data to get
+  //     // good results from it
+  //     return EMA_GAIN * prev + (1 - EMA_GAIN) * cur;
+  //   } else {
+  //     // simple moving average when we don't have much
+  //     // data to work with
+  //     numItems--; // we don't track distanceRate between first two refuelings
+  //     double fac1 = (numItems - 1) / numItems;
+  //     double fac2 = 1 / numItems;
+  //     return prev * fac1 + cur * fac2;
+  //   }
+  // }
 }
