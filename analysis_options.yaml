@@ -1,6 +1,19 @@
 # see https://github.com/dart-lang/pedantic#enabled-lints.
 include: package:pedantic/analysis_options.yaml
 
+analyzer:
+  errors:
+    todo: ignore
+    unawaited_futures: warning
+    always_declare_return_types: error
+    await_only_futures: error
+    file_names: error
+    prefer_final_fields: error
+    prefer_single_quotes: error
+    unnecessary_parenthesis: error
+    use_function_type_syntax_for_parameters: warning
+    prefer_typing_uninitialized_variables: error
+
 linter:
   rules:
     - always_declare_return_types
