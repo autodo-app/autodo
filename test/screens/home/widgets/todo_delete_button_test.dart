@@ -1,14 +1,12 @@
+import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/localization.dart';
+import 'package:autodo/models/models.dart';
 import 'package:autodo/screens/home/widgets/todo_delete_button.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:autodo/screens/home/widgets/todo_card.dart';
-import 'package:autodo/blocs/blocs.dart';
-import 'package:autodo/models/models.dart';
 
 class MockTodosBloc extends MockBloc<TodosEvent, TodosState>
     implements TodosBloc {}

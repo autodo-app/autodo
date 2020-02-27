@@ -1,10 +1,9 @@
-import 'dart:math';
-
 import 'package:autodo/localization.dart';
 import 'package:autodo/models/models.dart';
-import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart';
+import 'package:flutter/material.dart';
 import 'package:json_intl/json_intl.dart';
+
 import 'shared.dart';
 
 class FuelMileageChart extends StatelessWidget {
