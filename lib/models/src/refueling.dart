@@ -13,7 +13,7 @@ class Refueling extends Equatable {
   final double amount, cost, efficiency;
   final Color carColor, efficiencyColor;
 
-  Refueling({
+  const Refueling({
     @required this.carName,
     @required this.mileage,
     @required this.date,

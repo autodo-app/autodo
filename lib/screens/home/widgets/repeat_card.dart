@@ -11,7 +11,7 @@ import 'package:json_intl/json_intl.dart';
 class _RepeatTitle extends StatelessWidget {
   final Repeat repeat;
 
-  _RepeatTitle(this.repeat, {Key key}) : super(key: key);
+  const _RepeatTitle(this.repeat, {Key key}) : super(key: key);
 
   @override
   build(context) => Container(
@@ -44,7 +44,7 @@ class _RepeatTitle extends StatelessWidget {
 class _RepeatEditButton extends StatelessWidget {
   final Repeat repeat;
 
-  _RepeatEditButton(this.repeat, {Key key}) : super(key: key);
+  const _RepeatEditButton(this.repeat, {Key key}) : super(key: key);
 
   @override
   build(context) => ButtonTheme.fromButtonThemeData(
@@ -69,7 +69,7 @@ class _RepeatEditButton extends StatelessWidget {
 class _RepeatDeleteButton extends StatelessWidget {
   final Repeat repeat;
 
-  _RepeatDeleteButton(this.repeat, {Key key}) : super(key: key);
+  const _RepeatDeleteButton(this.repeat, {Key key}) : super(key: key);
 
   @override
   build(context) => ButtonTheme.fromButtonThemeData(
@@ -95,7 +95,7 @@ class _RepeatDeleteButton extends StatelessWidget {
 class RepeatCard extends StatelessWidget {
   final Repeat repeat;
 
-  RepeatCard({Key key, @required this.repeat}) : super(key: key);
+  const RepeatCard({Key key, @required this.repeat}) : super(key: key);
 
   @override
   build(context) => Card(

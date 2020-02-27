@@ -15,7 +15,8 @@ class CarEntryField extends StatefulWidget {
   final Function onNameSaved, onMileageSaved;
   final GlobalKey<FormState> formKey;
 
-  CarEntryField(this.next, this.onNameSaved, this.onMileageSaved, this.formKey);
+  const CarEntryField(
+      this.next, this.onNameSaved, this.onMileageSaved, this.formKey);
 
   @override
   State<CarEntryField> createState() =>
@@ -109,7 +110,7 @@ class MileageScreen extends StatefulWidget {
   final mileageKey;
   final Function() onNext;
 
-  MileageScreen(this.mileageEntry, this.mileageKey, this.onNext);
+  const MileageScreen(this.mileageEntry, this.mileageKey, this.onNext);
 
   @override
   MileageScreenState createState() => MileageScreenState(mileageEntry);

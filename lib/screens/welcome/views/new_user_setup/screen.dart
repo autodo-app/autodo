@@ -11,7 +11,7 @@ import 'setrepeats.dart';
 import 'new_user_screen_page.dart';
 
 class NewUserScreen extends StatefulWidget {
-  NewUserScreen({Key key = IntegrationTestKeys.newUserScreen})
+  const NewUserScreen({Key key = IntegrationTestKeys.newUserScreen})
       : super(key: key);
 
   @override

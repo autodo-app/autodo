@@ -7,7 +7,7 @@ class PrivacyPolicy extends StatelessWidget {
   final RichText text;
   final buttonKey;
 
-  PrivacyPolicy(this.text, {Key key, this.buttonKey}) : super(key: key);
+  const PrivacyPolicy(this.text, {Key key, this.buttonKey}) : super(key: key);
 
   @override
   build(context) => AlertDialog(

@@ -10,7 +10,7 @@ class FuelMileageChart extends StatelessWidget {
   final List<Series<FuelMileagePoint, DateTime>> seriesList;
   final bool animate;
 
-  FuelMileageChart(this.seriesList, this.animate);
+  const FuelMileageChart(this.seriesList, this.animate);
 
   lowerBound() {
     final minVal = seriesList[0]
@@ -74,7 +74,7 @@ class FuelMileageChart extends StatelessWidget {
 class FuelMileageHistory extends StatelessWidget {
   final data;
 
-  FuelMileageHistory(this.data);
+  const FuelMileageHistory(this.data);
 
   @override
   Widget build(BuildContext context) => Column(

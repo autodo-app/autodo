@@ -20,7 +20,7 @@ class PaidVersionBloc extends Bloc<PaidVersionEvent, PaidVersionState> {
   final InAppPurchaseConnection _purchaseConn;
   StreamSubscription _dbSubscription, _purchaseSubscription;
   RouteObserver observer = RouteObserver();
-  static const platform = const MethodChannel('com.jonathanbayless.autodo/iap');
+  static const platform = MethodChannel('com.jonathanbayless.autodo/iap');
 
   PaidVersionBloc({InAppPurchaseConnection conn, @required DatabaseBloc dbBloc})
       : _dbBloc = dbBloc,

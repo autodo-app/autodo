@@ -7,7 +7,7 @@ import 'package:json_intl/json_intl.dart';
 class SignupButton extends StatelessWidget {
   final buttonPadding;
 
-  SignupButton({Key key, this.buttonPadding}) : super(key: key);
+  const SignupButton({Key key, this.buttonPadding}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

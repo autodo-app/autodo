@@ -11,7 +11,7 @@ class Repeat extends Equatable {
   final Duration dateInterval;
   final List<String> cars;
 
-  Repeat(
+  const Repeat(
       {this.id, this.name, this.mileageInterval, this.dateInterval, this.cars});
 
   Repeat copyWith({

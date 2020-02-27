@@ -13,7 +13,7 @@ class Todo extends Equatable {
   final bool completed, estimatedDueDate;
   final DateTime completedDate, dueDate;
 
-  Todo(
+  const Todo(
       {this.id,
       this.name,
       this.carName,

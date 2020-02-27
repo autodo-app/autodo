@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:json_intl/json_intl.dart';
 
 class EditCarListScreen extends StatelessWidget {
-  EditCarListScreen({Key key}) : super(key: key);
+  const EditCarListScreen({Key key}) : super(key: key);
 
   @override
   build(context) => Scaffold(

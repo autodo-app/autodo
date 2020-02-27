@@ -10,7 +10,7 @@ import 'package:json_intl/json_intl.dart';
 class _PasswordResetDialog extends StatefulWidget {
   final String email;
   final AuthRepository authRepository;
-  _PasswordResetDialog(Key key, this.email, this.authRepository)
+  const _PasswordResetDialog(Key key, this.email, this.authRepository)
       : super(key: key);
 
   @override
@@ -83,7 +83,7 @@ class _PasswordResetDialogState extends State<_PasswordResetDialog> {
 class PasswordResetButton extends StatelessWidget {
   final dialogKey;
 
-  PasswordResetButton({this.dialogKey});
+  const PasswordResetButton({this.dialogKey});
 
   build(context) => FlatButton(
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,

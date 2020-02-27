@@ -6,7 +6,7 @@ class CarsCheckboxForm extends StatefulWidget {
   final List<Car> cars;
   final Function(List<Map<String, dynamic>>) onSaved;
 
-  CarsCheckboxForm({this.cars, this.onSaved});
+  const CarsCheckboxForm({this.cars, this.onSaved});
 
   @override
   _CarsFormState createState() => _CarsFormState(cars, onSaved);

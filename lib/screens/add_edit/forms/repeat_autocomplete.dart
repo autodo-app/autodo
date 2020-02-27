@@ -15,7 +15,7 @@ class RepeatForm extends StatefulWidget {
   final FocusNode node, nextNode;
   final bool requireInput;
 
-  RepeatForm({
+  const RepeatForm({
     Key key,
     this.todo,
     @required this.onSaved,

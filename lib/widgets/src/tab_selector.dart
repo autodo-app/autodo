@@ -10,7 +10,7 @@ class TabSelector extends StatelessWidget {
   final Function(AppTab) onTabSelected;
   final todosTabKey, refuelingsTabKey, statsTabKey, repeatsTabKey;
 
-  TabSelector(
+  const TabSelector(
       {Key key,
       @required this.activeTab,
       @required this.onTabSelected,

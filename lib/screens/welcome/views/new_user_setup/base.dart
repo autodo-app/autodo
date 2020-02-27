@@ -5,7 +5,7 @@ import 'package:autodo/theme.dart';
 class AccountSetupScreen extends StatefulWidget {
   final Widget header, panel;
 
-  AccountSetupScreen({@required this.header, @required this.panel});
+  const AccountSetupScreen({@required this.header, @required this.panel});
 
   @override
   AccountSetupScreenState createState() => AccountSetupScreenState();

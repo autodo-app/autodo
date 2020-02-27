@@ -17,7 +17,7 @@ class HomeScreen extends StatefulWidget {
   final todosTabKey;
   final bool integrationTest;
 
-  HomeScreen(
+  const HomeScreen(
       {Key key = IntegrationTestKeys.homeScreen,
       this.todosTabKey,
       this.integrationTest = false})
@@ -32,7 +32,7 @@ class _ScreenWithBanner extends StatelessWidget {
   final Widget child;
   final bool bannerShown;
 
-  _ScreenWithBanner({this.child, this.bannerShown = true});
+  const _ScreenWithBanner({this.child, this.bannerShown = true});
 
   @override
   build(context) => Center(

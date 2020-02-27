@@ -15,7 +15,7 @@ const int DUE_SOON_INTERVAL = 100;
 class _TodoTitle extends StatelessWidget {
   final Todo todo;
 
-  _TodoTitle({Key key, @required this.todo}) : super(key: key);
+  const _TodoTitle({Key key, @required this.todo}) : super(key: key);
 
   preface(BuildContext context) {
     if (todo.completed) {
@@ -44,7 +44,7 @@ class _TodoCheckbox extends StatelessWidget {
   final Todo todo;
   final ValueChanged<bool> onCheckboxChanged;
 
-  _TodoCheckbox({
+  const _TodoCheckbox({
     Key key,
     @required this.todo,
     @required this.onCheckboxChanged,
@@ -67,7 +67,7 @@ class _TodoCheckbox extends StatelessWidget {
 class _TodoDueDate extends StatelessWidget {
   final Todo todo;
 
-  _TodoDueDate({Key key, @required this.todo}) : super(key: key);
+  const _TodoDueDate({Key key, @required this.todo}) : super(key: key);
 
   @override
   build(context) => Row(
@@ -123,7 +123,7 @@ class _TodoDueMileage extends StatelessWidget {
 class _TodoLastCompleted extends StatelessWidget {
   final Todo todo;
 
-  _TodoLastCompleted({Key key, @required this.todo}) : super(key: key);
+  const _TodoLastCompleted({Key key, @required this.todo}) : super(key: key);
 
   @override
   build(context) => Row(
@@ -144,7 +144,7 @@ class _TodoLastCompleted extends StatelessWidget {
 class _TodoDueInfo extends StatelessWidget {
   final Todo todo;
 
-  _TodoDueInfo({Key key, @required this.todo}) : super(key: key);
+  const _TodoDueInfo({Key key, @required this.todo}) : super(key: key);
 
   @override
   build(context) => Container(
@@ -169,7 +169,8 @@ class _TodoBody extends StatelessWidget {
   final Todo todo;
   final ValueChanged<bool> onCheckboxChanged;
 
-  _TodoBody({Key key, @required this.todo, @required this.onCheckboxChanged})
+  const _TodoBody(
+      {Key key, @required this.todo, @required this.onCheckboxChanged})
       : super(key: key);
 
   @override
@@ -190,7 +191,7 @@ class _TodoBody extends StatelessWidget {
 class _TodoEditButton extends StatelessWidget {
   final Todo todo;
 
-  _TodoEditButton({Key key, @required this.todo}) : super(key: key);
+  const _TodoEditButton({Key key, @required this.todo}) : super(key: key);
 
   @override
   build(context) => ButtonTheme.fromButtonThemeData(
@@ -230,7 +231,7 @@ class _TodoEditButton extends StatelessWidget {
 class _TodoFooter extends StatelessWidget {
   final Todo todo;
 
-  _TodoFooter({Key key, @required this.todo}) : super(key: key);
+  const _TodoFooter({Key key, @required this.todo}) : super(key: key);
 
   @override
   build(context) => Row(

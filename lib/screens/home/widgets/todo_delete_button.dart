@@ -8,7 +8,7 @@ import 'package:autodo/models/models.dart';
 class TodoDeleteButton extends StatelessWidget {
   final Todo todo;
 
-  TodoDeleteButton({Key key, @required this.todo}) : super(key: key);
+  const TodoDeleteButton({Key key, @required this.todo}) : super(key: key);
 
   @override
   build(context) => ButtonTheme.fromButtonThemeData(

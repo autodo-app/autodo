@@ -10,7 +10,7 @@ import '../../views/new_user_setup/screen.dart';
 class TrialButton extends StatelessWidget {
   final buttonPadding;
 
-  TrialButton({Key key, this.buttonPadding}) : super(key: key);
+  const TrialButton({Key key, this.buttonPadding}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

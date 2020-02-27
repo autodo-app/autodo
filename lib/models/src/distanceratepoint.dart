@@ -4,7 +4,7 @@ class DistanceRatePoint extends Equatable {
   final DateTime date;
   final double distanceRate;
 
-  DistanceRatePoint(this.date, this.distanceRate);
+  const DistanceRatePoint(this.date, this.distanceRate);
 
   @override
   List<Object> get props => [date?.toUtc(), distanceRate];

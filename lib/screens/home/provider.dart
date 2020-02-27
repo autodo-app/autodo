@@ -10,7 +10,7 @@ import 'screen.dart';
 class HomeScreenProvider extends StatelessWidget {
   final bool integrationTest;
 
-  HomeScreenProvider({this.integrationTest});
+  const HomeScreenProvider({this.integrationTest});
 
   @override
   build(BuildContext context) => MultiBlocProvider(

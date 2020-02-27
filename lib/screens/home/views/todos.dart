@@ -7,7 +7,7 @@ import 'package:autodo/widgets/widgets.dart';
 import '../widgets/barrel.dart';
 
 class TodosScreen extends StatelessWidget {
-  TodosScreen({Key key}) : super(key: key);
+  const TodosScreen({Key key}) : super(key: key);
 
   onDismissed(direction, context, todo) {
     BlocProvider.of<TodosBloc>(context).add(DeleteTodo(todo));

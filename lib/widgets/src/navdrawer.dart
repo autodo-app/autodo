@@ -11,7 +11,7 @@ import 'package:autodo/routes.dart';
 import 'upgrade_dialog.dart';
 
 class NavDrawer extends StatefulWidget {
-  NavDrawer({Key key}) : super(key: key);
+  const NavDrawer({Key key}) : super(key: key);
 
   @override
   State<NavDrawer> createState() => NavDrawerState();

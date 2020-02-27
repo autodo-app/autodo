@@ -46,7 +46,7 @@ class RGB extends Equatable {
   final double g; // a fraction between 0 and 1
   final double b; // a fraction between 0 and 1
 
-  RGB(this.r, this.g, this.b);
+  const RGB(this.r, this.g, this.b);
 
   toValue() {
     final red = (r * 255).toInt();
@@ -67,7 +67,7 @@ class HSV extends Equatable {
   final double s; // a fraction between 0 and 1
   final double v; // a fraction between 0 and 1
 
-  HSV(this.h, this.s, this.v);
+  const HSV(this.h, this.s, this.v);
 
   toValue() => hsv2rgb(this).toValue();
 

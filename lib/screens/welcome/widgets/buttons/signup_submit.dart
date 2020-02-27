@@ -6,7 +6,7 @@ import 'package:json_intl/json_intl.dart';
 class SignupSubmitButton extends StatelessWidget {
   final Function onPressed;
 
-  SignupSubmitButton({this.onPressed});
+  const SignupSubmitButton({this.onPressed});
 
   @override
   build(context) => Container(

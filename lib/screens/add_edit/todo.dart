@@ -21,7 +21,7 @@ class _NameForm extends StatelessWidget {
   final FocusNode node, nextNode;
   final Function(String) onSaved;
 
-  _NameForm({this.todo, this.onSaved, this.node, this.nextNode});
+  const _NameForm({this.todo, this.onSaved, this.node, this.nextNode});
 
   @override
   build(context) => TextFormField(
@@ -51,7 +51,7 @@ class _DateForm extends StatefulWidget {
   final Function(String) onSaved;
   final FocusNode node, nextNode;
 
-  _DateForm({
+  const _DateForm({
     Key key,
     this.todo,
     @required this.onSaved,
@@ -158,7 +158,7 @@ class _MileageForm extends StatelessWidget {
   final FocusNode node, nextNode;
   final Function(String) onSaved;
 
-  _MileageForm({this.todo, this.onSaved, this.node, this.nextNode});
+  const _MileageForm({this.todo, this.onSaved, this.node, this.nextNode});
 
   @override
   build(context) => TextFormField(
@@ -188,7 +188,7 @@ class _CarToggleForm extends StatefulWidget {
   final List<Car> cars;
   final Function onSaved;
 
-  _CarToggleForm(this.initialState, this.cars, this.onSaved);
+  const _CarToggleForm(this.initialState, this.cars, this.onSaved);
 
   @override
   _CarToggleFormState createState() =>

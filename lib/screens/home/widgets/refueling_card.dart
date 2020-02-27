@@ -12,7 +12,7 @@ import 'package:json_intl/json_intl.dart';
 class _RefuelingTitle extends StatelessWidget {
   final Refueling refueling;
 
-  _RefuelingTitle({Key key, @required this.refueling}) : super(key: key);
+  const _RefuelingTitle({Key key, @required this.refueling}) : super(key: key);
 
   dateField(context) => TextSpan(
       text: JsonIntl.of(context).get(IntlKeys.onLiteral) +
@@ -47,7 +47,7 @@ class _RefuelingTitle extends StatelessWidget {
 class _RefuelingCost extends StatelessWidget {
   final Refueling refueling;
 
-  _RefuelingCost({Key key, @required this.refueling}) : super(key: key);
+  const _RefuelingCost({Key key, @required this.refueling}) : super(key: key);
 
   @override
   build(context) => RichText(
@@ -68,7 +68,7 @@ class _RefuelingCost extends StatelessWidget {
 class _RefuelingAmount extends StatelessWidget {
   final Refueling refueling;
 
-  _RefuelingAmount({Key key, @required this.refueling}) : super(key: key);
+  const _RefuelingAmount({Key key, @required this.refueling}) : super(key: key);
 
   @override
   build(context) => RichText(
@@ -91,7 +91,7 @@ class _RefuelingAmount extends StatelessWidget {
 class _RefuelingBody extends StatelessWidget {
   final Refueling refueling;
 
-  _RefuelingBody({Key key, @required this.refueling}) : super(key: key);
+  const _RefuelingBody({Key key, @required this.refueling}) : super(key: key);
 
   @override
   build(context) => Container(
@@ -108,7 +108,7 @@ class _RefuelingBody extends StatelessWidget {
 class _RefuelingTags extends StatelessWidget {
   final Refueling refueling;
 
-  _RefuelingTags({Key key, @required this.refueling}) : super(key: key);
+  const _RefuelingTags({Key key, @required this.refueling}) : super(key: key);
 
   @override
   build(context) => CarTag(text: refueling.carName, color: refueling.carColor);
@@ -117,7 +117,8 @@ class _RefuelingTags extends StatelessWidget {
 class _RefuelingEditButton extends StatelessWidget {
   final Refueling refueling;
 
-  _RefuelingEditButton({Key key, @required this.refueling}) : super(key: key);
+  const _RefuelingEditButton({Key key, @required this.refueling})
+      : super(key: key);
 
   @override
   build(context) => ButtonTheme.fromButtonThemeData(
@@ -157,7 +158,8 @@ class _RefuelingEditButton extends StatelessWidget {
 class _RefuelingDeleteButton extends StatelessWidget {
   final Refueling refueling;
 
-  _RefuelingDeleteButton({Key key, @required this.refueling}) : super(key: key);
+  const _RefuelingDeleteButton({Key key, @required this.refueling})
+      : super(key: key);
 
   @override
   build(context) => ButtonTheme.fromButtonThemeData(
@@ -186,7 +188,7 @@ class _RefuelingDeleteButton extends StatelessWidget {
 class _RefuelingFooter extends StatelessWidget {
   final Refueling refueling;
 
-  _RefuelingFooter({Key key, @required this.refueling}) : super(key: key);
+  const _RefuelingFooter({Key key, @required this.refueling}) : super(key: key);
 
   @override
   build(context) => Row(
@@ -208,7 +210,7 @@ class RefuelingCard extends StatelessWidget {
   final DismissDirectionCallback onDismissed;
   final GestureTapCallback onTap;
 
-  RefuelingCard(
+  const RefuelingCard(
       {Key key,
       @required this.refueling,
       @required this.onDismissed,

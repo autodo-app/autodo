@@ -142,7 +142,7 @@ class App extends StatelessWidget {
   final AuthRepository _authRepository;
   final bool integrationTest;
 
-  App({@required theme, @required authRepository, this.integrationTest})
+  const App({@required theme, @required authRepository, this.integrationTest})
       : assert(theme != null),
         assert(authRepository != null),
         _theme = theme,
@@ -150,7 +150,8 @@ class App extends StatelessWidget {
 
   @override
   build(context) {
-    final Widget homeProvider = HomeScreenProvider(integrationTest: integrationTest);
+    final Widget homeProvider =
+        HomeScreenProvider(integrationTest: integrationTest);
     final Widget welcomeProvider = WelcomeScreenProvider();
     final Widget signupProvider =
         SignupScreenProvider(authRepository: _authRepository);

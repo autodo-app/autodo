@@ -17,7 +17,7 @@ class _MileageForm extends StatelessWidget {
   final Function(String) onSaved;
   final FocusNode node, nextNode;
 
-  _MileageForm({
+  const _MileageForm({
     Key key,
     this.refueling,
     @required this.onSaved,
@@ -54,7 +54,7 @@ class _AmountForm extends StatelessWidget {
   final Function(String) onSaved;
   final FocusNode node, nextNode;
 
-  _AmountForm({
+  const _AmountForm({
     Key key,
     this.refueling,
     @required this.onSaved,
@@ -92,7 +92,7 @@ class _CostForm extends StatelessWidget {
   final Function(String) onSaved;
   final FocusNode node, nextNode;
 
-  _CostForm({
+  const _CostForm({
     Key key,
     this.refueling,
     @required this.onSaved,
@@ -129,7 +129,7 @@ class _DateForm extends StatefulWidget {
   final Function(String) onSaved;
   final FocusNode node, nextNode;
 
-  _DateForm({
+  const _DateForm({
     Key key,
     this.refueling,
     @required this.onSaved,
@@ -240,7 +240,7 @@ class _CarToggleForm extends StatefulWidget {
   final List<Car> cars;
   final Function onSaved;
 
-  _CarToggleForm(this.initialState, this.cars, this.onSaved);
+  const _CarToggleForm(this.initialState, this.cars, this.onSaved);
 
   @override
   _CarToggleFormState createState() =>
@@ -298,7 +298,7 @@ class RefuelingAddEditScreen extends StatefulWidget {
   final Refueling refueling;
   final List<Car> cars;
 
-  RefuelingAddEditScreen({
+  const RefuelingAddEditScreen({
     Key key = const ValueKey('__add_edit_refueling__'),
     @required this.onSave,
     @required this.isEditing,

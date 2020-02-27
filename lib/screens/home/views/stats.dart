@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'charts/barrel.dart';
 
 class StatisticsScreen extends StatelessWidget {
-  StatisticsScreen({Key key}) : super(key: key);
+  const StatisticsScreen({Key key}) : super(key: key);
 
   @override
   build(context) => ListView(

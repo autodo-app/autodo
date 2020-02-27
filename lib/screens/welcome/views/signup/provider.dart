@@ -8,7 +8,7 @@ import 'screen.dart';
 class SignupScreenProvider extends StatelessWidget {
   final AuthRepository _authRepository;
 
-  SignupScreenProvider({@required authRepository})
+  const SignupScreenProvider({@required authRepository})
       : assert(authRepository != null),
         _authRepository = authRepository;
 

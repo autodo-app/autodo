@@ -19,7 +19,7 @@ class _OilInterval extends StatelessWidget {
   final FocusNode node, nextNode;
   final Repeat repeat;
 
-  _OilInterval(this.repeat, this.node, this.nextNode);
+  const _OilInterval(this.repeat, this.node, this.nextNode);
 
   @override
   build(context) => TextFormField(
@@ -43,7 +43,7 @@ class _TireRotationInterval extends StatelessWidget {
   final FocusNode node;
   final Repeat repeat;
 
-  _TireRotationInterval(this.repeat, this.node);
+  const _TireRotationInterval(this.repeat, this.node);
 
   @override
   build(context) => TextFormField(
@@ -97,7 +97,7 @@ class _Card extends StatelessWidget {
   final FocusNode oilNode, tireRotationNode;
   final Function onNext;
 
-  _Card(this.oilRepeat, this.tireRotationRepeat, this.oilNode,
+  const _Card(this.oilRepeat, this.tireRotationRepeat, this.oilNode,
       this.tireRotationNode, this.onNext);
 
   @override
@@ -153,7 +153,7 @@ class SetRepeatsScreen extends StatefulWidget {
   final GlobalKey<FormState> repeatKey;
   final page;
 
-  SetRepeatsScreen(this.repeatKey, this.page);
+  const SetRepeatsScreen(this.repeatKey, this.page);
 
   @override
   SetRepeatsScreenState createState() =>

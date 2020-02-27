@@ -16,7 +16,7 @@ class LatestRepeatsScreen extends StatefulWidget {
   final page;
   final todosBloc;
 
-  LatestRepeatsScreen(
+  const LatestRepeatsScreen(
     this.repeatKey,
     this.onNext,
     this.page, {

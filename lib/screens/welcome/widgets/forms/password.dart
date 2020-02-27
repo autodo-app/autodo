@@ -10,7 +10,7 @@ class PasswordForm extends StatelessWidget {
   final FocusNode node;
   final bool login;
 
-  PasswordForm({this.onSaved, this.node, this.login = true});
+  const PasswordForm({this.onSaved, this.node, this.login = true});
 
   @override
   build(context) => Container(

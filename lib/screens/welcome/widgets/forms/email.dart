@@ -10,7 +10,7 @@ class EmailForm extends StatelessWidget {
   final FocusNode node, nextNode;
   final bool login;
 
-  EmailForm({this.onSaved, this.node, this.nextNode, this.login = true});
+  const EmailForm({this.onSaved, this.node, this.nextNode, this.login = true});
 
   @override
   build(context) => TextFormField(

@@ -11,7 +11,7 @@ class AutodoActionButton extends StatefulWidget {
   final List<MaterialPageRoute> Function() miniButtonRoutes;
   final TickerProvider ticker;
 
-  AutodoActionButton({
+  const AutodoActionButton({
     Key key,
     this.mainButtonKey = IntegrationTestKeys.mainFab,
     this.miniButtonKeys = IntegrationTestKeys.fabKeys,

@@ -49,7 +49,7 @@ class DeleteCar extends CarsEvent {
 class ExternalRefuelingsUpdated extends CarsEvent {
   final List<Refueling> refuelings;
 
-  ExternalRefuelingsUpdated(this.refuelings);
+  const ExternalRefuelingsUpdated(this.refuelings);
 
   @override
   List<Object> get props => [refuelings];

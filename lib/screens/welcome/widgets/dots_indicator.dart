@@ -24,7 +24,7 @@ class DotsIndicator extends AnimatedWidget {
   /// A list of keys corresponding to each of the dots in the indicator.
   final List<Key> keys;
 
-  DotsIndicator({
+  const DotsIndicator({
     this.controller,
     this.itemCount,
     this.onPageSelected,

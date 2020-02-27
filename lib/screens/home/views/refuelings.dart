@@ -6,7 +6,7 @@ import 'package:autodo/blocs/blocs.dart';
 import '../widgets/barrel.dart';
 
 class RefuelingsScreen extends StatelessWidget {
-  RefuelingsScreen({Key key}) : super(key: key);
+  const RefuelingsScreen({Key key}) : super(key: key);
 
   onDismissed(direction, context, refueling) {
     BlocProvider.of<RefuelingsBloc>(context).add(DeleteRefueling(refueling));

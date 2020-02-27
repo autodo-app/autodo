@@ -10,7 +10,7 @@ import 'package:json_intl/json_intl.dart';
 class ExtraActions extends StatelessWidget {
   final toggleAllKey;
 
-  ExtraActions(
+  const ExtraActions(
       {Key key = const ValueKey('__extra_actions__'), this.toggleAllKey})
       : super(key: key);
 

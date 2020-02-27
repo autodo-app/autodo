@@ -10,7 +10,7 @@ class DrivingDistanceChart extends StatelessWidget {
   final List<Series<DistanceRatePoint, DateTime>> seriesList;
   final bool animate;
 
-  DrivingDistanceChart(this.seriesList, {this.animate});
+  const DrivingDistanceChart(this.seriesList, {this.animate});
 
   lowerBound() {
     final minVal = seriesList[0]
@@ -52,7 +52,7 @@ class DrivingDistanceChart extends StatelessWidget {
 
 class DrivingDistanceHistory extends StatelessWidget {
   final data;
-  DrivingDistanceHistory(this.data);
+  const DrivingDistanceHistory(this.data);
 
   @override
   Widget build(BuildContext context) => Column(

@@ -17,7 +17,7 @@ class _NameForm extends StatelessWidget {
   final FocusNode node, nextNode;
   final Function(String) onSaved;
 
-  _NameForm({this.repeat, this.onSaved, this.node, this.nextNode});
+  const _NameForm({this.repeat, this.onSaved, this.node, this.nextNode});
 
   @override
   build(context) => TextFormField(
@@ -47,7 +47,7 @@ class _MileageForm extends StatelessWidget {
   final FocusNode node, nextNode;
   final Function(String) onSaved;
 
-  _MileageForm({this.repeat, this.onSaved, this.node, this.nextNode});
+  const _MileageForm({this.repeat, this.onSaved, this.node, this.nextNode});
 
   @override
   build(context) => TextFormField(
@@ -77,7 +77,7 @@ class RepeatAddEditScreen extends StatefulWidget {
   final _OnSaveCallback onSave;
   final Repeat repeat;
 
-  RepeatAddEditScreen({
+  const RepeatAddEditScreen({
     Key key = const ValueKey('__add_edit_repeat__'),
     @required this.onSave,
     @required this.isEditing,
