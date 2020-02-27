@@ -17,14 +17,14 @@ class WelcomePageScroller extends StatefulWidget {
   ];
 
   List<Widget> get screenList {
-    return this.screens;
+    return screens;
   }
 
   PageController get ctrl {
-    return this.controller;
+    return controller;
   }
 
-  void showPage(page) => this.controller.jumpToPage(page);
+  void showPage(page) => controller.jumpToPage(page);
 
   WelcomePageScroller({this.lastPageNotifier});
   @override

@@ -157,7 +157,7 @@ class SetRepeatsScreen extends StatefulWidget {
 
   @override
   SetRepeatsScreenState createState() =>
-      SetRepeatsScreenState(this.page == NewUserScreenPage.REPEATS);
+      SetRepeatsScreenState(page == NewUserScreenPage.REPEATS);
 }
 
 class SetRepeatsScreenState extends State<SetRepeatsScreen>

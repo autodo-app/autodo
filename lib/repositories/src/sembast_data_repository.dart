@@ -42,8 +42,8 @@ class SembastDataRepository extends Equatable implements DataRepository {
 
   SembastDataRepository(
       {@required createDb, dbFactory, this.dbPath = 'sample.db', pathProvider})
-      : this.dbFactory = dbFactory ?? databaseFactoryIo,
-        this.pathProvider = pathProvider ?? getApplicationDocumentsDirectory {}
+      : dbFactory = dbFactory ?? databaseFactoryIo,
+        pathProvider = pathProvider ?? getApplicationDocumentsDirectory {}
 
   Future<Database> _openDb() async {
     final path = await _getFullFilePath();

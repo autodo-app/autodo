@@ -9,9 +9,9 @@ class FirebaseWriteBatch extends Equatable implements WriteBatchWrapper {
   final WriteBatch _batch;
 
   FirebaseWriteBatch({@required firestoreInstance, @required collection})
-      : this._batch = firestoreInstance?.batch() ?? Firestore.instance.batch(),
+      : _batch = firestoreInstance?.batch() ?? Firestore.instance.batch(),
         assert(collection != null),
-        this._collection = collection;
+        _collection = collection;
 
   @override
   updateData(String id, dynamic data) =>

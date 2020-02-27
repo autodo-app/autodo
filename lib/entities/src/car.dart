@@ -20,9 +20,9 @@ class CarEntity extends Equatable {
       distanceRate,
       this.lastMileageUpdate,
       this.distanceRateHistory)
-      : this.numRefuelings = numRefuelings ?? 0,
-        this.averageEfficiency = averageEfficiency ?? 0.0,
-        this.distanceRate = distanceRate ?? 0.0;
+      : numRefuelings = numRefuelings ?? 0,
+        averageEfficiency = averageEfficiency ?? 0.0,
+        distanceRate = distanceRate ?? 0.0;
 
   @override
   List<Object> get props => [

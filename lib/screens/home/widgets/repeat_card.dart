@@ -23,7 +23,7 @@ class _RepeatTitle extends StatelessWidget {
                 text: JsonIntl.of(context).get(IntlKeys.task) + ' ',
                 style: Theme.of(context).primaryTextTheme.body1),
             TextSpan(
-                text: this.repeat.name,
+                text: repeat.name,
                 style: Theme.of(context).primaryTextTheme.subtitle),
           ]),
         ),
@@ -33,7 +33,7 @@ class _RepeatTitle extends StatelessWidget {
               text: JsonIntl.of(context).get(IntlKeys.interval) + ' ',
               style: Theme.of(context).primaryTextTheme.body1),
           TextSpan(
-              text: this.repeat.mileageInterval.toString(),
+              text: repeat.mileageInterval.toString(),
               style: Theme.of(context).primaryTextTheme.subtitle),
           TextSpan(
               text: ' miles', style: Theme.of(context).primaryTextTheme.body1)

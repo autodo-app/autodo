@@ -17,7 +17,7 @@ class SembastWriteBatch extends Equatable implements WriteBatchWrapper {
     @required this.dbFactory,
     @required this.dbPath,
     this.streamControllerUpdate,
-  }) : this.transactionList = transactionList ?? [];
+  }) : transactionList = transactionList ?? [];
 
   @override
   updateData(id, data) =>

@@ -219,7 +219,7 @@ class _TodoEditButton extends StatelessWidget {
                       );
                       BlocProvider.of<TodosBloc>(context).add(UpdateTodo(out));
                     },
-                    todo: this.todo,
+                    todo: todo,
                   ),
                 ));
           },

@@ -23,9 +23,9 @@ class Car extends Equatable {
     this.distanceRate = 0.0,
     lastMileageUpdate,
     distanceRateHistory,
-  })  : this.lastMileageUpdate = lastMileageUpdate ??
+  })  : lastMileageUpdate = lastMileageUpdate ??
             roundToDay(DateTime.fromMillisecondsSinceEpoch(0)),
-        this.distanceRateHistory = distanceRateHistory ?? [];
+        distanceRateHistory = distanceRateHistory ?? [];
 
   Car copyWith(
       {String id,

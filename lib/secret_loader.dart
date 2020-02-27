@@ -8,5 +8,5 @@ class SecretLoader {
   SecretLoader({this.secretPath});
   Future<Map<String, dynamic>> load() =>
       rootBundle.loadStructuredData<Map<String, dynamic>>(
-          this.secretPath, (jsonStr) async => json.decode(jsonStr));
+          secretPath, (jsonStr) async => json.decode(jsonStr));
 }

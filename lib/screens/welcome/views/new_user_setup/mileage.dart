@@ -112,7 +112,7 @@ class MileageScreen extends StatefulWidget {
   MileageScreen(this.mileageEntry, this.mileageKey, this.onNext);
 
   @override
-  MileageScreenState createState() => MileageScreenState(this.mileageEntry);
+  MileageScreenState createState() => MileageScreenState(mileageEntry);
 }
 
 class MileageScreenState extends State<MileageScreen> {
