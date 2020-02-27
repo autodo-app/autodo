@@ -6,7 +6,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:autodo/integ_test_keys.dart';
 
 class AutodoActionButton extends StatefulWidget {
-  final mainButtonKey;
+  final Key mainButtonKey;
   final List<Key> miniButtonKeys;
   final List<MaterialPageRoute> Function() miniButtonRoutes;
   final TickerProvider ticker;
@@ -27,7 +27,7 @@ class AutodoActionButton extends StatefulWidget {
 class _AutodoActionButtonState extends State<AutodoActionButton>
     with SingleTickerProviderStateMixin {
   AnimationController _controller;
-  final mainButtonKey;
+  final Key mainButtonKey;
   final List<Key> miniButtonKeys;
   final List<MaterialPageRoute> Function() miniButtonRoutes;
   final TickerProvider ticker;

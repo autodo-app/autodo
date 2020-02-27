@@ -134,7 +134,7 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
       final numRefuelings = thisCarsRefuelings.length;
 
       // Update average efficiency across all refuelings
-      var averageEfficiency;
+      double averageEfficiency;
       if (numRefuelings == 1) {
         // first refueling for this car
         averageEfficiency = thisCarsRefuelings[0].efficiency;

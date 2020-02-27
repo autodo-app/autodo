@@ -51,7 +51,7 @@ class DrivingDistanceChart extends StatelessWidget {
 }
 
 class DrivingDistanceHistory extends StatelessWidget {
-  final data;
+  final List<Series> data;
   const DrivingDistanceHistory(this.data);
 
   @override

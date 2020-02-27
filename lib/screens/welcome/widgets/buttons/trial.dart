@@ -8,7 +8,7 @@ import 'package:json_intl/json_intl.dart';
 import '../../views/new_user_setup/screen.dart';
 
 class TrialButton extends StatelessWidget {
-  final buttonPadding;
+  final double buttonPadding;
 
   const TrialButton({Key key, this.buttonPadding}) : super(key: key);
 

@@ -81,7 +81,7 @@ class _PasswordResetDialogState extends State<_PasswordResetDialog> {
 }
 
 class PasswordResetButton extends StatelessWidget {
-  final dialogKey;
+  final Key dialogKey;
 
   const PasswordResetButton({this.dialogKey});
 
@@ -93,7 +93,7 @@ class PasswordResetButton extends StatelessWidget {
         ),
         onPressed: () {
           final bloc = BlocProvider.of<LoginBloc>(context);
-          var email;
+          String email;
           if (bloc.state is LoginCredentialsValid) {
             email = (bloc.state as LoginCredentialsValid).email;
           } else {

@@ -72,7 +72,7 @@ class FuelMileageChart extends StatelessWidget {
 }
 
 class FuelMileageHistory extends StatelessWidget {
-  final data;
+  final List<Series> data;
 
   const FuelMileageHistory(this.data);
 

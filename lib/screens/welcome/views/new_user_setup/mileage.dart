@@ -107,7 +107,7 @@ class CarEntryFieldState extends State<CarEntryField> {
 
 class MileageScreen extends StatefulWidget {
   final String mileageEntry;
-  final mileageKey;
+  final Key mileageKey;
   final Function() onNext;
 
   const MileageScreen(this.mileageEntry, this.mileageKey, this.onNext);
@@ -117,7 +117,7 @@ class MileageScreen extends StatefulWidget {
 }
 
 class MileageScreenState extends State<MileageScreen> {
-  var mileageEntry;
+  String mileageEntry;
   List<GlobalKey<FormState>> formKeys = [GlobalKey<FormState>()];
   List<Car> cars = [Car()];
 

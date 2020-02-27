@@ -5,7 +5,7 @@ import 'package:json_intl/json_intl.dart';
 
 class PrivacyPolicy extends StatelessWidget {
   final RichText text;
-  final buttonKey;
+  final Key buttonKey;
 
   const PrivacyPolicy(this.text, {Key key, this.buttonKey}) : super(key: key);
 

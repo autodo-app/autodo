@@ -151,7 +151,7 @@ class _Card extends StatelessWidget {
 
 class SetRepeatsScreen extends StatefulWidget {
   final GlobalKey<FormState> repeatKey;
-  final page;
+  final NewUserScreenPage page;
 
   const SetRepeatsScreen(this.repeatKey, this.page);
 
@@ -164,7 +164,7 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen>
     with SingleTickerProviderStateMixin {
   bool pageWillBeVisible;
   AnimationController openCtrl;
-  var openCurve;
+  Animation<double> openCurve;
   FocusNode _oilNode, _tiresNode;
 
   SetRepeatsScreenState(this.pageWillBeVisible);

@@ -72,7 +72,7 @@ class EfficiencyStatsBloc
       }
       final last = emaData[emaData.length - 1];
       final newDate = point.date;
-      var newEfficiency;
+      double newEfficiency;
       if (points.indexOf(point) < EMA_CUTOFF) {
         // for first few values, just do simple moving average
         newEfficiency = (last.efficiency + point.efficiency) / 2;

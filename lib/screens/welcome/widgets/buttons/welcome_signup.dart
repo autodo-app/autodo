@@ -5,7 +5,7 @@ import 'package:autodo/routes.dart';
 import 'package:json_intl/json_intl.dart';
 
 class SignupButton extends StatelessWidget {
-  final buttonPadding;
+  final double buttonPadding;
 
   const SignupButton({Key key, this.buttonPadding}) : super(key: key);
 

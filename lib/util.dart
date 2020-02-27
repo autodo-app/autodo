@@ -87,7 +87,8 @@ HSV rgb2hsv(RGB rgb) {
   max = rgb.r > rgb.g ? rgb.r : rgb.g;
   max = max > rgb.b ? max : rgb.b;
 
-  var h, s, v = max;
+  double h, s;
+  final v = max;
 
   delta = max - min;
   if (delta < 0.00001) {

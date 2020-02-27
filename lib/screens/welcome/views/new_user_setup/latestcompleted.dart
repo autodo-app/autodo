@@ -13,8 +13,8 @@ import 'base.dart';
 class LatestRepeatsScreen extends StatefulWidget {
   final GlobalKey<FormState> repeatKey;
   final Function() onNext;
-  final page;
-  final todosBloc;
+  final NewUserScreenPage page;
+  final Bloc todosBloc;
 
   const LatestRepeatsScreen(
     this.repeatKey,
@@ -32,7 +32,7 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
     with TickerProviderStateMixin {
   bool expanded, pageTransition, pageWillBeVisible;
   AnimationController openCtrl;
-  var openCurve;
+  Animation<double> openCurve;
   FocusNode _oilNode, _tiresNode;
   final TodosBloc todosBloc;
 
