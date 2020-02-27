@@ -87,7 +87,7 @@ class NewUserScreenState extends State<NewUserScreen> {
                       appBar: AppBar(
                         leading: IconButton(
                           icon: Icon(Icons.arrow_back),
-                          onPressed: () => backAction(),
+                          onPressed: backAction,
                         ),
                       ),
                       body: currentPage(),

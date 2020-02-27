@@ -85,7 +85,7 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
       autofocus: false,
       onTap: () => setState(() => expanded = false),
       decoration: defaultInputDecoration('(miles)', 'Last Oil Change (miles)'),
-      validator: (value) => intNoRequire(value),
+      validator: intNoRequire,
       onSaved: (val) {
         if (val == null || val == '') return;
         BlocProvider.of<TodosBloc>(context).add(AddTodo(Todo(
@@ -106,7 +106,7 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
       onTap: () => setState(() => expanded = true),
       decoration:
           defaultInputDecoration('(miles)', 'Last Tire Rotation (miles)'),
-      validator: (value) => intNoRequire(value),
+      validator: intNoRequire,
       onSaved: (val) {
         if (val == null || val == '') return;
         BlocProvider.of<TodosBloc>(context).add(AddTodo(Todo(

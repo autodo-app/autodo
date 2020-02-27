@@ -55,7 +55,7 @@ class CarEntryFieldState extends State<CarEntryField> {
           autofocus: true,
           decoration: defaultInputDecoration(
               '', JsonIntl.of(context).get(IntlKeys.carName)),
-          validator: (val) => requiredValidator(val),
+          validator: requiredValidator,
           initialValue: '',
           onSaved: onNameSaved,
           focusNode: _nameNode,
@@ -69,7 +69,7 @@ class CarEntryFieldState extends State<CarEntryField> {
           autofocus: false,
           decoration: defaultInputDecoration(
               '', JsonIntl.of(context).get(IntlKeys.mileage)),
-          validator: (val) => intValidator(val),
+          validator: intValidator,
           initialValue: '',
           onSaved: onMileageSaved,
           focusNode: _mileageNode,

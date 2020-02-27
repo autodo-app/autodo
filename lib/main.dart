@@ -134,7 +134,7 @@ Future<void> main() async {
   _sentry = SentryClient(dsn: keys['sentry-dsn']);
   runZoned<Future<void>>(() async {
     run(false);
-  }, onError: (error, stackTrace) => _reportError(error, stackTrace));
+  }, onError: _reportError);
 }
 
 class App extends StatelessWidget {

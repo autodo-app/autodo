@@ -127,7 +127,7 @@ class _AutodoActionButtonState extends State<AutodoActionButton>
                     ).evaluate(_controller),
                   ),
                 ),
-                onPressed: () => switchState(),
+                onPressed: switchState,
               );
             },
           ),

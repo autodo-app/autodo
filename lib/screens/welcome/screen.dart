@@ -33,7 +33,7 @@ class WelcomeScreen extends StatelessWidget {
                             keys: dotKeys,
                             controller: scroller.ctrl,
                             itemCount: scroller.screenList.length,
-                            onPageSelected: (val) => scroller.showPage(val),
+                            onPageSelected: scroller.showPage,
                           ),
                         ],
                       ),

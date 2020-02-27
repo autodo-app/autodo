@@ -25,7 +25,7 @@ class SignupSubmitButton extends StatelessWidget {
               JsonIntl.of(context).get(IntlKeys.signup),
               style: Theme.of(context).accentTextTheme.button,
             ),
-            onPressed: () => onPressed(),
+            onPressed: onPressed,
           ),
         ),
       );
