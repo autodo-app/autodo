@@ -32,7 +32,7 @@ class DrivingDistanceChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (seriesList.length == 0) {
+    if (seriesList.isEmpty) {
       return Center(
           child: Text(JsonIntl.of(context).get(IntlKeys.noData),
               style: Theme.of(context).primaryTextTheme.body1));

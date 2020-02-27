@@ -135,7 +135,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   Stream<TodosState> _mapUpdateDueDatesToState(UpdateDueDates event) async* {
     final cars = event.cars;
     if (cars == null ||
-        cars.length == 0 ||
+        cars.isEmpty ||
         !(state is TodosLoaded) ||
         repo == null) return;
 
@@ -275,7 +275,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     final todos = (state is TodosLoaded) ? (state as TodosLoaded).todos : [];
     List<Todo> updatedTodos = todos;
     for (var r in event.repeats) {
-      if (todos.length > 0 &&
+      if (todos.isNotEmpty &&
           todos
               .any((t) => (!(t.completed ?? true) && t.repeatName == r.name))) {
         // redo the calculation for due date
@@ -300,7 +300,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
             .map((c) {
           final pastRepeats = todos
               .where((t) => (t.repeatName == r.name) && (t.carName == c.name));
-          if (pastRepeats.length == 0) {
+          if (pastRepeats.isEmpty) {
             // if the mileage interval is bigger than the car's current mileage,
             // then assume that it has not been done before.
             final dueMileage = (r.mileageInterval > c.mileage)

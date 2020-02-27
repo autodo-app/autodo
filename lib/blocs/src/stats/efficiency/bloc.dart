@@ -66,7 +66,7 @@ class EfficiencyStatsBloc
 
     final emaData = <FuelMileagePoint>[];
     for (var point in points) {
-      if (emaData.length == 0) {
+      if (emaData.isEmpty) {
         emaData.add(point);
         continue;
       }

@@ -244,7 +244,7 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
             (c) => (curRepeats.any((r) => r.cars.contains(c.name)) ? null : c))
         .toList();
     newCars.removeWhere((c) => c == null);
-    if (newCars.length == 0) {
+    if (newCars.isEmpty) {
       print('all cars have repeats, not adding defaults');
       return;
     }

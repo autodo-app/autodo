@@ -210,7 +210,7 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen>
 
     return BlocBuilder<RepeatsBloc, RepeatsState>(builder: (context, state) {
       if (!(state is RepeatsLoaded) ||
-          (state as RepeatsLoaded).repeats.length == 0) {
+          (state as RepeatsLoaded).repeats.isEmpty) {
         return LoadingIndicator();
       }
       final oilRepeat = (state as RepeatsLoaded)

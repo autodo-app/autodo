@@ -33,7 +33,7 @@ class FuelMileageChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (seriesList.length == 0 || seriesList[0].data.length == 0) {
+    if (seriesList.isEmpty || seriesList[0].data.isEmpty) {
       return Padding(
           padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
           child: Center(
