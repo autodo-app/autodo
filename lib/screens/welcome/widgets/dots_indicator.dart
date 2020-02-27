@@ -32,6 +32,7 @@ class DotsIndicator extends AnimatedWidget {
     this.keys,
   }) : super(listenable: controller);
 
+  @override
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.bottomCenter,

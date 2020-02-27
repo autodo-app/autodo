@@ -85,6 +85,7 @@ class PasswordResetButton extends StatelessWidget {
 
   const PasswordResetButton({this.dialogKey});
 
+  @override
   Widget build(context) => FlatButton(
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         child: Text(

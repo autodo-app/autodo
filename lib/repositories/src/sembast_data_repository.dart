@@ -83,6 +83,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
     return _todosStream.stream;
   }
 
+  @override
   Future<List<Todo>> getCurrentTodos() async {
     final db = await _openDb();
     final list = await _todos.find(db);
@@ -159,6 +160,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
 
   // Cars
 
+  @override
   Future<List<Car>> getCurrentCars() async {
     final db = await _openDb();
     final list = await _cars.find(db,
@@ -213,6 +215,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
 
   // Repeats
 
+  @override
   Future<List<Repeat>> getCurrentRepeats() async {
     final db = await _openDb();
     final list = await _repeats.find(db);
