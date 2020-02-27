@@ -197,7 +197,7 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen>
       // hide the keyboard
       FocusScope.of(context).requestFocus(FocusNode());
       await Future.delayed(Duration(milliseconds: 400));
-      Navigator.popAndPushNamed(context, AutodoRoutes.home);
+      await Navigator.popAndPushNamed(context, AutodoRoutes.home);
     }
   }
 

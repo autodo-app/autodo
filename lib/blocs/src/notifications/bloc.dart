@@ -65,7 +65,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     } catch (_) {
       yield NotificationsNotLoaded();
     }
-    _dataSubscription?.cancel();
+    await _dataSubscription?.cancel();
     _dataSubscription =
         repo?.notificationID()?.listen((id) => add(NotificationIdUpdated(id)));
   }
@@ -131,7 +131,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
 
   @override
   Future<void> close() async {
-    _dataSubscription?.cancel();
+    await _dataSubscription?.cancel();
     return super.close();
   }
 }

@@ -32,7 +32,7 @@ Future<void> _reportError(dynamic error, dynamic stackTrace) async {
     return;
   } else {
     // Send the Exception and Stacktrace to Sentry in Production mode.
-    _sentry.captureException(
+    await _sentry.captureException(
       exception: error,
       stackTrace: stackTrace,
     );
@@ -107,7 +107,7 @@ Future<Map> init() async {
   WidgetsFlutterBinding.ensureInitialized();
   final Map keys = await SecretLoader(secretPath: 'assets/keys.json').load();
   if (Platform.isIOS) {
-    FirebaseApp.configure(
+    await FirebaseApp.configure(
         name: 'autodo',
         options: FirebaseOptions(
           googleAppID: '1:617460744396:ios:7da25d96edce10cefc4269',
@@ -115,7 +115,7 @@ Future<Map> init() async {
           apiKey: keys['firebase-key'],
         ));
   } else {
-    FirebaseApp.configure(
+    await FirebaseApp.configure(
         name: 'autodo',
         options: FirebaseOptions(
           googleAppID: '1:617460744396:android:400cbb86de167047',
@@ -132,8 +132,8 @@ Future<Map> init() async {
 Future<void> main() async {
   final keys = await init();
   _sentry = SentryClient(dsn: keys['sentry-dsn']);
-  runZoned<Future<void>>(() async {
-    run(false);
+  await runZoned<Future<void>>(() async {
+    await run(false);
   }, onError: _reportError);
 }
 

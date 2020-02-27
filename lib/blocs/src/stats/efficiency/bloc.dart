@@ -40,7 +40,7 @@ class EfficiencyStatsBloc
           (_refuelingsBloc.state as RefuelingsLoaded).refuelings);
       yield EfficiencyStatsLoaded(data);
     }
-    _refuelingsSubscription?.cancel();
+    await _refuelingsSubscription?.cancel();
     _refuelingsBloc.listen((state) {
       if (state is RefuelingsLoaded) {
         add(UpdateEfficiencyData(state.refuelings));

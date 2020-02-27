@@ -153,7 +153,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
           .toList();
       yield TodosLoaded(updatedTodos);
       _carsCache = cars;
-      batch.commit();
+      await batch.commit();
     }
   }
 
@@ -166,7 +166,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       ..add(event.todo);
     yield TodosLoaded(updatedTodos);
     _scheduleNotification(event.todo);
-    repo.addNewTodo(event.todo);
+    await repo.addNewTodo(event.todo);
   }
 
   Stream<TodosState> _mapUpdateTodoToState(UpdateTodo event) async* {
@@ -184,7 +184,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     }).toList();
     yield TodosLoaded(updatedTodos);
     print('todos then: $updatedTodos');
-    repo.updateTodo(event.updatedTodo);
+    await repo.updateTodo(event.updatedTodo);
   }
 
   Todo _createNewTodoFromRepeat(repeat, todo) {
@@ -215,7 +215,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       if (!curRepeat.props.every((p) => p == null)) {
         final newTodo = _createNewTodoFromRepeat(curRepeat, curTodo);
         updatedTodos = updatedTodos..add(newTodo);
-        repo.addNewTodo(newTodo);
+        await repo.addNewTodo(newTodo);
       }
 
       final completedTodo = curTodo.copyWith(
@@ -226,7 +226,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
           .map((t) => (t.id == completedTodo.id) ? completedTodo : t)
           .toList();
       yield TodosLoaded(updatedTodos);
-      repo.updateTodo(completedTodo);
+      await repo.updateTodo(completedTodo);
     }
   }
 
@@ -239,7 +239,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       }
     }).toList();
     yield TodosLoaded(updatedTodos);
-    repo.deleteTodo(event.todo);
+    await repo.deleteTodo(event.todo);
   }
 
   Stream<TodosState> _mapToggleAllToState() async* {
@@ -254,7 +254,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       updatedTodos.forEach((updatedTodo) {
         batch.updateData(updatedTodo.id, updatedTodo.toEntity().toDocument());
       });
-      batch.commit();
+      await batch.commit();
     }
   }
 
@@ -290,7 +290,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
                 todos.where((t) => t.repeatName == r.name).toList(),
                 r.mileageInterval));
         print('updated todo: $updated');
-        repo.updateTodo(updated);
+        await repo.updateTodo(updated);
         updatedTodos = updatedTodos
             .map((t) => (t.id == updated.id) ? updated : t)
             .toList();

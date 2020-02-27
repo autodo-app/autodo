@@ -37,7 +37,7 @@ class DrivingDistanceStatsBloc
       final data = await _prepData((_carsBloc.state as CarsLoaded).cars);
       yield DrivingDistanceStatsLoaded(data);
     }
-    _carsSubscription?.cancel();
+    await _carsSubscription?.cancel();
     _carsBloc.listen((state) {
       if (state is CarsLoaded) {
         add(UpdateDrivingDistanceData(state.cars));

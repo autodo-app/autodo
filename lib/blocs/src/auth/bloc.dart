@@ -130,7 +130,7 @@ class AuthenticationBloc
 
     // make sure that any past trial users are no longer logged in
     final prefs = await SharedPreferences.getInstance();
-    prefs.setBool(trialUserKey, true);
+    await prefs.setBool(trialUserKey, true);
   }
 
   /// Responds to a [SignedUp] event with an [Authenticated] state.
@@ -144,7 +144,7 @@ class AuthenticationBloc
 
     // make sure that any past trial users are no longer logged in
     final prefs = await SharedPreferences.getInstance();
-    prefs.setBool(trialUserKey, true);
+    await prefs.setBool(trialUserKey, true);
   }
 
   /// Signs out the currently logged in user and yields [Unauthenticated].
@@ -154,7 +154,7 @@ class AuthenticationBloc
   /// to the home screen presentation layer.
   Stream<AuthenticationState> _mapLogOutToState() async* {
     yield Unauthenticated();
-    _userRepository.signOut();
+    await _userRepository.signOut();
   }
 
   /// Deletes all data associated with the currently logged in user and yields
@@ -171,6 +171,6 @@ class AuthenticationBloc
   Stream<AuthenticationState> _mapTrialUserSignedUpToState() async* {
     yield LocalAuthenticated(true);
     final prefs = await SharedPreferences.getInstance();
-    prefs.setBool(trialUserKey, true);
+    await prefs.setBool(trialUserKey, true);
   }
 }

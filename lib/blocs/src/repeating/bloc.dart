@@ -121,7 +121,7 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
         }
       }).toList();
       // yield RepeatsLoaded(updatedRepeats); // redundant because of the listener to the repository
-      repo.updateRepeat(event.updatedRepeat);
+      await repo.updateRepeat(event.updatedRepeat);
     }
   }
 
@@ -132,7 +132,7 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
           .where((r) => r.id != event.repeat.id)
           .toList();
       yield RepeatsLoaded(updatedRepeats);
-      repo.deleteRepeat(event.repeat);
+      await repo.deleteRepeat(event.repeat);
     }
   }
 

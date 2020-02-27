@@ -97,7 +97,7 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
     final updatedRefuelings =
         List<Refueling>.from((state as RefuelingsLoaded).refuelings)..add(out);
     yield RefuelingsLoaded(updatedRefuelings);
-    repo.addNewRefueling(out);
+    await repo.addNewRefueling(out);
   }
 
   Stream<RefuelingsState> _mapUpdateRefuelingToState(
@@ -117,7 +117,7 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
         .map((r) => r.id == out.id ? out : r)
         .toList();
     yield RefuelingsLoaded(updatedRefuelings);
-    repo.updateRefueling(out);
+    await repo.updateRefueling(out);
   }
 
   Stream<RefuelingsState> _mapDeleteRefuelingToState(
@@ -128,7 +128,7 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
           .where((r) => r.id != event.refueling.id)
           .toList();
       yield RefuelingsLoaded(updatedRefuelings);
-      repo.deleteRefueling(event.refueling);
+      await repo.deleteRefueling(event.refueling);
     }
   }
 

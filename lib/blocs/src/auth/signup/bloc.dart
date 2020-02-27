@@ -129,7 +129,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
     while (!verified) {
       await Future.delayed(const Duration(milliseconds: 100));
       final cur = await _authRepository.getCurrentUser();
-      cur.reload();
+      await cur.reload();
       verified = cur.isEmailVerified;
     }
   }

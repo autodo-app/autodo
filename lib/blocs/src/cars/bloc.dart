@@ -83,7 +83,7 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
       final updatedCars = List<Car>.from((state as CarsLoaded).cars)
         ..add(event.car);
       yield CarsLoaded(updatedCars);
-      repo.addNewCar(event.car);
+      await repo.addNewCar(event.car);
     }
   }
 
@@ -93,7 +93,7 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
         return car.id == event.updatedCar.id ? event.updatedCar : car;
       }).toList();
       yield CarsLoaded(updatedCars);
-      repo.updateCar(event.updatedCar);
+      await repo.updateCar(event.updatedCar);
     }
   }
 
@@ -104,7 +104,7 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
           .where((car) => car.id != event.car.id)
           .toList();
       yield CarsLoaded(updatedCars);
-      repo.deleteCar(event.car);
+      await repo.deleteCar(event.car);
     }
   }
 

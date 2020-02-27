@@ -13,9 +13,9 @@ void main() {
       final Widget app = MaterialApp(
         home: home,
       );
-      AutodoBannerAd()
-        ..load()
-        ..show();
+      final bannerAd = AutodoBannerAd();
+      // ignore: unawaited_futures
+      bannerAd.load().then((value) => bannerAd.show());
       AutodoBannerAd.defaultListener(MobileAdEvent.loaded);
       await tester.pumpWidget(app);
       expect(find.byType(Scaffold), findsOneWidget);

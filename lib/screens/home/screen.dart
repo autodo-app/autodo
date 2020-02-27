@@ -143,9 +143,9 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
     if (ModalRoute.of(context).isCurrent) {
       _bannerShown = true;
       await _bannerAd?.dispose(); // clear old banner ad if one exists
-      _bannerAd = _bannerAdConfig()
-        ..load()
-        ..show();
+      _bannerAd = _bannerAdConfig();
+      // ignore: unawaited_futures
+      _bannerAd.load().then((value) => _bannerAd.show());
     }
   }
 
