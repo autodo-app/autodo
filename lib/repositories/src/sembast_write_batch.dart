@@ -20,11 +20,11 @@ class SembastWriteBatch extends Equatable implements WriteBatchWrapper {
   }) : transactionList = transactionList ?? [];
 
   @override
-  updateData(id, data) =>
+  void updateData(id, data) =>
       transactionList.add((txn) => store.record(id).put(txn, data));
 
   @override
-  setData(data) => transactionList.add((txn) => store.add(txn, data));
+  void setData(data) => transactionList.add((txn) => store.add(txn, data));
 
   @override
   Future<void> commit() async {
@@ -44,5 +44,5 @@ class SembastWriteBatch extends Equatable implements WriteBatchWrapper {
   List<Object> get props => [store, dbPath];
 
   @override
-  toString() => 'SembastWriteBatch { store: $store, path: $dbPath }';
+  String toString() => 'SembastWriteBatch { store: $store, path: $dbPath }';
 }

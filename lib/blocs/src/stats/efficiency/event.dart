@@ -19,5 +19,5 @@ class UpdateEfficiencyData extends EfficiencyStatsEvent {
   List<Object> get props => [refuelings];
 
   @override
-  toString() => 'UpdateEfficiencyData { refuelings: $refuelings }';
+  String toString() => 'UpdateEfficiencyData { refuelings: $refuelings }';
 }

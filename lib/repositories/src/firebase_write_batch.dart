@@ -14,11 +14,11 @@ class FirebaseWriteBatch extends Equatable implements WriteBatchWrapper {
         _collection = collection;
 
   @override
-  updateData(String id, dynamic data) =>
+  void updateData(String id, dynamic data) =>
       _batch.updateData(_collection.document(id), data);
 
   @override
-  setData(dynamic data) => _batch.setData(_collection.document(), data);
+  void setData(dynamic data) => _batch.setData(_collection.document(), data);
 
   @override
   Future<void> commit() async {

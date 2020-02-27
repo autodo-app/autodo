@@ -5,5 +5,5 @@ import 'screen.dart';
 class WelcomeScreenProvider extends StatelessWidget {
   // Placeholder for any blocs that need provided to this widget
   @override
-  build(context) => WelcomeScreen();
+  Widget build(context) => WelcomeScreen();
 }

@@ -13,7 +13,7 @@ class HomeScreenProvider extends StatelessWidget {
   const HomeScreenProvider({this.integrationTest});
 
   @override
-  build(BuildContext context) => MultiBlocProvider(
+  Widget build(BuildContext context) => MultiBlocProvider(
         providers: [
           BlocProvider<TabBloc>(
             create: (context) => TabBloc(),

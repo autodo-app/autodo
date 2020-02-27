@@ -39,7 +39,7 @@ Future<void> _reportError(dynamic error, dynamic stackTrace) async {
   }
 }
 
-void run(bool integrationTest) async {
+Future<void> run(bool integrationTest) async {
   final AuthRepository authRepository = FirebaseAuthRepository();
   final theme = createTheme();
   runApp(
@@ -129,7 +129,7 @@ Future<Map> init() async {
   return keys;
 }
 
-void main() async {
+Future<void> main() async {
   final keys = await init();
   _sentry = SentryClient(dsn: keys['sentry-dsn']);
   runZoned<Future<void>>(() async {
@@ -149,7 +149,7 @@ class App extends StatelessWidget {
         _authRepository = authRepository;
 
   @override
-  build(context) {
+  Widget build(context) {
     final Widget homeProvider =
         HomeScreenProvider(integrationTest: integrationTest);
     final Widget welcomeProvider = WelcomeScreenProvider();

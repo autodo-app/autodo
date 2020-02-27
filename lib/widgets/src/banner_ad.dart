@@ -10,7 +10,7 @@ class AutodoBannerAd extends BannerAd {
     keywords: <String>['Game', 'Mario'],
   );
 
-  static defaultListener(MobileAdEvent event) {
+  static void defaultListener(MobileAdEvent event) {
     print('BannerAd $event');
   }
 

@@ -36,19 +36,19 @@ class _RepeatFormState extends State<RepeatForm> {
   final _autocompleteKey = GlobalKey<AutoCompleteTextFieldState<Repeat>>();
 
   @override
-  initState() {
+  void initState() {
     _autocompleteController = TextEditingController();
     super.initState();
   }
 
   @override
-  dispose() {
+  void dispose() {
     _autocompleteController.dispose();
     super.dispose();
   }
 
   @override
-  build(context) {
+  Widget build(context) {
     autoCompleteField = AutoCompleteTextField<Repeat>(
       controller: _autocompleteController,
       decoration: defaultInputDecoration(

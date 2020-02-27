@@ -22,7 +22,7 @@ class _OilInterval extends StatelessWidget {
   const _OilInterval(this.repeat, this.node, this.nextNode);
 
   @override
-  build(context) => TextFormField(
+  Widget build(context) => TextFormField(
         key: IntegrationTestKeys.setOilInterval,
         maxLines: 1,
         autofocus: false,
@@ -46,7 +46,7 @@ class _TireRotationInterval extends StatelessWidget {
   const _TireRotationInterval(this.repeat, this.node);
 
   @override
-  build(context) => TextFormField(
+  Widget build(context) => TextFormField(
         key: IntegrationTestKeys.setTireRotationInterval,
         maxLines: 1,
         autofocus: false,
@@ -64,7 +64,7 @@ class _TireRotationInterval extends StatelessWidget {
 
 class _HeaderText extends StatelessWidget {
   @override
-  build(context) => Container(
+  Widget build(context) => Container(
         padding: EdgeInsets.fromLTRB(0, 0, 0, 30),
         height: 110,
         child: Center(
@@ -101,7 +101,7 @@ class _Card extends StatelessWidget {
       this.tireRotationNode, this.onNext);
 
   @override
-  build(context) => Container(
+  Widget build(context) => Container(
         padding: EdgeInsets.all(10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -185,13 +185,13 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen>
   }
 
   @override
-  dispose() {
+  void dispose() {
     _oilNode.dispose();
     _tiresNode.dispose();
     super.dispose();
   }
 
-  _next() async {
+  Future<void> _next() async {
     if (widget.repeatKey.currentState.validate()) {
       widget.repeatKey.currentState.save();
       // hide the keyboard
@@ -202,7 +202,7 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen>
   }
 
   @override
-  build(context) {
+  Widget build(context) {
     if (pageWillBeVisible) {
       openCtrl.forward();
       pageWillBeVisible = false;

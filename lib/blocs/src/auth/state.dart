@@ -63,7 +63,7 @@ class LocalAuthenticated extends Authenticated {
   List<Object> get props => [newUser];
 
   @override
-  toString() => 'LocalAuthenticated { newUser: $newUser }';
+  String toString() => 'LocalAuthenticated { newUser: $newUser }';
 }
 
 /// Represents an app state where there is not a user logged in.

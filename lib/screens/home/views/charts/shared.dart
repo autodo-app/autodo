@@ -36,7 +36,7 @@ double floorToPrecision(double val, int places) {
   return (val * mod).floor().toDouble() / mod;
 }
 
-lerp(min, max, count, places) => List.generate(
+List<TickSpec<double>> lerp(min, max, count, places) => List.generate(
         count,
         (index) =>
             floorToPrecision(index * ((max - min) / count) + min, places))

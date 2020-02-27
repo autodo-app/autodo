@@ -38,7 +38,7 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
 
   LatestRepeatsScreenState(this.pageWillBeVisible, this.todosBloc);
 
-  _next() async {
+  Future<void> _next() async {
     if (widget.repeatKey.currentState.validate()) {
       widget.repeatKey.currentState.save();
       // hide the keyboard
@@ -66,14 +66,14 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
   }
 
   @override
-  dispose() {
+  void dispose() {
     _oilNode.dispose();
     _tiresNode.dispose();
     super.dispose();
   }
 
   @override
-  build(context) {
+  Widget build(context) {
     if (pageWillBeVisible) {
       openCtrl.forward();
       pageWillBeVisible = false;

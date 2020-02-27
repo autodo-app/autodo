@@ -62,7 +62,7 @@ class _AutodoActionButtonState extends State<AutodoActionButton>
     }
   }
 
-  _buttonKey(index) {
+  Key _buttonKey(index) {
     if (miniButtonKeys == null || index >= miniButtonKeys.length) return null;
     return miniButtonKeys[index];
   }

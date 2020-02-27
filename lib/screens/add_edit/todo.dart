@@ -24,7 +24,7 @@ class _NameForm extends StatelessWidget {
   const _NameForm({this.todo, this.onSaved, this.node, this.nextNode});
 
   @override
-  build(context) => TextFormField(
+  Widget build(context) => TextFormField(
         decoration: InputDecoration(
           border: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.teal),
@@ -72,14 +72,14 @@ class _DateFormState extends State<_DateForm> {
   _DateFormState({this.node, this.nextNode, this.initial});
 
   @override
-  initState() {
+  void initState() {
     _ctrl = TextEditingController();
     if (initial != null) _ctrl.text = DateFormat.yMd().format(initial);
     super.initState();
   }
 
   @override
-  dispose() {
+  void dispose() {
     _ctrl.dispose();
     super.dispose();
   }
@@ -120,7 +120,7 @@ class _DateFormState extends State<_DateForm> {
   }
 
   @override
-  build(context) => Row(children: <Widget>[
+  Widget build(context) => Row(children: <Widget>[
         Expanded(
           child: TextFormField(
               decoration: InputDecoration(
@@ -161,7 +161,7 @@ class _MileageForm extends StatelessWidget {
   const _MileageForm({this.todo, this.onSaved, this.node, this.nextNode});
 
   @override
-  build(context) => TextFormField(
+  Widget build(context) => TextFormField(
         decoration: InputDecoration(
           border: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.teal),
@@ -203,7 +203,7 @@ class _CarToggleFormState extends State<_CarToggleForm> {
   _CarToggleFormState(this.isSelected, this.cars, this.onSaved);
 
   @override
-  build(context) => FormField(
+  Widget build(context) => FormField(
         builder: (state) => Center(
           child: ToggleButtons(
             children: cars.map((c) => Text(c.name)).toList(),
@@ -296,7 +296,7 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
           : List.generate(cars.length, (idx) => (idx == 0) ? true : false);
 
   @override
-  build(context) => Scaffold(
+  Widget build(context) => Scaffold(
         resizeToAvoidBottomPadding: false,
         appBar: AppBar(
           title: Text(

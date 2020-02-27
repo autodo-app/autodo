@@ -14,7 +14,7 @@ class _RefuelingTitle extends StatelessWidget {
 
   const _RefuelingTitle({Key key, @required this.refueling}) : super(key: key);
 
-  dateField(context) => TextSpan(
+  TextSpan dateField(context) => TextSpan(
       text: JsonIntl.of(context).get(IntlKeys.onLiteral) +
           ' ' + // TODO: Can't concat verb and date
           DateFormat.yMMMd().format(refueling.date) +
@@ -22,7 +22,7 @@ class _RefuelingTitle extends StatelessWidget {
       style: Theme.of(context).primaryTextTheme.body1);
 
   @override
-  build(context) => RichText(
+  Widget build(context) => RichText(
         text: TextSpan(
           children: [
             TextSpan(
@@ -50,7 +50,7 @@ class _RefuelingCost extends StatelessWidget {
   const _RefuelingCost({Key key, @required this.refueling}) : super(key: key);
 
   @override
-  build(context) => RichText(
+  Widget build(context) => RichText(
         text: TextSpan(
           children: [
             TextSpan(
@@ -71,7 +71,7 @@ class _RefuelingAmount extends StatelessWidget {
   const _RefuelingAmount({Key key, @required this.refueling}) : super(key: key);
 
   @override
-  build(context) => RichText(
+  Widget build(context) => RichText(
         text: TextSpan(
           children: [
             TextSpan(
@@ -94,7 +94,7 @@ class _RefuelingBody extends StatelessWidget {
   const _RefuelingBody({Key key, @required this.refueling}) : super(key: key);
 
   @override
-  build(context) => Container(
+  Widget build(context) => Container(
       padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,7 +111,8 @@ class _RefuelingTags extends StatelessWidget {
   const _RefuelingTags({Key key, @required this.refueling}) : super(key: key);
 
   @override
-  build(context) => CarTag(text: refueling.carName, color: refueling.carColor);
+  Widget build(context) =>
+      CarTag(text: refueling.carName, color: refueling.carColor);
 }
 
 class _RefuelingEditButton extends StatelessWidget {
@@ -121,7 +122,7 @@ class _RefuelingEditButton extends StatelessWidget {
       : super(key: key);
 
   @override
-  build(context) => ButtonTheme.fromButtonThemeData(
+  Widget build(context) => ButtonTheme.fromButtonThemeData(
         data: ButtonThemeData(
           minWidth: 0,
         ),
@@ -162,7 +163,7 @@ class _RefuelingDeleteButton extends StatelessWidget {
       : super(key: key);
 
   @override
-  build(context) => ButtonTheme.fromButtonThemeData(
+  Widget build(context) => ButtonTheme.fromButtonThemeData(
         data: ButtonThemeData(
           minWidth: 0,
         ),
@@ -191,7 +192,7 @@ class _RefuelingFooter extends StatelessWidget {
   const _RefuelingFooter({Key key, @required this.refueling}) : super(key: key);
 
   @override
-  build(context) => Row(
+  Widget build(context) => Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           _RefuelingTags(refueling: refueling),
@@ -218,7 +219,7 @@ class RefuelingCard extends StatelessWidget {
       : super(key: key);
 
   @override
-  build(context) => InkWell(
+  Widget build(context) => InkWell(
       onTap: onTap,
       child: Dismissible(
           key: Key('__dismissible__'),

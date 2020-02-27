@@ -21,7 +21,8 @@ class DbLoaded extends DatabaseState {
   List<Object> get props => [repository, newUser];
 
   @override
-  toString() => 'DbLoaded { repository: $repository, newUser: $newUser }';
+  String toString() =>
+      'DbLoaded { repository: $repository, newUser: $newUser }';
 }
 
 class DbNotLoaded extends DatabaseState {}

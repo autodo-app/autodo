@@ -9,7 +9,7 @@ import '../widgets/barrel.dart';
 class TodosScreen extends StatelessWidget {
   const TodosScreen({Key key}) : super(key: key);
 
-  onDismissed(direction, context, todo) {
+  void onDismissed(direction, context, todo) {
     BlocProvider.of<TodosBloc>(context).add(DeleteTodo(todo));
     Scaffold.of(context).showSnackBar(DeleteTodoSnackBar(
       context: context,
@@ -18,7 +18,7 @@ class TodosScreen extends StatelessWidget {
     ));
   }
 
-  onTap(context, todo) async {
+  Future<void> onTap(context, todo) async {
     // final removedTodo = await Navigator.of(context).push(
     //   MaterialPageRoute(
     //     builder: (_) => DetailsScreen(id: todo.id),
@@ -26,14 +26,14 @@ class TodosScreen extends StatelessWidget {
     // );
   }
 
-  onCheckboxChanged(context, todo) {
+  void onCheckboxChanged(context, todo) {
     BlocProvider.of<TodosBloc>(context).add(
       UpdateTodo(todo.copyWith(completed: !todo.completed)),
     );
   }
 
   @override
-  build(context) => BlocBuilder<FilteredTodosBloc, FilteredTodosState>(
+  Widget build(context) => BlocBuilder<FilteredTodosBloc, FilteredTodosState>(
           builder: (context, state) {
         if (state is FilteredTodosLoading) {
           return LoadingIndicator();

@@ -10,7 +10,7 @@ class PrivacyPolicy extends StatelessWidget {
   const PrivacyPolicy(this.text, {Key key, this.buttonKey}) : super(key: key);
 
   @override
-  build(context) => AlertDialog(
+  Widget build(context) => AlertDialog(
         backgroundColor: cardColor,
         title: Text(JsonIntl.of(context).get(IntlKeys.privacyPolicy)),
         titleTextStyle: Theme.of(context).primaryTextTheme.title,

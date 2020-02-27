@@ -14,7 +14,7 @@ class SignupScreen extends StatelessWidget {
       : super(key: key);
 
   @override
-  build(context) => Container(
+  Widget build(context) => Container(
       decoration: scaffoldBackgroundGradient(),
       child: Scaffold(
         appBar: AppBar(

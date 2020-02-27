@@ -13,7 +13,7 @@ class PasswordForm extends StatelessWidget {
   const PasswordForm({this.onSaved, this.node, this.login = true});
 
   @override
-  build(context) => Container(
+  Widget build(context) => Container(
         padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
         child: TextFormField(
           obscureText: true,

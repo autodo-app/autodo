@@ -24,7 +24,7 @@ class _CarsFormState extends State<CarsCheckboxForm> {
   }
 
   @override
-  build(context) => FormField<List<Map<String, dynamic>>>(
+  Widget build(context) => FormField<List<Map<String, dynamic>>>(
         builder: (context) => Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

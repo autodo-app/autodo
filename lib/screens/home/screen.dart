@@ -35,7 +35,7 @@ class _ScreenWithBanner extends StatelessWidget {
   const _ScreenWithBanner({this.child, this.bannerShown = true});
 
   @override
-  build(context) => Center(
+  Widget build(context) => Center(
           child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
@@ -123,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
         }
       });
 
-  _bannerAdConfig() => AutodoBannerAd(
+  AutodoBannerAd _bannerAdConfig() => AutodoBannerAd(
         adUnitId: kReleaseMode
             ? 'ca-app-pub-6809809089648617/3864738913'
             : BannerAd.testAdUnitId,
@@ -138,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
   }
 
   @override
-  void didPush() async {
+  Future<void> didPush() async {
     // Route was pushed onto navigator and is now topmost route.
     if (ModalRoute.of(context).isCurrent) {
       _bannerShown = true;
@@ -150,7 +150,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
   }
 
   @override
-  void didPop() async {
+  Future<void> didPop() async {
     // Current route was popped off the navigator.
     if (_bannerShown) {
       _bannerShown = false;
@@ -159,7 +159,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
   }
 
   @override
-  void didPushNext() async {
+  Future<void> didPushNext() async {
     // Another route is now above this route
     if (_bannerShown) {
       _bannerShown = false;
@@ -169,7 +169,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
   }
 
   @override
-  initState() {
+  void initState() {
     FirebaseAdMob.instance.initialize(appId: BannerAd.testAdUnitId);
     super.initState();
   }
@@ -177,7 +177,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
   List<Widget> fakeBottomButtons = [Container(height: 50)];
 
   @override
-  build(context) => MultiBlocProvider(
+  Widget build(context) => MultiBlocProvider(
           providers: [
             BlocProvider<FilteredRefuelingsBloc>(
                 create: (context) => FilteredRefuelingsBloc(

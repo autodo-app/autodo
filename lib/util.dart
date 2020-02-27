@@ -48,7 +48,7 @@ class RGB extends Equatable {
 
   const RGB(this.r, this.g, this.b);
 
-  toValue() {
+  int toValue() {
     final red = (r * 255).toInt();
     final green = (g * 255).toInt();
     final blue = (b * 255).toInt();
@@ -59,7 +59,7 @@ class RGB extends Equatable {
   List<Object> get props => [r, g, b];
 
   @override
-  toString() => 'RGB { r: $r, g: $g, b: $b }';
+  String toString() => 'RGB { r: $r, g: $g, b: $b }';
 }
 
 class HSV extends Equatable {
@@ -69,13 +69,13 @@ class HSV extends Equatable {
 
   const HSV(this.h, this.s, this.v);
 
-  toValue() => hsv2rgb(this).toValue();
+  int toValue() => hsv2rgb(this).toValue();
 
   @override
   List<Object> get props => [h, s, v];
 
   @override
-  toString() => 'HSV { h: $h, s: $s, v: $v }';
+  String toString() => 'HSV { h: $h, s: $s, v: $v }';
 }
 
 HSV rgb2hsv(RGB rgb) {
@@ -160,12 +160,12 @@ RGB hsv2rgb(HSV hsv) {
   return out;
 }
 
-clamp(input, lo, hi) {
+num clamp(num input, num lo, num hi) {
   return (input < lo) ? lo : (input > hi) ? hi : input;
 }
 
 /// This will always round down for now
-roundToDay(DateTime date) {
+DateTime roundToDay(DateTime date) {
   final hours = Duration(hours: date.hour);
   final mins = Duration(minutes: date.minute);
   final secs = Duration(seconds: date.second);
@@ -186,7 +186,7 @@ double roundToPrecision(double val, int places) {
   return (val * mod).round().toDouble() / mod;
 }
 
-changeFocus(FocusNode cur, FocusNode next) {
+void changeFocus(FocusNode cur, FocusNode next) {
   cur.unfocus();
   next.requestFocus();
 }

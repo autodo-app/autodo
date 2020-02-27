@@ -6,7 +6,7 @@ class EditCarListScreen extends StatelessWidget {
   const EditCarListScreen({Key key}) : super(key: key);
 
   @override
-  build(context) => Scaffold(
+  Widget build(context) => Scaffold(
         resizeToAvoidBottomPadding:
             false, // used to avoid overflow when keyboard is viewable
         appBar: AppBar(

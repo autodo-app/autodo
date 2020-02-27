@@ -12,7 +12,7 @@ class DrivingDistanceChart extends StatelessWidget {
 
   const DrivingDistanceChart(this.seriesList, {this.animate});
 
-  lowerBound() {
+  int lowerBound() {
     final minVal = seriesList[0]
         .data
         .reduce((value, element) =>
@@ -21,7 +21,7 @@ class DrivingDistanceChart extends StatelessWidget {
     return (0.75 * minVal).round();
   }
 
-  upperBound() {
+  int upperBound() {
     final maxVal = seriesList[0]
         .data
         .reduce((value, element) =>

@@ -88,7 +88,7 @@ class NavDrawerState extends State<NavDrawer> {
       ];
 
   @override
-  build(BuildContext context) => BlocBuilder<AuthenticationBloc,
+  Widget build(BuildContext context) => BlocBuilder<AuthenticationBloc,
           AuthenticationState>(
       builder: (context, state) => Drawer(
             child: Container(

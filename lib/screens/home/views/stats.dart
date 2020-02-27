@@ -9,7 +9,7 @@ class StatisticsScreen extends StatelessWidget {
   const StatisticsScreen({Key key}) : super(key: key);
 
   @override
-  build(context) => ListView(
+  Widget build(context) => ListView(
         children: <Widget>[
           BlocBuilder<EfficiencyStatsBloc, EfficiencyStatsState>(
             builder: (context, state) {

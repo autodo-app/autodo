@@ -9,7 +9,7 @@ import 'package:autodo/theme.dart';
 import 'package:json_intl/json_intl.dart';
 
 class LegalNotice extends StatelessWidget {
-  onTap(context) {
+  void onTap(context) {
     BlocProvider.of<LegalBloc>(context).add(LoadLegal());
     showDialog<Widget>(
         context: context,
@@ -27,7 +27,7 @@ class LegalNotice extends StatelessWidget {
   }
 
   @override
-  build(context) => Container(
+  Widget build(context) => Container(
       padding: EdgeInsets.fromLTRB(5, 15, 5, 0),
       child: Center(
           child: RichText(

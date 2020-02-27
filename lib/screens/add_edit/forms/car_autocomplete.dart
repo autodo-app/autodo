@@ -37,20 +37,20 @@ class _CarFormState extends State<CarForm> {
   List<Car> cars;
 
   @override
-  initState() {
+  void initState() {
     _autocompleteController = TextEditingController();
     _autocompleteController.text = widget.initialValue ?? '';
     super.initState();
   }
 
   @override
-  dispose() {
+  void dispose() {
     _autocompleteController.dispose();
     super.dispose();
   }
 
   @override
-  build(context) {
+  Widget build(context) {
     print(_autocompleteController.text);
     // pulled out into the function so that the validator can access it
     autoCompleteField = AutoCompleteTextField<Car>(

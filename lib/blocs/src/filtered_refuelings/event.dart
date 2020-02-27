@@ -38,5 +38,5 @@ class FilteredRefuelingsUpdateCars extends FilteredRefuelingsEvent {
   List<Object> get props => [cars];
 
   @override
-  toString() => 'FilteredRefuelingsUpdateCars { cars: $cars }';
+  String toString() => 'FilteredRefuelingsUpdateCars { cars: $cars }';
 }

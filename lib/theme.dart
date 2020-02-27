@@ -114,7 +114,7 @@ TextStyle finePrint() {
   return TextStyle(fontSize: 13.0, fontWeight: FontWeight.w300);
 }
 
-createTheme() {
+ThemeData createTheme() {
   final primaryText = TextTheme(
     body1: TextStyle(
       color: Colors.white.withAlpha(230),

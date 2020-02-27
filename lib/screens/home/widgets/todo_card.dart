@@ -17,7 +17,7 @@ class _TodoTitle extends StatelessWidget {
 
   const _TodoTitle({Key key, @required this.todo}) : super(key: key);
 
-  preface(BuildContext context) {
+  String preface(BuildContext context) {
     if (todo.completed) {
       return JsonIntl.of(context).get(IntlKeys.completed);
     } else if (todo.dueState == TodoDueState.PAST_DUE) {
@@ -30,7 +30,7 @@ class _TodoTitle extends StatelessWidget {
   }
 
   @override
-  build(context) => RichText(
+  Widget build(context) => RichText(
           text: TextSpan(children: [
         TextSpan(
             text: preface(context) + ' ',
@@ -51,7 +51,7 @@ class _TodoCheckbox extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  build(context) => Transform.scale(
+  Widget build(context) => Transform.scale(
       scale: 1.5,
       child: Container(
           key: ValueKey('__todo_checkbox_${todo.name}'),
@@ -70,7 +70,7 @@ class _TodoDueDate extends StatelessWidget {
   const _TodoDueDate({Key key, @required this.todo}) : super(key: key);
 
   @override
-  build(context) => Row(
+  Widget build(context) => Row(
         children: <Widget>[
           Icon(Icons.alarm, size: 30),
           Text(
@@ -88,7 +88,7 @@ class _TodoDueMileage extends StatelessWidget {
 
   _TodoDueMileage({Key key, @required this.todo}) : super(key: key);
 
-  mileageString() {
+  String mileageString() {
     if (todo.dueMileage != null) {
       return todo.dueMileage
           .toString()
@@ -99,7 +99,7 @@ class _TodoDueMileage extends StatelessWidget {
   }
 
   @override
-  build(context) => Row(
+  Widget build(context) => Row(
         children: <Widget>[
           Icon(Icons.pin_drop, size: 30),
           Padding(padding: EdgeInsets.all(5)),
@@ -126,7 +126,7 @@ class _TodoLastCompleted extends StatelessWidget {
   const _TodoLastCompleted({Key key, @required this.todo}) : super(key: key);
 
   @override
-  build(context) => Row(
+  Widget build(context) => Row(
         children: <Widget>[
           Icon((todo.completed ?? false) ? Icons.alarm : Icons.new_releases,
               size: 30),
@@ -147,7 +147,7 @@ class _TodoDueInfo extends StatelessWidget {
   const _TodoDueInfo({Key key, @required this.todo}) : super(key: key);
 
   @override
-  build(context) => Container(
+  Widget build(context) => Container(
         padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -174,7 +174,7 @@ class _TodoBody extends StatelessWidget {
       : super(key: key);
 
   @override
-  build(context) => Container(
+  Widget build(context) => Container(
         padding: EdgeInsets.fromLTRB(10, 25, 10, 25),
         child: Row(
           children: <Widget>[
@@ -194,7 +194,7 @@ class _TodoEditButton extends StatelessWidget {
   const _TodoEditButton({Key key, @required this.todo}) : super(key: key);
 
   @override
-  build(context) => ButtonTheme.fromButtonThemeData(
+  Widget build(context) => ButtonTheme.fromButtonThemeData(
         data: ButtonThemeData(
           minWidth: 0,
         ),
@@ -234,7 +234,7 @@ class _TodoFooter extends StatelessWidget {
   const _TodoFooter({Key key, @required this.todo}) : super(key: key);
 
   @override
-  build(context) => Row(
+  Widget build(context) => Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Row(
@@ -300,7 +300,7 @@ class TodoCard extends StatelessWidget {
     @required this.emphasized,
   }) : super(key: key);
 
-  emphasizedDecoration(todo) {
+  BoxDecoration emphasizedDecoration(todo) {
     if (todo.dueState == TodoDueState.PAST_DUE) {
       return pastdueDecoration;
     } else if (todo.dueState == TodoDueState.DUE_SOON) {
@@ -311,7 +311,7 @@ class TodoCard extends StatelessWidget {
   }
 
   @override
-  build(context) => InkWell(
+  Widget build(context) => InkWell(
         onTap: onTap,
         child: Dismissible(
           key: Key(

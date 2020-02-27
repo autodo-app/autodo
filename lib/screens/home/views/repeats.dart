@@ -11,7 +11,7 @@ class RepeatsScreen extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  build(context) => BlocBuilder<RepeatsBloc, RepeatsState>(
+  Widget build(context) => BlocBuilder<RepeatsBloc, RepeatsState>(
         builder: (context, state) {
           if (state is RepeatsLoaded) {
             return ListView.builder(

@@ -20,7 +20,7 @@ class _NameForm extends StatelessWidget {
   const _NameForm({this.repeat, this.onSaved, this.node, this.nextNode});
 
   @override
-  build(context) => TextFormField(
+  Widget build(context) => TextFormField(
         decoration: InputDecoration(
           border: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.teal),
@@ -50,7 +50,7 @@ class _MileageForm extends StatelessWidget {
   const _MileageForm({this.repeat, this.onSaved, this.node, this.nextNode});
 
   @override
-  build(context) => TextFormField(
+  Widget build(context) => TextFormField(
         decoration: InputDecoration(
           border: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.teal),
@@ -118,7 +118,7 @@ class _RepeatAddEditScreenState extends State<RepeatAddEditScreen> {
   }
 
   @override
-  build(context) => Scaffold(
+  Widget build(context) => Scaffold(
         resizeToAvoidBottomPadding: false,
         appBar: AppBar(
           title: Text(

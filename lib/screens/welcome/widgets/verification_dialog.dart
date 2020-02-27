@@ -8,7 +8,7 @@ import 'package:json_intl/json_intl.dart';
 
 class EmailVerificationDialog extends StatelessWidget {
   @override
-  build(context) => AlertDialog(
+  Widget build(context) => AlertDialog(
         title: Text(JsonIntl.of(context).get(IntlKeys.verifyEmail),
             style: Theme.of(context).primaryTextTheme.title),
         content: Text(JsonIntl.of(context).get(IntlKeys.verifyBodyText),

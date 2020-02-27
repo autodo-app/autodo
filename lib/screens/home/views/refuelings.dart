@@ -8,7 +8,7 @@ import '../widgets/barrel.dart';
 class RefuelingsScreen extends StatelessWidget {
   const RefuelingsScreen({Key key}) : super(key: key);
 
-  onDismissed(direction, context, refueling) {
+  void onDismissed(direction, context, refueling) {
     BlocProvider.of<RefuelingsBloc>(context).add(DeleteRefueling(refueling));
     Scaffold.of(context).showSnackBar(
       DeleteRefuelingSnackBar(
@@ -19,7 +19,7 @@ class RefuelingsScreen extends StatelessWidget {
     );
   }
 
-  onTap(context, refueling) async {
+  Future<void> onTap(context, refueling) async {
     // final removedRefueling = await Navigator.of(context).push(
     //   MaterialPageRoute(
     //     builder: (_) => DetailsScreen(id: refueling.id),
@@ -28,7 +28,7 @@ class RefuelingsScreen extends StatelessWidget {
   }
 
   @override
-  build(context) =>
+  Widget build(context) =>
       BlocBuilder<FilteredRefuelingsBloc, FilteredRefuelingsState>(
           builder: (context, state) {
         if (state is FilteredRefuelingsLoading) {

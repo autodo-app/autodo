@@ -33,7 +33,7 @@ class _SignupFormState extends State<SignupForm> {
   }
 
   @override
-  build(context) => BlocListener<SignupBloc, SignupState>(
+  Widget build(context) => BlocListener<SignupBloc, SignupState>(
         listener: (context, state) {
           if (state is SignupError) {
             Scaffold.of(context)

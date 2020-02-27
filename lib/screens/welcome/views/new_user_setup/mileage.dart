@@ -34,14 +34,14 @@ class CarEntryFieldState extends State<CarEntryField> {
       this.nextNode, this.onNameSaved, this.onMileageSaved, this.formKey);
 
   @override
-  initState() {
+  void initState() {
     _nameNode = FocusNode();
     _mileageNode = FocusNode();
     super.initState();
   }
 
   @override
-  dispose() {
+  void dispose() {
     _nameNode.dispose();
     _mileageNode.dispose();
     super.dispose();
@@ -49,7 +49,7 @@ class CarEntryFieldState extends State<CarEntryField> {
 
   @override
   Widget build(BuildContext context) {
-    nameField() => TextFormField(
+    TextFormField nameField() => TextFormField(
           key: IntegrationTestKeys.mileageNameField,
           maxLines: 1,
           autofocus: true,
@@ -63,7 +63,7 @@ class CarEntryFieldState extends State<CarEntryField> {
           onFieldSubmitted: (_) => changeFocus(_nameNode, _mileageNode),
         );
 
-    mileageField() => TextFormField(
+    TextFormField mileageField() => TextFormField(
           key: IntegrationTestKeys.mileageMileageField,
           maxLines: 1,
           autofocus: false,
@@ -123,7 +123,7 @@ class MileageScreenState extends State<MileageScreen> {
 
   MileageScreenState(this.mileageEntry);
 
-  _next() async {
+  Future<void> _next() async {
     var allValidated = true;
     formKeys.forEach((k) {
       if (k.currentState.validate()) {

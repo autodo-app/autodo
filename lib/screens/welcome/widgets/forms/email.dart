@@ -13,7 +13,7 @@ class EmailForm extends StatelessWidget {
   const EmailForm({this.onSaved, this.node, this.nextNode, this.login = true});
 
   @override
-  build(context) => TextFormField(
+  Widget build(context) => TextFormField(
         keyboardType: TextInputType.emailAddress,
         textInputAction: TextInputAction.next,
         autofocus: true,

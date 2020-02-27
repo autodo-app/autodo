@@ -6,5 +6,5 @@ class DetailsScreen extends StatelessWidget {
   const DetailsScreen({Key key, @required this.id}) : super(key: key);
 
   @override
-  build(context) => Container();
+  Widget build(context) => Container();
 }

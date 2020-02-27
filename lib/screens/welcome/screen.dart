@@ -13,7 +13,7 @@ class WelcomeScreen extends StatelessWidget {
       : super(key: key);
 
   @override
-  build(context) => Scaffold(
+  Widget build(context) => Scaffold(
         body: Center(
           child: Container(
             decoration: scaffoldBackgroundGradient(),

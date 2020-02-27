@@ -10,6 +10,6 @@ class FuelMileagePoint extends Equatable {
   List<Object> get props => [date?.toUtc(), efficiency];
 
   @override
-  toString() =>
+  String toString() =>
       'FuelMileagePoint { date: ${date?.toUtc()}, efficiency: $efficiency }';
 }
