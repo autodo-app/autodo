@@ -9,6 +9,7 @@ import 'package:autodo/widgets/widgets.dart';
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/localization.dart';
 import 'package:autodo/util.dart';
+import 'package:json_intl/json_intl.dart';
 import 'forms/barrel.dart';
 
 typedef _OnSaveCallback = Function(
@@ -27,7 +28,7 @@ class _NameForm extends StatelessWidget {
           border: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.teal),
           ),
-          labelText: "Action Name *",
+          labelText: JsonIntl.of(context).get(IntlKeys.actionName),
           contentPadding:
               EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
         ),
@@ -57,7 +58,7 @@ class _MileageForm extends StatelessWidget {
           border: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.teal),
           ),
-          labelText: "Mileage Interval *",
+          labelText: JsonIntl.of(context).get(IntlKeys.mileageInterval),
           contentPadding:
               EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
         ),
@@ -125,8 +126,8 @@ class _RepeatAddEditScreenState extends State<RepeatAddEditScreen> {
         appBar: AppBar(
           title: Text(
             isEditing
-                ? AutodoLocalizations.editRepeat
-                : AutodoLocalizations.addRepeat,
+                ? JsonIntl.of(context).get(IntlKeys.editRepeat)
+                : JsonIntl.of(context).get(IntlKeys.addRepeat),
           ),
         ),
         body: Form(
@@ -181,8 +182,8 @@ class _RepeatAddEditScreenState extends State<RepeatAddEditScreen> {
                 ))),
         floatingActionButton: FloatingActionButton(
           tooltip: isEditing
-              ? AutodoLocalizations.saveChanges
-              : AutodoLocalizations.addRefueling,
+              ? JsonIntl.of(context).get(IntlKeys.saveChanges)
+              : JsonIntl.of(context).get(IntlKeys.addRefueling),
           child: Icon(isEditing ? Icons.check : Icons.add),
           onPressed: () {
             if (_formKey.currentState.validate()) {

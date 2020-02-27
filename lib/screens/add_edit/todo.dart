@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:autodo/models/models.dart';
 import 'package:autodo/widgets/widgets.dart';
 import 'package:autodo/blocs/blocs.dart';
+import 'package:json_intl/json_intl.dart';
 import 'forms/barrel.dart';
 import 'package:autodo/integ_test_keys.dart';
 import 'package:autodo/localization.dart';
@@ -28,7 +29,7 @@ class _NameForm extends StatelessWidget {
           border: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.teal),
           ),
-          labelText: "Action Name *",
+          labelText: JsonIntl.of(context).get(IntlKeys.actionName),
           contentPadding:
               EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
         ),
@@ -123,8 +124,8 @@ class _DateFormState extends State<_DateForm> {
         Expanded(
           child: TextFormField(
               decoration: InputDecoration(
-                hintText: AutodoLocalizations.optional,
-                labelText: AutodoLocalizations.dueDate,
+                hintText: JsonIntl.of(context).get(IntlKeys.optional),
+                labelText: JsonIntl.of(context).get(IntlKeys.dueDate),
                 contentPadding: EdgeInsets.fromLTRB(16, 20, 16, 5),
                 border: OutlineInputBorder(
                   borderSide: BorderSide(color: Theme.of(context).primaryColor),
@@ -132,8 +133,9 @@ class _DateFormState extends State<_DateForm> {
               ),
               controller: _ctrl,
               keyboardType: TextInputType.datetime,
-              validator: (val) =>
-                  isValidDate(val) ? null : AutodoLocalizations.invalidDate,
+              validator: (val) => isValidDate(val)
+                  ? null
+                  : JsonIntl.of(context).get(IntlKeys.invalidDate),
               onSaved: (val) => widget.onSaved(val),
               textInputAction: (nextNode == null)
                   ? TextInputAction.done
@@ -145,7 +147,7 @@ class _DateFormState extends State<_DateForm> {
         ),
         IconButton(
           icon: Icon(Icons.calendar_today),
-          tooltip: AutodoLocalizations.chooseDate,
+          tooltip: JsonIntl.of(context).get(IntlKeys.chooseDate),
           onPressed: (() => chooseDate(context, _ctrl.text)),
         )
       ]);
@@ -164,7 +166,7 @@ class _MileageForm extends StatelessWidget {
           border: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.teal),
           ),
-          labelText: "Due Mileage *",
+          labelText: JsonIntl.of(context).get(IntlKeys.dueMileage),
           contentPadding:
               EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
         ),
@@ -299,8 +301,8 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
         appBar: AppBar(
           title: Text(
             isEditing
-                ? AutodoLocalizations.editTodo
-                : AutodoLocalizations.addTodo,
+                ? JsonIntl.of(context).get(IntlKeys.editTodo)
+                : JsonIntl.of(context).get(IntlKeys.addTodo),
           ),
         ),
         body: Form(
@@ -407,8 +409,8 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
                 ))),
         floatingActionButton: FloatingActionButton(
           tooltip: isEditing
-              ? AutodoLocalizations.saveChanges
-              : AutodoLocalizations.addRefueling,
+              ? JsonIntl.of(context).get(IntlKeys.saveChanges)
+              : JsonIntl.of(context).get(IntlKeys.addRefueling),
           child: Icon(isEditing ? Icons.check : Icons.add),
           onPressed: () {
             if (_formKey.currentState.validate()) {

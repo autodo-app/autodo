@@ -1,8 +1,10 @@
+import 'package:autodo/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/theme.dart';
+import 'package:json_intl/json_intl.dart';
 import 'form.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -20,7 +22,7 @@ class LoginScreen extends StatelessWidget {
             onPressed: () => Navigator.pop(context),
           ),
           title: Text(
-            'LOG IN',
+            JsonIntl.of(context).get(IntlKeys.logIn),
             style: TextStyle(color: Colors.grey[300]),
           ),
         ),

@@ -80,7 +80,7 @@ void main() {
       );
       await tester.pumpAndSettle();
       expect(find.byKey(scaffoldKey), findsOneWidget);
-      expect(find.text(AutodoLocalizations.appTitle), findsOneWidget);
+      expect(find.text(IntlKeys.appTitle), findsOneWidget);
     });
 
     testWidgets('tab switch', (WidgetTester tester) async {

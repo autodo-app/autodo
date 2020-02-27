@@ -7,6 +7,7 @@ import 'package:autodo/models/models.dart';
 import 'package:autodo/localization.dart';
 import 'package:autodo/theme.dart';
 import 'package:autodo/util.dart';
+import 'package:json_intl/json_intl.dart';
 
 class CarForm extends StatefulWidget {
   final String initialValue;
@@ -55,7 +56,8 @@ class _CarFormState extends State<CarForm> {
     autoCompleteField = AutoCompleteTextField<Car>(
       controller: _autocompleteController,
       decoration: defaultInputDecoration(
-              AutodoLocalizations.requiredLiteral, AutodoLocalizations.carName)
+              JsonIntl.of(context).get(IntlKeys.requiredLiteral),
+              JsonIntl.of(context).get(IntlKeys.carName))
           .copyWith(errorText: _carError),
       itemSubmitted: (item) => setState(() {
         _autocompleteController.text = item.name;
@@ -69,8 +71,8 @@ class _CarFormState extends State<CarForm> {
       itemBuilder: (context, suggestion) => Padding(
         child: ListTile(
             title: Text(suggestion.name),
-            trailing:
-                Text(AutodoLocalizations.mileage + ": ${suggestion.mileage}")),
+            trailing: Text(JsonIntl.of(context).get(IntlKeys.mileage) +
+                ": ${suggestion.mileage}")),
         padding: EdgeInsets.all(5.0),
       ),
       itemSorter: (a, b) => a.name.length == b.name.length
@@ -94,8 +96,8 @@ class _CarFormState extends State<CarForm> {
         var res = requiredValidator(txt);
         autoCompleteField.updateDecoration(
           decoration: defaultInputDecoration(
-                  AutodoLocalizations.requiredLiteral,
-                  AutodoLocalizations.carName)
+                  JsonIntl.of(context).get(IntlKeys.requiredLiteral),
+                  JsonIntl.of(context).get(IntlKeys.carName))
               .copyWith(errorText: res),
         );
         setState(() => _carError = res);

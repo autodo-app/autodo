@@ -1,4 +1,6 @@
+import 'package:autodo/localization.dart';
 import 'package:flutter/material.dart';
+import 'package:json_intl/json_intl.dart';
 
 class Welcome extends StatelessWidget {
   @override
@@ -21,7 +23,7 @@ class Welcome extends StatelessWidget {
             padding: EdgeInsets.all(10.0),
           ),
           Text(
-            'Welcome to auToDo!',
+            JsonIntl.of(context).get(IntlKeys.welcome),
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 30,
@@ -34,7 +36,7 @@ class Welcome extends StatelessWidget {
             padding: EdgeInsets.all(5.0),
           ),
           Text(
-            "Car maintenance made simple.",
+            JsonIntl.of(context).get(IntlKeys.welcomeDesc),
             textAlign: TextAlign.center,
             style: TextStyle(
                 fontSize: 16.0,

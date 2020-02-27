@@ -1,3 +1,4 @@
+import 'package:autodo/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -6,6 +7,7 @@ import 'package:autodo/theme.dart';
 import 'package:autodo/integ_test_keys.dart';
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/models/models.dart';
+import 'package:json_intl/json_intl.dart';
 import 'base.dart';
 
 class CarEntryField extends StatefulWidget {
@@ -50,7 +52,8 @@ class CarEntryFieldState extends State<CarEntryField> {
           key: IntegrationTestKeys.mileageNameField,
           maxLines: 1,
           autofocus: true,
-          decoration: defaultInputDecoration('', 'Car Name'),
+          decoration: defaultInputDecoration(
+              '', JsonIntl.of(context).get(IntlKeys.carName)),
           validator: (val) => requiredValidator(val),
           initialValue: '',
           onSaved: onNameSaved,
@@ -63,7 +66,8 @@ class CarEntryFieldState extends State<CarEntryField> {
           key: IntegrationTestKeys.mileageMileageField,
           maxLines: 1,
           autofocus: false,
-          decoration: defaultInputDecoration('', 'Mileage'),
+          decoration: defaultInputDecoration(
+              '', JsonIntl.of(context).get(IntlKeys.mileage)),
           validator: (val) => intValidator(val),
           initialValue: '',
           onSaved: onMileageSaved,
@@ -148,7 +152,7 @@ class MileageScreenState extends State<MileageScreen> {
           Padding(
             padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
             child: Text(
-              'Before you get started,\n let\'s get some info about your car(s).',
+              JsonIntl.of(context).get(IntlKeys.carAddTitle),
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 20,
@@ -159,7 +163,7 @@ class MileageScreenState extends State<MileageScreen> {
             ),
           ),
           Text(
-            'Tap "Add" to configure multiple cars.',
+            JsonIntl.of(context).get(IntlKeys.tapAddCars),
             style: Theme.of(context).primaryTextTheme.body1,
           ),
         ],
@@ -194,7 +198,7 @@ class MileageScreenState extends State<MileageScreen> {
                       FlatButton.icon(
                         padding: EdgeInsets.all(0),
                         icon: Icon(Icons.add),
-                        label: Text('Add'),
+                        label: Text(JsonIntl.of(context).get(IntlKeys.add)),
                         onPressed: () => setState(() {
                           cars.add(Car());
                           formKeys.add(GlobalKey<FormState>());
@@ -203,7 +207,7 @@ class MileageScreenState extends State<MileageScreen> {
                       FlatButton.icon(
                         padding: EdgeInsets.all(0),
                         icon: Icon(Icons.delete),
-                        label: Text('Remove'),
+                        label: Text(JsonIntl.of(context).get(IntlKeys.remove)),
                         onPressed: () {
                           if (cars.length < 2) return;
                           setState(() => cars.removeAt(cars.length - 1));
@@ -216,7 +220,7 @@ class MileageScreenState extends State<MileageScreen> {
                     padding: EdgeInsets.all(0),
                     materialTapTargetSize: MaterialTapTargetSize.padded,
                     child: Text(
-                      'Next',
+                      JsonIntl.of(context).get(IntlKeys.next),
                       style: Theme.of(context).primaryTextTheme.button,
                     ),
                     onPressed: () async => await _next(),

@@ -6,6 +6,8 @@ import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/widgets/widgets.dart';
 import 'package:autodo/screens/add_edit/barrel.dart';
 import 'package:autodo/localization.dart';
+import 'package:intl/intl.dart';
+import 'package:json_intl/json_intl.dart';
 
 class _RefuelingTitle extends StatelessWidget {
   final Refueling refueling;
@@ -13,9 +15,9 @@ class _RefuelingTitle extends StatelessWidget {
   _RefuelingTitle({Key key, @required this.refueling}) : super(key: key);
 
   dateField(context) => TextSpan(
-      text: AutodoLocalizations.onLiteral +
-          ' ' +
-          AutodoLocalizations.dateFormat(refueling.date) +
+      text: JsonIntl.of(context).get(IntlKeys.onLiteral) +
+          ' ' + // TODO: Can't concat verb and date
+          DateFormat.yMMMd().format(refueling.date) +
           ' ',
       style: Theme.of(context).primaryTextTheme.body1);
 
@@ -24,17 +26,18 @@ class _RefuelingTitle extends StatelessWidget {
         text: TextSpan(
           children: [
             TextSpan(
-                text: AutodoLocalizations.refueling + ' ',
+                text: JsonIntl.of(context).get(IntlKeys.refueling) + ' ',
                 style: Theme.of(context).primaryTextTheme.body1),
             dateField(context),
             TextSpan(
-                text: AutodoLocalizations.at + ' ',
+                text: JsonIntl.of(context).get(IntlKeys.at) + ' ',
                 style: Theme.of(context).primaryTextTheme.body1),
             TextSpan(
-                text: refueling.mileage.toString() + ' ',
+                text: NumberFormat.decimalPattern().format(refueling.mileage) +
+                    ' ',
                 style: Theme.of(context).primaryTextTheme.subtitle),
             TextSpan(
-                text: AutodoLocalizations.distanceUnits,
+                text: JsonIntl.of(context).get(IntlKeys.distanceUnits),
                 style: Theme.of(context).primaryTextTheme.body1)
           ],
         ),
@@ -51,11 +54,11 @@ class _RefuelingCost extends StatelessWidget {
         text: TextSpan(
           children: [
             TextSpan(
-                text: AutodoLocalizations.totalCost + ': ',
+                text: JsonIntl.of(context).get(IntlKeys.totalCost) + ': ',
                 style: Theme.of(context).primaryTextTheme.body1),
             TextSpan(
-                text: AutodoLocalizations.moneyUnits +
-                    refueling.cost.toStringAsFixed(2),
+                text: NumberFormat.simpleCurrency(name: 'USD')
+                    .format(refueling.cost), // TODO: check unit
                 style: Theme.of(context).primaryTextTheme.subtitle),
           ],
         ),
@@ -72,13 +75,13 @@ class _RefuelingAmount extends StatelessWidget {
         text: TextSpan(
           children: [
             TextSpan(
-                text: AutodoLocalizations.totalAmount + ': ',
+                text: JsonIntl.of(context).get(IntlKeys.totalAmount) + ': ',
                 style: Theme.of(context).primaryTextTheme.body1),
             TextSpan(
-                text: refueling.amount.toStringAsFixed(2),
+                text: NumberFormat(',###.0#').format(refueling.amount),
                 style: Theme.of(context).primaryTextTheme.subtitle),
             TextSpan(
-                text: ' ' + AutodoLocalizations.fuelUnits,
+                text: ' ' + JsonIntl.of(context).get(IntlKeys.fuelUnits),
                 style: Theme.of(context).primaryTextTheme.body1)
           ],
         ),
@@ -168,10 +171,13 @@ class _RefuelingDeleteButton extends StatelessWidget {
           onPressed: () {
             BlocProvider.of<RefuelingsBloc>(context)
                 .add(DeleteRefueling(refueling));
-            Scaffold.of(context).showSnackBar(DeleteRefuelingSnackBar(
-              onUndo: () => BlocProvider.of<RefuelingsBloc>(context)
-                  .add(AddRefueling(refueling)),
-            ));
+            Scaffold.of(context).showSnackBar(
+              DeleteRefuelingSnackBar(
+                context: context,
+                onUndo: () => BlocProvider.of<RefuelingsBloc>(context)
+                    .add(AddRefueling(refueling)),
+              ),
+            );
           },
         ),
       );

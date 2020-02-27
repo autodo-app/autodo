@@ -1,3 +1,4 @@
+import 'package:autodo/localization.dart';
 import 'package:autodo/repositories/repositories.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
@@ -57,7 +58,7 @@ void main() {
         await tester.enterText(find.byWidget(w.widget), '2000');
         await tester.pumpAndSettle();
       }
-      await tester.tap(find.text('Next'));
+      await tester.tap(find.text(IntlKeys.next));
       await tester.pumpAndSettle();
       expect(find.byType(LatestRepeatsScreen), findsOneWidget);
     });
@@ -88,10 +89,10 @@ void main() {
         await tester.enterText(find.byWidget(w.widget), '2000');
         await tester.pump();
       }
-      await tester.tap(find.text('Next'));
+      await tester.tap(find.text(IntlKeys.next));
       await tester.pumpAndSettle();
       expect(find.byType(LatestRepeatsScreen), findsOneWidget);
-      await tester.tap(find.text('Next'));
+      await tester.tap(find.text(IntlKeys.next));
       await tester.pumpAndSettle();
       expect(find.byType(SetRepeatsScreen), findsOneWidget);
     });
@@ -122,10 +123,10 @@ void main() {
         await tester.enterText(find.byWidget(w.widget), '2000');
         await tester.pump();
       }
-      await tester.tap(find.text('Next'));
+      await tester.tap(find.text(IntlKeys.next));
       await tester.pumpAndSettle();
       expect(find.byType(LatestRepeatsScreen), findsOneWidget);
-      await tester.tap(find.text('Next'));
+      await tester.tap(find.text(IntlKeys.next));
       await tester.pumpAndSettle();
       expect(find.byType(SetRepeatsScreen), findsOneWidget);
       await tester.tap(find.byIcon(Icons.arrow_back));
@@ -163,13 +164,13 @@ void main() {
         await tester.enterText(find.byWidget(w.widget), '2000');
         await tester.pump();
       }
-      await tester.tap(find.text('Next'));
+      await tester.tap(find.text(IntlKeys.next));
       await tester.pumpAndSettle();
       expect(find.byType(LatestRepeatsScreen), findsOneWidget);
-      await tester.tap(find.text('Next'));
+      await tester.tap(find.text(IntlKeys.next));
       await tester.pumpAndSettle();
       expect(find.byType(SetRepeatsScreen), findsOneWidget);
-      await tester.tap(find.text('Next'));
+      await tester.tap(find.text(IntlKeys.next));
       await tester.pumpAndSettle();
       expect(find.byType(Container), findsOneWidget);
     });

@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:autodo/models/models.dart';
 import 'package:autodo/localization.dart';
+import 'package:json_intl/json_intl.dart';
 
 class TabSelector extends StatelessWidget {
   final AppTab activeTab;
@@ -27,19 +28,19 @@ class TabSelector extends StatelessWidget {
       items: [
         BottomNavigationBarItem(
           icon: Icon(Icons.list, key: todosTabKey),
-          title: Text(AutodoLocalizations.todos),
+          title: Text(JsonIntl.of(context).get(IntlKeys.todos)),
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.local_gas_station, key: refuelingsTabKey),
-          title: Text(AutodoLocalizations.refuelings),
+          title: Text(JsonIntl.of(context).get(IntlKeys.refuelings)),
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.show_chart, key: statsTabKey),
-          title: Text(AutodoLocalizations.stats),
+          title: Text(JsonIntl.of(context).get(IntlKeys.stats)),
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.repeat, key: repeatsTabKey),
-          title: Text(AutodoLocalizations.repeats),
+          title: Text(JsonIntl.of(context).get(IntlKeys.repeats)),
         ),
       ],
     );

@@ -6,6 +6,8 @@ import 'package:autodo/models/models.dart';
 import 'package:autodo/localization.dart';
 import 'package:autodo/theme.dart';
 import 'package:autodo/screens/add_edit/barrel.dart';
+import 'package:intl/intl.dart';
+import 'package:json_intl/json_intl.dart';
 import 'todo_delete_button.dart';
 
 const int DUE_SOON_INTERVAL = 100;
@@ -15,15 +17,15 @@ class _TodoTitle extends StatelessWidget {
 
   _TodoTitle({Key key, @required this.todo}) : super(key: key);
 
-  preface() {
+  preface(BuildContext context) {
     if (todo.completed) {
-      return AutodoLocalizations.completed;
+      return JsonIntl.of(context).get(IntlKeys.completed);
     } else if (todo.dueState == TodoDueState.PAST_DUE) {
-      return AutodoLocalizations.pastDue;
+      return JsonIntl.of(context).get(IntlKeys.pastDue);
     } else if (todo.dueState == TodoDueState.DUE_SOON) {
-      return AutodoLocalizations.dueSoon;
+      return JsonIntl.of(context).get(IntlKeys.dueSoon);
     } else {
-      return AutodoLocalizations.upcoming;
+      return JsonIntl.of(context).get(IntlKeys.upcoming);
     }
   }
 
@@ -31,7 +33,7 @@ class _TodoTitle extends StatelessWidget {
   build(context) => RichText(
           text: TextSpan(children: [
         TextSpan(
-            text: preface(),
+            text: preface(context) + ' ',
             style: Theme.of(context).primaryTextTheme.subtitle),
         TextSpan(
             text: todo.name, style: Theme.of(context).primaryTextTheme.title)
@@ -72,9 +74,9 @@ class _TodoDueDate extends StatelessWidget {
         children: <Widget>[
           Icon(Icons.alarm, size: 30),
           Text(
-              AutodoLocalizations.dueOn +
+              JsonIntl.of(context).get(IntlKeys.dueOn) +
                   ' ' +
-                  AutodoLocalizations.dateFormat(todo.dueDate),
+                  DateFormat.yMMMd().format(todo.dueDate),
               style: Theme.of(context).primaryTextTheme.body1),
         ],
       );
@@ -104,13 +106,13 @@ class _TodoDueMileage extends StatelessWidget {
           RichText(
               text: TextSpan(children: [
             TextSpan(
-                text: AutodoLocalizations.dueAt + ' ',
+                text: JsonIntl.of(context).get(IntlKeys.dueAt) + ' ',
                 style: Theme.of(context).primaryTextTheme.body1),
             TextSpan(
                 text: mileageString(),
                 style: Theme.of(context).primaryTextTheme.subtitle),
             TextSpan(
-              text: ' ' + AutodoLocalizations.distanceUnits,
+              text: ' ' + JsonIntl.of(context).get(IntlKeys.distanceUnits),
               style: Theme.of(context).primaryTextTheme.body1,
             )
           ]))
@@ -130,8 +132,8 @@ class _TodoLastCompleted extends StatelessWidget {
               size: 30),
           Padding(padding: EdgeInsets.all(5)),
           Text(
-            AutodoLocalizations
-                .firstTimeDoingTask, // TODO adjust this for past completed
+            JsonIntl.of(context).get(IntlKeys
+                .firstTimeDoingTask), // TODO adjust this for past completed
             style:
                 Theme.of(context).primaryTextTheme.body1.copyWith(fontSize: 14),
           ),

@@ -41,3 +41,6 @@ keys.json
 
 **.db
 *.workspace
+
+lib/generated_plugin_registrant.dart
+test/*.db

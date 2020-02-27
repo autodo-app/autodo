@@ -7,6 +7,7 @@ import 'package:autodo/models/models.dart';
 import 'package:autodo/localization.dart';
 import 'package:autodo/theme.dart';
 import 'package:autodo/util.dart';
+import 'package:json_intl/json_intl.dart';
 
 class RepeatForm extends StatefulWidget {
   final Todo todo;
@@ -50,8 +51,9 @@ class _RepeatFormState extends State<RepeatForm> {
   build(context) {
     autoCompleteField = AutoCompleteTextField<Repeat>(
       controller: _autocompleteController,
-      decoration: defaultInputDecoration(AutodoLocalizations.requiredLiteral,
-              AutodoLocalizations.repeatName)
+      decoration: defaultInputDecoration(
+              JsonIntl.of(context).get(IntlKeys.requiredLiteral),
+              JsonIntl.of(context).get(IntlKeys.repeatName))
           .copyWith(errorText: _repeatError),
       itemSubmitted: (item) => setState(() {
         _autocompleteController.text = item.name;
@@ -66,8 +68,8 @@ class _RepeatFormState extends State<RepeatForm> {
       itemBuilder: (context, suggestion) => Padding(
         child: ListTile(
             title: Text(suggestion.name),
-            trailing: Text(AutodoLocalizations.interval +
-                ": ${suggestion.mileageInterval}")),
+            trailing: Text(JsonIntl.of(context).get(IntlKeys.interval) +
+                " ${suggestion.mileageInterval}")),
         padding: EdgeInsets.all(5.0),
       ),
       itemSorter: (a, b) => a.name.length == b.name.length
@@ -98,8 +100,8 @@ class _RepeatFormState extends State<RepeatForm> {
           // }
           autoCompleteField.updateDecoration(
             decoration: defaultInputDecoration(
-                    AutodoLocalizations.requiredLiteral,
-                    AutodoLocalizations.carName)
+                    JsonIntl.of(context).get(IntlKeys.requiredLiteral),
+                    JsonIntl.of(context).get(IntlKeys.carName))
                 .copyWith(errorText: res),
           );
           setState(() => _repeatError = res);

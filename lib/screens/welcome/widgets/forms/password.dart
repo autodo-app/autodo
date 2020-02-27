@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/localization.dart';
+import 'package:json_intl/json_intl.dart';
 
 class PasswordForm extends StatelessWidget {
   final Function onSaved;
@@ -19,7 +20,7 @@ class PasswordForm extends StatelessWidget {
           focusNode: node,
           textInputAction: TextInputAction.done,
           decoration: InputDecoration(
-              hintText: AutodoLocalizations.password,
+              hintText: JsonIntl.of(context).get(IntlKeys.password),
               hintStyle: TextStyle(
                 color: Colors.grey[400],
               ),

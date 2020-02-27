@@ -1,7 +1,9 @@
+import 'package:autodo/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import 'package:autodo/routes.dart';
+import 'package:json_intl/json_intl.dart';
 
 class LoginButton extends StatelessWidget {
   final buttonPadding;
@@ -19,7 +21,7 @@ class LoginButton extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Already have an account?',
+              JsonIntl.of(context).get(IntlKeys.alreadyHaveAccount),
               style: TextStyle(
                 fontSize: 16.0,
                 fontWeight: FontWeight.normal,
@@ -33,7 +35,7 @@ class LoginButton extends StatelessWidget {
               textColor: Colors.white,
               padding: const EdgeInsets.all(0.0),
               child: Text(
-                "LOG IN",
+                JsonIntl.of(context).get(IntlKeys.logIn),
                 style: TextStyle(
                   decoration: TextDecoration.underline,
                   decorationStyle: TextDecorationStyle.solid,

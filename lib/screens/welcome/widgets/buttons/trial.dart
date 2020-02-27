@@ -1,8 +1,10 @@
+import 'package:autodo/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:autodo/blocs/blocs.dart';
+import 'package:json_intl/json_intl.dart';
 import '../../views/new_user_setup/screen.dart';
 
 class TrialButton extends StatelessWidget {
@@ -39,7 +41,7 @@ class TrialButton extends StatelessWidget {
           child: Container(
             padding: EdgeInsets.fromLTRB(40.0, 14.0, 40.0, 14.0),
             child: Text(
-              "TRY WITHOUT AN ACCOUNT",
+              JsonIntl.of(context).get(IntlKeys.tryWithoutAccount),
               style: Theme.of(context).accentTextTheme.button,
             ),
           ),

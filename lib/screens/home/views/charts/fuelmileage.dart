@@ -1,8 +1,10 @@
 import 'dart:math';
 
+import 'package:autodo/localization.dart';
 import 'package:autodo/models/models.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart';
+import 'package:json_intl/json_intl.dart';
 import 'shared.dart';
 
 class FuelMileageChart extends StatelessWidget {
@@ -32,11 +34,10 @@ class FuelMileageChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (seriesList.length == 0 || seriesList[0].data.length == 0) {
-      print(seriesList);
       return Padding(
           padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
           child: Center(
-              child: Text('Need at least 3 refuelings to see efficiency data.',
+              child: Text(JsonIntl.of(context).get(IntlKeys.noDataRefuelings),
                   textAlign: TextAlign.center,
                   style: Theme.of(context).primaryTextTheme.body1)));
     }
@@ -84,7 +85,7 @@ class FuelMileageHistory extends StatelessWidget {
             Padding(
               padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
             ),
-            Text('Fuel Efficiency History (mpg)',
+            Text(JsonIntl.of(context).get(IntlKeys.fuelEfficiencyHistory),
                 style: Theme.of(context).primaryTextTheme.subtitle),
             Container(
               height: 300,
