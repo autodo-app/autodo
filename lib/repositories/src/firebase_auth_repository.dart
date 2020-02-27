@@ -30,14 +30,14 @@ class FirebaseAuthRepository extends AuthRepository {
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
-    AuthResult res = await _firebaseAuth.signInWithCredential(credential);
+    final AuthResult res = await _firebaseAuth.signInWithCredential(credential);
     _cachedCurrentUser = res.user;
     return res.user;
   }
 
   Future<FirebaseUser> signInWithCredentials(
       String email, String password) async {
-    AuthResult res = await _firebaseAuth.signInWithEmailAndPassword(
+    final AuthResult res = await _firebaseAuth.signInWithEmailAndPassword(
       email: email,
       password: password,
     );
@@ -46,7 +46,7 @@ class FirebaseAuthRepository extends AuthRepository {
   }
 
   Future<FirebaseUser> signUp(String email, String password) async {
-    var res = await _firebaseAuth.createUserWithEmailAndPassword(
+    final res = await _firebaseAuth.createUserWithEmailAndPassword(
       email: email,
       password: password,
     );
@@ -56,7 +56,7 @@ class FirebaseAuthRepository extends AuthRepository {
 
   Future<FirebaseUser> signUpWithVerification(
       String email, String password) async {
-    var user = await signUp(email, password);
+    final user = await signUp(email, password);
     await user.sendEmailVerification();
     return user;
   }
@@ -71,7 +71,7 @@ class FirebaseAuthRepository extends AuthRepository {
 
   Future<void> deleteCurrentUser() async {
     try {
-      var user = _cachedCurrentUser ?? await _firebaseAuth.currentUser();
+      final user = _cachedCurrentUser ?? await _firebaseAuth.currentUser();
       print(user);
       print('cache $_cachedCurrentUser');
       _cachedCurrentUser = null;

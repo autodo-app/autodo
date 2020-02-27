@@ -38,7 +38,7 @@ void main() {
         ],
       };
       final docID = '0';
-      DocumentSnapshot snap = MockDocumentSnapshot();
+      final DocumentSnapshot snap = MockDocumentSnapshot();
       when(snap.documentID).thenReturn(docID);
       when(snap.data).thenReturn(doc);
       final car = CarEntity(
@@ -65,7 +65,7 @@ void main() {
         ],
       };
       final docID = '0';
-      RecordSnapshot snap = MockRecordSnapshot();
+      final RecordSnapshot snap = MockRecordSnapshot();
       when(snap.key).thenReturn(docID);
       when(snap.value).thenReturn(doc);
       final car = CarEntity(

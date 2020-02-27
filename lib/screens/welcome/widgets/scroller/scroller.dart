@@ -40,7 +40,7 @@ class WelcomePageScrollerState extends State<WelcomePageScroller> {
   void initState() {
     super.initState();
     debounceTimer = Timer(debounceDelta, () {});
-    VoidCallback scrollListener = () {
+    final VoidCallback scrollListener = () {
       if (widget.controller.page.round() == (widget.screens.length - 1) &&
           !debounceTimer.isActive &&
           prevVal != 2) {

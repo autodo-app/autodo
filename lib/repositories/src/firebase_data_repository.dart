@@ -147,7 +147,7 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
   @override
   Future<List<Repeat>> addNewRepeat(Repeat repeat) async {
     await _repeats.add(repeat.toEntity().toDocument());
-    var updatedDocs = await _repeats.getDocuments();
+    final updatedDocs = await _repeats.getDocuments();
     return updatedDocs?.documents
         ?.map((doc) => Repeat.fromEntity(RepeatEntity.fromSnapshot(doc)))
         ?.toList();
@@ -197,7 +197,7 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
 
   @override
   Future<bool> getPaidStatus() async {
-    DocumentSnapshot snap = await _userDoc.get();
+    final DocumentSnapshot snap = await _userDoc.get();
     return snap.data['paid'] as bool;
   }
 

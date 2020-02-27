@@ -144,7 +144,7 @@ class MileageScreenState extends State<MileageScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Widget headerText = Container(
+    final Widget headerText = Container(
       height: 110,
       child: Center(
           child: Column(
@@ -171,7 +171,7 @@ class MileageScreenState extends State<MileageScreen> {
     );
 
     Widget card() {
-      List<Widget> carFields = [];
+      final List<Widget> carFields = [];
       for (var i in Iterable.generate(cars.length)) {
         carFields.add(CarEntryField((i == cars.length - 1) ? _next : null,
             (val) {

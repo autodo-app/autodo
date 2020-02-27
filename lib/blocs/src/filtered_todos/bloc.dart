@@ -41,10 +41,10 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
   static List sortItems(List items) {
     return items
       ..sort((a, b) {
-        var aDate = a?.dueDate ?? 0;
-        var bDate = b?.dueDate ?? 0;
-        var aMileage = a?.dueMileage ?? 0;
-        var bMileage = b?.dueMileage ?? 0;
+        final aDate = a?.dueDate ?? 0;
+        final bDate = b?.dueDate ?? 0;
+        final aMileage = a?.dueMileage ?? 0;
+        final bMileage = b?.dueMileage ?? 0;
 
         if (aDate == 0 && bDate == 0) {
           // both don't have a date, so only consider the mileages

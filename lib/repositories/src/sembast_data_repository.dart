@@ -85,7 +85,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
 
   Future<List<Todo>> getCurrentTodos() async {
     final db = await _openDb();
-    var list = await _todos.find(db);
+    final list = await _todos.find(db);
     final out = list
         .map((snap) => Todo.fromEntity(TodoEntity.fromRecord(snap)))
         .toList();
@@ -103,7 +103,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
   @override
   Future<List<Refueling>> getCurrentRefuelings() async {
     final db = await _openDb();
-    var list = await _refuelings.find(db,
+    final list = await _refuelings.find(db,
         finder: Finder(sortOrders: [SortOrder('mileage')]));
     final out = list
         .map((snap) => Refueling.fromEntity(RefuelingEntity.fromRecord(snap)))
@@ -161,7 +161,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
 
   Future<List<Car>> getCurrentCars() async {
     final db = await _openDb();
-    var list = await _cars.find(db,
+    final list = await _cars.find(db,
         finder: Finder(sortOrders: [SortOrder('mileage')]));
     final out =
         list.map((snap) => Car.fromEntity(CarEntity.fromRecord(snap))).toList();
@@ -215,7 +215,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
 
   Future<List<Repeat>> getCurrentRepeats() async {
     final db = await _openDb();
-    var list = await _repeats.find(db);
+    final list = await _repeats.find(db);
     final out = list
         .map((snap) => Repeat.fromEntity(RepeatEntity.fromRecord(snap)))
         .toList();
@@ -232,7 +232,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
     final db = await _openDb();
     await _repeats.add(db, repeat.toEntity().toDocument());
     _repeatsUpdateStream();
-    var list = await _repeats.find(db);
+    final list = await _repeats.find(db);
     final out = list
         .map((snap) => Repeat.fromEntity(RepeatEntity.fromRecord(snap)))
         .toList();

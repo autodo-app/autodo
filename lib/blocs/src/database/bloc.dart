@@ -13,7 +13,7 @@ import '../auth/barrel.dart';
 
 class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
   final Firestore _firestoreInstance;
-  AuthenticationBloc _authenticationBloc;
+  final AuthenticationBloc _authenticationBloc;
   StreamSubscription _authSubscription;
   Future<Directory> Function() pathProvider;
 
@@ -49,7 +49,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
   }
 
   Stream<DatabaseState> _mapUserLoggedInToState(event) async* {
-    FirebaseDataRepository repository = FirebaseDataRepository(
+    final FirebaseDataRepository repository = FirebaseDataRepository(
       firestoreInstance: _firestoreInstance,
       uuid: event.uuid,
     );

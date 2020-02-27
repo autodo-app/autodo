@@ -45,7 +45,7 @@ final Color bottomControllerColor =
 const splashColor = Color(0xff454f51);
 
 Decoration scaffoldBackgroundGradient() {
-  LinearGradient blueGrey = LinearGradient(
+  final LinearGradient blueGrey = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
     colors: [
@@ -56,7 +56,7 @@ Decoration scaffoldBackgroundGradient() {
       Colors.blueGrey[900]
     ],
   );
-  LinearGradient darken = LinearGradient(
+  final LinearGradient darken = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
     colors: [Colors.blueGrey[900], Colors.black87, Colors.black],
@@ -115,7 +115,7 @@ TextStyle finePrint() {
 }
 
 createTheme() {
-  TextTheme primaryText = TextTheme(
+  final TextTheme primaryText = TextTheme(
     body1: TextStyle(
       color: Colors.white.withAlpha(230),
       fontSize: 16,
@@ -151,7 +151,7 @@ createTheme() {
   );
 
   // Like the primary text theme, but dark.
-  TextTheme accentTextTheme = TextTheme(
+  final TextTheme accentTextTheme = TextTheme(
     button: TextStyle(
       color: Colors.black.withAlpha(230),
       fontSize: 18,

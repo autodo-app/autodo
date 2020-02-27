@@ -51,7 +51,7 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
   }
 
   Future<Refueling> _findLatestRefueling(Refueling refueling) async {
-    List<Refueling> refuelings = await repo
+    final List<Refueling> refuelings = await repo
         .getCurrentRefuelings()
         .timeout(Duration(seconds: 10), onTimeout: () => []);
 
@@ -59,7 +59,7 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
     Refueling out;
     for (var r in refuelings) {
       if (r.carName == refueling.carName) {
-        var mileageDiff = refueling.mileage - r.mileage;
+        final mileageDiff = refueling.mileage - r.mileage;
         if (mileageDiff <= 0) continue; // only looking for past refuelings
         if (mileageDiff < smallestDiff) {
           smallestDiff = mileageDiff;
@@ -72,7 +72,7 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
 
   Stream<RefuelingsState> _mapLoadRefuelingsToState() async* {
     try {
-      List<Refueling> refuelings = await repo
+      final List<Refueling> refuelings = await repo
           .getCurrentRefuelings()
           .timeout(Duration(seconds: 10), onTimeout: () => []);
       yield RefuelingsLoaded(refuelings);
@@ -88,10 +88,10 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
       return;
     }
 
-    var item = event.refueling;
-    var prev = await _findLatestRefueling(item);
-    var dist = (prev == null) ? 0 : item.mileage - prev.mileage;
-    Refueling out = event.refueling.copyWith(efficiency: dist / item.amount);
+    final item = event.refueling;
+    final prev = await _findLatestRefueling(item);
+    final dist = (prev == null) ? 0 : item.mileage - prev.mileage;
+    final Refueling out = event.refueling.copyWith(efficiency: dist / item.amount);
 
     // event.carsBloc.add(AddRefuelingInfo(item.car, item.mileage, item.date, item.efficiency, prev.date, dist));
     final List<Refueling> updatedRefuelings =
@@ -107,10 +107,10 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
       return;
     }
 
-    var prev = await _findLatestRefueling(event.refueling);
-    var dist = (prev == null) ? 0 : event.refueling.mileage - prev.mileage;
-    var efficiency = dist / event.refueling.amount;
-    Refueling out = event.refueling.copyWith(efficiency: efficiency);
+    final prev = await _findLatestRefueling(event.refueling);
+    final dist = (prev == null) ? 0 : event.refueling.mileage - prev.mileage;
+    final efficiency = dist / event.refueling.amount;
+    final Refueling out = event.refueling.copyWith(efficiency: efficiency);
 
     final List<Refueling> updatedRefuelings = (state as RefuelingsLoaded)
         .refuelings

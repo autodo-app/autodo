@@ -92,8 +92,8 @@ class _CarFormState extends State<CarForm> {
         return autoCompleteField;
       },
       validator: (val) {
-        var txt = _autocompleteController.text;
-        var res = requiredValidator(txt);
+        final txt = _autocompleteController.text;
+        final res = requiredValidator(txt);
         autoCompleteField.updateDecoration(
           decoration: defaultInputDecoration(
                   JsonIntl.of(context).get(IntlKeys.requiredLiteral),

@@ -8,8 +8,8 @@ import 'package:autodo/models/models.dart';
 void main() {
   group('DeleteTodoSnackBar', () {
     testWidgets('should render properly', (WidgetTester tester) async {
-      var snackBarKey = Key('snack_bar_key');
-      var tapTarget = Key('tap_target_key');
+      final snackBarKey = Key('snack_bar_key');
+      final tapTarget = Key('tap_target_key');
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: Builder(builder: (BuildContext context) {
@@ -35,7 +35,7 @@ void main() {
       await tester.tap(find.byKey(tapTarget));
       await tester.pump();
 
-      Finder snackBarFinder = find.byKey(snackBarKey);
+      final Finder snackBarFinder = find.byKey(snackBarKey);
 
       expect(snackBarFinder, findsOneWidget);
       expect(
@@ -79,8 +79,8 @@ void main() {
 
   group('DeleteRefuelingSnackBar', () {
     testWidgets('should render properly', (WidgetTester tester) async {
-      var snackBarKey = Key('snack_bar_key');
-      var tapTarget = Key('tap_target_key');
+      final snackBarKey = Key('snack_bar_key');
+      final tapTarget = Key('tap_target_key');
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: Builder(builder: (BuildContext context) {
@@ -105,7 +105,7 @@ void main() {
       await tester.tap(find.byKey(tapTarget));
       await tester.pump();
 
-      Finder snackBarFinder = find.byKey(snackBarKey);
+      final Finder snackBarFinder = find.byKey(snackBarKey);
 
       expect(snackBarFinder, findsOneWidget);
       expect(find.text(IntlKeys.undo), findsOneWidget);
@@ -142,8 +142,8 @@ void main() {
   });
   group('DeleteRepeatSnackBar', () {
     testWidgets('should render properly', (WidgetTester tester) async {
-      var snackBarKey = Key('snack_bar_key');
-      var tapTarget = Key('tap_target_key');
+      final snackBarKey = Key('snack_bar_key');
+      final tapTarget = Key('tap_target_key');
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: Builder(builder: (BuildContext context) {
@@ -168,7 +168,7 @@ void main() {
       await tester.tap(find.byKey(tapTarget));
       await tester.pump();
 
-      Finder snackBarFinder = find.byKey(snackBarKey);
+      final Finder snackBarFinder = find.byKey(snackBarKey);
 
       expect(snackBarFinder, findsOneWidget);
       expect(find.text(IntlKeys.undo), findsOneWidget);

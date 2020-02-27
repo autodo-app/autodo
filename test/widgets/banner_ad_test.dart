@@ -7,10 +7,10 @@ import 'package:autodo/widgets/widgets.dart';
 void main() {
   group('BannerAd', () {
     testWidgets('should render properly', (tester) async {
-      Widget home = Scaffold(
+      final Widget home = Scaffold(
         body: Container(),
       );
-      Widget app = MaterialApp(
+      final Widget app = MaterialApp(
         home: home,
       );
       AutodoBannerAd()

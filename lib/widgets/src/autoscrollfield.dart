@@ -66,7 +66,7 @@ class AutoScrollFieldState extends State<AutoScrollField> {
   Future<Null> _scroll() async {
     if (!widget.focusNode.hasFocus) return;
 
-    double scrollTo = widget.position ?? _getScrollPosition();
+    final double scrollTo = widget.position ?? _getScrollPosition();
     if (scrollTo == null) return; // can't scroll
     await widget.controller
         .animateTo(scrollTo, duration: widget.duration, curve: widget.curve);

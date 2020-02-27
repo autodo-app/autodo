@@ -89,9 +89,9 @@ class _RepeatFormState extends State<RepeatForm> {
       },
       initialValue: widget.todo?.repeatName ?? '',
       validator: (val) {
-        var txt = _autocompleteController.text;
+        final txt = _autocompleteController.text;
         if (widget.requireInput) {
-          var res = requiredValidator(txt);
+          final res = requiredValidator(txt);
           // TODO figure this out better
           // if (selectedCar != null)
           //   widget.refueling.carName = selectedCar.name;

@@ -124,7 +124,7 @@ class PaidVersionBloc extends Bloc<PaidVersionEvent, PaidVersionState> {
       return;
     }
 
-    Set<String> ids = Set()..add(paidVersionId);
+    final Set<String> ids = Set()..add(paidVersionId);
     final ProductDetailsResponse response =
         await _purchaseConn.queryProductDetails(ids);
     if (response.notFoundIDs.isNotEmpty) {

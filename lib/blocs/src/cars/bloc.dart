@@ -110,9 +110,9 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
   }
 
   DistanceRatePoint _findDifference(DistancePoint prev, DistancePoint cur) {
-    var elapsedDuration = cur.date.difference(prev.date);
-    var dist = cur.distance - prev.distance;
-    var curDistRate = dist.toDouble() / elapsedDuration.inDays.toDouble();
+    final elapsedDuration = cur.date.difference(prev.date);
+    final dist = cur.distance - prev.distance;
+    final curDistRate = dist.toDouble() / elapsedDuration.inDays.toDouble();
     return DistanceRatePoint(cur.date, curDistRate);
   }
 
@@ -120,11 +120,11 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
       ExternalRefuelingsUpdated event) async* {
     if (repo == null || state is CarsNotLoaded) return;
 
-    WriteBatchWrapper batch = await repo.startCarWriteBatch();
+    final WriteBatchWrapper batch = await repo.startCarWriteBatch();
     List<Car> updatedCars = (state as CarsLoaded).cars;
     for (var c in (state as CarsLoaded).cars) {
       // Get a list of all refuelings for the car in order
-      List<Refueling> thisCarsRefuelings = event.refuelings
+      final List<Refueling> thisCarsRefuelings = event.refuelings
           .where((r) => r.carName == c.name)
           .toList()
             ..sort((a, b) =>
@@ -139,7 +139,7 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
         // first refueling for this car
         averageEfficiency = thisCarsRefuelings[0].efficiency;
       } else {
-        var sum = thisCarsRefuelings
+        final sum = thisCarsRefuelings
             .map((e) => e.efficiency ?? 0.0)
             .reduce((value, element) => value + element);
         averageEfficiency = sum / numRefuelings;
@@ -152,8 +152,8 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
       // This assumes that the refuelings are in chronological and distance order,
       // there should be no invalid refuelings where the car's mileage seemed to
       // go backwards
-      List<DistancePoint> points = [];
-      List<DistanceRatePoint> rates = [];
+      final List<DistancePoint> points = [];
+      final List<DistanceRatePoint> rates = [];
       thisCarsRefuelings.forEach((r) {
         points.add(DistancePoint(r.date, r.mileage));
         if (points.length >= 2) {
@@ -167,7 +167,7 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
       // list
       final currentMileage = thisCarsRefuelings.last.mileage;
 
-      Car updated = c.copyWith(
+      final Car updated = c.copyWith(
           distanceRateHistory: rates,
           mileage: currentMileage,
           numRefuelings: numRefuelings,

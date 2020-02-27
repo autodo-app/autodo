@@ -79,7 +79,7 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
       pageWillBeVisible = false;
     }
 
-    Widget oilMileage = TextFormField(
+    final Widget oilMileage = TextFormField(
       key: IntegrationTestKeys.latestOilChangeField,
       maxLines: 1,
       autofocus: false,
@@ -100,7 +100,7 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
       onFieldSubmitted: (_) => changeFocus(_oilNode, _tiresNode),
     );
 
-    Widget tireRotationMileage = TextFormField(
+    final Widget tireRotationMileage = TextFormField(
       key: IntegrationTestKeys.latestTireRotationField,
       maxLines: 1,
       onTap: () => setState(() => expanded = true),
@@ -120,7 +120,7 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
       textInputAction: TextInputAction.done,
     );
 
-    Widget headerText = AnimatedContainer(
+    final Widget headerText = AnimatedContainer(
       duration: Duration(milliseconds: 400),
       curve: Curves.fastOutSlowIn,
       height: (expanded) ? 0 : 110,

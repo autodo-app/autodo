@@ -18,7 +18,7 @@ class MockCarsBloc extends MockBloc<CarsEvent, CarsState> implements CarsBloc {}
 
 void main() {
   group('RepeatsBloc', () {
-    CarsBloc carsBloc = MockCarsBloc();
+    final CarsBloc carsBloc = MockCarsBloc();
     test('Null Assertion', () {
       expect(() => RepeatsBloc(dbBloc: null), throwsAssertionError);
     });
@@ -146,7 +146,7 @@ void main() {
       'DeleteRepeat',
       build: () {
         final dataRepository = MockDataRepository();
-        var repeats = [Repeat(id: '0')];
+        final repeats = [Repeat(id: '0')];
         when(dataRepository.repeats())
             .thenAnswer((_) => Stream.fromIterable([repeats]));
         when(dataRepository.deleteRepeat(Repeat(id: '0')))

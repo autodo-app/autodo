@@ -41,7 +41,7 @@ Future<void> _reportError(dynamic error, dynamic stackTrace) async {
 
 void run(bool integrationTest) async {
   final AuthRepository authRepository = FirebaseAuthRepository();
-  ThemeData theme = createTheme();
+  final ThemeData theme = createTheme();
   runApp(
     BlocProvider<AuthenticationBloc>(
       create: (context) => AuthenticationBloc(userRepository: authRepository)
@@ -105,7 +105,7 @@ void run(bool integrationTest) async {
 
 Future<Map> init() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Map keys = await SecretLoader(secretPath: 'assets/keys.json').load();
+  final Map keys = await SecretLoader(secretPath: 'assets/keys.json').load();
   if (Platform.isIOS) {
     FirebaseApp.configure(
         name: 'autodo',
@@ -150,11 +150,11 @@ class App extends StatelessWidget {
 
   @override
   build(context) {
-    Widget homeProvider = HomeScreenProvider(integrationTest: integrationTest);
-    Widget welcomeProvider = WelcomeScreenProvider();
-    Widget signupProvider =
+    final Widget homeProvider = HomeScreenProvider(integrationTest: integrationTest);
+    final Widget welcomeProvider = WelcomeScreenProvider();
+    final Widget signupProvider =
         SignupScreenProvider(authRepository: _authRepository);
-    Widget loginProvider = LoginScreenProvider(
+    final Widget loginProvider = LoginScreenProvider(
       authRepository: _authRepository,
     );
     return MaterialApp(

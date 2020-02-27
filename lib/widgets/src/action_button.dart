@@ -69,12 +69,12 @@ class _AutodoActionButtonState extends State<AutodoActionButton>
 
   @override
   Widget build(BuildContext context) {
-    Color backgroundColor = Theme.of(context).primaryColor;
-    Color foregroundColor = Theme.of(context).cardColor;
+    final Color backgroundColor = Theme.of(context).primaryColor;
+    final Color foregroundColor = Theme.of(context).cardColor;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: List.generate(icons.length, (int index) {
-        Widget child = Container(
+        final Widget child = Container(
           height: 70.0,
           width: 56.0,
           alignment: FractionalOffset.topCenter,

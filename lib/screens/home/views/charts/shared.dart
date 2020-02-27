@@ -32,7 +32,7 @@ final numberAxisSpec = NumericAxisSpec(
 );
 
 double floorToPrecision(double val, int places) {
-  double mod = pow(10.0, places);
+  final double mod = pow(10.0, places);
   return ((val * mod).floor().toDouble() / mod);
 }
 

@@ -210,7 +210,7 @@ class _TodoEditButton extends StatelessWidget {
                   builder: (context) => TodoAddEditScreen(
                     isEditing: true,
                     onSave: (name, dueDate, dueMileage, repeatName, carName) {
-                      var out = todo.copyWith(
+                      final out = todo.copyWith(
                         name: name,
                         dueDate: dueDate,
                         dueMileage: dueMileage,

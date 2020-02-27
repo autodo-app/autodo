@@ -88,7 +88,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   Stream<NotificationsState> _mapScheduleNotificationToState(
       ScheduleNotification event) async* {
     if (state is NotificationsLoaded) {
-      var id = (state as NotificationsLoaded).lastID + 1;
+      final id = (state as NotificationsLoaded).lastID + 1;
       await flutterLocalNotificationsPlugin.schedule(
           id, event.title, event.body, event.date, platformChannelSpecifics);
       yield NotificationsLoaded(id);
@@ -117,7 +117,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
       ReScheduleNotification event) async* {
     await cancel(event.id);
     if (state is NotificationsLoaded) {
-      var id = (state as NotificationsLoaded).lastID + 1;
+      final id = (state as NotificationsLoaded).lastID + 1;
       await flutterLocalNotificationsPlugin.schedule(
           id, event.title, event.body, event.date, platformChannelSpecifics);
       yield NotificationsLoaded(id);

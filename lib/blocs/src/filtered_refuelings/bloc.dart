@@ -98,9 +98,9 @@ class FilteredRefuelingsBloc
   int _hsv(Refueling refueling, Car car) {
     if (refueling.efficiency == double.infinity)
       return HSV(1.0, 1.0, 1.0).toValue();
-    var avgEff = car.averageEfficiency;
+    final avgEff = car.averageEfficiency;
     // range is 0 to 120
-    var diff = (refueling.efficiency == null ||
+    final diff = (refueling.efficiency == null ||
             refueling.efficiency == double.infinity)
         ? 0
         : refueling.efficiency - avgEff;
@@ -131,15 +131,15 @@ class FilteredRefuelingsBloc
   Stream<FilteredRefuelingsState> _mapCarsUpdatedToState(
       FilteredRefuelingsUpdateCars event) async* {
     if (state is FilteredRefuelingsLoaded) {
-      FilteredRefuelingsLoaded curState = state as FilteredRefuelingsLoaded;
+      final FilteredRefuelingsLoaded curState = state as FilteredRefuelingsLoaded;
       final curFilter = curState.activeFilter;
       List<Refueling> updatedRefuelings = curState.filteredRefuelings;
       for (var c in event.cars) {
-        List<Refueling> toUpdate = curState.filteredRefuelings
+        final List<Refueling> toUpdate = curState.filteredRefuelings
             .where((r) => r.carName == c.name)
             .toList();
         for (var r in toUpdate) {
-          Refueling updated = r.copyWith(efficiencyColor: Color(_hsv(r, c)));
+          final Refueling updated = r.copyWith(efficiencyColor: Color(_hsv(r, c)));
           updatedRefuelings = updatedRefuelings
               .map((r) => r.id == updated.id ? updated : r)
               .toList();

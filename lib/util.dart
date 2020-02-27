@@ -49,9 +49,9 @@ class RGB extends Equatable {
   RGB(this.r, this.g, this.b);
 
   toValue() {
-    int red = (r * 255).toInt();
-    int green = (g * 255).toInt();
-    int blue = (b * 255).toInt();
+    final int red = (r * 255).toInt();
+    final int green = (g * 255).toInt();
+    final int blue = (b * 255).toInt();
     return (0xff << 24) + (red << 16) + (green << 8) + blue;
   }
 
@@ -164,10 +164,10 @@ clamp(input, lo, hi) {
 
 /// This will always round down for now
 roundToDay(DateTime date) {
-  var hours = Duration(hours: date.hour);
-  var mins = Duration(minutes: date.minute);
-  var secs = Duration(seconds: date.second);
-  var millis = Duration(milliseconds: date.millisecond);
+  final hours = Duration(hours: date.hour);
+  final mins = Duration(minutes: date.minute);
+  final secs = Duration(seconds: date.second);
+  final millis = Duration(milliseconds: date.millisecond);
   return date.subtract(hours).subtract(mins).subtract(secs).subtract(millis);
 }
 
@@ -180,7 +180,7 @@ double scaleToUnit(double _num, double _min, double _max) {
 }
 
 double roundToPrecision(double val, int places) {
-  double mod = pow(10.0, places);
+  final double mod = pow(10.0, places);
   return ((val * mod).round().toDouble() / mod);
 }
 

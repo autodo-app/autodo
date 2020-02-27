@@ -101,7 +101,7 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
       // List.from((state as RepeatsLoaded).repeats)..add(event.repeat);
       // yield RepeatsLoaded(updatedRepeats);
       await repo.addNewRepeat(event.repeat);
-      var updatedRepeats = (state as RepeatsLoaded).repeats;
+      final updatedRepeats = (state as RepeatsLoaded).repeats;
       print(updatedRepeats);
       updatedRepeats.add(event.repeat);
       print(updatedRepeats);
@@ -221,7 +221,7 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
       print('Error: trying to add default repeats but repo is null');
       return;
     }
-    WriteBatchWrapper batch = await repo.startRepeatWriteBatch();
+    final WriteBatchWrapper batch = await repo.startRepeatWriteBatch();
     for (var r in defaults) {
       batch.setData(r.toEntity().toDocument());
     }
@@ -240,7 +240,7 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
     }
     final curRepeats = (state as RepeatsLoaded).repeats;
     // gets the list of cars that do not yet have a repeat associated with them
-    List<Car> newCars = event.cars
+    final List<Car> newCars = event.cars
         .map((c) => (curRepeats.any((r) => r.cars.contains(c.name)) ? null : c))
         .toList();
     newCars.removeWhere((c) => c == null);
@@ -248,7 +248,7 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
       print('all cars have repeats, not adding defaults');
       return;
     }
-    WriteBatchWrapper batch = await repo.startRepeatWriteBatch();
+    final WriteBatchWrapper batch = await repo.startRepeatWriteBatch();
     newCars.forEach((c) {
       defaults.forEach((r) {
         batch.setData(r.copyWith(cars: [c.name]).toEntity().toDocument());

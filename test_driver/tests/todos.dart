@@ -18,8 +18,8 @@ Future<void> newTodo(driver) async {
   await driver.tap(find.byType('_NameForm'));
   await driver.enterText('test todo');
   await driver.tap(find.byType('_DateForm'));
-  var today = DateTime.now();
-  var tomorrow = today.add(Duration(days: 1));
+  final today = DateTime.now();
+  final tomorrow = today.add(Duration(days: 1));
   await driver.enterText(DateFormat.yMd().format(tomorrow));
   await driver.tap(find.byType('_MileageForm'));
   await driver.enterText('2000');

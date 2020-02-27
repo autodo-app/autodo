@@ -28,7 +28,7 @@ class SembastWriteBatch extends Equatable implements WriteBatchWrapper {
 
   @override
   Future<void> commit() async {
-    var db = await dbFactory.openDatabase(dbPath);
+    final db = await dbFactory.openDatabase(dbPath);
     print('opened');
     await db.transaction((txn) async {
       print('list: ${transactionList}');

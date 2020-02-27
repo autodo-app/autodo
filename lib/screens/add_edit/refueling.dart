@@ -168,7 +168,7 @@ class _DateFormState extends State<_DateForm> {
 
   DateTime convertToDate(String input) {
     try {
-      var d = DateFormat.yMd().parseStrict(input);
+      final d = DateFormat.yMd().parseStrict(input);
       return d;
     } catch (e) {
       return null;
@@ -176,13 +176,13 @@ class _DateFormState extends State<_DateForm> {
   }
 
   Future chooseDate(BuildContext context, String initialDateString) async {
-    var now = DateTime.now();
+    final now = DateTime.now();
     var initialDate = convertToDate(initialDateString) ?? now;
     initialDate = (initialDate.year >= 1900 && initialDate.isBefore(now)
         ? initialDate
         : now);
 
-    var result = await showDatePicker(
+    final result = await showDatePicker(
         context: context,
         initialDate: initialDate,
         firstDate: DateTime(1900),
@@ -197,7 +197,7 @@ class _DateFormState extends State<_DateForm> {
 
   bool isValidDate(String date) {
     if (date.isEmpty) return true;
-    var d = convertToDate(date);
+    final d = convertToDate(date);
     return d != null && d.isBefore(DateTime.now());
   }
 

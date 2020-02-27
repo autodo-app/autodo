@@ -15,7 +15,7 @@ class CarsCheckboxForm extends StatefulWidget {
 class _CarsFormState extends State<CarsCheckboxForm> {
   final List<Car> cars;
   final Function(List<Map<String, dynamic>>) onSaved;
-  List<Map<String, dynamic>> _carStates = [];
+  final List<Map<String, dynamic>> _carStates = [];
 
   _CarsFormState(this.cars, this.onSaved) {
     for (var car in cars) {

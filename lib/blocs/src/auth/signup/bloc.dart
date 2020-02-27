@@ -29,7 +29,7 @@ import 'state.dart';
 /// A [Bloc] used for validating and submitting the information for the
 /// [SignupScreen].
 class SignupBloc extends Bloc<SignupEvent, SignupState> {
-  AuthRepository _authRepository;
+  final AuthRepository _authRepository;
 
   /// A flag that determines whether a verification email will be sent to the
   /// user that is signing up.
@@ -75,7 +75,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
   }
 
   Stream<SignupState> _mapEmailChangedToState(String email) async* {
-    String errorString = Validators.isValidEmail(email);
+    final String errorString = Validators.isValidEmail(email);
     if (errorString == null) {
       yield _clearEmailError();
     } else {
@@ -100,7 +100,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
   }
 
   Stream<SignupState> _mapPasswordChangedToState(String password) async* {
-    String errorString = Validators.isValidPassword(password);
+    final String errorString = Validators.isValidPassword(password);
     if (errorString == null) {
       yield _clearPasswordError();
     } else {
@@ -128,7 +128,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
     bool verified = user.isEmailVerified;
     while (!verified) {
       await Future.delayed(const Duration(milliseconds: 100));
-      var cur = await _authRepository.getCurrentUser();
+      final cur = await _authRepository.getCurrentUser();
       cur.reload();
       verified = cur.isEmailVerified;
     }
@@ -141,7 +141,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
     yield SignupLoading();
     try {
       if (verifyEmail) {
-        var user =
+        final user =
             await _authRepository.signUpWithVerification(email, password);
         yield VerificationSent();
         await _checkIfUserIsVerified(user);

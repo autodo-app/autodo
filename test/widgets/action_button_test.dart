@@ -6,10 +6,10 @@ import 'package:autodo/widgets/widgets.dart';
 void main() {
   group('ActionButton', () {
     testWidgets('should render properly', (tester) async {
-      var buttonKey = Key('button_key');
-      var mainKey = Key('main_key');
-      var miniKeys = [Key('refueling_key'), Key('todo_key'), Key('repeat_key')];
-      Widget home = Scaffold(
+      final buttonKey = Key('button_key');
+      final mainKey = Key('main_key');
+      final miniKeys = [Key('refueling_key'), Key('todo_key'), Key('repeat_key')];
+      final Widget home = Scaffold(
           floatingActionButton: Builder(
         builder: (BuildContext context) => AutodoActionButton(
           key: buttonKey,
@@ -17,11 +17,11 @@ void main() {
           miniButtonKeys: miniKeys,
         ),
       ));
-      Widget app = MaterialApp(
+      final Widget app = MaterialApp(
         home: home,
       );
       await tester.pumpWidget(app);
-      Finder buttonFinder = find.byKey(buttonKey);
+      final Finder buttonFinder = find.byKey(buttonKey);
 
       expect(buttonFinder, findsOneWidget);
 

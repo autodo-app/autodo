@@ -23,9 +23,9 @@ class MockInAppPurchaseConnection extends Mock
 
 void main() {
   group('PaidVersionBloc', () {
-    DataRepository dataRepo = MockDataRepository();
-    SembastDataRepository sembast = MockSembast();
-    InAppPurchaseConnection conn = MockInAppPurchaseConnection();
+    final DataRepository dataRepo = MockDataRepository();
+    final SembastDataRepository sembast = MockSembast();
+    final InAppPurchaseConnection conn = MockInAppPurchaseConnection();
     final emptyVerificationData = PurchaseVerificationData(
         localVerificationData: '',
         serverVerificationData: '',
@@ -123,7 +123,7 @@ void main() {
             when(conn.purchaseUpdatedStream)
                 .thenAnswer((_) => Stream.fromIterable([]));
             when(conn.isAvailable()).thenAnswer((_) async => true);
-            Set<String> ids = Set()..add('autodo_paid');
+            final Set<String> ids = Set()..add('autodo_paid');
             when(conn.queryProductDetails(ids)).thenAnswer((_) async =>
                 ProductDetailsResponse(productDetails: [], notFoundIDs: ['']));
 
@@ -139,7 +139,7 @@ void main() {
             when(conn.purchaseUpdatedStream)
                 .thenAnswer((_) => Stream.fromIterable([]));
             when(conn.isAvailable()).thenAnswer((_) async => true);
-            Set<String> ids = Set()..add('autodo_paid');
+            final Set<String> ids = Set()..add('autodo_paid');
             final deets = ProductDetails(
                 id: 'autodo_paid', price: '', title: '', description: '');
             when(conn.queryProductDetails(ids)).thenAnswer((_) async =>
@@ -161,7 +161,7 @@ void main() {
             when(conn.purchaseUpdatedStream)
                 .thenAnswer((_) => Stream.fromIterable([]));
             when(conn.isAvailable()).thenAnswer((_) async => true);
-            Set<String> ids = Set()..add('autodo_paid');
+            final Set<String> ids = Set()..add('autodo_paid');
             final deets = ProductDetails(
                 id: 'autodo_paid', price: '', title: '', description: '');
             when(conn.queryProductDetails(ids)).thenAnswer((_) async =>
@@ -194,7 +194,7 @@ void main() {
           expect: [PaidVersionLoading(), BasicVersion()]);
       blocTest<PaidVersionBloc, PaidVersionEvent, PaidVersionState>(
           'conn, not purchased', build: () {
-        var details = validDetails;
+        final details = validDetails;
         details.status = PurchaseStatus.error;
         details.error =
             IAPError(code: '', message: '', source: IAPSource.GooglePlay);
@@ -212,7 +212,7 @@ void main() {
           ]);
       blocTest<PaidVersionBloc, PaidVersionEvent, PaidVersionState>(
           'conn, purchased', build: () {
-        var details = validDetails;
+        final details = validDetails;
         details.status = PurchaseStatus.purchased;
         when(conn.purchaseUpdatedStream).thenAnswer((_) => Stream.fromIterable([
               [details],

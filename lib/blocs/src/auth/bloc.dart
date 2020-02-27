@@ -106,7 +106,7 @@ class AuthenticationBloc
       final isSignedIn = await _userRepository.isSignedIn();
       if (isSignedIn) {
         final name = await _userRepository.getUserEmail();
-        String uuid = await _userRepository.getUserId();
+        final String uuid = await _userRepository.getUserId();
         yield RemoteAuthenticated(name, uuid, false);
       } else if (prefs.getBool(trialUserKey)) {
         yield LocalAuthenticated(false);
@@ -124,8 +124,8 @@ class AuthenticationBloc
   /// Always yields [Authenticated]. This differs from the [SignedUp] event
   /// handler simply by passing a corresponding flag to the yielded state.
   Stream<AuthenticationState> _mapLoggedInToState() async* {
-    var _email = await _userRepository.getUserEmail();
-    var _uuid = await _userRepository.getUserId();
+    final _email = await _userRepository.getUserEmail();
+    final _uuid = await _userRepository.getUserId();
     yield RemoteAuthenticated(_email, _uuid, false);
 
     // make sure that any past trial users are no longer logged in
@@ -138,8 +138,8 @@ class AuthenticationBloc
   /// Always yields [Authenticated]. This differs from the [LoggedIn] event
   /// handler simply by passing a corresponding flag to the yielded state.
   Stream<AuthenticationState> _mapSignedUpToState() async* {
-    var _email = await _userRepository.getUserEmail();
-    var _uuid = await _userRepository.getUserId();
+    final _email = await _userRepository.getUserEmail();
+    final _uuid = await _userRepository.getUserId();
     yield RemoteAuthenticated(_email, _uuid, true);
 
     // make sure that any past trial users are no longer logged in
