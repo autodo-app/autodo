@@ -18,11 +18,10 @@ class MockFilteredTodosBloc
 void main() {
   group('TodosCard', () {
     TodosBloc todosBloc;
-    FilteredTodosBloc filteredTodosBloc;
 
     setUp(() {
       todosBloc = MockTodosBloc();
-      filteredTodosBloc = MockFilteredTodosBloc();
+      MockFilteredTodosBloc();
     });
 
     testWidgets('renders', (WidgetTester tester) async {

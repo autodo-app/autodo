@@ -112,7 +112,8 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
 
   Stream<RepeatsState> _mapUpdateRepeatToState(UpdateRepeat event) async* {
     if (state is RepeatsLoaded && repo != null) {
-      final updatedRepeats = (state as RepeatsLoaded).repeats.map<Repeat>((r) {
+      //final updatedRepeats =
+      (state as RepeatsLoaded).repeats.map<Repeat>((r) {
         if (r.id == null) {
           return (r.name == event.updatedRepeat.name) ? event.updatedRepeat : r;
         } else {

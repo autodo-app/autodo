@@ -18,7 +18,6 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
       _dbSubscription,
       _repoSubscription;
   final RefuelingsBloc _refuelingsBloc;
-  List<Refueling> _refuelingsCache;
 
   CarsBloc(
       {@required DatabaseBloc dbBloc, @required RefuelingsBloc refuelingsBloc})
@@ -177,7 +176,6 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
           .map((car) => car.id == updated.id ? updated : car)
           .toList();
     }
-    _refuelingsCache = event.refuelings;
     await batch.commit();
     yield CarsLoaded(updatedCars);
   }
