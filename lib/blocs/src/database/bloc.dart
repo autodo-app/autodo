@@ -71,7 +71,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       print('ignoring outdated trial login event');
       return;
     }
-    final repo = await SembastDataRepository(
+    final repo = SembastDataRepository(
         createDb: event.newUser, pathProvider: pathProvider);
     await repo.load();
     yield DbLoaded(repo, event.newUser);
