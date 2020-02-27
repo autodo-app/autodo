@@ -102,12 +102,14 @@ HSV rgb2hsv(RGB rgb) {
     return HSV(double.infinity, 0.0, v);
   }
 
-  if (rgb.r >= max) // > is bogus, just keeps compiler happy
+  if (rgb.r >= max) {
+    // > is bogus, just keeps compiler happy
     h = (rgb.g - rgb.b) / delta; // between yellow & magenta
-  else if (rgb.g >= max)
+  } else if (rgb.g >= max) {
     h = 2.0 + (rgb.b - rgb.r) / delta; // between cyan & yellow
-  else
+  } else {
     h = 4.0 + (rgb.r - rgb.g) / delta; // between magenta & cyan
+  }
 
   h *= 60.0; // degrees
 

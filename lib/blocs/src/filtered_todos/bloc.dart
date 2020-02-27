@@ -48,16 +48,21 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
 
         if (aDate == 0 && bDate == 0) {
           // both don't have a date, so only consider the mileages
-          if (aMileage > bMileage)
+          if (aMileage > bMileage) {
             return 1;
-          else if (aMileage < bMileage)
+          } else if (aMileage < bMileage) {
             return -1;
-          else
+          } else {
             return 0;
+          }
         } else {
           // in case one of the two isn't a valid timestamp
-          if (aDate == 0) return -1;
-          if (bDate == 0) return 1;
+          if (aDate == 0) {
+            return -1;
+          }
+          if (bDate == 0) {
+            return 1;
+          }
           // consider the dates since all todo items should have dates as a result
           // of the distance rate translation function
           return aDate.compareTo(bDate);

@@ -135,8 +135,12 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
 
   Stream<TodosState> _mapUpdateDueDatesToState(UpdateDueDates event) async* {
     final cars = event.cars;
-    if (cars == null || cars.isEmpty || !(state is TodosLoaded) || repo == null)
+    if (cars == null ||
+        cars.isEmpty ||
+        !(state is TodosLoaded) ||
+        repo == null) {
       return;
+    }
 
     final TodosLoaded curState = state;
     final batch = await repo.startTodoWriteBatch();
@@ -256,9 +260,11 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
 
   int _calculateNextTodo(List<Todo> pastTodos, int mileageInterval) {
     pastTodos.sort((a, b) {
-      if (a.dueMileage < b.dueMileage)
+      if (a.dueMileage < b.dueMileage) {
         return 1;
-      else if (b.dueMileage < a.dueMileage) return -1;
+      } else if (b.dueMileage < a.dueMileage) {
+        return -1;
+      }
       return 0;
     });
     final latest = pastTodos.toList().last;

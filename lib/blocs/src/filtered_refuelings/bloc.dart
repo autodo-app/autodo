@@ -96,8 +96,9 @@ class FilteredRefuelingsBloc
   }
 
   int _hsv(Refueling refueling, Car car) {
-    if (refueling.efficiency == double.infinity)
+    if (refueling.efficiency == double.infinity) {
       return HSV(1.0, 1.0, 1.0).toValue();
+    }
     final avgEff = car.averageEfficiency;
     // range is 0 to 120
     final diff = (refueling.efficiency == null ||

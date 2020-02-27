@@ -64,10 +64,11 @@ class NewUserScreenState extends State<NewUserScreen> {
     if (page.value == NewUserScreenPage.MILEAGE) {
       // delete the current user somehow?
       Navigator.pop(context);
-    } else if (page.value == NewUserScreenPage.LATEST)
+    } else if (page.value == NewUserScreenPage.LATEST) {
       setState(() => page.value = NewUserScreenPage.MILEAGE);
-    else if (page.value == NewUserScreenPage.REPEATS)
+    } else if (page.value == NewUserScreenPage.REPEATS) {
       setState(() => page.value = NewUserScreenPage.LATEST);
+    }
   }
 
   @override

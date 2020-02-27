@@ -183,10 +183,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       yield LoginEmpty();
     } on PlatformException catch (e) {
       var errorString = 'Error communicating to the auToDo servers.';
-      if (e.code == 'ERROR_INVALID_EMAIL')
+      if (e.code == 'ERROR_INVALID_EMAIL') {
         errorString = 'Invalid email address format';
-      else if (e.code == 'ERROR_USER_NOT_FOUND')
+      } else if (e.code == 'ERROR_USER_NOT_FOUND') {
         errorString = 'Could not find an account for this email address';
+      }
       yield LoginError(errorString);
     }
   }
