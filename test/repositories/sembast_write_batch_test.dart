@@ -40,7 +40,7 @@ void main() {
           dbFactory: databaseFactoryIo,
           dbPath: './test.db');
       wrapper.setData({'test': ''});
-      wrapper.commit();
+      await wrapper.commit();
     });
     test('props', () async {
       expect(

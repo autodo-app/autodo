@@ -7,5 +7,5 @@ Future<void> main() async {
 
   // run the app
   await app.init();
-  app.run(true);
+  await app.run(true);
 }

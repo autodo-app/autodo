@@ -37,7 +37,7 @@ class SembastWriteBatch extends Equatable implements WriteBatchWrapper {
       }
     });
     if (streamControllerUpdate != null) streamControllerUpdate();
-    db.close();
+    await db.close();
   }
 
   @override
