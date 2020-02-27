@@ -8,8 +8,10 @@ import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/models/models.dart';
 import 'package:autodo/repositories/repositories.dart';
 
+// ignore: must_be_immutable
 class MockDataRepository extends Mock implements FirebaseDataRepository {}
 
+// ignore: must_be_immutable
 class MockWriteBatch extends Mock implements WriteBatchWrapper {}
 
 class MockDbBloc extends Mock implements DatabaseBloc {}

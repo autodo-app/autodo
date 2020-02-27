@@ -7,6 +7,7 @@ import 'package:mockito/mockito.dart';
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/repositories/repositories.dart';
 
+// ignore: must_be_immutable
 class MockDataRepository extends Mock
     with EquatableMixin
     implements DataRepository {}

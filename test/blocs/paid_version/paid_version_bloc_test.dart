@@ -8,10 +8,12 @@ import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/repositories/repositories.dart';
 import 'package:autodo/repositories/src/sembast_data_repository.dart';
 
+// ignore: must_be_immutable
 class MockDataRepository extends Mock
     with EquatableMixin
     implements DataRepository {}
 
+// ignore: must_be_immutable
 class MockSembast extends Mock
     with EquatableMixin
     implements SembastDataRepository {}

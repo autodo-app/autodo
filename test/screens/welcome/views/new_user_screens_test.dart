@@ -25,6 +25,7 @@ class MockAuthenticationBloc
 class MockDatabaseBloc extends MockBloc<DatabaseEvent, DatabaseState>
     implements DatabaseBloc {}
 
+// ignore: must_be_immutable
 class MockRepo extends Mock implements DataRepository {}
 
 void main() {
