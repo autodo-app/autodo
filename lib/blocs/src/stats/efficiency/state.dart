@@ -29,10 +29,9 @@ class EfficiencyStatsLoaded extends EfficiencyStatsState {
 
   @override
   String toString() {
-    return 'EfficiencyStatsLoaded { fuelEfficiencyData:' +
-        fuelEfficiencyData
-            .map((p) => p.data.toString())
-            .fold('', (val, str) => val + str) +
-        ' }';
+    final data = fuelEfficiencyData
+        .map((p) => p.data.toString())
+        .fold('', (val, str) => val + str);
+    return 'EfficiencyStatsLoaded { fuelEfficiencyData: $data }';
   }
 }

@@ -20,7 +20,8 @@ class _RepeatTitle extends StatelessWidget {
         RichText(
           text: TextSpan(children: [
             TextSpan(
-                text: JsonIntl.of(context).get(IntlKeys.task) + ' ',
+                // Todo: Improve this translation
+                text: '${JsonIntl.of(context).get(IntlKeys.task)} ',
                 style: Theme.of(context).primaryTextTheme.body1),
             TextSpan(
                 text: repeat.name,
@@ -30,7 +31,8 @@ class _RepeatTitle extends StatelessWidget {
         RichText(
             text: TextSpan(children: [
           TextSpan(
-              text: JsonIntl.of(context).get(IntlKeys.interval) + ' ',
+              // Todo: Improve this translation
+              text: '${JsonIntl.of(context).get(IntlKeys.interval)} ',
               style: Theme.of(context).primaryTextTheme.body1),
           TextSpan(
               text: repeat.mileageInterval.toString(),

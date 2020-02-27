@@ -32,9 +32,9 @@ class _MileageForm extends StatelessWidget {
           border: OutlineInputBorder(
             borderSide: BorderSide(color: Theme.of(context).primaryColor),
           ),
-          labelText: JsonIntl.of(context).get(IntlKeys.odomReading) +
-              ' ' +
-              JsonIntl.of(context).get(IntlKeys.distanceUnitsShort),
+          labelText:
+              // Todo: Improve this translation
+              '${JsonIntl.of(context).get(IntlKeys.odomReading)} ${JsonIntl.of(context).get(IntlKeys.distanceUnitsShort)}',
           contentPadding:
               EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
         ),
@@ -69,10 +69,9 @@ class _AmountForm extends StatelessWidget {
           border: OutlineInputBorder(
             borderSide: BorderSide(color: Theme.of(context).primaryColor),
           ),
-          labelText: JsonIntl.of(context).get(IntlKeys.refuelingAmount) +
-              ' (' +
-              JsonIntl.of(context).get(IntlKeys.fuelUnits) +
-              ')',
+          labelText:
+              // Todo: Improve this translation
+              '${JsonIntl.of(context).get(IntlKeys.refuelingAmount)} (${JsonIntl.of(context).get(IntlKeys.fuelUnits)})',
           contentPadding:
               EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
         ),
@@ -107,9 +106,9 @@ class _CostForm extends StatelessWidget {
           border: OutlineInputBorder(
             borderSide: BorderSide(color: Theme.of(context).primaryColor),
           ),
-          labelText: JsonIntl.of(context).get(IntlKeys.totalPrice) +
-              ' ' +
-              JsonIntl.of(context).get(IntlKeys.moneyUnitsSuffix),
+          labelText:
+              // Todo: Improve this translation
+              '${JsonIntl.of(context).get(IntlKeys.totalPrice)} ${JsonIntl.of(context).get(IntlKeys.moneyUnitsSuffix)}',
           contentPadding:
               EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
         ),

@@ -37,7 +37,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
 
   Future<String> _getFullFilePath() async {
     final path = await pathProvider();
-    return path.path + '/' + dbPath;
+    return '${path.path}/$dbPath';
   }
 
   SembastDataRepository(

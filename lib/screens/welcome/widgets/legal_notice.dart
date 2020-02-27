@@ -34,7 +34,7 @@ class LegalNotice extends StatelessWidget {
         textAlign: TextAlign.center,
         text: TextSpan(children: [
           TextSpan(
-            text: JsonIntl.of(context).get(IntlKeys.legal1) + ' ',
+            text: '${JsonIntl.of(context).get(IntlKeys.legal1)} ',
             style: finePrint(),
           ),
           TextSpan(
@@ -43,7 +43,7 @@ class LegalNotice extends StatelessWidget {
             recognizer: TapGestureRecognizer()..onTap = () {},
           ),
           TextSpan(
-            text: ' ' + JsonIntl.of(context).get(IntlKeys.legal3) + ' ',
+            text: ' ${JsonIntl.of(context).get(IntlKeys.legal3)} ',
             style: finePrint(),
           ),
           TextSpan(
@@ -53,7 +53,7 @@ class LegalNotice extends StatelessWidget {
             semanticsLabel: 'Privacy Policy Button',
           ),
           TextSpan(
-            text: ' ' + JsonIntl.of(context).get(IntlKeys.legal5),
+            text: ' ${JsonIntl.of(context).get(IntlKeys.legal5)}',
             style: finePrint(),
           ),
         ]),

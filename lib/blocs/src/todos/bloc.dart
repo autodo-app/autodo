@@ -107,7 +107,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   void _scheduleNotification(Todo todo) {
     _notificationsBloc.add(ScheduleNotification(
         date: todo.dueDate,
-        title: IntlKeys.todoDueSoon + ': ${todo.name}', // TODO: Translate this
+        title: '${IntlKeys.todoDueSoon}: ${todo.name}', // TODO: Translate this
         body: ''));
   }
 
@@ -122,7 +122,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     _notificationsBloc.add(ReScheduleNotification(
         id: out.notificationID,
         date: out.dueDate,
-        title: IntlKeys.todoDueSoon + ': ${out.name}', // TODO: Translate this
+        title: '${IntlKeys.todoDueSoon}: ${out.name}', // TODO: Translate this
         body: ''));
     batch.updateData(out.id, out.toEntity().toDocument());
     return out;

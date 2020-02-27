@@ -15,26 +15,25 @@ class _RefuelingTitle extends StatelessWidget {
   const _RefuelingTitle({Key key, @required this.refueling}) : super(key: key);
 
   TextSpan dateField(context) => TextSpan(
-      text: JsonIntl.of(context).get(IntlKeys.onLiteral) +
-          ' ' + // TODO: Can't concat verb and date
-          DateFormat.yMMMd().format(refueling.date) +
-          ' ',
+      text: // TODO: Can't concat verb and date
+          '${JsonIntl.of(context).get(IntlKeys.onLiteral)} ${DateFormat.yMMMd().format(refueling.date)} ',
       style: Theme.of(context).primaryTextTheme.body1);
 
   @override
   Widget build(context) => RichText(
         text: TextSpan(
           children: [
+            // Todo: Improve this translation
             TextSpan(
-                text: JsonIntl.of(context).get(IntlKeys.refueling) + ' ',
+                text: '${JsonIntl.of(context).get(IntlKeys.refueling)} ',
                 style: Theme.of(context).primaryTextTheme.body1),
             dateField(context),
             TextSpan(
-                text: JsonIntl.of(context).get(IntlKeys.at) + ' ',
+                text: '${JsonIntl.of(context).get(IntlKeys.at)} ',
                 style: Theme.of(context).primaryTextTheme.body1),
             TextSpan(
-                text: NumberFormat.decimalPattern().format(refueling.mileage) +
-                    ' ',
+                text:
+                    '${NumberFormat.decimalPattern().format(refueling.mileage)} ',
                 style: Theme.of(context).primaryTextTheme.subtitle),
             TextSpan(
                 text: JsonIntl.of(context).get(IntlKeys.distanceUnits),
@@ -54,7 +53,8 @@ class _RefuelingCost extends StatelessWidget {
         text: TextSpan(
           children: [
             TextSpan(
-                text: JsonIntl.of(context).get(IntlKeys.totalCost) + ': ',
+                // Todo: Improve this translation
+                text: '${JsonIntl.of(context).get(IntlKeys.totalCost)}: ',
                 style: Theme.of(context).primaryTextTheme.body1),
             TextSpan(
                 text: NumberFormat.simpleCurrency(name: 'USD')
@@ -75,13 +75,14 @@ class _RefuelingAmount extends StatelessWidget {
         text: TextSpan(
           children: [
             TextSpan(
-                text: JsonIntl.of(context).get(IntlKeys.totalAmount) + ': ',
+                // Todo: Improve this translation
+                text: '${JsonIntl.of(context).get(IntlKeys.totalAmount)}: ',
                 style: Theme.of(context).primaryTextTheme.body1),
             TextSpan(
                 text: NumberFormat(',###.0#').format(refueling.amount),
                 style: Theme.of(context).primaryTextTheme.subtitle),
             TextSpan(
-                text: ' ' + JsonIntl.of(context).get(IntlKeys.fuelUnits),
+                text: ' ${JsonIntl.of(context).get(IntlKeys.fuelUnits)}',
                 style: Theme.of(context).primaryTextTheme.body1)
           ],
         ),

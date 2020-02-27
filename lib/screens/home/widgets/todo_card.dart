@@ -33,7 +33,8 @@ class _TodoTitle extends StatelessWidget {
   Widget build(context) => RichText(
           text: TextSpan(children: [
         TextSpan(
-            text: preface(context) + ' ',
+            // Todo: Improve this translation
+            text: '${preface(context)} ',
             style: Theme.of(context).primaryTextTheme.subtitle),
         TextSpan(
             text: todo.name, style: Theme.of(context).primaryTextTheme.title)
@@ -74,9 +75,8 @@ class _TodoDueDate extends StatelessWidget {
         children: <Widget>[
           Icon(Icons.alarm, size: 30),
           Text(
-              JsonIntl.of(context).get(IntlKeys.dueOn) +
-                  ' ' +
-                  DateFormat.yMMMd().format(todo.dueDate),
+              // Todo: Improve this translation
+              '${JsonIntl.of(context).get(IntlKeys.dueOn)} ${DateFormat.yMMMd().format(todo.dueDate)}',
               style: Theme.of(context).primaryTextTheme.body1),
         ],
       );
@@ -105,14 +105,15 @@ class _TodoDueMileage extends StatelessWidget {
           Padding(padding: EdgeInsets.all(5)),
           RichText(
               text: TextSpan(children: [
+            // Todo: Improve this translation
             TextSpan(
-                text: JsonIntl.of(context).get(IntlKeys.dueAt) + ' ',
+                text: '${JsonIntl.of(context).get(IntlKeys.dueAt)} ',
                 style: Theme.of(context).primaryTextTheme.body1),
             TextSpan(
                 text: mileageString(),
                 style: Theme.of(context).primaryTextTheme.subtitle),
             TextSpan(
-              text: ' ' + JsonIntl.of(context).get(IntlKeys.distanceUnits),
+              text: ' ${JsonIntl.of(context).get(IntlKeys.distanceUnits)}',
               style: Theme.of(context).primaryTextTheme.body1,
             )
           ]))

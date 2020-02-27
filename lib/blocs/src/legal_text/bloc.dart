@@ -19,7 +19,7 @@ class MarkdownParser {
   static String _list(String line) {
     if (RegExp(r'^- ').hasMatch(line)) {
       final pieces = line.split(RegExp(r'^- '));
-      return '•   ' + pieces[1];
+      return '•   ${pieces[1]}';
     }
     return null;
   }
