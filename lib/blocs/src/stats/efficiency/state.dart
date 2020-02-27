@@ -32,6 +32,6 @@ class EfficiencyStatsLoaded extends EfficiencyStatsState {
     final data = fuelEfficiencyData
         .map((p) => p.data.toString())
         .fold('', (val, str) => val + str);
-    return 'EfficiencyStatsLoaded { fuelEfficiencyData: $data }';
+    return 'EfficiencyStatsLoaded { fuelEfficiencyData:$data }';
   }
 }
