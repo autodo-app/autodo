@@ -1,11 +1,10 @@
 import 'dart:math';
 
-import 'package:json_intl/json_intl.dart';
 import 'package:autodo/localization.dart';
-import 'package:charts_flutter/flutter.dart';
-import 'package:flutter/material.dart';
-
 import 'package:autodo/models/models.dart';
+import 'package:flutter/material.dart';
+import 'package:charts_flutter/flutter.dart';
+import 'package:json_intl/json_intl.dart';
 import 'shared.dart';
 
 class FuelMileageChart extends StatelessWidget {
@@ -38,7 +37,7 @@ class FuelMileageChart extends StatelessWidget {
       return Padding(
           padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
           child: Center(
-              child: Text(JsonIntl.of(context).get(IntlKeys.noData),
+              child: Text(JsonIntl.of(context).get(IntlKeys.noDataRefuelings),
                   textAlign: TextAlign.center,
                   style: Theme.of(context).primaryTextTheme.body1)));
     }

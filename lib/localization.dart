@@ -82,7 +82,7 @@ class IntlKeys {
   static const distanceUnits = 'distance_units';
 
   /// strings-fr.json: 'Historique des distances de conduite'
-  /// strings.json: 'Driving Distance History'
+  /// strings.json: 'Driving Distance History (mi/day)'
   static const drivingDistanceHistory = 'driving_distance_history';
 
   /// strings-fr.json: 'Dû à'
@@ -138,7 +138,7 @@ class IntlKeys {
   static const forgotYourPassword = 'forgot_your_password';
 
   /// strings-fr.json: 'Historique de l\'efficacité énergétique'
-  /// strings.json: 'Fuel Efficiency History'
+  /// strings.json: 'Fuel Efficiency History (mpg)'
   static const fuelEfficiencyHistory = 'fuel_efficiency_history';
 
   /// strings-fr.json: 'gal'
@@ -456,6 +456,10 @@ class IntlKeys {
   /// strings-fr.json: 'Oui'
   /// strings.json: 'Yes'
   static const yes = 'yes';
+
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings.json: 'Need at least 3 refuelings to see efficiency data.'
+  static const noDataRefuelings = 'no_data_refuelings';
 
   /// strings-fr.json: *** NOT TRANSLATED ***
   /// strings.json: 'Alignment Check'

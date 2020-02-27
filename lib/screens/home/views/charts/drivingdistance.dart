@@ -4,6 +4,7 @@ import 'package:charts_flutter/flutter.dart';
 import 'package:autodo/models/models.dart';
 import 'package:json_intl/json_intl.dart';
 import 'shared.dart';
+import 'package:json_intl/json_intl.dart';
 
 class DrivingDistanceChart extends StatelessWidget {
   final List<Series<DistanceRatePoint, DateTime>> seriesList;
