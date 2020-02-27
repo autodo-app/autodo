@@ -114,7 +114,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   Todo _updateDueDate(car, todo, batch) {
     final distanceToTodo = todo.dueMileage - car.mileage;
     final int daysToTodo = (distanceToTodo / car.distanceRate).round();
-    final Duration timeToTodo = Duration(days: daysToTodo);
+    final timeToTodo = Duration(days: daysToTodo);
     final newDueDate =
         roundToDay(car.lastMileageUpdate.toUtc()).add(timeToTodo).toLocal();
 
@@ -133,14 +133,14 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       !(t.completed ?? false));
 
   Stream<TodosState> _mapUpdateDueDatesToState(UpdateDueDates event) async* {
-    final List<Car> cars = event.cars;
+    final cars = event.cars;
     if (cars == null ||
         cars.length == 0 ||
         !(state is TodosLoaded) ||
         repo == null) return;
 
     final TodosLoaded curState = state;
-    final WriteBatchWrapper batch = await repo.startTodoWriteBatch();
+    final batch = await repo.startTodoWriteBatch();
     List<Todo> updatedTodos;
     for (var car in cars) {
       if (_carsCache?.contains(car) ?? false) continue;
@@ -159,7 +159,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       print('Error: adding todo to null repo');
       return;
     }
-    final List<Todo> updatedTodos = List.from((state as TodosLoaded).todos)
+    final updatedTodos = List<Todo>.from((state as TodosLoaded).todos)
       ..add(event.todo);
     yield TodosLoaded(updatedTodos);
     _scheduleNotification(event.todo);
@@ -172,7 +172,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       return;
     }
     print('todos now: ${(state as TodosLoaded).todos}');
-    final List<Todo> updatedTodos = (state as TodosLoaded).todos.map((r) {
+    final updatedTodos = (state as TodosLoaded).todos.map<Todo>((r) {
       if (r.id != null && event.updatedTodo.id != null) {
         return r.id == event.updatedTodo.id ? event.updatedTodo : r;
       } else {
@@ -186,11 +186,13 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
 
   Todo _createNewTodoFromRepeat(repeat, todo) {
     final CarsLoaded curCarsState = _carsBloc.state;
-    final Car curCar = curCarsState.cars.firstWhere((c) => c.name == todo.carName);
+    final curCar = curCarsState.cars.firstWhere((c) => c.name == todo.carName);
 
     final int nextDueMileage = curCar.mileage + repeat.mileageInterval;
-    final int daysToDue = (repeat.mileageInterval / curCar.distanceRate).round();
-    final DateTime nextDueDate = todo.completedDate.add(Duration(days: daysToDue));
+    final int daysToDue =
+        (repeat.mileageInterval / curCar.distanceRate).round();
+    final DateTime nextDueDate =
+        todo.completedDate.add(Duration(days: daysToDue));
     final Todo next = todo.copyWith(
         dueMileage: nextDueMileage, dueDate: nextDueDate, completed: false);
     repo.addNewTodo(next);
@@ -198,22 +200,22 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   }
 
   Stream<TodosState> _mapCompleteTodoToState(CompleteTodo event) async* {
-    final Todo curTodo = event.todo;
+    final curTodo = event.todo;
     if (_repeatsBloc.state is RepeatsLoaded &&
         _carsBloc.state is CarsLoaded &&
         repo != null) {
-      List<Todo> updatedTodos = (state as TodosLoaded).todos;
+      var updatedTodos = (state as TodosLoaded).todos;
 
       final RepeatsLoaded curRepeatsState = _repeatsBloc.state;
-      final Repeat curRepeat = curRepeatsState.repeats
+      final curRepeat = curRepeatsState.repeats
           .firstWhere((r) => r.name == curTodo.repeatName, orElse: () => null);
       if (!curRepeat.props.every((p) => p == null)) {
-        final Todo newTodo = _createNewTodoFromRepeat(curRepeat, curTodo);
+        final newTodo = _createNewTodoFromRepeat(curRepeat, curTodo);
         updatedTodos = updatedTodos..add(newTodo);
         repo.addNewTodo(newTodo);
       }
 
-      final Todo completedTodo = curTodo.copyWith(
+      final completedTodo = curTodo.copyWith(
         completed: true,
         completedDate: event.completedDate ?? DateTime.now(),
       );
@@ -241,8 +243,8 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     final currentState = state;
     if (currentState is TodosLoaded && repo != null) {
       final allComplete = currentState.todos.every((todo) => todo.completed);
-      final List<Todo> updatedTodos = currentState.todos
-          .map((todo) => todo.copyWith(completed: !allComplete))
+      final updatedTodos = currentState.todos
+          .map<Todo>((todo) => todo.copyWith(completed: !allComplete))
           .toList();
       yield TodosLoaded(updatedTodos);
       final batch = await repo.startTodoWriteBatch();
@@ -260,7 +262,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       else if (b.dueMileage < a.dueMileage) return -1;
       return 0;
     });
-    final Todo latest = pastTodos.toList().last;
+    final latest = pastTodos.toList().last;
     return latest.dueMileage + mileageInterval;
   }
 
@@ -279,7 +281,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
         // redo the calculation for due date
         final Todo upcoming =
             todos.firstWhere((t) => (!t.completed && t.repeatName == r.name));
-        final Todo updated = upcoming.copyWith(
+        final updated = upcoming.copyWith(
             dueMileage: _calculateNextTodo(
                 todos.where((t) => t.repeatName == r.name).toList(),
                 r.mileageInterval));
@@ -290,8 +292,8 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
             .toList();
       } else {
         // create a new todo for every car
-        final List<Car> cars = (_carsBloc.state as CarsLoaded).cars;
-        final Iterable<Todo> newTodos = cars
+        final cars = (_carsBloc.state as CarsLoaded).cars;
+        final newTodos = cars
             // if the repeat does not have a list of cars because it is a default
             // then consider all cars to work
             .where((c) => r?.cars?.contains(c.name) ?? true)
@@ -301,7 +303,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
           if (pastRepeats.length == 0) {
             // if the mileage interval is bigger than the car's current mileage,
             // then assume that it has not been done before.
-            final int dueMileage = (r.mileageInterval > c.mileage)
+            final dueMileage = (r.mileageInterval > c.mileage)
                 ? r.mileageInterval
                 : c.mileage + r.mileageInterval;
             return Todo(

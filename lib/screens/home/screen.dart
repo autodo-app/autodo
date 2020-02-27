@@ -14,7 +14,7 @@ import 'package:json_intl/json_intl.dart';
 import 'views/barrel.dart';
 
 class HomeScreen extends StatefulWidget {
-  final Key todosTabKey;
+  final todosTabKey;
   final bool integrationTest;
 
   HomeScreen(
@@ -55,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
     AppTab.stats: StatisticsScreen(),
     AppTab.repeats: RepeatsScreen(),
   };
-  final Key todosTabKey;
+  final todosTabKey;
   final bool integrationTest;
   BannerAd _bannerAd;
   bool _bannerShown = false;

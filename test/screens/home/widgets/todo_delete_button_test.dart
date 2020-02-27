@@ -28,7 +28,7 @@ void main() {
     });
 
     testWidgets('renders', (WidgetTester tester) async {
-      final Key todosKey = Key('todos');
+      final todosKey = Key('todos');
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
@@ -47,7 +47,7 @@ void main() {
       expect(find.byKey(todosKey), findsOneWidget);
     });
     testWidgets('press', (WidgetTester tester) async {
-      final Key todosKey = Key('todos');
+      final todosKey = Key('todos');
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
@@ -69,7 +69,7 @@ void main() {
       verify(todosBloc.add(DeleteTodo(Todo(name: 'test')))).called(1);
     });
     testWidgets('undo', (WidgetTester tester) async {
-      final Key todosKey = Key('todos');
+      final todosKey = Key('todos');
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [

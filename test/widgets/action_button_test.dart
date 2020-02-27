@@ -8,7 +8,11 @@ void main() {
     testWidgets('should render properly', (tester) async {
       final buttonKey = Key('button_key');
       final mainKey = Key('main_key');
-      final miniKeys = [Key('refueling_key'), Key('todo_key'), Key('repeat_key')];
+      final miniKeys = [
+        Key('refueling_key'),
+        Key('todo_key'),
+        Key('repeat_key')
+      ];
       final Widget home = Scaffold(
           floatingActionButton: Builder(
         builder: (BuildContext context) => AutodoActionButton(
@@ -21,7 +25,7 @@ void main() {
         home: home,
       );
       await tester.pumpWidget(app);
-      final Finder buttonFinder = find.byKey(buttonKey);
+      final buttonFinder = find.byKey(buttonKey);
 
       expect(buttonFinder, findsOneWidget);
 

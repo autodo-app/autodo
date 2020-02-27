@@ -7,10 +7,10 @@ import 'package:autodo/models/models.dart';
 void main() {
   group('TabSelector', () {
     testWidgets('should render properly', (WidgetTester tester) async {
-      final Key todosTabKey = Key('todosTab');
-      final Key refuelingsTabKey = Key('refuelingsTab');
-      final Key statsTabKey = Key('statsTab');
-      final Key repeatsTabKey = Key('repeatsTab');
+      final todosTabKey = Key('todosTab');
+      final refuelingsTabKey = Key('refuelingsTab');
+      final statsTabKey = Key('statsTab');
+      final repeatsTabKey = Key('repeatsTab');
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -36,10 +36,10 @@ void main() {
     testWidgets('should call onTabSelected with correct index when tab tapped',
         (WidgetTester tester) async {
       AppTab selectedTab;
-      final Key todosTabKey = Key('todosTab');
-      final Key refuelingsTabKey = Key('refuelingsTab');
-      final Key statsTabKey = Key('statsTab');
-      final Key repeatsTabKey = Key('repeatsTab');
+      final todosTabKey = Key('todosTab');
+      final refuelingsTabKey = Key('refuelingsTab');
+      final statsTabKey = Key('statsTab');
+      final repeatsTabKey = Key('repeatsTab');
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -58,10 +58,10 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      final Finder todoTabFinder = find.byKey(todosTabKey);
-      final Finder refuelingTabFinder = find.byKey(refuelingsTabKey);
-      final Finder statsTabFinder = find.byKey(statsTabKey);
-      final Finder repeatTabFinder = find.byKey(repeatsTabKey);
+      final todoTabFinder = find.byKey(todosTabKey);
+      final refuelingTabFinder = find.byKey(refuelingsTabKey);
+      final statsTabFinder = find.byKey(statsTabKey);
+      final repeatTabFinder = find.byKey(repeatsTabKey);
       expect(todoTabFinder, findsOneWidget);
       expect(statsTabFinder, findsOneWidget);
       await tester.tap(todoTabFinder);

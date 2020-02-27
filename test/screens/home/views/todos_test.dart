@@ -30,7 +30,7 @@ void main() {
     testWidgets('renders loading', (WidgetTester tester) async {
       when(todosBloc.state).thenAnswer((_) => TodosLoaded([]));
       when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoading());
-      final Key todosKey = Key('todos');
+      final todosKey = Key('todos');
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
@@ -57,7 +57,7 @@ void main() {
       when(todosBloc.state).thenAnswer((_) => TodosLoaded([]));
       when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded(
           [Todo(name: '', completed: true)], VisibilityFilter.all));
-      final Key todosKey = Key('todos');
+      final todosKey = Key('todos');
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
@@ -88,7 +88,7 @@ void main() {
                 dueMileage: 0,
                 completed: true)
           ], VisibilityFilter.all));
-      final Key todosKey = Key('todos');
+      final todosKey = Key('todos');
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
@@ -118,7 +118,7 @@ void main() {
       when(filteredTodosBloc.state)
           .thenAnswer((_) => FilteredTodosLoaded([todo], VisibilityFilter.all));
       when(todosBloc.add(UpdateTodo(todo))).thenAnswer((_) => _);
-      final Key todosKey = Key('todos');
+      final todosKey = Key('todos');
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
@@ -151,7 +151,7 @@ void main() {
       when(filteredTodosBloc.state)
           .thenAnswer((_) => FilteredTodosLoaded([todo], VisibilityFilter.all));
       when(todosBloc.add(DeleteTodo(todo))).thenAnswer((_) => null);
-      final Key todosKey = Key('todos');
+      final todosKey = Key('todos');
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
@@ -186,7 +186,7 @@ void main() {
           completed: false);
       when(filteredTodosBloc.state)
           .thenAnswer((_) => FilteredTodosLoaded([todo], VisibilityFilter.all));
-      final Key todosKey = Key('todos');
+      final todosKey = Key('todos');
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [

@@ -43,7 +43,7 @@ void main() {
       when(repeatsBloc.state).thenReturn(RepeatsLoaded([
         Repeat(name: 'test', mileageInterval: 0, cars: ['test'])
       ]));
-      final Key repeatsKey = Key('repeats');
+      final repeatsKey = Key('repeats');
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [

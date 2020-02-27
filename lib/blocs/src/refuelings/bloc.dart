@@ -51,11 +51,11 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
   }
 
   Future<Refueling> _findLatestRefueling(Refueling refueling) async {
-    final List<Refueling> refuelings = await repo
+    final refuelings = await repo
         .getCurrentRefuelings()
         .timeout(Duration(seconds: 10), onTimeout: () => []);
 
-    int smallestDiff = MAX_MPG;
+    var smallestDiff = MAX_MPG;
     Refueling out;
     for (var r in refuelings) {
       if (r.carName == refueling.carName) {
@@ -72,7 +72,7 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
 
   Stream<RefuelingsState> _mapLoadRefuelingsToState() async* {
     try {
-      final List<Refueling> refuelings = await repo
+      final refuelings = await repo
           .getCurrentRefuelings()
           .timeout(Duration(seconds: 10), onTimeout: () => []);
       yield RefuelingsLoaded(refuelings);
@@ -91,11 +91,11 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
     final item = event.refueling;
     final prev = await _findLatestRefueling(item);
     final dist = (prev == null) ? 0 : item.mileage - prev.mileage;
-    final Refueling out = event.refueling.copyWith(efficiency: dist / item.amount);
+    final out = event.refueling.copyWith(efficiency: dist / item.amount);
 
     // event.carsBloc.add(AddRefuelingInfo(item.car, item.mileage, item.date, item.efficiency, prev.date, dist));
-    final List<Refueling> updatedRefuelings =
-        List.from((state as RefuelingsLoaded).refuelings)..add(out);
+    final updatedRefuelings =
+        List<Refueling>.from((state as RefuelingsLoaded).refuelings)..add(out);
     yield RefuelingsLoaded(updatedRefuelings);
     repo.addNewRefueling(out);
   }
@@ -110,9 +110,9 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
     final prev = await _findLatestRefueling(event.refueling);
     final dist = (prev == null) ? 0 : event.refueling.mileage - prev.mileage;
     final efficiency = dist / event.refueling.amount;
-    final Refueling out = event.refueling.copyWith(efficiency: efficiency);
+    final out = event.refueling.copyWith(efficiency: efficiency);
 
-    final List<Refueling> updatedRefuelings = (state as RefuelingsLoaded)
+    final updatedRefuelings = (state as RefuelingsLoaded)
         .refuelings
         .map((r) => r.id == out.id ? out : r)
         .toList();

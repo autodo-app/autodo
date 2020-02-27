@@ -75,7 +75,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
   }
 
   Stream<SignupState> _mapEmailChangedToState(String email) async* {
-    final String errorString = Validators.isValidEmail(email);
+    final errorString = Validators.isValidEmail(email);
     if (errorString == null) {
       yield _clearEmailError();
     } else {
@@ -100,7 +100,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
   }
 
   Stream<SignupState> _mapPasswordChangedToState(String password) async* {
-    final String errorString = Validators.isValidPassword(password);
+    final errorString = Validators.isValidPassword(password);
     if (errorString == null) {
       yield _clearPasswordError();
     } else {

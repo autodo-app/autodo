@@ -96,7 +96,7 @@ class CarEntity extends Equatable {
       'distanceRate': distanceRate,
       'lastMileageUpdate': lastMileageUpdate?.millisecondsSinceEpoch,
       'distanceRateHistory': distanceRateHistory
-          ?.map((p) => Map<String, dynamic>()
+          ?.map((p) => <String, dynamic>{}
             ..addAll({
               'date': p.date.millisecondsSinceEpoch,
               'distanceRate': p.distanceRate

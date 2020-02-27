@@ -106,7 +106,7 @@ class AuthenticationBloc
       final isSignedIn = await _userRepository.isSignedIn();
       if (isSignedIn) {
         final name = await _userRepository.getUserEmail();
-        final String uuid = await _userRepository.getUserId();
+        final uuid = await _userRepository.getUserId();
         yield RemoteAuthenticated(name, uuid, false);
       } else if (prefs.getBool(trialUserKey)) {
         yield LocalAuthenticated(false);

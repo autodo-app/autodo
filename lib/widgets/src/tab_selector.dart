@@ -8,7 +8,7 @@ import 'package:json_intl/json_intl.dart';
 class TabSelector extends StatelessWidget {
   final AppTab activeTab;
   final Function(AppTab) onTabSelected;
-  final Key todosTabKey, refuelingsTabKey, statsTabKey, repeatsTabKey;
+  final todosTabKey, refuelingsTabKey, statsTabKey, repeatsTabKey;
 
   TabSelector(
       {Key key,

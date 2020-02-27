@@ -123,7 +123,7 @@ void main() {
             when(conn.purchaseUpdatedStream)
                 .thenAnswer((_) => Stream.fromIterable([]));
             when(conn.isAvailable()).thenAnswer((_) async => true);
-            final Set<String> ids = Set()..add('autodo_paid');
+            final ids = <String>{'autodo_paid'};
             when(conn.queryProductDetails(ids)).thenAnswer((_) async =>
                 ProductDetailsResponse(productDetails: [], notFoundIDs: ['']));
 
@@ -139,7 +139,7 @@ void main() {
             when(conn.purchaseUpdatedStream)
                 .thenAnswer((_) => Stream.fromIterable([]));
             when(conn.isAvailable()).thenAnswer((_) async => true);
-            final Set<String> ids = Set()..add('autodo_paid');
+            final ids = <String>{'autodo_paid'};
             final deets = ProductDetails(
                 id: 'autodo_paid', price: '', title: '', description: '');
             when(conn.queryProductDetails(ids)).thenAnswer((_) async =>
@@ -161,7 +161,7 @@ void main() {
             when(conn.purchaseUpdatedStream)
                 .thenAnswer((_) => Stream.fromIterable([]));
             when(conn.isAvailable()).thenAnswer((_) async => true);
-            final Set<String> ids = Set()..add('autodo_paid');
+            final ids = <String>{'autodo_paid'};
             final deets = ProductDetails(
                 id: 'autodo_paid', price: '', title: '', description: '');
             when(conn.queryProductDetails(ids)).thenAnswer((_) async =>

@@ -213,10 +213,10 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen>
           (state as RepeatsLoaded).repeats.length == 0) {
         return LoadingIndicator();
       }
-      final Repeat oilRepeat = (state as RepeatsLoaded)
+      final oilRepeat = (state as RepeatsLoaded)
           .repeats
           .firstWhere((val) => val.name == 'oil');
-      final Repeat tireRotationRepeat = (state as RepeatsLoaded)
+      final tireRotationRepeat = (state as RepeatsLoaded)
           .repeats
           .firstWhere((val) => val.name == 'tireRotation');
       print('oil $oilRepeat tire $tireRotationRepeat');

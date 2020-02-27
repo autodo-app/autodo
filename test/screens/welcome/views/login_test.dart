@@ -31,7 +31,7 @@ void main() {
     });
 
     testWidgets('renders correctly', (WidgetTester tester) async {
-      final Key scaffoldKey = Key('scaffold');
+      final scaffoldKey = Key('scaffold');
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
@@ -45,7 +45,7 @@ void main() {
       expect(find.byKey(scaffoldKey), findsOneWidget);
     });
     testWidgets('back button', (WidgetTester tester) async {
-      final Key scaffoldKey = Key('scaffold');
+      final scaffoldKey = Key('scaffold');
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
@@ -61,7 +61,7 @@ void main() {
       expect(find.byKey(scaffoldKey), findsOneWidget);
     });
     testWidgets('error', (WidgetTester tester) async {
-      final Key scaffoldKey = Key('scaffold');
+      final scaffoldKey = Key('scaffold');
       whenListen(
           loginBloc, Stream.fromIterable([LoginEmpty(), LoginError('test')]));
       await tester.pumpWidget(
@@ -76,7 +76,7 @@ void main() {
       expect(find.byType(SnackBar), findsOneWidget);
     });
     testWidgets('loading', (WidgetTester tester) async {
-      final Key scaffoldKey = Key('scaffold');
+      final scaffoldKey = Key('scaffold');
       whenListen(
           loginBloc, Stream.fromIterable([LoginEmpty(), LoginLoading()]));
       await tester.pumpWidget(
@@ -91,7 +91,7 @@ void main() {
       expect(find.byType(SnackBar), findsOneWidget);
     });
     testWidgets('loggedin', (WidgetTester tester) async {
-      final Key scaffoldKey = Key('scaffold');
+      final scaffoldKey = Key('scaffold');
       whenListen(
           loginBloc, Stream.fromIterable([LoginEmpty(), LoginSuccess()]));
       when(authBloc.add(LoggedIn())).thenAnswer((_) => null);
@@ -112,7 +112,7 @@ void main() {
       verify(authBloc.add(LoggedIn())).called(1);
     });
     testWidgets('submit form', (WidgetTester tester) async {
-      final Key scaffoldKey = Key('scaffold');
+      final scaffoldKey = Key('scaffold');
       when(authBloc.add(LoggedIn())).thenAnswer((_) => null);
       await tester.pumpWidget(
         MultiBlocProvider(

@@ -56,8 +56,8 @@ class AutoScrollFieldState extends State<AutoScrollField> {
   }
 
   double _getScrollPosition() {
-    final RenderObject object = context.findRenderObject();
-    final RenderAbstractViewport viewport = RenderAbstractViewport.of(object);
+    final object = context.findRenderObject();
+    final viewport = RenderAbstractViewport.of(object);
     if (viewport == null) return null;
 
     return viewport.getOffsetToReveal(object, 0.0).offset;
@@ -66,7 +66,7 @@ class AutoScrollFieldState extends State<AutoScrollField> {
   Future<Null> _scroll() async {
     if (!widget.focusNode.hasFocus) return;
 
-    final double scrollTo = widget.position ?? _getScrollPosition();
+    final scrollTo = widget.position ?? _getScrollPosition();
     if (scrollTo == null) return; // can't scroll
     await widget.controller
         .animateTo(scrollTo, duration: widget.duration, curve: widget.curve);

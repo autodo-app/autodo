@@ -123,7 +123,7 @@ class MileageScreenState extends State<MileageScreen> {
   MileageScreenState(this.mileageEntry);
 
   _next() async {
-    bool allValidated = true;
+    var allValidated = true;
     formKeys.forEach((k) {
       if (k.currentState.validate()) {
         k.currentState.save();
@@ -171,7 +171,7 @@ class MileageScreenState extends State<MileageScreen> {
     );
 
     Widget card() {
-      final List<Widget> carFields = [];
+      final carFields = <Widget>[];
       for (var i in Iterable.generate(cars.length)) {
         carFields.add(CarEntryField((i == cars.length - 1) ? _next : null,
             (val) {

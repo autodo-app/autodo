@@ -26,7 +26,7 @@ void main() {
     });
 
     testWidgets('renders', (WidgetTester tester) async {
-      final Key todosKey = Key('todos');
+      final todosKey = Key('todos');
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
@@ -55,7 +55,7 @@ void main() {
       expect(find.byKey(todosKey), findsOneWidget);
     });
     testWidgets('past due', (WidgetTester tester) async {
-      final Key todosKey = Key('todos');
+      final todosKey = Key('todos');
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
@@ -87,7 +87,7 @@ void main() {
       expect(find.byKey(todosKey), findsOneWidget);
     });
     testWidgets('due soon', (WidgetTester tester) async {
-      final Key todosKey = Key('todos');
+      final todosKey = Key('todos');
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
@@ -119,8 +119,8 @@ void main() {
       expect(find.byKey(todosKey), findsOneWidget);
     });
     testWidgets('check', (WidgetTester tester) async {
-      final Key todosKey = Key('todos');
-      bool checkboxChanged = false;
+      final todosKey = Key('todos');
+      var checkboxChanged = false;
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
@@ -156,8 +156,8 @@ void main() {
       when(todosBloc.state).thenAnswer((_) => TodosLoaded([]));
       when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded(
           [Todo(name: '', completed: false)], VisibilityFilter.all));
-      final Key todosKey = Key('todos');
-      bool dismissed = false;
+      final todosKey = Key('todos');
+      var dismissed = false;
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
@@ -193,8 +193,8 @@ void main() {
       when(todosBloc.state).thenAnswer((_) => TodosLoaded([]));
       when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded(
           [Todo(name: '', completed: false)], VisibilityFilter.all));
-      final Key todosKey = Key('todos');
-      bool tapped = false;
+      final todosKey = Key('todos');
+      var tapped = false;
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [

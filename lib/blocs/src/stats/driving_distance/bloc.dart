@@ -46,7 +46,7 @@ class DrivingDistanceStatsBloc
   }
 
   Future<List<Series<DistanceRatePoint, DateTime>>> _prepData(cars) async {
-    final out = List<Series<DistanceRatePoint, DateTime>>();
+    final out = <Series<DistanceRatePoint, DateTime>>[];
     for (var car in cars) {
       final points = car.distanceRateHistory;
       print(points);

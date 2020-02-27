@@ -131,15 +131,15 @@ class FilteredRefuelingsBloc
   Stream<FilteredRefuelingsState> _mapCarsUpdatedToState(
       FilteredRefuelingsUpdateCars event) async* {
     if (state is FilteredRefuelingsLoaded) {
-      final FilteredRefuelingsLoaded curState = state as FilteredRefuelingsLoaded;
+      final curState = state as FilteredRefuelingsLoaded;
       final curFilter = curState.activeFilter;
-      List<Refueling> updatedRefuelings = curState.filteredRefuelings;
+      var updatedRefuelings = curState.filteredRefuelings;
       for (var c in event.cars) {
-        final List<Refueling> toUpdate = curState.filteredRefuelings
+        final toUpdate = curState.filteredRefuelings
             .where((r) => r.carName == c.name)
             .toList();
         for (var r in toUpdate) {
-          final Refueling updated = r.copyWith(efficiencyColor: Color(_hsv(r, c)));
+          final updated = r.copyWith(efficiencyColor: Color(_hsv(r, c)));
           updatedRefuelings = updatedRefuelings
               .map((r) => r.id == updated.id ? updated : r)
               .toList();

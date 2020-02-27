@@ -188,7 +188,7 @@ class _RepeatAddEditScreenState extends State<RepeatAddEditScreen> {
           onPressed: () {
             if (_formKey.currentState.validate()) {
               _formKey.currentState.save();
-              final List<String> carNames = [];
+              final carNames = <String>[];
               for (var car in _cars) {
                 if (car['enabled']) {
                   carNames.add(car['name'] as String);

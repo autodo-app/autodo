@@ -18,7 +18,7 @@ class _Parser {
 class MarkdownParser {
   static String _list(String line) {
     if (RegExp(r'^- ').hasMatch(line)) {
-      final List<String> pieces = line.split(RegExp(r'^- '));
+      final pieces = line.split(RegExp(r'^- '));
       return '•   ' + pieces[1];
     }
     return null;
@@ -26,7 +26,7 @@ class MarkdownParser {
 
   static String _h2(String line) {
     if (RegExp(r'^## ').hasMatch(line)) {
-      final List<String> pieces = line.split(RegExp(r'^## '));
+      final pieces = line.split(RegExp(r'^## '));
       return pieces[1];
     }
     return null;
@@ -41,7 +41,7 @@ class MarkdownParser {
 
   static String _h3(String line) {
     if (RegExp(r'^### ').hasMatch(line)) {
-      final List<String> pieces = line.split(RegExp(r'^### '));
+      final pieces = line.split(RegExp(r'^### '));
       return pieces[1];
     }
     return null;
@@ -81,14 +81,14 @@ class MarkdownParser {
       decoration: TextDecoration.underline, color: Colors.blue);
 
   static List<TextSpan> _inlineMarkup(List<TextSpan> spans, String txt) {
-    final List<TextSpan> out = [];
+    final out = <TextSpan>[];
 
     // check for bolding
     // the below regex is kinda black magic and I don't fully understand it
     // modified slightly from https://stackoverflow.com/questions/43633223/dart-split-string-by-regex
-    final RegExp bolded = RegExp(r'(?:\^\s*-|[^\*\*])+|-');
+    final bolded = RegExp(r'(?:\^\s*-|[^\*\*])+|-');
     final pieces = bolded.allMatches(txt);
-    bool odd = false;
+    var odd = false;
     for (var piece in pieces) {
       final match = piece.group(0);
 
@@ -107,18 +107,18 @@ class MarkdownParser {
       odd = !odd;
     }
 
-    final RegExp isLink = RegExp(r'\[(.*?)\]\((.*?)\)');
+    final isLink = RegExp(r'\[(.*?)\]\((.*?)\)');
     // List containing entries with the past text span and the new text span
-    final List<List<TextSpan>> toRemove = [];
+    final toRemove = <List<TextSpan>>[];
     for (var span in out) {
       final txt = span.text;
       // dynamically resizing the list is bad
-      final TextSpan t = TextSpan(text: '', children: []);
+      final t = TextSpan(text: '', children: []);
       final pieces = isLink.allMatches(txt);
       for (var piece in pieces) {
         final fullMatch = piece.group(0);
         final splitString = txt.split(fullMatch);
-        bool odd = false;
+        var odd = false;
         for (var s in splitString) {
           if (odd) {
             final url = piece.group(2);
@@ -156,7 +156,7 @@ class MarkdownParser {
   }
 
   static List<String> _removeJekyllHeader(List<String> lines) {
-    int endJekyllFrontMatter = 0;
+    var endJekyllFrontMatter = 0;
     for (var line in lines.getRange(1, lines.length)) {
       if (line.startsWith('---')) {
         endJekyllFrontMatter = lines.indexOf(line, 2);
@@ -169,17 +169,17 @@ class MarkdownParser {
   }
 
   static TextSpan parse(String input) {
-    List<String> lines = input.split(RegExp(r'\r?\n'));
-    List<TextSpan> spans = [];
+    var lines = input.split(RegExp(r'\r?\n'));
+    var spans = <TextSpan>[];
 
     lines = _removeJekyllHeader(lines);
 
     lines.forEach((line) {
-      bool parsed = false;
+      var parsed = false;
 
       // line starting styles - headers, lists, etc.
       for (var parser in parsers) {
-        final String txt = parser.fn(line);
+        final txt = parser.fn(line);
         if (txt != null) {
           spans = addLine(spans, txt, parser.style);
           parsed = true;

@@ -8,7 +8,7 @@ import 'package:autodo/localization.dart';
 import 'package:json_intl/json_intl.dart';
 
 class ExtraActions extends StatelessWidget {
-  final Key toggleAllKey;
+  final toggleAllKey;
 
   ExtraActions(
       {Key key = const ValueKey('__extra_actions__'), this.toggleAllKey})
@@ -19,7 +19,7 @@ class ExtraActions extends StatelessWidget {
     return BlocBuilder<FilteredTodosBloc, FilteredTodosState>(
       builder: (context, state) {
         if (state is FilteredTodosLoaded) {
-          final bool allComplete =
+          final allComplete =
               (BlocProvider.of<TodosBloc>(context).state as TodosLoaded)
                   .todos
                   .every((todo) => todo.completed);

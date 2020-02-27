@@ -58,19 +58,19 @@ class EfficiencyStatsBloc
       roundToPrecision(0.8 * prev + 0.2 * current, 3);
 
   Future<List<Series<FuelMileagePoint, DateTime>>> _prepData(refuelings) async {
-    final List<FuelMileagePoint> points = [];
+    final points = <FuelMileagePoint>[];
     for (var r in refuelings) {
       if (r.efficiency == double.infinity || r.efficiency == 0) continue;
       points.add(FuelMileagePoint(r.date, r.efficiency));
     }
 
-    final List<FuelMileagePoint> emaData = [];
+    final emaData = <FuelMileagePoint>[];
     for (var point in points) {
       if (emaData.length == 0) {
         emaData.add(point);
         continue;
       }
-      final FuelMileagePoint last = emaData[emaData.length - 1];
+      final last = emaData[emaData.length - 1];
       final newDate = point.date;
       var newEfficiency;
       if (points.indexOf(point) < EMA_CUTOFF) {
@@ -92,8 +92,8 @@ class EfficiencyStatsBloc
     // Not worth displaying a line graph with only one point
     if (mpgs.length < 2) return [];
 
-    final double maxMeasure = mpgs.reduce(max);
-    final double minMeasure = mpgs.reduce(min);
+    final maxMeasure = mpgs.reduce(max);
+    final minMeasure = mpgs.reduce(min);
 
     return [
       Series<FuelMileagePoint, DateTime>(

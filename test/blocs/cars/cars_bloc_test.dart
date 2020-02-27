@@ -178,7 +178,7 @@ void main() {
               id: '0',
               name: 'abcd',
               mileage: 10000,
-              distanceRateHistory: List<DistanceRatePoint>())
+              distanceRateHistory: <DistanceRatePoint>[])
         ]),
         CarsLoaded([
           Car(
@@ -189,7 +189,7 @@ void main() {
               distanceRate: 0.0,
               lastMileageUpdate:
                   roundToDay(DateTime.fromMillisecondsSinceEpoch(0)),
-              distanceRateHistory: List<DistanceRatePoint>())
+              distanceRateHistory: <DistanceRatePoint>[])
         ])
       ]);
       blocTest<CarsBloc, CarsEvent, CarsState>('Second New Refueling',
@@ -215,7 +215,7 @@ void main() {
               name: 'abcd',
               mileage: 10000,
               numRefuelings: 1,
-              distanceRateHistory: List<DistanceRatePoint>())
+              distanceRateHistory: <DistanceRatePoint>[])
         ]),
         CarsLoaded([
           Car(

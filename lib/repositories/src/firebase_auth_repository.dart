@@ -23,21 +23,20 @@ class FirebaseAuthRepository extends AuthRepository {
             getGoogleCredential ?? GoogleAuthProvider.getCredential;
 
   Future<FirebaseUser> signInWithGoogle() async {
-    final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
-    final AuthCredential credential = _getGoogleCredential(
+    final googleUser = await _googleSignIn.signIn();
+    final googleAuth = await googleUser.authentication;
+    final credential = _getGoogleCredential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
-    final AuthResult res = await _firebaseAuth.signInWithCredential(credential);
+    final res = await _firebaseAuth.signInWithCredential(credential);
     _cachedCurrentUser = res.user;
     return res.user;
   }
 
   Future<FirebaseUser> signInWithCredentials(
       String email, String password) async {
-    final AuthResult res = await _firebaseAuth.signInWithEmailAndPassword(
+    final res = await _firebaseAuth.signInWithEmailAndPassword(
       email: email,
       password: password,
     );

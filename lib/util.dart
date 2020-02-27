@@ -49,9 +49,9 @@ class RGB extends Equatable {
   RGB(this.r, this.g, this.b);
 
   toValue() {
-    final int red = (r * 255).toInt();
-    final int green = (g * 255).toInt();
-    final int blue = (b * 255).toInt();
+    final red = (r * 255).toInt();
+    final green = (g * 255).toInt();
+    final blue = (b * 255).toInt();
     return (0xff << 24) + (red << 16) + (green << 8) + blue;
   }
 
@@ -119,7 +119,7 @@ HSV rgb2hsv(RGB rgb) {
 RGB hsv2rgb(HSV hsv) {
   double hh, p, q, t, ff;
   int i;
-  RGB out = RGB(0, 0, 0);
+  var out = RGB(0, 0, 0);
 
   if (hsv.s <= 0.0) {
     // < is bogus, just shuts up warnings

@@ -261,7 +261,7 @@ class _CarToggleFormState extends State<_CarToggleForm> {
             children: cars.map((c) => Text(c.name)).toList(),
             onPressed: (int index) {
               setState(() {
-                for (int buttonIndex = 0;
+                for (var buttonIndex = 0;
                     buttonIndex < isSelected.length;
                     buttonIndex++) {
                   if (buttonIndex == index) {

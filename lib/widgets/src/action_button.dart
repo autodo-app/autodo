@@ -6,7 +6,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:autodo/integ_test_keys.dart';
 
 class AutodoActionButton extends StatefulWidget {
-  final Key mainButtonKey;
+  final mainButtonKey;
   final List<Key> miniButtonKeys;
   final List<MaterialPageRoute> Function() miniButtonRoutes;
   final TickerProvider ticker;
@@ -27,7 +27,7 @@ class AutodoActionButton extends StatefulWidget {
 class _AutodoActionButtonState extends State<AutodoActionButton>
     with SingleTickerProviderStateMixin {
   AnimationController _controller;
-  final Key mainButtonKey;
+  final mainButtonKey;
   final List<Key> miniButtonKeys;
   final List<MaterialPageRoute> Function() miniButtonRoutes;
   final TickerProvider ticker;
@@ -69,8 +69,8 @@ class _AutodoActionButtonState extends State<AutodoActionButton>
 
   @override
   Widget build(BuildContext context) {
-    final Color backgroundColor = Theme.of(context).primaryColor;
-    final Color foregroundColor = Theme.of(context).cardColor;
+    final backgroundColor = Theme.of(context).primaryColor;
+    final foregroundColor = Theme.of(context).cardColor;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: List.generate(icons.length, (int index) {

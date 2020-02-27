@@ -95,8 +95,7 @@ class PaidVersionBloc extends Bloc<PaidVersionEvent, PaidVersionState> {
 
     // TODO: pull the JSON purchase validation string from assets bundle
 
-    final QueryPurchaseDetailsResponse response =
-        await _purchaseConn.queryPastPurchases();
+    final response = await _purchaseConn.queryPastPurchases();
     if (response.error != null) {
       print('Error querying past purchases: ${response.error.message}');
       yield BasicVersion();
@@ -104,7 +103,7 @@ class PaidVersionBloc extends Bloc<PaidVersionEvent, PaidVersionState> {
     }
 
     print('purchases: ${response.pastPurchases}');
-    for (PurchaseDetails p in response.pastPurchases) {
+    for (var p in response.pastPurchases) {
       print('past purchase: $p');
       if (!_verifyPurchase(p)) {
         print('cannot verify purchase');
@@ -119,20 +118,19 @@ class PaidVersionBloc extends Bloc<PaidVersionEvent, PaidVersionState> {
   }
 
   Stream<PaidVersionState> _mapPaidVersionUpgradeToState(event) async* {
-    final bool available = await _purchaseConn.isAvailable();
+    final available = await _purchaseConn.isAvailable();
     if (!available) {
       return;
     }
 
-    final Set<String> ids = Set()..add(paidVersionId);
-    final ProductDetailsResponse response =
-        await _purchaseConn.queryProductDetails(ids);
+    final Set<String> ids = <dynamic>{}..add(paidVersionId);
+    final response = await _purchaseConn.queryProductDetails(ids);
     if (response.notFoundIDs.isNotEmpty) {
       print('Could not find paid version product id');
       return;
     }
     final deets = response.productDetails[0]; // only care about first item
-    final PurchaseParam param = PurchaseParam(productDetails: deets);
+    final param = PurchaseParam(productDetails: deets);
     final res = await _purchaseConn.buyNonConsumable(purchaseParam: param);
     if (!res) {
       print('purchase failed');

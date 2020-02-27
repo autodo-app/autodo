@@ -35,7 +35,7 @@ void main() {
       await tester.tap(find.byKey(tapTarget));
       await tester.pump();
 
-      final Finder snackBarFinder = find.byKey(snackBarKey);
+      final snackBarFinder = find.byKey(snackBarKey);
 
       expect(snackBarFinder, findsOneWidget);
       expect(
@@ -48,7 +48,7 @@ void main() {
 
     testWidgets('should call onUndo when undo tapped',
         (WidgetTester tester) async {
-      int tapCount = 0;
+      var tapCount = 0;
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: Builder(builder: (BuildContext context) {
@@ -105,7 +105,7 @@ void main() {
       await tester.tap(find.byKey(tapTarget));
       await tester.pump();
 
-      final Finder snackBarFinder = find.byKey(snackBarKey);
+      final snackBarFinder = find.byKey(snackBarKey);
 
       expect(snackBarFinder, findsOneWidget);
       expect(find.text(IntlKeys.undo), findsOneWidget);
@@ -113,7 +113,7 @@ void main() {
 
     testWidgets('should call onUndo when undo tapped',
         (WidgetTester tester) async {
-      int tapCount = 0;
+      var tapCount = 0;
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: Builder(builder: (BuildContext context) {
@@ -168,7 +168,7 @@ void main() {
       await tester.tap(find.byKey(tapTarget));
       await tester.pump();
 
-      final Finder snackBarFinder = find.byKey(snackBarKey);
+      final snackBarFinder = find.byKey(snackBarKey);
 
       expect(snackBarFinder, findsOneWidget);
       expect(find.text(IntlKeys.undo), findsOneWidget);
@@ -176,7 +176,7 @@ void main() {
 
     testWidgets('should call onUndo when undo tapped',
         (WidgetTester tester) async {
-      int tapCount = 0;
+      var tapCount = 0;
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: Builder(builder: (BuildContext context) {

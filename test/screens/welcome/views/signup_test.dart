@@ -34,7 +34,7 @@ void main() {
     });
 
     testWidgets('renders correctly', (WidgetTester tester) async {
-      final Key scaffoldKey = Key('scaffold');
+      final scaffoldKey = Key('scaffold');
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
@@ -48,7 +48,7 @@ void main() {
       expect(find.byKey(scaffoldKey), findsOneWidget);
     });
     testWidgets('back button', (WidgetTester tester) async {
-      final Key scaffoldKey = Key('scaffold');
+      final scaffoldKey = Key('scaffold');
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
@@ -66,7 +66,7 @@ void main() {
       expect(find.byKey(scaffoldKey), findsOneWidget);
     });
     testWidgets('error', (WidgetTester tester) async {
-      final Key scaffoldKey = Key('scaffold');
+      final scaffoldKey = Key('scaffold');
       whenListen(signupBloc,
           Stream.fromIterable([SignupEmpty(), SignupError('test')]));
       await tester.pumpWidget(
@@ -81,7 +81,7 @@ void main() {
       expect(find.byType(SnackBar), findsOneWidget);
     });
     testWidgets('loading', (WidgetTester tester) async {
-      final Key scaffoldKey = Key('scaffold');
+      final scaffoldKey = Key('scaffold');
       whenListen(
           signupBloc, Stream.fromIterable([SignupEmpty(), SignupLoading()]));
       await tester.pumpWidget(
@@ -96,7 +96,7 @@ void main() {
       expect(find.byType(SnackBar), findsOneWidget);
     });
     testWidgets('submit form', (WidgetTester tester) async {
-      final Key scaffoldKey = Key('scaffold');
+      final scaffoldKey = Key('scaffold');
       when(signupBloc.state).thenReturn(SignupEmpty());
       when(authBloc.add(SignedUp())).thenAnswer((_) => null);
       await tester.pumpWidget(

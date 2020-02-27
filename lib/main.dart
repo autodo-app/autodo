@@ -41,7 +41,7 @@ Future<void> _reportError(dynamic error, dynamic stackTrace) async {
 
 void run(bool integrationTest) async {
   final AuthRepository authRepository = FirebaseAuthRepository();
-  final ThemeData theme = createTheme();
+  final theme = createTheme();
   runApp(
     BlocProvider<AuthenticationBloc>(
       create: (context) => AuthenticationBloc(userRepository: authRepository)

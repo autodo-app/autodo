@@ -12,7 +12,7 @@ void main() {
   group('welcome widgets', () {
     testWidgets('google signin', (tester) async {
       final loginBloc = MockLoginBloc();
-      bool pressed = false;
+      var pressed = false;
       when(loginBloc.add(LoginWithGooglePressed())).thenAnswer((_) {
         pressed = true;
       });

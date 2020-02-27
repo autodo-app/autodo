@@ -49,7 +49,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
   }
 
   Stream<DatabaseState> _mapUserLoggedInToState(event) async* {
-    final FirebaseDataRepository repository = FirebaseDataRepository(
+    final repository = FirebaseDataRepository(
       firestoreInstance: _firestoreInstance,
       uuid: event.uuid,
     );

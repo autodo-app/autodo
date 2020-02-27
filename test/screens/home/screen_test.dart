@@ -54,7 +54,7 @@ void main() {
     testWidgets('renders correctly', (WidgetTester tester) async {
       when(todosBloc.state).thenAnswer((_) => TodosLoaded([]));
       when(tabBloc.state).thenAnswer((_) => AppTab.todos);
-      final Key scaffoldKey = Key('scaffold');
+      final scaffoldKey = Key('scaffold');
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
@@ -87,8 +87,8 @@ void main() {
       when(todosBloc.state).thenAnswer((_) => TodosLoaded([]));
       when(tabBloc.state).thenAnswer((_) => AppTab.todos);
       when(tabBloc.add(UpdateTab(AppTab.todos))).thenAnswer((_) => null);
-      final Key scaffoldKey = Key('scaffold');
-      final Key todosTabKey = Key('tab');
+      final scaffoldKey = Key('scaffold');
+      final todosTabKey = Key('tab');
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
@@ -122,7 +122,7 @@ void main() {
       testWidgets('refueling', (WidgetTester tester) async {
         when(todosBloc.state).thenAnswer((_) => TodosLoaded([]));
         when(tabBloc.state).thenAnswer((_) => AppTab.todos);
-        final Key scaffoldKey = Key('scaffold');
+        final scaffoldKey = Key('scaffold');
         final carsBloc = MockCarsBloc();
         when(carsBloc.state).thenReturn(CarsLoaded([Car()]));
         await tester.pumpWidget(
@@ -158,7 +158,7 @@ void main() {
       testWidgets('todo', (WidgetTester tester) async {
         when(todosBloc.state).thenAnswer((_) => TodosLoaded([]));
         when(tabBloc.state).thenAnswer((_) => AppTab.todos);
-        final Key scaffoldKey = Key('scaffold');
+        final scaffoldKey = Key('scaffold');
         final carsBloc = MockCarsBloc();
         whenListen(
             carsBloc,
@@ -207,7 +207,7 @@ void main() {
       testWidgets('repeat', (WidgetTester tester) async {
         when(todosBloc.state).thenAnswer((_) => TodosLoaded([]));
         when(tabBloc.state).thenAnswer((_) => AppTab.todos);
-        final Key scaffoldKey = Key('scaffold');
+        final scaffoldKey = Key('scaffold');
         final carsBloc = MockCarsBloc();
         when(carsBloc.state).thenReturn(CarsLoaded([Car(name: 'test')]));
         whenListen(
