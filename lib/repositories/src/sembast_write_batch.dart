@@ -31,7 +31,7 @@ class SembastWriteBatch extends Equatable implements WriteBatchWrapper {
     final db = await dbFactory.openDatabase(dbPath);
     print('opened');
     await db.transaction((txn) async {
-      print('list: ${transactionList}');
+      print('list: $transactionList');
       for (var t in transactionList) {
         await t(txn);
       }

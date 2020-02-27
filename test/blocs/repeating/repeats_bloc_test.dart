@@ -22,6 +22,7 @@ void main() {
   group('RepeatsBloc', () {
     final CarsBloc carsBloc = MockCarsBloc();
     test('Null Assertion', () {
+      // ignore: missing_required_param
       expect(() => RepeatsBloc(dbBloc: null), throwsAssertionError);
     });
     group('LoadRepeats', () {
