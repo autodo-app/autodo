@@ -15,7 +15,7 @@ void main() {
     });
     test('Update toString', () {
       expect(UpdateDrivingDistanceData([Car()]).toString(),
-          "UpdateDrivingDistanceData { cars: ${[Car()]} }");
+          'UpdateDrivingDistanceData { cars: ${[Car()]} }');
     });
   });
 }

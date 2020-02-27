@@ -37,11 +37,11 @@ class _AutodoActionButtonState extends State<AutodoActionButton>
 
   static const List<Map<String, dynamic>> icons = [
     {
-      "data": Icons.local_gas_station,
-      "semanticLabel": 'Add Refueling',
+      'data': Icons.local_gas_station,
+      'semanticLabel': 'Add Refueling',
     },
-    {"data": Icons.build, "semanticLabel": 'Add ToDo'},
-    {"data": Icons.autorenew, "semanticLabel": 'Add Repeat'},
+    {'data': Icons.build, 'semanticLabel': 'Add ToDo'},
+    {'data': Icons.autorenew, 'semanticLabel': 'Add Repeat'},
   ];
 
   @override

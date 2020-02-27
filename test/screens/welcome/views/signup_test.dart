@@ -108,7 +108,7 @@ void main() {
             BlocProvider<SignupBloc>.value(value: signupBloc),
           ],
           child: MaterialApp(home: SignupScreen(key: scaffoldKey), routes: {
-            "__home__": (context) => Container(),
+            '__home__': (context) => Container(),
           }),
         ),
       );

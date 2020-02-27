@@ -92,9 +92,9 @@ class _TodoDueMileage extends StatelessWidget {
     if (todo.dueMileage != null) {
       return todo.dueMileage
           .toString()
-          .replaceAllMapped(commaRegex, (Match m) => "${m[1]},");
+          .replaceAllMapped(commaRegex, (Match m) => '${m[1]},');
     } else {
-      return "";
+      return '';
     }
   }
 
@@ -314,7 +314,7 @@ class TodoCard extends StatelessWidget {
         onTap: onTap,
         child: Dismissible(
           key: Key(
-              "__dismissable__"), // TODO: this should be visible to remove the todo from the list
+              '__dismissable__'), // TODO: this should be visible to remove the todo from the list
           onDismissed: onDismissed,
           dismissThresholds: {
             DismissDirection.horizontal:

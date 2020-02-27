@@ -30,7 +30,7 @@ void main() {
         await Future.delayed(Duration(milliseconds: 500));
       }, expect: [
         LoginEmpty(),
-        LoginCredentialsInvalid(emailError: ""),
+        LoginCredentialsInvalid(emailError: ''),
       ]);
       blocTest<LoginBloc, LoginEvent, LoginState>(
           'Invalid Email, previous error', build: () {
@@ -45,7 +45,7 @@ void main() {
         await Future.delayed(Duration(milliseconds: 500));
       }, expect: [
         LoginEmpty(),
-        LoginCredentialsInvalid(emailError: "", passwordError: ""),
+        LoginCredentialsInvalid(emailError: '', passwordError: ''),
       ]);
       blocTest<LoginBloc, LoginEvent, LoginState>('Valid Email', build: () {
         final authRepository = MockAuthRepository();
@@ -85,7 +85,7 @@ void main() {
         await Future.delayed(Duration(milliseconds: 500));
       }, expect: [
         LoginEmpty(),
-        LoginCredentialsInvalid(emailError: ""),
+        LoginCredentialsInvalid(emailError: ''),
       ]);
       blocTest<LoginBloc, LoginEvent, LoginState>(
           'Invalid password, previous error', build: () {
@@ -100,7 +100,7 @@ void main() {
         await Future.delayed(Duration(milliseconds: 500));
       }, expect: [
         LoginEmpty(),
-        LoginCredentialsInvalid(emailError: ""),
+        LoginCredentialsInvalid(emailError: ''),
       ]);
       blocTest<LoginBloc, LoginEvent, LoginState>('Valid password', build: () {
         final authRepository = MockAuthRepository();
@@ -143,26 +143,26 @@ void main() {
           'Can\'t communicate to servers', build: () {
         final authRepository = MockAuthRepository();
         when(authRepository.signInWithCredentials('', ''))
-            .thenThrow(PlatformException(code: "UNHANDLED_ERROR"));
+            .thenThrow(PlatformException(code: 'UNHANDLED_ERROR'));
         return LoginBloc(authRepository: authRepository);
       }, act: (bloc) async {
         bloc.add(LoginWithCredentialsPressed(email: '', password: ''));
       }, expect: [
         LoginEmpty(),
         LoginLoading(),
-        LoginError("Error communicating to the auToDo servers."),
+        LoginError('Error communicating to the auToDo servers.'),
       ]);
       blocTest<LoginBloc, LoginEvent, LoginState>('Weak Password', build: () {
         final authRepository = MockAuthRepository();
         when(authRepository.signInWithCredentials('', ''))
-            .thenThrow(PlatformException(code: "ERROR_WEAK_PASSWORD"));
+            .thenThrow(PlatformException(code: 'ERROR_WEAK_PASSWORD'));
         return LoginBloc(authRepository: authRepository);
       }, act: (bloc) async {
         bloc.add(LoginWithCredentialsPressed(email: '', password: ''));
       }, expect: [
         LoginEmpty(),
         LoginLoading(),
-        LoginError("Your password must be longer than 6 characters."),
+        LoginError('Your password must be longer than 6 characters.'),
       ]);
       blocTest<LoginBloc, LoginEvent, LoginState>('Successful login',
           build: () {
@@ -183,14 +183,14 @@ void main() {
           build: () {
         final authRepository = MockAuthRepository();
         when(authRepository.sendPasswordReset(''))
-            .thenThrow(PlatformException(code: "UNHANDLED_ERROR"));
+            .thenThrow(PlatformException(code: 'UNHANDLED_ERROR'));
         return LoginBloc(authRepository: authRepository);
       }, act: (bloc) async {
         bloc.add(SendPasswordResetPressed(email: ''));
       }, expect: [
         LoginEmpty(),
         LoginLoading(),
-        LoginError("Error communicating to the auToDo servers."),
+        LoginError('Error communicating to the auToDo servers.'),
       ]);
       blocTest<LoginBloc, LoginEvent, LoginState>('Sent fine', build: () {
         final authRepository = MockAuthRepository();

@@ -11,7 +11,7 @@ class AutodoBannerAd extends BannerAd {
   );
 
   static defaultListener(MobileAdEvent event) {
-    print("BannerAd $event");
+    print('BannerAd $event');
   }
 
   AutodoBannerAd({adUnitId, size, targetingInfo, listener})

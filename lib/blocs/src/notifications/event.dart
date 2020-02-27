@@ -19,7 +19,7 @@ class NotificationIdUpdated extends NotificationsEvent {
   List<Object> get props => [id];
 
   @override
-  toString() => "NotificationIdUpdated { id: $id }";
+  toString() => 'NotificationIdUpdated { id: $id }';
 }
 
 class ScheduleNotification extends NotificationsEvent {
@@ -34,7 +34,7 @@ class ScheduleNotification extends NotificationsEvent {
 
   @override
   toString() =>
-      "ScheduleNotification { date: $date, title: $title, body: $body }";
+      'ScheduleNotification { date: $date, title: $title, body: $body }';
 }
 
 class ReScheduleNotification extends NotificationsEvent {
@@ -53,7 +53,7 @@ class ReScheduleNotification extends NotificationsEvent {
 
   @override
   toString() =>
-      "ReScheduleNotification { id: $id, date: $date, title: $title, body: $body }";
+      'ReScheduleNotification { id: $id, date: $date, title: $title, body: $body }';
 }
 
 class CancelNotification extends NotificationsEvent {
@@ -65,5 +65,5 @@ class CancelNotification extends NotificationsEvent {
   List<Object> get props => [id];
 
   @override
-  toString() => "CancelNotification { id: $id }";
+  toString() => 'CancelNotification { id: $id }';
 }

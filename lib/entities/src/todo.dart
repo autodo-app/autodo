@@ -50,59 +50,59 @@ class TodoEntity extends Equatable {
   static TodoEntity fromSnapshot(DocumentSnapshot snap) {
     return TodoEntity(
       snap.documentID,
-      snap.data["name"] as String,
-      snap.data["carName"] as String,
-      snap.data["repeatName"] as String,
-      (snap.data["dueState"] == null)
+      snap.data['name'] as String,
+      snap.data['carName'] as String,
+      snap.data['repeatName'] as String,
+      (snap.data['dueState'] == null)
           ? null
-          : TodoDueState.values[snap.data["dueState"]],
-      snap.data["dueMileage"] as int,
-      snap.data["notificationID"] as int,
-      snap.data["completed"] as bool,
+          : TodoDueState.values[snap.data['dueState']],
+      snap.data['dueMileage'] as int,
+      snap.data['notificationID'] as int,
+      snap.data['completed'] as bool,
       snap.data['estimatedDueDate'] as bool,
-      (snap.data["completedDate"] == null)
+      (snap.data['completedDate'] == null)
           ? null
-          : DateTime.fromMillisecondsSinceEpoch(snap.data["completedDate"]),
-      (snap.data["dueDate"] == null)
+          : DateTime.fromMillisecondsSinceEpoch(snap.data['completedDate']),
+      (snap.data['dueDate'] == null)
           ? null
-          : DateTime.fromMillisecondsSinceEpoch(snap.data["dueDate"]),
+          : DateTime.fromMillisecondsSinceEpoch(snap.data['dueDate']),
     );
   }
 
   static TodoEntity fromRecord(RecordSnapshot snap) {
     return TodoEntity(
       (snap.key is String) ? snap.key : '${snap.key}',
-      snap.value["name"] as String,
-      snap.value["carName"] as String,
-      snap.value["repeatName"] as String,
-      (snap.value["dueState"] == null)
+      snap.value['name'] as String,
+      snap.value['carName'] as String,
+      snap.value['repeatName'] as String,
+      (snap.value['dueState'] == null)
           ? null
-          : TodoDueState.values[snap.value["dueState"]],
-      snap.value["dueMileage"] as int,
-      snap.value["notificationID"] as int,
-      snap.value["completed"] as bool,
+          : TodoDueState.values[snap.value['dueState']],
+      snap.value['dueMileage'] as int,
+      snap.value['notificationID'] as int,
+      snap.value['completed'] as bool,
       snap.value['estimatedDueDate'] as bool,
-      (snap.value["completedDate"] == null)
+      (snap.value['completedDate'] == null)
           ? null
-          : DateTime.fromMillisecondsSinceEpoch(snap.value["completedDate"]),
-      (snap.value["dueDate"] == null)
+          : DateTime.fromMillisecondsSinceEpoch(snap.value['completedDate']),
+      (snap.value['dueDate'] == null)
           ? null
-          : DateTime.fromMillisecondsSinceEpoch(snap.value["dueDate"]),
+          : DateTime.fromMillisecondsSinceEpoch(snap.value['dueDate']),
     );
   }
 
   Map<String, Object> toDocument() {
     return {
-      "name": name,
-      "carName": carName,
-      "repeatName": repeatName,
-      "dueState": dueState?.index,
-      "dueMileage": dueMileage,
-      "notificationID": notificationID,
-      "completed": completed,
-      "estimatedDueDate": estimatedDueDate,
-      "completedDate": completedDate?.millisecondsSinceEpoch,
-      "dueDate": dueDate?.millisecondsSinceEpoch
+      'name': name,
+      'carName': carName,
+      'repeatName': repeatName,
+      'dueState': dueState?.index,
+      'dueMileage': dueMileage,
+      'notificationID': notificationID,
+      'completed': completed,
+      'estimatedDueDate': estimatedDueDate,
+      'completedDate': completedDate?.millisecondsSinceEpoch,
+      'dueDate': dueDate?.millisecondsSinceEpoch
     };
   }
 }

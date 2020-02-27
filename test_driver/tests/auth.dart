@@ -5,7 +5,7 @@ Future<void> signUp(FlutterDriver driver) async {
   // Welcome Screen
   await driver.waitFor(find.byValueKey('__welcome_screen__'),
       timeout: Duration(minutes: 2));
-  await driver.tap(find.byType("SignupButton"));
+  await driver.tap(find.byType('SignupButton'));
   print('Welcome Screen completed');
 
   // Enter email and password into signup screen
@@ -93,7 +93,7 @@ Future<void> startTrial(FlutterDriver driver) async {
 Future<void> signOut(FlutterDriver driver) async {
   print('signing out');
   // this tooltip exists by default as the means for opening the nav drawer
-  await driver.tap(find.byTooltip("Open navigation menu"));
+  await driver.tap(find.byTooltip('Open navigation menu'));
   await driver.tap(find.byValueKey('__sign_out_button__'));
 
   // should be in the welcome screen again now
@@ -125,7 +125,7 @@ Future<void> signIn(FlutterDriver driver) async {
 Future<void> deleteUser(FlutterDriver driver) async {
   print('deleting account');
   // this tooltip exists by default as the means for opening the nav drawer
-  await driver.tap(find.byTooltip("Open navigation menu"));
+  await driver.tap(find.byTooltip('Open navigation menu'));
   await driver.tap(find.byValueKey('__settings_drawer_button__'));
 
   // settings screen

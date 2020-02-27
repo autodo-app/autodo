@@ -8,7 +8,7 @@ void main() {
     });
     test('toString', () {
       expect(UserLoggedIn('abcd').toString(),
-          "UserLoggedIn { uuid: abcd, newUser: null }");
+          'UserLoggedIn { uuid: abcd, newUser: null }');
     });
   });
   group('UserLoggedOut', () {

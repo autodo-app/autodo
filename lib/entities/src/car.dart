@@ -44,16 +44,16 @@ class CarEntity extends Equatable {
   static CarEntity fromSnapshot(DocumentSnapshot snap) {
     return CarEntity(
         snap.documentID,
-        snap.data["name"] as String,
-        snap.data["mileage"] as int,
-        snap.data["numRefuelings"] as int,
-        snap.data["averageEfficiency"] as double,
-        snap.data["distanceRate"] as double,
+        snap.data['name'] as String,
+        snap.data['mileage'] as int,
+        snap.data['numRefuelings'] as int,
+        snap.data['averageEfficiency'] as double,
+        snap.data['distanceRate'] as double,
         (snap.data['lastMileageUpdate'] == null)
             ? null
             : DateTime.fromMillisecondsSinceEpoch(
-                snap.data["lastMileageUpdate"] as int),
-        snap.data["distanceRateHistory"]
+                snap.data['lastMileageUpdate'] as int),
+        snap.data['distanceRateHistory']
             ?.map((p) => DistanceRatePoint(
                   (p['date'] == null)
                       ? null
@@ -67,16 +67,16 @@ class CarEntity extends Equatable {
   factory CarEntity.fromRecord(RecordSnapshot snap) {
     return CarEntity(
         (snap.key is String) ? snap.key : '${snap.key}',
-        snap.value["name"] as String,
-        snap.value["mileage"] as int,
-        snap.value["numRefuelings"] as int,
-        snap.value["averageEfficiency"] as double,
-        snap.value["distanceRate"] as double,
+        snap.value['name'] as String,
+        snap.value['mileage'] as int,
+        snap.value['numRefuelings'] as int,
+        snap.value['averageEfficiency'] as double,
+        snap.value['distanceRate'] as double,
         (snap.value['lastMileageUpdate'] == null)
             ? null
             : DateTime.fromMillisecondsSinceEpoch(
-                snap.value["lastMileageUpdate"] as int),
-        snap.value["distanceRateHistory"]
+                snap.value['lastMileageUpdate'] as int),
+        snap.value['distanceRateHistory']
             ?.map((p) => DistanceRatePoint(
                   (p['date'] == null)
                       ? null
@@ -89,13 +89,13 @@ class CarEntity extends Equatable {
 
   Map<String, Object> toDocument() {
     return {
-      "name": name,
-      "mileage": mileage,
-      "numRefuelings": numRefuelings,
-      "averageEfficiency": averageEfficiency,
-      "distanceRate": distanceRate,
-      "lastMileageUpdate": lastMileageUpdate?.millisecondsSinceEpoch,
-      "distanceRateHistory": distanceRateHistory
+      'name': name,
+      'mileage': mileage,
+      'numRefuelings': numRefuelings,
+      'averageEfficiency': averageEfficiency,
+      'distanceRate': distanceRate,
+      'lastMileageUpdate': lastMileageUpdate?.millisecondsSinceEpoch,
+      'distanceRateHistory': distanceRateHistory
           ?.map((p) => Map<String, dynamic>()
             ..addAll({
               'date': p.date.millisecondsSinceEpoch,

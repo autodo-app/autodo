@@ -170,7 +170,7 @@ class App extends StatelessWidget {
         const Locale('fr'),
       ],
       routes: {
-        "/": (context) => BlocBuilder<AuthenticationBloc, AuthenticationState>(
+        '/': (context) => BlocBuilder<AuthenticationBloc, AuthenticationState>(
               // Just here as the splitter between home screen and login screen
               builder: (context, state) {
                 if (state is RemoteAuthenticated ||

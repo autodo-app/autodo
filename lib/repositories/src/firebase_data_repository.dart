@@ -205,7 +205,7 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
   List<Object> get props => [_firestoreInstance, _uuid];
 
   @override
-  toString() => "FirebaseDataRepository { firestoreInstance: "
-      "$_firestoreInstance, uuid: $_uuid, userDoc: $_userDoc, todos: "
-      "$_todos, refuelings: $_refuelings, cars: $_cars, repeats: $_repeats }";
+  toString() => 'FirebaseDataRepository { firestoreInstance: '
+      '$_firestoreInstance, uuid: $_uuid, userDoc: $_userDoc, todos: '
+      '$_todos, refuelings: $_refuelings, cars: $_cars, repeats: $_repeats }';
 }

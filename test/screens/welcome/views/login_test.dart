@@ -104,7 +104,7 @@ void main() {
             BlocProvider<LoginBloc>.value(value: loginBloc),
           ],
           child: MaterialApp(home: LoginScreen(key: scaffoldKey), routes: {
-            "__home__": (context) => Container(),
+            '__home__': (context) => Container(),
           }),
         ),
       );
@@ -123,7 +123,7 @@ void main() {
             BlocProvider<LoginBloc>.value(value: loginBloc),
           ],
           child: MaterialApp(home: LoginScreen(key: scaffoldKey), routes: {
-            "__home__": (context) => Container(),
+            '__home__': (context) => Container(),
           }),
         ),
       );

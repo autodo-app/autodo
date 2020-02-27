@@ -17,21 +17,21 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
 
   static final List<Repeat> defaults = [
     // TODO: Translate this
-    Repeat(name: "oil", mileageInterval: 3500),
-    Repeat(name: "tireRotation", mileageInterval: 7500),
-    Repeat(name: "engineFilter", mileageInterval: 45000),
-    Repeat(name: "wiperBlades", mileageInterval: 30000),
-    Repeat(name: "alignmentCheck", mileageInterval: 40000),
-    Repeat(name: "cabinFilter", mileageInterval: 45000),
-    Repeat(name: "tires", mileageInterval: 50000),
-    Repeat(name: "brakes", mileageInterval: 60000),
-    Repeat(name: "sparkPlugs", mileageInterval: 60000),
-    Repeat(name: "frontStruts", mileageInterval: 75000),
-    Repeat(name: "rearStruts", mileageInterval: 75000),
-    Repeat(name: "battery", mileageInterval: 75000),
-    Repeat(name: "serpentineBelt", mileageInterval: 150000),
-    Repeat(name: "transmissionFluid", mileageInterval: 100000),
-    Repeat(name: "coolantChange", mileageInterval: 100000)
+    Repeat(name: 'oil', mileageInterval: 3500),
+    Repeat(name: 'tireRotation', mileageInterval: 7500),
+    Repeat(name: 'engineFilter', mileageInterval: 45000),
+    Repeat(name: 'wiperBlades', mileageInterval: 30000),
+    Repeat(name: 'alignmentCheck', mileageInterval: 40000),
+    Repeat(name: 'cabinFilter', mileageInterval: 45000),
+    Repeat(name: 'tires', mileageInterval: 50000),
+    Repeat(name: 'brakes', mileageInterval: 60000),
+    Repeat(name: 'sparkPlugs', mileageInterval: 60000),
+    Repeat(name: 'frontStruts', mileageInterval: 75000),
+    Repeat(name: 'rearStruts', mileageInterval: 75000),
+    Repeat(name: 'battery', mileageInterval: 75000),
+    Repeat(name: 'serpentineBelt', mileageInterval: 150000),
+    Repeat(name: 'transmissionFluid', mileageInterval: 100000),
+    Repeat(name: 'coolantChange', mileageInterval: 100000)
   ];
 
   RepeatsBloc({@required DatabaseBloc dbBloc, @required CarsBloc carsBloc})

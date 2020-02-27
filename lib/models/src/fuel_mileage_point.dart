@@ -11,5 +11,5 @@ class FuelMileagePoint extends Equatable {
 
   @override
   toString() =>
-      "FuelMileagePoint { date: ${date?.toUtc()}, efficiency: $efficiency }";
+      'FuelMileagePoint { date: ${date?.toUtc()}, efficiency: $efficiency }';
 }

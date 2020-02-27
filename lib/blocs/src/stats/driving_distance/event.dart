@@ -19,5 +19,5 @@ class UpdateDrivingDistanceData extends DrivingDistanceStatsEvent {
   List<Object> get props => [cars];
 
   @override
-  toString() => "UpdateDrivingDistanceData { cars: $cars }";
+  toString() => 'UpdateDrivingDistanceData { cars: $cars }';
 }

@@ -93,9 +93,9 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
 
   SignupState _addEmailError(emailError) {
     if (state is SignupCredentialsInvalid) {
-      return (state as SignupCredentialsInvalid).copyWith(emailError: "");
+      return (state as SignupCredentialsInvalid).copyWith(emailError: '');
     } else {
-      return SignupCredentialsInvalid(emailError: "");
+      return SignupCredentialsInvalid(emailError: '');
     }
   }
 
@@ -118,9 +118,9 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
 
   SignupState _addPasswordError(passwordError) {
     if (state is SignupCredentialsInvalid) {
-      return (state as SignupCredentialsInvalid).copyWith(passwordError: "");
+      return (state as SignupCredentialsInvalid).copyWith(passwordError: '');
     } else {
-      return SignupCredentialsInvalid(passwordError: "");
+      return SignupCredentialsInvalid(passwordError: '');
     }
   }
 
@@ -151,15 +151,15 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
         yield SignupSuccess();
       }
     } on PlatformException catch (e) {
-      var errorString = "Error communicating to the auToDo servers.";
-      if (e.code == "ERROR_WEAK_PASSWORD") {
-        errorString = "Your password must be longer than 6 characters.";
-      } else if (e.code == "ERROR_INVALID_EMAIL") {
-        errorString = "The email address you entered is invalid.";
-      } else if (e.code == "ERROR_EMAIL_ALREADY_IN_USE") {
-        errorString = "The email address you entered is already in use.";
-      } else if (e.code == "ERROR_WRONG_PASSWORD") {
-        errorString = "Incorrect password, please try again.";
+      var errorString = 'Error communicating to the auToDo servers.';
+      if (e.code == 'ERROR_WEAK_PASSWORD') {
+        errorString = 'Your password must be longer than 6 characters.';
+      } else if (e.code == 'ERROR_INVALID_EMAIL') {
+        errorString = 'The email address you entered is invalid.';
+      } else if (e.code == 'ERROR_EMAIL_ALREADY_IN_USE') {
+        errorString = 'The email address you entered is already in use.';
+      } else if (e.code == 'ERROR_WRONG_PASSWORD') {
+        errorString = 'Incorrect password, please try again.';
       }
       yield SignupError(errorString);
     }

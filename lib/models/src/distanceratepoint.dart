@@ -11,5 +11,5 @@ class DistanceRatePoint extends Equatable {
 
   @override
   toString() =>
-      "DistanceRatePoint { date: ${date?.toUtc()}, distanceRate: $distanceRate }";
+      'DistanceRatePoint { date: ${date?.toUtc()}, distanceRate: $distanceRate }';
 }

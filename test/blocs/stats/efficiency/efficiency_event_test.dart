@@ -22,7 +22,7 @@ void main() {
     });
     test('Update toString', () {
       expect(UpdateEfficiencyData([refueling]).toString(),
-          "UpdateEfficiencyData { refuelings: ${[refueling]} }");
+          'UpdateEfficiencyData { refuelings: ${[refueling]} }');
     });
   });
 }

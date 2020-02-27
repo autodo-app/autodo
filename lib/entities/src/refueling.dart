@@ -48,15 +48,15 @@ class RefuelingEntity extends Equatable {
       (snap.data['date'] == null)
           ? null
           : DateTime.fromMillisecondsSinceEpoch(snap.data['date']),
-      snap.data["amount"] as double,
-      snap.data["cost"] as double,
+      snap.data['amount'] as double,
+      snap.data['cost'] as double,
       (snap.data['carColor'] == null)
           ? null
-          : Color(snap.data["carColor"] as int),
-      snap.data["efficiency"] as double,
+          : Color(snap.data['carColor'] as int),
+      snap.data['efficiency'] as double,
       (snap.data['efficiencyColor'] == null)
           ? null
-          : Color(snap.data["efficiencyColor"] as int),
+          : Color(snap.data['efficiencyColor'] as int),
     );
   }
 
@@ -68,28 +68,28 @@ class RefuelingEntity extends Equatable {
       (snap.value['date'] == null)
           ? null
           : DateTime.fromMillisecondsSinceEpoch(snap.value['date']),
-      snap.value["amount"] as double,
-      snap.value["cost"] as double,
+      snap.value['amount'] as double,
+      snap.value['cost'] as double,
       (snap.value['carColor'] == null)
           ? null
-          : Color(snap.value["carColor"] as int),
-      snap.value["efficiency"] as double,
+          : Color(snap.value['carColor'] as int),
+      snap.value['efficiency'] as double,
       (snap.value['efficiencyColor'] == null)
           ? null
-          : Color(snap.value["efficiencyColor"] as int),
+          : Color(snap.value['efficiencyColor'] as int),
     );
   }
 
   Map<String, Object> toDocument() {
     return {
-      "carName": carName,
-      "mileage": mileage,
-      "date": date?.millisecondsSinceEpoch,
-      "amount": amount,
-      "cost": cost,
-      "carColor": carColor?.value,
-      "efficiency": efficiency,
-      "efficiencyColor": efficiencyColor?.value
+      'carName': carName,
+      'mileage': mileage,
+      'date': date?.millisecondsSinceEpoch,
+      'amount': amount,
+      'cost': cost,
+      'carColor': carColor?.value,
+      'efficiency': efficiency,
+      'efficiencyColor': efficiencyColor?.value
     };
   }
 }

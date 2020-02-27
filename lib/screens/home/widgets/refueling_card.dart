@@ -219,7 +219,7 @@ class RefuelingCard extends StatelessWidget {
   build(context) => InkWell(
       onTap: onTap,
       child: Dismissible(
-          key: Key("__dismissible__"),
+          key: Key('__dismissible__'),
           onDismissed: onDismissed,
           child: Card(
             elevation: 4,

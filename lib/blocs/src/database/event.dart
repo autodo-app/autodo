@@ -17,7 +17,7 @@ class UserLoggedIn extends DatabaseEvent {
   List<Object> get props => [uuid, newUser];
 
   @override
-  toString() => "UserLoggedIn { uuid: $uuid, newUser: $newUser }";
+  toString() => 'UserLoggedIn { uuid: $uuid, newUser: $newUser }';
 }
 
 class UserLoggedOut extends DatabaseEvent {}

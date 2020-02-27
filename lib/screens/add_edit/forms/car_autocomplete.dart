@@ -72,7 +72,7 @@ class _CarFormState extends State<CarForm> {
         child: ListTile(
             title: Text(suggestion.name),
             trailing: Text(JsonIntl.of(context).get(IntlKeys.mileage) +
-                ": ${suggestion.mileage}")),
+                ': ${suggestion.mileage}')),
         padding: EdgeInsets.all(5.0),
       ),
       itemSorter: (a, b) => a.name.length == b.name.length

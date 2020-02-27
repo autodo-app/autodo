@@ -59,7 +59,7 @@ class UpdateDueDates extends TodosEvent {
   List<Object> get props => [cars];
 
   @override
-  toString() => "UpdateDueDates { cars: $cars }";
+  toString() => 'UpdateDueDates { cars: $cars }';
 }
 
 class RepeatsRefresh extends TodosEvent {
@@ -71,7 +71,7 @@ class RepeatsRefresh extends TodosEvent {
   List<Object> get props => [repeats];
 
   @override
-  toString() => "RepeatsRefresh { repeats: $repeats }";
+  toString() => 'RepeatsRefresh { repeats: $repeats }';
 }
 
 class CompleteTodo extends TodosEvent {
@@ -84,5 +84,5 @@ class CompleteTodo extends TodosEvent {
   List<Object> get props => [todo, completedDate];
 
   @override
-  toString() => "CompleteTodo { todo: $todo, completedDate: $completedDate }";
+  toString() => 'CompleteTodo { todo: $todo, completedDate: $completedDate }';
 }

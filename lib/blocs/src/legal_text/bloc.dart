@@ -86,7 +86,7 @@ class MarkdownParser {
     // check for bolding
     // the below regex is kinda black magic and I don't fully understand it
     // modified slightly from https://stackoverflow.com/questions/43633223/dart-split-string-by-regex
-    final RegExp bolded = RegExp(r"(?:\^\s*-|[^\*\*])+|-");
+    final RegExp bolded = RegExp(r'(?:\^\s*-|[^\*\*])+|-');
     final pieces = bolded.allMatches(txt);
     bool odd = false;
     for (var piece in pieces) {

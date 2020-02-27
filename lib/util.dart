@@ -10,18 +10,18 @@ String titleCase(String input) {
   input =
       input[0].toUpperCase() + input.substring(1); // capitalize first letter
   return input.replaceAllMapped(
-      lowerToUpper, (m) => "${m[1]} ${m[2]}"); // space between words
+      lowerToUpper, (m) => '${m[1]} ${m[2]}'); // space between words
 }
 
 String requiredValidator(String val) =>
-    (val == null || val == "") ? "This field is required." : null;
+    (val == null || val == '') ? 'This field is required.' : null;
 
 String doubleValidator(String val) {
   if (requiredValidator(val) != null) return requiredValidator(val);
   try {
     double.parse(val);
   } catch (e) {
-    return "Number";
+    return 'Number';
   }
   return null;
 }
@@ -31,7 +31,7 @@ String intNoRequire(String val) {
   try {
     int.parse(val);
   } catch (e) {
-    return "Integer";
+    return 'Integer';
   }
   return null;
 }

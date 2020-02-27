@@ -24,7 +24,7 @@ void main() {
           child: MaterialApp(
               home: Scaffold(
                   appBar: AppBar(), drawer: NavDrawer(), body: Container()))));
-      await tester.tap(find.byTooltip("Open navigation menu"));
+      await tester.tap(find.byTooltip('Open navigation menu'));
       await tester.pumpAndSettle();
       expect(find.byType(NavDrawer), findsOneWidget);
     });
