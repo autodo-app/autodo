@@ -128,16 +128,15 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     return out;
   }
 
-  bool _shouldUpdate(car, t) => (t.carName == car.name &&
+  bool _shouldUpdate(car, t) =>
+      t.carName == car.name &&
       (t.estimatedDueDate ?? false) &&
-      !(t.completed ?? false));
+      !(t.completed ?? false);
 
   Stream<TodosState> _mapUpdateDueDatesToState(UpdateDueDates event) async* {
     final cars = event.cars;
-    if (cars == null ||
-        cars.isEmpty ||
-        !(state is TodosLoaded) ||
-        repo == null) return;
+    if (cars == null || cars.isEmpty || !(state is TodosLoaded) || repo == null)
+      return;
 
     final TodosLoaded curState = state;
     final batch = await repo.startTodoWriteBatch();
@@ -276,11 +275,10 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     List<Todo> updatedTodos = todos;
     for (var r in event.repeats) {
       if (todos.isNotEmpty &&
-          todos
-              .any((t) => (!(t.completed ?? true) && t.repeatName == r.name))) {
+          todos.any((t) => !(t.completed ?? true) && t.repeatName == r.name)) {
         // redo the calculation for due date
         final Todo upcoming =
-            todos.firstWhere((t) => (!t.completed && t.repeatName == r.name));
+            todos.firstWhere((t) => !t.completed && t.repeatName == r.name);
         final updated = upcoming.copyWith(
             dueMileage: _calculateNextTodo(
                 todos.where((t) => t.repeatName == r.name).toList(),

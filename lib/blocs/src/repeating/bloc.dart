@@ -241,7 +241,7 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
     // gets the list of cars that do not yet have a repeat associated with them
     final newCars = event.cars
         .map<Car>(
-            (c) => (curRepeats.any((r) => r.cars.contains(c.name)) ? null : c))
+            (c) => curRepeats.any((r) => r.cars.contains(c.name)) ? null : c)
         .toList();
     newCars.removeWhere((c) => c == null);
     if (newCars.isEmpty) {

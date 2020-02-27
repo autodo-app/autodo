@@ -44,7 +44,7 @@ void main() {
           ),
         ),
       ));
-      expect(find.byKey((key)), findsOneWidget);
+      expect(find.byKey(key), findsOneWidget);
     });
 
     testWidgets(

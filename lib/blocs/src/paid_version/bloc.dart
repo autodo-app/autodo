@@ -76,7 +76,7 @@ class PaidVersionBloc extends Bloc<PaidVersionEvent, PaidVersionState> {
 
   /// This methodology will vary by platform, currently just handling Android
   bool _verifyPurchase(PurchaseDetails p) {
-    return (p.productID == paidVersionId);
+    return p.productID == paidVersionId;
   }
 
   /// Currently just checking the respective app store, store this on the server

@@ -96,9 +96,9 @@ class _DateFormState extends State<_DateForm> {
   Future chooseDate(BuildContext context, String initialDateString) async {
     final now = DateTime.now();
     var initialDate = convertToDate(initialDateString) ?? now;
-    initialDate = (initialDate.year >= 1900 && initialDate.isBefore(now)
+    initialDate = initialDate.year >= 1900 && initialDate.isBefore(now)
         ? initialDate
-        : now);
+        : now;
 
     final result = await showDatePicker(
         context: context,
@@ -148,7 +148,7 @@ class _DateFormState extends State<_DateForm> {
         IconButton(
           icon: Icon(Icons.calendar_today),
           tooltip: JsonIntl.of(context).get(IntlKeys.chooseDate),
-          onPressed: (() => chooseDate(context, _ctrl.text)),
+          onPressed: () => chooseDate(context, _ctrl.text),
         )
       ]);
 }

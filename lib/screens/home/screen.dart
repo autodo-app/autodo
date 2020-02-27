@@ -41,9 +41,9 @@ class _ScreenWithBanner extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Expanded(child: child),
-          ...((bannerShown)
+          ...bannerShown
               ? [Container(height: 50, color: Theme.of(context).cardColor)]
-              : [])
+              : []
         ],
       ));
 }
@@ -124,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
       });
 
   _bannerAdConfig() => AutodoBannerAd(
-        adUnitId: (kReleaseMode)
+        adUnitId: kReleaseMode
             ? 'ca-app-pub-6809809089648617/3864738913'
             : BannerAd.testAdUnitId,
       );

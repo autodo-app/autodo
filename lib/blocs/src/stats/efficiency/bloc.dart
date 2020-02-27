@@ -131,7 +131,7 @@ class EfficiencyStatsBloc
 
   Stream<EfficiencyStatsState> _mapUpdateEfficiencyDataToState(event) async* {
     final data = await _prepData(event.refuelings);
-    yield (EfficiencyStatsLoaded(data));
+    yield EfficiencyStatsLoaded(data);
   }
 
   @override

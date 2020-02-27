@@ -360,7 +360,7 @@ void main() {
         when(dataRepository.getCurrentTodos()).thenAnswer((_) async => [todo3]);
         final writeBatch = MockWriteBatch();
         when(writeBatch.updateData(todo3.id, dynamic))
-            .thenAnswer((_) => ((_) => _));
+            .thenAnswer((_) => (_) => _);
         when(writeBatch.commit()).thenAnswer((_) async {});
         when(dataRepository.startTodoWriteBatch())
             .thenAnswer((_) => writeBatch);
@@ -413,7 +413,7 @@ void main() {
         when(dataRepository.updateTodo(todo3)).thenAnswer((_) async {});
         final writeBatch = MockWriteBatch();
         when(writeBatch.updateData(todo3.id, dynamic))
-            .thenAnswer((_) => ((_) => _));
+            .thenAnswer((_) => (_) => _);
         when(writeBatch.commit()).thenAnswer((_) async {});
         when(dataRepository.startTodoWriteBatch())
             .thenAnswer((_) => writeBatch);

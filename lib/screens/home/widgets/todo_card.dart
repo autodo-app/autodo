@@ -321,14 +321,14 @@ class TodoCard extends StatelessWidget {
                 0.5 // must move halfway across the screen
           },
           child: Card(
-            elevation: (emphasized) ? 16 : 4,
+            elevation: emphasized ? 16 : 4,
             color:
-                (emphasized) ? Colors.transparent : Theme.of(context).cardColor,
+                emphasized ? Colors.transparent : Theme.of(context).cardColor,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
             child: Container(
                 decoration:
-                    (emphasized) ? emphasizedDecoration(todo) : BoxDecoration(),
+                    emphasized ? emphasizedDecoration(todo) : BoxDecoration(),
                 child: Column(
                   children: <Widget>[
                     _TodoTitle(todo: todo),

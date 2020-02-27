@@ -33,7 +33,7 @@ final numberAxisSpec = NumericAxisSpec(
 
 double floorToPrecision(double val, int places) {
   final double mod = pow(10.0, places);
-  return ((val * mod).floor().toDouble() / mod);
+  return (val * mod).floor().toDouble() / mod;
 }
 
 lerp(min, max, count, places) => List.generate(

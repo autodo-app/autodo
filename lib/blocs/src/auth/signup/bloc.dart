@@ -50,10 +50,10 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
   ) {
     final observableStream = events;
     final nonDebounceStream = observableStream.where((event) {
-      return (event is! SignupEmailChanged && event is! SignupPasswordChanged);
+      return event is! SignupEmailChanged && event is! SignupPasswordChanged;
     });
     final debounceStream = observableStream.where((event) {
-      return (event is SignupEmailChanged || event is SignupPasswordChanged);
+      return event is SignupEmailChanged || event is SignupPasswordChanged;
     }).debounceTime(Duration(milliseconds: 300));
     return super
         .transformEvents(nonDebounceStream.mergeWith([debounceStream]), next);

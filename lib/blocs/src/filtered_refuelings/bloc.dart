@@ -82,7 +82,7 @@ class FilteredRefuelingsBloc
   ) async* {
     print('filtered refuelings $state');
     if (state is FilteredRefuelingsLoaded) {
-      final curState = (state as FilteredRefuelingsLoaded);
+      final curState = state as FilteredRefuelingsLoaded;
       yield _shadeEfficiencyStats(
           (refuelingsBloc.state as RefuelingsLoaded).refuelings, curState.cars);
     } else if (carsBloc.state is RefuelingsLoaded) {

@@ -123,7 +123,7 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
     final Widget headerText = AnimatedContainer(
       duration: Duration(milliseconds: 400),
       curve: Curves.fastOutSlowIn,
-      height: (expanded) ? 0 : 110,
+      height: expanded ? 0 : 110,
       child: Padding(
         padding: EdgeInsets.fromLTRB(0, 0, 0, 30),
         child: Center(

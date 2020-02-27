@@ -95,7 +95,7 @@ HSV rgb2hsv(RGB rgb) {
   }
   if (max > 0.0) {
     // NOTE: if Max is == 0, this divide would cause a crash
-    s = (delta / max);
+    s = delta / max;
   } else {
     // if max is 0, then r = g = b = 0
     // s = 0, h is undefined
@@ -181,7 +181,7 @@ double scaleToUnit(double _num, double _min, double _max) {
 
 double roundToPrecision(double val, int places) {
   final double mod = pow(10.0, places);
-  return ((val * mod).round().toDouble() / mod);
+  return (val * mod).round().toDouble() / mod;
 }
 
 changeFocus(FocusNode cur, FocusNode next) {

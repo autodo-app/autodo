@@ -182,7 +182,7 @@ void main() {
         when(dataRepository.getCurrentRepeats())
             .thenAnswer((_) async => RepeatsBloc.defaults);
         // dynamic lambdas to effectively do nothing
-        when(mockBatch.setData(dynamic)).thenAnswer((_) => ((_) => _));
+        when(mockBatch.setData(dynamic)).thenAnswer((_) => (_) => _);
         when(mockBatch.commit()).thenAnswer((_) async {});
         final dbBloc = MockDbBloc();
         when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));

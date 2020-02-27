@@ -99,7 +99,7 @@ class FirebaseAuthRepository extends AuthRepository {
   }
 
   Future<void> sendPasswordReset(String email) async {
-    return (await _firebaseAuth.sendPasswordResetEmail(email: email));
+    return await _firebaseAuth.sendPasswordResetEmail(email: email);
   }
 
   @override

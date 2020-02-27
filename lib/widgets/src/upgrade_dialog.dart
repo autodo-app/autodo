@@ -11,14 +11,14 @@ class UpgradeDialog extends AlertDialog {
             key: key,
             title: Text(JsonIntl.of(context).get(IntlKeys.upgradePaidVersion),
                 style: Theme.of(context).primaryTextTheme.subtitle),
-            content: (trialUser)
+            content: trialUser
                 ? Text(
                     JsonIntl.of(context).get(IntlKeys.upgradePaidVersionTrial),
                     style: Theme.of(context).primaryTextTheme.body1)
                 : Text(
                     JsonIntl.of(context).get(IntlKeys.upgradePaidVersionDesc),
                     style: Theme.of(context).primaryTextTheme.body1),
-            actions: (trialUser)
+            actions: trialUser
                 ? [
                     FlatButton(
                         onPressed: () => Navigator.pop(context),
