@@ -35,7 +35,7 @@ class DrivingDistanceChart extends StatelessWidget {
     if (seriesList.isEmpty) {
       return Center(
           child: Text(JsonIntl.of(context).get(IntlKeys.noData),
-              style: Theme.of(context).primaryTextTheme.body1));
+              style: Theme.of(context).primaryTextTheme.bodyText2));
     }
     return TimeSeriesChart(
       seriesList,
@@ -63,7 +63,7 @@ class DrivingDistanceHistory extends StatelessWidget {
               padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
             ),
             Text(JsonIntl.of(context).get(IntlKeys.drivingDistanceHistory),
-                style: Theme.of(context).primaryTextTheme.subtitle),
+                style: Theme.of(context).primaryTextTheme.subtitle2),
             Container(
               height: 300,
               padding: EdgeInsets.all(15),
@@ -71,7 +71,7 @@ class DrivingDistanceHistory extends StatelessWidget {
             ),
             Text(
               'Refueling Date',
-              style: Theme.of(context).primaryTextTheme.body1,
+              style: Theme.of(context).primaryTextTheme.bodyText2,
               textAlign: TextAlign.center,
             ),
           ]);

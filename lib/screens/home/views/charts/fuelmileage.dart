@@ -38,7 +38,7 @@ class FuelMileageChart extends StatelessWidget {
           child: Center(
               child: Text(JsonIntl.of(context).get(IntlKeys.noDataRefuelings),
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).primaryTextTheme.body1)));
+                  style: Theme.of(context).primaryTextTheme.bodyText2)));
     }
     return TimeSeriesChart(
       seriesList,
@@ -85,7 +85,7 @@ class FuelMileageHistory extends StatelessWidget {
               padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
             ),
             Text(JsonIntl.of(context).get(IntlKeys.fuelEfficiencyHistory),
-                style: Theme.of(context).primaryTextTheme.subtitle),
+                style: Theme.of(context).primaryTextTheme.subtitle2),
             Container(
               height: 300,
               padding: EdgeInsets.all(15),
@@ -93,7 +93,7 @@ class FuelMileageHistory extends StatelessWidget {
             ),
             Text(
               'Refueling Date',
-              style: Theme.of(context).primaryTextTheme.body1,
+              style: Theme.of(context).primaryTextTheme.bodyText2,
               textAlign: TextAlign.center,
             ),
           ]);

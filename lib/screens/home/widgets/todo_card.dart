@@ -35,9 +35,10 @@ class _TodoTitle extends StatelessWidget {
         TextSpan(
             // Todo: Improve this translation
             text: '${preface(context)} ',
-            style: Theme.of(context).primaryTextTheme.subtitle),
+            style: Theme.of(context).primaryTextTheme.subtitle2),
         TextSpan(
-            text: todo.name, style: Theme.of(context).primaryTextTheme.title)
+            text: todo.name,
+            style: Theme.of(context).primaryTextTheme.headline6)
       ]));
 }
 
@@ -77,7 +78,7 @@ class _TodoDueDate extends StatelessWidget {
           Text(
               // Todo: Improve this translation
               '${JsonIntl.of(context).get(IntlKeys.dueOn)} ${DateFormat.yMMMd().format(todo.dueDate)}',
-              style: Theme.of(context).primaryTextTheme.body1),
+              style: Theme.of(context).primaryTextTheme.bodyText2),
         ],
       );
 }
@@ -108,13 +109,13 @@ class _TodoDueMileage extends StatelessWidget {
             // Todo: Improve this translation
             TextSpan(
                 text: '${JsonIntl.of(context).get(IntlKeys.dueAt)} ',
-                style: Theme.of(context).primaryTextTheme.body1),
+                style: Theme.of(context).primaryTextTheme.bodyText2),
             TextSpan(
                 text: mileageString(),
-                style: Theme.of(context).primaryTextTheme.subtitle),
+                style: Theme.of(context).primaryTextTheme.subtitle2),
             TextSpan(
               text: ' ${JsonIntl.of(context).get(IntlKeys.distanceUnits)}',
-              style: Theme.of(context).primaryTextTheme.body1,
+              style: Theme.of(context).primaryTextTheme.bodyText2,
             )
           ]))
         ],
@@ -135,8 +136,10 @@ class _TodoLastCompleted extends StatelessWidget {
           Text(
             JsonIntl.of(context).get(IntlKeys
                 .firstTimeDoingTask), // TODO adjust this for past completed
-            style:
-                Theme.of(context).primaryTextTheme.body1.copyWith(fontSize: 14),
+            style: Theme.of(context)
+                .primaryTextTheme
+                .bodyText2
+                .copyWith(fontSize: 14),
           ),
         ],
       );

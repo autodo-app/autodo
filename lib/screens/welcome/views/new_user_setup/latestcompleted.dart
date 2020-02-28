@@ -144,7 +144,7 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
             ),
             Text(
               'When was the last time you did these tasks?',
-              style: Theme.of(context).primaryTextTheme.body1,
+              style: Theme.of(context).primaryTextTheme.bodyText2,
             ),
           ],
         )),

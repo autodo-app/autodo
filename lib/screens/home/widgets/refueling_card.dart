@@ -17,7 +17,7 @@ class _RefuelingTitle extends StatelessWidget {
   TextSpan dateField(context) => TextSpan(
       text: // TODO: Can't concat verb and date
           '${JsonIntl.of(context).get(IntlKeys.onLiteral)} ${DateFormat.yMMMd().format(refueling.date)} ',
-      style: Theme.of(context).primaryTextTheme.body1);
+      style: Theme.of(context).primaryTextTheme.bodyText2);
 
   @override
   Widget build(context) => RichText(
@@ -26,18 +26,18 @@ class _RefuelingTitle extends StatelessWidget {
             // Todo: Improve this translation
             TextSpan(
                 text: '${JsonIntl.of(context).get(IntlKeys.refueling)} ',
-                style: Theme.of(context).primaryTextTheme.body1),
+                style: Theme.of(context).primaryTextTheme.bodyText2),
             dateField(context),
             TextSpan(
                 text: '${JsonIntl.of(context).get(IntlKeys.at)} ',
-                style: Theme.of(context).primaryTextTheme.body1),
+                style: Theme.of(context).primaryTextTheme.bodyText2),
             TextSpan(
                 text:
                     '${NumberFormat.decimalPattern().format(refueling.mileage)} ',
-                style: Theme.of(context).primaryTextTheme.subtitle),
+                style: Theme.of(context).primaryTextTheme.subtitle2),
             TextSpan(
                 text: JsonIntl.of(context).get(IntlKeys.distanceUnits),
-                style: Theme.of(context).primaryTextTheme.body1)
+                style: Theme.of(context).primaryTextTheme.bodyText2)
           ],
         ),
       );
@@ -55,11 +55,11 @@ class _RefuelingCost extends StatelessWidget {
             TextSpan(
                 // Todo: Improve this translation
                 text: '${JsonIntl.of(context).get(IntlKeys.totalCost)}: ',
-                style: Theme.of(context).primaryTextTheme.body1),
+                style: Theme.of(context).primaryTextTheme.bodyText2),
             TextSpan(
                 text: NumberFormat.simpleCurrency(name: 'USD')
                     .format(refueling.cost), // TODO: check unit
-                style: Theme.of(context).primaryTextTheme.subtitle),
+                style: Theme.of(context).primaryTextTheme.subtitle2),
           ],
         ),
       );
@@ -77,13 +77,13 @@ class _RefuelingAmount extends StatelessWidget {
             TextSpan(
                 // Todo: Improve this translation
                 text: '${JsonIntl.of(context).get(IntlKeys.totalAmount)}: ',
-                style: Theme.of(context).primaryTextTheme.body1),
+                style: Theme.of(context).primaryTextTheme.bodyText2),
             TextSpan(
                 text: NumberFormat(',###.0#').format(refueling.amount),
-                style: Theme.of(context).primaryTextTheme.subtitle),
+                style: Theme.of(context).primaryTextTheme.subtitle2),
             TextSpan(
                 text: ' ${JsonIntl.of(context).get(IntlKeys.fuelUnits)}',
-                style: Theme.of(context).primaryTextTheme.body1)
+                style: Theme.of(context).primaryTextTheme.bodyText2)
           ],
         ),
       );

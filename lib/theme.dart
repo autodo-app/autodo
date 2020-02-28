@@ -116,7 +116,7 @@ TextStyle finePrint() {
 
 ThemeData createTheme() {
   final primaryText = TextTheme(
-    body1: TextStyle(
+    bodyText2: TextStyle(
       color: Colors.white.withAlpha(230),
       fontSize: 16,
       fontWeight: FontWeight.w300,
@@ -129,20 +129,20 @@ ThemeData createTheme() {
       fontFamily: 'IBM Plex Sans',
       letterSpacing: 0.2,
     ),
-    display1: TextStyle(
+    headline4: TextStyle(
       fontSize: 30,
       fontFamily: 'Ubuntu',
       fontWeight: FontWeight.w600,
       color: Colors.white.withAlpha(230),
     ),
-    title: TextStyle(
+    headline6: TextStyle(
       color: Colors.white.withAlpha(230),
       fontSize: 24,
       fontWeight: FontWeight.w500,
       fontFamily: 'IBM Plex Sans',
       letterSpacing: 1.0,
     ),
-    subtitle: TextStyle(
+    subtitle2: TextStyle(
       color: Colors.white.withAlpha(230),
       fontSize: 18,
       fontWeight: FontWeight.w400,
@@ -159,7 +159,7 @@ ThemeData createTheme() {
       fontFamily: 'IBM Plex Sans',
       letterSpacing: 0.2,
     ),
-    body2: TextStyle(
+    bodyText1: TextStyle(
       // This is used for the car tags
       color: Colors.black.withAlpha(230),
       fontSize: 14,
@@ -210,9 +210,9 @@ ThemeData createTheme() {
     primaryTextTheme: primaryText,
     accentTextTheme: accentTextTheme,
     inputDecorationTheme: InputDecorationTheme(
-      hintStyle: primaryText.body1.copyWith(color: Colors.grey),
-      labelStyle: primaryText.body1,
-      helperStyle: primaryText.body1,
+      hintStyle: primaryText.bodyText2.copyWith(color: Colors.grey),
+      labelStyle: primaryText.bodyText2,
+      helperStyle: primaryText.bodyText2,
     ),
     iconTheme: IconThemeData(
       color: Colors.white.withAlpha(230),
@@ -226,7 +226,7 @@ ThemeData createTheme() {
     // sliderTheme: ,
     // tabBarTheme: ,
     tooltipTheme: TooltipThemeData(
-      textStyle: primaryText.title,
+      textStyle: primaryText.headline6,
     ),
     // chipTheme: ,
     platform: TargetPlatform.android,
@@ -246,8 +246,8 @@ ThemeData createTheme() {
     // colorScheme: prefix0.ColorScheme.fromSwatch(primarySwatch: mainPallette, ), // this sets a lot of defaults, avoiding for now
     dialogTheme: DialogTheme(
         backgroundColor: cardColor,
-        titleTextStyle: primaryText.title,
-        contentTextStyle: primaryText.body1),
+        titleTextStyle: primaryText.headline6,
+        contentTextStyle: primaryText.bodyText2),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: mainPallette.shade500,
       foregroundColor: Colors.black.withAlpha(230),
@@ -256,6 +256,7 @@ ThemeData createTheme() {
     // snackBarTheme: ,
     // bottomSheetTheme: ,
     // popupMenuTheme: ,
-    bannerTheme: MaterialBannerThemeData(contentTextStyle: primaryText.title),
+    bannerTheme:
+        MaterialBannerThemeData(contentTextStyle: primaryText.headline6),
   );
 }

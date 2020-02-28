@@ -78,11 +78,11 @@ class _SignupFormState extends State<SignupForm> {
               context: context,
               builder: (context) => AlertDialog(
                 title: Text(JsonIntl.of(context).get(IntlKeys.verificationSent),
-                    style: Theme.of(context).primaryTextTheme.title),
+                    style: Theme.of(context).primaryTextTheme.headline6),
                 content: Text(
                     JsonIntl.of(context)
                         .get(IntlKeys.verificationDialogContent),
-                    style: Theme.of(context).primaryTextTheme.body1),
+                    style: Theme.of(context).primaryTextTheme.bodyText2),
                 actions: [
                   FlatButton(
                     child: Text(JsonIntl.of(context).get(IntlKeys.back),

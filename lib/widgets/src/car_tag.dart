@@ -19,7 +19,7 @@ class CarTag extends StatelessWidget {
           backgroundColor: color,
           label: Text(
             text,
-            style: Theme.of(context).accentTextTheme.body2,
+            style: Theme.of(context).accentTextTheme.bodyText1,
           ),
         ),
         onPressed: () {},

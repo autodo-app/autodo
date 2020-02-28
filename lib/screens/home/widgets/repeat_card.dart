@@ -22,10 +22,10 @@ class _RepeatTitle extends StatelessWidget {
             TextSpan(
                 // Todo: Improve this translation
                 text: '${JsonIntl.of(context).get(IntlKeys.task)} ',
-                style: Theme.of(context).primaryTextTheme.body1),
+                style: Theme.of(context).primaryTextTheme.bodyText2),
             TextSpan(
                 text: repeat.name,
-                style: Theme.of(context).primaryTextTheme.subtitle),
+                style: Theme.of(context).primaryTextTheme.subtitle2),
           ]),
         ),
         RichText(
@@ -33,12 +33,13 @@ class _RepeatTitle extends StatelessWidget {
           TextSpan(
               // Todo: Improve this translation
               text: '${JsonIntl.of(context).get(IntlKeys.interval)} ',
-              style: Theme.of(context).primaryTextTheme.body1),
+              style: Theme.of(context).primaryTextTheme.bodyText2),
           TextSpan(
               text: repeat.mileageInterval.toString(),
-              style: Theme.of(context).primaryTextTheme.subtitle),
+              style: Theme.of(context).primaryTextTheme.subtitle2),
           TextSpan(
-              text: ' miles', style: Theme.of(context).primaryTextTheme.body1)
+              text: ' miles',
+              style: Theme.of(context).primaryTextTheme.bodyText2)
         ]))
       ]));
 }

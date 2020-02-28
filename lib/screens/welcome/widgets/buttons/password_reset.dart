@@ -24,7 +24,7 @@ class _PasswordResetDialogState extends State<_PasswordResetDialog> {
   @override
   Widget build(context) => AlertDialog(
           title: Text(JsonIntl.of(context).get(IntlKeys.sendPasswordReset),
-              style: Theme.of(context).primaryTextTheme.title),
+              style: Theme.of(context).primaryTextTheme.headline6),
           content: Form(
             key: _passwordResetKey,
             child: Column(

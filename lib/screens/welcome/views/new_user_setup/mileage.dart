@@ -165,7 +165,7 @@ class MileageScreenState extends State<MileageScreen> {
           ),
           Text(
             JsonIntl.of(context).get(IntlKeys.tapAddCars),
-            style: Theme.of(context).primaryTextTheme.body1,
+            style: Theme.of(context).primaryTextTheme.bodyText2,
           ),
         ],
       )),

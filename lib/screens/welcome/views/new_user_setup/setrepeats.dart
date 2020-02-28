@@ -85,7 +85,7 @@ class _HeaderText extends StatelessWidget {
             ),
             Text(
               'How often do you want to do these tasks?',
-              style: Theme.of(context).primaryTextTheme.body1,
+              style: Theme.of(context).primaryTextTheme.bodyText2,
             ),
           ],
         )),
