@@ -4,13 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:sembast/sembast.dart';
 
 class RefuelingEntity extends Equatable {
-  final String id;
-  final String carName;
-  final int mileage;
-  final DateTime date;
-  final double amount, cost, efficiency;
-  final Color carColor, efficiencyColor;
-
   const RefuelingEntity(
       this.id,
       this.carName,
@@ -21,6 +14,38 @@ class RefuelingEntity extends Equatable {
       this.carColor,
       this.efficiency,
       this.efficiencyColor);
+
+  factory RefuelingEntity.fromRecord(RecordSnapshot snap) {
+    return RefuelingEntity(
+      (snap.key is String) ? snap.key : '${snap.key}',
+      snap.value['carName'],
+      snap.value['mileage'],
+      (snap.value['date'] == null)
+          ? null
+          : DateTime.fromMillisecondsSinceEpoch(snap.value['date']),
+      snap.value['amount'] as double,
+      snap.value['cost'] as double,
+      (snap.value['carColor'] == null)
+          ? null
+          : Color(snap.value['carColor'] as int),
+      snap.value['efficiency'] as double,
+      (snap.value['efficiencyColor'] == null)
+          ? null
+          : Color(snap.value['efficiencyColor'] as int),
+    );
+  }
+
+  final String id;
+
+  final String carName;
+
+  final int mileage;
+
+  final DateTime date;
+
+  final double amount, cost, efficiency;
+
+  final Color carColor, efficiencyColor;
 
   @override
   List<Object> get props => [
@@ -57,26 +82,6 @@ class RefuelingEntity extends Equatable {
       (snap.data['efficiencyColor'] == null)
           ? null
           : Color(snap.data['efficiencyColor'] as int),
-    );
-  }
-
-  factory RefuelingEntity.fromRecord(RecordSnapshot snap) {
-    return RefuelingEntity(
-      (snap.key is String) ? snap.key : '${snap.key}',
-      snap.value['carName'],
-      snap.value['mileage'],
-      (snap.value['date'] == null)
-          ? null
-          : DateTime.fromMillisecondsSinceEpoch(snap.value['date']),
-      snap.value['amount'] as double,
-      snap.value['cost'] as double,
-      (snap.value['carColor'] == null)
-          ? null
-          : Color(snap.value['carColor'] as int),
-      snap.value['efficiency'] as double,
-      (snap.value['efficiencyColor'] == null)
-          ? null
-          : Color(snap.value['efficiencyColor'] as int),
     );
   }
 

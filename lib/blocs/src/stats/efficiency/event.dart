@@ -11,9 +11,9 @@ abstract class EfficiencyStatsEvent extends Equatable {
 class LoadEfficiencyStats extends EfficiencyStatsEvent {}
 
 class UpdateEfficiencyData extends EfficiencyStatsEvent {
-  final List<Refueling> refuelings;
-
   const UpdateEfficiencyData(this.refuelings);
+
+  final List<Refueling> refuelings;
 
   @override
   List<Object> get props => [refuelings];

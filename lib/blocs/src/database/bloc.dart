@@ -12,11 +12,6 @@ import 'state.dart';
 import '../auth/barrel.dart';
 
 class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
-  final Firestore _firestoreInstance;
-  final AuthenticationBloc _authenticationBloc;
-  StreamSubscription _authSubscription;
-  Future<Directory> Function() pathProvider;
-
   DatabaseBloc(
       {firestoreInstance, @required authenticationBloc, this.pathProvider})
       : assert(authenticationBloc != null),
@@ -33,6 +28,14 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       }
     });
   }
+
+  final Firestore _firestoreInstance;
+
+  final AuthenticationBloc _authenticationBloc;
+
+  StreamSubscription _authSubscription;
+
+  Future<Directory> Function() pathProvider;
 
   @override
   DatabaseState get initialState => DbUninitialized();

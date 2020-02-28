@@ -8,11 +8,6 @@ typedef GetGoogleCredentialsFn = AuthCredential Function(
     {String accessToken, String idToken});
 
 class FirebaseAuthRepository extends AuthRepository {
-  final FirebaseAuth _firebaseAuth;
-  final GoogleSignIn _googleSignIn;
-  final GetGoogleCredentialsFn _getGoogleCredential;
-  FirebaseUser _cachedCurrentUser;
-
   FirebaseAuthRepository({
     FirebaseAuth firebaseAuth,
     GoogleSignIn googleSignin,
@@ -21,6 +16,14 @@ class FirebaseAuthRepository extends AuthRepository {
         _googleSignIn = googleSignin ?? GoogleSignIn(),
         _getGoogleCredential =
             getGoogleCredential ?? GoogleAuthProvider.getCredential;
+
+  final FirebaseAuth _firebaseAuth;
+
+  final GoogleSignIn _googleSignIn;
+
+  final GetGoogleCredentialsFn _getGoogleCredential;
+
+  FirebaseUser _cachedCurrentUser;
 
   @override
   Future<FirebaseUser> signInWithGoogle() async {

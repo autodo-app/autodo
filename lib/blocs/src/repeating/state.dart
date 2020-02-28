@@ -12,12 +12,13 @@ abstract class RepeatsState extends Equatable {
 class RepeatsLoading extends RepeatsState {}
 
 class RepeatsLoaded extends RepeatsState {
+  const RepeatsLoaded([this.repeats = const [], this.changes = const []]);
+
   final List<Repeat> repeats;
+
   // TODO: figure out how feasible it is to implement this as a means
   // of figuring out what repeats have/haven't been updated
   final List<DocumentChange> changes;
-
-  const RepeatsLoaded([this.repeats = const [], this.changes = const []]);
 
   List<Repeat> sorted() {
     return repeats

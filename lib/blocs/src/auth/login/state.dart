@@ -33,10 +33,10 @@ class LoginEmpty extends LoginState {}
 /// This does not indicate a fatal error, the [errorMsg] string is displayed
 /// as direction to the user for resolving the error.
 class LoginError extends LoginState {
+  const LoginError(this.errorMsg);
+
   /// A description of the cause and/or resolution of the login error.
   final String errorMsg;
-
-  const LoginError(this.errorMsg);
 
   @override
   List<Object> get props => [];
@@ -49,6 +49,9 @@ class LoginLoading extends LoginState {}
 /// Indicates that there was an error with the validation of one of the fields
 /// in the [LoginForm].
 class LoginCredentialsInvalid extends LoginState {
+  const LoginCredentialsInvalid(
+      {this.emailError, this.passwordError, this.email, this.password});
+
   /// An optional parameter describing the error with the email field if applicable.
   final String emailError;
 
@@ -60,9 +63,6 @@ class LoginCredentialsInvalid extends LoginState {
 
   /// The current password
   final String password;
-
-  const LoginCredentialsInvalid(
-      {this.emailError, this.passwordError, this.email, this.password});
 
   LoginCredentialsInvalid copyWith(
           {emailError, passwordError, email, password}) =>
@@ -79,9 +79,9 @@ class LoginCredentialsInvalid extends LoginState {
 /// Indicates that the contents of the [LoginForm] are properly validated and
 /// ready for submission to the authentication database.
 class LoginCredentialsValid extends LoginState {
-  final String email, password;
-
   const LoginCredentialsValid({this.email, this.password});
+
+  final String email, password;
 
   LoginCredentialsValid copyWith({email, password}) => LoginCredentialsValid(
       email: email ?? this.email, password: password ?? this.password);

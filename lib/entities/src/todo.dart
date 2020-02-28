@@ -5,12 +5,6 @@ import 'package:sembast/sembast.dart';
 import 'package:autodo/models/models.dart';
 
 class TodoEntity extends Equatable {
-  final String id, name, carName, repeatName;
-  final TodoDueState dueState;
-  final int dueMileage, notificationID;
-  final bool completed, estimatedDueDate;
-  final DateTime completedDate, dueDate;
-
   const TodoEntity(
       this.id,
       this.name,
@@ -23,6 +17,16 @@ class TodoEntity extends Equatable {
       this.estimatedDueDate,
       this.completedDate,
       this.dueDate);
+
+  final String id, name, carName, repeatName;
+
+  final TodoDueState dueState;
+
+  final int dueMileage, notificationID;
+
+  final bool completed, estimatedDueDate;
+
+  final DateTime completedDate, dueDate;
 
   @override
   List<Object> get props => [

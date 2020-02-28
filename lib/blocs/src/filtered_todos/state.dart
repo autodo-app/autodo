@@ -11,13 +11,14 @@ abstract class FilteredTodosState extends Equatable {
 class FilteredTodosLoading extends FilteredTodosState {}
 
 class FilteredTodosLoaded extends FilteredTodosState {
-  final List<Todo> filteredTodos;
-  final VisibilityFilter activeFilter;
-
   const FilteredTodosLoaded(
     this.filteredTodos,
     this.activeFilter,
   );
+
+  final List<Todo> filteredTodos;
+
+  final VisibilityFilter activeFilter;
 
   @override
   List<Object> get props => [filteredTodos, activeFilter];

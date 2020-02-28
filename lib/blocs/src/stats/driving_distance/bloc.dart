@@ -11,12 +11,13 @@ import 'state.dart';
 
 class DrivingDistanceStatsBloc
     extends Bloc<DrivingDistanceStatsEvent, DrivingDistanceStatsState> {
-  final CarsBloc _carsBloc;
-  StreamSubscription _carsSubscription;
-
   DrivingDistanceStatsBloc({@required carsBloc})
       : assert(carsBloc != null),
         _carsBloc = carsBloc;
+
+  final CarsBloc _carsBloc;
+
+  StreamSubscription _carsSubscription;
 
   @override
   DrivingDistanceStatsState get initialState => DrivingDistanceStatsLoading();

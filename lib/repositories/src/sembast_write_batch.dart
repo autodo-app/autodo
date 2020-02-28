@@ -5,12 +5,6 @@ import 'package:flutter/material.dart';
 import 'write_batch_wrapper.dart';
 
 class SembastWriteBatch extends Equatable implements WriteBatchWrapper {
-  final List<Function(DatabaseClient)> transactionList;
-  final StoreRef store;
-  final DatabaseFactory dbFactory;
-  final String dbPath;
-  final Function streamControllerUpdate;
-
   SembastWriteBatch({
     transactionList,
     @required this.store,
@@ -18,6 +12,16 @@ class SembastWriteBatch extends Equatable implements WriteBatchWrapper {
     @required this.dbPath,
     this.streamControllerUpdate,
   }) : transactionList = transactionList ?? [];
+
+  final List<Function(DatabaseClient)> transactionList;
+
+  final StoreRef store;
+
+  final DatabaseFactory dbFactory;
+
+  final String dbPath;
+
+  final Function streamControllerUpdate;
 
   @override
   void updateData(id, data) =>

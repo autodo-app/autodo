@@ -8,8 +8,12 @@ import 'tutorial1.dart';
 import 'tutorial2.dart';
 
 class WelcomePageScroller extends StatefulWidget {
+  WelcomePageScroller({this.lastPageNotifier});
+
   final VoidCallback lastPageNotifier;
+
   final PageController controller = PageController();
+
   final List<Widget> screens = [
     Welcome(),
     Tutorial1(),
@@ -26,7 +30,6 @@ class WelcomePageScroller extends StatefulWidget {
 
   void showPage(page) => controller.jumpToPage(page);
 
-  WelcomePageScroller({this.lastPageNotifier});
   @override
   WelcomePageScrollerState createState() => WelcomePageScrollerState();
 }

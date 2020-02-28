@@ -8,11 +8,11 @@ import 'package:autodo/localization.dart';
 import 'package:json_intl/json_intl.dart';
 
 class ExtraActions extends StatelessWidget {
-  final Key toggleAllKey;
-
   const ExtraActions(
       {Key key = const ValueKey('__extra_actions__'), this.toggleAllKey})
       : super(key: key);
+
+  final Key toggleAllKey;
 
   @override
   Widget build(BuildContext context) {

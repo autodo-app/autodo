@@ -10,26 +10,34 @@ import 'event.dart';
 import 'state.dart';
 
 class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
-  final DatabaseBloc _dbBloc;
-  StreamSubscription _dataSubscription;
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
-  static final channelID = 'com.jonathanbayless.autodo';
-  static final channelName = 'auToDo';
-  static final channelDescription = 'Task reminders from the auToDo app';
-  static final androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      channelID, channelName, channelDescription,
-      importance: Importance.Max,
-      priority: Priority.High,
-      ticker: 'auToDo notification');
-  static final iOSPlatformChannelSpecifics = IOSNotificationDetails();
-  static final platformChannelSpecifics = NotificationDetails(
-      androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-
   NotificationsBloc({notificationsPlugin, @required dbBloc})
       : assert(dbBloc != null),
         _dbBloc = dbBloc,
         flutterLocalNotificationsPlugin =
             notificationsPlugin ?? FlutterLocalNotificationsPlugin();
+
+  final DatabaseBloc _dbBloc;
+
+  StreamSubscription _dataSubscription;
+
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+
+  static final channelID = 'com.jonathanbayless.autodo';
+
+  static final channelName = 'auToDo';
+
+  static final channelDescription = 'Task reminders from the auToDo app';
+
+  static final androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      channelID, channelName, channelDescription,
+      importance: Importance.Max,
+      priority: Priority.High,
+      ticker: 'auToDo notification');
+
+  static final iOSPlatformChannelSpecifics = IOSNotificationDetails();
+
+  static final platformChannelSpecifics = NotificationDetails(
+      androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
 
   @override
   NotificationsState get initialState => NotificationsLoading();

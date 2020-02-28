@@ -11,20 +11,25 @@ import 'write_batch_wrapper.dart';
 import 'firebase_write_batch.dart';
 
 class FirebaseDataRepository extends Equatable implements DataRepository {
-  final Firestore _firestoreInstance;
-  final String _uuid;
-
-  DocumentReference get _userDoc =>
-      _firestoreInstance.collection('users').document(_uuid);
-  CollectionReference get _todos => _userDoc.collection('todos');
-  CollectionReference get _refuelings => _userDoc.collection('refuelings');
-  CollectionReference get _cars => _userDoc.collection('cars');
-  CollectionReference get _repeats => _userDoc.collection('repeats');
-
   FirebaseDataRepository({Firestore firestoreInstance, @required String uuid})
       : assert(uuid != null),
         _firestoreInstance = firestoreInstance ?? Firestore.instance,
         _uuid = uuid;
+
+  final Firestore _firestoreInstance;
+
+  final String _uuid;
+
+  DocumentReference get _userDoc =>
+      _firestoreInstance.collection('users').document(_uuid);
+
+  CollectionReference get _todos => _userDoc.collection('todos');
+
+  CollectionReference get _refuelings => _userDoc.collection('refuelings');
+
+  CollectionReference get _cars => _userDoc.collection('cars');
+
+  CollectionReference get _repeats => _userDoc.collection('repeats');
 
   @override
   Future<void> addNewTodo(Todo todo) {

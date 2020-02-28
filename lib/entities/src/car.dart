@@ -5,12 +5,6 @@ import 'package:sembast/sembast.dart';
 import 'package:autodo/models/models.dart';
 
 class CarEntity extends Equatable {
-  final String id, name;
-  final int mileage, numRefuelings;
-  final double averageEfficiency, distanceRate;
-  final DateTime lastMileageUpdate;
-  final List<DistanceRatePoint> distanceRateHistory;
-
   const CarEntity(
       this.id,
       this.name,
@@ -23,6 +17,39 @@ class CarEntity extends Equatable {
       : numRefuelings = numRefuelings ?? 0,
         averageEfficiency = averageEfficiency ?? 0.0,
         distanceRate = distanceRate ?? 0.0;
+
+  factory CarEntity.fromRecord(RecordSnapshot snap) {
+    return CarEntity(
+        (snap.key is String) ? snap.key : '${snap.key}',
+        snap.value['name'] as String,
+        snap.value['mileage'] as int,
+        snap.value['numRefuelings'] as int,
+        snap.value['averageEfficiency'] as double,
+        snap.value['distanceRate'] as double,
+        (snap.value['lastMileageUpdate'] == null)
+            ? null
+            : DateTime.fromMillisecondsSinceEpoch(
+                snap.value['lastMileageUpdate'] as int),
+        snap.value['distanceRateHistory']
+            ?.map((p) => DistanceRatePoint(
+                  (p['date'] == null)
+                      ? null
+                      : DateTime.fromMillisecondsSinceEpoch(p['date']),
+                  p['distanceRate'],
+                ))
+            ?.toList()
+            ?.cast<DistanceRatePoint>());
+  }
+
+  final String id, name;
+
+  final int mileage, numRefuelings;
+
+  final double averageEfficiency, distanceRate;
+
+  final DateTime lastMileageUpdate;
+
+  final List<DistanceRatePoint> distanceRateHistory;
 
   @override
   List<Object> get props => [
@@ -64,29 +91,6 @@ class CarEntity extends Equatable {
             ?.cast<DistanceRatePoint>());
   }
 
-  factory CarEntity.fromRecord(RecordSnapshot snap) {
-    return CarEntity(
-        (snap.key is String) ? snap.key : '${snap.key}',
-        snap.value['name'] as String,
-        snap.value['mileage'] as int,
-        snap.value['numRefuelings'] as int,
-        snap.value['averageEfficiency'] as double,
-        snap.value['distanceRate'] as double,
-        (snap.value['lastMileageUpdate'] == null)
-            ? null
-            : DateTime.fromMillisecondsSinceEpoch(
-                snap.value['lastMileageUpdate'] as int),
-        snap.value['distanceRateHistory']
-            ?.map((p) => DistanceRatePoint(
-                  (p['date'] == null)
-                      ? null
-                      : DateTime.fromMillisecondsSinceEpoch(p['date']),
-                  p['distanceRate'],
-                ))
-            ?.toList()
-            ?.cast<DistanceRatePoint>());
-  }
-
   Map<String, Object> toDocument() {
     return {
       'name': name,
@@ -96,8 +100,7 @@ class CarEntity extends Equatable {
       'distanceRate': distanceRate,
       'lastMileageUpdate': lastMileageUpdate?.millisecondsSinceEpoch,
       'distanceRateHistory': distanceRateHistory
-          ?.map((p) => <String, dynamic>{}
-            ..addAll({
+          ?.map((p) => <String, dynamic>{}..addAll({
               'date': p.date.millisecondsSinceEpoch,
               'distanceRate': p.distanceRate
             }))

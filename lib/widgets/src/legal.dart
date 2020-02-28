@@ -4,10 +4,11 @@ import 'package:autodo/theme.dart';
 import 'package:json_intl/json_intl.dart';
 
 class PrivacyPolicy extends StatelessWidget {
-  final RichText text;
-  final Key buttonKey;
-
   const PrivacyPolicy(this.text, {Key key, this.buttonKey}) : super(key: key);
+
+  final RichText text;
+
+  final Key buttonKey;
 
   @override
   Widget build(context) => AlertDialog(

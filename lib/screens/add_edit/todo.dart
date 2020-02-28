@@ -17,11 +17,13 @@ typedef _OnSaveCallback = Function(String name, DateTime dueDate,
     int dueMileage, String repeatName, String carName);
 
 class _NameForm extends StatelessWidget {
-  final Todo todo;
-  final FocusNode node, nextNode;
-  final Function(String) onSaved;
-
   const _NameForm({this.todo, this.onSaved, this.node, this.nextNode});
+
+  final Todo todo;
+
+  final FocusNode node, nextNode;
+
+  final Function(String) onSaved;
 
   @override
   Widget build(context) => TextFormField(
@@ -47,10 +49,6 @@ class _NameForm extends StatelessWidget {
 }
 
 class _DateForm extends StatefulWidget {
-  final Todo todo;
-  final Function(String) onSaved;
-  final FocusNode node, nextNode;
-
   const _DateForm({
     Key key,
     this.todo,
@@ -59,17 +57,25 @@ class _DateForm extends StatefulWidget {
     @required this.nextNode,
   }) : super(key: key);
 
+  final Todo todo;
+
+  final Function(String) onSaved;
+
+  final FocusNode node, nextNode;
+
   @override
   _DateFormState createState() =>
       _DateFormState(node: node, nextNode: nextNode, initial: todo?.dueDate);
 }
 
 class _DateFormState extends State<_DateForm> {
-  TextEditingController _ctrl;
-  DateTime initial;
-  FocusNode node, nextNode;
-
   _DateFormState({this.node, this.nextNode, this.initial});
+
+  TextEditingController _ctrl;
+
+  DateTime initial;
+
+  FocusNode node, nextNode;
 
   @override
   void initState() {
@@ -154,11 +160,13 @@ class _DateFormState extends State<_DateForm> {
 }
 
 class _MileageForm extends StatelessWidget {
-  final Todo todo;
-  final FocusNode node, nextNode;
-  final Function(String) onSaved;
-
   const _MileageForm({this.todo, this.onSaved, this.node, this.nextNode});
+
+  final Todo todo;
+
+  final FocusNode node, nextNode;
+
+  final Function(String) onSaved;
 
   @override
   Widget build(context) => TextFormField(
@@ -184,11 +192,13 @@ class _MileageForm extends StatelessWidget {
 }
 
 class _CarToggleForm extends StatefulWidget {
-  final List<bool> initialState;
-  final List<Car> cars;
-  final Function onSaved;
-
   const _CarToggleForm(this.initialState, this.cars, this.onSaved);
+
+  final List<bool> initialState;
+
+  final List<Car> cars;
+
+  final Function onSaved;
 
   @override
   _CarToggleFormState createState() =>
@@ -196,11 +206,13 @@ class _CarToggleForm extends StatefulWidget {
 }
 
 class _CarToggleFormState extends State<_CarToggleForm> {
-  List<bool> isSelected;
-  final List<Car> cars;
-  final Function onSaved;
-
   _CarToggleFormState(this.isSelected, this.cars, this.onSaved);
+
+  List<bool> isSelected;
+
+  final List<Car> cars;
+
+  final Function onSaved;
 
   @override
   Widget build(context) => FormField(
@@ -241,10 +253,6 @@ class _CarToggleFormState extends State<_CarToggleForm> {
 }
 
 class TodoAddEditScreen extends StatefulWidget {
-  final bool isEditing;
-  final _OnSaveCallback onSave;
-  final Todo todo;
-
   TodoAddEditScreen({
     Key key = IntegrationTestKeys.addEditTodo,
     @required this.onSave,
@@ -253,6 +261,12 @@ class TodoAddEditScreen extends StatefulWidget {
   }) : super(key: key) {
     print(todo);
   }
+
+  final bool isEditing;
+
+  final _OnSaveCallback onSave;
+
+  final Todo todo;
 
   @override
   _TodoAddEditScreenState createState() => _TodoAddEditScreenState();

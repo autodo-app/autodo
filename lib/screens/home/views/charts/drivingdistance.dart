@@ -7,10 +7,11 @@ import 'package:json_intl/json_intl.dart';
 import 'shared.dart';
 
 class DrivingDistanceChart extends StatelessWidget {
-  final List<Series<DistanceRatePoint, DateTime>> seriesList;
-  final bool animate;
-
   const DrivingDistanceChart(this.seriesList, {this.animate});
+
+  final List<Series<DistanceRatePoint, DateTime>> seriesList;
+
+  final bool animate;
 
   int lowerBound() {
     final minVal = seriesList[0]
@@ -51,8 +52,9 @@ class DrivingDistanceChart extends StatelessWidget {
 }
 
 class DrivingDistanceHistory extends StatelessWidget {
-  final List<Series> data;
   const DrivingDistanceHistory(this.data);
+
+  final List<Series> data;
 
   @override
   Widget build(BuildContext context) => Column(

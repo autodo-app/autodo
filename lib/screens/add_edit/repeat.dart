@@ -13,11 +13,13 @@ typedef _OnSaveCallback = Function(
     String name, int mileageInterval, List<String> carNames);
 
 class _NameForm extends StatelessWidget {
-  final Repeat repeat;
-  final FocusNode node, nextNode;
-  final Function(String) onSaved;
-
   const _NameForm({this.repeat, this.onSaved, this.node, this.nextNode});
+
+  final Repeat repeat;
+
+  final FocusNode node, nextNode;
+
+  final Function(String) onSaved;
 
   @override
   Widget build(context) => TextFormField(
@@ -43,11 +45,13 @@ class _NameForm extends StatelessWidget {
 }
 
 class _MileageForm extends StatelessWidget {
-  final Repeat repeat;
-  final FocusNode node, nextNode;
-  final Function(String) onSaved;
-
   const _MileageForm({this.repeat, this.onSaved, this.node, this.nextNode});
+
+  final Repeat repeat;
+
+  final FocusNode node, nextNode;
+
+  final Function(String) onSaved;
 
   @override
   Widget build(context) => TextFormField(
@@ -73,10 +77,6 @@ class _MileageForm extends StatelessWidget {
 }
 
 class RepeatAddEditScreen extends StatefulWidget {
-  final bool isEditing;
-  final _OnSaveCallback onSave;
-  final Repeat repeat;
-
   const RepeatAddEditScreen({
     Key key = const ValueKey('__add_edit_repeat__'),
     @required this.onSave,
@@ -84,20 +84,32 @@ class RepeatAddEditScreen extends StatefulWidget {
     this.repeat,
   }) : super(key: key);
 
+  final bool isEditing;
+
+  final _OnSaveCallback onSave;
+
+  final Repeat repeat;
+
   @override
   _RepeatAddEditScreenState createState() => _RepeatAddEditScreenState(repeat);
 }
 
 class _RepeatAddEditScreenState extends State<RepeatAddEditScreen> {
-  Repeat repeat;
-  FocusNode _nameNode, _mileageNode;
-  final _formKey = GlobalKey<FormState>();
-  ScrollController scrollCtrl;
-  String _name;
-  int _mileageInterval;
-  List<Map<String, dynamic>> _cars;
-
   _RepeatAddEditScreenState(this.repeat);
+
+  Repeat repeat;
+
+  FocusNode _nameNode, _mileageNode;
+
+  final _formKey = GlobalKey<FormState>();
+
+  ScrollController scrollCtrl;
+
+  String _name;
+
+  int _mileageInterval;
+
+  List<Map<String, dynamic>> _cars;
 
   bool get isEditing => widget.isEditing;
 

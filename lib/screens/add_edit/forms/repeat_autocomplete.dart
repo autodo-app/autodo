@@ -10,11 +10,6 @@ import 'package:autodo/util.dart';
 import 'package:json_intl/json_intl.dart';
 
 class RepeatForm extends StatefulWidget {
-  final Todo todo;
-  final Function(String) onSaved;
-  final FocusNode node, nextNode;
-  final bool requireInput;
-
   const RepeatForm({
     Key key,
     this.todo,
@@ -23,6 +18,14 @@ class RepeatForm extends StatefulWidget {
     this.nextNode,
     @required this.requireInput,
   }) : super(key: key);
+
+  final Todo todo;
+
+  final Function(String) onSaved;
+
+  final FocusNode node, nextNode;
+
+  final bool requireInput;
 
   @override
   _RepeatFormState createState() => _RepeatFormState();

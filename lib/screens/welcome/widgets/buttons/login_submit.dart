@@ -4,9 +4,9 @@ import 'package:autodo/localization.dart';
 import 'package:json_intl/json_intl.dart';
 
 class LoginSubmitButton extends StatelessWidget {
-  final Function onPressed;
-
   const LoginSubmitButton({this.onPressed});
+
+  final Function onPressed;
 
   @override
   Widget build(context) => Container(

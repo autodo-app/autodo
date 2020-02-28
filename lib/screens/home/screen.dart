@@ -14,14 +14,15 @@ import 'package:json_intl/json_intl.dart';
 import 'views/barrel.dart';
 
 class HomeScreen extends StatefulWidget {
-  final Key todosTabKey;
-  final bool integrationTest;
-
   const HomeScreen(
       {Key key = IntegrationTestKeys.homeScreen,
       this.todosTabKey,
       this.integrationTest = false})
       : super(key: key);
+
+  final Key todosTabKey;
+
+  final bool integrationTest;
 
   @override
   _HomeScreenState createState() =>
@@ -29,10 +30,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _ScreenWithBanner extends StatelessWidget {
-  final Widget child;
-  final bool bannerShown;
-
   const _ScreenWithBanner({this.child, this.bannerShown = true});
+
+  final Widget child;
+
+  final bool bannerShown;
 
   @override
   Widget build(context) => Center(
@@ -49,15 +51,21 @@ class _ScreenWithBanner extends StatelessWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with RouteAware {
+  _HomeScreenState(this.todosTabKey, this.integrationTest);
+
   final Map<AppTab, Widget> views = {
     AppTab.todos: TodosScreen(),
     AppTab.refuelings: RefuelingsScreen(),
     AppTab.stats: StatisticsScreen(),
     AppTab.repeats: RepeatsScreen(),
   };
+
   final Key todosTabKey;
+
   final bool integrationTest;
+
   BannerAd _bannerAd;
+
   bool _bannerShown = false;
 
   // this has to be a function so that it returns a different route each time
@@ -105,8 +113,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                   },
                 ))),
       ];
-
-  _HomeScreenState(this.todosTabKey, this.integrationTest);
 
   Widget get actionButton =>
       BlocBuilder<CarsBloc, CarsState>(builder: (context, state) {

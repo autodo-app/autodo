@@ -10,13 +10,6 @@ import 'package:autodo/repositories/repositories.dart';
 import 'package:autodo/models/models.dart';
 
 class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
-  static const int MAX_MPG = 0xffff;
-  // don't know why anyone would enter this many, but preventing overflow here
-  static const int MAX_NUM_REFUELINGS = 0xffff;
-
-  StreamSubscription _dataSubscription, _repoSubscription;
-  final DatabaseBloc _dbBloc;
-
   RefuelingsBloc({@required dbBloc})
       : assert(dbBloc != null),
         _dbBloc = dbBloc {
@@ -29,6 +22,15 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
       }
     });
   }
+
+  static const int MAX_MPG = 0xffff;
+
+  // don't know why anyone would enter this many, but preventing overflow here
+  static const int MAX_NUM_REFUELINGS = 0xffff;
+
+  StreamSubscription _dataSubscription, _repoSubscription;
+
+  final DatabaseBloc _dbBloc;
 
   @override
   RefuelingsState get initialState => RefuelingsLoading();

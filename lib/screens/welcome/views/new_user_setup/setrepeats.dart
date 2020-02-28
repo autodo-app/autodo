@@ -16,10 +16,11 @@ import 'base.dart';
 const int cardAppearDuration = 200; // in ms
 
 class _OilInterval extends StatelessWidget {
-  final FocusNode node, nextNode;
-  final Repeat repeat;
-
   const _OilInterval(this.repeat, this.node, this.nextNode);
+
+  final FocusNode node, nextNode;
+
+  final Repeat repeat;
 
   @override
   Widget build(context) => TextFormField(
@@ -40,10 +41,11 @@ class _OilInterval extends StatelessWidget {
 }
 
 class _TireRotationInterval extends StatelessWidget {
-  final FocusNode node;
-  final Repeat repeat;
-
   const _TireRotationInterval(this.repeat, this.node);
+
+  final FocusNode node;
+
+  final Repeat repeat;
 
   @override
   Widget build(context) => TextFormField(
@@ -93,12 +95,14 @@ class _HeaderText extends StatelessWidget {
 }
 
 class _Card extends StatelessWidget {
-  final Repeat oilRepeat, tireRotationRepeat;
-  final FocusNode oilNode, tireRotationNode;
-  final Function onNext;
-
   const _Card(this.oilRepeat, this.tireRotationRepeat, this.oilNode,
       this.tireRotationNode, this.onNext);
+
+  final Repeat oilRepeat, tireRotationRepeat;
+
+  final FocusNode oilNode, tireRotationNode;
+
+  final Function onNext;
 
   @override
   Widget build(context) => Container(
@@ -150,10 +154,11 @@ class _Card extends StatelessWidget {
 }
 
 class SetRepeatsScreen extends StatefulWidget {
-  final GlobalKey<FormState> repeatKey;
-  final NewUserScreenPage page;
-
   const SetRepeatsScreen(this.repeatKey, this.page);
+
+  final GlobalKey<FormState> repeatKey;
+
+  final NewUserScreenPage page;
 
   @override
   SetRepeatsScreenState createState() =>
@@ -162,12 +167,15 @@ class SetRepeatsScreen extends StatefulWidget {
 
 class SetRepeatsScreenState extends State<SetRepeatsScreen>
     with SingleTickerProviderStateMixin {
-  bool pageWillBeVisible;
-  AnimationController openCtrl;
-  Animation<double> openCurve;
-  FocusNode _oilNode, _tiresNode;
-
   SetRepeatsScreenState(this.pageWillBeVisible);
+
+  bool pageWillBeVisible;
+
+  AnimationController openCtrl;
+
+  Animation<double> openCurve;
+
+  FocusNode _oilNode, _tiresNode;
 
   @override
   void initState() {

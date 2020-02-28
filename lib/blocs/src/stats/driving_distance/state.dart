@@ -13,9 +13,9 @@ abstract class DrivingDistanceStatsState extends Equatable {
 class DrivingDistanceStatsLoading extends DrivingDistanceStatsState {}
 
 class DrivingDistanceStatsLoaded extends DrivingDistanceStatsState {
-  final List<Series<DistanceRatePoint, DateTime>> drivingDistanceData;
-
   const DrivingDistanceStatsLoaded(this.drivingDistanceData);
+
+  final List<Series<DistanceRatePoint, DateTime>> drivingDistanceData;
 
   @override
   List<Object> get props => [

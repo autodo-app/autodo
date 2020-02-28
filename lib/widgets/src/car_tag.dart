@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
 class CarTag extends StatelessWidget {
-  final String text;
-  final Color color;
-
   const CarTag({Key key, @required this.text, this.color = Colors.blue})
       : super(key: key);
+
+  final String text;
+
+  final Color color;
 
   @override
   Widget build(BuildContext context) {

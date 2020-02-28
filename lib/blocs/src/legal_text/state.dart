@@ -13,9 +13,9 @@ class LegalNotLoaded extends LegalState {}
 class LegalLoading extends LegalState {}
 
 class LegalLoaded extends LegalState {
-  final RichText text;
-
   const LegalLoaded({this.text});
+
+  final RichText text;
 
   @override
   List<Object> get props => [text.text.toPlainText()];

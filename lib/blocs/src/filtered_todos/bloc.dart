@@ -7,9 +7,6 @@ import '../todos/barrel.dart';
 import 'package:autodo/models/models.dart';
 
 class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
-  final TodosBloc todosBloc;
-  StreamSubscription todosSubscription;
-
   FilteredTodosBloc({@required this.todosBloc}) {
     todosSubscription = todosBloc.listen((state) {
       if (state is TodosLoaded) {
@@ -17,6 +14,10 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
       }
     }, onError: (_) => print('err'), onDone: () => print('done'));
   }
+
+  final TodosBloc todosBloc;
+
+  StreamSubscription todosSubscription;
 
   @override
   FilteredTodosState get initialState {

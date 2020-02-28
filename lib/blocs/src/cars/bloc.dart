@@ -10,15 +10,6 @@ import '../refuelings/barrel.dart';
 import '../database/barrel.dart';
 
 class CarsBloc extends Bloc<CarsEvent, CarsState> {
-  static const double EMA_GAIN = 0.9;
-  static const double EMA_CUTOFF = 8;
-
-  final DatabaseBloc _dbBloc;
-  StreamSubscription _refuelingsSubscription,
-      _dbSubscription,
-      _repoSubscription;
-  final RefuelingsBloc _refuelingsBloc;
-
   CarsBloc(
       {@required DatabaseBloc dbBloc, @required RefuelingsBloc refuelingsBloc})
       : assert(dbBloc != null),
@@ -39,6 +30,18 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
       }
     });
   }
+
+  static const double EMA_GAIN = 0.9;
+
+  static const double EMA_CUTOFF = 8;
+
+  final DatabaseBloc _dbBloc;
+
+  StreamSubscription _refuelingsSubscription,
+      _dbSubscription,
+      _repoSubscription;
+
+  final RefuelingsBloc _refuelingsBloc;
 
   @override
   CarsState get initialState => CarsLoading();

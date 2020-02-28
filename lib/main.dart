@@ -138,15 +138,17 @@ Future<void> main() async {
 }
 
 class App extends StatelessWidget {
-  final ThemeData _theme;
-  final AuthRepository _authRepository;
-  final bool integrationTest;
-
   const App({@required theme, @required authRepository, this.integrationTest})
       : assert(theme != null),
         assert(authRepository != null),
         _theme = theme,
         _authRepository = authRepository;
+
+  final ThemeData _theme;
+
+  final AuthRepository _authRepository;
+
+  final bool integrationTest;
 
   @override
   Widget build(context) {

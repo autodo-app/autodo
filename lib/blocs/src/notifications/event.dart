@@ -11,9 +11,9 @@ abstract class NotificationsEvent extends Equatable {
 class LoadNotifications extends NotificationsEvent {}
 
 class NotificationIdUpdated extends NotificationsEvent {
-  final int id;
-
   const NotificationIdUpdated(this.id);
+
+  final int id;
 
   @override
   List<Object> get props => [id];
@@ -23,11 +23,12 @@ class NotificationIdUpdated extends NotificationsEvent {
 }
 
 class ScheduleNotification extends NotificationsEvent {
-  final String title, body;
-  final DateTime date;
-
   const ScheduleNotification(
       {@required this.date, @required this.title, @required this.body});
+
+  final String title, body;
+
+  final DateTime date;
 
   @override
   List<Object> get props => [date, title, body];
@@ -38,15 +39,17 @@ class ScheduleNotification extends NotificationsEvent {
 }
 
 class ReScheduleNotification extends NotificationsEvent {
-  final int id;
-  final String title, body;
-  final DateTime date;
-
   const ReScheduleNotification(
       {@required this.id,
       @required this.date,
       @required this.title,
       @required this.body});
+
+  final int id;
+
+  final String title, body;
+
+  final DateTime date;
 
   @override
   List<Object> get props => [id, date, title, body];
@@ -57,9 +60,9 @@ class ReScheduleNotification extends NotificationsEvent {
 }
 
 class CancelNotification extends NotificationsEvent {
-  final int id;
-
   const CancelNotification(this.id);
+
+  final int id;
 
   @override
   List<Object> get props => [id];

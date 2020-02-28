@@ -12,10 +12,11 @@ abstract class DatabaseState extends Equatable {
 class DbUninitialized extends DatabaseState {}
 
 class DbLoaded extends DatabaseState {
-  final DataRepository repository;
-  final bool newUser;
-
   const DbLoaded(this.repository, [this.newUser]);
+
+  final DataRepository repository;
+
+  final bool newUser;
 
   @override
   List<Object> get props => [repository, newUser];

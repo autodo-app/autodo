@@ -15,17 +15,6 @@ import '../database/barrel.dart';
 import 'package:autodo/localization.dart';
 
 class TodosBloc extends Bloc<TodosEvent, TodosState> {
-  final DatabaseBloc _dbBloc;
-  final CarsBloc _carsBloc;
-  final NotificationsBloc _notificationsBloc;
-  final RepeatsBloc _repeatsBloc;
-  StreamSubscription _dataSubscription,
-      _carsSubscription,
-      _repeatsSubscription,
-      _repoSubscription;
-
-  List<Car> _carsCache;
-
   TodosBloc(
       {@required DatabaseBloc dbBloc,
       @required CarsBloc carsBloc,
@@ -59,6 +48,21 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       }
     });
   }
+
+  final DatabaseBloc _dbBloc;
+
+  final CarsBloc _carsBloc;
+
+  final NotificationsBloc _notificationsBloc;
+
+  final RepeatsBloc _repeatsBloc;
+
+  StreamSubscription _dataSubscription,
+      _carsSubscription,
+      _repeatsSubscription,
+      _repoSubscription;
+
+  List<Car> _carsCache;
 
   @override
   TodosState get initialState => TodosLoading();

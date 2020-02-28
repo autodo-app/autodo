@@ -15,37 +15,48 @@ import 'write_batch_wrapper.dart';
 import 'sembast_write_batch.dart';
 
 class SembastDataRepository extends Equatable implements DataRepository {
+  SembastDataRepository(
+      {@required createDb, dbFactory, this.dbPath = 'sample.db', pathProvider})
+      : dbFactory = dbFactory ?? databaseFactoryIo,
+        pathProvider = pathProvider ?? getApplicationDocumentsDirectory {
+    _todosStream.stream.listen(print);
+  }
+
   // File path to a file in the current directory
   final String dbPath;
+
   final DatabaseFactory dbFactory;
   StoreRef get _todos => StoreRef('todos');
+
   final StreamController<List<Todo>> _todosStream =
       StreamController<List<Todo>>.broadcast();
+
   StoreRef get _refuelings => StoreRef('refuelings');
+
   final StreamController<List<Refueling>> _refuelingsStream =
       StreamController<List<Refueling>>.broadcast();
+
   StoreRef get _cars => StoreRef('cars');
+
   final StreamController<List<Car>> _carsStream =
       StreamController<List<Car>>.broadcast();
+
   StoreRef get _repeats => StoreRef('repeats');
+
   final StreamController<List<Repeat>> _repeatsStream =
       StreamController<List<Repeat>>.broadcast();
+
   final StreamController<int> _notificationIdStream =
       StreamController<int>.broadcast();
+
   final Completer<Database> dbCompleter = Completer<Database>();
+
   final Future<Directory> Function() pathProvider;
 
   Future<String> _getFullFilePath() async {
     final path = await pathProvider();
     return '${path.path}/$dbPath';
   }
-
-  SembastDataRepository(
-      {@required createDb, dbFactory, this.dbPath = 'sample.db', pathProvider})
-      : dbFactory = dbFactory ?? databaseFactoryIo,
-        pathProvider = pathProvider ?? getApplicationDocumentsDirectory {
-          _todosStream.stream.listen(print);
-        }
 
   Future<Database> _openDb() async {
     final path = await _getFullFilePath();

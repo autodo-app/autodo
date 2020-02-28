@@ -7,10 +7,11 @@ import 'package:json_intl/json_intl.dart';
 import 'shared.dart';
 
 class FuelMileageChart extends StatelessWidget {
-  final List<Series<FuelMileagePoint, DateTime>> seriesList;
-  final bool animate;
-
   const FuelMileageChart(this.seriesList, this.animate);
+
+  final List<Series<FuelMileagePoint, DateTime>> seriesList;
+
+  final bool animate;
 
   int lowerBound() {
     final minVal = seriesList[0]
@@ -72,9 +73,9 @@ class FuelMileageChart extends StatelessWidget {
 }
 
 class FuelMileageHistory extends StatelessWidget {
-  final List<Series> data;
-
   const FuelMileageHistory(this.data);
+
+  final List<Series> data;
 
   @override
   Widget build(BuildContext context) => Column(

@@ -5,13 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class FirebaseWriteBatch extends Equatable implements WriteBatchWrapper {
-  final CollectionReference _collection;
-  final WriteBatch _batch;
-
   FirebaseWriteBatch({@required firestoreInstance, @required collection})
       : _batch = firestoreInstance?.batch() ?? Firestore.instance.batch(),
         assert(collection != null),
         _collection = collection;
+
+  final CollectionReference _collection;
+
+  final WriteBatch _batch;
 
   @override
   void updateData(String id, dynamic data) =>

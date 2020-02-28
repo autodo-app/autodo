@@ -8,10 +8,11 @@ abstract class DatabaseEvent extends Equatable {
 }
 
 class UserLoggedIn extends DatabaseEvent {
-  final String uuid;
-  final bool newUser;
-
   const UserLoggedIn(this.uuid, [this.newUser]);
+
+  final String uuid;
+
+  final bool newUser;
 
   @override
   List<Object> get props => [uuid, newUser];
@@ -23,9 +24,9 @@ class UserLoggedIn extends DatabaseEvent {
 class UserLoggedOut extends DatabaseEvent {}
 
 class TrialLogin extends DatabaseEvent {
-  final bool newUser;
-
   const TrialLogin(this.newUser);
+
+  final bool newUser;
 
   @override
   List<Object> get props => [newUser];

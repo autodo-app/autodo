@@ -32,6 +32,8 @@ class Authenticated extends AuthenticationState {
 
 /// Represents an app state where there is a user logged in.
 class RemoteAuthenticated extends AuthenticationState {
+  const RemoteAuthenticated(this.displayName, this.uuid, this.newUser);
+
   /// The email address of the user. Used to represent the user in the GUI.
   final String displayName;
 
@@ -44,8 +46,6 @@ class RemoteAuthenticated extends AuthenticationState {
   /// setup routines to prepare the initial set of data for the user's account.
   final bool newUser;
 
-  const RemoteAuthenticated(this.displayName, this.uuid, this.newUser);
-
   @override
   List<Object> get props => [displayName, uuid, newUser];
 
@@ -55,9 +55,9 @@ class RemoteAuthenticated extends AuthenticationState {
 }
 
 class LocalAuthenticated extends Authenticated {
-  final bool newUser;
-
   const LocalAuthenticated(this.newUser);
+
+  final bool newUser;
 
   @override
   List<Object> get props => [newUser];
@@ -68,11 +68,11 @@ class LocalAuthenticated extends Authenticated {
 
 /// Represents an app state where there is not a user logged in.
 class Unauthenticated extends AuthenticationState {
+  const Unauthenticated({this.errorCode});
+
   /// An optional parameter for the event that describes why an authenticated
   /// user could not be found if it is the result of an error.
   final String errorCode;
-
-  const Unauthenticated({this.errorCode});
 
   @override
   List<Object> get props => [errorCode];

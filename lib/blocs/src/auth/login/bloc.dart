@@ -35,12 +35,12 @@ import 'state.dart';
 /// the GUI, and is responsible for delegating the proper login action to the
 /// [authRepository] upon submission of the [LoginForm].
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  AuthRepository authRepository;
-
   /// Creates a LoginBloc.
   ///
   /// The [authRepository] parameter must be non-null.
   LoginBloc({@required this.authRepository}) : assert(authRepository != null);
+
+  AuthRepository authRepository;
 
   @override
   LoginState get initialState => LoginEmpty();

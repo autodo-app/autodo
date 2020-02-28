@@ -11,9 +11,9 @@ abstract class DrivingDistanceStatsEvent extends Equatable {
 class LoadDrivingDistanceStats extends DrivingDistanceStatsEvent {}
 
 class UpdateDrivingDistanceData extends DrivingDistanceStatsEvent {
-  final List<Car> cars;
-
   const UpdateDrivingDistanceData(this.cars);
+
+  final List<Car> cars;
 
   @override
   List<Object> get props => [cars];

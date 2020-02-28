@@ -10,10 +10,6 @@ import 'package:autodo/util.dart';
 import 'package:json_intl/json_intl.dart';
 
 class CarForm extends StatefulWidget {
-  final String initialValue;
-  final Function(String) onSaved;
-  final FocusNode node, nextNode;
-
   CarForm({
     Key key,
     this.initialValue,
@@ -23,6 +19,12 @@ class CarForm extends StatefulWidget {
   }) : super(key: key) {
     print(initialValue);
   }
+
+  final String initialValue;
+
+  final Function(String) onSaved;
+
+  final FocusNode node, nextNode;
 
   @override
   _CarFormState createState() => _CarFormState();

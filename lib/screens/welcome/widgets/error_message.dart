@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class ErrorMessage extends StatelessWidget {
-  final String msg;
-
   const ErrorMessage(this.msg);
+
+  final String msg;
 
   @override
   Widget build(context) => Padding(

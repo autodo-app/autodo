@@ -13,9 +13,9 @@ import 'todo_delete_button.dart';
 const int DUE_SOON_INTERVAL = 100;
 
 class _TodoTitle extends StatelessWidget {
-  final Todo todo;
-
   const _TodoTitle({Key key, @required this.todo}) : super(key: key);
+
+  final Todo todo;
 
   String preface(BuildContext context) {
     if (todo.completed) {
@@ -43,14 +43,15 @@ class _TodoTitle extends StatelessWidget {
 }
 
 class _TodoCheckbox extends StatelessWidget {
-  final Todo todo;
-  final ValueChanged<bool> onCheckboxChanged;
-
   const _TodoCheckbox({
     Key key,
     @required this.todo,
     @required this.onCheckboxChanged,
   }) : super(key: key);
+
+  final Todo todo;
+
+  final ValueChanged<bool> onCheckboxChanged;
 
   @override
   Widget build(context) => Transform.scale(
@@ -67,9 +68,9 @@ class _TodoCheckbox extends StatelessWidget {
 }
 
 class _TodoDueDate extends StatelessWidget {
-  final Todo todo;
-
   const _TodoDueDate({Key key, @required this.todo}) : super(key: key);
+
+  final Todo todo;
 
   @override
   Widget build(context) => Row(
@@ -84,10 +85,11 @@ class _TodoDueDate extends StatelessWidget {
 }
 
 class _TodoDueMileage extends StatelessWidget {
-  final Todo todo;
-  final commaRegex = RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))');
-
   _TodoDueMileage({Key key, @required this.todo}) : super(key: key);
+
+  final Todo todo;
+
+  final commaRegex = RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))');
 
   String mileageString() {
     if (todo.dueMileage != null) {
@@ -123,9 +125,9 @@ class _TodoDueMileage extends StatelessWidget {
 }
 
 class _TodoLastCompleted extends StatelessWidget {
-  final Todo todo;
-
   const _TodoLastCompleted({Key key, @required this.todo}) : super(key: key);
+
+  final Todo todo;
 
   @override
   Widget build(context) => Row(
@@ -146,9 +148,9 @@ class _TodoLastCompleted extends StatelessWidget {
 }
 
 class _TodoDueInfo extends StatelessWidget {
-  final Todo todo;
-
   const _TodoDueInfo({Key key, @required this.todo}) : super(key: key);
+
+  final Todo todo;
 
   @override
   Widget build(context) => Container(
@@ -170,12 +172,13 @@ class _TodoDueInfo extends StatelessWidget {
 }
 
 class _TodoBody extends StatelessWidget {
-  final Todo todo;
-  final ValueChanged<bool> onCheckboxChanged;
-
   const _TodoBody(
       {Key key, @required this.todo, @required this.onCheckboxChanged})
       : super(key: key);
+
+  final Todo todo;
+
+  final ValueChanged<bool> onCheckboxChanged;
 
   @override
   Widget build(context) => Container(
@@ -193,9 +196,9 @@ class _TodoBody extends StatelessWidget {
 }
 
 class _TodoEditButton extends StatelessWidget {
-  final Todo todo;
-
   const _TodoEditButton({Key key, @required this.todo}) : super(key: key);
+
+  final Todo todo;
 
   @override
   Widget build(context) => ButtonTheme.fromButtonThemeData(
@@ -233,9 +236,9 @@ class _TodoEditButton extends StatelessWidget {
 }
 
 class _TodoFooter extends StatelessWidget {
-  final Todo todo;
-
   const _TodoFooter({Key key, @required this.todo}) : super(key: key);
+
+  final Todo todo;
 
   @override
   Widget build(context) => Row(
@@ -253,48 +256,6 @@ class _TodoFooter extends StatelessWidget {
 }
 
 class TodoCard extends StatelessWidget {
-  final Todo todo;
-  final DismissDirectionCallback onDismissed;
-  final GestureTapCallback onTap;
-  final ValueChanged<bool> onCheckboxChanged;
-  final bool emphasized;
-
-  static final grad1 = LinearGradient(
-      begin: Alignment.centerLeft,
-      end: Alignment.centerRight,
-      colors: [mainColors[300], mainColors[400]]);
-  static final grad2 = LinearGradient(
-      begin: Alignment.topCenter,
-      end: Alignment.bottomCenter,
-      colors: [mainColors[700], mainColors[900]]);
-  final BoxDecoration upcomingDecoration = BoxDecoration(
-      borderRadius: BorderRadius.circular(25),
-      gradient: LinearGradient.lerp(grad1, grad2, 0.5));
-
-  static final grad3 = LinearGradient(
-      begin: Alignment.centerLeft,
-      end: Alignment.centerRight,
-      colors: [Colors.yellow.shade700, Colors.yellow.shade800]);
-  static final grad4 = LinearGradient(
-      begin: Alignment.topCenter,
-      end: Alignment.bottomCenter,
-      colors: [Colors.yellow.shade800, Colors.orange.shade300]);
-  final BoxDecoration duesoonDecoration = BoxDecoration(
-      borderRadius: BorderRadius.circular(25),
-      gradient: LinearGradient.lerp(grad3, grad4, 0.5));
-
-  static final grad5 = LinearGradient(
-      begin: Alignment.centerLeft,
-      end: Alignment.centerRight,
-      colors: [Colors.red.shade300, Colors.red.shade600]);
-  static final grad6 = LinearGradient(
-      begin: Alignment.topCenter,
-      end: Alignment.bottomCenter,
-      colors: [Colors.orange.shade800, Colors.red.shade500]);
-  final BoxDecoration pastdueDecoration = BoxDecoration(
-      borderRadius: BorderRadius.circular(25),
-      gradient: LinearGradient.lerp(grad5, grad6, 0.4));
-
   TodoCard({
     Key key,
     @required this.todo,
@@ -303,6 +264,58 @@ class TodoCard extends StatelessWidget {
     @required this.onCheckboxChanged,
     @required this.emphasized,
   }) : super(key: key);
+
+  final Todo todo;
+
+  final DismissDirectionCallback onDismissed;
+
+  final GestureTapCallback onTap;
+
+  final ValueChanged<bool> onCheckboxChanged;
+
+  final bool emphasized;
+
+  static final grad1 = LinearGradient(
+      begin: Alignment.centerLeft,
+      end: Alignment.centerRight,
+      colors: [mainColors[300], mainColors[400]]);
+
+  static final grad2 = LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: [mainColors[700], mainColors[900]]);
+
+  final BoxDecoration upcomingDecoration = BoxDecoration(
+      borderRadius: BorderRadius.circular(25),
+      gradient: LinearGradient.lerp(grad1, grad2, 0.5));
+
+  static final grad3 = LinearGradient(
+      begin: Alignment.centerLeft,
+      end: Alignment.centerRight,
+      colors: [Colors.yellow.shade700, Colors.yellow.shade800]);
+
+  static final grad4 = LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: [Colors.yellow.shade800, Colors.orange.shade300]);
+
+  final BoxDecoration duesoonDecoration = BoxDecoration(
+      borderRadius: BorderRadius.circular(25),
+      gradient: LinearGradient.lerp(grad3, grad4, 0.5));
+
+  static final grad5 = LinearGradient(
+      begin: Alignment.centerLeft,
+      end: Alignment.centerRight,
+      colors: [Colors.red.shade300, Colors.red.shade600]);
+
+  static final grad6 = LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: [Colors.orange.shade800, Colors.red.shade500]);
+
+  final BoxDecoration pastdueDecoration = BoxDecoration(
+      borderRadius: BorderRadius.circular(25),
+      gradient: LinearGradient.lerp(grad5, grad6, 0.4));
 
   BoxDecoration emphasizedDecoration(todo) {
     if (todo.dueState == TodoDueState.PAST_DUE) {

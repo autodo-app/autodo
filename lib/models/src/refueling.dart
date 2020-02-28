@@ -6,13 +6,6 @@ import 'package:autodo/entities/entities.dart';
 
 @immutable
 class Refueling extends Equatable {
-  final String id;
-  final String carName;
-  final int mileage;
-  final DateTime date;
-  final double amount, cost, efficiency;
-  final Color carColor, efficiencyColor;
-
   const Refueling({
     @required this.carName,
     @required this.mileage,
@@ -28,6 +21,18 @@ class Refueling extends Equatable {
         assert(cost != null),
         assert(amount != null),
         assert(carName != null);
+
+  final String id;
+
+  final String carName;
+
+  final int mileage;
+
+  final DateTime date;
+
+  final double amount, cost, efficiency;
+
+  final Color carColor, efficiencyColor;
 
   Refueling copyWith(
       {String id,

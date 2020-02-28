@@ -9,9 +9,9 @@ import 'package:autodo/widgets/widgets.dart';
 import 'package:json_intl/json_intl.dart';
 
 class _RepeatTitle extends StatelessWidget {
-  final Repeat repeat;
-
   const _RepeatTitle(this.repeat, {Key key}) : super(key: key);
+
+  final Repeat repeat;
 
   @override
   Widget build(context) => Container(
@@ -45,9 +45,9 @@ class _RepeatTitle extends StatelessWidget {
 }
 
 class _RepeatEditButton extends StatelessWidget {
-  final Repeat repeat;
-
   const _RepeatEditButton(this.repeat, {Key key}) : super(key: key);
+
+  final Repeat repeat;
 
   @override
   Widget build(context) => ButtonTheme.fromButtonThemeData(
@@ -70,9 +70,9 @@ class _RepeatEditButton extends StatelessWidget {
 }
 
 class _RepeatDeleteButton extends StatelessWidget {
-  final Repeat repeat;
-
   const _RepeatDeleteButton(this.repeat, {Key key}) : super(key: key);
+
+  final Repeat repeat;
 
   @override
   Widget build(context) => ButtonTheme.fromButtonThemeData(
@@ -96,9 +96,9 @@ class _RepeatDeleteButton extends StatelessWidget {
 }
 
 class RepeatCard extends StatelessWidget {
-  final Repeat repeat;
-
   const RepeatCard({Key key, @required this.repeat}) : super(key: key);
+
+  final Repeat repeat;
 
   @override
   Widget build(context) => Card(

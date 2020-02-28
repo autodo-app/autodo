@@ -13,12 +13,14 @@ class FilteredRefuelingsNotLoaded extends FilteredRefuelingsState {}
 class FilteredRefuelingsLoading extends FilteredRefuelingsState {}
 
 class FilteredRefuelingsLoaded extends FilteredRefuelingsState {
-  final List<Refueling> filteredRefuelings;
-  final List<Car> cars;
-  final VisibilityFilter activeFilter;
-
   const FilteredRefuelingsLoaded(
       this.filteredRefuelings, this.activeFilter, this.cars);
+
+  final List<Refueling> filteredRefuelings;
+
+  final List<Car> cars;
+
+  final VisibilityFilter activeFilter;
 
   @override
   List<Object> get props => [filteredRefuelings, activeFilter, cars];

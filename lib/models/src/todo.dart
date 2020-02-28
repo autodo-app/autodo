@@ -7,12 +7,6 @@ import 'package:autodo/entities/entities.dart';
 
 @immutable
 class Todo extends Equatable {
-  final String id, name, carName, repeatName;
-  final TodoDueState dueState;
-  final int dueMileage, notificationID;
-  final bool completed, estimatedDueDate;
-  final DateTime completedDate, dueDate;
-
   const Todo(
       {this.id,
       this.name,
@@ -25,6 +19,16 @@ class Todo extends Equatable {
       this.estimatedDueDate,
       this.completedDate,
       this.dueDate});
+
+  final String id, name, carName, repeatName;
+
+  final TodoDueState dueState;
+
+  final int dueMileage, notificationID;
+
+  final bool completed, estimatedDueDate;
+
+  final DateTime completedDate, dueDate;
 
   Todo copyWith(
       {String id,

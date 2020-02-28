@@ -25,10 +25,10 @@ abstract class SignupEvent extends Equatable {
 
 /// Tells the [SignupBloc] that the email field of the [SignupForm] has changed.
 class SignupEmailChanged extends SignupEvent {
+  const SignupEmailChanged({@required this.email});
+
   /// The text currently present in the email field of the [SignupForm].
   final String email;
-
-  const SignupEmailChanged({@required this.email});
 
   @override
   List<Object> get props => [email];
@@ -36,10 +36,10 @@ class SignupEmailChanged extends SignupEvent {
 
 /// Tells the [SignupBloc] that the password field of the [SignupForm] has changed.
 class SignupPasswordChanged extends SignupEvent {
+  const SignupPasswordChanged({@required this.password});
+
   /// The text currently present in the password field of the [SignupForm].
   final String password;
-
-  const SignupPasswordChanged({@required this.password});
 
   @override
   List<Object> get props => [password];
@@ -48,16 +48,16 @@ class SignupPasswordChanged extends SignupEvent {
 /// Tells the [SignupBloc] to submit the contents of the [SignupForm] and
 /// authenticate the user.
 class SignupWithCredentialsPressed extends SignupEvent {
+  const SignupWithCredentialsPressed({
+    @required this.email,
+    @required this.password,
+  });
+
   /// The email address for the user to be signed up.
   final String email;
 
   /// The password for the user to be signed up.
   final String password;
-
-  const SignupWithCredentialsPressed({
-    @required this.email,
-    @required this.password,
-  });
 
   @override
   List<Object> get props => [email, password];

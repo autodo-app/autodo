@@ -11,9 +11,9 @@ abstract class TodosEvent extends Equatable {
 class LoadTodos extends TodosEvent {}
 
 class AddTodo extends TodosEvent {
-  final Todo todo;
-
   const AddTodo(this.todo);
+
+  final Todo todo;
 
   @override
   List<Object> get props => [todo];
@@ -23,9 +23,9 @@ class AddTodo extends TodosEvent {
 }
 
 class UpdateTodo extends TodosEvent {
-  final Todo updatedTodo;
-
   const UpdateTodo(this.updatedTodo);
+
+  final Todo updatedTodo;
 
   @override
   List<Object> get props => [updatedTodo];
@@ -35,9 +35,9 @@ class UpdateTodo extends TodosEvent {
 }
 
 class DeleteTodo extends TodosEvent {
-  final Todo todo;
-
   const DeleteTodo(this.todo);
+
+  final Todo todo;
 
   @override
   List<Object> get props => [todo];
@@ -51,9 +51,9 @@ class ClearCompleted extends TodosEvent {}
 class ToggleAll extends TodosEvent {}
 
 class UpdateDueDates extends TodosEvent {
-  final List<Car> cars;
-
   const UpdateDueDates(this.cars);
+
+  final List<Car> cars;
 
   @override
   List<Object> get props => [cars];
@@ -63,9 +63,9 @@ class UpdateDueDates extends TodosEvent {
 }
 
 class RepeatsRefresh extends TodosEvent {
-  final List<Repeat> repeats;
-
   const RepeatsRefresh(this.repeats);
+
+  final List<Repeat> repeats;
 
   @override
   List<Object> get props => [repeats];
@@ -75,10 +75,11 @@ class RepeatsRefresh extends TodosEvent {
 }
 
 class CompleteTodo extends TodosEvent {
-  final Todo todo;
-  final DateTime completedDate;
-
   const CompleteTodo(this.todo, [this.completedDate]);
+
+  final Todo todo;
+
+  final DateTime completedDate;
 
   @override
   List<Object> get props => [todo, completedDate];

@@ -13,13 +13,15 @@ import 'state.dart';
 
 class EfficiencyStatsBloc
     extends Bloc<EfficiencyStatsEvent, EfficiencyStatsState> {
-  final RefuelingsBloc _refuelingsBloc;
-  StreamSubscription _refuelingsSubscription;
-  static const EMA_CUTOFF = 8;
-
   EfficiencyStatsBloc({@required refuelingsBloc})
       : assert(refuelingsBloc != null),
         _refuelingsBloc = refuelingsBloc;
+
+  final RefuelingsBloc _refuelingsBloc;
+
+  StreamSubscription _refuelingsSubscription;
+
+  static const EMA_CUTOFF = 8;
 
   @override
   EfficiencyStatsState get initialState => EfficiencyStatsLoading();

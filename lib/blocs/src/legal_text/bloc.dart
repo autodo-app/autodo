@@ -9,10 +9,11 @@ import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart' as launcher;
 
 class _Parser {
-  final String Function(String) fn;
-  final TextStyle style;
-
   _Parser(this.fn, this.style);
+
+  final String Function(String) fn;
+
+  final TextStyle style;
 }
 
 class MarkdownParser {
@@ -200,11 +201,11 @@ class MarkdownParser {
 }
 
 class LegalBloc extends Bloc<LegalEvent, LegalState> {
-  final AssetBundle _bundle;
-
   LegalBloc({@required bundle})
       : assert(bundle != null),
         _bundle = bundle;
+
+  final AssetBundle _bundle;
 
   @override
   LegalState get initialState => LegalNotLoaded();

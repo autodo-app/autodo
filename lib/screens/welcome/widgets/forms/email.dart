@@ -6,11 +6,13 @@ import 'package:autodo/localization.dart';
 import 'package:json_intl/json_intl.dart';
 
 class EmailForm extends StatelessWidget {
-  final Function onSaved;
-  final FocusNode node, nextNode;
-  final bool login;
-
   const EmailForm({this.onSaved, this.node, this.nextNode, this.login = true});
+
+  final Function onSaved;
+
+  final FocusNode node, nextNode;
+
+  final bool login;
 
   @override
   Widget build(context) => TextFormField(

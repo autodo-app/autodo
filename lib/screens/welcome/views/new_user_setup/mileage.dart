@@ -11,12 +11,14 @@ import 'package:json_intl/json_intl.dart';
 import 'base.dart';
 
 class CarEntryField extends StatefulWidget {
-  final Function next;
-  final Function onNameSaved, onMileageSaved;
-  final GlobalKey<FormState> formKey;
-
   const CarEntryField(
       this.next, this.onNameSaved, this.onMileageSaved, this.formKey);
+
+  final Function next;
+
+  final Function onNameSaved, onMileageSaved;
+
+  final GlobalKey<FormState> formKey;
 
   @override
   State<CarEntryField> createState() =>
@@ -24,14 +26,18 @@ class CarEntryField extends StatefulWidget {
 }
 
 class CarEntryFieldState extends State<CarEntryField> {
-  bool firstWritten = false;
-  FocusNode _nameNode, _mileageNode;
-  Function nextNode;
-  final Function onNameSaved, onMileageSaved;
-  final GlobalKey<FormState> formKey;
-
   CarEntryFieldState(
       this.nextNode, this.onNameSaved, this.onMileageSaved, this.formKey);
+
+  bool firstWritten = false;
+
+  FocusNode _nameNode, _mileageNode;
+
+  Function nextNode;
+
+  final Function onNameSaved, onMileageSaved;
+
+  final GlobalKey<FormState> formKey;
 
   @override
   void initState() {
@@ -106,22 +112,26 @@ class CarEntryFieldState extends State<CarEntryField> {
 }
 
 class MileageScreen extends StatefulWidget {
-  final String mileageEntry;
-  final Key mileageKey;
-  final Function() onNext;
-
   const MileageScreen(this.mileageEntry, this.mileageKey, this.onNext);
+
+  final String mileageEntry;
+
+  final Key mileageKey;
+
+  final Function() onNext;
 
   @override
   MileageScreenState createState() => MileageScreenState(mileageEntry);
 }
 
 class MileageScreenState extends State<MileageScreen> {
-  String mileageEntry;
-  List<GlobalKey<FormState>> formKeys = [GlobalKey<FormState>()];
-  List<Car> cars = [Car()];
-
   MileageScreenState(this.mileageEntry);
+
+  String mileageEntry;
+
+  List<GlobalKey<FormState>> formKeys = [GlobalKey<FormState>()];
+
+  List<Car> cars = [Car()];
 
   Future<void> _next() async {
     var allValidated = true;

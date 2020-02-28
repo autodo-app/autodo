@@ -34,9 +34,6 @@ import 'state.dart';
 /// login actions are provided by the [SignupBloc] and [LoginBloc] respectively.
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
-  final AuthRepository _userRepository;
-  static const String trialUserKey = 'trialUserLoggedIn';
-
   /// Creates an AuthenticationBloc.
   ///
   /// The [userRepository] parameter must be non-null. The [userRepository]
@@ -59,6 +56,10 @@ class AuthenticationBloc
       }
     });
   }
+
+  final AuthRepository _userRepository;
+
+  static const String trialUserKey = 'trialUserLoggedIn';
 
   @override
   AuthenticationState get initialState => Uninitialized();

@@ -13,14 +13,6 @@ import 'state.dart';
 
 class FilteredRefuelingsBloc
     extends Bloc<FilteredRefuelingsEvent, FilteredRefuelingsState> {
-  static const int HUE_RANGE = 60; // range of usable hues is 0-120, or +- 60
-  static const double EFF_VAR = 5.0;
-  static const double HUE_MAX = 360.0;
-
-  final RefuelingsBloc refuelingsBloc;
-  final CarsBloc carsBloc;
-  StreamSubscription refuelingsSubscription, carsSubscription;
-
   FilteredRefuelingsBloc(
       {@required this.refuelingsBloc, @required this.carsBloc}) {
     refuelingsSubscription = refuelingsBloc.listen((state) {
@@ -35,6 +27,19 @@ class FilteredRefuelingsBloc
       }
     });
   }
+
+  /// range of usable hues is 0-120, or +- 60
+  static const int HUE_RANGE = 60;
+
+  static const double EFF_VAR = 5.0;
+
+  static const double HUE_MAX = 360.0;
+
+  final RefuelingsBloc refuelingsBloc;
+
+  final CarsBloc carsBloc;
+
+  StreamSubscription refuelingsSubscription, carsSubscription;
 
   @override
   FilteredRefuelingsState get initialState {

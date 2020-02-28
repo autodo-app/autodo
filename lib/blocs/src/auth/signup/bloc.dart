@@ -29,15 +29,15 @@ import 'state.dart';
 /// A [Bloc] used for validating and submitting the information for the
 /// [SignupScreen].
 class SignupBloc extends Bloc<SignupEvent, SignupState> {
+  SignupBloc({@required authRepository, this.verifyEmail = kReleaseMode})
+      : assert(authRepository != null),
+        _authRepository = authRepository;
+
   final AuthRepository _authRepository;
 
   /// A flag that determines whether a verification email will be sent to the
   /// user that is signing up.
   final bool verifyEmail;
-
-  SignupBloc({@required authRepository, this.verifyEmail = kReleaseMode})
-      : assert(authRepository != null),
-        _authRepository = authRepository;
 
   @override
   SignupState get initialState => SignupEmpty();

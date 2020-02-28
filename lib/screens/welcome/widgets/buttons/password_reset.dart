@@ -8,10 +8,12 @@ import 'package:autodo/theme.dart';
 import 'package:json_intl/json_intl.dart';
 
 class _PasswordResetDialog extends StatefulWidget {
-  final String email;
-  final AuthRepository authRepository;
   const _PasswordResetDialog(Key key, this.email, this.authRepository)
       : super(key: key);
+
+  final String email;
+
+  final AuthRepository authRepository;
 
   @override
   _PasswordResetDialogState createState() => _PasswordResetDialogState();
@@ -81,9 +83,9 @@ class _PasswordResetDialogState extends State<_PasswordResetDialog> {
 }
 
 class PasswordResetButton extends StatelessWidget {
-  final Key dialogKey;
-
   const PasswordResetButton({this.dialogKey});
+
+  final Key dialogKey;
 
   @override
   Widget build(context) => FlatButton(

@@ -11,9 +11,9 @@ abstract class RefuelingsState extends Equatable {
 class RefuelingsLoading extends RefuelingsState {}
 
 class RefuelingsLoaded extends RefuelingsState {
-  final List<Refueling> refuelings;
-
   const RefuelingsLoaded([this.refuelings = const []]);
+
+  final List<Refueling> refuelings;
 
   @override
   List<Object> get props => [...refuelings];

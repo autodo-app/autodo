@@ -13,10 +13,6 @@ typedef _OnSaveCallback = Function(
     int mileage, DateTime date, double amount, double cost, String car);
 
 class _MileageForm extends StatelessWidget {
-  final Refueling refueling;
-  final Function(String) onSaved;
-  final FocusNode node, nextNode;
-
   const _MileageForm({
     Key key,
     this.refueling,
@@ -24,6 +20,12 @@ class _MileageForm extends StatelessWidget {
     @required this.node,
     @required this.nextNode,
   }) : super(key: key);
+
+  final Refueling refueling;
+
+  final Function(String) onSaved;
+
+  final FocusNode node, nextNode;
 
   @override
   Widget build(context) => TextFormField(
@@ -50,10 +52,6 @@ class _MileageForm extends StatelessWidget {
 }
 
 class _AmountForm extends StatelessWidget {
-  final Refueling refueling;
-  final Function(String) onSaved;
-  final FocusNode node, nextNode;
-
   const _AmountForm({
     Key key,
     this.refueling,
@@ -61,6 +59,12 @@ class _AmountForm extends StatelessWidget {
     @required this.node,
     @required this.nextNode,
   }) : super(key: key);
+
+  final Refueling refueling;
+
+  final Function(String) onSaved;
+
+  final FocusNode node, nextNode;
 
   @override
   Widget build(context) => TextFormField(
@@ -87,10 +91,6 @@ class _AmountForm extends StatelessWidget {
 }
 
 class _CostForm extends StatelessWidget {
-  final Refueling refueling;
-  final Function(String) onSaved;
-  final FocusNode node, nextNode;
-
   const _CostForm({
     Key key,
     this.refueling,
@@ -98,6 +98,12 @@ class _CostForm extends StatelessWidget {
     @required this.node,
     @required this.nextNode,
   }) : super(key: key);
+
+  final Refueling refueling;
+
+  final Function(String) onSaved;
+
+  final FocusNode node, nextNode;
 
   @override
   Widget build(context) => TextFormField(
@@ -124,10 +130,6 @@ class _CostForm extends StatelessWidget {
 }
 
 class _DateForm extends StatefulWidget {
-  final Refueling refueling;
-  final Function(String) onSaved;
-  final FocusNode node, nextNode;
-
   const _DateForm({
     Key key,
     this.refueling,
@@ -136,17 +138,25 @@ class _DateForm extends StatefulWidget {
     @required this.nextNode,
   }) : super(key: key);
 
+  final Refueling refueling;
+
+  final Function(String) onSaved;
+
+  final FocusNode node, nextNode;
+
   @override
   _DateFormState createState() =>
       _DateFormState(node: node, nextNode: nextNode, initial: refueling?.date);
 }
 
 class _DateFormState extends State<_DateForm> {
-  TextEditingController _ctrl;
-  DateTime initial;
-  FocusNode node, nextNode;
-
   _DateFormState({this.node, this.nextNode, this.initial});
+
+  TextEditingController _ctrl;
+
+  DateTime initial;
+
+  FocusNode node, nextNode;
 
   @override
   void initState() {
@@ -235,11 +245,13 @@ class _DateFormState extends State<_DateForm> {
 }
 
 class _CarToggleForm extends StatefulWidget {
-  final List<bool> initialState;
-  final List<Car> cars;
-  final Function onSaved;
-
   const _CarToggleForm(this.initialState, this.cars, this.onSaved);
+
+  final List<bool> initialState;
+
+  final List<Car> cars;
+
+  final Function onSaved;
 
   @override
   _CarToggleFormState createState() =>
@@ -247,11 +259,13 @@ class _CarToggleForm extends StatefulWidget {
 }
 
 class _CarToggleFormState extends State<_CarToggleForm> {
-  List<bool> isSelected;
-  final List<Car> cars;
-  final Function onSaved;
-
   _CarToggleFormState(this.isSelected, this.cars, this.onSaved);
+
+  List<bool> isSelected;
+
+  final List<Car> cars;
+
+  final Function onSaved;
 
   @override
   Widget build(context) => FormField(
@@ -292,11 +306,6 @@ class _CarToggleFormState extends State<_CarToggleForm> {
 }
 
 class RefuelingAddEditScreen extends StatefulWidget {
-  final bool isEditing;
-  final _OnSaveCallback onSave;
-  final Refueling refueling;
-  final List<Car> cars;
-
   const RefuelingAddEditScreen({
     Key key = const ValueKey('__add_edit_refueling__'),
     @required this.onSave,
@@ -304,6 +313,13 @@ class RefuelingAddEditScreen extends StatefulWidget {
     @required this.cars,
     this.refueling,
   }) : super(key: key);
+
+  final bool isEditing;
+  final _OnSaveCallback onSave;
+
+  final Refueling refueling;
+
+  final List<Car> cars;
 
   @override
   _RefuelingAddEditScreenState createState() => _RefuelingAddEditScreenState();

@@ -11,9 +11,9 @@ abstract class CarsState extends Equatable {
 class CarsLoading extends CarsState {}
 
 class CarsLoaded extends CarsState {
-  final List<Car> cars;
-
   const CarsLoaded([this.cars = const []]);
+
+  final List<Car> cars;
 
   @override
   List<Object> get props => [...cars];

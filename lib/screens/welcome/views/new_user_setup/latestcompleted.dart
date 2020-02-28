@@ -11,17 +11,20 @@ import 'new_user_screen_page.dart';
 import 'base.dart';
 
 class LatestRepeatsScreen extends StatefulWidget {
-  final GlobalKey<FormState> repeatKey;
-  final Function() onNext;
-  final NewUserScreenPage page;
-  final Bloc todosBloc;
-
   const LatestRepeatsScreen(
     this.repeatKey,
     this.onNext,
     this.page, {
     this.todosBloc,
   });
+
+  final GlobalKey<FormState> repeatKey;
+
+  final Function() onNext;
+
+  final NewUserScreenPage page;
+
+  final Bloc todosBloc;
 
   @override
   LatestRepeatsScreenState createState() =>
@@ -30,13 +33,17 @@ class LatestRepeatsScreen extends StatefulWidget {
 
 class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
     with TickerProviderStateMixin {
-  bool expanded, pageTransition, pageWillBeVisible;
-  AnimationController openCtrl;
-  Animation<double> openCurve;
-  FocusNode _oilNode, _tiresNode;
-  final TodosBloc todosBloc;
-
   LatestRepeatsScreenState(this.pageWillBeVisible, this.todosBloc);
+
+  bool expanded, pageTransition, pageWillBeVisible;
+
+  AnimationController openCtrl;
+
+  Animation<double> openCurve;
+
+  FocusNode _oilNode, _tiresNode;
+
+  final TodosBloc todosBloc;
 
   Future<void> _next() async {
     if (widget.repeatKey.currentState.validate()) {

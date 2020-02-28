@@ -13,15 +13,6 @@ import 'event.dart';
 import 'state.dart';
 
 class PaidVersionBloc extends Bloc<PaidVersionEvent, PaidVersionState> {
-  static const paidVersionId = 'autodo_paid';
-  String localVerificationKey;
-
-  final DatabaseBloc _dbBloc;
-  final InAppPurchaseConnection _purchaseConn;
-  StreamSubscription _dbSubscription, _purchaseSubscription;
-  RouteObserver observer = RouteObserver();
-  static const platform = MethodChannel('com.jonathanbayless.autodo/iap');
-
   PaidVersionBloc({InAppPurchaseConnection conn, @required DatabaseBloc dbBloc})
       : _dbBloc = dbBloc,
         _purchaseConn = conn ?? InAppPurchaseConnection.instance {
@@ -55,6 +46,20 @@ class PaidVersionBloc extends Bloc<PaidVersionEvent, PaidVersionState> {
       }
     });
   }
+
+  static const paidVersionId = 'autodo_paid';
+
+  String localVerificationKey;
+
+  final DatabaseBloc _dbBloc;
+
+  final InAppPurchaseConnection _purchaseConn;
+
+  StreamSubscription _dbSubscription, _purchaseSubscription;
+
+  RouteObserver observer = RouteObserver();
+
+  static const platform = MethodChannel('com.jonathanbayless.autodo/iap');
 
   DataRepository get repo => (_dbBloc.state is DbLoaded)
       ? (_dbBloc.state as DbLoaded).repository

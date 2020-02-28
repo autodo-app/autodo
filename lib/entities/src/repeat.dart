@@ -3,13 +3,16 @@ import 'package:equatable/equatable.dart';
 import 'package:sembast/sembast.dart';
 
 class RepeatEntity extends Equatable {
-  final String id, name;
-  final int mileageInterval;
-  final Duration dateInterval;
-  final List<String> cars;
-
   const RepeatEntity(
       this.id, this.name, this.mileageInterval, this.dateInterval, this.cars);
+
+  final String id, name;
+
+  final int mileageInterval;
+
+  final Duration dateInterval;
+
+  final List<String> cars;
 
   @override
   List<Object> get props => [id, name, mileageInterval, dateInterval, cars];

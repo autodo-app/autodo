@@ -42,11 +42,16 @@ String intValidator(String val) {
 }
 
 class RGB extends Equatable {
-  final double r; // a fraction between 0 and 1
-  final double g; // a fraction between 0 and 1
-  final double b; // a fraction between 0 and 1
-
   const RGB(this.r, this.g, this.b);
+
+  /// a fraction between 0 and 1
+  final double r;
+
+  /// a fraction between 0 and 1
+  final double g;
+
+  /// a fraction between 0 and 1
+  final double b;
 
   int toValue() {
     final red = (r * 255).toInt();
@@ -63,11 +68,16 @@ class RGB extends Equatable {
 }
 
 class HSV extends Equatable {
-  final double h; // angle in degrees
-  final double s; // a fraction between 0 and 1
-  final double v; // a fraction between 0 and 1
-
   const HSV(this.h, this.s, this.v);
+
+  /// angle in degrees
+  final double h;
+
+  /// a fraction between 0 and 1
+  final double s;
+
+  /// a fraction between 0 and 1
+  final double v;
 
   int toValue() => hsv2rgb(this).toValue();
 

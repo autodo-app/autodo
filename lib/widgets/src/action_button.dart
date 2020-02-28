@@ -6,11 +6,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:autodo/integ_test_keys.dart';
 
 class AutodoActionButton extends StatefulWidget {
-  final Key mainButtonKey;
-  final List<Key> miniButtonKeys;
-  final List<MaterialPageRoute> Function() miniButtonRoutes;
-  final TickerProvider ticker;
-
   const AutodoActionButton({
     Key key,
     this.mainButtonKey = IntegrationTestKeys.mainFab,
@@ -19,6 +14,14 @@ class AutodoActionButton extends StatefulWidget {
     this.ticker,
   }) : super(key: key ?? IntegrationTestKeys.fabKey);
 
+  final Key mainButtonKey;
+
+  final List<Key> miniButtonKeys;
+
+  final List<MaterialPageRoute> Function() miniButtonRoutes;
+
+  final TickerProvider ticker;
+
   @override
   _AutodoActionButtonState createState() => _AutodoActionButtonState(
       mainButtonKey, miniButtonKeys, miniButtonRoutes, ticker);
@@ -26,14 +29,18 @@ class AutodoActionButton extends StatefulWidget {
 
 class _AutodoActionButtonState extends State<AutodoActionButton>
     with SingleTickerProviderStateMixin {
-  AnimationController _controller;
-  final Key mainButtonKey;
-  final List<Key> miniButtonKeys;
-  final List<MaterialPageRoute> Function() miniButtonRoutes;
-  final TickerProvider ticker;
-
   _AutodoActionButtonState(this.mainButtonKey, this.miniButtonKeys,
       this.miniButtonRoutes, this.ticker);
+
+  AnimationController _controller;
+
+  final Key mainButtonKey;
+
+  final List<Key> miniButtonKeys;
+
+  final List<MaterialPageRoute> Function() miniButtonRoutes;
+
+  final TickerProvider ticker;
 
   static const List<Map<String, dynamic>> icons = [
     {
