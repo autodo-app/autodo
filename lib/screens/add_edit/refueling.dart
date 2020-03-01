@@ -7,7 +7,6 @@ import 'package:autodo/util.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:json_intl/json_intl.dart';
-import 'package:preferences/preferences.dart';
 
 import 'forms/barrel.dart';
 
@@ -31,10 +30,7 @@ class _MileageForm extends StatelessWidget {
 
   @override
   Widget build(context) {
-    final distance = Distance(
-      DistanceUnit.values[PrefService.of(context).getInt('length_unit')],
-      Localizations.localeOf(context),
-    );
+    final distance = Distance.of(context);
 
     return TextFormField(
       decoration: InputDecoration(
@@ -77,10 +73,7 @@ class _AmountForm extends StatelessWidget {
 
   @override
   Widget build(context) {
-    final volume = Volume(
-      VolumeUnit.values[PrefService.of(context).getInt('volume_unit')],
-      Localizations.localeOf(context),
-    );
+    final volume = Volume.of(context);
 
     return TextFormField(
       decoration: InputDecoration(
@@ -123,10 +116,7 @@ class _CostForm extends StatelessWidget {
 
   @override
   Widget build(context) {
-    final currency = Currency(
-      PrefService.of(context).getString('currency'),
-      Localizations.localeOf(context),
-    );
+    final currency = Currency.of(context);
 
     return TextFormField(
       decoration: InputDecoration(

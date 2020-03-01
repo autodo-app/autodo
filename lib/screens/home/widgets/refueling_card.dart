@@ -1,15 +1,13 @@
+import 'package:autodo/blocs/blocs.dart';
+import 'package:autodo/localization.dart';
+import 'package:autodo/models/models.dart';
+import 'package:autodo/screens/add_edit/barrel.dart';
 import 'package:autodo/units/units.dart';
+import 'package:autodo/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:autodo/models/models.dart';
-import 'package:autodo/blocs/blocs.dart';
-import 'package:autodo/widgets/widgets.dart';
-import 'package:autodo/screens/add_edit/barrel.dart';
-import 'package:autodo/localization.dart';
 import 'package:intl/intl.dart';
 import 'package:json_intl/json_intl.dart';
-import 'package:preferences/preferences.dart';
 
 class _RefuelingTitle extends StatelessWidget {
   const _RefuelingTitle({Key key, @required this.refueling}) : super(key: key);
@@ -23,10 +21,7 @@ class _RefuelingTitle extends StatelessWidget {
 
   @override
   Widget build(context) {
-    final distance = Distance(
-      DistanceUnit.values[PrefService.of(context).getInt('length_unit')],
-      Localizations.localeOf(context),
-    );
+    final distance = Distance.of(context);
 
     return RichText(
       text: TextSpan(
@@ -60,10 +55,7 @@ class _RefuelingCost extends StatelessWidget {
 
   @override
   Widget build(context) {
-    final currency = Currency(
-      PrefService.of(context).getString('currency'),
-      Localizations.localeOf(context),
-    );
+    final currency = Currency.of(context);
 
     return RichText(
       text: TextSpan(
@@ -88,10 +80,7 @@ class _RefuelingAmount extends StatelessWidget {
 
   @override
   Widget build(context) {
-    final volume = Volume(
-      VolumeUnit.values[PrefService.of(context).getInt('volume_unit')],
-      Localizations.localeOf(context),
-    );
+    final volume = Volume.of(context);
 
     return RichText(
       text: TextSpan(

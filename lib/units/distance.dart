@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:json_intl/json_intl.dart';
+import 'package:preferences/preferences.dart';
 
 import '../localization.dart';
 import 'conversion.dart';
@@ -11,6 +12,11 @@ enum DistanceUnit { metric, imperial }
 
 class Distance extends UnitConversion<DistanceUnit> {
   const Distance(DistanceUnit unit, Locale locale) : super(unit, locale);
+
+  factory Distance.of(BuildContext context) => Distance(
+        DistanceUnit.values[PrefService.of(context).getInt('length_unit')],
+        Localizations.localeOf(context),
+      );
 
   static const kilometer = 1000.0;
   static const miles = 1.609344 * kilometer;

@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:json_intl/json_intl.dart';
-import 'package:preferences/preferences.dart';
 
 import 'todo_delete_button.dart';
 
@@ -93,10 +92,7 @@ class _TodoDueMileage extends StatelessWidget {
 
   @override
   Widget build(context) {
-    final distance = Distance(
-      DistanceUnit.values[PrefService.of(context).getInt('length_unit')],
-      Localizations.localeOf(context),
-    );
+    final distance = Distance.of(context);
 
     return Row(
       children: <Widget>[
