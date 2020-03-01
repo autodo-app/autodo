@@ -19,11 +19,7 @@
   "delete_account": "Delete Account",
   "distance_units_short": "(mi)",
   "distance_units": "miles",
-<<<<<<< HEAD
-  "driving_distance_history": "Driving Distance History",
-=======
   "driving_distance_history": "Driving Distance History (mi/day)",
->>>>>>> e475b234f44c518ab0dfdb786018867d56b4881a
   "due_at": "Due At",
   "due_date": "Due Date",
   "due_mileage": "Due Mileage *",
@@ -37,11 +33,7 @@
   "filter_todos": "Filter ToDos",
   "first_time_doing_task": "First Time Doing This Task.",
   "forgot_your_password": "Forgot your password?",
-<<<<<<< HEAD
-  "fuel_efficiency_history": "Fuel Efficiency History",
-=======
   "fuel_efficiency_history": "Fuel Efficiency History (mpg)",
->>>>>>> e475b234f44c518ab0dfdb786018867d56b4881a
   "fuel_units": "gal",
   "got_it_bang": "Got It!",
   "interval": "Interval:",
@@ -62,10 +54,7 @@
   "money_units_suffix": "(USD)",
   "money_units": "$",
   "next": "Next",
-<<<<<<< HEAD
-=======
   "no_data_refuelings": "Need at least 3 refuelings to see efficiency data.",
->>>>>>> e475b234f44c518ab0dfdb786018867d56b4881a
   "no_data": "No Data Available to Display.",
   "no": "no",
   "odom_reading": "Odometer Reading",
