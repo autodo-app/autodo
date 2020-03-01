@@ -23,7 +23,7 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
     });
   }
 
-  static const int MAX_MPG = 0xffff;
+  static const double MAX_MPG = 0xffff;
 
   // don't know why anyone would enter this many, but preventing overflow here
   static const int MAX_NUM_REFUELINGS = 0xffff;

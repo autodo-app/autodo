@@ -39,7 +39,7 @@ class RefuelingEntity extends Equatable {
 
   final String carName;
 
-  final int mileage;
+  final double mileage;
 
   final DateTime date;
 
@@ -69,7 +69,7 @@ class RefuelingEntity extends Equatable {
     return RefuelingEntity(
       snap.documentID,
       snap.data['carName'],
-      snap.data['mileage'],
+      snap.data['mileage'].toDouble(),
       (snap.data['date'] == null)
           ? null
           : DateTime.fromMillisecondsSinceEpoch(snap.data['date']),

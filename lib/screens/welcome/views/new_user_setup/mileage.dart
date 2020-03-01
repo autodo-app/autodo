@@ -187,7 +187,7 @@ class MileageScreenState extends State<MileageScreen> {
         carFields.add(CarEntryField((i == cars.length - 1) ? _next : null,
             (val) {
           cars[i] = cars[i].copyWith(name: val);
-        }, (val) => cars[i] = cars[i].copyWith(mileage: int.parse(val)),
+        }, (val) => cars[i] = cars[i].copyWith(mileage: double.parse(val)),
             formKeys[i]));
       }
 

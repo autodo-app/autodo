@@ -11,7 +11,12 @@ import 'package:json_intl/json_intl.dart';
 import 'forms/barrel.dart';
 
 typedef _OnSaveCallback = Function(
-    int mileage, DateTime date, double amount, double cost, String car);
+  double mileage,
+  DateTime date,
+  double amount,
+  double cost,
+  String car,
+);
 
 class _MileageForm extends StatelessWidget {
   const _MileageForm({
@@ -32,6 +37,11 @@ class _MileageForm extends StatelessWidget {
   Widget build(context) {
     final distance = Distance.of(context);
 
+    var value = '';
+    if (refueling?.mileage != null) {
+      value = distance.internalToUnit(refueling.mileage).round().toString();
+    }
+
     return TextFormField(
       decoration: InputDecoration(
         hintText: JsonIntl.of(context).get(IntlKeys.requiredLiteral),
@@ -45,7 +55,7 @@ class _MileageForm extends StatelessWidget {
             EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
       ),
       autofocus: true,
-      initialValue: refueling?.mileage?.toString() ?? '',
+      initialValue: value,
       keyboardType: TextInputType.numberWithOptions(decimal: false),
       validator: intValidator,
       onSaved: onSaved,
@@ -75,6 +85,11 @@ class _AmountForm extends StatelessWidget {
   Widget build(context) {
     final volume = Volume.of(context);
 
+    var value = '';
+    if (refueling?.amount != null) {
+      value = volume.internalToUnit(refueling.amount).toStringAsFixed(2);
+    }
+
     return TextFormField(
       decoration: InputDecoration(
         hintText: JsonIntl.of(context).get(IntlKeys.requiredLiteral),
@@ -88,7 +103,7 @@ class _AmountForm extends StatelessWidget {
             EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
       ),
       autofocus: true,
-      initialValue: refueling?.amount?.toString() ?? '',
+      initialValue: value,
       keyboardType: TextInputType.numberWithOptions(decimal: true),
       validator: doubleValidator,
       onSaved: onSaved,
@@ -118,6 +133,11 @@ class _CostForm extends StatelessWidget {
   Widget build(context) {
     final currency = Currency.of(context);
 
+    var value = '';
+    if (refueling?.cost != null) {
+      value = currency.unitToInternal(refueling.cost).toString();
+    }
+
     return TextFormField(
       decoration: InputDecoration(
         hintText: JsonIntl.of(context).get(IntlKeys.requiredLiteral),
@@ -131,7 +151,7 @@ class _CostForm extends StatelessWidget {
             EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
       ),
       autofocus: true,
-      initialValue: refueling?.cost?.toString() ?? '',
+      initialValue: value,
       keyboardType: TextInputType.numberWithOptions(decimal: true),
       validator: doubleValidator,
       onSaved: onSaved,
@@ -341,7 +361,7 @@ class RefuelingAddEditScreen extends StatefulWidget {
 class _RefuelingAddEditScreenState extends State<RefuelingAddEditScreen> {
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  int _mileage;
+  double _mileage;
   DateTime _date;
   double _amount, _cost;
   String _car;
@@ -411,7 +431,7 @@ class _RefuelingAddEditScreenState extends State<RefuelingAddEditScreen> {
                         : Padding(padding: EdgeInsets.fromLTRB(0, 16, 0, 16)),
                     _MileageForm(
                         refueling: widget.refueling,
-                        onSaved: (val) => _mileage = int.parse(val),
+                        onSaved: (val) => _mileage = double.parse(val),
                         node: _mileageNode,
                         nextNode: _carNode),
                     Padding(padding: EdgeInsets.fromLTRB(0, 16, 0, 16)),

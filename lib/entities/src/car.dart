@@ -22,7 +22,7 @@ class CarEntity extends Equatable {
     return CarEntity(
         (snap.key is String) ? snap.key : '${snap.key}',
         snap.value['name'] as String,
-        snap.value['mileage'] as int,
+        snap.value['mileage'] as double,
         snap.value['numRefuelings'] as int,
         snap.value['averageEfficiency'] as double,
         snap.value['distanceRate'] as double,
@@ -43,7 +43,9 @@ class CarEntity extends Equatable {
 
   final String id, name;
 
-  final int mileage, numRefuelings;
+  final double mileage;
+
+  final int numRefuelings;
 
   final double averageEfficiency, distanceRate;
 
@@ -72,7 +74,7 @@ class CarEntity extends Equatable {
     return CarEntity(
         snap.documentID,
         snap.data['name'] as String,
-        snap.data['mileage'] as int,
+        (snap.data['mileage'] as num).toDouble(),
         snap.data['numRefuelings'] as int,
         snap.data['averageEfficiency'] as double,
         snap.data['distanceRate'] as double,

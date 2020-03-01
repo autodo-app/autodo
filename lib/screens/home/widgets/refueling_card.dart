@@ -158,10 +158,11 @@ class _RefuelingEditButton extends StatelessWidget {
                 onSave: (m, d, a, c, n) {
                   BlocProvider.of<RefuelingsBloc>(context)
                       .add(UpdateRefueling(refueling.copyWith(
-                    mileage: m,
+                    mileage:
+                        Distance.of(context, listen: false).unitToInternal(m),
                     date: d,
-                    amount: a,
-                    cost: c,
+                    amount: Volume.of(context, listen: false).unitToInternal(a),
+                    cost: Currency.of(context, listen: false).unitToInternal(c),
                     carName: n,
                   )));
                 },
