@@ -44,6 +44,9 @@ jobs:
     - run: echo "${{ secrets.google_services }}" | base64 --decode > ./android/app/google-services.json
     - run: echo "${{ secrets.google_services_plist }}" > ./ios/GoogleService-Info.plist
     - run: echo "${{ secrets.info_plist }}" > ./ios/Runner/Info.plist
+    - run: flutter clean
+    - run: rm ./ios/Podfile.lock
+    - run: pod install
     - run: flutter build ios --release --no-codesign
       env:
         KEY_ALIAS: ${{ secrets.key_alias }}
