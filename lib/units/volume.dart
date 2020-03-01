@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:json_intl/json_intl.dart';
 import 'package:preferences/preferences.dart';
+import 'package:provider/provider.dart';
 
 import '../localization.dart';
 import 'conversion.dart';
@@ -13,8 +14,11 @@ enum VolumeUnit { metric, imperial, us }
 class Volume extends UnitConversion<VolumeUnit> {
   const Volume(VolumeUnit unit, Locale locale) : super(unit, locale);
 
-  factory Volume.of(BuildContext context) => Volume(
-        VolumeUnit.values[PrefService.of(context).getInt('volume_unit')],
+  factory Volume.of(BuildContext context, {bool listen = true}) => Volume(
+        VolumeUnit.values[Provider.of<BasePrefService>(
+          context,
+          listen: listen,
+        ).getInt('volume_unit')],
         Localizations.localeOf(context),
       );
 
