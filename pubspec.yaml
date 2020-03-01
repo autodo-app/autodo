@@ -33,7 +33,7 @@ dependencies:
   charts_flutter: ^0.8.1
   sliding_up_panel: ^0.3.6
   bloc: ^3.0.0
-  flutter_bloc: ^3.1.0
+  flutter_bloc: ^3.2.0
   google_sign_in: any
   equatable: any
   font_awesome_flutter: any
