@@ -3,14 +3,18 @@ import 'dart:ui';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:preferences/preferences.dart';
+import 'package:provider/provider.dart';
 
 import 'conversion.dart';
 
 class Currency extends UnitConversion<String> {
   const Currency(String unit, Locale locale) : super(unit, locale);
 
-  factory Currency.of(BuildContext context) => Currency(
-        PrefService.of(context).getString('currency'),
+  factory Currency.of(BuildContext context, {bool listen = true}) => Currency(
+        Provider.of<BasePrefService>(
+          context,
+          listen: listen,
+        ).getString('currency'),
         Localizations.localeOf(context),
       );
 

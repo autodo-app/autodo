@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:json_intl/json_intl.dart';
 import 'package:preferences/preferences.dart';
+import 'package:provider/provider.dart';
 
 import '../localization.dart';
 import 'conversion.dart';
@@ -13,8 +14,11 @@ enum DistanceUnit { metric, imperial }
 class Distance extends UnitConversion<DistanceUnit> {
   const Distance(DistanceUnit unit, Locale locale) : super(unit, locale);
 
-  factory Distance.of(BuildContext context) => Distance(
-        DistanceUnit.values[PrefService.of(context).getInt('length_unit')],
+  factory Distance.of(BuildContext context, {bool listen = true}) => Distance(
+        DistanceUnit.values[Provider.of<BasePrefService>(
+          context,
+          listen: listen,
+        ).getInt('length_unit')],
         Localizations.localeOf(context),
       );
 
