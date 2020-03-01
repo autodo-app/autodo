@@ -1,3 +1,4 @@
+import 'package:autodo/units/units.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -8,6 +9,7 @@ import 'package:autodo/screens/add_edit/barrel.dart';
 import 'package:autodo/localization.dart';
 import 'package:intl/intl.dart';
 import 'package:json_intl/json_intl.dart';
+import 'package:preferences/preferences.dart';
 
 class _RefuelingTitle extends StatelessWidget {
   const _RefuelingTitle({Key key, @required this.refueling}) : super(key: key);
@@ -20,27 +22,35 @@ class _RefuelingTitle extends StatelessWidget {
       style: Theme.of(context).primaryTextTheme.bodyText2);
 
   @override
-  Widget build(context) => RichText(
-        text: TextSpan(
-          children: [
-            // Todo: Improve this translation
-            TextSpan(
-                text: '${JsonIntl.of(context).get(IntlKeys.refueling)} ',
-                style: Theme.of(context).primaryTextTheme.bodyText2),
-            dateField(context),
-            TextSpan(
-                text: '${JsonIntl.of(context).get(IntlKeys.at)} ',
-                style: Theme.of(context).primaryTextTheme.bodyText2),
-            TextSpan(
-                text:
-                    '${NumberFormat.decimalPattern().format(refueling.mileage)} ',
-                style: Theme.of(context).primaryTextTheme.subtitle2),
-            TextSpan(
-                text: JsonIntl.of(context).get(IntlKeys.distanceUnits),
-                style: Theme.of(context).primaryTextTheme.bodyText2)
-          ],
-        ),
-      );
+  Widget build(context) {
+    final distance = Distance(
+      DistanceUnit.values[PrefService.of(context).getInt('length_unit')],
+      Localizations.localeOf(context),
+    );
+
+    return RichText(
+      text: TextSpan(
+        children: [
+          // Todo: Improve this translation
+          TextSpan(
+              text: '${JsonIntl.of(context).get(IntlKeys.refueling)} ',
+              style: Theme.of(context).primaryTextTheme.bodyText2),
+          dateField(context),
+          TextSpan(
+              text: '${JsonIntl.of(context).get(IntlKeys.at)} ',
+              style: Theme.of(context).primaryTextTheme.bodyText2),
+          TextSpan(
+            text: distance.format(refueling.mileage),
+            style: Theme.of(context).primaryTextTheme.subtitle2,
+            children: [TextSpan(text: ' ')],
+          ),
+          TextSpan(
+              text: distance.unitString(context),
+              style: Theme.of(context).primaryTextTheme.bodyText2)
+        ],
+      ),
+    );
+  }
 }
 
 class _RefuelingCost extends StatelessWidget {
@@ -49,20 +59,26 @@ class _RefuelingCost extends StatelessWidget {
   final Refueling refueling;
 
   @override
-  Widget build(context) => RichText(
-        text: TextSpan(
-          children: [
-            TextSpan(
-                // Todo: Improve this translation
-                text: '${JsonIntl.of(context).get(IntlKeys.totalCost)}: ',
-                style: Theme.of(context).primaryTextTheme.bodyText2),
-            TextSpan(
-                text: NumberFormat.simpleCurrency(name: 'USD')
-                    .format(refueling.cost), // TODO: check unit
-                style: Theme.of(context).primaryTextTheme.subtitle2),
-          ],
-        ),
-      );
+  Widget build(context) {
+    final currency = Currency(
+      PrefService.of(context).getString('currency'),
+      Localizations.localeOf(context),
+    );
+
+    return RichText(
+      text: TextSpan(
+        children: [
+          TextSpan(
+              // Todo: Improve this translation
+              text: '${JsonIntl.of(context).get(IntlKeys.totalCost)}: ',
+              style: Theme.of(context).primaryTextTheme.bodyText2),
+          TextSpan(
+              text: currency.format(refueling.cost),
+              style: Theme.of(context).primaryTextTheme.subtitle2),
+        ],
+      ),
+    );
+  }
 }
 
 class _RefuelingAmount extends StatelessWidget {
@@ -71,22 +87,32 @@ class _RefuelingAmount extends StatelessWidget {
   final Refueling refueling;
 
   @override
-  Widget build(context) => RichText(
-        text: TextSpan(
-          children: [
-            TextSpan(
-                // Todo: Improve this translation
-                text: '${JsonIntl.of(context).get(IntlKeys.totalAmount)}: ',
-                style: Theme.of(context).primaryTextTheme.bodyText2),
-            TextSpan(
-                text: NumberFormat(',###.0#').format(refueling.amount),
-                style: Theme.of(context).primaryTextTheme.subtitle2),
-            TextSpan(
-                text: ' ${JsonIntl.of(context).get(IntlKeys.fuelUnits)}',
-                style: Theme.of(context).primaryTextTheme.bodyText2)
-          ],
-        ),
-      );
+  Widget build(context) {
+    final volume = Volume(
+      VolumeUnit.values[PrefService.of(context).getInt('volume_unit')],
+      Localizations.localeOf(context),
+    );
+
+    return RichText(
+      text: TextSpan(
+        children: [
+          TextSpan(
+              // Todo: Improve this translation
+              text: '${JsonIntl.of(context).get(IntlKeys.totalAmount)}: ',
+              style: Theme.of(context).primaryTextTheme.bodyText2),
+          TextSpan(
+            text: volume.format(refueling.amount),
+            style: Theme.of(context).primaryTextTheme.subtitle2,
+            children: [TextSpan(text: ' ')],
+          ),
+          TextSpan(
+            text: volume.unitString(context),
+            style: Theme.of(context).primaryTextTheme.bodyText2,
+          )
+        ],
+      ),
+    );
+  }
 }
 
 class _RefuelingBody extends StatelessWidget {
