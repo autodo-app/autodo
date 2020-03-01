@@ -24,7 +24,9 @@ class Todo extends Equatable {
 
   final TodoDueState dueState;
 
-  final int dueMileage, notificationID;
+  final double dueMileage;
+
+  final int notificationID;
 
   final bool completed, estimatedDueDate;
 
@@ -36,7 +38,7 @@ class Todo extends Equatable {
       String carName,
       String repeatName,
       TodoDueState dueState,
-      int dueMileage,
+      double dueMileage,
       int notificationID,
       bool completed,
       bool estimatedDueDate,

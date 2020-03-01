@@ -13,7 +13,7 @@ abstract class UnitConversion<U> {
 
   final Locale locale;
 
-  String format(num value);
+  String format(num value, {bool textField = false});
 
   String unitString(
     BuildContext context, {

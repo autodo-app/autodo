@@ -11,7 +11,7 @@ class Repeat extends Equatable {
 
   final String id, name;
 
-  final int mileageInterval;
+  final double mileageInterval;
 
   final Duration dateInterval;
 
@@ -20,7 +20,7 @@ class Repeat extends Equatable {
   Repeat copyWith({
     String id,
     String name,
-    int mileageInterval,
+    double mileageInterval,
     Duration dateInterval,
     List<String> cars,
   }) {

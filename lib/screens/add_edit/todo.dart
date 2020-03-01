@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:autodo/units/units.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -14,7 +15,7 @@ import 'package:autodo/localization.dart';
 import 'package:autodo/util.dart';
 
 typedef _OnSaveCallback = Function(String name, DateTime dueDate,
-    int dueMileage, String repeatName, String carName);
+    double dueMileage, String repeatName, String carName);
 
 class _NameForm extends StatelessWidget {
   const _NameForm({this.todo, this.onSaved, this.node, this.nextNode});
@@ -169,26 +170,30 @@ class _MileageForm extends StatelessWidget {
   final Function(String) onSaved;
 
   @override
-  Widget build(context) => TextFormField(
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.teal),
-          ),
-          labelText: JsonIntl.of(context).get(IntlKeys.dueMileage),
-          contentPadding:
-              EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
+  Widget build(context) {
+    final distance = Distance.of(context);
+
+    return TextFormField(
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.teal),
         ),
-        initialValue: todo?.dueMileage?.toString() ?? '',
-        autofocus: false,
-        focusNode: node,
-        style: Theme.of(context).primaryTextTheme.subtitle2,
-        keyboardType: TextInputType.text,
-        textCapitalization: TextCapitalization.sentences,
-        validator: requiredValidator,
-        onSaved: onSaved,
-        textInputAction: TextInputAction.next,
-        onFieldSubmitted: (_) => changeFocus(node, nextNode),
-      );
+        labelText: JsonIntl.of(context).get(IntlKeys.dueMileage),
+        contentPadding:
+            EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
+      ),
+      initialValue: distance.format(todo?.dueMileage, textField: true),
+      autofocus: false,
+      focusNode: node,
+      style: Theme.of(context).primaryTextTheme.subtitle2,
+      keyboardType: TextInputType.text,
+      textCapitalization: TextCapitalization.sentences,
+      validator: requiredValidator,
+      onSaved: onSaved,
+      textInputAction: TextInputAction.next,
+      onFieldSubmitted: (_) => changeFocus(node, nextNode),
+    );
+  }
 }
 
 class _CarToggleForm extends StatefulWidget {
@@ -277,7 +282,7 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
   final _formKey = GlobalKey<FormState>();
   ScrollController scrollCtrl;
   DateTime _dueDate;
-  int _dueMileage;
+  double _dueMileage;
   String _name, _repeatName, _car;
 
   bool get isEditing => widget.isEditing;
@@ -361,7 +366,7 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
                         todo: widget.todo,
                         node: _mileageNode,
                         nextNode: _repeatNode,
-                        onSaved: (val) => _dueMileage = int.parse(val),
+                        onSaved: (val) => _dueMileage = double.parse(val),
                       ),
                       focusNode: _mileageNode,
                     ),

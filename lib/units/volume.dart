@@ -35,12 +35,17 @@ class Volume extends UnitConversion<VolumeUnit> {
   static const usDryGallon = 4.40488377086 * liter;
 
   @override
-  String format(num value) {
+  String format(num value, {bool textField = false}) {
     if (value == null) {
       return '';
     }
 
     value = internalToUnit(value);
+
+    if (textField) {
+      return value.toStringAsFixed(2);
+    }
+
     return NumberFormat(',###.0#', locale.toLanguageTag()).format(value);
   }
 

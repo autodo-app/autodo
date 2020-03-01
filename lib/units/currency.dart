@@ -19,7 +19,18 @@ class Currency extends UnitConversion<String> {
       );
 
   @override
-  String format(num value) {
+  String format(num value, {bool textField = false}) {
+    if (value == null) {
+      return '';
+    }
+
+    value = internalToUnit(value);
+
+    if (textField) {
+      // ToDo: might change depending on the currency
+      return value.toStringAsFixed(2);
+    }
+
     return NumberFormat.simpleCurrency(
       locale: locale.toLanguageTag(),
       name: unit,

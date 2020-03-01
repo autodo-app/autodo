@@ -52,7 +52,7 @@ class _TodoFieldsState extends State<_TodoFields> {
               carName: widget.c.name,
               completed: true,
               completedDate: DateTime.now(),
-              dueMileage: int.parse(val.trim()))));
+              dueMileage: double.parse(val.trim()))));
         },
         focusNode: _oilNode,
         textInputAction: TextInputAction.next,
@@ -72,7 +72,7 @@ class _TodoFieldsState extends State<_TodoFields> {
               carName: widget.c.name,
               completed: true,
               completedDate: DateTime.now(),
-              dueMileage: int.parse(val.trim()))));
+              dueMileage: double.parse(val.trim()))));
         },
         focusNode: _tiresNode,
         textInputAction: TextInputAction.done,

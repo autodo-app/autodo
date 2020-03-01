@@ -22,7 +22,9 @@ class TodoEntity extends Equatable {
 
   final TodoDueState dueState;
 
-  final int dueMileage, notificationID;
+  final double dueMileage;
+
+  final int notificationID;
 
   final bool completed, estimatedDueDate;
 
@@ -60,7 +62,7 @@ class TodoEntity extends Equatable {
       (snap.data['dueState'] == null)
           ? null
           : TodoDueState.values[snap.data['dueState']],
-      snap.data['dueMileage'] as int,
+      (snap.data['dueMileage'] as num).toDouble(),
       snap.data['notificationID'] as int,
       snap.data['completed'] as bool,
       snap.data['estimatedDueDate'] as bool,
@@ -82,7 +84,7 @@ class TodoEntity extends Equatable {
       (snap.value['dueState'] == null)
           ? null
           : TodoDueState.values[snap.value['dueState']],
-      snap.value['dueMileage'] as int,
+      snap.value['dueMileage'] as double,
       snap.value['notificationID'] as int,
       snap.value['completed'] as bool,
       snap.value['estimatedDueDate'] as bool,

@@ -26,12 +26,17 @@ class Distance extends UnitConversion<DistanceUnit> {
   static const miles = 1.609344 * kilometer;
 
   @override
-  String format(num value) {
+  String format(num value, {bool textField = false}) {
     if (value == null) {
       return '';
     }
 
     value = internalToUnit(value);
+
+    if (textField) {
+      return value.round().toString();
+    }
+
     return NumberFormat(',###', locale.toLanguageTag()).format(value);
   }
 
