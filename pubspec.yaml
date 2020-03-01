@@ -53,6 +53,7 @@ dependencies:
     # path: /home/bayle/Documents/git/flutterfire/packages/firebase_admob/ # used for local testing
   in_app_purchase: ^0.3.0
 
+  preferences:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
