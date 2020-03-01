@@ -23,7 +23,9 @@ class Car extends Equatable {
 
   final String id, name;
 
-  final int mileage, numRefuelings;
+  final double mileage;
+
+  final int numRefuelings;
 
   final double averageEfficiency, distanceRate;
 
@@ -34,7 +36,7 @@ class Car extends Equatable {
   Car copyWith(
       {String id,
       String name,
-      int mileage,
+      double mileage,
       int numRefuelings,
       double averageEfficiency,
       double distanceRate,

@@ -195,7 +195,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     final CarsLoaded curCarsState = _carsBloc.state;
     final curCar = curCarsState.cars.firstWhere((c) => c.name == todo.carName);
 
-    final int nextDueMileage = curCar.mileage + repeat.mileageInterval;
+    final nextDueMileage = curCar.mileage + repeat.mileageInterval;
     final int daysToDue =
         (repeat.mileageInterval / curCar.distanceRate).round();
     final DateTime nextDueDate =

@@ -26,7 +26,7 @@ class Refueling extends Equatable {
 
   final String carName;
 
-  final int mileage;
+  final double mileage;
 
   final DateTime date;
 
@@ -37,7 +37,7 @@ class Refueling extends Equatable {
   Refueling copyWith(
       {String id,
       String carName,
-      int mileage,
+      double mileage,
       DateTime date,
       double amount,
       double cost,

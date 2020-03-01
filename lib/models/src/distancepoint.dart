@@ -5,7 +5,7 @@ class DistancePoint extends Equatable {
 
   final DateTime date;
 
-  final int distance;
+  final double distance;
 
   @override
   List<Object> get props => [date?.toUtc(), distance];
