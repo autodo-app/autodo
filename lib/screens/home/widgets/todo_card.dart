@@ -1,13 +1,15 @@
+import 'package:autodo/blocs/blocs.dart';
+import 'package:autodo/localization.dart';
+import 'package:autodo/models/models.dart';
+import 'package:autodo/screens/add_edit/barrel.dart';
+import 'package:autodo/theme.dart';
+import 'package:autodo/units/units.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:autodo/blocs/blocs.dart';
-import 'package:autodo/models/models.dart';
-import 'package:autodo/localization.dart';
-import 'package:autodo/theme.dart';
-import 'package:autodo/screens/add_edit/barrel.dart';
 import 'package:intl/intl.dart';
 import 'package:json_intl/json_intl.dart';
+import 'package:preferences/preferences.dart';
+
 import 'todo_delete_button.dart';
 
 const int DUE_SOON_INTERVAL = 100;
@@ -85,43 +87,40 @@ class _TodoDueDate extends StatelessWidget {
 }
 
 class _TodoDueMileage extends StatelessWidget {
-  _TodoDueMileage({Key key, @required this.todo}) : super(key: key);
+  const _TodoDueMileage({Key key, @required this.todo}) : super(key: key);
 
   final Todo todo;
 
-  final commaRegex = RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))');
-
-  String mileageString() {
-    if (todo.dueMileage != null) {
-      return todo.dueMileage
-          .toString()
-          .replaceAllMapped(commaRegex, (Match m) => '${m[1]},');
-    } else {
-      return '';
-    }
-  }
-
   @override
-  Widget build(context) => Row(
-        children: <Widget>[
-          Icon(Icons.pin_drop, size: 30),
-          Padding(padding: EdgeInsets.all(5)),
-          RichText(
-              text: TextSpan(children: [
-            // Todo: Improve this translation
-            TextSpan(
-                text: '${JsonIntl.of(context).get(IntlKeys.dueAt)} ',
-                style: Theme.of(context).primaryTextTheme.bodyText2),
-            TextSpan(
-                text: mileageString(),
-                style: Theme.of(context).primaryTextTheme.subtitle2),
-            TextSpan(
-              text: ' ${JsonIntl.of(context).get(IntlKeys.distanceUnits)}',
-              style: Theme.of(context).primaryTextTheme.bodyText2,
-            )
-          ]))
-        ],
-      );
+  Widget build(context) {
+    final distance = Distance(
+      DistanceUnit.values[PrefService.of(context).getInt('length_unit')],
+      Localizations.localeOf(context),
+    );
+
+    return Row(
+      children: <Widget>[
+        Icon(Icons.pin_drop, size: 30),
+        Padding(padding: EdgeInsets.all(5)),
+        RichText(
+            text: TextSpan(children: [
+          // Todo: Improve this translation
+          TextSpan(
+              text: '${JsonIntl.of(context).get(IntlKeys.dueAt)} ',
+              style: Theme.of(context).primaryTextTheme.bodyText2),
+          TextSpan(
+            text: distance.format(todo.dueMileage),
+            style: Theme.of(context).primaryTextTheme.subtitle2,
+            children: [TextSpan(text: ' ')],
+          ),
+          TextSpan(
+            text: distance.unitString(context),
+            style: Theme.of(context).primaryTextTheme.bodyText2,
+          )
+        ]))
+      ],
+    );
+  }
 }
 
 class _TodoLastCompleted extends StatelessWidget {

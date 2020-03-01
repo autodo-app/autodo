@@ -73,14 +73,6 @@ class IntlKeys {
   /// strings.json: 'Delete Account'
   static const deleteAccount = 'delete_account';
 
-  /// strings-fr.json: '(mi)'
-  /// strings.json: '(mi)'
-  static const distanceUnitsShort = 'distance_units_short';
-
-  /// strings-fr.json: 'miles'
-  /// strings.json: 'miles'
-  static const distanceUnits = 'distance_units';
-
   /// strings-fr.json: 'Historique des distances de conduite'
   /// strings.json: 'Driving Distance History (mi/day)'
   static const drivingDistanceHistory = 'driving_distance_history';
@@ -141,15 +133,11 @@ class IntlKeys {
   /// strings.json: 'Fuel Efficiency History (mpg)'
   static const fuelEfficiencyHistory = 'fuel_efficiency_history';
 
-  /// strings-fr.json: 'gal'
-  /// strings.json: 'gal'
-  static const fuelUnits = 'fuel_units';
-
   /// strings-fr.json: 'Je l\'ai !'
   /// strings.json: 'Got It!'
   static const gotItBang = 'got_it_bang';
 
-  /// strings-fr.json: 'Intervalle'
+  /// strings-fr.json: 'Intervalle :'
   /// strings.json: 'Interval:'
   static const interval = 'interval';
 
@@ -208,14 +196,6 @@ class IntlKeys {
   /// strings-fr.json: 'Kilométrage'
   /// strings.json: 'Mileage'
   static const mileage = 'mileage';
-
-  /// strings-fr.json: '(USD)'
-  /// strings.json: '(USD)'
-  static const moneyUnitsSuffix = 'money_units_suffix';
-
-  /// strings-fr.json: '$'
-  /// strings.json: '$'
-  static const moneyUnits = 'money_units';
 
   /// strings-fr.json: 'Suite'
   /// strings.json: 'Next'
@@ -285,13 +265,73 @@ class IntlKeys {
   /// strings.json: 'Remove'
   static const remove = 'remove';
 
+  /// strings-fr.json: 'Contrôle d\'alignement'
+  /// strings.json: 'Alignment Check'
+  static const repeatAlignmentCheck = 'repeat_alignment_check';
+
+  /// strings-fr.json: 'Batterie'
+  /// strings.json: 'Battery'
+  static const repeatBattery = 'repeat_battery';
+
+  /// strings-fr.json: 'Freins'
+  /// strings.json: 'Brakes'
+  static const repeatBrakes = 'repeat_brakes';
+
+  /// strings-fr.json: 'Filtre d\'habitacle'
+  /// strings.json: 'Cabin Filter'
+  static const repeatCabinFilter = 'repeat_cabin_filter';
+
+  /// strings-fr.json: 'Changement du liquide de refroidissement'
+  /// strings.json: 'Coolant Change'
+  static const repeatCoolantChange = 'repeat_coolant_change';
+
   /// strings-fr.json: 'Tâche répétitive supprimée.'
   /// strings.json: 'Repeat deleted.'
   static const repeatDeleted = 'repeat_deleted';
 
+  /// strings-fr.json: 'Filtre moteur'
+  /// strings.json: 'Engine Filter'
+  static const repeatEngineFilter = 'repeat_engine_filter';
+
+  /// strings-fr.json: 'Amortisseurs avant'
+  /// strings.json: 'Front Struts'
+  static const repeatFrontStruts = 'repeat_front_struts';
+
   /// strings-fr.json: 'Nom de la tâche'
   /// strings.json: 'Repeat Name'
   static const repeatName = 'repeat_name';
+
+  /// strings-fr.json: 'Pétrole'
+  /// strings.json: 'Oil'
+  static const repeatOil = 'repeat_oil';
+
+  /// strings-fr.json: 'Amortisseurs arrière'
+  /// strings.json: 'Rear Struts'
+  static const repeatRearStruts = 'repeat_rear_struts';
+
+  /// strings-fr.json: 'Courroie de distribution'
+  /// strings.json: 'Serpentine Belt'
+  static const repeatSerpentineBelt = 'repeat_serpentine_belt';
+
+  /// strings-fr.json: 'Bougies'
+  /// strings.json: 'Spark Plugs'
+  static const repeatSparkPlugs = 'repeat_spark_plugs';
+
+  /// strings-fr.json: 'Rotation des pneus'
+  /// strings.json: 'Tire Rotation'
+  static const repeatTireRotation = 'repeat_tire_rotation';
+
+  /// strings-fr.json: 'Pneus'
+  /// strings.json: 'Tires'
+  static const repeatTires = 'repeat_tires';
+
+  /// strings-fr.json: 'Liquide de transmission'
+  /// strings.json: 'Transmission Fluid'
+  static const repeatTransmissionFluid = 'repeat_transmission_fluid';
+
+  /// strings-fr.json: 'Balais d\'essuie-glace'
+  /// strings.json: 'Wiper Blades'
+  static const repeatWiperBlades = 'repeat_wiper_blades';
 
   /// strings-fr.json: 'Répéter'
   /// strings.json: 'Repeats'
@@ -369,12 +409,16 @@ class IntlKeys {
   /// strings.json: 'Tap "Add" to configure multiple cars.'
   static const tapAddCars = 'tap_add_cars';
 
+  /// strings-fr.json: 'Tâche :'
+  /// strings.json: 'Task:'
+  static const task = 'task';
+
   /// strings-fr.json: 'Tâche {{name}} supprimé.'
   /// strings.json: 'ToDo {{ name }} deleted.'
   static const todoDeleted = 'todo_deleted';
 
-  /// strings-fr.json: 'Maintenance à faire bientôt'
-  /// strings.json: 'Maintenance ToDo Due Soon'
+  /// strings-fr.json: 'Maintenance à faire bientôt : {{ name }}'
+  /// strings.json: 'Maintenance ToDo Due Soon: {{ name }}'
   static const todoDueSoon = 'todo_due_soon';
 
   /// strings-fr.json: 'Tâches'
@@ -429,7 +473,7 @@ class IntlKeys {
   /// strings.json: 'UPGRADE'
   static const upgrade = 'upgrade';
 
-  /// strings-fr.json: 'Veuillez vérifier votre boite de courriel pour un courriel de la part d\'auToDo. Ce courriel contiendra un lien par lequel vous pourrez vérifier votre compte et utiliser l\'application.'
+  /// strings-fr.json: 'Veuillez vérifier votre boite de courriel pour un courriel de la part d\'auToDo. Ce courriel contiendra un lien qui permet de valider votre compte et utiliser l\'application.'
   /// strings.json: 'Please check the specified email address for an email from auToDo. This email will contain a link through which you can verify your account and use the app.'
   static const verificationDialogContent = 'verification_dialog_content';
 
@@ -437,7 +481,7 @@ class IntlKeys {
   /// strings.json: 'Verification Email Sent'
   static const verificationSent = 'verification_sent';
 
-  /// strings-fr.json: 'Un e-mail vous a été envoyé avec un lien pour vérifier votre compte.\n\nVous devez vérifier votre e-mail pour utiliser auToDo.'
+  /// strings-fr.json: 'Un courriel vous a été envoyé avec un lien pour valider votre compte.\n\nVous devez vérifier votre courriel pour utiliser auToDo.'
   /// strings.json: 'An email has been sent to you with a link to verify your account.\n\nYou must verify your email to use auToDo.'
   static const verifyBodyText = 'verify_body_text';
 
@@ -449,7 +493,7 @@ class IntlKeys {
   /// strings.json: 'Car maintenance made simple.'
   static const welcomeDesc = 'welcome_desc';
 
-  /// strings-fr.json: 'Bienvenue chez auToDo!'
+  /// strings-fr.json: 'Bienvenue dans auToDo !'
   /// strings.json: 'Welcome to auToDo!'
   static const welcome = 'welcome';
 
@@ -458,70 +502,66 @@ class IntlKeys {
   static const yes = 'yes';
 
   /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings.json: 'mi'
+  static const distanceMilesShort = 'distance_miles_short';
+
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings.json: 'miles'
+  static const distanceMiles = 'distance_miles';
+
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings.json: 'km'
+  static const distanceKmShort = 'distance_km_short';
+
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings.json: 'kilometers'
+  static const distanceKm = 'distance_km';
+
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings.json: 'gal'
+  static const fuelGallonsImperialShort = 'fuel_gallons_imperial_short';
+
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings.json: 'gallons'
+  static const fuelGallonsImperial = 'fuel_gallons_imperial';
+
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings.json: 'gal'
+  static const fuelGallonsUsShort = 'fuel_gallons_us_short';
+
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings.json: 'US gallons'
+  static const fuelGallonsUs = 'fuel_gallons_us';
+
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings.json: 'l'
+  static const fuelLitersShort = 'fuel_liters_short';
+
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings.json: 'liters'
+  static const fuelLiters = 'fuel_liters';
+
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings.json: 'Default currency'
+  static const defaultCurrency = 'default_currency';
+
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings.json: 'Units'
+  static const groupUnits = 'group_units';
+
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings.json: 'Distance unit'
+  static const lengthUnit = 'length_unit';
+
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings.json: 'Fuel volume unit'
+  static const volumeUnit = 'volume_unit';
+
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings.json: 'Misc'
+  static const groupMisc = 'group_misc';
+
+  /// strings-fr.json: *** NOT TRANSLATED ***
   /// strings.json: 'Need at least 3 refuelings to see efficiency data.'
   static const noDataRefuelings = 'no_data_refuelings';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'Alignment Check'
-  static const repeatAlignmentCheck = 'repeat_alignment_check';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'Battery'
-  static const repeatBattery = 'repeat_battery';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'Brakes'
-  static const repeatBrakes = 'repeat_brakes';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'Cabin Filter'
-  static const repeatCabinFilter = 'repeat_cabin_filter';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'Coolant Change'
-  static const repeatCoolantChange = 'repeat_coolant_change';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'Engine Filter'
-  static const repeatEngineFilter = 'repeat_engine_filter';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'Front Struts'
-  static const repeatFrontStruts = 'repeat_front_struts';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'Oil'
-  static const repeatOil = 'repeat_oil';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'Rear Struts'
-  static const repeatRearStruts = 'repeat_rear_struts';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'Serpentine Belt'
-  static const repeatSerpentineBelt = 'repeat_serpentine_belt';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'Spark Plugs'
-  static const repeatSparkPlugs = 'repeat_spark_plugs';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'Tire Rotation'
-  static const repeatTireRotation = 'repeat_tire_rotation';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'Tires'
-  static const repeatTires = 'repeat_tires';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'Transmission Fluid'
-  static const repeatTransmissionFluid = 'repeat_transmission_fluid';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'Wiper Blades'
-  static const repeatWiperBlades = 'repeat_wiper_blades';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'Task:'
-  static const task = 'task';
 }
