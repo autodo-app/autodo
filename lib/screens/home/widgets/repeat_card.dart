@@ -1,11 +1,11 @@
+import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/localization.dart';
+import 'package:autodo/models/models.dart';
+import 'package:autodo/screens/add_edit/repeat.dart';
+import 'package:autodo/units/units.dart';
+import 'package:autodo/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:autodo/models/models.dart';
-import 'package:autodo/blocs/blocs.dart';
-import 'package:autodo/screens/add_edit/repeat.dart';
-import 'package:autodo/widgets/widgets.dart';
 import 'package:json_intl/json_intl.dart';
 
 class _RepeatTitle extends StatelessWidget {
@@ -14,34 +14,40 @@ class _RepeatTitle extends StatelessWidget {
   final Repeat repeat;
 
   @override
-  Widget build(context) => Container(
-      padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        RichText(
-          text: TextSpan(children: [
+  Widget build(context) {
+    final distance = Distance.of(context);
+
+    return Container(
+        padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          RichText(
+            text: TextSpan(children: [
+              TextSpan(
+                  // Todo: Improve this translation
+                  text: '${JsonIntl.of(context).get(IntlKeys.task)} ',
+                  style: Theme.of(context).primaryTextTheme.bodyText2),
+              TextSpan(
+                  text: repeat.name,
+                  style: Theme.of(context).primaryTextTheme.subtitle2),
+            ]),
+          ),
+          RichText(
+              text: TextSpan(children: [
             TextSpan(
                 // Todo: Improve this translation
-                text: '${JsonIntl.of(context).get(IntlKeys.task)} ',
+                text: '${JsonIntl.of(context).get(IntlKeys.interval)} ',
                 style: Theme.of(context).primaryTextTheme.bodyText2),
             TextSpan(
-                text: repeat.name,
-                style: Theme.of(context).primaryTextTheme.subtitle2),
-          ]),
-        ),
-        RichText(
-            text: TextSpan(children: [
-          TextSpan(
-              // Todo: Improve this translation
-              text: '${JsonIntl.of(context).get(IntlKeys.interval)} ',
-              style: Theme.of(context).primaryTextTheme.bodyText2),
-          TextSpan(
-              text: repeat.mileageInterval.toString(),
-              style: Theme.of(context).primaryTextTheme.subtitle2),
-          TextSpan(
-              text: ' miles',
-              style: Theme.of(context).primaryTextTheme.bodyText2)
-        ]))
-      ]));
+              text: distance.format(repeat.mileageInterval),
+              style: Theme.of(context).primaryTextTheme.subtitle2,
+              children: [TextSpan(text: ' ')],
+            ),
+            TextSpan(
+                text: distance.unitString(context),
+                style: Theme.of(context).primaryTextTheme.bodyText2)
+          ]))
+        ]));
+  }
 }
 
 class _RepeatEditButton extends StatelessWidget {

@@ -2,11 +2,17 @@ import 'dart:ui';
 
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:preferences/preferences.dart';
 
 import 'conversion.dart';
 
 class Currency extends UnitConversion<String> {
   const Currency(String unit, Locale locale) : super(unit, locale);
+
+  factory Currency.of(BuildContext context) => Currency(
+        PrefService.of(context).getString('currency'),
+        Localizations.localeOf(context),
+      );
 
   @override
   String format(num value) {
