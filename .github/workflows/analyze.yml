@@ -12,4 +12,5 @@ jobs:
       with:
         channel: 'dev'
     - run: flutter pub get
+    - run: mkdir -p assets && echo "${{ secrets.keys_json }}" > assets/keys.json
     - run: flutter analyze
