@@ -6,12 +6,12 @@ import 'package:autodo/blocs/blocs.dart';
 import '../widgets/barrel.dart';
 
 class RepeatsScreen extends StatelessWidget {
-  RepeatsScreen({
+  const RepeatsScreen({
     Key key = const ValueKey('__repeats_screen__'),
   }) : super(key: key);
 
   @override
-  build(context) => BlocBuilder<RepeatsBloc, RepeatsState>(
+  Widget build(context) => BlocBuilder<RepeatsBloc, RepeatsState>(
         builder: (context, state) {
           if (state is RepeatsLoaded) {
             return ListView.builder(

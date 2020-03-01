@@ -11,20 +11,25 @@ import 'write_batch_wrapper.dart';
 import 'firebase_write_batch.dart';
 
 class FirebaseDataRepository extends Equatable implements DataRepository {
-  final Firestore _firestoreInstance;
-  final String _uuid;
-
-  DocumentReference get _userDoc =>
-      _firestoreInstance.collection('users').document(_uuid);
-  CollectionReference get _todos => _userDoc.collection('todos');
-  CollectionReference get _refuelings => _userDoc.collection('refuelings');
-  CollectionReference get _cars => _userDoc.collection('cars');
-  CollectionReference get _repeats => _userDoc.collection('repeats');
-
   FirebaseDataRepository({Firestore firestoreInstance, @required String uuid})
       : assert(uuid != null),
         _firestoreInstance = firestoreInstance ?? Firestore.instance,
         _uuid = uuid;
+
+  final Firestore _firestoreInstance;
+
+  final String _uuid;
+
+  DocumentReference get _userDoc =>
+      _firestoreInstance.collection('users').document(_uuid);
+
+  CollectionReference get _todos => _userDoc.collection('todos');
+
+  CollectionReference get _refuelings => _userDoc.collection('refuelings');
+
+  CollectionReference get _cars => _userDoc.collection('cars');
+
+  CollectionReference get _repeats => _userDoc.collection('repeats');
 
   @override
   Future<void> addNewTodo(Todo todo) {
@@ -147,7 +152,7 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
   @override
   Future<List<Repeat>> addNewRepeat(Repeat repeat) async {
     await _repeats.add(repeat.toEntity().toDocument());
-    var updatedDocs = await _repeats.getDocuments();
+    final updatedDocs = await _repeats.getDocuments();
     return updatedDocs?.documents
         ?.map((doc) => Repeat.fromEntity(RepeatEntity.fromSnapshot(doc)))
         ?.toList();
@@ -197,7 +202,7 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
 
   @override
   Future<bool> getPaidStatus() async {
-    DocumentSnapshot snap = await _userDoc.get();
+    final snap = await _userDoc.get();
     return snap.data['paid'] as bool;
   }
 
@@ -205,7 +210,7 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
   List<Object> get props => [_firestoreInstance, _uuid];
 
   @override
-  toString() => "FirebaseDataRepository { firestoreInstance: "
-      "$_firestoreInstance, uuid: $_uuid, userDoc: $_userDoc, todos: "
-      "$_todos, refuelings: $_refuelings, cars: $_cars, repeats: $_repeats }";
+  String toString() => 'FirebaseDataRepository { firestoreInstance: '
+      '$_firestoreInstance, uuid: $_uuid, userDoc: $_userDoc, todos: '
+      '$_todos, refuelings: $_refuelings, cars: $_cars, repeats: $_repeats }';
 }

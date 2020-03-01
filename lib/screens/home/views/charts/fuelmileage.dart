@@ -1,19 +1,19 @@
-import 'dart:math';
-
 import 'package:autodo/localization.dart';
 import 'package:autodo/models/models.dart';
-import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart';
+import 'package:flutter/material.dart';
 import 'package:json_intl/json_intl.dart';
+
 import 'shared.dart';
 
 class FuelMileageChart extends StatelessWidget {
+  const FuelMileageChart(this.seriesList, this.animate);
+
   final List<Series<FuelMileagePoint, DateTime>> seriesList;
+
   final bool animate;
 
-  FuelMileageChart(this.seriesList, this.animate);
-
-  lowerBound() {
+  int lowerBound() {
     final minVal = seriesList[0]
         .data
         .reduce((value, element) =>
@@ -22,7 +22,7 @@ class FuelMileageChart extends StatelessWidget {
     return (0.75 * minVal).round();
   }
 
-  upperBound() {
+  int upperBound() {
     final maxVal = seriesList[0]
         .data
         .reduce((value, element) =>
@@ -33,13 +33,13 @@ class FuelMileageChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (seriesList.length == 0 || seriesList[0].data.length == 0) {
+    if (seriesList.isEmpty || seriesList[0].data.isEmpty) {
       return Padding(
           padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
           child: Center(
               child: Text(JsonIntl.of(context).get(IntlKeys.noDataRefuelings),
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).primaryTextTheme.body1)));
+                  style: Theme.of(context).primaryTextTheme.bodyText2)));
     }
     return TimeSeriesChart(
       seriesList,
@@ -73,9 +73,9 @@ class FuelMileageChart extends StatelessWidget {
 }
 
 class FuelMileageHistory extends StatelessWidget {
-  final data;
+  const FuelMileageHistory(this.data);
 
-  FuelMileageHistory(this.data);
+  final List<Series> data;
 
   @override
   Widget build(BuildContext context) => Column(
@@ -86,7 +86,7 @@ class FuelMileageHistory extends StatelessWidget {
               padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
             ),
             Text(JsonIntl.of(context).get(IntlKeys.fuelEfficiencyHistory),
-                style: Theme.of(context).primaryTextTheme.subtitle),
+                style: Theme.of(context).primaryTextTheme.subtitle2),
             Container(
               height: 300,
               padding: EdgeInsets.all(15),
@@ -94,7 +94,7 @@ class FuelMileageHistory extends StatelessWidget {
             ),
             Text(
               'Refueling Date',
-              style: Theme.of(context).primaryTextTheme.body1,
+              style: Theme.of(context).primaryTextTheme.bodyText2,
               textAlign: TextAlign.center,
             ),
           ]);

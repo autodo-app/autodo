@@ -13,9 +13,9 @@ abstract class EfficiencyStatsState extends Equatable {
 class EfficiencyStatsLoading extends EfficiencyStatsState {}
 
 class EfficiencyStatsLoaded extends EfficiencyStatsState {
-  final List<Series<FuelMileagePoint, DateTime>> fuelEfficiencyData;
-
   const EfficiencyStatsLoaded(this.fuelEfficiencyData);
+
+  final List<Series<FuelMileagePoint, DateTime>> fuelEfficiencyData;
 
   @override
   List<Object> get props => [
@@ -29,10 +29,9 @@ class EfficiencyStatsLoaded extends EfficiencyStatsState {
 
   @override
   String toString() {
-    return 'EfficiencyStatsLoaded { fuelEfficiencyData:' +
-        fuelEfficiencyData
-            .map((p) => p.data.toString())
-            .fold('', (val, str) => val + str) +
-        ' }';
+    final data = fuelEfficiencyData
+        .map((p) => p.data.toString())
+        .fold('', (val, str) => val + str);
+    return 'EfficiencyStatsLoaded { fuelEfficiencyData:$data }';
   }
 }

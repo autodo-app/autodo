@@ -35,12 +35,12 @@ import 'state.dart';
 /// the GUI, and is responsible for delegating the proper login action to the
 /// [authRepository] upon submission of the [LoginForm].
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  AuthRepository authRepository;
-
   /// Creates a LoginBloc.
   ///
   /// The [authRepository] parameter must be non-null.
   LoginBloc({@required this.authRepository}) : assert(authRepository != null);
+
+  AuthRepository authRepository;
 
   @override
   LoginState get initialState => LoginEmpty();
@@ -56,10 +56,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   ) {
     final observableStream = events;
     final nonDebounceStream = observableStream.where((event) {
-      return (event is! LoginEmailChanged && event is! LoginPasswordChanged);
+      return event is! LoginEmailChanged && event is! LoginPasswordChanged;
     });
     final debounceStream = observableStream.where((event) {
-      return (event is LoginEmailChanged || event is LoginPasswordChanged);
+      return event is LoginEmailChanged || event is LoginPasswordChanged;
     }).debounceTime(Duration(milliseconds: 300));
     return super
         .transformEvents(nonDebounceStream.mergeWith([debounceStream]), next);
@@ -85,7 +85,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   Stream<LoginState> _mapEmailChangedToState(String email) async* {
-    String errorString = Validators.isValidEmail(email);
+    final errorString = Validators.isValidEmail(email);
     LoginState out;
     if (errorString == null) {
       out = _clearEmailError(email);
@@ -110,14 +110,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginState _addEmailError(emailError, email) {
     if (state is LoginCredentialsInvalid) {
       return (state as LoginCredentialsInvalid)
-          .copyWith(emailError: "", email: email);
+          .copyWith(emailError: '', email: email);
     } else {
-      return LoginCredentialsInvalid(emailError: "", email: email);
+      return LoginCredentialsInvalid(emailError: '', email: email);
     }
   }
 
   Stream<LoginState> _mapPasswordChangedToState(String password) async* {
-    String errorString = Validators.isValidPassword(password);
+    final errorString = Validators.isValidPassword(password);
     if (errorString == null) {
       yield _clearPasswordError(password);
     } else {
@@ -139,14 +139,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginState _addPasswordError(passwordError, password) {
     if (state is LoginCredentialsInvalid) {
       return (state as LoginCredentialsInvalid)
-          .copyWith(passwordError: "", password: password);
+          .copyWith(passwordError: '', password: password);
     } else {
-      return LoginCredentialsInvalid(passwordError: "", password: password);
+      return LoginCredentialsInvalid(passwordError: '', password: password);
     }
   }
 
   Stream<LoginState> _mapLoginWithGooglePressedToState() async* {
-    authRepository.signInWithGoogle();
+    await authRepository.signInWithGoogle();
     yield LoginEmpty();
   }
 
@@ -159,15 +159,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       await authRepository.signInWithCredentials(email, password);
       yield LoginSuccess();
     } on PlatformException catch (e) {
-      var errorString = "Error communicating to the auToDo servers.";
-      if (e.code == "ERROR_WEAK_PASSWORD") {
-        errorString = "Your password must be longer than 6 characters.";
-      } else if (e.code == "ERROR_INVALID_EMAIL") {
-        errorString = "The email address you entered is invalid.";
-      } else if (e.code == "ERROR_EMAIL_ALREADY_IN_USE") {
-        errorString = "The email address you entered is already in use.";
-      } else if (e.code == "ERROR_WRONG_PASSWORD") {
-        errorString = "Incorrect password, please try again.";
+      var errorString = 'Error communicating to the auToDo servers.';
+      if (e.code == 'ERROR_WEAK_PASSWORD') {
+        errorString = 'Your password must be longer than 6 characters.';
+      } else if (e.code == 'ERROR_INVALID_EMAIL') {
+        errorString = 'The email address you entered is invalid.';
+      } else if (e.code == 'ERROR_EMAIL_ALREADY_IN_USE') {
+        errorString = 'The email address you entered is already in use.';
+      } else if (e.code == 'ERROR_WRONG_PASSWORD') {
+        errorString = 'Incorrect password, please try again.';
       }
       yield LoginError(errorString);
     }
@@ -182,11 +182,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       await authRepository.sendPasswordReset(event.email);
       yield LoginEmpty();
     } on PlatformException catch (e) {
-      var errorString = "Error communicating to the auToDo servers.";
-      if (e.code == 'ERROR_INVALID_EMAIL')
-        errorString = "Invalid email address format";
-      else if (e.code == 'ERROR_USER_NOT_FOUND')
-        errorString = "Could not find an account for this email address";
+      var errorString = 'Error communicating to the auToDo servers.';
+      if (e.code == 'ERROR_INVALID_EMAIL') {
+        errorString = 'Invalid email address format';
+      } else if (e.code == 'ERROR_USER_NOT_FOUND') {
+        errorString = 'Could not find an account for this email address';
+      }
       yield LoginError(errorString);
     }
   }

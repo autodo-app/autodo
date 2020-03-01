@@ -65,7 +65,7 @@ void main() {
         expect(
             CompleteTodo(Todo(), DateTime.fromMillisecondsSinceEpoch(0))
                 .toString(),
-            "CompleteTodo { todo: ${Todo()}, completedDate: ${DateTime.fromMillisecondsSinceEpoch(0)} }");
+            'CompleteTodo { todo: ${Todo()}, completedDate: ${DateTime.fromMillisecondsSinceEpoch(0)} }');
       });
     });
   });

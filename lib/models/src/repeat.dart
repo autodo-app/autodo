@@ -6,13 +6,16 @@ import 'package:autodo/entities/entities.dart';
 
 @immutable
 class Repeat extends Equatable {
-  final String id, name;
-  final int mileageInterval;
-  final Duration dateInterval;
-  final List<String> cars;
-
-  Repeat(
+  const Repeat(
       {this.id, this.name, this.mileageInterval, this.dateInterval, this.cars});
+
+  final String id, name;
+
+  final int mileageInterval;
+
+  final Duration dateInterval;
+
+  final List<String> cars;
 
   Repeat copyWith({
     String id,

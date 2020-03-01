@@ -6,14 +6,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'screen.dart';
 
 class LoginScreenProvider extends StatelessWidget {
-  final AuthRepository _authRepository;
-
-  LoginScreenProvider({@required authRepository})
+  const LoginScreenProvider({@required authRepository})
       : assert(authRepository != null),
         _authRepository = authRepository;
 
+  final AuthRepository _authRepository;
+
   @override
-  build(context) => BlocProvider<LoginBloc>(
+  Widget build(context) => BlocProvider<LoginBloc>(
       create: (context) => LoginBloc(authRepository: _authRepository),
       child: LoginScreen());
 }

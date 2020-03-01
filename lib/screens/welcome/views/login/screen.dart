@@ -8,7 +8,7 @@ import 'package:json_intl/json_intl.dart';
 import 'form.dart';
 
 class LoginScreen extends StatelessWidget {
-  LoginScreen({Key key}) : super(key: key);
+  const LoginScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

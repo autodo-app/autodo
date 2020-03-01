@@ -11,17 +11,20 @@ import 'new_user_screen_page.dart';
 import 'base.dart';
 
 class LatestRepeatsScreen extends StatefulWidget {
-  final GlobalKey<FormState> repeatKey;
-  final Function() onNext;
-  final page;
-  final todosBloc;
-
-  LatestRepeatsScreen(
+  const LatestRepeatsScreen(
     this.repeatKey,
     this.onNext,
     this.page, {
     this.todosBloc,
   });
+
+  final GlobalKey<FormState> repeatKey;
+
+  final Function() onNext;
+
+  final NewUserScreenPage page;
+
+  final Bloc todosBloc;
 
   @override
   LatestRepeatsScreenState createState() =>
@@ -30,15 +33,19 @@ class LatestRepeatsScreen extends StatefulWidget {
 
 class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
     with TickerProviderStateMixin {
-  bool expanded, pageTransition, pageWillBeVisible;
-  AnimationController openCtrl;
-  var openCurve;
-  FocusNode _oilNode, _tiresNode;
-  final TodosBloc todosBloc;
-
   LatestRepeatsScreenState(this.pageWillBeVisible, this.todosBloc);
 
-  _next() async {
+  bool expanded, pageTransition, pageWillBeVisible;
+
+  AnimationController openCtrl;
+
+  Animation<double> openCurve;
+
+  FocusNode _oilNode, _tiresNode;
+
+  final TodosBloc todosBloc;
+
+  Future<void> _next() async {
     if (widget.repeatKey.currentState.validate()) {
       widget.repeatKey.currentState.save();
       // hide the keyboard
@@ -66,26 +73,26 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
   }
 
   @override
-  dispose() {
+  void dispose() {
     _oilNode.dispose();
     _tiresNode.dispose();
     super.dispose();
   }
 
   @override
-  build(context) {
+  Widget build(context) {
     if (pageWillBeVisible) {
       openCtrl.forward();
       pageWillBeVisible = false;
     }
 
-    Widget oilMileage = TextFormField(
+    final Widget oilMileage = TextFormField(
       key: IntegrationTestKeys.latestOilChangeField,
       maxLines: 1,
       autofocus: false,
       onTap: () => setState(() => expanded = false),
       decoration: defaultInputDecoration('(miles)', 'Last Oil Change (miles)'),
-      validator: (value) => intNoRequire(value),
+      validator: intNoRequire,
       onSaved: (val) {
         if (val == null || val == '') return;
         BlocProvider.of<TodosBloc>(context).add(AddTodo(Todo(
@@ -100,13 +107,13 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
       onFieldSubmitted: (_) => changeFocus(_oilNode, _tiresNode),
     );
 
-    Widget tireRotationMileage = TextFormField(
+    final Widget tireRotationMileage = TextFormField(
       key: IntegrationTestKeys.latestTireRotationField,
       maxLines: 1,
       onTap: () => setState(() => expanded = true),
       decoration:
           defaultInputDecoration('(miles)', 'Last Tire Rotation (miles)'),
-      validator: (value) => intNoRequire(value),
+      validator: intNoRequire,
       onSaved: (val) {
         if (val == null || val == '') return;
         BlocProvider.of<TodosBloc>(context).add(AddTodo(Todo(
@@ -120,10 +127,10 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
       textInputAction: TextInputAction.done,
     );
 
-    Widget headerText = AnimatedContainer(
+    final Widget headerText = AnimatedContainer(
       duration: Duration(milliseconds: 400),
       curve: Curves.fastOutSlowIn,
-      height: (expanded) ? 0 : 110,
+      height: expanded ? 0 : 110,
       child: Padding(
         padding: EdgeInsets.fromLTRB(0, 0, 0, 30),
         child: Center(
@@ -144,7 +151,7 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
             ),
             Text(
               'When was the last time you did these tasks?',
-              style: Theme.of(context).primaryTextTheme.body1,
+              style: Theme.of(context).primaryTextTheme.bodyText2,
             ),
           ],
         )),

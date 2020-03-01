@@ -16,7 +16,7 @@ class SettingsScreenState extends State<SettingsScreen> {
     return AlertDialog(
       title: Text(JsonIntl.of(context).get(IntlKeys.deleteAccount)),
       content: Text(JsonIntl.of(context).get(IntlKeys.deleteAccountMessage),
-          style: Theme.of(context).primaryTextTheme.body1),
+          style: Theme.of(context).primaryTextTheme.bodyText2),
       actions: <Widget>[
         FlatButton(
             key: ValueKey('__delete_account_confirm__'),

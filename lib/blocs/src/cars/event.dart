@@ -11,9 +11,9 @@ abstract class CarsEvent extends Equatable {
 class LoadCars extends CarsEvent {}
 
 class AddCar extends CarsEvent {
-  final Car car;
-
   const AddCar(this.car);
+
+  final Car car;
 
   @override
   List<Object> get props => [car];
@@ -23,9 +23,9 @@ class AddCar extends CarsEvent {
 }
 
 class UpdateCar extends CarsEvent {
-  final Car updatedCar;
-
   const UpdateCar(this.updatedCar);
+
+  final Car updatedCar;
 
   @override
   List<Object> get props => [updatedCar];
@@ -35,9 +35,9 @@ class UpdateCar extends CarsEvent {
 }
 
 class DeleteCar extends CarsEvent {
-  final Car car;
-
   const DeleteCar(this.car);
+
+  final Car car;
 
   @override
   List<Object> get props => [car];
@@ -47,9 +47,9 @@ class DeleteCar extends CarsEvent {
 }
 
 class ExternalRefuelingsUpdated extends CarsEvent {
-  final List<Refueling> refuelings;
+  const ExternalRefuelingsUpdated(this.refuelings);
 
-  ExternalRefuelingsUpdated(this.refuelings);
+  final List<Refueling> refuelings;
 
   @override
   List<Object> get props => [refuelings];

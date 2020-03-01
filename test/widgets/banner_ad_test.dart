@@ -7,15 +7,15 @@ import 'package:autodo/widgets/widgets.dart';
 void main() {
   group('BannerAd', () {
     testWidgets('should render properly', (tester) async {
-      Widget home = Scaffold(
+      final Widget home = Scaffold(
         body: Container(),
       );
-      Widget app = MaterialApp(
+      final Widget app = MaterialApp(
         home: home,
       );
-      AutodoBannerAd()
-        ..load()
-        ..show();
+      final bannerAd = AutodoBannerAd();
+      // ignore: unawaited_futures
+      bannerAd.load().then((value) => bannerAd.show());
       AutodoBannerAd.defaultListener(MobileAdEvent.loaded);
       await tester.pumpWidget(app);
       expect(find.byType(Scaffold), findsOneWidget);

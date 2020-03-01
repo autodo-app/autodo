@@ -13,11 +13,7 @@ typedef _OnSaveCallback = Function(
     int mileage, DateTime date, double amount, double cost, String car);
 
 class _MileageForm extends StatelessWidget {
-  final Refueling refueling;
-  final Function(String) onSaved;
-  final FocusNode node, nextNode;
-
-  _MileageForm({
+  const _MileageForm({
     Key key,
     this.refueling,
     @required this.onSaved,
@@ -25,16 +21,22 @@ class _MileageForm extends StatelessWidget {
     @required this.nextNode,
   }) : super(key: key);
 
+  final Refueling refueling;
+
+  final Function(String) onSaved;
+
+  final FocusNode node, nextNode;
+
   @override
-  build(context) => TextFormField(
+  Widget build(context) => TextFormField(
         decoration: InputDecoration(
           hintText: JsonIntl.of(context).get(IntlKeys.requiredLiteral),
           border: OutlineInputBorder(
             borderSide: BorderSide(color: Theme.of(context).primaryColor),
           ),
-          labelText: JsonIntl.of(context).get(IntlKeys.odomReading) +
-              ' ' +
-              JsonIntl.of(context).get(IntlKeys.distanceUnitsShort),
+          labelText:
+              // Todo: Improve this translation
+              '${JsonIntl.of(context).get(IntlKeys.odomReading)} ${JsonIntl.of(context).get(IntlKeys.distanceUnitsShort)}',
           contentPadding:
               EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
         ),
@@ -42,7 +44,7 @@ class _MileageForm extends StatelessWidget {
         initialValue: refueling?.mileage?.toString() ?? '',
         keyboardType: TextInputType.numberWithOptions(decimal: false),
         validator: intValidator,
-        onSaved: (val) => onSaved(val),
+        onSaved: onSaved,
         textInputAction: TextInputAction.next,
         focusNode: node,
         onFieldSubmitted: (_) => changeFocus(node, nextNode),
@@ -50,11 +52,7 @@ class _MileageForm extends StatelessWidget {
 }
 
 class _AmountForm extends StatelessWidget {
-  final Refueling refueling;
-  final Function(String) onSaved;
-  final FocusNode node, nextNode;
-
-  _AmountForm({
+  const _AmountForm({
     Key key,
     this.refueling,
     @required this.onSaved,
@@ -62,17 +60,22 @@ class _AmountForm extends StatelessWidget {
     @required this.nextNode,
   }) : super(key: key);
 
+  final Refueling refueling;
+
+  final Function(String) onSaved;
+
+  final FocusNode node, nextNode;
+
   @override
-  build(context) => TextFormField(
+  Widget build(context) => TextFormField(
         decoration: InputDecoration(
           hintText: JsonIntl.of(context).get(IntlKeys.requiredLiteral),
           border: OutlineInputBorder(
             borderSide: BorderSide(color: Theme.of(context).primaryColor),
           ),
-          labelText: JsonIntl.of(context).get(IntlKeys.refuelingAmount) +
-              ' (' +
-              JsonIntl.of(context).get(IntlKeys.fuelUnits) +
-              ')',
+          labelText:
+              // Todo: Improve this translation
+              '${JsonIntl.of(context).get(IntlKeys.refuelingAmount)} (${JsonIntl.of(context).get(IntlKeys.fuelUnits)})',
           contentPadding:
               EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
         ),
@@ -80,7 +83,7 @@ class _AmountForm extends StatelessWidget {
         initialValue: refueling?.amount?.toString() ?? '',
         keyboardType: TextInputType.numberWithOptions(decimal: true),
         validator: doubleValidator,
-        onSaved: (val) => onSaved(val),
+        onSaved: onSaved,
         textInputAction: TextInputAction.next,
         focusNode: node,
         onFieldSubmitted: (_) => changeFocus(node, nextNode),
@@ -88,11 +91,7 @@ class _AmountForm extends StatelessWidget {
 }
 
 class _CostForm extends StatelessWidget {
-  final Refueling refueling;
-  final Function(String) onSaved;
-  final FocusNode node, nextNode;
-
-  _CostForm({
+  const _CostForm({
     Key key,
     this.refueling,
     @required this.onSaved,
@@ -100,16 +99,22 @@ class _CostForm extends StatelessWidget {
     @required this.nextNode,
   }) : super(key: key);
 
+  final Refueling refueling;
+
+  final Function(String) onSaved;
+
+  final FocusNode node, nextNode;
+
   @override
-  build(context) => TextFormField(
+  Widget build(context) => TextFormField(
         decoration: InputDecoration(
           hintText: JsonIntl.of(context).get(IntlKeys.requiredLiteral),
           border: OutlineInputBorder(
             borderSide: BorderSide(color: Theme.of(context).primaryColor),
           ),
-          labelText: JsonIntl.of(context).get(IntlKeys.totalPrice) +
-              ' ' +
-              JsonIntl.of(context).get(IntlKeys.moneyUnitsSuffix),
+          labelText:
+              // Todo: Improve this translation
+              '${JsonIntl.of(context).get(IntlKeys.totalPrice)} ${JsonIntl.of(context).get(IntlKeys.moneyUnitsSuffix)}',
           contentPadding:
               EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
         ),
@@ -117,7 +122,7 @@ class _CostForm extends StatelessWidget {
         initialValue: refueling?.cost?.toString() ?? '',
         keyboardType: TextInputType.numberWithOptions(decimal: true),
         validator: doubleValidator,
-        onSaved: (val) => onSaved(val),
+        onSaved: onSaved,
         textInputAction: TextInputAction.next,
         focusNode: node,
         onFieldSubmitted: (_) => changeFocus(node, nextNode),
@@ -125,11 +130,7 @@ class _CostForm extends StatelessWidget {
 }
 
 class _DateForm extends StatefulWidget {
-  final Refueling refueling;
-  final Function(String) onSaved;
-  final FocusNode node, nextNode;
-
-  _DateForm({
+  const _DateForm({
     Key key,
     this.refueling,
     @required this.onSaved,
@@ -137,20 +138,28 @@ class _DateForm extends StatefulWidget {
     @required this.nextNode,
   }) : super(key: key);
 
+  final Refueling refueling;
+
+  final Function(String) onSaved;
+
+  final FocusNode node, nextNode;
+
   @override
   _DateFormState createState() =>
       _DateFormState(node: node, nextNode: nextNode, initial: refueling?.date);
 }
 
 class _DateFormState extends State<_DateForm> {
-  TextEditingController _ctrl;
-  DateTime initial;
-  FocusNode node, nextNode;
-
   _DateFormState({this.node, this.nextNode, this.initial});
 
+  TextEditingController _ctrl;
+
+  DateTime initial;
+
+  FocusNode node, nextNode;
+
   @override
-  initState() {
+  void initState() {
     _ctrl = TextEditingController();
     if (initial != null) {
       _ctrl.text = DateFormat.yMd().format(initial);
@@ -161,14 +170,14 @@ class _DateFormState extends State<_DateForm> {
   }
 
   @override
-  dispose() {
+  void dispose() {
     _ctrl.dispose();
     super.dispose();
   }
 
   DateTime convertToDate(String input) {
     try {
-      var d = DateFormat.yMd().parseStrict(input);
+      final d = DateFormat.yMd().parseStrict(input);
       return d;
     } catch (e) {
       return null;
@@ -176,13 +185,13 @@ class _DateFormState extends State<_DateForm> {
   }
 
   Future chooseDate(BuildContext context, String initialDateString) async {
-    var now = DateTime.now();
+    final now = DateTime.now();
     var initialDate = convertToDate(initialDateString) ?? now;
-    initialDate = (initialDate.year >= 1900 && initialDate.isBefore(now)
+    initialDate = initialDate.year >= 1900 && initialDate.isBefore(now)
         ? initialDate
-        : now);
+        : now;
 
-    var result = await showDatePicker(
+    final result = await showDatePicker(
         context: context,
         initialDate: initialDate,
         firstDate: DateTime(1900),
@@ -197,16 +206,16 @@ class _DateFormState extends State<_DateForm> {
 
   bool isValidDate(String date) {
     if (date.isEmpty) return true;
-    var d = convertToDate(date);
+    final d = convertToDate(date);
     return d != null && d.isBefore(DateTime.now());
   }
 
   @override
-  build(context) => Row(children: <Widget>[
+  Widget build(context) => Row(children: <Widget>[
         IconButton(
           icon: Icon(Icons.calendar_today),
           tooltip: JsonIntl.of(context).get(IntlKeys.chooseDate),
-          onPressed: (() => chooseDate(context, _ctrl.text)),
+          onPressed: () => chooseDate(context, _ctrl.text),
         ),
         Expanded(
           child: TextFormField(
@@ -236,11 +245,13 @@ class _DateFormState extends State<_DateForm> {
 }
 
 class _CarToggleForm extends StatefulWidget {
-  final List<bool> initialState;
-  final List<Car> cars;
-  final Function onSaved;
+  const _CarToggleForm(this.initialState, this.cars, this.onSaved);
 
-  _CarToggleForm(this.initialState, this.cars, this.onSaved);
+  final List<bool> initialState;
+
+  final List<Car> cars;
+
+  final Function onSaved;
 
   @override
   _CarToggleFormState createState() =>
@@ -248,20 +259,22 @@ class _CarToggleForm extends StatefulWidget {
 }
 
 class _CarToggleFormState extends State<_CarToggleForm> {
-  List<bool> isSelected;
-  final List<Car> cars;
-  final Function onSaved;
-
   _CarToggleFormState(this.isSelected, this.cars, this.onSaved);
 
+  List<bool> isSelected;
+
+  final List<Car> cars;
+
+  final Function onSaved;
+
   @override
-  build(context) => FormField(
+  Widget build(context) => FormField(
         builder: (state) => Center(
           child: ToggleButtons(
             children: cars.map((c) => Text(c.name)).toList(),
             onPressed: (int index) {
               setState(() {
-                for (int buttonIndex = 0;
+                for (var buttonIndex = 0;
                     buttonIndex < isSelected.length;
                     buttonIndex++) {
                   if (buttonIndex == index) {
@@ -293,18 +306,20 @@ class _CarToggleFormState extends State<_CarToggleForm> {
 }
 
 class RefuelingAddEditScreen extends StatefulWidget {
-  final bool isEditing;
-  final _OnSaveCallback onSave;
-  final Refueling refueling;
-  final List<Car> cars;
-
-  RefuelingAddEditScreen({
+  const RefuelingAddEditScreen({
     Key key = const ValueKey('__add_edit_refueling__'),
     @required this.onSave,
     @required this.isEditing,
     @required this.cars,
     this.refueling,
   }) : super(key: key);
+
+  final bool isEditing;
+  final _OnSaveCallback onSave;
+
+  final Refueling refueling;
+
+  final List<Car> cars;
 
   @override
   _RefuelingAddEditScreenState createState() => _RefuelingAddEditScreenState();
@@ -349,7 +364,7 @@ class _RefuelingAddEditScreenState extends State<RefuelingAddEditScreen> {
       : List.generate(widget.cars.length, (idx) => (idx == 0) ? true : false);
 
   @override
-  build(context) => Scaffold(
+  Widget build(context) => Scaffold(
         appBar: AppBar(
           title: Text(
             isEditing
@@ -419,7 +434,7 @@ class _RefuelingAddEditScreenState extends State<RefuelingAddEditScreen> {
 
               _formKey.currentState.save();
 
-              if (_car == null) _car = widget.cars.first.name;
+              _car ??= widget.cars.first.name;
               widget.onSave(_mileage, _date, _amount, _cost, _car);
               Navigator.pop(context);
             }

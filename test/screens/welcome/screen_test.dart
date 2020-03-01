@@ -1,15 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:autodo/screens/welcome/screen.dart';
 import 'package:autodo/screens/welcome/widgets/scroller/tutorial1.dart';
 import 'package:autodo/screens/welcome/widgets/scroller/tutorial2.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('WelcomeScreen', () {
     testWidgets('renders correctly', (WidgetTester tester) async {
-      Key scaffoldKey = Key('scaffold');
+      final scaffoldKey = Key('scaffold');
       await tester.pumpWidget(
         // MultiBlocProvider(
         // providers: [],
@@ -20,8 +18,8 @@ void main() {
       expect(find.byKey(scaffoldKey), findsOneWidget);
     });
     testWidgets('tap page indicator', (WidgetTester tester) async {
-      Key scaffoldKey = Key('scaffold');
-      List<Key> dotKeys = [Key('dot1'), Key('dot2'), Key('dot3')];
+      final scaffoldKey = Key('scaffold');
+      final dotKeys = <Key>[Key('dot1'), Key('dot2'), Key('dot3')];
       await tester.pumpWidget(
         // MultiBlocProvider(
         //   providers: [],
@@ -38,8 +36,8 @@ void main() {
       expect(find.byType(Tutorial1), findsOneWidget);
     });
     testWidgets('show tutorial2', (WidgetTester tester) async {
-      Key scaffoldKey = Key('scaffold');
-      List<Key> dotKeys = [Key('dot1'), Key('dot2'), Key('dot3')];
+      final scaffoldKey = Key('scaffold');
+      final dotKeys = <Key>[Key('dot1'), Key('dot2'), Key('dot3')];
       await tester.pumpWidget(
         // MultiBlocProvider(
         // providers: [],

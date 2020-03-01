@@ -10,13 +10,6 @@ import 'package:autodo/repositories/repositories.dart';
 import 'package:autodo/models/models.dart';
 
 class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
-  static const int MAX_MPG = 0xffff;
-  // don't know why anyone would enter this many, but preventing overflow here
-  static const int MAX_NUM_REFUELINGS = 0xffff;
-
-  StreamSubscription _dataSubscription, _repoSubscription;
-  final DatabaseBloc _dbBloc;
-
   RefuelingsBloc({@required dbBloc})
       : assert(dbBloc != null),
         _dbBloc = dbBloc {
@@ -29,6 +22,15 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
       }
     });
   }
+
+  static const int MAX_MPG = 0xffff;
+
+  // don't know why anyone would enter this many, but preventing overflow here
+  static const int MAX_NUM_REFUELINGS = 0xffff;
+
+  StreamSubscription _dataSubscription, _repoSubscription;
+
+  final DatabaseBloc _dbBloc;
 
   @override
   RefuelingsState get initialState => RefuelingsLoading();
@@ -51,15 +53,15 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
   }
 
   Future<Refueling> _findLatestRefueling(Refueling refueling) async {
-    List<Refueling> refuelings = await repo
+    final refuelings = await repo
         .getCurrentRefuelings()
         .timeout(Duration(seconds: 10), onTimeout: () => []);
 
-    int smallestDiff = MAX_MPG;
+    var smallestDiff = MAX_MPG;
     Refueling out;
     for (var r in refuelings) {
       if (r.carName == refueling.carName) {
-        var mileageDiff = refueling.mileage - r.mileage;
+        final mileageDiff = refueling.mileage - r.mileage;
         if (mileageDiff <= 0) continue; // only looking for past refuelings
         if (mileageDiff < smallestDiff) {
           smallestDiff = mileageDiff;
@@ -72,7 +74,7 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
 
   Stream<RefuelingsState> _mapLoadRefuelingsToState() async* {
     try {
-      List<Refueling> refuelings = await repo
+      final refuelings = await repo
           .getCurrentRefuelings()
           .timeout(Duration(seconds: 10), onTimeout: () => []);
       yield RefuelingsLoaded(refuelings);
@@ -88,16 +90,16 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
       return;
     }
 
-    var item = event.refueling;
-    var prev = await _findLatestRefueling(item);
-    var dist = (prev == null) ? 0 : item.mileage - prev.mileage;
-    Refueling out = event.refueling.copyWith(efficiency: dist / item.amount);
+    final item = event.refueling;
+    final prev = await _findLatestRefueling(item);
+    final dist = (prev == null) ? 0 : item.mileage - prev.mileage;
+    final out = event.refueling.copyWith(efficiency: dist / item.amount);
 
     // event.carsBloc.add(AddRefuelingInfo(item.car, item.mileage, item.date, item.efficiency, prev.date, dist));
-    final List<Refueling> updatedRefuelings =
-        List.from((state as RefuelingsLoaded).refuelings)..add(out);
+    final updatedRefuelings =
+        List<Refueling>.from((state as RefuelingsLoaded).refuelings)..add(out);
     yield RefuelingsLoaded(updatedRefuelings);
-    repo.addNewRefueling(out);
+    await repo.addNewRefueling(out);
   }
 
   Stream<RefuelingsState> _mapUpdateRefuelingToState(
@@ -107,17 +109,17 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
       return;
     }
 
-    var prev = await _findLatestRefueling(event.refueling);
-    var dist = (prev == null) ? 0 : event.refueling.mileage - prev.mileage;
-    var efficiency = dist / event.refueling.amount;
-    Refueling out = event.refueling.copyWith(efficiency: efficiency);
+    final prev = await _findLatestRefueling(event.refueling);
+    final dist = (prev == null) ? 0 : event.refueling.mileage - prev.mileage;
+    final efficiency = dist / event.refueling.amount;
+    final out = event.refueling.copyWith(efficiency: efficiency);
 
-    final List<Refueling> updatedRefuelings = (state as RefuelingsLoaded)
+    final updatedRefuelings = (state as RefuelingsLoaded)
         .refuelings
         .map((r) => r.id == out.id ? out : r)
         .toList();
     yield RefuelingsLoaded(updatedRefuelings);
-    repo.updateRefueling(out);
+    await repo.updateRefueling(out);
   }
 
   Stream<RefuelingsState> _mapDeleteRefuelingToState(
@@ -128,7 +130,7 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
           .where((r) => r.id != event.refueling.id)
           .toList();
       yield RefuelingsLoaded(updatedRefuelings);
-      repo.deleteRefueling(event.refueling);
+      await repo.deleteRefueling(event.refueling);
     }
   }
 

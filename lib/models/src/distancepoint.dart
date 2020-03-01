@@ -1,14 +1,16 @@
 import 'package:equatable/equatable.dart';
 
 class DistancePoint extends Equatable {
-  final DateTime date;
-  final int distance;
+  const DistancePoint(this.date, this.distance);
 
-  DistancePoint(this.date, this.distance);
+  final DateTime date;
+
+  final int distance;
 
   @override
   List<Object> get props => [date?.toUtc(), distance];
 
   @override
-  toString() => "DistancePoint { date: ${date?.toUtc()}, distance: $distance }";
+  String toString() =>
+      'DistancePoint { date: ${date?.toUtc()}, distance: $distance }';
 }

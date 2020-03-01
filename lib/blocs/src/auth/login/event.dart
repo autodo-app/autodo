@@ -25,10 +25,10 @@ abstract class LoginEvent extends Equatable {
 
 /// Tells the [LoginBloc] that the email field of the [LoginForm] has changed.
 class LoginEmailChanged extends LoginEvent {
+  const LoginEmailChanged({@required this.email});
+
   /// The text currently present in the email field of the [LoginForm].
   final String email;
-
-  const LoginEmailChanged({@required this.email});
 
   @override
   List<Object> get props => [email];
@@ -36,10 +36,10 @@ class LoginEmailChanged extends LoginEvent {
 
 /// Tells the [LoginBloc] that the password field of the [LoginForm] has changed.
 class LoginPasswordChanged extends LoginEvent {
+  const LoginPasswordChanged({@required this.password});
+
   /// The text currently present in the password field of the [LoginForm].
   final String password;
-
-  const LoginPasswordChanged({@required this.password});
 
   @override
   List<Object> get props => [password];
@@ -51,16 +51,16 @@ class LoginWithGooglePressed extends LoginEvent {}
 /// Tells the [LoginBloc] to submit the contents of the [LoginForm] and
 /// authenticate the user.
 class LoginWithCredentialsPressed extends LoginEvent {
+  const LoginWithCredentialsPressed({
+    @required this.email,
+    @required this.password,
+  });
+
   /// The email address for the user to be signed in.
   final String email;
 
   /// The password for the user account to be signed in.
   final String password;
-
-  const LoginWithCredentialsPressed({
-    @required this.email,
-    @required this.password,
-  });
 
   @override
   List<Object> get props => [email, password];
@@ -69,10 +69,10 @@ class LoginWithCredentialsPressed extends LoginEvent {
 /// Prompts the [LoginBloc] to send a password reset email for the given
 /// address.
 class SendPasswordResetPressed extends LoginEvent {
+  const SendPasswordResetPressed({@required this.email});
+
   /// The email address where the password reset email will be sent.
   final String email;
-
-  const SendPasswordResetPressed({@required this.email});
 
   @override
   List<Object> get props => [email];

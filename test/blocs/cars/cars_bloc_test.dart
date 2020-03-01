@@ -9,10 +9,12 @@ import 'package:autodo/repositories/repositories.dart';
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/models/models.dart';
 
+// ignore: must_be_immutable
 class MockDataRepository extends Mock implements DataRepository {}
 
 class MockRefuelingsBloc extends Mock implements RefuelingsBloc {}
 
+// ignore: must_be_immutable
 class MockWriteBatch extends Mock implements WriteBatchWrapper {}
 
 class MockDbBloc extends Mock implements DatabaseBloc {}
@@ -178,7 +180,7 @@ void main() {
               id: '0',
               name: 'abcd',
               mileage: 10000,
-              distanceRateHistory: List<DistanceRatePoint>())
+              distanceRateHistory: <DistanceRatePoint>[])
         ]),
         CarsLoaded([
           Car(
@@ -189,7 +191,7 @@ void main() {
               distanceRate: 0.0,
               lastMileageUpdate:
                   roundToDay(DateTime.fromMillisecondsSinceEpoch(0)),
-              distanceRateHistory: List<DistanceRatePoint>())
+              distanceRateHistory: <DistanceRatePoint>[])
         ])
       ]);
       blocTest<CarsBloc, CarsEvent, CarsState>('Second New Refueling',
@@ -215,7 +217,7 @@ void main() {
               name: 'abcd',
               mileage: 10000,
               numRefuelings: 1,
-              distanceRateHistory: List<DistanceRatePoint>())
+              distanceRateHistory: <DistanceRatePoint>[])
         ]),
         CarsLoaded([
           Car(

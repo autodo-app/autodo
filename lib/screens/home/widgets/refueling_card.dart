@@ -10,91 +10,92 @@ import 'package:intl/intl.dart';
 import 'package:json_intl/json_intl.dart';
 
 class _RefuelingTitle extends StatelessWidget {
+  const _RefuelingTitle({Key key, @required this.refueling}) : super(key: key);
+
   final Refueling refueling;
 
-  _RefuelingTitle({Key key, @required this.refueling}) : super(key: key);
-
-  dateField(context) => TextSpan(
-      text: JsonIntl.of(context).get(IntlKeys.onLiteral) +
-          ' ' + // TODO: Can't concat verb and date
-          DateFormat.yMMMd().format(refueling.date) +
-          ' ',
-      style: Theme.of(context).primaryTextTheme.body1);
+  TextSpan dateField(context) => TextSpan(
+      text: // TODO: Can't concat verb and date
+          '${JsonIntl.of(context).get(IntlKeys.onLiteral)} ${DateFormat.yMMMd().format(refueling.date)} ',
+      style: Theme.of(context).primaryTextTheme.bodyText2);
 
   @override
-  build(context) => RichText(
+  Widget build(context) => RichText(
         text: TextSpan(
           children: [
+            // Todo: Improve this translation
             TextSpan(
-                text: JsonIntl.of(context).get(IntlKeys.refueling) + ' ',
-                style: Theme.of(context).primaryTextTheme.body1),
+                text: '${JsonIntl.of(context).get(IntlKeys.refueling)} ',
+                style: Theme.of(context).primaryTextTheme.bodyText2),
             dateField(context),
             TextSpan(
-                text: JsonIntl.of(context).get(IntlKeys.at) + ' ',
-                style: Theme.of(context).primaryTextTheme.body1),
+                text: '${JsonIntl.of(context).get(IntlKeys.at)} ',
+                style: Theme.of(context).primaryTextTheme.bodyText2),
             TextSpan(
-                text: NumberFormat.decimalPattern().format(refueling.mileage) +
-                    ' ',
-                style: Theme.of(context).primaryTextTheme.subtitle),
+                text:
+                    '${NumberFormat.decimalPattern().format(refueling.mileage)} ',
+                style: Theme.of(context).primaryTextTheme.subtitle2),
             TextSpan(
                 text: JsonIntl.of(context).get(IntlKeys.distanceUnits),
-                style: Theme.of(context).primaryTextTheme.body1)
+                style: Theme.of(context).primaryTextTheme.bodyText2)
           ],
         ),
       );
 }
 
 class _RefuelingCost extends StatelessWidget {
+  const _RefuelingCost({Key key, @required this.refueling}) : super(key: key);
+
   final Refueling refueling;
 
-  _RefuelingCost({Key key, @required this.refueling}) : super(key: key);
-
   @override
-  build(context) => RichText(
+  Widget build(context) => RichText(
         text: TextSpan(
           children: [
             TextSpan(
-                text: JsonIntl.of(context).get(IntlKeys.totalCost) + ': ',
-                style: Theme.of(context).primaryTextTheme.body1),
+                // Todo: Improve this translation
+                text: '${JsonIntl.of(context).get(IntlKeys.totalCost)}: ',
+                style: Theme.of(context).primaryTextTheme.bodyText2),
             TextSpan(
                 text: NumberFormat.simpleCurrency(name: 'USD')
                     .format(refueling.cost), // TODO: check unit
-                style: Theme.of(context).primaryTextTheme.subtitle),
+                style: Theme.of(context).primaryTextTheme.subtitle2),
           ],
         ),
       );
 }
 
 class _RefuelingAmount extends StatelessWidget {
+  const _RefuelingAmount({Key key, @required this.refueling}) : super(key: key);
+
   final Refueling refueling;
 
-  _RefuelingAmount({Key key, @required this.refueling}) : super(key: key);
-
   @override
-  build(context) => RichText(
+  Widget build(context) => RichText(
         text: TextSpan(
           children: [
             TextSpan(
-                text: JsonIntl.of(context).get(IntlKeys.totalAmount) + ': ',
-                style: Theme.of(context).primaryTextTheme.body1),
+                // Todo: Improve this translation
+                text: '${JsonIntl.of(context).get(IntlKeys.totalAmount)}: ',
+                style: Theme.of(context).primaryTextTheme.bodyText2),
             TextSpan(
                 text: NumberFormat(',###.0#').format(refueling.amount),
-                style: Theme.of(context).primaryTextTheme.subtitle),
+                style: Theme.of(context).primaryTextTheme.subtitle2),
             TextSpan(
-                text: ' ' + JsonIntl.of(context).get(IntlKeys.fuelUnits),
-                style: Theme.of(context).primaryTextTheme.body1)
+                text: ' ${JsonIntl.of(context).get(IntlKeys.fuelUnits)}',
+                style: Theme.of(context).primaryTextTheme.bodyText2)
           ],
         ),
       );
 }
 
 class _RefuelingBody extends StatelessWidget {
+  const _RefuelingBody({Key key, @required this.refueling}) : super(key: key);
+
   final Refueling refueling;
 
-  _RefuelingBody({Key key, @required this.refueling}) : super(key: key);
-
   @override
-  build(context) => Container(
+  Widget build(context) => Container(
       padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -106,21 +107,23 @@ class _RefuelingBody extends StatelessWidget {
 }
 
 class _RefuelingTags extends StatelessWidget {
+  const _RefuelingTags({Key key, @required this.refueling}) : super(key: key);
+
   final Refueling refueling;
 
-  _RefuelingTags({Key key, @required this.refueling}) : super(key: key);
-
   @override
-  build(context) => CarTag(text: refueling.carName, color: refueling.carColor);
+  Widget build(context) =>
+      CarTag(text: refueling.carName, color: refueling.carColor);
 }
 
 class _RefuelingEditButton extends StatelessWidget {
+  const _RefuelingEditButton({Key key, @required this.refueling})
+      : super(key: key);
+
   final Refueling refueling;
 
-  _RefuelingEditButton({Key key, @required this.refueling}) : super(key: key);
-
   @override
-  build(context) => ButtonTheme.fromButtonThemeData(
+  Widget build(context) => ButtonTheme.fromButtonThemeData(
         data: ButtonThemeData(
           minWidth: 0,
         ),
@@ -155,12 +158,13 @@ class _RefuelingEditButton extends StatelessWidget {
 }
 
 class _RefuelingDeleteButton extends StatelessWidget {
+  const _RefuelingDeleteButton({Key key, @required this.refueling})
+      : super(key: key);
+
   final Refueling refueling;
 
-  _RefuelingDeleteButton({Key key, @required this.refueling}) : super(key: key);
-
   @override
-  build(context) => ButtonTheme.fromButtonThemeData(
+  Widget build(context) => ButtonTheme.fromButtonThemeData(
         data: ButtonThemeData(
           minWidth: 0,
         ),
@@ -184,12 +188,12 @@ class _RefuelingDeleteButton extends StatelessWidget {
 }
 
 class _RefuelingFooter extends StatelessWidget {
+  const _RefuelingFooter({Key key, @required this.refueling}) : super(key: key);
+
   final Refueling refueling;
 
-  _RefuelingFooter({Key key, @required this.refueling}) : super(key: key);
-
   @override
-  build(context) => Row(
+  Widget build(context) => Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           _RefuelingTags(refueling: refueling),
@@ -204,22 +208,24 @@ class _RefuelingFooter extends StatelessWidget {
 }
 
 class RefuelingCard extends StatelessWidget {
-  final Refueling refueling;
-  final DismissDirectionCallback onDismissed;
-  final GestureTapCallback onTap;
-
-  RefuelingCard(
+  const RefuelingCard(
       {Key key,
       @required this.refueling,
       @required this.onDismissed,
       @required this.onTap})
       : super(key: key);
 
+  final Refueling refueling;
+
+  final DismissDirectionCallback onDismissed;
+
+  final GestureTapCallback onTap;
+
   @override
-  build(context) => InkWell(
+  Widget build(context) => InkWell(
       onTap: onTap,
       child: Dismissible(
-          key: Key("__dismissible__"),
+          key: Key('__dismissible__'),
           onDismissed: onDismissed,
           child: Card(
             elevation: 4,

@@ -6,14 +6,16 @@ import 'package:autodo/localization.dart';
 import 'package:json_intl/json_intl.dart';
 
 class PasswordForm extends StatelessWidget {
+  const PasswordForm({this.onSaved, this.node, this.login = true});
+
   final Function onSaved;
+
   final FocusNode node;
+
   final bool login;
 
-  PasswordForm({this.onSaved, this.node, this.login = true});
-
   @override
-  build(context) => Container(
+  Widget build(context) => Container(
         padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
         child: TextFormField(
           obscureText: true,

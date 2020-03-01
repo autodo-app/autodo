@@ -15,35 +15,48 @@ import 'write_batch_wrapper.dart';
 import 'sembast_write_batch.dart';
 
 class SembastDataRepository extends Equatable implements DataRepository {
+  SembastDataRepository(
+      {@required createDb, dbFactory, this.dbPath = 'sample.db', pathProvider})
+      : dbFactory = dbFactory ?? databaseFactoryIo,
+        pathProvider = pathProvider ?? getApplicationDocumentsDirectory {
+    _todosStream.stream.listen(print);
+  }
+
   // File path to a file in the current directory
   final String dbPath;
+
   final DatabaseFactory dbFactory;
   StoreRef get _todos => StoreRef('todos');
+
   final StreamController<List<Todo>> _todosStream =
       StreamController<List<Todo>>.broadcast();
+
   StoreRef get _refuelings => StoreRef('refuelings');
+
   final StreamController<List<Refueling>> _refuelingsStream =
       StreamController<List<Refueling>>.broadcast();
+
   StoreRef get _cars => StoreRef('cars');
+
   final StreamController<List<Car>> _carsStream =
       StreamController<List<Car>>.broadcast();
+
   StoreRef get _repeats => StoreRef('repeats');
+
   final StreamController<List<Repeat>> _repeatsStream =
       StreamController<List<Repeat>>.broadcast();
+
   final StreamController<int> _notificationIdStream =
       StreamController<int>.broadcast();
+
   final Completer<Database> dbCompleter = Completer<Database>();
+
   final Future<Directory> Function() pathProvider;
 
   Future<String> _getFullFilePath() async {
     final path = await pathProvider();
-    return path.path + '/' + dbPath;
+    return '${path.path}/$dbPath';
   }
-
-  SembastDataRepository(
-      {@required createDb, dbFactory, this.dbPath = 'sample.db', pathProvider})
-      : this.dbFactory = dbFactory ?? databaseFactoryIo,
-        this.pathProvider = pathProvider ?? getApplicationDocumentsDirectory {}
 
   Future<Database> _openDb() async {
     final path = await _getFullFilePath();
@@ -59,7 +72,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
     final db = await _openDb();
     await _todos.add(db, todo.toEntity().toDocument());
     _todosStream.add(await getCurrentTodos());
-    db.close();
+    await db.close();
   }
 
   @override
@@ -67,7 +80,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
     final db = await _openDb();
     await _todos.record(todo.id).put(db, todo.toEntity().toDocument());
     _todosStream.add(await getCurrentTodos());
-    db.close();
+    await db.close();
   }
 
   @override
@@ -75,7 +88,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
     final db = await _openDb();
     await _todos.record(todo.id).delete(db);
     _todosStream.add(await getCurrentTodos());
-    db.close();
+    await db.close();
   }
 
   @override
@@ -83,13 +96,14 @@ class SembastDataRepository extends Equatable implements DataRepository {
     return _todosStream.stream;
   }
 
+  @override
   Future<List<Todo>> getCurrentTodos() async {
     final db = await _openDb();
-    var list = await _todos.find(db);
+    final list = await _todos.find(db);
     final out = list
         .map((snap) => Todo.fromEntity(TodoEntity.fromRecord(snap)))
         .toList();
-    db.close();
+    await db.close();
     return out;
   }
 
@@ -103,12 +117,12 @@ class SembastDataRepository extends Equatable implements DataRepository {
   @override
   Future<List<Refueling>> getCurrentRefuelings() async {
     final db = await _openDb();
-    var list = await _refuelings.find(db,
+    final list = await _refuelings.find(db,
         finder: Finder(sortOrders: [SortOrder('mileage')]));
     final out = list
         .map((snap) => Refueling.fromEntity(RefuelingEntity.fromRecord(snap)))
         .toList();
-    db.close();
+    await db.close();
     return out;
   }
 
@@ -120,8 +134,8 @@ class SembastDataRepository extends Equatable implements DataRepository {
   Future<void> addNewRefueling(Refueling refueling) async {
     final db = await _openDb();
     await _refuelings.add(db, refueling.toEntity().toDocument());
-    refuelingStreamUpdate();
-    db.close();
+    await refuelingStreamUpdate();
+    await db.close();
   }
 
   @override
@@ -130,16 +144,16 @@ class SembastDataRepository extends Equatable implements DataRepository {
     await _refuelings
         .record(refueling.id)
         .put(db, refueling.toEntity().toDocument());
-    refuelingStreamUpdate();
-    db.close();
+    await refuelingStreamUpdate();
+    await db.close();
   }
 
   @override
   Future<void> deleteRefueling(Refueling refueling) async {
     final db = await _openDb();
     await _refuelings.record(refueling.id).delete(db);
-    refuelingStreamUpdate();
-    db.close();
+    await refuelingStreamUpdate();
+    await db.close();
   }
 
   @override
@@ -159,13 +173,14 @@ class SembastDataRepository extends Equatable implements DataRepository {
 
   // Cars
 
+  @override
   Future<List<Car>> getCurrentCars() async {
     final db = await _openDb();
-    var list = await _cars.find(db,
+    final list = await _cars.find(db,
         finder: Finder(sortOrders: [SortOrder('mileage')]));
     final out =
         list.map((snap) => Car.fromEntity(CarEntity.fromRecord(snap))).toList();
-    db.close();
+    await db.close();
     return out;
   }
 
@@ -177,24 +192,24 @@ class SembastDataRepository extends Equatable implements DataRepository {
   Future<void> addNewCar(Car car) async {
     final db = await _openDb();
     await _cars.add(db, car.toEntity().toDocument());
-    carStreamUpdate();
-    db.close();
+    await carStreamUpdate();
+    await db.close();
   }
 
   @override
   Future<void> updateCar(Car car) async {
     final db = await _openDb();
     await _cars.record(car.id).put(db, car.toEntity().toDocument());
-    carStreamUpdate();
-    db.close();
+    await carStreamUpdate();
+    await db.close();
   }
 
   @override
   Future<void> deleteCar(Car car) async {
     final db = await _openDb();
     await _cars.record(car.id).delete(db);
-    carStreamUpdate();
-    db.close();
+    await carStreamUpdate();
+    await db.close();
   }
 
   @override
@@ -213,13 +228,14 @@ class SembastDataRepository extends Equatable implements DataRepository {
 
   // Repeats
 
+  @override
   Future<List<Repeat>> getCurrentRepeats() async {
     final db = await _openDb();
-    var list = await _repeats.find(db);
+    final list = await _repeats.find(db);
     final out = list
         .map((snap) => Repeat.fromEntity(RepeatEntity.fromRecord(snap)))
         .toList();
-    db.close();
+    await db.close();
     return out;
   }
 
@@ -231,29 +247,29 @@ class SembastDataRepository extends Equatable implements DataRepository {
   Future<List<Repeat>> addNewRepeat(Repeat repeat) async {
     final db = await _openDb();
     await _repeats.add(db, repeat.toEntity().toDocument());
-    _repeatsUpdateStream();
-    var list = await _repeats.find(db);
-    final out = list
-        .map((snap) => Repeat.fromEntity(RepeatEntity.fromRecord(snap)))
-        .toList();
-    db.close();
-    return out;
+    await _repeatsUpdateStream();
+    // final list = await _repeats.find(db);
+    // final out = list
+    //     .map((snap) => Repeat.fromEntity(RepeatEntity.fromRecord(snap)))
+    //     .toList();
+    await db.close();
+    return []; // TODO: remove this eventually
   }
 
   @override
   Future<void> updateRepeat(Repeat repeat) async {
     final db = await _openDb();
     await _repeats.record(repeat.id).put(db, repeat.toEntity().toDocument());
-    _repeatsUpdateStream();
-    db.close();
+    await _repeatsUpdateStream();
+    await db.close();
   }
 
   @override
   Future<void> deleteRepeat(Repeat repeat) async {
     final db = await _openDb();
     await _repeats.record(repeat.id).delete(db);
-    _repeatsUpdateStream();
-    db.close();
+    await _repeatsUpdateStream();
+    await db.close();
   }
 
   @override

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
 class CarTag extends StatelessWidget {
-  final String text;
-  final Color color;
-
-  CarTag({Key key, @required this.text, this.color = Colors.blue})
+  const CarTag({Key key, @required this.text, this.color = Colors.blue})
       : super(key: key);
+
+  final String text;
+
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,7 @@ class CarTag extends StatelessWidget {
           backgroundColor: color,
           label: Text(
             text,
-            style: Theme.of(context).accentTextTheme.body2,
+            style: Theme.of(context).accentTextTheme.bodyText1,
           ),
         ),
         onPressed: () {},

@@ -10,12 +10,7 @@ import 'package:autodo/util.dart';
 import 'package:json_intl/json_intl.dart';
 
 class RepeatForm extends StatefulWidget {
-  final Todo todo;
-  final Function(String) onSaved;
-  final FocusNode node, nextNode;
-  final bool requireInput;
-
-  RepeatForm({
+  const RepeatForm({
     Key key,
     this.todo,
     @required this.onSaved,
@@ -23,6 +18,14 @@ class RepeatForm extends StatefulWidget {
     this.nextNode,
     @required this.requireInput,
   }) : super(key: key);
+
+  final Todo todo;
+
+  final Function(String) onSaved;
+
+  final FocusNode node, nextNode;
+
+  final bool requireInput;
 
   @override
   _RepeatFormState createState() => _RepeatFormState();
@@ -36,19 +39,19 @@ class _RepeatFormState extends State<RepeatForm> {
   final _autocompleteKey = GlobalKey<AutoCompleteTextFieldState<Repeat>>();
 
   @override
-  initState() {
+  void initState() {
     _autocompleteController = TextEditingController();
     super.initState();
   }
 
   @override
-  dispose() {
+  void dispose() {
     _autocompleteController.dispose();
     super.dispose();
   }
 
   @override
-  build(context) {
+  Widget build(context) {
     autoCompleteField = AutoCompleteTextField<Repeat>(
       controller: _autocompleteController,
       decoration: defaultInputDecoration(
@@ -68,8 +71,10 @@ class _RepeatFormState extends State<RepeatForm> {
       itemBuilder: (context, suggestion) => Padding(
         child: ListTile(
             title: Text(suggestion.name),
-            trailing: Text(JsonIntl.of(context).get(IntlKeys.interval) +
-                " ${suggestion.mileageInterval}")),
+            trailing: Text(
+              // Todo: Improve this translation
+              '${JsonIntl.of(context).get(IntlKeys.interval)} ${suggestion.mileageInterval}',
+            )),
         padding: EdgeInsets.all(5.0),
       ),
       itemSorter: (a, b) => a.name.length == b.name.length
@@ -89,9 +94,9 @@ class _RepeatFormState extends State<RepeatForm> {
       },
       initialValue: widget.todo?.repeatName ?? '',
       validator: (val) {
-        var txt = _autocompleteController.text;
+        final txt = _autocompleteController.text;
         if (widget.requireInput) {
-          var res = requiredValidator(txt);
+          final res = requiredValidator(txt);
           // TODO figure this out better
           // if (selectedCar != null)
           //   widget.refueling.carName = selectedCar.name;

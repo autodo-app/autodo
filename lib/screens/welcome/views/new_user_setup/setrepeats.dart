@@ -16,20 +16,21 @@ import 'base.dart';
 const int cardAppearDuration = 200; // in ms
 
 class _OilInterval extends StatelessWidget {
+  const _OilInterval(this.repeat, this.node, this.nextNode);
+
   final FocusNode node, nextNode;
+
   final Repeat repeat;
 
-  _OilInterval(this.repeat, this.node, this.nextNode);
-
   @override
-  build(context) => TextFormField(
+  Widget build(context) => TextFormField(
         key: IntegrationTestKeys.setOilInterval,
         maxLines: 1,
         autofocus: false,
         initialValue: repeat.mileageInterval.toString(),
         decoration:
             defaultInputDecoration('(miles)', 'Oil Change Interval (miles)'),
-        validator: (val) => intValidator(val),
+        validator: intValidator,
         onSaved: (val) => BlocProvider.of<RepeatsBloc>(context).add(
             UpdateRepeat(
                 repeat.copyWith(mileageInterval: int.parse(val.trim())))),
@@ -40,20 +41,21 @@ class _OilInterval extends StatelessWidget {
 }
 
 class _TireRotationInterval extends StatelessWidget {
+  const _TireRotationInterval(this.repeat, this.node);
+
   final FocusNode node;
+
   final Repeat repeat;
 
-  _TireRotationInterval(this.repeat, this.node);
-
   @override
-  build(context) => TextFormField(
+  Widget build(context) => TextFormField(
         key: IntegrationTestKeys.setTireRotationInterval,
         maxLines: 1,
         autofocus: false,
         initialValue: repeat.mileageInterval.toString(),
         decoration:
             defaultInputDecoration('(miles)', 'Tire Rotation Interval (miles)'),
-        validator: (val) => intValidator(val),
+        validator: intValidator,
         onSaved: (val) => BlocProvider.of<RepeatsBloc>(context).add(
             UpdateRepeat(
                 repeat.copyWith(mileageInterval: int.parse(val.trim())))),
@@ -64,7 +66,7 @@ class _TireRotationInterval extends StatelessWidget {
 
 class _HeaderText extends StatelessWidget {
   @override
-  build(context) => Container(
+  Widget build(context) => Container(
         padding: EdgeInsets.fromLTRB(0, 0, 0, 30),
         height: 110,
         child: Center(
@@ -85,7 +87,7 @@ class _HeaderText extends StatelessWidget {
             ),
             Text(
               'How often do you want to do these tasks?',
-              style: Theme.of(context).primaryTextTheme.body1,
+              style: Theme.of(context).primaryTextTheme.bodyText2,
             ),
           ],
         )),
@@ -93,15 +95,17 @@ class _HeaderText extends StatelessWidget {
 }
 
 class _Card extends StatelessWidget {
-  final Repeat oilRepeat, tireRotationRepeat;
-  final FocusNode oilNode, tireRotationNode;
-  final Function onNext;
-
-  _Card(this.oilRepeat, this.tireRotationRepeat, this.oilNode,
+  const _Card(this.oilRepeat, this.tireRotationRepeat, this.oilNode,
       this.tireRotationNode, this.onNext);
 
+  final Repeat oilRepeat, tireRotationRepeat;
+
+  final FocusNode oilNode, tireRotationNode;
+
+  final Function onNext;
+
   @override
-  build(context) => Container(
+  Widget build(context) => Container(
         padding: EdgeInsets.all(10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -150,24 +154,28 @@ class _Card extends StatelessWidget {
 }
 
 class SetRepeatsScreen extends StatefulWidget {
-  final GlobalKey<FormState> repeatKey;
-  final page;
+  const SetRepeatsScreen(this.repeatKey, this.page);
 
-  SetRepeatsScreen(this.repeatKey, this.page);
+  final GlobalKey<FormState> repeatKey;
+
+  final NewUserScreenPage page;
 
   @override
   SetRepeatsScreenState createState() =>
-      SetRepeatsScreenState(this.page == NewUserScreenPage.REPEATS);
+      SetRepeatsScreenState(page == NewUserScreenPage.REPEATS);
 }
 
 class SetRepeatsScreenState extends State<SetRepeatsScreen>
     with SingleTickerProviderStateMixin {
-  bool pageWillBeVisible;
-  AnimationController openCtrl;
-  var openCurve;
-  FocusNode _oilNode, _tiresNode;
-
   SetRepeatsScreenState(this.pageWillBeVisible);
+
+  bool pageWillBeVisible;
+
+  AnimationController openCtrl;
+
+  Animation<double> openCurve;
+
+  FocusNode _oilNode, _tiresNode;
 
   @override
   void initState() {
@@ -185,24 +193,24 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen>
   }
 
   @override
-  dispose() {
+  void dispose() {
     _oilNode.dispose();
     _tiresNode.dispose();
     super.dispose();
   }
 
-  _next() async {
+  Future<void> _next() async {
     if (widget.repeatKey.currentState.validate()) {
       widget.repeatKey.currentState.save();
       // hide the keyboard
       FocusScope.of(context).requestFocus(FocusNode());
       await Future.delayed(Duration(milliseconds: 400));
-      Navigator.popAndPushNamed(context, AutodoRoutes.home);
+      await Navigator.popAndPushNamed(context, AutodoRoutes.home);
     }
   }
 
   @override
-  build(context) {
+  Widget build(context) {
     if (pageWillBeVisible) {
       openCtrl.forward();
       pageWillBeVisible = false;
@@ -210,13 +218,13 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen>
 
     return BlocBuilder<RepeatsBloc, RepeatsState>(builder: (context, state) {
       if (!(state is RepeatsLoaded) ||
-          (state as RepeatsLoaded).repeats.length == 0) {
+          (state as RepeatsLoaded).repeats.isEmpty) {
         return LoadingIndicator();
       }
-      Repeat oilRepeat = (state as RepeatsLoaded)
+      final oilRepeat = (state as RepeatsLoaded)
           .repeats
           .firstWhere((val) => val.name == 'oil');
-      Repeat tireRotationRepeat = (state as RepeatsLoaded)
+      final tireRotationRepeat = (state as RepeatsLoaded)
           .repeats
           .firstWhere((val) => val.name == 'tireRotation');
       print('oil $oilRepeat tire $tireRotationRepeat');

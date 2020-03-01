@@ -1,14 +1,12 @@
+import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/localization.dart';
+import 'package:autodo/models/models.dart';
 import 'package:autodo/screens/home/widgets/todo_delete_button.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:autodo/screens/home/widgets/todo_card.dart';
-import 'package:autodo/blocs/blocs.dart';
-import 'package:autodo/models/models.dart';
 
 class MockTodosBloc extends MockBloc<TodosEvent, TodosState>
     implements TodosBloc {}
@@ -20,15 +18,14 @@ class MockFilteredTodosBloc
 void main() {
   group('TodosCard', () {
     TodosBloc todosBloc;
-    FilteredTodosBloc filteredTodosBloc;
 
     setUp(() {
       todosBloc = MockTodosBloc();
-      filteredTodosBloc = MockFilteredTodosBloc();
+      MockFilteredTodosBloc();
     });
 
     testWidgets('renders', (WidgetTester tester) async {
-      Key todosKey = Key('todos');
+      final todosKey = Key('todos');
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
@@ -47,7 +44,7 @@ void main() {
       expect(find.byKey(todosKey), findsOneWidget);
     });
     testWidgets('press', (WidgetTester tester) async {
-      Key todosKey = Key('todos');
+      final todosKey = Key('todos');
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
@@ -69,7 +66,7 @@ void main() {
       verify(todosBloc.add(DeleteTodo(Todo(name: 'test')))).called(1);
     });
     testWidgets('undo', (WidgetTester tester) async {
-      Key todosKey = Key('todos');
+      final todosKey = Key('todos');
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [

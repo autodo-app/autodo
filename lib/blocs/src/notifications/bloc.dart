@@ -10,26 +10,34 @@ import 'event.dart';
 import 'state.dart';
 
 class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
-  final DatabaseBloc _dbBloc;
-  StreamSubscription _dataSubscription;
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
-  static final channelID = 'com.jonathanbayless.autodo';
-  static final channelName = 'auToDo';
-  static final channelDescription = 'Task reminders from the auToDo app';
-  static final androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      channelID, channelName, channelDescription,
-      importance: Importance.Max,
-      priority: Priority.High,
-      ticker: 'auToDo notification');
-  static final iOSPlatformChannelSpecifics = IOSNotificationDetails();
-  static final platformChannelSpecifics = NotificationDetails(
-      androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-
   NotificationsBloc({notificationsPlugin, @required dbBloc})
       : assert(dbBloc != null),
         _dbBloc = dbBloc,
         flutterLocalNotificationsPlugin =
             notificationsPlugin ?? FlutterLocalNotificationsPlugin();
+
+  final DatabaseBloc _dbBloc;
+
+  StreamSubscription _dataSubscription;
+
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+
+  static final channelID = 'com.jonathanbayless.autodo';
+
+  static final channelName = 'auToDo';
+
+  static final channelDescription = 'Task reminders from the auToDo app';
+
+  static final androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      channelID, channelName, channelDescription,
+      importance: Importance.Max,
+      priority: Priority.High,
+      ticker: 'auToDo notification');
+
+  static final iOSPlatformChannelSpecifics = IOSNotificationDetails();
+
+  static final platformChannelSpecifics = NotificationDetails(
+      androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
 
   @override
   NotificationsState get initialState => NotificationsLoading();
@@ -65,7 +73,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     } catch (_) {
       yield NotificationsNotLoaded();
     }
-    _dataSubscription?.cancel();
+    await _dataSubscription?.cancel();
     _dataSubscription =
         repo?.notificationID()?.listen((id) => add(NotificationIdUpdated(id)));
   }
@@ -88,7 +96,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   Stream<NotificationsState> _mapScheduleNotificationToState(
       ScheduleNotification event) async* {
     if (state is NotificationsLoaded) {
-      var id = (state as NotificationsLoaded).lastID + 1;
+      final id = (state as NotificationsLoaded).lastID + 1;
       await flutterLocalNotificationsPlugin.schedule(
           id, event.title, event.body, event.date, platformChannelSpecifics);
       yield NotificationsLoaded(id);
@@ -117,7 +125,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
       ReScheduleNotification event) async* {
     await cancel(event.id);
     if (state is NotificationsLoaded) {
-      var id = (state as NotificationsLoaded).lastID + 1;
+      final id = (state as NotificationsLoaded).lastID + 1;
       await flutterLocalNotificationsPlugin.schedule(
           id, event.title, event.body, event.date, platformChannelSpecifics);
       yield NotificationsLoaded(id);
@@ -131,7 +139,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
 
   @override
   Future<void> close() async {
-    _dataSubscription?.cancel();
+    await _dataSubscription?.cancel();
     return super.close();
   }
 }

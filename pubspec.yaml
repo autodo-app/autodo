@@ -65,6 +65,7 @@ dev_dependencies:
   test: ^1.6.3
   bloc_test: ^3.1.0
   mockito: any
+  pedantic:
 
 
 

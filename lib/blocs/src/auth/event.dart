@@ -26,11 +26,11 @@ abstract class AuthenticationEvent extends Equatable {
 ///
 /// Also used to prep a dummy user for an integration test if applicable.
 class AppStarted extends AuthenticationEvent {
+  const AppStarted({this.integrationTest});
+
   /// A flag used to change the transformation's behavior to prep a dummy user
   /// in the case of an integration test.
   final bool integrationTest;
-
-  const AppStarted({this.integrationTest});
 
   @override
   List<Object> get props => [integrationTest];

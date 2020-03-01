@@ -6,9 +6,9 @@ abstract class FilteredRefuelingsEvent extends Equatable {
 }
 
 class UpdateRefuelingsFilter extends FilteredRefuelingsEvent {
-  final VisibilityFilter filter;
-
   const UpdateRefuelingsFilter(this.filter);
+
+  final VisibilityFilter filter;
 
   @override
   List<Object> get props => [filter];
@@ -18,9 +18,9 @@ class UpdateRefuelingsFilter extends FilteredRefuelingsEvent {
 }
 
 class UpdateRefuelings extends FilteredRefuelingsEvent {
-  final List<Refueling> refuelings;
-
   const UpdateRefuelings(this.refuelings);
+
+  final List<Refueling> refuelings;
 
   @override
   List<Object> get props => [refuelings];
@@ -30,13 +30,13 @@ class UpdateRefuelings extends FilteredRefuelingsEvent {
 }
 
 class FilteredRefuelingsUpdateCars extends FilteredRefuelingsEvent {
-  final List<Car> cars;
-
   const FilteredRefuelingsUpdateCars(this.cars);
+
+  final List<Car> cars;
 
   @override
   List<Object> get props => [cars];
 
   @override
-  toString() => 'FilteredRefuelingsUpdateCars { cars: $cars }';
+  String toString() => 'FilteredRefuelingsUpdateCars { cars: $cars }';
 }

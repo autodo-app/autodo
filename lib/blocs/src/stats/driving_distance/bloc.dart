@@ -11,12 +11,13 @@ import 'state.dart';
 
 class DrivingDistanceStatsBloc
     extends Bloc<DrivingDistanceStatsEvent, DrivingDistanceStatsState> {
-  final CarsBloc _carsBloc;
-  StreamSubscription _carsSubscription;
-
   DrivingDistanceStatsBloc({@required carsBloc})
       : assert(carsBloc != null),
         _carsBloc = carsBloc;
+
+  final CarsBloc _carsBloc;
+
+  StreamSubscription _carsSubscription;
 
   @override
   DrivingDistanceStatsState get initialState => DrivingDistanceStatsLoading();
@@ -37,7 +38,7 @@ class DrivingDistanceStatsBloc
       final data = await _prepData((_carsBloc.state as CarsLoaded).cars);
       yield DrivingDistanceStatsLoaded(data);
     }
-    _carsSubscription?.cancel();
+    await _carsSubscription?.cancel();
     _carsBloc.listen((state) {
       if (state is CarsLoaded) {
         add(UpdateDrivingDistanceData(state.cars));
@@ -46,9 +47,9 @@ class DrivingDistanceStatsBloc
   }
 
   Future<List<Series<DistanceRatePoint, DateTime>>> _prepData(cars) async {
-    var out = List<Series<DistanceRatePoint, DateTime>>();
+    final out = <Series<DistanceRatePoint, DateTime>>[];
     for (var car in cars) {
-      var points = car.distanceRateHistory;
+      final points = car.distanceRateHistory;
       print(points);
       if (points == null || points.length == 0) continue;
 

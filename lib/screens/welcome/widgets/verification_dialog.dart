@@ -8,11 +8,11 @@ import 'package:json_intl/json_intl.dart';
 
 class EmailVerificationDialog extends StatelessWidget {
   @override
-  build(context) => AlertDialog(
+  Widget build(context) => AlertDialog(
         title: Text(JsonIntl.of(context).get(IntlKeys.verifyEmail),
-            style: Theme.of(context).primaryTextTheme.title),
+            style: Theme.of(context).primaryTextTheme.headline6),
         content: Text(JsonIntl.of(context).get(IntlKeys.verifyBodyText),
-            style: Theme.of(context).primaryTextTheme.body1),
+            style: Theme.of(context).primaryTextTheme.bodyText2),
         actions: [
           BlocBuilder<SignupBloc, SignupState>(builder: (context, state) {
             if (!(state is UserVerified)) return Container();

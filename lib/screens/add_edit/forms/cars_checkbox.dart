@@ -3,28 +3,31 @@ import 'package:flutter/material.dart';
 import 'package:autodo/models/models.dart';
 
 class CarsCheckboxForm extends StatefulWidget {
-  final List<Car> cars;
-  final Function(List<Map<String, dynamic>>) onSaved;
+  const CarsCheckboxForm({this.cars, this.onSaved});
 
-  CarsCheckboxForm({this.cars, this.onSaved});
+  final List<Car> cars;
+
+  final Function(List<Map<String, dynamic>>) onSaved;
 
   @override
   _CarsFormState createState() => _CarsFormState(cars, onSaved);
 }
 
 class _CarsFormState extends State<CarsCheckboxForm> {
-  final List<Car> cars;
-  final Function(List<Map<String, dynamic>>) onSaved;
-  List<Map<String, dynamic>> _carStates = [];
-
   _CarsFormState(this.cars, this.onSaved) {
     for (var car in cars) {
       _carStates.add({'name': car.name, 'enabled': false});
     }
   }
 
+  final List<Car> cars;
+
+  final Function(List<Map<String, dynamic>>) onSaved;
+
+  final List<Map<String, dynamic>> _carStates = [];
+
   @override
-  build(context) => FormField<List<Map<String, dynamic>>>(
+  Widget build(context) => FormField<List<Map<String, dynamic>>>(
         builder: (context) => Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

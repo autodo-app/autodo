@@ -32,11 +32,11 @@ final numberAxisSpec = NumericAxisSpec(
 );
 
 double floorToPrecision(double val, int places) {
-  double mod = pow(10.0, places);
-  return ((val * mod).floor().toDouble() / mod);
+  final double mod = pow(10.0, places);
+  return (val * mod).floor().toDouble() / mod;
 }
 
-lerp(min, max, count, places) => List.generate(
+List<TickSpec<double>> lerp(min, max, count, places) => List.generate(
         count,
         (index) =>
             floorToPrecision(index * ((max - min) / count) + min, places))

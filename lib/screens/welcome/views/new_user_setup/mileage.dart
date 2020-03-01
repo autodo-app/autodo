@@ -11,11 +11,14 @@ import 'package:json_intl/json_intl.dart';
 import 'base.dart';
 
 class CarEntryField extends StatefulWidget {
-  final Function next;
-  final Function onNameSaved, onMileageSaved;
-  final GlobalKey<FormState> formKey;
+  const CarEntryField(
+      this.next, this.onNameSaved, this.onMileageSaved, this.formKey);
 
-  CarEntryField(this.next, this.onNameSaved, this.onMileageSaved, this.formKey);
+  final Function next;
+
+  final Function onNameSaved, onMileageSaved;
+
+  final GlobalKey<FormState> formKey;
 
   @override
   State<CarEntryField> createState() =>
@@ -23,24 +26,28 @@ class CarEntryField extends StatefulWidget {
 }
 
 class CarEntryFieldState extends State<CarEntryField> {
-  bool firstWritten = false;
-  FocusNode _nameNode, _mileageNode;
-  Function nextNode;
-  final Function onNameSaved, onMileageSaved;
-  final GlobalKey<FormState> formKey;
-
   CarEntryFieldState(
       this.nextNode, this.onNameSaved, this.onMileageSaved, this.formKey);
 
+  bool firstWritten = false;
+
+  FocusNode _nameNode, _mileageNode;
+
+  Function nextNode;
+
+  final Function onNameSaved, onMileageSaved;
+
+  final GlobalKey<FormState> formKey;
+
   @override
-  initState() {
+  void initState() {
     _nameNode = FocusNode();
     _mileageNode = FocusNode();
     super.initState();
   }
 
   @override
-  dispose() {
+  void dispose() {
     _nameNode.dispose();
     _mileageNode.dispose();
     super.dispose();
@@ -48,13 +55,13 @@ class CarEntryFieldState extends State<CarEntryField> {
 
   @override
   Widget build(BuildContext context) {
-    nameField() => TextFormField(
+    TextFormField nameField() => TextFormField(
           key: IntegrationTestKeys.mileageNameField,
           maxLines: 1,
           autofocus: true,
           decoration: defaultInputDecoration(
               '', JsonIntl.of(context).get(IntlKeys.carName)),
-          validator: (val) => requiredValidator(val),
+          validator: requiredValidator,
           initialValue: '',
           onSaved: onNameSaved,
           focusNode: _nameNode,
@@ -62,13 +69,13 @@ class CarEntryFieldState extends State<CarEntryField> {
           onFieldSubmitted: (_) => changeFocus(_nameNode, _mileageNode),
         );
 
-    mileageField() => TextFormField(
+    TextFormField mileageField() => TextFormField(
           key: IntegrationTestKeys.mileageMileageField,
           maxLines: 1,
           autofocus: false,
           decoration: defaultInputDecoration(
               '', JsonIntl.of(context).get(IntlKeys.mileage)),
-          validator: (val) => intValidator(val),
+          validator: intValidator,
           initialValue: '',
           onSaved: onMileageSaved,
           focusNode: _mileageNode,
@@ -105,25 +112,29 @@ class CarEntryFieldState extends State<CarEntryField> {
 }
 
 class MileageScreen extends StatefulWidget {
+  const MileageScreen(this.mileageEntry, this.mileageKey, this.onNext);
+
   final String mileageEntry;
-  final mileageKey;
+
+  final Key mileageKey;
+
   final Function() onNext;
 
-  MileageScreen(this.mileageEntry, this.mileageKey, this.onNext);
-
   @override
-  MileageScreenState createState() => MileageScreenState(this.mileageEntry);
+  MileageScreenState createState() => MileageScreenState(mileageEntry);
 }
 
 class MileageScreenState extends State<MileageScreen> {
-  var mileageEntry;
-  List<GlobalKey<FormState>> formKeys = [GlobalKey<FormState>()];
-  List<Car> cars = [Car()];
-
   MileageScreenState(this.mileageEntry);
 
-  _next() async {
-    bool allValidated = true;
+  String mileageEntry;
+
+  List<GlobalKey<FormState>> formKeys = [GlobalKey<FormState>()];
+
+  List<Car> cars = [Car()];
+
+  Future<void> _next() async {
+    var allValidated = true;
     formKeys.forEach((k) {
       if (k.currentState.validate()) {
         k.currentState.save();
@@ -144,7 +155,7 @@ class MileageScreenState extends State<MileageScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Widget headerText = Container(
+    final Widget headerText = Container(
       height: 110,
       child: Center(
           child: Column(
@@ -164,14 +175,14 @@ class MileageScreenState extends State<MileageScreen> {
           ),
           Text(
             JsonIntl.of(context).get(IntlKeys.tapAddCars),
-            style: Theme.of(context).primaryTextTheme.body1,
+            style: Theme.of(context).primaryTextTheme.bodyText2,
           ),
         ],
       )),
     );
 
     Widget card() {
-      List<Widget> carFields = [];
+      final carFields = <Widget>[];
       for (var i in Iterable.generate(cars.length)) {
         carFields.add(CarEntryField((i == cars.length - 1) ? _next : null,
             (val) {

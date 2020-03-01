@@ -32,16 +32,16 @@ Future<void> _reportError(dynamic error, dynamic stackTrace) async {
     return;
   } else {
     // Send the Exception and Stacktrace to Sentry in Production mode.
-    _sentry.captureException(
+    await _sentry.captureException(
       exception: error,
       stackTrace: stackTrace,
     );
   }
 }
 
-void run(bool integrationTest) async {
+Future<void> run(bool integrationTest) async {
   final AuthRepository authRepository = FirebaseAuthRepository();
-  ThemeData theme = createTheme();
+  final theme = createTheme();
   runApp(
     BlocProvider<AuthenticationBloc>(
       create: (context) => AuthenticationBloc(userRepository: authRepository)
@@ -105,9 +105,9 @@ void run(bool integrationTest) async {
 
 Future<Map> init() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Map keys = await SecretLoader(secretPath: 'assets/keys.json').load();
+  final Map keys = await SecretLoader(secretPath: 'assets/keys.json').load();
   if (Platform.isIOS) {
-    FirebaseApp.configure(
+    await FirebaseApp.configure(
         name: 'autodo',
         options: FirebaseOptions(
           googleAppID: '1:617460744396:ios:7da25d96edce10cefc4269',
@@ -115,7 +115,7 @@ Future<Map> init() async {
           apiKey: keys['firebase-key'],
         ));
   } else {
-    FirebaseApp.configure(
+    await FirebaseApp.configure(
         name: 'autodo',
         options: FirebaseOptions(
           googleAppID: '1:617460744396:android:400cbb86de167047',
@@ -129,32 +129,35 @@ Future<Map> init() async {
   return keys;
 }
 
-void main() async {
+Future<void> main() async {
   final keys = await init();
   _sentry = SentryClient(dsn: keys['sentry-dsn']);
-  runZoned<Future<void>>(() async {
-    run(false);
-  }, onError: (error, stackTrace) => _reportError(error, stackTrace));
+  await runZoned<Future<void>>(() async {
+    await run(false);
+  }, onError: _reportError);
 }
 
 class App extends StatelessWidget {
-  final ThemeData _theme;
-  final AuthRepository _authRepository;
-  final bool integrationTest;
-
-  App({@required theme, @required authRepository, this.integrationTest})
+  const App({@required theme, @required authRepository, this.integrationTest})
       : assert(theme != null),
         assert(authRepository != null),
         _theme = theme,
         _authRepository = authRepository;
 
+  final ThemeData _theme;
+
+  final AuthRepository _authRepository;
+
+  final bool integrationTest;
+
   @override
-  build(context) {
-    Widget homeProvider = HomeScreenProvider(integrationTest: integrationTest);
-    Widget welcomeProvider = WelcomeScreenProvider();
-    Widget signupProvider =
+  Widget build(context) {
+    final Widget homeProvider =
+        HomeScreenProvider(integrationTest: integrationTest);
+    final Widget welcomeProvider = WelcomeScreenProvider();
+    final Widget signupProvider =
         SignupScreenProvider(authRepository: _authRepository);
-    Widget loginProvider = LoginScreenProvider(
+    final Widget loginProvider = LoginScreenProvider(
       authRepository: _authRepository,
     );
     return MaterialApp(
@@ -170,7 +173,7 @@ class App extends StatelessWidget {
         const Locale('fr'),
       ],
       routes: {
-        "/": (context) => BlocBuilder<AuthenticationBloc, AuthenticationState>(
+        '/': (context) => BlocBuilder<AuthenticationBloc, AuthenticationState>(
               // Just here as the splitter between home screen and login screen
               builder: (context, state) {
                 if (state is RemoteAuthenticated ||

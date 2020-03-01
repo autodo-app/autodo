@@ -10,6 +10,7 @@ void main() {
       final policy = Key('policy');
       await tester.pumpWidget(
           MaterialApp(home: Scaffold(key: scaffold, body: Container())));
+      // ignore: unawaited_futures
       showDialog(
         context: scaffold.currentContext,
         builder: (context) =>
@@ -24,6 +25,7 @@ void main() {
       final button = Key('button');
       await tester.pumpWidget(
           MaterialApp(home: Scaffold(key: scaffold, body: Container())));
+      // ignore: unawaited_futures
       showDialog(
         context: scaffold.currentContext,
         builder: (context) => PrivacyPolicy(

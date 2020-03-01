@@ -4,16 +4,17 @@ import 'package:autodo/theme.dart';
 import 'package:json_intl/json_intl.dart';
 
 class PrivacyPolicy extends StatelessWidget {
+  const PrivacyPolicy(this.text, {Key key, this.buttonKey}) : super(key: key);
+
   final RichText text;
+
   final Key buttonKey;
 
-  PrivacyPolicy(this.text, {Key key, this.buttonKey}) : super(key: key);
-
   @override
-  build(context) => AlertDialog(
+  Widget build(context) => AlertDialog(
         backgroundColor: cardColor,
         title: Text(JsonIntl.of(context).get(IntlKeys.privacyPolicy)),
-        titleTextStyle: Theme.of(context).primaryTextTheme.title,
+        titleTextStyle: Theme.of(context).primaryTextTheme.headline6,
         content: SingleChildScrollView(
             child: Container(
           child: text,

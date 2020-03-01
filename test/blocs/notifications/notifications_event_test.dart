@@ -13,7 +13,7 @@ void main() {
       });
       test('toString', () {
         expect(NotificationIdUpdated(0).toString(),
-            "NotificationIdUpdated { id: 0 }");
+            'NotificationIdUpdated { id: 0 }');
       });
     });
     group('ScheduleNotification', () {
@@ -33,7 +33,7 @@ void main() {
                     title: 'test',
                     body: 'here')
                 .toString(),
-            "ScheduleNotification { date: ${DateTime.fromMillisecondsSinceEpoch(0)}, title: test, body: here }");
+            'ScheduleNotification { date: ${DateTime.fromMillisecondsSinceEpoch(0)}, title: test, body: here }');
       });
     });
     group('ReScheduleNotification', () {
@@ -55,7 +55,7 @@ void main() {
                     title: 'test',
                     body: 'here')
                 .toString(),
-            "ReScheduleNotification { id: 1, date: ${DateTime.fromMillisecondsSinceEpoch(0)}, title: test, body: here }");
+            'ReScheduleNotification { id: 1, date: ${DateTime.fromMillisecondsSinceEpoch(0)}, title: test, body: here }');
       });
     });
     group('CancelNotification', () {

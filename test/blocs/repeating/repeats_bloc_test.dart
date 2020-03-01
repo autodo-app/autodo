@@ -8,8 +8,10 @@ import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/models/models.dart';
 import 'package:autodo/repositories/repositories.dart';
 
+// ignore: must_be_immutable
 class MockDataRepository extends Mock implements FirebaseDataRepository {}
 
+// ignore: must_be_immutable
 class MockWriteBatch extends Mock implements WriteBatchWrapper {}
 
 class MockDbBloc extends Mock implements DatabaseBloc {}
@@ -18,8 +20,9 @@ class MockCarsBloc extends MockBloc<CarsEvent, CarsState> implements CarsBloc {}
 
 void main() {
   group('RepeatsBloc', () {
-    CarsBloc carsBloc = MockCarsBloc();
+    final CarsBloc carsBloc = MockCarsBloc();
     test('Null Assertion', () {
+      // ignore: missing_required_param
       expect(() => RepeatsBloc(dbBloc: null), throwsAssertionError);
     });
     group('LoadRepeats', () {
@@ -146,7 +149,7 @@ void main() {
       'DeleteRepeat',
       build: () {
         final dataRepository = MockDataRepository();
-        var repeats = [Repeat(id: '0')];
+        final repeats = [Repeat(id: '0')];
         when(dataRepository.repeats())
             .thenAnswer((_) => Stream.fromIterable([repeats]));
         when(dataRepository.deleteRepeat(Repeat(id: '0')))
@@ -182,7 +185,7 @@ void main() {
         when(dataRepository.getCurrentRepeats())
             .thenAnswer((_) async => RepeatsBloc.defaults);
         // dynamic lambdas to effectively do nothing
-        when(mockBatch.setData(dynamic)).thenAnswer((_) => ((_) => _));
+        when(mockBatch.setData(dynamic)).thenAnswer((_) => (_) => _);
         when(mockBatch.commit()).thenAnswer((_) async {});
         final dbBloc = MockDbBloc();
         when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));

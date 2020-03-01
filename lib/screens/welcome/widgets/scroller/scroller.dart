@@ -8,8 +8,12 @@ import 'tutorial1.dart';
 import 'tutorial2.dart';
 
 class WelcomePageScroller extends StatefulWidget {
+  WelcomePageScroller({this.lastPageNotifier});
+
   final VoidCallback lastPageNotifier;
+
   final PageController controller = PageController();
+
   final List<Widget> screens = [
     Welcome(),
     Tutorial1(),
@@ -17,16 +21,15 @@ class WelcomePageScroller extends StatefulWidget {
   ];
 
   List<Widget> get screenList {
-    return this.screens;
+    return screens;
   }
 
   PageController get ctrl {
-    return this.controller;
+    return controller;
   }
 
-  void showPage(page) => this.controller.jumpToPage(page);
+  void showPage(page) => controller.jumpToPage(page);
 
-  WelcomePageScroller({this.lastPageNotifier});
   @override
   WelcomePageScrollerState createState() => WelcomePageScrollerState();
 }
@@ -40,7 +43,7 @@ class WelcomePageScrollerState extends State<WelcomePageScroller> {
   void initState() {
     super.initState();
     debounceTimer = Timer(debounceDelta, () {});
-    VoidCallback scrollListener = () {
+    final VoidCallback scrollListener = () {
       if (widget.controller.page.round() == (widget.screens.length - 1) &&
           !debounceTimer.isActive &&
           prevVal != 2) {

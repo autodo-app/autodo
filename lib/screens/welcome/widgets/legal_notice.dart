@@ -9,7 +9,7 @@ import 'package:autodo/theme.dart';
 import 'package:json_intl/json_intl.dart';
 
 class LegalNotice extends StatelessWidget {
-  onTap(context) {
+  void onTap(context) {
     BlocProvider.of<LegalBloc>(context).add(LoadLegal());
     showDialog<Widget>(
         context: context,
@@ -27,14 +27,14 @@ class LegalNotice extends StatelessWidget {
   }
 
   @override
-  build(context) => Container(
+  Widget build(context) => Container(
       padding: EdgeInsets.fromLTRB(5, 15, 5, 0),
       child: Center(
           child: RichText(
         textAlign: TextAlign.center,
         text: TextSpan(children: [
           TextSpan(
-            text: JsonIntl.of(context).get(IntlKeys.legal1) + ' ',
+            text: '${JsonIntl.of(context).get(IntlKeys.legal1)} ',
             style: finePrint(),
           ),
           TextSpan(
@@ -43,7 +43,7 @@ class LegalNotice extends StatelessWidget {
             recognizer: TapGestureRecognizer()..onTap = () {},
           ),
           TextSpan(
-            text: ' ' + JsonIntl.of(context).get(IntlKeys.legal3) + ' ',
+            text: ' ${JsonIntl.of(context).get(IntlKeys.legal3)} ',
             style: finePrint(),
           ),
           TextSpan(
@@ -53,7 +53,7 @@ class LegalNotice extends StatelessWidget {
             semanticsLabel: 'Privacy Policy Button',
           ),
           TextSpan(
-            text: ' ' + JsonIntl.of(context).get(IntlKeys.legal5),
+            text: ' ${JsonIntl.of(context).get(IntlKeys.legal5)}',
             style: finePrint(),
           ),
         ]),

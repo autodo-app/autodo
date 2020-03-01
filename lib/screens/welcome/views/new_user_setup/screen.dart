@@ -11,7 +11,7 @@ import 'setrepeats.dart';
 import 'new_user_screen_page.dart';
 
 class NewUserScreen extends StatefulWidget {
-  NewUserScreen({Key key = IntegrationTestKeys.newUserScreen})
+  const NewUserScreen({Key key = IntegrationTestKeys.newUserScreen})
       : super(key: key);
 
   @override
@@ -64,10 +64,11 @@ class NewUserScreenState extends State<NewUserScreen> {
     if (page.value == NewUserScreenPage.MILEAGE) {
       // delete the current user somehow?
       Navigator.pop(context);
-    } else if (page.value == NewUserScreenPage.LATEST)
+    } else if (page.value == NewUserScreenPage.LATEST) {
       setState(() => page.value = NewUserScreenPage.MILEAGE);
-    else if (page.value == NewUserScreenPage.REPEATS)
+    } else if (page.value == NewUserScreenPage.REPEATS) {
       setState(() => page.value = NewUserScreenPage.LATEST);
+    }
   }
 
   @override
@@ -86,7 +87,7 @@ class NewUserScreenState extends State<NewUserScreen> {
                       appBar: AppBar(
                         leading: IconButton(
                           icon: Icon(Icons.arrow_back),
-                          onPressed: () => backAction(),
+                          onPressed: backAction,
                         ),
                       ),
                       body: currentPage(),

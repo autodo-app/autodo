@@ -8,10 +8,12 @@ import 'package:autodo/theme.dart';
 import 'package:json_intl/json_intl.dart';
 
 class _PasswordResetDialog extends StatefulWidget {
-  final String email;
-  final AuthRepository authRepository;
-  _PasswordResetDialog(Key key, this.email, this.authRepository)
+  const _PasswordResetDialog(Key key, this.email, this.authRepository)
       : super(key: key);
+
+  final String email;
+
+  final AuthRepository authRepository;
 
   @override
   _PasswordResetDialogState createState() => _PasswordResetDialogState();
@@ -22,9 +24,9 @@ class _PasswordResetDialogState extends State<_PasswordResetDialog> {
   String _email;
 
   @override
-  build(context) => AlertDialog(
+  Widget build(context) => AlertDialog(
           title: Text(JsonIntl.of(context).get(IntlKeys.sendPasswordReset),
-              style: Theme.of(context).primaryTextTheme.title),
+              style: Theme.of(context).primaryTextTheme.headline6),
           content: Form(
             key: _passwordResetKey,
             child: Column(
@@ -81,11 +83,12 @@ class _PasswordResetDialogState extends State<_PasswordResetDialog> {
 }
 
 class PasswordResetButton extends StatelessWidget {
-  final dialogKey;
+  const PasswordResetButton({this.dialogKey});
 
-  PasswordResetButton({this.dialogKey});
+  final Key dialogKey;
 
-  build(context) => FlatButton(
+  @override
+  Widget build(context) => FlatButton(
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         child: Text(
           JsonIntl.of(context).get(IntlKeys.forgotYourPassword),
@@ -93,7 +96,7 @@ class PasswordResetButton extends StatelessWidget {
         ),
         onPressed: () {
           final bloc = BlocProvider.of<LoginBloc>(context);
-          var email;
+          String email;
           if (bloc.state is LoginCredentialsValid) {
             email = (bloc.state as LoginCredentialsValid).email;
           } else {

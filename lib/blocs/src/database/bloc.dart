@@ -12,11 +12,6 @@ import 'state.dart';
 import '../auth/barrel.dart';
 
 class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
-  final Firestore _firestoreInstance;
-  AuthenticationBloc _authenticationBloc;
-  StreamSubscription _authSubscription;
-  Future<Directory> Function() pathProvider;
-
   DatabaseBloc(
       {firestoreInstance, @required authenticationBloc, this.pathProvider})
       : assert(authenticationBloc != null),
@@ -34,6 +29,14 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
     });
   }
 
+  final Firestore _firestoreInstance;
+
+  final AuthenticationBloc _authenticationBloc;
+
+  StreamSubscription _authSubscription;
+
+  Future<Directory> Function() pathProvider;
+
   @override
   DatabaseState get initialState => DbUninitialized();
 
@@ -49,7 +52,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
   }
 
   Stream<DatabaseState> _mapUserLoggedInToState(event) async* {
-    FirebaseDataRepository repository = FirebaseDataRepository(
+    final repository = FirebaseDataRepository(
       firestoreInstance: _firestoreInstance,
       uuid: event.uuid,
     );
@@ -71,7 +74,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       print('ignoring outdated trial login event');
       return;
     }
-    final repo = await SembastDataRepository(
+    final repo = SembastDataRepository(
         createDb: event.newUser, pathProvider: pathProvider);
     await repo.load();
     yield DbLoaded(repo, event.newUser);

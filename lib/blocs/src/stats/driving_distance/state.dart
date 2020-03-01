@@ -13,13 +13,13 @@ abstract class DrivingDistanceStatsState extends Equatable {
 class DrivingDistanceStatsLoading extends DrivingDistanceStatsState {}
 
 class DrivingDistanceStatsLoaded extends DrivingDistanceStatsState {
-  final List<Series<DistanceRatePoint, DateTime>> drivingDistanceData;
-
   const DrivingDistanceStatsLoaded(this.drivingDistanceData);
+
+  final List<Series<DistanceRatePoint, DateTime>> drivingDistanceData;
 
   @override
   List<Object> get props => [
-        (drivingDistanceData.length > 0)
+        (drivingDistanceData.isNotEmpty)
             ? drivingDistanceData
                 ?.map((r) => r.id)
                 ?.reduce((val, id) => val + id)

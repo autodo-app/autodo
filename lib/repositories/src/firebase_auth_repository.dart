@@ -8,11 +8,6 @@ typedef GetGoogleCredentialsFn = AuthCredential Function(
     {String accessToken, String idToken});
 
 class FirebaseAuthRepository extends AuthRepository {
-  final FirebaseAuth _firebaseAuth;
-  final GoogleSignIn _googleSignIn;
-  final GetGoogleCredentialsFn _getGoogleCredential;
-  FirebaseUser _cachedCurrentUser;
-
   FirebaseAuthRepository({
     FirebaseAuth firebaseAuth,
     GoogleSignIn googleSignin,
@@ -22,22 +17,31 @@ class FirebaseAuthRepository extends AuthRepository {
         _getGoogleCredential =
             getGoogleCredential ?? GoogleAuthProvider.getCredential;
 
+  final FirebaseAuth _firebaseAuth;
+
+  final GoogleSignIn _googleSignIn;
+
+  final GetGoogleCredentialsFn _getGoogleCredential;
+
+  FirebaseUser _cachedCurrentUser;
+
+  @override
   Future<FirebaseUser> signInWithGoogle() async {
-    final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
-    final AuthCredential credential = _getGoogleCredential(
+    final googleUser = await _googleSignIn.signIn();
+    final googleAuth = await googleUser.authentication;
+    final credential = _getGoogleCredential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
-    AuthResult res = await _firebaseAuth.signInWithCredential(credential);
+    final res = await _firebaseAuth.signInWithCredential(credential);
     _cachedCurrentUser = res.user;
     return res.user;
   }
 
+  @override
   Future<FirebaseUser> signInWithCredentials(
       String email, String password) async {
-    AuthResult res = await _firebaseAuth.signInWithEmailAndPassword(
+    final res = await _firebaseAuth.signInWithEmailAndPassword(
       email: email,
       password: password,
     );
@@ -45,8 +49,9 @@ class FirebaseAuthRepository extends AuthRepository {
     return res.user;
   }
 
+  @override
   Future<FirebaseUser> signUp(String email, String password) async {
-    var res = await _firebaseAuth.createUserWithEmailAndPassword(
+    final res = await _firebaseAuth.createUserWithEmailAndPassword(
       email: email,
       password: password,
     );
@@ -54,13 +59,15 @@ class FirebaseAuthRepository extends AuthRepository {
     return res.user;
   }
 
+  @override
   Future<FirebaseUser> signUpWithVerification(
       String email, String password) async {
-    var user = await signUp(email, password);
+    final user = await signUp(email, password);
     await user.sendEmailVerification();
     return user;
   }
 
+  @override
   Future<void> signOut() async {
     _cachedCurrentUser = null;
     return Future.wait([
@@ -69,9 +76,10 @@ class FirebaseAuthRepository extends AuthRepository {
     ]);
   }
 
+  @override
   Future<void> deleteCurrentUser() async {
     try {
-      var user = _cachedCurrentUser ?? await _firebaseAuth.currentUser();
+      final user = _cachedCurrentUser ?? await _firebaseAuth.currentUser();
       print(user);
       print('cache $_cachedCurrentUser');
       _cachedCurrentUser = null;
@@ -82,25 +90,30 @@ class FirebaseAuthRepository extends AuthRepository {
     }
   }
 
+  @override
   Future<bool> isSignedIn() async {
     final currentUser = await _firebaseAuth.currentUser();
     return currentUser != null;
   }
 
+  @override
   Future<FirebaseUser> getCurrentUser() {
     return _firebaseAuth.currentUser();
   }
 
+  @override
   Future<String> getUserEmail() async {
     return (await _firebaseAuth.currentUser()).email;
   }
 
+  @override
   Future<String> getUserId() async {
     return (await _firebaseAuth.currentUser()).uid;
   }
 
+  @override
   Future<void> sendPasswordReset(String email) async {
-    return (await _firebaseAuth.sendPasswordResetEmail(email: email));
+    return await _firebaseAuth.sendPasswordResetEmail(email: email);
   }
 
   @override

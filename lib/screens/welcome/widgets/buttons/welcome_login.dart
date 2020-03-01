@@ -6,9 +6,9 @@ import 'package:autodo/routes.dart';
 import 'package:json_intl/json_intl.dart';
 
 class LoginButton extends StatelessWidget {
-  final buttonPadding;
+  const LoginButton({Key key, this.buttonPadding}) : super(key: key);
 
-  LoginButton({Key key, this.buttonPadding}) : super(key: key);
+  final double buttonPadding;
 
   @override
   Widget build(BuildContext context) {

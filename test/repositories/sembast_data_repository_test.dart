@@ -31,9 +31,11 @@ void main() {
             createDb: true,
             pathProvider: () async => Directory('.'),
             dbPath: 'todos.db');
-        repository.addNewTodo(Todo(name: 'test'));
+        // This is deliberately not await-ed to ensure that the stream matcher
+        // receives the new todo event
+        repository.addNewTodo(Todo(name: 'test')); // ignore: unawaited_futures
         expect(repository.todos(), emits([Todo(id: '1', name: 'test')]));
-        await databaseFactoryIo.deleteDatabase('todos.db');
+        // await databaseFactoryIo.deleteDatabase('todos.db');
       });
       test('batch', () async {
         WidgetsFlutterBinding.ensureInitialized();
@@ -72,9 +74,9 @@ void main() {
             createDb: true,
             pathProvider: () async => Directory('.'),
             dbPath: 'refuelings.db');
-        repository.addNewRefueling(ref);
+        repository.addNewRefueling(ref); // ignore: unawaited_futures
         expect(repository.refuelings(), emits([ref]));
-        await databaseFactoryIo.deleteDatabase('refuelings.db');
+        // await databaseFactoryIo.deleteDatabase('refuelings.db');
       });
       test('batch', () async {
         WidgetsFlutterBinding.ensureInitialized();
@@ -106,9 +108,9 @@ void main() {
             createDb: true,
             pathProvider: () async => Directory('.'),
             dbPath: 'cars.db');
-        repository.addNewCar(Car());
+        repository.addNewCar(Car()); // ignore: unawaited_futures
         expect(repository.cars(), emits([Car(id: '1')]));
-        await databaseFactoryIo.deleteDatabase('cars.db');
+        // await databaseFactoryIo.deleteDatabase('cars.db');
       });
       test('batch', () async {
         WidgetsFlutterBinding.ensureInitialized();
@@ -138,9 +140,9 @@ void main() {
             createDb: true,
             pathProvider: () async => Directory('.'),
             dbPath: 'repeats.db');
-        repository.addNewRepeat(Repeat());
+        repository.addNewRepeat(Repeat()); // ignore: unawaited_futures
         expect(repository.repeats(), emits([Repeat(id: '1')]));
-        await databaseFactoryIo.deleteDatabase('repeats.db');
+        // await databaseFactoryIo.deleteDatabase('repeats.db');
       });
       test('batch', () async {
         WidgetsFlutterBinding.ensureInitialized();

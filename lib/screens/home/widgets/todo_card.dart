@@ -13,11 +13,11 @@ import 'todo_delete_button.dart';
 const int DUE_SOON_INTERVAL = 100;
 
 class _TodoTitle extends StatelessWidget {
+  const _TodoTitle({Key key, @required this.todo}) : super(key: key);
+
   final Todo todo;
 
-  _TodoTitle({Key key, @required this.todo}) : super(key: key);
-
-  preface(BuildContext context) {
+  String preface(BuildContext context) {
     if (todo.completed) {
       return JsonIntl.of(context).get(IntlKeys.completed);
     } else if (todo.dueState == TodoDueState.PAST_DUE) {
@@ -30,28 +30,31 @@ class _TodoTitle extends StatelessWidget {
   }
 
   @override
-  build(context) => RichText(
+  Widget build(context) => RichText(
           text: TextSpan(children: [
         TextSpan(
-            text: preface(context) + ' ',
-            style: Theme.of(context).primaryTextTheme.subtitle),
+            // Todo: Improve this translation
+            text: '${preface(context)} ',
+            style: Theme.of(context).primaryTextTheme.subtitle2),
         TextSpan(
-            text: todo.name, style: Theme.of(context).primaryTextTheme.title)
+            text: todo.name,
+            style: Theme.of(context).primaryTextTheme.headline6)
       ]));
 }
 
 class _TodoCheckbox extends StatelessWidget {
-  final Todo todo;
-  final ValueChanged<bool> onCheckboxChanged;
-
-  _TodoCheckbox({
+  const _TodoCheckbox({
     Key key,
     @required this.todo,
     @required this.onCheckboxChanged,
   }) : super(key: key);
 
+  final Todo todo;
+
+  final ValueChanged<bool> onCheckboxChanged;
+
   @override
-  build(context) => Transform.scale(
+  Widget build(context) => Transform.scale(
       scale: 1.5,
       child: Container(
           key: ValueKey('__todo_checkbox_${todo.name}'),
@@ -65,55 +68,56 @@ class _TodoCheckbox extends StatelessWidget {
 }
 
 class _TodoDueDate extends StatelessWidget {
+  const _TodoDueDate({Key key, @required this.todo}) : super(key: key);
+
   final Todo todo;
 
-  _TodoDueDate({Key key, @required this.todo}) : super(key: key);
-
   @override
-  build(context) => Row(
+  Widget build(context) => Row(
         children: <Widget>[
           Icon(Icons.alarm, size: 30),
           Text(
-              JsonIntl.of(context).get(IntlKeys.dueOn) +
-                  ' ' +
-                  DateFormat.yMMMd().format(todo.dueDate),
-              style: Theme.of(context).primaryTextTheme.body1),
+              // Todo: Improve this translation
+              '${JsonIntl.of(context).get(IntlKeys.dueOn)} ${DateFormat.yMMMd().format(todo.dueDate)}',
+              style: Theme.of(context).primaryTextTheme.bodyText2),
         ],
       );
 }
 
 class _TodoDueMileage extends StatelessWidget {
-  final Todo todo;
-  final commaRegex = RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))');
-
   _TodoDueMileage({Key key, @required this.todo}) : super(key: key);
 
-  mileageString() {
+  final Todo todo;
+
+  final commaRegex = RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))');
+
+  String mileageString() {
     if (todo.dueMileage != null) {
       return todo.dueMileage
           .toString()
-          .replaceAllMapped(commaRegex, (Match m) => "${m[1]},");
+          .replaceAllMapped(commaRegex, (Match m) => '${m[1]},');
     } else {
-      return "";
+      return '';
     }
   }
 
   @override
-  build(context) => Row(
+  Widget build(context) => Row(
         children: <Widget>[
           Icon(Icons.pin_drop, size: 30),
           Padding(padding: EdgeInsets.all(5)),
           RichText(
               text: TextSpan(children: [
+            // Todo: Improve this translation
             TextSpan(
-                text: JsonIntl.of(context).get(IntlKeys.dueAt) + ' ',
-                style: Theme.of(context).primaryTextTheme.body1),
+                text: '${JsonIntl.of(context).get(IntlKeys.dueAt)} ',
+                style: Theme.of(context).primaryTextTheme.bodyText2),
             TextSpan(
                 text: mileageString(),
-                style: Theme.of(context).primaryTextTheme.subtitle),
+                style: Theme.of(context).primaryTextTheme.subtitle2),
             TextSpan(
-              text: ' ' + JsonIntl.of(context).get(IntlKeys.distanceUnits),
-              style: Theme.of(context).primaryTextTheme.body1,
+              text: ' ${JsonIntl.of(context).get(IntlKeys.distanceUnits)}',
+              style: Theme.of(context).primaryTextTheme.bodyText2,
             )
           ]))
         ],
@@ -121,12 +125,12 @@ class _TodoDueMileage extends StatelessWidget {
 }
 
 class _TodoLastCompleted extends StatelessWidget {
+  const _TodoLastCompleted({Key key, @required this.todo}) : super(key: key);
+
   final Todo todo;
 
-  _TodoLastCompleted({Key key, @required this.todo}) : super(key: key);
-
   @override
-  build(context) => Row(
+  Widget build(context) => Row(
         children: <Widget>[
           Icon((todo.completed ?? false) ? Icons.alarm : Icons.new_releases,
               size: 30),
@@ -134,20 +138,22 @@ class _TodoLastCompleted extends StatelessWidget {
           Text(
             JsonIntl.of(context).get(IntlKeys
                 .firstTimeDoingTask), // TODO adjust this for past completed
-            style:
-                Theme.of(context).primaryTextTheme.body1.copyWith(fontSize: 14),
+            style: Theme.of(context)
+                .primaryTextTheme
+                .bodyText2
+                .copyWith(fontSize: 14),
           ),
         ],
       );
 }
 
 class _TodoDueInfo extends StatelessWidget {
+  const _TodoDueInfo({Key key, @required this.todo}) : super(key: key);
+
   final Todo todo;
 
-  _TodoDueInfo({Key key, @required this.todo}) : super(key: key);
-
   @override
-  build(context) => Container(
+  Widget build(context) => Container(
         padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -166,14 +172,16 @@ class _TodoDueInfo extends StatelessWidget {
 }
 
 class _TodoBody extends StatelessWidget {
-  final Todo todo;
-  final ValueChanged<bool> onCheckboxChanged;
-
-  _TodoBody({Key key, @required this.todo, @required this.onCheckboxChanged})
+  const _TodoBody(
+      {Key key, @required this.todo, @required this.onCheckboxChanged})
       : super(key: key);
 
+  final Todo todo;
+
+  final ValueChanged<bool> onCheckboxChanged;
+
   @override
-  build(context) => Container(
+  Widget build(context) => Container(
         padding: EdgeInsets.fromLTRB(10, 25, 10, 25),
         child: Row(
           children: <Widget>[
@@ -188,12 +196,12 @@ class _TodoBody extends StatelessWidget {
 }
 
 class _TodoEditButton extends StatelessWidget {
+  const _TodoEditButton({Key key, @required this.todo}) : super(key: key);
+
   final Todo todo;
 
-  _TodoEditButton({Key key, @required this.todo}) : super(key: key);
-
   @override
-  build(context) => ButtonTheme.fromButtonThemeData(
+  Widget build(context) => ButtonTheme.fromButtonThemeData(
         data: ButtonThemeData(
           minWidth: 0,
         ),
@@ -210,7 +218,7 @@ class _TodoEditButton extends StatelessWidget {
                   builder: (context) => TodoAddEditScreen(
                     isEditing: true,
                     onSave: (name, dueDate, dueMileage, repeatName, carName) {
-                      var out = todo.copyWith(
+                      final out = todo.copyWith(
                         name: name,
                         dueDate: dueDate,
                         dueMileage: dueMileage,
@@ -219,7 +227,7 @@ class _TodoEditButton extends StatelessWidget {
                       );
                       BlocProvider.of<TodosBloc>(context).add(UpdateTodo(out));
                     },
-                    todo: this.todo,
+                    todo: todo,
                   ),
                 ));
           },
@@ -228,12 +236,12 @@ class _TodoEditButton extends StatelessWidget {
 }
 
 class _TodoFooter extends StatelessWidget {
+  const _TodoFooter({Key key, @required this.todo}) : super(key: key);
+
   final Todo todo;
 
-  _TodoFooter({Key key, @required this.todo}) : super(key: key);
-
   @override
-  build(context) => Row(
+  Widget build(context) => Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Row(
@@ -248,48 +256,6 @@ class _TodoFooter extends StatelessWidget {
 }
 
 class TodoCard extends StatelessWidget {
-  final Todo todo;
-  final DismissDirectionCallback onDismissed;
-  final GestureTapCallback onTap;
-  final ValueChanged<bool> onCheckboxChanged;
-  final bool emphasized;
-
-  static final grad1 = LinearGradient(
-      begin: Alignment.centerLeft,
-      end: Alignment.centerRight,
-      colors: [mainColors[300], mainColors[400]]);
-  static final grad2 = LinearGradient(
-      begin: Alignment.topCenter,
-      end: Alignment.bottomCenter,
-      colors: [mainColors[700], mainColors[900]]);
-  final BoxDecoration upcomingDecoration = BoxDecoration(
-      borderRadius: BorderRadius.circular(25),
-      gradient: LinearGradient.lerp(grad1, grad2, 0.5));
-
-  static final grad3 = LinearGradient(
-      begin: Alignment.centerLeft,
-      end: Alignment.centerRight,
-      colors: [Colors.yellow.shade700, Colors.yellow.shade800]);
-  static final grad4 = LinearGradient(
-      begin: Alignment.topCenter,
-      end: Alignment.bottomCenter,
-      colors: [Colors.yellow.shade800, Colors.orange.shade300]);
-  final BoxDecoration duesoonDecoration = BoxDecoration(
-      borderRadius: BorderRadius.circular(25),
-      gradient: LinearGradient.lerp(grad3, grad4, 0.5));
-
-  static final grad5 = LinearGradient(
-      begin: Alignment.centerLeft,
-      end: Alignment.centerRight,
-      colors: [Colors.red.shade300, Colors.red.shade600]);
-  static final grad6 = LinearGradient(
-      begin: Alignment.topCenter,
-      end: Alignment.bottomCenter,
-      colors: [Colors.orange.shade800, Colors.red.shade500]);
-  final BoxDecoration pastdueDecoration = BoxDecoration(
-      borderRadius: BorderRadius.circular(25),
-      gradient: LinearGradient.lerp(grad5, grad6, 0.4));
-
   TodoCard({
     Key key,
     @required this.todo,
@@ -299,7 +265,59 @@ class TodoCard extends StatelessWidget {
     @required this.emphasized,
   }) : super(key: key);
 
-  emphasizedDecoration(todo) {
+  final Todo todo;
+
+  final DismissDirectionCallback onDismissed;
+
+  final GestureTapCallback onTap;
+
+  final ValueChanged<bool> onCheckboxChanged;
+
+  final bool emphasized;
+
+  static final grad1 = LinearGradient(
+      begin: Alignment.centerLeft,
+      end: Alignment.centerRight,
+      colors: [mainColors[300], mainColors[400]]);
+
+  static final grad2 = LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: [mainColors[700], mainColors[900]]);
+
+  final BoxDecoration upcomingDecoration = BoxDecoration(
+      borderRadius: BorderRadius.circular(25),
+      gradient: LinearGradient.lerp(grad1, grad2, 0.5));
+
+  static final grad3 = LinearGradient(
+      begin: Alignment.centerLeft,
+      end: Alignment.centerRight,
+      colors: [Colors.yellow.shade700, Colors.yellow.shade800]);
+
+  static final grad4 = LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: [Colors.yellow.shade800, Colors.orange.shade300]);
+
+  final BoxDecoration duesoonDecoration = BoxDecoration(
+      borderRadius: BorderRadius.circular(25),
+      gradient: LinearGradient.lerp(grad3, grad4, 0.5));
+
+  static final grad5 = LinearGradient(
+      begin: Alignment.centerLeft,
+      end: Alignment.centerRight,
+      colors: [Colors.red.shade300, Colors.red.shade600]);
+
+  static final grad6 = LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: [Colors.orange.shade800, Colors.red.shade500]);
+
+  final BoxDecoration pastdueDecoration = BoxDecoration(
+      borderRadius: BorderRadius.circular(25),
+      gradient: LinearGradient.lerp(grad5, grad6, 0.4));
+
+  BoxDecoration emphasizedDecoration(todo) {
     if (todo.dueState == TodoDueState.PAST_DUE) {
       return pastdueDecoration;
     } else if (todo.dueState == TodoDueState.DUE_SOON) {
@@ -310,25 +328,25 @@ class TodoCard extends StatelessWidget {
   }
 
   @override
-  build(context) => InkWell(
+  Widget build(context) => InkWell(
         onTap: onTap,
         child: Dismissible(
           key: Key(
-              "__dismissable__"), // TODO: this should be visible to remove the todo from the list
+              '__dismissable__'), // TODO: this should be visible to remove the todo from the list
           onDismissed: onDismissed,
           dismissThresholds: {
             DismissDirection.horizontal:
                 0.5 // must move halfway across the screen
           },
           child: Card(
-            elevation: (emphasized) ? 16 : 4,
+            elevation: emphasized ? 16 : 4,
             color:
-                (emphasized) ? Colors.transparent : Theme.of(context).cardColor,
+                emphasized ? Colors.transparent : Theme.of(context).cardColor,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
             child: Container(
                 decoration:
-                    (emphasized) ? emphasizedDecoration(todo) : BoxDecoration(),
+                    emphasized ? emphasizedDecoration(todo) : BoxDecoration(),
                 child: Column(
                   children: <Widget>[
                     _TodoTitle(todo: todo),

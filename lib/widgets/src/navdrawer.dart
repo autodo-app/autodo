@@ -11,7 +11,7 @@ import 'package:autodo/routes.dart';
 import 'upgrade_dialog.dart';
 
 class NavDrawer extends StatefulWidget {
-  NavDrawer({Key key}) : super(key: key);
+  const NavDrawer({Key key}) : super(key: key);
 
   @override
   State<NavDrawer> createState() => NavDrawerState();
@@ -88,7 +88,7 @@ class NavDrawerState extends State<NavDrawer> {
       ];
 
   @override
-  build(BuildContext context) => BlocBuilder<AuthenticationBloc,
+  Widget build(BuildContext context) => BlocBuilder<AuthenticationBloc,
           AuthenticationState>(
       builder: (context, state) => Drawer(
             child: Container(

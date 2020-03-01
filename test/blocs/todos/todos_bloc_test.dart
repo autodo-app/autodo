@@ -7,6 +7,7 @@ import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/repositories/repositories.dart';
 import 'package:autodo/models/models.dart';
 
+// ignore: must_be_immutable
 class MockDataRepository extends Mock
     with EquatableMixin
     implements DataRepository {}
@@ -17,6 +18,7 @@ class MockRepeatsBloc extends Mock implements RepeatsBloc {}
 
 class MockNotificationsBloc extends Mock implements NotificationsBloc {}
 
+// ignore: must_be_immutable
 class MockWriteBatch extends Mock implements WriteBatchWrapper {}
 
 class MockDbBloc extends Mock implements DatabaseBloc {}
@@ -360,7 +362,7 @@ void main() {
         when(dataRepository.getCurrentTodos()).thenAnswer((_) async => [todo3]);
         final writeBatch = MockWriteBatch();
         when(writeBatch.updateData(todo3.id, dynamic))
-            .thenAnswer((_) => ((_) => _));
+            .thenAnswer((_) => (_) => _);
         when(writeBatch.commit()).thenAnswer((_) async {});
         when(dataRepository.startTodoWriteBatch())
             .thenAnswer((_) => writeBatch);
@@ -413,7 +415,7 @@ void main() {
         when(dataRepository.updateTodo(todo3)).thenAnswer((_) async {});
         final writeBatch = MockWriteBatch();
         when(writeBatch.updateData(todo3.id, dynamic))
-            .thenAnswer((_) => ((_) => _));
+            .thenAnswer((_) => (_) => _);
         when(writeBatch.commit()).thenAnswer((_) async {});
         when(dataRepository.startTodoWriteBatch())
             .thenAnswer((_) => writeBatch);

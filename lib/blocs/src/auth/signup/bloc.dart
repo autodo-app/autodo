@@ -29,15 +29,15 @@ import 'state.dart';
 /// A [Bloc] used for validating and submitting the information for the
 /// [SignupScreen].
 class SignupBloc extends Bloc<SignupEvent, SignupState> {
-  AuthRepository _authRepository;
+  SignupBloc({@required authRepository, this.verifyEmail = kReleaseMode})
+      : assert(authRepository != null),
+        _authRepository = authRepository;
+
+  final AuthRepository _authRepository;
 
   /// A flag that determines whether a verification email will be sent to the
   /// user that is signing up.
   final bool verifyEmail;
-
-  SignupBloc({@required authRepository, this.verifyEmail = kReleaseMode})
-      : assert(authRepository != null),
-        _authRepository = authRepository;
 
   @override
   SignupState get initialState => SignupEmpty();
@@ -50,10 +50,10 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
   ) {
     final observableStream = events;
     final nonDebounceStream = observableStream.where((event) {
-      return (event is! SignupEmailChanged && event is! SignupPasswordChanged);
+      return event is! SignupEmailChanged && event is! SignupPasswordChanged;
     });
     final debounceStream = observableStream.where((event) {
-      return (event is SignupEmailChanged || event is SignupPasswordChanged);
+      return event is SignupEmailChanged || event is SignupPasswordChanged;
     }).debounceTime(Duration(milliseconds: 300));
     return super
         .transformEvents(nonDebounceStream.mergeWith([debounceStream]), next);
@@ -75,7 +75,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
   }
 
   Stream<SignupState> _mapEmailChangedToState(String email) async* {
-    String errorString = Validators.isValidEmail(email);
+    final errorString = Validators.isValidEmail(email);
     if (errorString == null) {
       yield _clearEmailError();
     } else {
@@ -93,14 +93,14 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
 
   SignupState _addEmailError(emailError) {
     if (state is SignupCredentialsInvalid) {
-      return (state as SignupCredentialsInvalid).copyWith(emailError: "");
+      return (state as SignupCredentialsInvalid).copyWith(emailError: '');
     } else {
-      return SignupCredentialsInvalid(emailError: "");
+      return SignupCredentialsInvalid(emailError: '');
     }
   }
 
   Stream<SignupState> _mapPasswordChangedToState(String password) async* {
-    String errorString = Validators.isValidPassword(password);
+    final errorString = Validators.isValidPassword(password);
     if (errorString == null) {
       yield _clearPasswordError();
     } else {
@@ -118,9 +118,9 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
 
   SignupState _addPasswordError(passwordError) {
     if (state is SignupCredentialsInvalid) {
-      return (state as SignupCredentialsInvalid).copyWith(passwordError: "");
+      return (state as SignupCredentialsInvalid).copyWith(passwordError: '');
     } else {
-      return SignupCredentialsInvalid(passwordError: "");
+      return SignupCredentialsInvalid(passwordError: '');
     }
   }
 
@@ -128,8 +128,8 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
     bool verified = user.isEmailVerified;
     while (!verified) {
       await Future.delayed(const Duration(milliseconds: 100));
-      var cur = await _authRepository.getCurrentUser();
-      cur.reload();
+      final cur = await _authRepository.getCurrentUser();
+      await cur.reload();
       verified = cur.isEmailVerified;
     }
   }
@@ -141,7 +141,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
     yield SignupLoading();
     try {
       if (verifyEmail) {
-        var user =
+        final user =
             await _authRepository.signUpWithVerification(email, password);
         yield VerificationSent();
         await _checkIfUserIsVerified(user);
@@ -151,15 +151,15 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
         yield SignupSuccess();
       }
     } on PlatformException catch (e) {
-      var errorString = "Error communicating to the auToDo servers.";
-      if (e.code == "ERROR_WEAK_PASSWORD") {
-        errorString = "Your password must be longer than 6 characters.";
-      } else if (e.code == "ERROR_INVALID_EMAIL") {
-        errorString = "The email address you entered is invalid.";
-      } else if (e.code == "ERROR_EMAIL_ALREADY_IN_USE") {
-        errorString = "The email address you entered is already in use.";
-      } else if (e.code == "ERROR_WRONG_PASSWORD") {
-        errorString = "Incorrect password, please try again.";
+      var errorString = 'Error communicating to the auToDo servers.';
+      if (e.code == 'ERROR_WEAK_PASSWORD') {
+        errorString = 'Your password must be longer than 6 characters.';
+      } else if (e.code == 'ERROR_INVALID_EMAIL') {
+        errorString = 'The email address you entered is invalid.';
+      } else if (e.code == 'ERROR_EMAIL_ALREADY_IN_USE') {
+        errorString = 'The email address you entered is already in use.';
+      } else if (e.code == 'ERROR_WRONG_PASSWORD') {
+        errorString = 'Incorrect password, please try again.';
       }
       yield SignupError(errorString);
     }

@@ -14,14 +14,15 @@ import 'package:json_intl/json_intl.dart';
 import 'views/barrel.dart';
 
 class HomeScreen extends StatefulWidget {
-  final Key todosTabKey;
-  final bool integrationTest;
-
-  HomeScreen(
+  const HomeScreen(
       {Key key = IntegrationTestKeys.homeScreen,
       this.todosTabKey,
       this.integrationTest = false})
       : super(key: key);
+
+  final Key todosTabKey;
+
+  final bool integrationTest;
 
   @override
   _HomeScreenState createState() =>
@@ -29,35 +30,42 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _ScreenWithBanner extends StatelessWidget {
+  const _ScreenWithBanner({this.child, this.bannerShown = true});
+
   final Widget child;
+
   final bool bannerShown;
 
-  _ScreenWithBanner({this.child, this.bannerShown = true});
-
   @override
-  build(context) => Center(
+  Widget build(context) => Center(
           child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
         children: [
           Expanded(child: child),
-          ...((bannerShown)
+          ...bannerShown
               ? [Container(height: 50, color: Theme.of(context).cardColor)]
-              : [])
+              : []
         ],
       ));
 }
 
 class _HomeScreenState extends State<HomeScreen> with RouteAware {
+  _HomeScreenState(this.todosTabKey, this.integrationTest);
+
   final Map<AppTab, Widget> views = {
     AppTab.todos: TodosScreen(),
     AppTab.refuelings: RefuelingsScreen(),
     AppTab.stats: StatisticsScreen(),
     AppTab.repeats: RepeatsScreen(),
   };
+
   final Key todosTabKey;
+
   final bool integrationTest;
+
   BannerAd _bannerAd;
+
   bool _bannerShown = false;
 
   // this has to be a function so that it returns a different route each time
@@ -106,8 +114,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                 ))),
       ];
 
-  _HomeScreenState(this.todosTabKey, this.integrationTest);
-
   Widget get actionButton =>
       BlocBuilder<CarsBloc, CarsState>(builder: (context, state) {
         if (!(state is CarsLoaded)) {
@@ -123,8 +129,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
         }
       });
 
-  _bannerAdConfig() => AutodoBannerAd(
-        adUnitId: (kReleaseMode)
+  AutodoBannerAd _bannerAdConfig() => AutodoBannerAd(
+        adUnitId: kReleaseMode
             ? 'ca-app-pub-6809809089648617/3864738913'
             : BannerAd.testAdUnitId,
       );
@@ -138,19 +144,19 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
   }
 
   @override
-  void didPush() async {
+  Future<void> didPush() async {
     // Route was pushed onto navigator and is now topmost route.
     if (ModalRoute.of(context).isCurrent) {
       _bannerShown = true;
       await _bannerAd?.dispose(); // clear old banner ad if one exists
-      _bannerAd = _bannerAdConfig()
-        ..load()
-        ..show();
+      _bannerAd = _bannerAdConfig();
+      // ignore: unawaited_futures
+      _bannerAd.load().then((value) => _bannerAd.show());
     }
   }
 
   @override
-  void didPop() async {
+  Future<void> didPop() async {
     // Current route was popped off the navigator.
     if (_bannerShown) {
       _bannerShown = false;
@@ -159,7 +165,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
   }
 
   @override
-  void didPushNext() async {
+  Future<void> didPushNext() async {
     // Another route is now above this route
     if (_bannerShown) {
       _bannerShown = false;
@@ -169,7 +175,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
   }
 
   @override
-  initState() {
+  void initState() {
     FirebaseAdMob.instance.initialize(appId: BannerAd.testAdUnitId);
     super.initState();
   }
@@ -177,7 +183,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
   List<Widget> fakeBottomButtons = [Container(height: 50)];
 
   @override
-  build(context) => MultiBlocProvider(
+  Widget build(context) => MultiBlocProvider(
           providers: [
             BlocProvider<FilteredRefuelingsBloc>(
                 create: (context) => FilteredRefuelingsBloc(

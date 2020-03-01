@@ -1,18 +1,19 @@
 import 'package:autodo/localization.dart';
-import 'package:flutter/material.dart';
-import 'package:charts_flutter/flutter.dart';
 import 'package:autodo/models/models.dart';
+import 'package:charts_flutter/flutter.dart';
+import 'package:flutter/material.dart';
 import 'package:json_intl/json_intl.dart';
+
 import 'shared.dart';
-import 'package:json_intl/json_intl.dart';
 
 class DrivingDistanceChart extends StatelessWidget {
+  const DrivingDistanceChart(this.seriesList, {this.animate});
+
   final List<Series<DistanceRatePoint, DateTime>> seriesList;
+
   final bool animate;
 
-  DrivingDistanceChart(this.seriesList, {this.animate});
-
-  lowerBound() {
+  int lowerBound() {
     final minVal = seriesList[0]
         .data
         .reduce((value, element) =>
@@ -21,7 +22,7 @@ class DrivingDistanceChart extends StatelessWidget {
     return (0.75 * minVal).round();
   }
 
-  upperBound() {
+  int upperBound() {
     final maxVal = seriesList[0]
         .data
         .reduce((value, element) =>
@@ -32,10 +33,10 @@ class DrivingDistanceChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (seriesList.length == 0) {
+    if (seriesList.isEmpty) {
       return Center(
           child: Text(JsonIntl.of(context).get(IntlKeys.noData),
-              style: Theme.of(context).primaryTextTheme.body1));
+              style: Theme.of(context).primaryTextTheme.bodyText2));
     }
     return TimeSeriesChart(
       seriesList,
@@ -51,8 +52,9 @@ class DrivingDistanceChart extends StatelessWidget {
 }
 
 class DrivingDistanceHistory extends StatelessWidget {
-  final data;
-  DrivingDistanceHistory(this.data);
+  const DrivingDistanceHistory(this.data);
+
+  final List<Series> data;
 
   @override
   Widget build(BuildContext context) => Column(
@@ -63,7 +65,7 @@ class DrivingDistanceHistory extends StatelessWidget {
               padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
             ),
             Text(JsonIntl.of(context).get(IntlKeys.drivingDistanceHistory),
-                style: Theme.of(context).primaryTextTheme.subtitle),
+                style: Theme.of(context).primaryTextTheme.subtitle2),
             Container(
               height: 300,
               padding: EdgeInsets.all(15),
@@ -71,7 +73,7 @@ class DrivingDistanceHistory extends StatelessWidget {
             ),
             Text(
               'Refueling Date',
-              style: Theme.of(context).primaryTextTheme.body1,
+              style: Theme.of(context).primaryTextTheme.bodyText2,
               textAlign: TextAlign.center,
             ),
           ]);

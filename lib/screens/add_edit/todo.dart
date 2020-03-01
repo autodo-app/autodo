@@ -17,14 +17,16 @@ typedef _OnSaveCallback = Function(String name, DateTime dueDate,
     int dueMileage, String repeatName, String carName);
 
 class _NameForm extends StatelessWidget {
+  const _NameForm({this.todo, this.onSaved, this.node, this.nextNode});
+
   final Todo todo;
+
   final FocusNode node, nextNode;
+
   final Function(String) onSaved;
 
-  _NameForm({this.todo, this.onSaved, this.node, this.nextNode});
-
   @override
-  build(context) => TextFormField(
+  Widget build(context) => TextFormField(
         decoration: InputDecoration(
           border: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.teal),
@@ -36,7 +38,7 @@ class _NameForm extends StatelessWidget {
         initialValue: todo?.name ?? '',
         autofocus: true,
         focusNode: node,
-        style: Theme.of(context).primaryTextTheme.subtitle,
+        style: Theme.of(context).primaryTextTheme.subtitle2,
         keyboardType: TextInputType.text,
         textCapitalization: TextCapitalization.sentences,
         validator: requiredValidator,
@@ -47,11 +49,7 @@ class _NameForm extends StatelessWidget {
 }
 
 class _DateForm extends StatefulWidget {
-  final Todo todo;
-  final Function(String) onSaved;
-  final FocusNode node, nextNode;
-
-  _DateForm({
+  const _DateForm({
     Key key,
     this.todo,
     @required this.onSaved,
@@ -59,34 +57,42 @@ class _DateForm extends StatefulWidget {
     @required this.nextNode,
   }) : super(key: key);
 
+  final Todo todo;
+
+  final Function(String) onSaved;
+
+  final FocusNode node, nextNode;
+
   @override
   _DateFormState createState() =>
       _DateFormState(node: node, nextNode: nextNode, initial: todo?.dueDate);
 }
 
 class _DateFormState extends State<_DateForm> {
-  TextEditingController _ctrl;
-  DateTime initial;
-  FocusNode node, nextNode;
-
   _DateFormState({this.node, this.nextNode, this.initial});
 
+  TextEditingController _ctrl;
+
+  DateTime initial;
+
+  FocusNode node, nextNode;
+
   @override
-  initState() {
+  void initState() {
     _ctrl = TextEditingController();
     if (initial != null) _ctrl.text = DateFormat.yMd().format(initial);
     super.initState();
   }
 
   @override
-  dispose() {
+  void dispose() {
     _ctrl.dispose();
     super.dispose();
   }
 
   DateTime convertToDate(String input) {
     try {
-      var d = DateFormat.yMd().parseStrict(input);
+      final d = DateFormat.yMd().parseStrict(input);
       return d;
     } catch (e) {
       return null;
@@ -94,13 +100,13 @@ class _DateFormState extends State<_DateForm> {
   }
 
   Future chooseDate(BuildContext context, String initialDateString) async {
-    var now = DateTime.now();
+    final now = DateTime.now();
     var initialDate = convertToDate(initialDateString) ?? now;
-    initialDate = (initialDate.year >= 1900 && initialDate.isBefore(now)
+    initialDate = initialDate.year >= 1900 && initialDate.isBefore(now)
         ? initialDate
-        : now);
+        : now;
 
-    var result = await showDatePicker(
+    final result = await showDatePicker(
         context: context,
         initialDate: initialDate,
         firstDate: DateTime(1900),
@@ -115,12 +121,12 @@ class _DateFormState extends State<_DateForm> {
 
   bool isValidDate(String date) {
     if (date.isEmpty) return true;
-    var d = convertToDate(date);
+    final d = convertToDate(date);
     return d != null && d.isAfter(DateTime.now());
   }
 
   @override
-  build(context) => Row(children: <Widget>[
+  Widget build(context) => Row(children: <Widget>[
         Expanded(
           child: TextFormField(
               decoration: InputDecoration(
@@ -148,20 +154,22 @@ class _DateFormState extends State<_DateForm> {
         IconButton(
           icon: Icon(Icons.calendar_today),
           tooltip: JsonIntl.of(context).get(IntlKeys.chooseDate),
-          onPressed: (() => chooseDate(context, _ctrl.text)),
+          onPressed: () => chooseDate(context, _ctrl.text),
         )
       ]);
 }
 
 class _MileageForm extends StatelessWidget {
+  const _MileageForm({this.todo, this.onSaved, this.node, this.nextNode});
+
   final Todo todo;
+
   final FocusNode node, nextNode;
+
   final Function(String) onSaved;
 
-  _MileageForm({this.todo, this.onSaved, this.node, this.nextNode});
-
   @override
-  build(context) => TextFormField(
+  Widget build(context) => TextFormField(
         decoration: InputDecoration(
           border: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.teal),
@@ -173,7 +181,7 @@ class _MileageForm extends StatelessWidget {
         initialValue: todo?.dueMileage?.toString() ?? '',
         autofocus: false,
         focusNode: node,
-        style: Theme.of(context).primaryTextTheme.subtitle,
+        style: Theme.of(context).primaryTextTheme.subtitle2,
         keyboardType: TextInputType.text,
         textCapitalization: TextCapitalization.sentences,
         validator: requiredValidator,
@@ -184,11 +192,13 @@ class _MileageForm extends StatelessWidget {
 }
 
 class _CarToggleForm extends StatefulWidget {
-  final List<bool> initialState;
-  final List<Car> cars;
-  final Function onSaved;
+  const _CarToggleForm(this.initialState, this.cars, this.onSaved);
 
-  _CarToggleForm(this.initialState, this.cars, this.onSaved);
+  final List<bool> initialState;
+
+  final List<Car> cars;
+
+  final Function onSaved;
 
   @override
   _CarToggleFormState createState() =>
@@ -196,20 +206,22 @@ class _CarToggleForm extends StatefulWidget {
 }
 
 class _CarToggleFormState extends State<_CarToggleForm> {
-  List<bool> isSelected;
-  final List<Car> cars;
-  final Function onSaved;
-
   _CarToggleFormState(this.isSelected, this.cars, this.onSaved);
 
+  List<bool> isSelected;
+
+  final List<Car> cars;
+
+  final Function onSaved;
+
   @override
-  build(context) => FormField(
+  Widget build(context) => FormField(
         builder: (state) => Center(
           child: ToggleButtons(
             children: cars.map((c) => Text(c.name)).toList(),
             onPressed: (int index) {
               setState(() {
-                for (int buttonIndex = 0;
+                for (var buttonIndex = 0;
                     buttonIndex < isSelected.length;
                     buttonIndex++) {
                   if (buttonIndex == index) {
@@ -241,10 +253,6 @@ class _CarToggleFormState extends State<_CarToggleForm> {
 }
 
 class TodoAddEditScreen extends StatefulWidget {
-  final bool isEditing;
-  final _OnSaveCallback onSave;
-  final Todo todo;
-
   TodoAddEditScreen({
     Key key = IntegrationTestKeys.addEditTodo,
     @required this.onSave,
@@ -253,6 +261,12 @@ class TodoAddEditScreen extends StatefulWidget {
   }) : super(key: key) {
     print(todo);
   }
+
+  final bool isEditing;
+
+  final _OnSaveCallback onSave;
+
+  final Todo todo;
 
   @override
   _TodoAddEditScreenState createState() => _TodoAddEditScreenState();
@@ -296,7 +310,7 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
           : List.generate(cars.length, (idx) => (idx == 0) ? true : false);
 
   @override
-  build(context) => Scaffold(
+  Widget build(context) => Scaffold(
         resizeToAvoidBottomPadding: false,
         appBar: AppBar(
           title: Text(

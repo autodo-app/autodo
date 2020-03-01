@@ -33,7 +33,7 @@ void main() {
         await Future.delayed(Duration(milliseconds: 500));
       }, expect: [
         SignupEmpty(),
-        SignupCredentialsInvalid(emailError: ""),
+        SignupCredentialsInvalid(emailError: ''),
       ]);
       blocTest<SignupBloc, SignupEvent, SignupState>(
           'Invalid Email, previous error', build: () {
@@ -48,7 +48,7 @@ void main() {
         await Future.delayed(Duration(milliseconds: 500));
       }, expect: [
         SignupEmpty(),
-        SignupCredentialsInvalid(emailError: "", passwordError: ""),
+        SignupCredentialsInvalid(emailError: '', passwordError: ''),
       ]);
       blocTest<SignupBloc, SignupEvent, SignupState>('Valid Email', build: () {
         final authRepository = MockAuthRepository();
@@ -88,7 +88,7 @@ void main() {
         await Future.delayed(Duration(milliseconds: 500));
       }, expect: [
         SignupEmpty(),
-        SignupCredentialsInvalid(emailError: ""),
+        SignupCredentialsInvalid(emailError: ''),
       ]);
       blocTest<SignupBloc, SignupEvent, SignupState>(
           'Invalid password, previous error', build: () {
@@ -103,7 +103,7 @@ void main() {
         await Future.delayed(Duration(milliseconds: 500));
       }, expect: [
         SignupEmpty(),
-        SignupCredentialsInvalid(emailError: ""),
+        SignupCredentialsInvalid(emailError: ''),
       ]);
       blocTest<SignupBloc, SignupEvent, SignupState>('Valid password',
           build: () {
@@ -138,27 +138,27 @@ void main() {
           'Can\'t communicate to servers', build: () {
         final authRepository = MockAuthRepository();
         when(authRepository.signUp('', ''))
-            .thenThrow(PlatformException(code: "UNHANDLED_ERROR"));
+            .thenThrow(PlatformException(code: 'UNHANDLED_ERROR'));
         return SignupBloc(authRepository: authRepository);
       }, act: (bloc) async {
         bloc.add(SignupWithCredentialsPressed(email: '', password: ''));
       }, expect: [
         SignupEmpty(),
         SignupLoading(),
-        SignupError("Error communicating to the auToDo servers."),
+        SignupError('Error communicating to the auToDo servers.'),
       ]);
       blocTest<SignupBloc, SignupEvent, SignupState>('Weak Password',
           build: () {
         final authRepository = MockAuthRepository();
         when(authRepository.signUp('', ''))
-            .thenThrow(PlatformException(code: "ERROR_WEAK_PASSWORD"));
+            .thenThrow(PlatformException(code: 'ERROR_WEAK_PASSWORD'));
         return SignupBloc(authRepository: authRepository);
       }, act: (bloc) async {
         bloc.add(SignupWithCredentialsPressed(email: '', password: ''));
       }, expect: [
         SignupEmpty(),
         SignupLoading(),
-        SignupError("Your password must be longer than 6 characters."),
+        SignupError('Your password must be longer than 6 characters.'),
       ]);
       blocTest<SignupBloc, SignupEvent, SignupState>('Successful login',
           build: () {

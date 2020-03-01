@@ -6,18 +6,21 @@ import 'package:flutter/scheduler.dart';
 import 'package:autodo/integ_test_keys.dart';
 
 class AutodoActionButton extends StatefulWidget {
-  final Key mainButtonKey;
-  final List<Key> miniButtonKeys;
-  final List<MaterialPageRoute> Function() miniButtonRoutes;
-  final TickerProvider ticker;
-
-  AutodoActionButton({
+  const AutodoActionButton({
     Key key,
     this.mainButtonKey = IntegrationTestKeys.mainFab,
     this.miniButtonKeys = IntegrationTestKeys.fabKeys,
     this.miniButtonRoutes,
     this.ticker,
   }) : super(key: key ?? IntegrationTestKeys.fabKey);
+
+  final Key mainButtonKey;
+
+  final List<Key> miniButtonKeys;
+
+  final List<MaterialPageRoute> Function() miniButtonRoutes;
+
+  final TickerProvider ticker;
 
   @override
   _AutodoActionButtonState createState() => _AutodoActionButtonState(
@@ -26,22 +29,26 @@ class AutodoActionButton extends StatefulWidget {
 
 class _AutodoActionButtonState extends State<AutodoActionButton>
     with SingleTickerProviderStateMixin {
-  AnimationController _controller;
-  final Key mainButtonKey;
-  final List<Key> miniButtonKeys;
-  final List<MaterialPageRoute> Function() miniButtonRoutes;
-  final TickerProvider ticker;
-
   _AutodoActionButtonState(this.mainButtonKey, this.miniButtonKeys,
       this.miniButtonRoutes, this.ticker);
 
+  AnimationController _controller;
+
+  final Key mainButtonKey;
+
+  final List<Key> miniButtonKeys;
+
+  final List<MaterialPageRoute> Function() miniButtonRoutes;
+
+  final TickerProvider ticker;
+
   static const List<Map<String, dynamic>> icons = [
     {
-      "data": Icons.local_gas_station,
-      "semanticLabel": 'Add Refueling',
+      'data': Icons.local_gas_station,
+      'semanticLabel': 'Add Refueling',
     },
-    {"data": Icons.build, "semanticLabel": 'Add ToDo'},
-    {"data": Icons.autorenew, "semanticLabel": 'Add Repeat'},
+    {'data': Icons.build, 'semanticLabel': 'Add ToDo'},
+    {'data': Icons.autorenew, 'semanticLabel': 'Add Repeat'},
   ];
 
   @override
@@ -62,19 +69,19 @@ class _AutodoActionButtonState extends State<AutodoActionButton>
     }
   }
 
-  _buttonKey(index) {
+  Key _buttonKey(index) {
     if (miniButtonKeys == null || index >= miniButtonKeys.length) return null;
     return miniButtonKeys[index];
   }
 
   @override
   Widget build(BuildContext context) {
-    Color backgroundColor = Theme.of(context).primaryColor;
-    Color foregroundColor = Theme.of(context).cardColor;
+    final backgroundColor = Theme.of(context).primaryColor;
+    final foregroundColor = Theme.of(context).cardColor;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: List.generate(icons.length, (int index) {
-        Widget child = Container(
+        final Widget child = Container(
           height: 70.0,
           width: 56.0,
           alignment: FractionalOffset.topCenter,
@@ -127,7 +134,7 @@ class _AutodoActionButtonState extends State<AutodoActionButton>
                     ).evaluate(_controller),
                   ),
                 ),
-                onPressed: () => switchState(),
+                onPressed: switchState,
               );
             },
           ),

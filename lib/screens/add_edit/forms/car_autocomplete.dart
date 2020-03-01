@@ -10,10 +10,6 @@ import 'package:autodo/util.dart';
 import 'package:json_intl/json_intl.dart';
 
 class CarForm extends StatefulWidget {
-  final String initialValue;
-  final Function(String) onSaved;
-  final FocusNode node, nextNode;
-
   CarForm({
     Key key,
     this.initialValue,
@@ -23,6 +19,12 @@ class CarForm extends StatefulWidget {
   }) : super(key: key) {
     print(initialValue);
   }
+
+  final String initialValue;
+
+  final Function(String) onSaved;
+
+  final FocusNode node, nextNode;
 
   @override
   _CarFormState createState() => _CarFormState();
@@ -37,20 +39,20 @@ class _CarFormState extends State<CarForm> {
   List<Car> cars;
 
   @override
-  initState() {
+  void initState() {
     _autocompleteController = TextEditingController();
     _autocompleteController.text = widget.initialValue ?? '';
     super.initState();
   }
 
   @override
-  dispose() {
+  void dispose() {
     _autocompleteController.dispose();
     super.dispose();
   }
 
   @override
-  build(context) {
+  Widget build(context) {
     print(_autocompleteController.text);
     // pulled out into the function so that the validator can access it
     autoCompleteField = AutoCompleteTextField<Car>(
@@ -71,8 +73,10 @@ class _CarFormState extends State<CarForm> {
       itemBuilder: (context, suggestion) => Padding(
         child: ListTile(
             title: Text(suggestion.name),
-            trailing: Text(JsonIntl.of(context).get(IntlKeys.mileage) +
-                ": ${suggestion.mileage}")),
+            trailing: Text(
+              // Todo: Improve this translation
+              '${JsonIntl.of(context).get(IntlKeys.mileage)}: ${suggestion.mileage}',
+            )),
         padding: EdgeInsets.all(5.0),
       ),
       itemSorter: (a, b) => a.name.length == b.name.length
@@ -92,8 +96,8 @@ class _CarFormState extends State<CarForm> {
         return autoCompleteField;
       },
       validator: (val) {
-        var txt = _autocompleteController.text;
-        var res = requiredValidator(txt);
+        final txt = _autocompleteController.text;
+        final res = requiredValidator(txt);
         autoCompleteField.updateDecoration(
           decoration: defaultInputDecoration(
                   JsonIntl.of(context).get(IntlKeys.requiredLiteral),

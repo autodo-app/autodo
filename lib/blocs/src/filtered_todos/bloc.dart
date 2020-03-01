@@ -7,9 +7,6 @@ import '../todos/barrel.dart';
 import 'package:autodo/models/models.dart';
 
 class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
-  final TodosBloc todosBloc;
-  StreamSubscription todosSubscription;
-
   FilteredTodosBloc({@required this.todosBloc}) {
     todosSubscription = todosBloc.listen((state) {
       if (state is TodosLoaded) {
@@ -17,6 +14,10 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
       }
     }, onError: (_) => print('err'), onDone: () => print('done'));
   }
+
+  final TodosBloc todosBloc;
+
+  StreamSubscription todosSubscription;
 
   @override
   FilteredTodosState get initialState {
@@ -41,23 +42,28 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
   static List sortItems(List items) {
     return items
       ..sort((a, b) {
-        var aDate = a?.dueDate ?? 0;
-        var bDate = b?.dueDate ?? 0;
-        var aMileage = a?.dueMileage ?? 0;
-        var bMileage = b?.dueMileage ?? 0;
+        final aDate = a?.dueDate ?? 0;
+        final bDate = b?.dueDate ?? 0;
+        final aMileage = a?.dueMileage ?? 0;
+        final bMileage = b?.dueMileage ?? 0;
 
         if (aDate == 0 && bDate == 0) {
           // both don't have a date, so only consider the mileages
-          if (aMileage > bMileage)
+          if (aMileage > bMileage) {
             return 1;
-          else if (aMileage < bMileage)
+          } else if (aMileage < bMileage) {
             return -1;
-          else
+          } else {
             return 0;
+          }
         } else {
           // in case one of the two isn't a valid timestamp
-          if (aDate == 0) return -1;
-          if (bDate == 0) return 1;
+          if (aDate == 0) {
+            return -1;
+          }
+          if (bDate == 0) {
+            return 1;
+          }
           // consider the dates since all todo items should have dates as a result
           // of the distance rate translation function
           return aDate.compareTo(bDate);

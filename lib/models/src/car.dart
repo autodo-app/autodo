@@ -8,12 +8,6 @@ import 'distanceratepoint.dart';
 
 @immutable
 class Car extends Equatable {
-  final String id, name;
-  final int mileage, numRefuelings;
-  final double averageEfficiency, distanceRate;
-  final DateTime lastMileageUpdate;
-  final List<DistanceRatePoint> distanceRateHistory;
-
   Car({
     this.id,
     this.name,
@@ -23,9 +17,19 @@ class Car extends Equatable {
     this.distanceRate = 0.0,
     lastMileageUpdate,
     distanceRateHistory,
-  })  : this.lastMileageUpdate = lastMileageUpdate ??
+  })  : lastMileageUpdate = lastMileageUpdate ??
             roundToDay(DateTime.fromMillisecondsSinceEpoch(0)),
-        this.distanceRateHistory = distanceRateHistory ?? [];
+        distanceRateHistory = distanceRateHistory ?? [];
+
+  final String id, name;
+
+  final int mileage, numRefuelings;
+
+  final double averageEfficiency, distanceRate;
+
+  final DateTime lastMileageUpdate;
+
+  final List<DistanceRatePoint> distanceRateHistory;
 
   Car copyWith(
       {String id,

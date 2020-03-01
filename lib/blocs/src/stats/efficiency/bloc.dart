@@ -13,13 +13,15 @@ import 'state.dart';
 
 class EfficiencyStatsBloc
     extends Bloc<EfficiencyStatsEvent, EfficiencyStatsState> {
-  final RefuelingsBloc _refuelingsBloc;
-  StreamSubscription _refuelingsSubscription;
-  static const EMA_CUTOFF = 8;
-
   EfficiencyStatsBloc({@required refuelingsBloc})
       : assert(refuelingsBloc != null),
         _refuelingsBloc = refuelingsBloc;
+
+  final RefuelingsBloc _refuelingsBloc;
+
+  StreamSubscription _refuelingsSubscription;
+
+  static const EMA_CUTOFF = 8;
 
   @override
   EfficiencyStatsState get initialState => EfficiencyStatsLoading();
@@ -40,7 +42,7 @@ class EfficiencyStatsBloc
           (_refuelingsBloc.state as RefuelingsLoaded).refuelings);
       yield EfficiencyStatsLoaded(data);
     }
-    _refuelingsSubscription?.cancel();
+    await _refuelingsSubscription?.cancel();
     _refuelingsBloc.listen((state) {
       if (state is RefuelingsLoaded) {
         add(UpdateEfficiencyData(state.refuelings));
@@ -58,21 +60,21 @@ class EfficiencyStatsBloc
       roundToPrecision(0.8 * prev + 0.2 * current, 3);
 
   Future<List<Series<FuelMileagePoint, DateTime>>> _prepData(refuelings) async {
-    List<FuelMileagePoint> points = [];
+    final points = <FuelMileagePoint>[];
     for (var r in refuelings) {
       if (r.efficiency == double.infinity || r.efficiency == 0) continue;
       points.add(FuelMileagePoint(r.date, r.efficiency));
     }
 
-    List<FuelMileagePoint> emaData = [];
+    final emaData = <FuelMileagePoint>[];
     for (var point in points) {
-      if (emaData.length == 0) {
+      if (emaData.isEmpty) {
         emaData.add(point);
         continue;
       }
-      FuelMileagePoint last = emaData[emaData.length - 1];
-      var newDate = point.date;
-      var newEfficiency;
+      final last = emaData[emaData.length - 1];
+      final newDate = point.date;
+      double newEfficiency;
       if (points.indexOf(point) < EMA_CUTOFF) {
         // for first few values, just do simple moving average
         newEfficiency = (last.efficiency + point.efficiency) / 2;
@@ -80,7 +82,7 @@ class EfficiencyStatsBloc
         newEfficiency = emaFilter(last.efficiency, point.efficiency);
       }
 
-      var newPoint = FuelMileagePoint(newDate, newEfficiency);
+      final newPoint = FuelMileagePoint(newDate, newEfficiency);
       // var interDate = _interpolateDate(last.date, point.date);
       // var interEfficiency = last.efficiency * 0.8 + newPoint.efficiency * 0.2;
       // var interpolate = FuelMileagePoint(interDate, interEfficiency);
@@ -88,12 +90,12 @@ class EfficiencyStatsBloc
       emaData.add(newPoint);
     }
 
-    var mpgs = points.map((val) => val.efficiency);
+    final mpgs = points.map((val) => val.efficiency);
     // Not worth displaying a line graph with only one point
     if (mpgs.length < 2) return [];
 
-    final double maxMeasure = mpgs.reduce(max);
-    final double minMeasure = mpgs.reduce(min);
+    final maxMeasure = mpgs.reduce(max);
+    final minMeasure = mpgs.reduce(min);
 
     return [
       Series<FuelMileagePoint, DateTime>(
@@ -131,7 +133,7 @@ class EfficiencyStatsBloc
 
   Stream<EfficiencyStatsState> _mapUpdateEfficiencyDataToState(event) async* {
     final data = await _prepData(event.refuelings);
-    yield (EfficiencyStatsLoaded(data));
+    yield EfficiencyStatsLoaded(data);
   }
 
   @override

@@ -3,10 +3,11 @@ import 'dart:convert' show json;
 import 'package:flutter/services.dart' show rootBundle;
 
 class SecretLoader {
+  SecretLoader({this.secretPath});
+
   final String secretPath;
 
-  SecretLoader({this.secretPath});
   Future<Map<String, dynamic>> load() =>
       rootBundle.loadStructuredData<Map<String, dynamic>>(
-          this.secretPath, (jsonStr) async => json.decode(jsonStr));
+          secretPath, (jsonStr) async => json.decode(jsonStr));
 }

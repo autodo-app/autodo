@@ -7,7 +7,7 @@ import 'package:json_intl/json_intl.dart';
 
 class SignupToLoginButton extends StatelessWidget {
   @override
-  build(context) => Container(
+  Widget build(context) => Container(
         padding: EdgeInsets.only(top: 10.0),
         child: FlatButton(
           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,

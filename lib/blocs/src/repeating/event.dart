@@ -11,9 +11,9 @@ abstract class RepeatsEvent extends Equatable {
 class LoadRepeats extends RepeatsEvent {}
 
 class AddRepeat extends RepeatsEvent {
-  final Repeat repeat;
-
   const AddRepeat(this.repeat);
+
+  final Repeat repeat;
 
   @override
   List<Object> get props => [repeat];
@@ -23,9 +23,9 @@ class AddRepeat extends RepeatsEvent {
 }
 
 class UpdateRepeat extends RepeatsEvent {
-  final Repeat updatedRepeat;
-
   const UpdateRepeat(this.updatedRepeat);
+
+  final Repeat updatedRepeat;
 
   @override
   List<Object> get props => [updatedRepeat];
@@ -35,9 +35,9 @@ class UpdateRepeat extends RepeatsEvent {
 }
 
 class DeleteRepeat extends RepeatsEvent {
-  final Repeat repeat;
-
   const DeleteRepeat(this.repeat);
+
+  final Repeat repeat;
 
   @override
   List<Object> get props => [repeat];
@@ -49,9 +49,9 @@ class DeleteRepeat extends RepeatsEvent {
 class AddDefaultRepeats extends RepeatsEvent {}
 
 class RepeatCarsUpdated extends RepeatsEvent {
-  final List<Car> cars;
-
   const RepeatCarsUpdated(this.cars);
+
+  final List<Car> cars;
 
   @override
   List<Object> get props => [cars];

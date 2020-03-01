@@ -1,28 +1,18 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:autodo/repositories/repositories.dart';
 import 'package:autodo/repositories/src/sembast_data_repository.dart';
-import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:in_app_purchase/store_kit_wrappers.dart';
 
-import 'package:autodo/repositories/repositories.dart';
 import '../database/barrel.dart';
 import 'event.dart';
 import 'state.dart';
 
 class PaidVersionBloc extends Bloc<PaidVersionEvent, PaidVersionState> {
-  static const paidVersionId = 'autodo_paid';
-  String localVerificationKey;
-
-  final DatabaseBloc _dbBloc;
-  final InAppPurchaseConnection _purchaseConn;
-  StreamSubscription _dbSubscription, _purchaseSubscription;
-  RouteObserver observer = RouteObserver();
-  static const platform = const MethodChannel('com.jonathanbayless.autodo/iap');
-
   PaidVersionBloc({InAppPurchaseConnection conn, @required DatabaseBloc dbBloc})
       : _dbBloc = dbBloc,
         _purchaseConn = conn ?? InAppPurchaseConnection.instance {
@@ -57,6 +47,20 @@ class PaidVersionBloc extends Bloc<PaidVersionEvent, PaidVersionState> {
     });
   }
 
+  static const paidVersionId = 'autodo_paid';
+
+  String localVerificationKey;
+
+  final DatabaseBloc _dbBloc;
+
+  final InAppPurchaseConnection _purchaseConn;
+
+  StreamSubscription _dbSubscription, _purchaseSubscription;
+
+  RouteObserver observer = RouteObserver();
+
+  static const platform = MethodChannel('com.jonathanbayless.autodo/iap');
+
   DataRepository get repo => (_dbBloc.state is DbLoaded)
       ? (_dbBloc.state as DbLoaded).repository
       : null;
@@ -77,7 +81,7 @@ class PaidVersionBloc extends Bloc<PaidVersionEvent, PaidVersionState> {
 
   /// This methodology will vary by platform, currently just handling Android
   bool _verifyPurchase(PurchaseDetails p) {
-    return (p.productID == paidVersionId);
+    return p.productID == paidVersionId;
   }
 
   /// Currently just checking the respective app store, store this on the server
@@ -95,8 +99,7 @@ class PaidVersionBloc extends Bloc<PaidVersionEvent, PaidVersionState> {
 
     // TODO: pull the JSON purchase validation string from assets bundle
 
-    final QueryPurchaseDetailsResponse response =
-        await _purchaseConn.queryPastPurchases();
+    final response = await _purchaseConn.queryPastPurchases();
     if (response.error != null) {
       print('Error querying past purchases: ${response.error.message}');
       yield BasicVersion();
@@ -104,7 +107,7 @@ class PaidVersionBloc extends Bloc<PaidVersionEvent, PaidVersionState> {
     }
 
     print('purchases: ${response.pastPurchases}');
-    for (PurchaseDetails p in response.pastPurchases) {
+    for (var p in response.pastPurchases) {
       print('past purchase: $p');
       if (!_verifyPurchase(p)) {
         print('cannot verify purchase');
@@ -119,20 +122,19 @@ class PaidVersionBloc extends Bloc<PaidVersionEvent, PaidVersionState> {
   }
 
   Stream<PaidVersionState> _mapPaidVersionUpgradeToState(event) async* {
-    final bool available = await _purchaseConn.isAvailable();
+    final available = await _purchaseConn.isAvailable();
     if (!available) {
       return;
     }
 
-    Set<String> ids = Set()..add(paidVersionId);
-    final ProductDetailsResponse response =
-        await _purchaseConn.queryProductDetails(ids);
+    final Set<String> ids = <dynamic>{}..add(paidVersionId);
+    final response = await _purchaseConn.queryProductDetails(ids);
     if (response.notFoundIDs.isNotEmpty) {
       print('Could not find paid version product id');
       return;
     }
     final deets = response.productDetails[0]; // only care about first item
-    final PurchaseParam param = PurchaseParam(productDetails: deets);
+    final param = PurchaseParam(productDetails: deets);
     final res = await _purchaseConn.buyNonConsumable(purchaseParam: param);
     if (!res) {
       print('purchase failed');

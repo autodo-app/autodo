@@ -11,13 +11,13 @@ abstract class EfficiencyStatsEvent extends Equatable {
 class LoadEfficiencyStats extends EfficiencyStatsEvent {}
 
 class UpdateEfficiencyData extends EfficiencyStatsEvent {
-  final List<Refueling> refuelings;
-
   const UpdateEfficiencyData(this.refuelings);
+
+  final List<Refueling> refuelings;
 
   @override
   List<Object> get props => [refuelings];
 
   @override
-  toString() => 'UpdateEfficiencyData { refuelings: $refuelings }';
+  String toString() => 'UpdateEfficiencyData { refuelings: $refuelings }';
 }

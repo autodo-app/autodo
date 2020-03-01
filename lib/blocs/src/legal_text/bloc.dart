@@ -9,30 +9,31 @@ import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart' as launcher;
 
 class _Parser {
-  final String Function(String) fn;
-  final TextStyle style;
-
   _Parser(this.fn, this.style);
+
+  final String Function(String) fn;
+
+  final TextStyle style;
 }
 
 class MarkdownParser {
   static String _list(String line) {
     if (RegExp(r'^- ').hasMatch(line)) {
-      List<String> pieces = line.split(RegExp(r'^- '));
-      return '•   ' + pieces[1];
+      final pieces = line.split(RegExp(r'^- '));
+      return '•   ${pieces[1]}';
     }
     return null;
   }
 
   static String _h2(String line) {
     if (RegExp(r'^## ').hasMatch(line)) {
-      List<String> pieces = line.split(RegExp(r'^## '));
+      final pieces = line.split(RegExp(r'^## '));
       return pieces[1];
     }
     return null;
   }
 
-  static TextStyle _h2Style = TextStyle(
+  static final TextStyle _h2Style = TextStyle(
     color: Colors.white.withAlpha(230),
     fontSize: 22,
     fontWeight: FontWeight.w600,
@@ -41,13 +42,13 @@ class MarkdownParser {
 
   static String _h3(String line) {
     if (RegExp(r'^### ').hasMatch(line)) {
-      List<String> pieces = line.split(RegExp(r'^### '));
+      final pieces = line.split(RegExp(r'^### '));
       return pieces[1];
     }
     return null;
   }
 
-  static TextStyle _h3Style = TextStyle(
+  static final TextStyle _h3Style = TextStyle(
     color: Colors.white.withAlpha(230),
     fontSize: 16,
     fontWeight: FontWeight.w600,
@@ -77,20 +78,20 @@ class MarkdownParser {
   }
 
   static TextStyle bold = defaultStyle.copyWith(fontWeight: FontWeight.w600);
-  static TextStyle _linkStyle = defaultStyle.copyWith(
+  static final TextStyle _linkStyle = defaultStyle.copyWith(
       decoration: TextDecoration.underline, color: Colors.blue);
 
   static List<TextSpan> _inlineMarkup(List<TextSpan> spans, String txt) {
-    List<TextSpan> out = [];
+    final out = <TextSpan>[];
 
     // check for bolding
     // the below regex is kinda black magic and I don't fully understand it
     // modified slightly from https://stackoverflow.com/questions/43633223/dart-split-string-by-regex
-    RegExp bolded = RegExp(r"(?:\^\s*-|[^\*\*])+|-");
-    var pieces = bolded.allMatches(txt);
-    bool odd = false;
+    final bolded = RegExp(r'(?:\^\s*-|[^\*\*])+|-');
+    final pieces = bolded.allMatches(txt);
+    var odd = false;
     for (var piece in pieces) {
-      var match = piece.group(0);
+      final match = piece.group(0);
 
       // odd numbered matches (zero aligned) will be bolded sections
       if (odd) {
@@ -107,23 +108,23 @@ class MarkdownParser {
       odd = !odd;
     }
 
-    RegExp isLink = RegExp(r'\[(.*?)\]\((.*?)\)');
+    final isLink = RegExp(r'\[(.*?)\]\((.*?)\)');
     // List containing entries with the past text span and the new text span
-    List<List<TextSpan>> toRemove = [];
+    final toRemove = <List<TextSpan>>[];
     for (var span in out) {
-      var txt = span.text;
+      final txt = span.text;
       // dynamically resizing the list is bad
-      TextSpan t = TextSpan(text: '', children: []);
-      var pieces = isLink.allMatches(txt);
+      final t = TextSpan(text: '', children: []);
+      final pieces = isLink.allMatches(txt);
       for (var piece in pieces) {
-        var fullMatch = piece.group(0);
-        var splitString = txt.split(fullMatch);
-        bool odd = false;
+        final fullMatch = piece.group(0);
+        final splitString = txt.split(fullMatch);
+        var odd = false;
         for (var s in splitString) {
           if (odd) {
-            var url = piece.group(2);
-            var linkText = piece.group(1);
-            var tap = TapGestureRecognizer()
+            final url = piece.group(2);
+            final linkText = piece.group(1);
+            final tap = TapGestureRecognizer()
               ..onTap = () => launcher.launch(url);
             t.children.add(TextSpan(
               text: linkText,
@@ -143,7 +144,7 @@ class MarkdownParser {
       }
     }
     for (var pair in toRemove) {
-      var idx = out.indexOf(pair[0]);
+      final idx = out.indexOf(pair[0]);
       out[idx] = pair[1];
     }
 
@@ -156,7 +157,7 @@ class MarkdownParser {
   }
 
   static List<String> _removeJekyllHeader(List<String> lines) {
-    int endJekyllFrontMatter = 0;
+    var endJekyllFrontMatter = 0;
     for (var line in lines.getRange(1, lines.length)) {
       if (line.startsWith('---')) {
         endJekyllFrontMatter = lines.indexOf(line, 2);
@@ -169,17 +170,17 @@ class MarkdownParser {
   }
 
   static TextSpan parse(String input) {
-    List<String> lines = input.split(RegExp(r'\r?\n'));
-    List<TextSpan> spans = [];
+    var lines = input.split(RegExp(r'\r?\n'));
+    var spans = <TextSpan>[];
 
     lines = _removeJekyllHeader(lines);
 
     lines.forEach((line) {
-      bool parsed = false;
+      var parsed = false;
 
       // line starting styles - headers, lists, etc.
       for (var parser in parsers) {
-        String txt = parser.fn(line);
+        final txt = parser.fn(line);
         if (txt != null) {
           spans = addLine(spans, txt, parser.style);
           parsed = true;
@@ -200,11 +201,11 @@ class MarkdownParser {
 }
 
 class LegalBloc extends Bloc<LegalEvent, LegalState> {
-  AssetBundle _bundle;
-
   LegalBloc({@required bundle})
       : assert(bundle != null),
         _bundle = bundle;
+
+  final AssetBundle _bundle;
 
   @override
   LegalState get initialState => LegalNotLoaded();
@@ -218,8 +219,8 @@ class LegalBloc extends Bloc<LegalEvent, LegalState> {
 
   Stream<LegalState> _mapLoadLegalToState() async* {
     yield LegalLoading();
-    var rawText = await _bundle.loadString('legal/privacy-policy.md');
-    var richText = RichText(text: MarkdownParser.parse(rawText));
+    final rawText = await _bundle.loadString('legal/privacy-policy.md');
+    final richText = RichText(text: MarkdownParser.parse(rawText));
     yield LegalLoaded(text: richText);
   }
 }

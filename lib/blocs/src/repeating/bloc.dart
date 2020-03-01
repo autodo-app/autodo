@@ -11,29 +11,6 @@ import 'event.dart';
 import 'state.dart';
 
 class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
-  final DatabaseBloc _dbBloc;
-  final CarsBloc _carsBloc;
-  StreamSubscription _dbSubscription, _repoSubscription, _carsSubscription;
-
-  static final List<Repeat> defaults = [
-    // TODO: Translate this
-    Repeat(name: "oil", mileageInterval: 3500),
-    Repeat(name: "tireRotation", mileageInterval: 7500),
-    Repeat(name: "engineFilter", mileageInterval: 45000),
-    Repeat(name: "wiperBlades", mileageInterval: 30000),
-    Repeat(name: "alignmentCheck", mileageInterval: 40000),
-    Repeat(name: "cabinFilter", mileageInterval: 45000),
-    Repeat(name: "tires", mileageInterval: 50000),
-    Repeat(name: "brakes", mileageInterval: 60000),
-    Repeat(name: "sparkPlugs", mileageInterval: 60000),
-    Repeat(name: "frontStruts", mileageInterval: 75000),
-    Repeat(name: "rearStruts", mileageInterval: 75000),
-    Repeat(name: "battery", mileageInterval: 75000),
-    Repeat(name: "serpentineBelt", mileageInterval: 150000),
-    Repeat(name: "transmissionFluid", mileageInterval: 100000),
-    Repeat(name: "coolantChange", mileageInterval: 100000)
-  ];
-
   RepeatsBloc({@required DatabaseBloc dbBloc, @required CarsBloc carsBloc})
       : assert(dbBloc != null),
         assert(carsBloc != null),
@@ -57,6 +34,31 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
       }
     });
   }
+
+  final DatabaseBloc _dbBloc;
+
+  final CarsBloc _carsBloc;
+
+  StreamSubscription _dbSubscription, _repoSubscription, _carsSubscription;
+
+  static final List<Repeat> defaults = [
+    // TODO: Translate this
+    Repeat(name: 'oil', mileageInterval: 3500),
+    Repeat(name: 'tireRotation', mileageInterval: 7500),
+    Repeat(name: 'engineFilter', mileageInterval: 45000),
+    Repeat(name: 'wiperBlades', mileageInterval: 30000),
+    Repeat(name: 'alignmentCheck', mileageInterval: 40000),
+    Repeat(name: 'cabinFilter', mileageInterval: 45000),
+    Repeat(name: 'tires', mileageInterval: 50000),
+    Repeat(name: 'brakes', mileageInterval: 60000),
+    Repeat(name: 'sparkPlugs', mileageInterval: 60000),
+    Repeat(name: 'frontStruts', mileageInterval: 75000),
+    Repeat(name: 'rearStruts', mileageInterval: 75000),
+    Repeat(name: 'battery', mileageInterval: 75000),
+    Repeat(name: 'serpentineBelt', mileageInterval: 150000),
+    Repeat(name: 'transmissionFluid', mileageInterval: 100000),
+    Repeat(name: 'coolantChange', mileageInterval: 100000)
+  ];
 
   @override
   RepeatsState get initialState => RepeatsLoading();
@@ -101,7 +103,7 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
       // List.from((state as RepeatsLoaded).repeats)..add(event.repeat);
       // yield RepeatsLoaded(updatedRepeats);
       await repo.addNewRepeat(event.repeat);
-      var updatedRepeats = (state as RepeatsLoaded).repeats;
+      final updatedRepeats = (state as RepeatsLoaded).repeats;
       print(updatedRepeats);
       updatedRepeats.add(event.repeat);
       print(updatedRepeats);
@@ -112,8 +114,8 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
 
   Stream<RepeatsState> _mapUpdateRepeatToState(UpdateRepeat event) async* {
     if (state is RepeatsLoaded && repo != null) {
-      final List<Repeat> updatedRepeats =
-          (state as RepeatsLoaded).repeats.map((r) {
+      //final updatedRepeats =
+      (state as RepeatsLoaded).repeats.map<Repeat>((r) {
         if (r.id == null) {
           return (r.name == event.updatedRepeat.name) ? event.updatedRepeat : r;
         } else {
@@ -121,7 +123,7 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
         }
       }).toList();
       // yield RepeatsLoaded(updatedRepeats); // redundant because of the listener to the repository
-      repo.updateRepeat(event.updatedRepeat);
+      await repo.updateRepeat(event.updatedRepeat);
     }
   }
 
@@ -132,7 +134,7 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
           .where((r) => r.id != event.repeat.id)
           .toList();
       yield RepeatsLoaded(updatedRepeats);
-      repo.deleteRepeat(event.repeat);
+      await repo.deleteRepeat(event.repeat);
     }
   }
 
@@ -221,7 +223,7 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
       print('Error: trying to add default repeats but repo is null');
       return;
     }
-    WriteBatchWrapper batch = await repo.startRepeatWriteBatch();
+    final batch = await repo.startRepeatWriteBatch();
     for (var r in defaults) {
       batch.setData(r.toEntity().toDocument());
     }
@@ -240,15 +242,16 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
     }
     final curRepeats = (state as RepeatsLoaded).repeats;
     // gets the list of cars that do not yet have a repeat associated with them
-    List<Car> newCars = event.cars
-        .map((c) => (curRepeats.any((r) => r.cars.contains(c.name)) ? null : c))
+    final newCars = event.cars
+        .map<Car>(
+            (c) => curRepeats.any((r) => r.cars.contains(c.name)) ? null : c)
         .toList();
     newCars.removeWhere((c) => c == null);
-    if (newCars.length == 0) {
+    if (newCars.isEmpty) {
       print('all cars have repeats, not adding defaults');
       return;
     }
-    WriteBatchWrapper batch = await repo.startRepeatWriteBatch();
+    final batch = await repo.startRepeatWriteBatch();
     newCars.forEach((c) {
       defaults.forEach((r) {
         batch.setData(r.copyWith(cars: [c.name]).toEntity().toDocument());

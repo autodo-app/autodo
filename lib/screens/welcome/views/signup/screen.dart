@@ -10,10 +10,11 @@ import 'form.dart';
 import 'package:autodo/routes.dart';
 
 class SignupScreen extends StatelessWidget {
-  SignupScreen({Key key = IntegrationTestKeys.signupScreen}) : super(key: key);
+  const SignupScreen({Key key = IntegrationTestKeys.signupScreen})
+      : super(key: key);
 
   @override
-  build(context) => Container(
+  Widget build(context) => Container(
       decoration: scaffoldBackgroundGradient(),
       child: Scaffold(
         appBar: AppBar(

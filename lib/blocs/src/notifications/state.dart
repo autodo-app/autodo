@@ -10,9 +10,9 @@ abstract class NotificationsState extends Equatable {
 class NotificationsLoading extends NotificationsState {}
 
 class NotificationsLoaded extends NotificationsState {
-  final int lastID;
-
   const NotificationsLoaded(this.lastID);
+
+  final int lastID;
 
   @override
   List<Object> get props => [lastID];

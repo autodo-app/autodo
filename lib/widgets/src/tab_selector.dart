@@ -6,11 +6,7 @@ import 'package:autodo/localization.dart';
 import 'package:json_intl/json_intl.dart';
 
 class TabSelector extends StatelessWidget {
-  final AppTab activeTab;
-  final Function(AppTab) onTabSelected;
-  final Key todosTabKey, refuelingsTabKey, statsTabKey, repeatsTabKey;
-
-  TabSelector(
+  const TabSelector(
       {Key key,
       @required this.activeTab,
       @required this.onTabSelected,
@@ -19,6 +15,12 @@ class TabSelector extends StatelessWidget {
       this.statsTabKey,
       this.repeatsTabKey})
       : super(key: key);
+
+  final AppTab activeTab;
+
+  final Function(AppTab) onTabSelected;
+
+  final Key todosTabKey, refuelingsTabKey, statsTabKey, repeatsTabKey;
 
   @override
   Widget build(BuildContext context) {

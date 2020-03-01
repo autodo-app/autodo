@@ -10,18 +10,18 @@ String titleCase(String input) {
   input =
       input[0].toUpperCase() + input.substring(1); // capitalize first letter
   return input.replaceAllMapped(
-      lowerToUpper, (m) => "${m[1]} ${m[2]}"); // space between words
+      lowerToUpper, (m) => '${m[1]} ${m[2]}'); // space between words
 }
 
 String requiredValidator(String val) =>
-    (val == null || val == "") ? "This field is required." : null;
+    (val == null || val == '') ? 'This field is required.' : null;
 
 String doubleValidator(String val) {
   if (requiredValidator(val) != null) return requiredValidator(val);
   try {
     double.parse(val);
   } catch (e) {
-    return "Number";
+    return 'Number';
   }
   return null;
 }
@@ -31,7 +31,7 @@ String intNoRequire(String val) {
   try {
     int.parse(val);
   } catch (e) {
-    return "Integer";
+    return 'Integer';
   }
   return null;
 }
@@ -42,16 +42,21 @@ String intValidator(String val) {
 }
 
 class RGB extends Equatable {
-  final double r; // a fraction between 0 and 1
-  final double g; // a fraction between 0 and 1
-  final double b; // a fraction between 0 and 1
+  const RGB(this.r, this.g, this.b);
 
-  RGB(this.r, this.g, this.b);
+  /// a fraction between 0 and 1
+  final double r;
 
-  toValue() {
-    int red = (r * 255).toInt();
-    int green = (g * 255).toInt();
-    int blue = (b * 255).toInt();
+  /// a fraction between 0 and 1
+  final double g;
+
+  /// a fraction between 0 and 1
+  final double b;
+
+  int toValue() {
+    final red = (r * 255).toInt();
+    final green = (g * 255).toInt();
+    final blue = (b * 255).toInt();
     return (0xff << 24) + (red << 16) + (green << 8) + blue;
   }
 
@@ -59,23 +64,28 @@ class RGB extends Equatable {
   List<Object> get props => [r, g, b];
 
   @override
-  toString() => 'RGB { r: $r, g: $g, b: $b }';
+  String toString() => 'RGB { r: $r, g: $g, b: $b }';
 }
 
 class HSV extends Equatable {
-  final double h; // angle in degrees
-  final double s; // a fraction between 0 and 1
-  final double v; // a fraction between 0 and 1
+  const HSV(this.h, this.s, this.v);
 
-  HSV(this.h, this.s, this.v);
+  /// angle in degrees
+  final double h;
 
-  toValue() => hsv2rgb(this).toValue();
+  /// a fraction between 0 and 1
+  final double s;
+
+  /// a fraction between 0 and 1
+  final double v;
+
+  int toValue() => hsv2rgb(this).toValue();
 
   @override
   List<Object> get props => [h, s, v];
 
   @override
-  toString() => 'HSV { h: $h, s: $s, v: $v }';
+  String toString() => 'HSV { h: $h, s: $s, v: $v }';
 }
 
 HSV rgb2hsv(RGB rgb) {
@@ -87,7 +97,8 @@ HSV rgb2hsv(RGB rgb) {
   max = rgb.r > rgb.g ? rgb.r : rgb.g;
   max = max > rgb.b ? max : rgb.b;
 
-  var h, s, v = max;
+  double h, s;
+  final v = max;
 
   delta = max - min;
   if (delta < 0.00001) {
@@ -95,19 +106,21 @@ HSV rgb2hsv(RGB rgb) {
   }
   if (max > 0.0) {
     // NOTE: if Max is == 0, this divide would cause a crash
-    s = (delta / max);
+    s = delta / max;
   } else {
     // if max is 0, then r = g = b = 0
     // s = 0, h is undefined
     return HSV(double.infinity, 0.0, v);
   }
 
-  if (rgb.r >= max) // > is bogus, just keeps compiler happy
+  if (rgb.r >= max) {
+    // > is bogus, just keeps compiler happy
     h = (rgb.g - rgb.b) / delta; // between yellow & magenta
-  else if (rgb.g >= max)
+  } else if (rgb.g >= max) {
     h = 2.0 + (rgb.b - rgb.r) / delta; // between cyan & yellow
-  else
+  } else {
     h = 4.0 + (rgb.r - rgb.g) / delta; // between magenta & cyan
+  }
 
   h *= 60.0; // degrees
 
@@ -119,7 +132,7 @@ HSV rgb2hsv(RGB rgb) {
 RGB hsv2rgb(HSV hsv) {
   double hh, p, q, t, ff;
   int i;
-  RGB out = RGB(0, 0, 0);
+  var out = RGB(0, 0, 0);
 
   if (hsv.s <= 0.0) {
     // < is bogus, just shuts up warnings
@@ -158,16 +171,16 @@ RGB hsv2rgb(HSV hsv) {
   return out;
 }
 
-clamp(input, lo, hi) {
+num clamp(num input, num lo, num hi) {
   return (input < lo) ? lo : (input > hi) ? hi : input;
 }
 
 /// This will always round down for now
-roundToDay(DateTime date) {
-  var hours = Duration(hours: date.hour);
-  var mins = Duration(minutes: date.minute);
-  var secs = Duration(seconds: date.second);
-  var millis = Duration(milliseconds: date.millisecond);
+DateTime roundToDay(DateTime date) {
+  final hours = Duration(hours: date.hour);
+  final mins = Duration(minutes: date.minute);
+  final secs = Duration(seconds: date.second);
+  final millis = Duration(milliseconds: date.millisecond);
   return date.subtract(hours).subtract(mins).subtract(secs).subtract(millis);
 }
 
@@ -180,11 +193,11 @@ double scaleToUnit(double _num, double _min, double _max) {
 }
 
 double roundToPrecision(double val, int places) {
-  double mod = pow(10.0, places);
-  return ((val * mod).round().toDouble() / mod);
+  final double mod = pow(10.0, places);
+  return (val * mod).round().toDouble() / mod;
 }
 
-changeFocus(FocusNode cur, FocusNode next) {
+void changeFocus(FocusNode cur, FocusNode next) {
   cur.unfocus();
   next.requestFocus();
 }

@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:autodo/theme.dart';
 
 class AccountSetupScreen extends StatefulWidget {
-  final Widget header, panel;
+  const AccountSetupScreen({@required this.header, @required this.panel});
 
-  AccountSetupScreen({@required this.header, @required this.panel});
+  final Widget header, panel;
 
   @override
   AccountSetupScreenState createState() => AccountSetupScreenState();

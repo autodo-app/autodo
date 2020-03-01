@@ -8,12 +8,12 @@ import 'screen.dart';
 /// Structures the BlocProviders for the homescreen and exports them for
 /// use by the main screen.
 class HomeScreenProvider extends StatelessWidget {
+  const HomeScreenProvider({this.integrationTest});
+
   final bool integrationTest;
 
-  HomeScreenProvider({this.integrationTest});
-
   @override
-  build(BuildContext context) => MultiBlocProvider(
+  Widget build(BuildContext context) => MultiBlocProvider(
         providers: [
           BlocProvider<TabBloc>(
             create: (context) => TabBloc(),

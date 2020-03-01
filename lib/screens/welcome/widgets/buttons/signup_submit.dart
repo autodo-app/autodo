@@ -4,12 +4,12 @@ import 'package:autodo/localization.dart';
 import 'package:json_intl/json_intl.dart';
 
 class SignupSubmitButton extends StatelessWidget {
+  const SignupSubmitButton({this.onPressed});
+
   final Function onPressed;
 
-  SignupSubmitButton({this.onPressed});
-
   @override
-  build(context) => Container(
+  Widget build(context) => Container(
         padding: EdgeInsets.fromLTRB(0.0, 25.0, 0.0, 0.0),
         child: SizedBox(
           height: 40.0,
@@ -25,7 +25,7 @@ class SignupSubmitButton extends StatelessWidget {
               JsonIntl.of(context).get(IntlKeys.signup),
               style: Theme.of(context).accentTextTheme.button,
             ),
-            onPressed: () => onPressed(),
+            onPressed: onPressed,
           ),
         ),
       );

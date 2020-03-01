@@ -4,8 +4,6 @@ import 'package:autodo/theme.dart';
 
 void main() {
   group('theme', () {
-    test('createTheme runs properly', () {
-      createTheme();
-    });
+    test('createTheme runs properly', createTheme);
   });
 }

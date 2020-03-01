@@ -9,45 +9,48 @@ import 'package:autodo/widgets/widgets.dart';
 import 'package:json_intl/json_intl.dart';
 
 class _RepeatTitle extends StatelessWidget {
+  const _RepeatTitle(this.repeat, {Key key}) : super(key: key);
+
   final Repeat repeat;
 
-  _RepeatTitle(this.repeat, {Key key}) : super(key: key);
-
   @override
-  build(context) => Container(
+  Widget build(context) => Container(
       padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         RichText(
           text: TextSpan(children: [
             TextSpan(
-                text: JsonIntl.of(context).get(IntlKeys.task) + ' ',
-                style: Theme.of(context).primaryTextTheme.body1),
+                // Todo: Improve this translation
+                text: '${JsonIntl.of(context).get(IntlKeys.task)} ',
+                style: Theme.of(context).primaryTextTheme.bodyText2),
             TextSpan(
-                text: this.repeat.name,
-                style: Theme.of(context).primaryTextTheme.subtitle),
+                text: repeat.name,
+                style: Theme.of(context).primaryTextTheme.subtitle2),
           ]),
         ),
         RichText(
             text: TextSpan(children: [
           TextSpan(
-              text: JsonIntl.of(context).get(IntlKeys.interval) + ' ',
-              style: Theme.of(context).primaryTextTheme.body1),
+              // Todo: Improve this translation
+              text: '${JsonIntl.of(context).get(IntlKeys.interval)} ',
+              style: Theme.of(context).primaryTextTheme.bodyText2),
           TextSpan(
-              text: this.repeat.mileageInterval.toString(),
-              style: Theme.of(context).primaryTextTheme.subtitle),
+              text: repeat.mileageInterval.toString(),
+              style: Theme.of(context).primaryTextTheme.subtitle2),
           TextSpan(
-              text: ' miles', style: Theme.of(context).primaryTextTheme.body1)
+              text: ' miles',
+              style: Theme.of(context).primaryTextTheme.bodyText2)
         ]))
       ]));
 }
 
 class _RepeatEditButton extends StatelessWidget {
+  const _RepeatEditButton(this.repeat, {Key key}) : super(key: key);
+
   final Repeat repeat;
 
-  _RepeatEditButton(this.repeat, {Key key}) : super(key: key);
-
   @override
-  build(context) => ButtonTheme.fromButtonThemeData(
+  Widget build(context) => ButtonTheme.fromButtonThemeData(
       data: ButtonThemeData(
         minWidth: 0,
       ),
@@ -67,12 +70,12 @@ class _RepeatEditButton extends StatelessWidget {
 }
 
 class _RepeatDeleteButton extends StatelessWidget {
+  const _RepeatDeleteButton(this.repeat, {Key key}) : super(key: key);
+
   final Repeat repeat;
 
-  _RepeatDeleteButton(this.repeat, {Key key}) : super(key: key);
-
   @override
-  build(context) => ButtonTheme.fromButtonThemeData(
+  Widget build(context) => ButtonTheme.fromButtonThemeData(
       data: ButtonThemeData(
         minWidth: 0,
       ),
@@ -93,12 +96,12 @@ class _RepeatDeleteButton extends StatelessWidget {
 }
 
 class RepeatCard extends StatelessWidget {
+  const RepeatCard({Key key, @required this.repeat}) : super(key: key);
+
   final Repeat repeat;
 
-  RepeatCard({Key key, @required this.repeat}) : super(key: key);
-
   @override
-  build(context) => Card(
+  Widget build(context) => Card(
       key: ValueKey('__repeat_card_${repeat.name}'),
       elevation: 4,
       color: Theme.of(context).cardColor,

@@ -13,14 +13,6 @@ import 'state.dart';
 
 class FilteredRefuelingsBloc
     extends Bloc<FilteredRefuelingsEvent, FilteredRefuelingsState> {
-  static const int HUE_RANGE = 60; // range of usable hues is 0-120, or +- 60
-  static const double EFF_VAR = 5.0;
-  static const double HUE_MAX = 360.0;
-
-  final RefuelingsBloc refuelingsBloc;
-  final CarsBloc carsBloc;
-  StreamSubscription refuelingsSubscription, carsSubscription;
-
   FilteredRefuelingsBloc(
       {@required this.refuelingsBloc, @required this.carsBloc}) {
     refuelingsSubscription = refuelingsBloc.listen((state) {
@@ -35,6 +27,19 @@ class FilteredRefuelingsBloc
       }
     });
   }
+
+  /// range of usable hues is 0-120, or +- 60
+  static const int HUE_RANGE = 60;
+
+  static const double EFF_VAR = 5.0;
+
+  static const double HUE_MAX = 360.0;
+
+  final RefuelingsBloc refuelingsBloc;
+
+  final CarsBloc carsBloc;
+
+  StreamSubscription refuelingsSubscription, carsSubscription;
 
   @override
   FilteredRefuelingsState get initialState {
@@ -82,7 +87,7 @@ class FilteredRefuelingsBloc
   ) async* {
     print('filtered refuelings $state');
     if (state is FilteredRefuelingsLoaded) {
-      final curState = (state as FilteredRefuelingsLoaded);
+      final curState = state as FilteredRefuelingsLoaded;
       yield _shadeEfficiencyStats(
           (refuelingsBloc.state as RefuelingsLoaded).refuelings, curState.cars);
     } else if (carsBloc.state is RefuelingsLoaded) {
@@ -96,11 +101,12 @@ class FilteredRefuelingsBloc
   }
 
   int _hsv(Refueling refueling, Car car) {
-    if (refueling.efficiency == double.infinity)
+    if (refueling.efficiency == double.infinity) {
       return HSV(1.0, 1.0, 1.0).toValue();
-    var avgEff = car.averageEfficiency;
+    }
+    final avgEff = car.averageEfficiency;
     // range is 0 to 120
-    var diff = (refueling.efficiency == null ||
+    final diff = (refueling.efficiency == null ||
             refueling.efficiency == double.infinity)
         ? 0
         : refueling.efficiency - avgEff;
@@ -131,15 +137,15 @@ class FilteredRefuelingsBloc
   Stream<FilteredRefuelingsState> _mapCarsUpdatedToState(
       FilteredRefuelingsUpdateCars event) async* {
     if (state is FilteredRefuelingsLoaded) {
-      FilteredRefuelingsLoaded curState = state as FilteredRefuelingsLoaded;
+      final curState = state as FilteredRefuelingsLoaded;
       final curFilter = curState.activeFilter;
-      List<Refueling> updatedRefuelings = curState.filteredRefuelings;
+      var updatedRefuelings = curState.filteredRefuelings;
       for (var c in event.cars) {
-        List<Refueling> toUpdate = curState.filteredRefuelings
+        final toUpdate = curState.filteredRefuelings
             .where((r) => r.carName == c.name)
             .toList();
         for (var r in toUpdate) {
-          Refueling updated = r.copyWith(efficiencyColor: Color(_hsv(r, c)));
+          final updated = r.copyWith(efficiencyColor: Color(_hsv(r, c)));
           updatedRefuelings = updatedRefuelings
               .map((r) => r.id == updated.id ? updated : r)
               .toList();

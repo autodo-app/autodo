@@ -85,7 +85,7 @@ void main() {
       final repeatsBloc = MockRepeatsBloc();
       when(repeatsBloc.state).thenReturn(
           RepeatsLoaded([Repeat(name: 'test'), Repeat(name: 'test1')]));
-      bool saved = false;
+      var saved = false;
       final key = GlobalKey<FormState>();
       await tester.pumpWidget(
         MultiBlocProvider(
