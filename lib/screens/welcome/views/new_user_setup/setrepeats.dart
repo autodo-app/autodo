@@ -33,7 +33,7 @@ class _OilInterval extends StatelessWidget {
         validator: intValidator,
         onSaved: (val) => BlocProvider.of<RepeatsBloc>(context).add(
             UpdateRepeat(
-                repeat.copyWith(mileageInterval: int.parse(val.trim())))),
+                repeat.copyWith(mileageInterval: double.parse(val.trim())))),
         focusNode: node,
         textInputAction: TextInputAction.next,
         onFieldSubmitted: (_) => changeFocus(node, nextNode),
@@ -53,12 +53,12 @@ class _TireRotationInterval extends StatelessWidget {
         maxLines: 1,
         autofocus: false,
         initialValue: repeat.mileageInterval.toString(),
-        decoration:
-            defaultInputDecoration('(miles)', 'Tire Rotation Interval (miles)'),
+        decoration: defaultInputDecoration(
+            '(miles)', 'Tire Rotation Interval (miles)'), // Todo: Translate
         validator: intValidator,
         onSaved: (val) => BlocProvider.of<RepeatsBloc>(context).add(
             UpdateRepeat(
-                repeat.copyWith(mileageInterval: int.parse(val.trim())))),
+                repeat.copyWith(mileageInterval: double.parse(val.trim())))),
         focusNode: node,
         textInputAction: TextInputAction.done,
       );

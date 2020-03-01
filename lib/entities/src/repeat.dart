@@ -8,7 +8,7 @@ class RepeatEntity extends Equatable {
 
   final String id, name;
 
-  final int mileageInterval;
+  final double mileageInterval;
 
   final Duration dateInterval;
 
@@ -26,7 +26,7 @@ class RepeatEntity extends Equatable {
     return RepeatEntity(
         snap.documentID,
         snap.data['name'] as String,
-        snap.data['mileageInterval'] as int,
+        (snap.data['mileageInterval'] as num).toDouble(),
         (snap.data['dateInterval'] == null)
             ? null
             : Duration(days: snap.data['dateInterval'] as int),
@@ -37,7 +37,7 @@ class RepeatEntity extends Equatable {
     return RepeatEntity(
         (snap.key is String) ? snap.key : '${snap.key}',
         snap.value['name'] as String,
-        snap.value['mileageInterval'] as int,
+        snap.value['mileageInterval'] as double,
         (snap.value['dateInterval'] == null)
             ? null
             : Duration(days: snap.value['dateInterval'] as int),

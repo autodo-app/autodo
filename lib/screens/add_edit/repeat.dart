@@ -1,6 +1,7 @@
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/localization.dart';
 import 'package:autodo/models/models.dart';
+import 'package:autodo/units/units.dart';
 import 'package:autodo/util.dart';
 import 'package:autodo/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,10 @@ import 'package:json_intl/json_intl.dart';
 import 'forms/barrel.dart';
 
 typedef _OnSaveCallback = Function(
-    String name, int mileageInterval, List<String> carNames);
+  String name,
+  double mileageInterval,
+  List<String> carNames,
+);
 
 class _NameForm extends StatelessWidget {
   const _NameForm({this.repeat, this.onSaved, this.node, this.nextNode});
@@ -54,26 +58,30 @@ class _MileageForm extends StatelessWidget {
   final Function(String) onSaved;
 
   @override
-  Widget build(context) => TextFormField(
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.teal),
-          ),
-          labelText: JsonIntl.of(context).get(IntlKeys.mileageInterval),
-          contentPadding:
-              EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
+  Widget build(context) {
+    final distance = Distance.of(context);
+
+    return TextFormField(
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.teal),
         ),
-        initialValue: repeat?.mileageInterval?.toString() ?? '',
-        autofocus: false,
-        focusNode: node,
-        style: Theme.of(context).primaryTextTheme.subtitle2,
-        keyboardType: TextInputType.text,
-        textCapitalization: TextCapitalization.sentences,
-        validator: requiredValidator,
-        onSaved: onSaved,
-        textInputAction: TextInputAction.next,
-        onFieldSubmitted: (_) => changeFocus(node, nextNode),
-      );
+        labelText: JsonIntl.of(context).get(IntlKeys.mileageInterval),
+        contentPadding:
+            EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
+      ),
+      initialValue: distance.format(repeat?.mileageInterval, textField: true),
+      autofocus: false,
+      focusNode: node,
+      style: Theme.of(context).primaryTextTheme.subtitle2,
+      keyboardType: TextInputType.text,
+      textCapitalization: TextCapitalization.sentences,
+      validator: requiredValidator,
+      onSaved: onSaved,
+      textInputAction: TextInputAction.next,
+      onFieldSubmitted: (_) => changeFocus(node, nextNode),
+    );
+  }
 }
 
 class RepeatAddEditScreen extends StatefulWidget {
@@ -107,7 +115,7 @@ class _RepeatAddEditScreenState extends State<RepeatAddEditScreen> {
 
   String _name;
 
-  int _mileageInterval;
+  double _mileageInterval;
 
   List<Map<String, dynamic>> _cars;
 
@@ -164,7 +172,7 @@ class _RepeatAddEditScreenState extends State<RepeatAddEditScreen> {
                       child: _MileageForm(
                         repeat: repeat,
                         node: _mileageNode,
-                        onSaved: (val) => _mileageInterval = int.parse(val),
+                        onSaved: (val) => _mileageInterval = double.parse(val),
                       ),
                       focusNode: _mileageNode,
                     ),

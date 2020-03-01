@@ -262,7 +262,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     }
   }
 
-  int _calculateNextTodo(List<Todo> pastTodos, int mileageInterval) {
+  double _calculateNextTodo(List<Todo> pastTodos, double mileageInterval) {
     pastTodos.sort((a, b) {
       if (a.dueMileage < b.dueMileage) {
         return 1;

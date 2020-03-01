@@ -37,11 +37,6 @@ class _MileageForm extends StatelessWidget {
   Widget build(context) {
     final distance = Distance.of(context);
 
-    var value = '';
-    if (refueling?.mileage != null) {
-      value = distance.internalToUnit(refueling.mileage).round().toString();
-    }
-
     return TextFormField(
       decoration: InputDecoration(
         hintText: JsonIntl.of(context).get(IntlKeys.requiredLiteral),
@@ -55,7 +50,7 @@ class _MileageForm extends StatelessWidget {
             EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
       ),
       autofocus: true,
-      initialValue: value,
+      initialValue: distance.format(refueling?.mileage, textField: true),
       keyboardType: TextInputType.numberWithOptions(decimal: false),
       validator: intValidator,
       onSaved: onSaved,
@@ -85,11 +80,6 @@ class _AmountForm extends StatelessWidget {
   Widget build(context) {
     final volume = Volume.of(context);
 
-    var value = '';
-    if (refueling?.amount != null) {
-      value = volume.internalToUnit(refueling.amount).toStringAsFixed(2);
-    }
-
     return TextFormField(
       decoration: InputDecoration(
         hintText: JsonIntl.of(context).get(IntlKeys.requiredLiteral),
@@ -103,7 +93,7 @@ class _AmountForm extends StatelessWidget {
             EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
       ),
       autofocus: true,
-      initialValue: value,
+      initialValue: volume.format(refueling?.amount, textField: true),
       keyboardType: TextInputType.numberWithOptions(decimal: true),
       validator: doubleValidator,
       onSaved: onSaved,
@@ -133,11 +123,6 @@ class _CostForm extends StatelessWidget {
   Widget build(context) {
     final currency = Currency.of(context);
 
-    var value = '';
-    if (refueling?.cost != null) {
-      value = currency.unitToInternal(refueling.cost).toString();
-    }
-
     return TextFormField(
       decoration: InputDecoration(
         hintText: JsonIntl.of(context).get(IntlKeys.requiredLiteral),
@@ -151,7 +136,7 @@ class _CostForm extends StatelessWidget {
             EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
       ),
       autofocus: true,
-      initialValue: value,
+      initialValue: currency.format(refueling?.cost, textField: true),
       keyboardType: TextInputType.numberWithOptions(decimal: true),
       validator: doubleValidator,
       onSaved: onSaved,
