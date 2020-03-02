@@ -47,7 +47,7 @@ jobs:
     - run: flutter clean
     - run: rm ./ios/Podfile.lock
     - run: cd ./ios && pod deintegrate && pod install && cd ..
-    - run: flutter build ios --release --no-codesign --verbose
+    - run: flutter build ios --release --no-codesign
       env:
         KEY_ALIAS: ${{ secrets.key_alias }}
         KEY_PASSWORD: ${{ secrets.key_password }}
