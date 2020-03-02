@@ -53,6 +53,7 @@ class _TodoFieldsState extends State<_TodoFields> {
         BlocProvider.of<TodosBloc>(context).add(AddTodo(Todo(
             name: 'oil',
             repeatName: 'oil',
+            carName: c.name,
             completed: true,
             completedDate: DateTime.now(),
             dueMileage: int.parse(val.trim()))));
@@ -73,6 +74,7 @@ class _TodoFieldsState extends State<_TodoFields> {
         BlocProvider.of<TodosBloc>(context).add(AddTodo(Todo(
             name: 'tireRotation',
             repeatName: 'tireRotation',
+            carName: c.name,
             completed: true,
             completedDate: DateTime.now(),
             dueMileage: int.parse(val.trim()))));
