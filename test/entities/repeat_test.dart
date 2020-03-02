@@ -25,7 +25,7 @@ void main() {
       expect(
           repeat.toString(),
           'RepeatEntity { id: , name: , mileage'
-          'Interval: 0, dateInterval: ${Duration(hours: 0)}, cars: '
+          'Interval: 0.0, dateInterval: ${Duration(hours: 0)}, cars: '
           '[]}');
     });
     test('fromSnapshot', () {
@@ -45,7 +45,7 @@ void main() {
     test('fromRecord', () {
       final doc = {
         'name': 'name',
-        'mileageInterval': 0,
+        'mileageInterval': 0.0,
         'dateInterval': 0,
         'cars': ['test']
       };

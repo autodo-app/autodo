@@ -1,5 +1,6 @@
 import 'package:autodo/integ_test_keys.dart';
 import 'package:autodo/localization.dart';
+import 'package:autodo/units/units.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:autodo/blocs/blocs.dart';
@@ -38,45 +39,53 @@ class _TodoFieldsState extends State<_TodoFields> {
     super.dispose();
   }
 
-  Widget oilMileage() => TextFormField(
-        key: IntegrationTestKeys.latestOilChangeField,
-        maxLines: 1,
-        autofocus: false,
-        decoration: defaultInputDecoration('(miles)', 'Oil Change'),
-        validator: intNoRequire,
-        onSaved: (val) {
-          if (val == null || val == '') return;
-          BlocProvider.of<TodosBloc>(context).add(AddTodo(Todo(
-              name: 'oil',
-              repeatName: 'oil',
-              carName: widget.c.name,
-              completed: true,
-              completedDate: DateTime.now(),
-              dueMileage: double.parse(val.trim()))));
-        },
-        focusNode: _oilNode,
-        textInputAction: TextInputAction.next,
-        onFieldSubmitted: (_) => changeFocus(_oilNode, _tiresNode),
-      );
+  Widget oilMileage() {
+    final distance = Distance.of(context);
 
-  Widget tireRotationMileage() => TextFormField(
-        key: IntegrationTestKeys.latestTireRotationField,
-        maxLines: 1,
-        decoration: defaultInputDecoration('(miles)', 'Tire Rotation'),
-        validator: intNoRequire,
-        onSaved: (val) {
-          if (val == null || val == '') return;
-          BlocProvider.of<TodosBloc>(context).add(AddTodo(Todo(
-              name: 'tireRotation',
-              repeatName: 'tireRotation',
-              carName: widget.c.name,
-              completed: true,
-              completedDate: DateTime.now(),
-              dueMileage: double.parse(val.trim()))));
-        },
-        focusNode: _tiresNode,
-        textInputAction: TextInputAction.done,
-      );
+    return TextFormField(
+      key: IntegrationTestKeys.latestOilChangeField,
+      maxLines: 1,
+      autofocus: false,
+      decoration: defaultInputDecoration('(miles)', 'Oil Change'),
+      validator: intNoRequire,
+      onSaved: (val) {
+        if (val == null || val == '') return;
+        BlocProvider.of<TodosBloc>(context).add(AddTodo(Todo(
+            name: 'oil',
+            repeatName: 'oil',
+            carName: widget.c.name,
+            completed: true,
+            completedDate: DateTime.now(),
+            dueMileage: distance.unitToInternal(double.parse(val.trim())))));
+      },
+      focusNode: _oilNode,
+      textInputAction: TextInputAction.next,
+      onFieldSubmitted: (_) => changeFocus(_oilNode, _tiresNode),
+    );
+  }
+
+  Widget tireRotationMileage() {
+    final distance = Distance.of(context);
+
+    return TextFormField(
+      key: IntegrationTestKeys.latestTireRotationField,
+      maxLines: 1,
+      decoration: defaultInputDecoration('(miles)', 'Tire Rotation'),
+      validator: intNoRequire,
+      onSaved: (val) {
+        if (val == null || val == '') return;
+        BlocProvider.of<TodosBloc>(context).add(AddTodo(Todo(
+            name: 'tireRotation',
+            repeatName: 'tireRotation',
+            carName: widget.c.name,
+            completed: true,
+            completedDate: DateTime.now(),
+            dueMileage: distance.unitToInternal(double.parse(val.trim())))));
+      },
+      focusNode: _tiresNode,
+      textInputAction: TextInputAction.done,
+    );
+  }
 
   @override
   Widget build(context) {

@@ -26,7 +26,7 @@ class RepeatEntity extends Equatable {
     return RepeatEntity(
         snap.documentID,
         snap.data['name'] as String,
-        (snap.data['mileageInterval'] as num).toDouble(),
+        (snap.data['mileageInterval'] as num)?.toDouble(),
         (snap.data['dateInterval'] == null)
             ? null
             : Duration(days: snap.data['dateInterval'] as int),

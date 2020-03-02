@@ -1,4 +1,5 @@
 import 'package:autodo/localization.dart';
+import 'package:autodo/units/units.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -182,13 +183,17 @@ class MileageScreenState extends State<MileageScreen> {
     );
 
     Widget card() {
+      final distance = Distance.of(context);
       final carFields = <Widget>[];
       for (var i in Iterable.generate(cars.length)) {
-        carFields.add(CarEntryField((i == cars.length - 1) ? _next : null,
-            (val) {
+        carFields
+            .add(CarEntryField((i == cars.length - 1) ? _next : null, (val) {
           cars[i] = cars[i].copyWith(name: val);
-        }, (val) => cars[i] = cars[i].copyWith(mileage: double.parse(val)),
-            formKeys[i]));
+        },
+                (val) => cars[i] = cars[i].copyWith(
+                      mileage: distance.unitToInternal(double.parse(val)),
+                    ),
+                formKeys[i]));
       }
 
       return Container(

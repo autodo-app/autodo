@@ -39,7 +39,7 @@ void main() {
       expect(
           refueling.toString(),
           'RefuelingEntity { id: , name: , carColor: '
-          '${Color(0)}, mileage: 0, date: '
+          '${Color(0)}, mileage: 0.0, date: '
           '${DateTime.fromMillisecondsSinceEpoch(0)}, amount: 0.0, '
           'cost: 0.0, efficiency: 0.0, efficiencyColor: ${Color(0)} }');
     });
@@ -73,7 +73,7 @@ void main() {
     test('fromRecord', () {
       final doc = {
         'carName': 'name',
-        'mileage': 0,
+        'mileage': 0.0,
         'date': 0,
         'amount': 0.0,
         'cost': 0.0,

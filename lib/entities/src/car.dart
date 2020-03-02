@@ -74,7 +74,7 @@ class CarEntity extends Equatable {
     return CarEntity(
         snap.documentID,
         snap.data['name'] as String,
-        (snap.data['mileage'] as num).toDouble(),
+        (snap.data['mileage'] as num)?.toDouble(),
         snap.data['numRefuelings'] as int,
         snap.data['averageEfficiency'] as double,
         snap.data['distanceRate'] as double,

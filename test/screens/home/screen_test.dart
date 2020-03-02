@@ -1,4 +1,5 @@
 import 'package:autodo/integ_test_keys.dart';
+import 'package:autodo/units/units.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -10,6 +11,8 @@ import 'package:autodo/screens/add_edit/barrel.dart';
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/models/models.dart';
 import 'package:autodo/localization.dart';
+import 'package:preferences/preferences.dart';
+import 'package:provider/provider.dart';
 
 class MockTodosBloc extends MockBloc<TodosEvent, TodosState>
     implements TodosBloc {}
@@ -39,8 +42,9 @@ void main() {
     PaidVersionBloc paidBloc;
     CarsBloc carsBloc;
     RefuelingsBloc refuelingsBloc;
+    BasePrefService pref;
 
-    setUp(() {
+    setUp(() async {
       todosBloc = MockTodosBloc();
       filteredTodosBloc = MockFilteredTodosBloc();
       tabBloc = MockTabBloc();
@@ -49,6 +53,13 @@ void main() {
       carsBloc = MockCarsBloc();
       when(carsBloc.state).thenReturn(CarsLoaded([Car(name: 'test')]));
       refuelingsBloc = MockRefuelingsBloc();
+
+      pref = JustCachePrefService();
+      await pref.setDefaultValues({
+        'length_unit': DistanceUnit.imperial.index,
+        'volume_unit': VolumeUnit.us.index,
+        'currency': 'USD',
+      });
     });
 
     testWidgets('renders correctly', (WidgetTester tester) async {
@@ -126,24 +137,27 @@ void main() {
         final carsBloc = MockCarsBloc();
         when(carsBloc.state).thenReturn(CarsLoaded([Car()]));
         await tester.pumpWidget(
-          MultiBlocProvider(
-            providers: [
-              BlocProvider<TodosBloc>.value(
-                value: todosBloc,
-              ),
-              BlocProvider<FilteredTodosBloc>.value(
-                value: filteredTodosBloc,
-              ),
-              BlocProvider<TabBloc>.value(
-                value: tabBloc,
-              ),
-              BlocProvider<CarsBloc>.value(value: carsBloc),
-              BlocProvider<PaidVersionBloc>.value(value: paidBloc),
-              BlocProvider<RefuelingsBloc>.value(value: refuelingsBloc),
-            ],
-            child: MaterialApp(
-              home: Scaffold(
-                body: HomeScreen(key: scaffoldKey),
+          ChangeNotifierProvider<BasePrefService>.value(
+            value: pref,
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<TodosBloc>.value(
+                  value: todosBloc,
+                ),
+                BlocProvider<FilteredTodosBloc>.value(
+                  value: filteredTodosBloc,
+                ),
+                BlocProvider<TabBloc>.value(
+                  value: tabBloc,
+                ),
+                BlocProvider<CarsBloc>.value(value: carsBloc),
+                BlocProvider<PaidVersionBloc>.value(value: paidBloc),
+                BlocProvider<RefuelingsBloc>.value(value: refuelingsBloc),
+              ],
+              child: MaterialApp(
+                home: Scaffold(
+                  body: HomeScreen(key: scaffoldKey),
+                ),
               ),
             ),
           ),
@@ -174,25 +188,28 @@ void main() {
               RepeatsLoaded([Repeat()])
             ]));
         await tester.pumpWidget(
-          MultiBlocProvider(
-            providers: [
-              BlocProvider<TodosBloc>.value(
-                value: todosBloc,
-              ),
-              BlocProvider<FilteredTodosBloc>.value(
-                value: filteredTodosBloc,
-              ),
-              BlocProvider<TabBloc>.value(
-                value: tabBloc,
-              ),
-              BlocProvider<CarsBloc>.value(value: carsBloc),
-              BlocProvider<RepeatsBloc>.value(value: repeatsBloc),
-              BlocProvider<PaidVersionBloc>.value(value: paidBloc),
-              BlocProvider<RefuelingsBloc>.value(value: refuelingsBloc),
-            ],
-            child: MaterialApp(
-              home: Scaffold(
-                body: HomeScreen(key: scaffoldKey),
+          ChangeNotifierProvider<BasePrefService>.value(
+            value: pref,
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<TodosBloc>.value(
+                  value: todosBloc,
+                ),
+                BlocProvider<FilteredTodosBloc>.value(
+                  value: filteredTodosBloc,
+                ),
+                BlocProvider<TabBloc>.value(
+                  value: tabBloc,
+                ),
+                BlocProvider<CarsBloc>.value(value: carsBloc),
+                BlocProvider<RepeatsBloc>.value(value: repeatsBloc),
+                BlocProvider<PaidVersionBloc>.value(value: paidBloc),
+                BlocProvider<RefuelingsBloc>.value(value: refuelingsBloc),
+              ],
+              child: MaterialApp(
+                home: Scaffold(
+                  body: HomeScreen(key: scaffoldKey),
+                ),
               ),
             ),
           ),
@@ -223,25 +240,28 @@ void main() {
               RepeatsLoaded([Repeat()])
             ]));
         await tester.pumpWidget(
-          MultiBlocProvider(
-            providers: [
-              BlocProvider<TodosBloc>.value(
-                value: todosBloc,
-              ),
-              BlocProvider<FilteredTodosBloc>.value(
-                value: filteredTodosBloc,
-              ),
-              BlocProvider<TabBloc>.value(
-                value: tabBloc,
-              ),
-              BlocProvider<CarsBloc>.value(value: carsBloc),
-              BlocProvider<RepeatsBloc>.value(value: repeatsBloc),
-              BlocProvider<PaidVersionBloc>.value(value: paidBloc),
-              BlocProvider<RefuelingsBloc>.value(value: refuelingsBloc),
-            ],
-            child: MaterialApp(
-              home: Scaffold(
-                body: HomeScreen(key: scaffoldKey),
+          ChangeNotifierProvider<BasePrefService>.value(
+            value: pref,
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<TodosBloc>.value(
+                  value: todosBloc,
+                ),
+                BlocProvider<FilteredTodosBloc>.value(
+                  value: filteredTodosBloc,
+                ),
+                BlocProvider<TabBloc>.value(
+                  value: tabBloc,
+                ),
+                BlocProvider<CarsBloc>.value(value: carsBloc),
+                BlocProvider<RepeatsBloc>.value(value: repeatsBloc),
+                BlocProvider<PaidVersionBloc>.value(value: paidBloc),
+                BlocProvider<RefuelingsBloc>.value(value: refuelingsBloc),
+              ],
+              child: MaterialApp(
+                home: Scaffold(
+                  body: HomeScreen(key: scaffoldKey),
+                ),
               ),
             ),
           ),

@@ -21,7 +21,7 @@ void main() {
     test('toString', () {
       expect(
           car.toString(),
-          'CarEntity { id: , name: , mileage: 0, '
+          'CarEntity { id: , name: , mileage: 0.0, '
           'numRefuelings: 0, averageEfficiency: 0.0, distanceRate: '
           '0.0, lastMileageUpdate: ${DateTime.fromMillisecondsSinceEpoch(0)}, distanceRateHistory: [] }');
     });
@@ -55,7 +55,7 @@ void main() {
     test('fromRecord', () {
       final doc = {
         'name': 'name',
-        'mileage': 0,
+        'mileage': 0.0,
         'numRefuelings': 0,
         'averageEfficiency': 0.0,
         'distanceRate': 0.0,
