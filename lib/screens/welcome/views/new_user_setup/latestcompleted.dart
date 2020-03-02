@@ -10,32 +10,140 @@ import 'package:json_intl/json_intl.dart';
 import 'new_user_screen_page.dart';
 import 'base.dart';
 
+class _TodoFields extends StatefulWidget {
+  const _TodoFields(this.c, this.formKey, this.showName);
+
+  final Car c;
+  final GlobalKey<FormState> formKey;
+  final bool showName;
+
+  @override
+  _TodoFieldsState createState() => _TodoFieldsState(c, formKey, showName);
+}
+
+class _TodoFieldsState extends State<_TodoFields> {
+  _TodoFieldsState(this.c, this.formKey, this.showName);
+
+  final Car c;
+  FocusNode _oilNode, _tiresNode;
+  final GlobalKey<FormState> formKey;
+  final bool showName;
+
+  @override
+  void initState() {
+    _oilNode = FocusNode();
+    _tiresNode = FocusNode();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _oilNode.dispose();
+    _tiresNode.dispose();
+    super.dispose();
+  }
+
+  Widget oilMileage() => TextFormField(
+      key: IntegrationTestKeys.latestOilChangeField,
+      maxLines: 1,
+      autofocus: false,
+      decoration: defaultInputDecoration('(miles)', 'Oil Change'),
+      validator: intNoRequire,
+      onSaved: (val) {
+        BlocProvider.of<TodosBloc>(context).add(AddTodo(Todo(
+            name: 'oil',
+            repeatName: 'oil',
+            completed: true,
+            completedDate: DateTime.now(),
+            dueMileage: int.parse(val.trim()))));
+      },
+      focusNode: _oilNode,
+      textInputAction: TextInputAction.next,
+      onFieldSubmitted: (_) => changeFocus(_oilNode, _tiresNode),
+    );
+
+  Widget tireRotationMileage() => TextFormField(
+      key: IntegrationTestKeys.latestTireRotationField,
+      maxLines: 1,
+      decoration:
+          defaultInputDecoration('(miles)', 'Tire Rotation'),
+      validator: intNoRequire,
+      onSaved: (val) {
+        if (val == null || val == '') return;
+        BlocProvider.of<TodosBloc>(context).add(AddTodo(Todo(
+            name: 'tireRotation',
+            repeatName: 'tireRotation',
+            completed: true,
+            completedDate: DateTime.now(),
+            dueMileage: int.parse(val.trim()))));
+      },
+      focusNode: _tiresNode,
+      textInputAction: TextInputAction.done,
+    );
+
+  @override
+  Widget build(context) {
+    final name = showName ? Text(c.name, style: Theme.of(context).primaryTextTheme.headline6) : Container();
+    final namePadding = showName ? Padding(padding: EdgeInsets.only(bottom: 10)) : Container();
+    return Container(
+      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+      child: Form(
+        key: formKey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            name,
+            namePadding,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Expanded(
+                  flex: 1,
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                    child: oilMileage(),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                    child: tireRotationMileage(),
+                  ),
+                ),
+              ],
+            ),
+            Padding(padding: EdgeInsets.only(bottom: 10)),
+          ],
+        )
+      )
+    );
+  }
+}
+
 class LatestRepeatsScreen extends StatefulWidget {
   const LatestRepeatsScreen(
-    this.repeatKey,
+    this.formKey,
     this.onNext,
-    this.page, {
-    this.todosBloc,
-  });
+    this.page);
 
-  final GlobalKey<FormState> repeatKey;
+  final GlobalKey<FormState> formKey;
 
   final Function() onNext;
 
   final NewUserScreenPage page;
 
-  final Bloc todosBloc;
-
   @override
   LatestRepeatsScreenState createState() =>
-      LatestRepeatsScreenState(page == NewUserScreenPage.LATEST, todosBloc);
+      LatestRepeatsScreenState(page == NewUserScreenPage.LATEST);
 }
 
 class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
     with TickerProviderStateMixin {
-  LatestRepeatsScreenState(this.pageWillBeVisible, this.todosBloc);
+  LatestRepeatsScreenState(this.pageWillBeVisible);
 
-  bool expanded, pageTransition, pageWillBeVisible;
+  bool pageTransition, pageWillBeVisible;
 
   AnimationController openCtrl;
 
@@ -43,11 +151,19 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
 
   FocusNode _oilNode, _tiresNode;
 
-  final TodosBloc todosBloc;
+  List<GlobalKey<FormState>> carFormKeys = [];
 
   Future<void> _next() async {
-    if (widget.repeatKey.currentState.validate()) {
-      widget.repeatKey.currentState.save();
+    var allValidated = true;
+    carFormKeys.forEach((k) {
+      if (k.currentState.validate()) {
+        k.currentState.save();
+      } else {
+        allValidated = false;
+      }
+    });
+    if (allValidated && widget.formKey.currentState.validate()) {
+      widget.formKey.currentState.save();
       // hide the keyboard
       FocusScope.of(context).requestFocus(FocusNode());
       await Future.delayed(Duration(milliseconds: 400));
@@ -57,7 +173,6 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
 
   @override
   void initState() {
-    expanded = false;
     pageTransition = false;
     openCtrl = AnimationController(
       vsync: this,
@@ -79,6 +194,58 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
     super.dispose();
   }
 
+  Widget card() {
+    // we're assuming here that the cars bloc doesn't update while this screen
+    // is visible, should be a safe assumption
+    final carsState = BlocProvider.of<CarsBloc>(context).state;
+    if (!(carsState is CarsLoaded)) {
+      return Container();
+    }
+    final cars = (carsState as CarsLoaded).cars;
+    // again relying on this set of cars to be static
+    final carFields = cars.map((c) => _TodoFields(c, GlobalKey<FormState>(), cars.length > 1));
+    carFormKeys = carFields.map((f) => f.formKey).toList();
+
+    return Container(
+      padding: EdgeInsets.all(10),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          ...carFields,
+          Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                FlatButton(
+                  padding: EdgeInsets.all(0),
+                  materialTapTargetSize: MaterialTapTargetSize.padded,
+                  child: Text(
+                    'Skip',
+                    style: Theme.of(context).primaryTextTheme.button,
+                  ),
+                  onPressed: () =>
+                      Navigator.popAndPushNamed(context, '/load'),
+                ),
+                FlatButton(
+                  key: IntegrationTestKeys.latestNextButton,
+                  padding: EdgeInsets.all(0),
+                  materialTapTargetSize: MaterialTapTargetSize.padded,
+                  child: Text(
+                    JsonIntl.of(context).get(IntlKeys.next),
+                    style: Theme.of(context).primaryTextTheme.button,
+                  ),
+                  onPressed: () async => await _next(),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(context) {
     if (pageWillBeVisible) {
@@ -86,51 +253,10 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
       pageWillBeVisible = false;
     }
 
-    final Widget oilMileage = TextFormField(
-      key: IntegrationTestKeys.latestOilChangeField,
-      maxLines: 1,
-      autofocus: false,
-      onTap: () => setState(() => expanded = false),
-      decoration: defaultInputDecoration('(miles)', 'Last Oil Change (miles)'),
-      validator: intNoRequire,
-      onSaved: (val) {
-        if (val == null || val == '') return;
-        BlocProvider.of<TodosBloc>(context).add(AddTodo(Todo(
-            name: 'oil',
-            repeatName: 'oil',
-            completed: true,
-            completedDate: DateTime.now(),
-            dueMileage: int.parse(val.trim()))));
-      },
-      focusNode: _oilNode,
-      textInputAction: TextInputAction.next,
-      onFieldSubmitted: (_) => changeFocus(_oilNode, _tiresNode),
-    );
-
-    final Widget tireRotationMileage = TextFormField(
-      key: IntegrationTestKeys.latestTireRotationField,
-      maxLines: 1,
-      onTap: () => setState(() => expanded = true),
-      decoration:
-          defaultInputDecoration('(miles)', 'Last Tire Rotation (miles)'),
-      validator: intNoRequire,
-      onSaved: (val) {
-        if (val == null || val == '') return;
-        BlocProvider.of<TodosBloc>(context).add(AddTodo(Todo(
-            name: 'tireRotation',
-            repeatName: 'tireRotation',
-            completed: true,
-            completedDate: DateTime.now(),
-            dueMileage: int.parse(val.trim()))));
-      },
-      focusNode: _tiresNode,
-      textInputAction: TextInputAction.done,
-    );
-
     final Widget headerText = AnimatedContainer(
       duration: Duration(milliseconds: 400),
       curve: Curves.fastOutSlowIn,
-      height: expanded ? 0 : 110,
+      height: 110,
       child: Padding(
         padding: EdgeInsets.fromLTRB(0, 0, 0, 30),
         child: Center(
@@ -158,56 +284,8 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
       ),
     );
 
-    Widget card() {
-      return Container(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-              child: oilMileage,
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-              child: tireRotationMileage,
-            ),
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  FlatButton(
-                    padding: EdgeInsets.all(0),
-                    materialTapTargetSize: MaterialTapTargetSize.padded,
-                    child: Text(
-                      'Skip',
-                      style: Theme.of(context).primaryTextTheme.button,
-                    ),
-                    onPressed: () =>
-                        Navigator.popAndPushNamed(context, '/load'),
-                  ),
-                  FlatButton(
-                    key: IntegrationTestKeys.latestNextButton,
-                    padding: EdgeInsets.all(0),
-                    materialTapTargetSize: MaterialTapTargetSize.padded,
-                    child: Text(
-                      JsonIntl.of(context).get(IntlKeys.next),
-                      style: Theme.of(context).primaryTextTheme.button,
-                    ),
-                    onPressed: () async => await _next(),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
     return Form(
-        key: widget.repeatKey,
+        key: widget.formKey,
         child: AccountSetupScreen(header: headerText, panel: card()));
   }
 }
