@@ -90,5 +90,13 @@ class Distance extends UnitConversion<DistanceUnit> {
     throw UnimplementedError('Unit $unit not implemented');
   }
 
-  static DistanceUnit getDefault(Locale locale) => DistanceUnit.metric;
+  static DistanceUnit getDefault(Locale locale) {
+    switch (locale.countryCode) {
+      case 'US':
+      case 'GB':
+        return DistanceUnit.imperial;
+    }
+
+    return DistanceUnit.metric;
+  }
 }
