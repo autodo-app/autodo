@@ -44,91 +44,88 @@ class _TodoFieldsState extends State<_TodoFields> {
   }
 
   Widget oilMileage() => TextFormField(
-      key: IntegrationTestKeys.latestOilChangeField,
-      maxLines: 1,
-      autofocus: false,
-      decoration: defaultInputDecoration('(miles)', 'Oil Change'),
-      validator: intNoRequire,
-      onSaved: (val) {
-        BlocProvider.of<TodosBloc>(context).add(AddTodo(Todo(
-            name: 'oil',
-            repeatName: 'oil',
-            carName: c.name,
-            completed: true,
-            completedDate: DateTime.now(),
-            dueMileage: int.parse(val.trim()))));
-      },
-      focusNode: _oilNode,
-      textInputAction: TextInputAction.next,
-      onFieldSubmitted: (_) => changeFocus(_oilNode, _tiresNode),
-    );
+        key: IntegrationTestKeys.latestOilChangeField,
+        maxLines: 1,
+        autofocus: false,
+        decoration: defaultInputDecoration('(miles)', 'Oil Change'),
+        validator: intNoRequire,
+        onSaved: (val) {
+          BlocProvider.of<TodosBloc>(context).add(AddTodo(Todo(
+              name: 'oil',
+              repeatName: 'oil',
+              carName: c.name,
+              completed: true,
+              completedDate: DateTime.now(),
+              dueMileage: int.parse(val.trim()))));
+        },
+        focusNode: _oilNode,
+        textInputAction: TextInputAction.next,
+        onFieldSubmitted: (_) => changeFocus(_oilNode, _tiresNode),
+      );
 
   Widget tireRotationMileage() => TextFormField(
-      key: IntegrationTestKeys.latestTireRotationField,
-      maxLines: 1,
-      decoration:
-          defaultInputDecoration('(miles)', 'Tire Rotation'),
-      validator: intNoRequire,
-      onSaved: (val) {
-        if (val == null || val == '') return;
-        BlocProvider.of<TodosBloc>(context).add(AddTodo(Todo(
-            name: 'tireRotation',
-            repeatName: 'tireRotation',
-            carName: c.name,
-            completed: true,
-            completedDate: DateTime.now(),
-            dueMileage: int.parse(val.trim()))));
-      },
-      focusNode: _tiresNode,
-      textInputAction: TextInputAction.done,
-    );
+        key: IntegrationTestKeys.latestTireRotationField,
+        maxLines: 1,
+        decoration: defaultInputDecoration('(miles)', 'Tire Rotation'),
+        validator: intNoRequire,
+        onSaved: (val) {
+          if (val == null || val == '') return;
+          BlocProvider.of<TodosBloc>(context).add(AddTodo(Todo(
+              name: 'tireRotation',
+              repeatName: 'tireRotation',
+              carName: c.name,
+              completed: true,
+              completedDate: DateTime.now(),
+              dueMileage: int.parse(val.trim()))));
+        },
+        focusNode: _tiresNode,
+        textInputAction: TextInputAction.done,
+      );
 
   @override
   Widget build(context) {
-    final name = showName ? Text(c.name, style: Theme.of(context).primaryTextTheme.headline6) : Container();
-    final namePadding = showName ? Padding(padding: EdgeInsets.only(bottom: 10)) : Container();
+    final name = showName
+        ? Text(c.name, style: Theme.of(context).primaryTextTheme.headline6)
+        : Container();
+    final namePadding =
+        showName ? Padding(padding: EdgeInsets.only(bottom: 10)) : Container();
     return Container(
-      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-      child: Form(
-        key: formKey,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            name,
-            namePadding,
-            Row(
+        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+        child: Form(
+            key: formKey,
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Expanded(
-                  flex: 1,
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                    child: oilMileage(),
-                  ),
+                name,
+                namePadding,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Expanded(
+                      flex: 1,
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                        child: oilMileage(),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                        child: tireRotationMileage(),
+                      ),
+                    ),
+                  ],
                 ),
-                Expanded(
-                  flex: 1,
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                    child: tireRotationMileage(),
-                  ),
-                ),
+                Padding(padding: EdgeInsets.only(bottom: 10)),
               ],
-            ),
-            Padding(padding: EdgeInsets.only(bottom: 10)),
-          ],
-        )
-      )
-    );
+            )));
   }
 }
 
 class LatestRepeatsScreen extends StatefulWidget {
-  const LatestRepeatsScreen(
-    this.formKey,
-    this.onNext,
-    this.page);
+  const LatestRepeatsScreen(this.formKey, this.onNext, this.page);
 
   final GlobalKey<FormState> formKey;
 
@@ -205,7 +202,8 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
     }
     final cars = (carsState as CarsLoaded).cars;
     // again relying on this set of cars to be static
-    final carFields = cars.map((c) => _TodoFields(c, GlobalKey<FormState>(), cars.length > 1));
+    final carFields = cars
+        .map((c) => _TodoFields(c, GlobalKey<FormState>(), cars.length > 1));
     carFormKeys = carFields.map((f) => f.formKey).toList();
 
     return Container(
@@ -227,8 +225,7 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
                     'Skip',
                     style: Theme.of(context).primaryTextTheme.button,
                   ),
-                  onPressed: () =>
-                      Navigator.popAndPushNamed(context, '/load'),
+                  onPressed: () => Navigator.popAndPushNamed(context, '/load'),
                 ),
                 FlatButton(
                   key: IntegrationTestKeys.latestNextButton,
