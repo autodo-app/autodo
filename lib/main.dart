@@ -50,8 +50,8 @@ Future<void> run(bool integrationTest) async {
   final locale = Locale(Intl.systemLocale);
   final service = await SharedPrefService.init();
   await service.setDefaultValues({
-    'length_unit': Distance.getDefault(locale),
-    'volume_unit': Volume.getDefault(locale),
+    'length_unit': Distance.getDefault(locale).index,
+    'volume_unit': Volume.getDefault(locale).index,
     'currency': Currency.getDefault(locale),
   });
 

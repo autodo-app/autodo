@@ -111,5 +111,14 @@ class Volume extends UnitConversion<VolumeUnit> {
     throw UnimplementedError('Unit $unit not implemented');
   }
 
-  static VolumeUnit getDefault(Locale locale) => VolumeUnit.metric;
+  static VolumeUnit getDefault(Locale locale) {
+    switch (locale.countryCode) {
+      case 'US':
+        return VolumeUnit.us;
+      case 'GB':
+        return VolumeUnit.imperial;
+    }
+
+    return VolumeUnit.metric;
+  }
 }
