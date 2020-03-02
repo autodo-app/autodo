@@ -1,14 +1,16 @@
-import 'package:bloc_test/bloc_test.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:autodo/screens/home/views/todos.dart';
-import 'package:autodo/screens/home/widgets/todo_card.dart';
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/models/models.dart';
+import 'package:autodo/screens/home/views/todos.dart';
+import 'package:autodo/screens/home/widgets/todo_card.dart';
+import 'package:autodo/units/units.dart';
 import 'package:autodo/widgets/widgets.dart';
+import 'package:bloc_test/bloc_test.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:preferences/preferences.dart';
+import 'package:provider/provider.dart';
 
 class MockTodosBloc extends MockBloc<TodosEvent, TodosState>
     implements TodosBloc {}
@@ -21,10 +23,17 @@ void main() {
   group('TodosScreen', () {
     TodosBloc todosBloc;
     FilteredTodosBloc filteredTodosBloc;
+    BasePrefService pref;
 
-    setUp(() {
+    setUp(() async {
       todosBloc = MockTodosBloc();
       filteredTodosBloc = MockFilteredTodosBloc();
+      pref = JustCachePrefService();
+      await pref.setDefaultValues({
+        'length_unit': DistanceUnit.imperial.index,
+        'volume_unit': VolumeUnit.us.index,
+        'currency': 'USD',
+      });
     });
 
     testWidgets('renders loading', (WidgetTester tester) async {
@@ -90,18 +99,21 @@ void main() {
           ], VisibilityFilter.all));
       final todosKey = Key('todos');
       await tester.pumpWidget(
-        MultiBlocProvider(
-          providers: [
-            BlocProvider<TodosBloc>.value(
-              value: todosBloc,
-            ),
-            BlocProvider<FilteredTodosBloc>.value(
-              value: filteredTodosBloc,
-            ),
-          ],
-          child: MaterialApp(
-            home: Scaffold(
-              body: TodosScreen(key: todosKey),
+        ChangeNotifierProvider<BasePrefService>.value(
+          value: pref,
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider<TodosBloc>.value(
+                value: todosBloc,
+              ),
+              BlocProvider<FilteredTodosBloc>.value(
+                value: filteredTodosBloc,
+              ),
+            ],
+            child: MaterialApp(
+              home: Scaffold(
+                body: TodosScreen(key: todosKey),
+              ),
             ),
           ),
         ),
@@ -120,18 +132,21 @@ void main() {
       when(todosBloc.add(UpdateTodo(todo))).thenAnswer((_) => _);
       final todosKey = Key('todos');
       await tester.pumpWidget(
-        MultiBlocProvider(
-          providers: [
-            BlocProvider<TodosBloc>.value(
-              value: todosBloc,
-            ),
-            BlocProvider<FilteredTodosBloc>.value(
-              value: filteredTodosBloc,
-            ),
-          ],
-          child: MaterialApp(
-            home: Scaffold(
-              body: TodosScreen(key: todosKey),
+        ChangeNotifierProvider<BasePrefService>.value(
+          value: pref,
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider<TodosBloc>.value(
+                value: todosBloc,
+              ),
+              BlocProvider<FilteredTodosBloc>.value(
+                value: filteredTodosBloc,
+              ),
+            ],
+            child: MaterialApp(
+              home: Scaffold(
+                body: TodosScreen(key: todosKey),
+              ),
             ),
           ),
         ),
@@ -153,18 +168,21 @@ void main() {
       when(todosBloc.add(DeleteTodo(todo))).thenAnswer((_) => null);
       final todosKey = Key('todos');
       await tester.pumpWidget(
-        MultiBlocProvider(
-          providers: [
-            BlocProvider<TodosBloc>.value(
-              value: todosBloc,
-            ),
-            BlocProvider<FilteredTodosBloc>.value(
-              value: filteredTodosBloc,
-            ),
-          ],
-          child: MaterialApp(
-            home: Scaffold(
-              body: TodosScreen(key: todosKey),
+        ChangeNotifierProvider<BasePrefService>.value(
+          value: pref,
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider<TodosBloc>.value(
+                value: todosBloc,
+              ),
+              BlocProvider<FilteredTodosBloc>.value(
+                value: filteredTodosBloc,
+              ),
+            ],
+            child: MaterialApp(
+              home: Scaffold(
+                body: TodosScreen(key: todosKey),
+              ),
             ),
           ),
         ),
@@ -188,18 +206,21 @@ void main() {
           .thenAnswer((_) => FilteredTodosLoaded([todo], VisibilityFilter.all));
       final todosKey = Key('todos');
       await tester.pumpWidget(
-        MultiBlocProvider(
-          providers: [
-            BlocProvider<TodosBloc>.value(
-              value: todosBloc,
-            ),
-            BlocProvider<FilteredTodosBloc>.value(
-              value: filteredTodosBloc,
-            ),
-          ],
-          child: MaterialApp(
-            home: Scaffold(
-              body: TodosScreen(key: todosKey),
+        ChangeNotifierProvider<BasePrefService>.value(
+          value: pref,
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider<TodosBloc>.value(
+                value: todosBloc,
+              ),
+              BlocProvider<FilteredTodosBloc>.value(
+                value: filteredTodosBloc,
+              ),
+            ],
+            child: MaterialApp(
+              home: Scaffold(
+                body: TodosScreen(key: todosKey),
+              ),
             ),
           ),
         ),

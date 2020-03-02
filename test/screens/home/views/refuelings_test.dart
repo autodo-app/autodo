@@ -1,14 +1,16 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:bloc_test/bloc_test.dart';
-
-import 'package:autodo/models/models.dart';
 import 'package:autodo/blocs/blocs.dart';
-import 'package:autodo/widgets/widgets.dart';
+import 'package:autodo/models/models.dart';
 import 'package:autodo/screens/home/views/refuelings.dart';
 import 'package:autodo/screens/home/widgets/refueling_card.dart';
+import 'package:autodo/units/units.dart';
+import 'package:autodo/widgets/widgets.dart';
+import 'package:bloc_test/bloc_test.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:preferences/preferences.dart';
+import 'package:provider/provider.dart';
 
 class MockRefuelingsBloc extends MockBloc<RefuelingsEvent, RefuelingsState>
     implements RefuelingsBloc {}
@@ -20,10 +22,17 @@ class MockFilteredRefuelingsBloc
 void main() {
   RefuelingsBloc refuelingsBloc;
   FilteredRefuelingsBloc filteredRefuelingsBloc;
+  BasePrefService pref;
 
-  setUp(() {
+  setUp(() async {
     refuelingsBloc = MockRefuelingsBloc();
     filteredRefuelingsBloc = MockFilteredRefuelingsBloc();
+    pref = JustCachePrefService();
+    await pref.setDefaultValues({
+      'length_unit': DistanceUnit.imperial.index,
+      'volume_unit': VolumeUnit.us.index,
+      'currency': 'USD',
+    });
   });
 
   group('RefuelingsScreen', () {
@@ -32,18 +41,21 @@ void main() {
           .thenAnswer((_) => FilteredRefuelingsLoading());
       final refuelingsKey = Key('refuelings');
       await tester.pumpWidget(
-        MultiBlocProvider(
-          providers: [
-            BlocProvider<RefuelingsBloc>.value(
-              value: refuelingsBloc,
-            ),
-            BlocProvider<FilteredRefuelingsBloc>.value(
-              value: filteredRefuelingsBloc,
-            ),
-          ],
-          child: MaterialApp(
-            home: Scaffold(
-              body: RefuelingsScreen(key: refuelingsKey),
+        ChangeNotifierProvider<BasePrefService>.value(
+          value: pref,
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider<RefuelingsBloc>.value(
+                value: refuelingsBloc,
+              ),
+              BlocProvider<FilteredRefuelingsBloc>.value(
+                value: filteredRefuelingsBloc,
+              ),
+            ],
+            child: MaterialApp(
+              home: Scaffold(
+                body: RefuelingsScreen(key: refuelingsKey),
+              ),
             ),
           ),
         ),
@@ -87,18 +99,21 @@ void main() {
           FilteredRefuelingsLoaded([refueling], VisibilityFilter.all, [Car()]));
       final refuelingsKey = Key('refuelings');
       await tester.pumpWidget(
-        MultiBlocProvider(
-          providers: [
-            BlocProvider<RefuelingsBloc>.value(
-              value: refuelingsBloc,
-            ),
-            BlocProvider<FilteredRefuelingsBloc>.value(
-              value: filteredRefuelingsBloc,
-            ),
-          ],
-          child: MaterialApp(
-            home: Scaffold(
-              body: RefuelingsScreen(key: refuelingsKey),
+        ChangeNotifierProvider<BasePrefService>.value(
+          value: pref,
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider<RefuelingsBloc>.value(
+                value: refuelingsBloc,
+              ),
+              BlocProvider<FilteredRefuelingsBloc>.value(
+                value: filteredRefuelingsBloc,
+              ),
+            ],
+            child: MaterialApp(
+              home: Scaffold(
+                body: RefuelingsScreen(key: refuelingsKey),
+              ),
             ),
           ),
         ),
@@ -120,18 +135,21 @@ void main() {
           FilteredRefuelingsLoaded([refueling], VisibilityFilter.all, [Car()]));
       final refuelingsKey = Key('refuelings');
       await tester.pumpWidget(
-        MultiBlocProvider(
-          providers: [
-            BlocProvider<RefuelingsBloc>.value(
-              value: refuelingsBloc,
-            ),
-            BlocProvider<FilteredRefuelingsBloc>.value(
-              value: filteredRefuelingsBloc,
-            ),
-          ],
-          child: MaterialApp(
-            home: Scaffold(
-              body: RefuelingsScreen(key: refuelingsKey),
+        ChangeNotifierProvider<BasePrefService>.value(
+          value: pref,
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider<RefuelingsBloc>.value(
+                value: refuelingsBloc,
+              ),
+              BlocProvider<FilteredRefuelingsBloc>.value(
+                value: filteredRefuelingsBloc,
+              ),
+            ],
+            child: MaterialApp(
+              home: Scaffold(
+                body: RefuelingsScreen(key: refuelingsKey),
+              ),
             ),
           ),
         ),
@@ -153,18 +171,21 @@ void main() {
           FilteredRefuelingsLoaded([refueling], VisibilityFilter.all, [Car()]));
       final refuelingsKey = Key('refuelings');
       await tester.pumpWidget(
-        MultiBlocProvider(
-          providers: [
-            BlocProvider<RefuelingsBloc>.value(
-              value: refuelingsBloc,
-            ),
-            BlocProvider<FilteredRefuelingsBloc>.value(
-              value: filteredRefuelingsBloc,
-            ),
-          ],
-          child: MaterialApp(
-            home: Scaffold(
-              body: RefuelingsScreen(key: refuelingsKey),
+        ChangeNotifierProvider<BasePrefService>.value(
+          value: pref,
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider<RefuelingsBloc>.value(
+                value: refuelingsBloc,
+              ),
+              BlocProvider<FilteredRefuelingsBloc>.value(
+                value: filteredRefuelingsBloc,
+              ),
+            ],
+            child: MaterialApp(
+              home: Scaffold(
+                body: RefuelingsScreen(key: refuelingsKey),
+              ),
             ),
           ),
         ),

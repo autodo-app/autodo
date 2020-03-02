@@ -1,5 +1,6 @@
 import 'package:autodo/integ_test_keys.dart';
 import 'package:autodo/localization.dart';
+import 'package:autodo/units/units.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -23,21 +24,29 @@ class _OilInterval extends StatelessWidget {
   final Repeat repeat;
 
   @override
-  Widget build(context) => TextFormField(
-        key: IntegrationTestKeys.setOilInterval,
-        maxLines: 1,
-        autofocus: false,
-        initialValue: repeat.mileageInterval.toString(),
-        decoration:
-            defaultInputDecoration('(miles)', 'Oil Change Interval (miles)'),
-        validator: intValidator,
-        onSaved: (val) => BlocProvider.of<RepeatsBloc>(context).add(
-            UpdateRepeat(
-                repeat.copyWith(mileageInterval: double.parse(val.trim())))),
-        focusNode: node,
-        textInputAction: TextInputAction.next,
-        onFieldSubmitted: (_) => changeFocus(node, nextNode),
-      );
+  Widget build(context) {
+    final distance = Distance.of(context);
+
+    return TextFormField(
+      key: IntegrationTestKeys.setOilInterval,
+      maxLines: 1,
+      autofocus: false,
+      initialValue: distance.format(
+        repeat.mileageInterval,
+        textField: true,
+      ),
+      decoration: defaultInputDecoration('(${distance.unitString(context)})',
+          'Oil Change Interval (${distance.unitString(context)})'),
+      validator: intValidator,
+      onSaved: (val) => BlocProvider.of<RepeatsBloc>(context).add(UpdateRepeat(
+          repeat.copyWith(
+              mileageInterval:
+                  distance.unitToInternal(double.parse(val.trim()))))),
+      focusNode: node,
+      textInputAction: TextInputAction.next,
+      onFieldSubmitted: (_) => changeFocus(node, nextNode),
+    );
+  }
 }
 
 class _TireRotationInterval extends StatelessWidget {
@@ -48,20 +57,25 @@ class _TireRotationInterval extends StatelessWidget {
   final Repeat repeat;
 
   @override
-  Widget build(context) => TextFormField(
-        key: IntegrationTestKeys.setTireRotationInterval,
-        maxLines: 1,
-        autofocus: false,
-        initialValue: repeat.mileageInterval.toString(),
-        decoration: defaultInputDecoration(
-            '(miles)', 'Tire Rotation Interval (miles)'), // Todo: Translate
-        validator: intValidator,
-        onSaved: (val) => BlocProvider.of<RepeatsBloc>(context).add(
-            UpdateRepeat(
-                repeat.copyWith(mileageInterval: double.parse(val.trim())))),
-        focusNode: node,
-        textInputAction: TextInputAction.done,
-      );
+  Widget build(context) {
+    final distance = Distance.of(context);
+
+    return TextFormField(
+      key: IntegrationTestKeys.setTireRotationInterval,
+      maxLines: 1,
+      autofocus: false,
+      initialValue: distance.format(repeat.mileageInterval, textField: true),
+      decoration: defaultInputDecoration('(${distance.unitString(context)})',
+          'Tire Rotation Interval (${distance.unitString(context)})'), // Todo: Translate
+      validator: intValidator,
+      onSaved: (val) => BlocProvider.of<RepeatsBloc>(context).add(UpdateRepeat(
+          repeat.copyWith(
+              mileageInterval:
+                  distance.unitToInternal(double.parse(val.trim()))))),
+      focusNode: node,
+      textInputAction: TextInputAction.done,
+    );
+  }
 }
 
 class _HeaderText extends StatelessWidget {

@@ -43,7 +43,7 @@ void main() {
       expect(
           todo.toString(),
           'TodoEntity { id: , name: , carName: , repeatName'
-          ': , dueState: ${TodoDueState.DUE_SOON}, dueMileage: 0, notificationID: '
+          ': , dueState: ${TodoDueState.DUE_SOON}, dueMileage: 0.0, notificationID: '
           '0, completed: false, estimatedDueDate: false, completedDate: '
           '${DateTime.fromMillisecondsSinceEpoch(0)}, dueDate: ${DateTime.fromMillisecondsSinceEpoch(0)} }');
     });
@@ -84,7 +84,7 @@ void main() {
         'carName': 'car',
         'repeatName': 'repeat',
         'dueState': 0,
-        'dueMileage': 0,
+        'dueMileage': 0.0,
         'notificationID': 0,
         'completed': false,
         'estimatedDueDate': false,
