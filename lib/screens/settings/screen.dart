@@ -74,9 +74,9 @@ class SettingsScreenState extends State<SettingsScreen> {
       DropdownPreference<String>(
         JsonIntl.of(context).get(IntlKeys.defaultCurrency),
         'currency',
-        displayValues: Currency.currencies.keys
-            .map((e) => '${Currency.currencies[e]} ($e)')
-            .toList(),
+        // displayValues: Currency.currencies.keys
+        //     .map((e) => '${Currency.currencies[e]} ($e)')
+        //     .toList(),
         values: Currency.currencies.keys.toList(),
       ),
       PreferenceTitle(JsonIntl.of(context).get(IntlKeys.groupMisc)),
