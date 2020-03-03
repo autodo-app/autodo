@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:intl/intl.dart';
 import 'package:json_intl/json_intl.dart';
 import 'package:preferences/preferences.dart';
 import 'package:provider/provider.dart';
@@ -47,7 +46,7 @@ Future<void> run(bool integrationTest) async {
   final AuthRepository authRepository = FirebaseAuthRepository();
   final theme = createTheme();
 
-  final locale = Locale(Intl.systemLocale);
+  final locale = WidgetsBinding.instance.window.locale ?? Locale('en', 'US');
   final service = await SharedPrefService.init();
   await service.setDefaultValues({
     'length_unit': Distance.getDefault(locale).index,
