@@ -25,6 +25,8 @@ class MockAuthenticationBloc
 class MockDatabaseBloc extends MockBloc<DatabaseEvent, DatabaseState>
     implements DatabaseBloc {}
 
+class MockTodosBloc extends Mock implements TodosBloc {}
+
 // ignore: must_be_immutable
 class MockRepo extends Mock implements DataRepository {}
 
@@ -64,7 +66,9 @@ void main() {
       expect(find.byType(LatestRepeatsScreen), findsOneWidget);
     });
     testWidgets('set repeats', (tester) async {
+      final todosBloc = MockTodosBloc();
       final carsBloc = MockCarsBloc();
+      when(carsBloc.state).thenReturn(CarsLoaded([Car(name: 'test')]));
       final repeatsBloc = MockRepeatsBloc();
       whenListen(
           repeatsBloc,
@@ -83,6 +87,7 @@ void main() {
         BlocProvider<DatabaseBloc>.value(value: dbBloc),
         BlocProvider<CarsBloc>.value(value: carsBloc),
         BlocProvider<RepeatsBloc>.value(value: repeatsBloc),
+        BlocProvider<TodosBloc>.value(value: todosBloc),
       ], child: MaterialApp(home: NewUserScreen())));
       expect(find.byType(NewUserScreen), findsOneWidget);
       for (var w in find.byType(TextFormField).evaluate()) {
@@ -98,7 +103,9 @@ void main() {
       expect(find.byType(SetRepeatsScreen), findsOneWidget);
     });
     testWidgets('set repeats back', (tester) async {
+      final todosBloc = MockTodosBloc();
       final carsBloc = MockCarsBloc();
+      when(carsBloc.state).thenReturn(CarsLoaded([Car(name: 'test')]));
       final repeatsBloc = MockRepeatsBloc();
       whenListen(
           repeatsBloc,
@@ -117,6 +124,7 @@ void main() {
         BlocProvider<DatabaseBloc>.value(value: dbBloc),
         BlocProvider<CarsBloc>.value(value: carsBloc),
         BlocProvider<RepeatsBloc>.value(value: repeatsBloc),
+        BlocProvider<TodosBloc>.value(value: todosBloc),
       ], child: MaterialApp(home: NewUserScreen())));
       expect(find.byType(NewUserScreen), findsOneWidget);
       for (var w in find.byType(TextFormField).evaluate()) {
@@ -135,7 +143,9 @@ void main() {
       expect(find.byType(LatestRepeatsScreen), findsOneWidget);
     });
     testWidgets('set repeats next', (tester) async {
+      final todosBloc = MockTodosBloc();
       final carsBloc = MockCarsBloc();
+      when(carsBloc.state).thenReturn(CarsLoaded([Car(name: 'test')]));
       final repeatsBloc = MockRepeatsBloc();
       whenListen(
           repeatsBloc,
@@ -155,6 +165,7 @@ void main() {
             BlocProvider<DatabaseBloc>.value(value: dbBloc),
             BlocProvider<CarsBloc>.value(value: carsBloc),
             BlocProvider<RepeatsBloc>.value(value: repeatsBloc),
+            BlocProvider<TodosBloc>.value(value: todosBloc),
           ],
           child: MaterialApp(home: NewUserScreen(), routes: {
             AutodoRoutes.home: (context) => Container(),
