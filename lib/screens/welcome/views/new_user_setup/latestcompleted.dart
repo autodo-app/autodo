@@ -44,24 +44,25 @@ class _TodoFieldsState extends State<_TodoFields> {
   }
 
   Widget oilMileage() => TextFormField(
-        key: IntegrationTestKeys.latestOilChangeField,
-        maxLines: 1,
-        autofocus: false,
-        decoration: defaultInputDecoration('(miles)', 'Oil Change'),
-        validator: intNoRequire,
-        onSaved: (val) {
-          BlocProvider.of<TodosBloc>(context).add(AddTodo(Todo(
-              name: 'oil',
-              repeatName: 'oil',
-              carName: c.name,
-              completed: true,
-              completedDate: DateTime.now(),
-              dueMileage: int.parse(val.trim()))));
-        },
-        focusNode: _oilNode,
-        textInputAction: TextInputAction.next,
-        onFieldSubmitted: (_) => changeFocus(_oilNode, _tiresNode),
-      );
+      key: IntegrationTestKeys.latestOilChangeField,
+      maxLines: 1,
+      autofocus: false,
+      decoration: defaultInputDecoration('(miles)', 'Oil Change'),
+      validator: intNoRequire,
+      onSaved: (val) {
+        if (val == null || val == '') return;
+        BlocProvider.of<TodosBloc>(context).add(AddTodo(Todo(
+            name: 'oil',
+            repeatName: 'oil',
+            carName: c.name,
+            completed: true,
+            completedDate: DateTime.now(),
+            dueMileage: int.parse(val.trim()))));
+      },
+      focusNode: _oilNode,
+      textInputAction: TextInputAction.next,
+      onFieldSubmitted: (_) => changeFocus(_oilNode, _tiresNode),
+    );
 
   Widget tireRotationMileage() => TextFormField(
         key: IntegrationTestKeys.latestTireRotationField,
@@ -202,9 +203,15 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
     }
     final cars = (carsState as CarsLoaded).cars;
     // again relying on this set of cars to be static
-    final carFields = cars
-        .map((c) => _TodoFields(c, GlobalKey<FormState>(), cars.length > 1));
-    carFormKeys = carFields.map((f) => f.formKey).toList();
+    // I'm fairly confident that there is a better way to do this but idk what it is
+    final carFields = [];
+    for (var i in Iterable.generate(cars.length)) {
+      if (carFormKeys.length - 1 < i) {
+        // only insert new keys if the index is empty
+        carFormKeys.add(GlobalKey<FormState>());
+      }
+      carFields.add(_TodoFields(cars[i], carFormKeys[i], cars.length > 1));
+    }
 
     return Container(
       padding: EdgeInsets.all(10),
