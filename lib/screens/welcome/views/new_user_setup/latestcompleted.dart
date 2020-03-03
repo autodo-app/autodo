@@ -18,16 +18,11 @@ class _TodoFields extends StatefulWidget {
   final bool showName;
 
   @override
-  _TodoFieldsState createState() => _TodoFieldsState(c, formKey, showName);
+  _TodoFieldsState createState() => _TodoFieldsState();
 }
 
 class _TodoFieldsState extends State<_TodoFields> {
-  _TodoFieldsState(this.c, this.formKey, this.showName);
-
-  final Car c;
   FocusNode _oilNode, _tiresNode;
-  final GlobalKey<FormState> formKey;
-  final bool showName;
 
   @override
   void initState() {
@@ -54,7 +49,7 @@ class _TodoFieldsState extends State<_TodoFields> {
         BlocProvider.of<TodosBloc>(context).add(AddTodo(Todo(
             name: 'oil',
             repeatName: 'oil',
-            carName: c.name,
+            carName: widget.c.name,
             completed: true,
             completedDate: DateTime.now(),
             dueMileage: int.parse(val.trim()))));
@@ -74,7 +69,7 @@ class _TodoFieldsState extends State<_TodoFields> {
           BlocProvider.of<TodosBloc>(context).add(AddTodo(Todo(
               name: 'tireRotation',
               repeatName: 'tireRotation',
-              carName: c.name,
+              carName: widget.c.name,
               completed: true,
               completedDate: DateTime.now(),
               dueMileage: int.parse(val.trim()))));
@@ -85,15 +80,15 @@ class _TodoFieldsState extends State<_TodoFields> {
 
   @override
   Widget build(context) {
-    final name = showName
-        ? Text(c.name, style: Theme.of(context).primaryTextTheme.headline6)
+    final name = widget.showName
+        ? Text(widget.c.name, style: Theme.of(context).primaryTextTheme.headline6)
         : Container();
     final namePadding =
-        showName ? Padding(padding: EdgeInsets.only(bottom: 10)) : Container();
+        widget.showName ? Padding(padding: EdgeInsets.only(bottom: 10)) : Container();
     return Container(
         padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
         child: Form(
-            key: formKey,
+            key: widget.formKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
