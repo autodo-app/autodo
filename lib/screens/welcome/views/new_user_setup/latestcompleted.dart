@@ -44,25 +44,25 @@ class _TodoFieldsState extends State<_TodoFields> {
   }
 
   Widget oilMileage() => TextFormField(
-      key: IntegrationTestKeys.latestOilChangeField,
-      maxLines: 1,
-      autofocus: false,
-      decoration: defaultInputDecoration('(miles)', 'Oil Change'),
-      validator: intNoRequire,
-      onSaved: (val) {
-        if (val == null || val == '') return;
-        BlocProvider.of<TodosBloc>(context).add(AddTodo(Todo(
-            name: 'oil',
-            repeatName: 'oil',
-            carName: c.name,
-            completed: true,
-            completedDate: DateTime.now(),
-            dueMileage: int.parse(val.trim()))));
-      },
-      focusNode: _oilNode,
-      textInputAction: TextInputAction.next,
-      onFieldSubmitted: (_) => changeFocus(_oilNode, _tiresNode),
-    );
+        key: IntegrationTestKeys.latestOilChangeField,
+        maxLines: 1,
+        autofocus: false,
+        decoration: defaultInputDecoration('(miles)', 'Oil Change'),
+        validator: intNoRequire,
+        onSaved: (val) {
+          if (val == null || val == '') return;
+          BlocProvider.of<TodosBloc>(context).add(AddTodo(Todo(
+              name: 'oil',
+              repeatName: 'oil',
+              carName: c.name,
+              completed: true,
+              completedDate: DateTime.now(),
+              dueMileage: int.parse(val.trim()))));
+        },
+        focusNode: _oilNode,
+        textInputAction: TextInputAction.next,
+        onFieldSubmitted: (_) => changeFocus(_oilNode, _tiresNode),
+      );
 
   Widget tireRotationMileage() => TextFormField(
         key: IntegrationTestKeys.latestTireRotationField,
