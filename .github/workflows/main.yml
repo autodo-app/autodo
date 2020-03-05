@@ -18,7 +18,8 @@ jobs:
     - run: flutter pub get
     - run: mkdir -p assets && echo "${{ secrets.keys_json }}" > assets/keys.json
     - run: echo "${{ secrets.store_file }}" | base64 --decode > ~/keystore.jks
-    - run: echo "${{ secrets.google_services }}" | base64 --decode > ./android/app/google-services.json
+    - run: echo "${{ secrets.google_services_test }}" > ./android/app/src/debug/google-services.json
+    - run: echo "${{ secrets.google_services_prod }}" > ./android/app/src/release/google-services.json
     - run: flutter build apk --debug --split-per-abi
       env:
         KEY_ALIAS: ${{ secrets.key_alias }}
