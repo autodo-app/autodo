@@ -122,26 +122,39 @@ Future<void> run(bool integrationTest) async {
   );
 }
 
+Future<void> configureFirebase(keys) async {
+  String googleAppID, projectID, apiKey;
+  if (kReleaseMode) {
+    apiKey = keys['firebase-prod-key'];
+    projectID = 'autodo-e93fc';
+    if (Platform.isIOS) {
+      googleAppID = '1:356275435347:ios:4e46f5fa8de51c6faad3a6';
+    } else {
+      googleAppID = '1:356275435347:android:5d33ed5a0494d852aad3a6';
+    }
+  } else {
+    apiKey = keys['firebase-test-key'];
+    projectID = 'autodo-49f21';
+    if (Platform.isIOS) {
+      googleAppID = '1:617460744396:ios:7da25d96edce10cefc4269';
+    } else {
+      googleAppID = '1:617460744396:android:400cbb86de167047';
+    }
+  }
+
+  await FirebaseApp.configure(
+        name: 'autodo',
+        options: FirebaseOptions(
+          googleAppID: googleAppID,
+          projectID: projectID,
+          apiKey: apiKey,
+        ));
+}
+
 Future<Map> init() async {
   WidgetsFlutterBinding.ensureInitialized();
   final Map keys = await SecretLoader(secretPath: 'assets/keys.json').load();
-  if (Platform.isIOS) {
-    await FirebaseApp.configure(
-        name: 'autodo',
-        options: FirebaseOptions(
-          googleAppID: '1:617460744396:ios:7da25d96edce10cefc4269',
-          projectID: 'autodo-49f21',
-          apiKey: keys['firebase-key'],
-        ));
-  } else {
-    await FirebaseApp.configure(
-        name: 'autodo',
-        options: FirebaseOptions(
-          googleAppID: '1:617460744396:android:400cbb86de167047',
-          projectID: 'autodo-49f21',
-          apiKey: keys['firebase-key'],
-        ));
-  }
+  await configureFirebase(keys);
   InAppPurchaseConnection
       .enablePendingPurchases(); // required in init for Android
   BlocSupervisor.delegate = AutodoBlocDelegate();
