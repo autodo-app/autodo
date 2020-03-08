@@ -143,12 +143,12 @@ Future<void> configureFirebase(keys) async {
   }
 
   await FirebaseApp.configure(
-        name: 'autodo',
-        options: FirebaseOptions(
-          googleAppID: googleAppID,
-          projectID: projectID,
-          apiKey: apiKey,
-        ));
+      name: 'autodo',
+      options: FirebaseOptions(
+        googleAppID: googleAppID,
+        projectID: projectID,
+        apiKey: apiKey,
+      ));
 }
 
 Future<Map> init() async {
