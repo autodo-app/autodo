@@ -40,17 +40,11 @@ jobs:
       with:
         channel: 'dev'
     - run: flutter pub get
-    - run: mkdir -p assets && echo "${{ secrets.keys_json }}" > assets/keys.json
-    - run: echo "${{ secrets.store_file }}" | base64 --decode > ~/keystore.jks
-    - run: echo "${{ secrets.google_services }}" | base64 --decode > ./android/app/google-services.json
-    - run: echo "${{ secrets.google_services_plist }}" > ./ios/GoogleService-Info.plist
-    - run: echo "${{ secrets.info_plist }}" > ./ios/Runner/Info.plist
+    - run: mkdir -p assets ios/Release
+    - run: echo "${{ secrets.keys_json }}" > assets/keys.json
+    - run: echo "${{ secrets.google_services_plist }}" > ./ios/Release/GoogleService-Info.plist
+    - run: echo "${{ secrets.info_plist }}" > ./ios/Release/Info.plist
     - run: flutter clean
     - run: rm ./ios/Podfile.lock
-    - run: cd ./ios && pod deintegrate && pod install && cd ..
+    - run: pushd ./ios && pod deintegrate
     - run: flutter build ios --release --no-codesign
-      env:
-        KEY_ALIAS: ${{ secrets.key_alias }}
-        KEY_PASSWORD: ${{ secrets.key_password }}
-        STORE_FILE: ~/keystore.jks
-        STORE_PASSWORD: ${{ secrets.store_password }}
