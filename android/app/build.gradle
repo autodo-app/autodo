@@ -64,7 +64,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.jonathanbayless.autodo"
+        applicationId "com.autodo.autodo"
         minSdkVersion 23
         targetSdkVersion 28
         multiDexEnabled true
@@ -85,10 +85,10 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.release
-	        
+
             shrinkResources false
             minifyEnabled true
-            
+
             useProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
