@@ -279,10 +279,9 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     // TODO figure out what was/wasn't updated based on metadata?
     // new repeats, updated repeats, and deleted repeats affect this
     // TODO currently not removing todos with a deleted repeat
-    // if (!(state is TodosLoaded)) return;
-
     final todos = (state is TodosLoaded) ? (state as TodosLoaded).todos : [];
-    List<Todo> updatedTodos = todos;
+    // List<Todo> updatedTodos = todos;
+    WriteBatchWrapper batch = repo.startTodoWriteBatch();
     for (var r in event.repeats) {
       if (todos.isNotEmpty &&
           todos.any((t) => !(t.completed ?? true) && t.repeatName == r.name)) {
@@ -293,11 +292,11 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
             dueMileage: _calculateNextTodo(
                 todos.where((t) => t.repeatName == r.name).toList(),
                 r.mileageInterval));
-        print('updated todo: $updated');
-        await repo.updateTodo(updated);
-        updatedTodos = updatedTodos
-            .map((t) => (t.id == updated.id) ? updated : t)
-            .toList();
+
+        batch.updateData(updated.id, updated.toEntity().toDocument());
+        // updatedTodos = updatedTodos
+        //     .map((t) => (t.id == updated.id) ? updated : t)
+        //     .toList();
       } else {
         // create a new todo for every car
         final cars = (_carsBloc.state as CarsLoaded).cars;
@@ -329,10 +328,14 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
                 completed: false);
           }
         });
-        newTodos.forEach((t) => repo.addNewTodo(t));
-        updatedTodos.addAll(newTodos);
+        // newTodos.forEach((t) => repo.addNewTodo(t));
+        newTodos.forEach((t) => batch.setData(t));
+        // updatedTodos.addAll(newTodos);
       }
     }
+    await batch.commit();
+    final updatedTodos = await repo.getCurrentTodos();
+    print(updatedTodos);
     yield TodosLoaded(updatedTodos);
   }
 

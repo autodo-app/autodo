@@ -98,23 +98,17 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
 
   Stream<RepeatsState> _mapAddRepeatToState(AddRepeat event) async* {
     if (state is RepeatsLoaded && repo != null) {
-      // don't add it to the cache until it is given an id
-      // final List<Repeat> updatedRepeats =
-      // List.from((state as RepeatsLoaded).repeats)..add(event.repeat);
-      // yield RepeatsLoaded(updatedRepeats);
       await repo.addNewRepeat(event.repeat);
       final updatedRepeats = (state as RepeatsLoaded).repeats;
       print(updatedRepeats);
       updatedRepeats.add(event.repeat);
       print(updatedRepeats);
       yield RepeatsLoaded(updatedRepeats);
-      // yield RepeatsLoaded(updatedRepeats); redundant because of the listener to the repository
     }
   }
 
   Stream<RepeatsState> _mapUpdateRepeatToState(UpdateRepeat event) async* {
     if (state is RepeatsLoaded && repo != null) {
-      //final updatedRepeats =
       (state as RepeatsLoaded).repeats.map<Repeat>((r) {
         if (r.id == null) {
           return (r.name == event.updatedRepeat.name) ? event.updatedRepeat : r;
@@ -254,7 +248,8 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
     final batch = await repo.startRepeatWriteBatch();
     newCars.forEach((c) {
       defaults.forEach((r) {
-        batch.setData(r.copyWith(cars: [c.name]).toEntity().toDocument());
+        final newRepeat = r.copyWith(cars: [c.name]);
+        batch.setData(newRepeat.toEntity().toDocument());
       });
     });
 
