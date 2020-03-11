@@ -24,15 +24,7 @@ class StatisticsScreen extends StatelessWidget {
             padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
             child: Divider(),
           ),
-          BlocBuilder<DrivingDistanceStatsBloc, DrivingDistanceStatsState>(
-            builder: (context, state) {
-              if (state is DrivingDistanceStatsLoaded) {
-                return DrivingDistanceHistory(state.drivingDistanceData);
-              } else {
-                return LoadingIndicator();
-              }
-            },
-          ),
+          DrivingDistanceHistory(),
           Padding(
             padding: EdgeInsets.fromLTRB(0, 40, 0, 40),
             // used to allow the user to scroll the chart above the FAB

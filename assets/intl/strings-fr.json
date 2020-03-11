@@ -17,7 +17,7 @@
   "create_an_account": "Créer un compte",
   "delete_account_message": "La suppression de votre compte supprimera définitivement toutes les données associées à votre compte.\n\n Êtes-vous sur de vouloir continuer?",
   "delete_account": "Supprimer le compte",
-  "driving_distance_history": "Historique des distances de conduite",
+  "driving_distance_history": "Historique des distances de conduite ({{ unit }}/jour)",
   "due_at": "Dû à",
   "due_date": "Date d'échéance",
   "due_mileage": "Kilométrage dû *",
