@@ -22,7 +22,7 @@
   "distance_km": "kilometers",
   "distance_miles_short": "mi",
   "distance_miles": "miles",
-  "driving_distance_history": "Driving Distance History (mi/day)",
+  "driving_distance_history": "Driving Distance History ({{ unit }}/day)",
   "due_at": "Due At",
   "due_date": "Due Date",
   "due_mileage": "Due Mileage *",
