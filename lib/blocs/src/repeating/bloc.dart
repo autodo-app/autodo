@@ -233,6 +233,9 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
     if (repo == null) {
       print('Error: trying to update repeats for cars update but repo is null');
       return;
+    } else if (!(state is RepeatsLoaded)) {
+      print('Cannot update in response to cars loaded when state is not RepeatsLoaded');
+      return;
     }
     final curRepeats = (state as RepeatsLoaded).repeats;
     // gets the list of cars that do not yet have a repeat associated with them
@@ -255,6 +258,7 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
 
     // need to wait on this, otherwise the "currentRepeats" call will return the
     // old state
+    print(batch);
     await batch.commit();
     final updatedRepeats = await repo.getCurrentRepeats();
     yield RepeatsLoaded(updatedRepeats);

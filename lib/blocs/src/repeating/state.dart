@@ -40,7 +40,7 @@ class RepeatsLoaded extends RepeatsState {
 
   @override
   String toString() =>
-      'RepeatsLoaded { repeats: ${repeats?.map((r) => "{${r.name}, ${r.cars}}")} }';
+      'RepeatsLoaded { repeats: $repeats }';
 }
 
 class RepeatsNotLoaded extends RepeatsState {}

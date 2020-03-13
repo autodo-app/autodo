@@ -43,6 +43,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       }
     });
     _repeatsSubscription = _repeatsBloc.listen((state) {
+      print(state);
       if (state is RepeatsLoaded) {
         add(RepeatsRefresh(state.repeats));
       }
@@ -280,8 +281,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     // new repeats, updated repeats, and deleted repeats affect this
     // TODO currently not removing todos with a deleted repeat
     final todos = (state is TodosLoaded) ? (state as TodosLoaded).todos : [];
-    // List<Todo> updatedTodos = todos;
-    WriteBatchWrapper batch = repo.startTodoWriteBatch();
+    final batch = await repo.startTodoWriteBatch();
     for (var r in event.repeats) {
       if (todos.isNotEmpty &&
           todos.any((t) => !(t.completed ?? true) && t.repeatName == r.name)) {
@@ -329,7 +329,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
           }
         });
         // newTodos.forEach((t) => repo.addNewTodo(t));
-        newTodos.forEach((t) => batch.setData(t));
+        newTodos.forEach((t) => batch.setData(t.toEntity().toDocument()));
         // updatedTodos.addAll(newTodos);
       }
     }
