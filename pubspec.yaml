@@ -52,7 +52,7 @@ dependencies:
       path: packages/firebase_admob/
     # path: /home/bayle/Documents/git/flutterfire/packages/firebase_admob/ # used for local testing
   in_app_purchase: ^0.3.0
-
+  semaphore: ^0.1.4
   provider:
   preferences:
     git:

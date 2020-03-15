@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:semaphore/semaphore.dart';
 import 'package:sembast/sembast.dart';
 import 'package:flutter/material.dart';
 
@@ -10,6 +11,7 @@ class SembastWriteBatch extends Equatable implements WriteBatchWrapper {
     @required this.store,
     @required this.dbFactory,
     @required this.dbPath,
+    this.mutex,
     this.streamControllerUpdate,
   }) : transactionList = transactionList ?? [];
 
@@ -23,25 +25,26 @@ class SembastWriteBatch extends Equatable implements WriteBatchWrapper {
 
   final Function streamControllerUpdate;
 
-  @override
-  void updateData(id, data) =>
-      transactionList.add((txn) => store.record(id).put(txn, data));
+  final Semaphore mutex;
 
   @override
-  void setData(data) => transactionList.add((txn) => store.add(txn, data));
+  void updateData(id, data) =>
+      transactionList.add((txn) async => await store.record(id).put(txn, data));
+
+  @override
+  void setData(data) => transactionList.add((txn) async => await store.add(txn, data));
 
   @override
   Future<void> commit() async {
-    final db = await dbFactory.openDatabase(dbPath);
-    print('opened');
-    await db.transaction((txn) async {
-      print('list: $transactionList');
-      for (var t in transactionList) {
-        await t(txn);
-      }
-    });
-    if (streamControllerUpdate != null) streamControllerUpdate();
-    await db.close();
+    await mutex.acquire();
+    try {
+      final db = await dbFactory.openDatabase(dbPath);
+      await db.transaction((transaction) => transactionList.forEach((txn) async => await txn(transaction)));
+      await db.close();
+      if (streamControllerUpdate != null) await streamControllerUpdate();
+    } finally {
+      mutex.release();
+    }
   }
 
   @override

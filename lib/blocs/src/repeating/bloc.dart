@@ -18,11 +18,7 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
         _carsBloc = carsBloc {
     _dbSubscription = _dbBloc.listen((state) {
       if (state is DbLoaded) {
-        // if (state.newUser ?? false) {
-        //   add(AddDefaultRepeats());
-        // } else {
         add(LoadRepeats());
-        // }
       }
     });
     _repoSubscription = repo?.repeats()?.listen((repeats) {
@@ -78,7 +74,7 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
     } else if (event is DeleteRepeat) {
       yield* _mapDeleteRepeatToState(event);
     } else if (event is AddDefaultRepeats) {
-      yield* _mapAddDefaultRepeatsToState(event);
+      // yield* _mapAddDefaultRepeatsToState(event);
     } else if (event is RepeatCarsUpdated) {
       yield* _mapRepeatCarsUpdatedToState(event);
     }
@@ -258,7 +254,6 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
 
     // need to wait on this, otherwise the "currentRepeats" call will return the
     // old state
-    print(batch);
     await batch.commit();
     final updatedRepeats = await repo.getCurrentRepeats();
     yield RepeatsLoaded(updatedRepeats);

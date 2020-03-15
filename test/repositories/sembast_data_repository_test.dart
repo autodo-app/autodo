@@ -47,7 +47,7 @@ void main() {
             await repository.startTodoWriteBatch(),
             SembastWriteBatch(
                 dbFactory: repository.dbFactory,
-                dbPath: './sample.db',
+                dbPath: 'sample.db',
                 store: StoreRef('todos')));
       });
     });
@@ -88,7 +88,7 @@ void main() {
             await repository.startRefuelingWriteBatch(),
             SembastWriteBatch(
                 dbFactory: repository.dbFactory,
-                dbPath: './sample.db',
+                dbPath: 'sample.db',
                 store: StoreRef('refuelings')));
       });
     });
@@ -120,7 +120,7 @@ void main() {
             await repository.startCarWriteBatch(),
             SembastWriteBatch(
                 dbFactory: repository.dbFactory,
-                dbPath: './sample.db',
+                dbPath: 'sample.db',
                 store: StoreRef('cars')));
       });
     });
@@ -152,7 +152,7 @@ void main() {
             await repository.startRepeatWriteBatch(),
             SembastWriteBatch(
                 dbFactory: repository.dbFactory,
-                dbPath: './sample.db',
+                dbPath: 'sample.db',
                 store: StoreRef('repeats')));
       });
     });

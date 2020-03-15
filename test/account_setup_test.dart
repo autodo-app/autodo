@@ -99,8 +99,10 @@ void main() {
       clearDatabases();
     });
     test('2 cars, no prev todos', () async {
+      clearDatabases();
+
       // tell the blocs that there was a new user signed up
-      final localRepo = SembastDataRepository(createDb: true, pathProvider: () async => Directory('.'));
+      final localRepo = SembastDataRepository(createDb: true, pathProvider: () async => Directory('/home/bayle/Documents/git/autodo'));
       when(dbBloc.state).thenReturn(DbLoaded(localRepo, true));
 
       // Add a Load call to all blocs to force refresh
@@ -118,12 +120,14 @@ void main() {
       await expectLater(repeatsBloc, emitsInOrder([RepeatsLoading(), RepeatsLoaded([])]));
       todosBloc.add(LoadTodos());
       await expectLater(todosBloc, emitsInOrder([TodosLoading(), TodosLoaded([])]));
+      print('blocs loaded');
 
       // The mileage screen adds cars to the CarsBloc
       carsBloc.add(AddCar(car1));
       await expectLater(carsBloc, emitsInOrder([CarsLoaded([]), CarsLoaded([car1])]));
       carsBloc.add(AddCar(car2));
       await expectLater(carsBloc, emitsInOrder([CarsLoaded([car1]), CarsLoaded([car1, car2])]));
+      print('cars loaded');
       // not doing anything for the lastcompleted or repeat interval screens
 
       // This new car prompts a change in repeats, which prompts a change in todos.
@@ -145,6 +149,8 @@ void main() {
       clearDatabases();
     });
     test('3 cars, no prev todos', () async {
+      clearDatabases();
+
       // tell the blocs that there was a new user signed up
       final localRepo = SembastDataRepository(createDb: true, pathProvider: () async => Directory('.'));
       when(dbBloc.state).thenReturn(DbLoaded(localRepo, true));
