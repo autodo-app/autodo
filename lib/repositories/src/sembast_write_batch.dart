@@ -11,7 +11,7 @@ class SembastWriteBatch extends Equatable implements WriteBatchWrapper {
     @required this.store,
     @required this.dbFactory,
     @required this.dbPath,
-    this.mutex,
+    this.semaphore,
     this.streamControllerUpdate,
   }) : transactionList = transactionList ?? [];
 
@@ -25,7 +25,7 @@ class SembastWriteBatch extends Equatable implements WriteBatchWrapper {
 
   final Function streamControllerUpdate;
 
-  final Semaphore mutex;
+  final Semaphore semaphore;
 
   @override
   void updateData(id, data) =>
@@ -36,14 +36,19 @@ class SembastWriteBatch extends Equatable implements WriteBatchWrapper {
 
   @override
   Future<void> commit() async {
-    await mutex.acquire();
+    await semaphore?.acquire();
     try {
       final db = await dbFactory.openDatabase(dbPath);
-      await db.transaction((transaction) => transactionList.forEach((txn) async => await txn(transaction)));
+      await db.transaction((transaction) async {
+        // a .forEach loop didn't await properly here... not sure why
+        for (var txn in transactionList) {
+          await txn(transaction);
+        }
+      });
       await db.close();
       if (streamControllerUpdate != null) await streamControllerUpdate();
     } finally {
-      mutex.release();
+      semaphore?.release();
     }
   }
 

@@ -51,17 +51,19 @@ void main() {
     final car2 = Car(name: 'car2', mileage: 10000);
     final car3 = Car(name: 'car3', mileage: 10000);
 
-    final repo = MockRepo();
-    final dbBloc = MockDatabaseBloc();
-    final refuelingsBloc = RefuelingsBloc(dbBloc: dbBloc);
-    final carsBloc = CarsBloc(dbBloc: dbBloc, refuelingsBloc: refuelingsBloc);
-    final repeatsBloc = RepeatsBloc(dbBloc: dbBloc, carsBloc: carsBloc);
-    final notificationsBloc = MockNotificationsBloc();
-    final todosBloc = TodosBloc(dbBloc: dbBloc, carsBloc: carsBloc, notificationsBloc: notificationsBloc, repeatsBloc: repeatsBloc);
+
 
     setUp(clearDatabases);
 
     test('1 car, no prev todos', () async {
+      final repo = MockRepo();
+      final dbBloc = MockDatabaseBloc();
+      final refuelingsBloc = RefuelingsBloc(dbBloc: dbBloc);
+      final carsBloc = CarsBloc(dbBloc: dbBloc, refuelingsBloc: refuelingsBloc);
+      final repeatsBloc = RepeatsBloc(dbBloc: dbBloc, carsBloc: carsBloc);
+      final notificationsBloc = MockNotificationsBloc();
+      final todosBloc = TodosBloc(dbBloc: dbBloc, carsBloc: carsBloc, notificationsBloc: notificationsBloc, repeatsBloc: repeatsBloc);
+
       // tell the blocs that there was a new user signed up
       final localRepo = SembastDataRepository(createDb: true, pathProvider: () async => Directory('.'));
       when(dbBloc.state).thenReturn(DbLoaded(localRepo, true));
@@ -99,10 +101,17 @@ void main() {
       clearDatabases();
     });
     test('2 cars, no prev todos', () async {
+      final repo = MockRepo();
+      final dbBloc = MockDatabaseBloc();
+      final refuelingsBloc = RefuelingsBloc(dbBloc: dbBloc);
+      final carsBloc = CarsBloc(dbBloc: dbBloc, refuelingsBloc: refuelingsBloc);
+      final repeatsBloc = RepeatsBloc(dbBloc: dbBloc, carsBloc: carsBloc);
+      final notificationsBloc = MockNotificationsBloc();
+      final todosBloc = TodosBloc(dbBloc: dbBloc, carsBloc: carsBloc, notificationsBloc: notificationsBloc, repeatsBloc: repeatsBloc);
       clearDatabases();
 
       // tell the blocs that there was a new user signed up
-      final localRepo = SembastDataRepository(createDb: true, pathProvider: () async => Directory('/home/bayle/Documents/git/autodo'));
+      final localRepo = SembastDataRepository(createDb: true, dbPath: 'asd.db', pathProvider: () async => Directory('/home/bayle/Documents/git/autodo'));
       when(dbBloc.state).thenReturn(DbLoaded(localRepo, true));
 
       // Add a Load call to all blocs to force refresh
@@ -149,6 +158,13 @@ void main() {
       clearDatabases();
     });
     test('3 cars, no prev todos', () async {
+      final repo = MockRepo();
+      final dbBloc = MockDatabaseBloc();
+      final refuelingsBloc = RefuelingsBloc(dbBloc: dbBloc);
+      final carsBloc = CarsBloc(dbBloc: dbBloc, refuelingsBloc: refuelingsBloc);
+      final repeatsBloc = RepeatsBloc(dbBloc: dbBloc, carsBloc: carsBloc);
+      final notificationsBloc = MockNotificationsBloc();
+      final todosBloc = TodosBloc(dbBloc: dbBloc, carsBloc: carsBloc, notificationsBloc: notificationsBloc, repeatsBloc: repeatsBloc);
       clearDatabases();
 
       // tell the blocs that there was a new user signed up
@@ -201,9 +217,290 @@ void main() {
     });
   });
   group('car mileage', () {
+    final car1 = Car(name: 'car1', mileage: 1000);
+    final car2 = Car(name: 'car2', mileage: 10000);
+    final car3 = Car(name: 'car3', mileage: 100000);
+    final car4 = Car(name: 'car4', mileage: 1000000);
 
+    final repo = MockRepo();
+    final dbBloc = MockDatabaseBloc();
+    final refuelingsBloc = RefuelingsBloc(dbBloc: dbBloc);
+    final carsBloc = CarsBloc(dbBloc: dbBloc, refuelingsBloc: refuelingsBloc);
+    final repeatsBloc = RepeatsBloc(dbBloc: dbBloc, carsBloc: carsBloc);
+    final notificationsBloc = MockNotificationsBloc();
+    final todosBloc = TodosBloc(dbBloc: dbBloc, carsBloc: carsBloc, notificationsBloc: notificationsBloc, repeatsBloc: repeatsBloc);
+
+    setUp(clearDatabases);
+    // this is less than any of the repeating intervals
+    test('1000 miles', () async {
+      // tell the blocs that there was a new user signed up
+      final localRepo = SembastDataRepository(createDb: true, pathProvider: () async => Directory('.'));
+      when(dbBloc.state).thenReturn(DbLoaded(localRepo, true));
+
+      // Add a Load call to all blocs to force refresh
+      // This would happen automatically if we could write directly to the dbBloc's
+      // stream.
+      when(repo.getCurrentRefuelings()).thenAnswer((_) async => []);
+      when(repo.getCurrentCars()).thenAnswer((_) async => []);
+      when(repo.getCurrentRepeats()).thenAnswer((_) async => []);
+      when(repo.startRepeatWriteBatch()).thenAnswer((_) async => MockWriteBatch());
+      when(repo.getCurrentTodos()).thenAnswer((_) async => []);
+      refuelingsBloc.add(LoadRefuelings());
+      carsBloc.add(LoadCars());
+      repeatsBloc.add(LoadRepeats());
+      todosBloc.add(LoadTodos());
+
+      // The mileage screen adds cars to the CarsBloc
+      carsBloc.add(AddCar(car1));
+      await emitsExactly(carsBloc, [CarsLoading(), CarsLoaded([]), CarsLoaded([car1])]);
+      // not doing anything for the lastcompleted or repeat interval screens
+
+      // This new car prompts a change in repeats, which prompts a change in todos.
+      // Using `emitsAnyOf` because the async nature of the streams means that
+      // we may or may not see the empty list state show up in the assert.
+      // Doesn't really matter either way if that happens, it shouldn't break
+      // the test.
+      final defaultRepeats = RepeatsBloc.defaults.asMap()
+          .map((k,v) => MapEntry(k, v.copyWith(id: '${k + 1}', cars: ['car1'])))
+          .values.toList();
+      expect(repeatsBloc, emitsAnyOf([RepeatsLoaded([]), RepeatsLoaded(defaultRepeats)]));
+      final defaultTodos = defaultRepeats.map((e) => Todo(id: e.id, name: e.name, carName: e.cars[0])).toList();
+      expect(todosBloc, emitsAnyOf([TodosLoaded([]), TodosLoaded(defaultTodos)]));
+
+      clearDatabases();
+    });
+
+    test('10000 miles', () async {
+      // tell the blocs that there was a new user signed up
+      final localRepo = SembastDataRepository(createDb: true, pathProvider: () async => Directory('.'));
+      when(dbBloc.state).thenReturn(DbLoaded(localRepo, true));
+
+      // Add a Load call to all blocs to force refresh
+      // This would happen automatically if we could write directly to the dbBloc's
+      // stream.
+      when(repo.getCurrentRefuelings()).thenAnswer((_) async => []);
+      when(repo.getCurrentCars()).thenAnswer((_) async => []);
+      when(repo.getCurrentRepeats()).thenAnswer((_) async => []);
+      when(repo.startRepeatWriteBatch()).thenAnswer((_) async => MockWriteBatch());
+      when(repo.getCurrentTodos()).thenAnswer((_) async => []);
+      refuelingsBloc.add(LoadRefuelings());
+      carsBloc.add(LoadCars());
+      repeatsBloc.add(LoadRepeats());
+      todosBloc.add(LoadTodos());
+
+      // The mileage screen adds cars to the CarsBloc
+      carsBloc.add(AddCar(car2));
+      await emitsExactly(carsBloc, [CarsLoading(), CarsLoaded([]), CarsLoaded([car2])]);
+      // not doing anything for the lastcompleted or repeat interval screens
+
+      // This new car prompts a change in repeats, which prompts a change in todos.
+      // Using `emitsAnyOf` because the async nature of the streams means that
+      // we may or may not see the empty list state show up in the assert.
+      // Doesn't really matter either way if that happens, it shouldn't break
+      // the test.
+      final defaultRepeats = RepeatsBloc.defaults.asMap()
+          .map((k,v) => MapEntry(k, v.copyWith(id: '${k + 1}', cars: ['car2'])))
+          .values.toList();
+      expect(repeatsBloc, emitsAnyOf([RepeatsLoaded([]), RepeatsLoaded(defaultRepeats)]));
+      final defaultTodos = defaultRepeats.map((e) => Todo(id: e.id, name: e.name, carName: e.cars[0])).toList();
+      expect(todosBloc, emitsAnyOf([TodosLoaded([]), TodosLoaded(defaultTodos)]));
+
+      clearDatabases();
+    });
+
+    test('100000 miles', () async {
+      // tell the blocs that there was a new user signed up
+      final localRepo = SembastDataRepository(createDb: true, pathProvider: () async => Directory('.'));
+      when(dbBloc.state).thenReturn(DbLoaded(localRepo, true));
+
+      // Add a Load call to all blocs to force refresh
+      // This would happen automatically if we could write directly to the dbBloc's
+      // stream.
+      when(repo.getCurrentRefuelings()).thenAnswer((_) async => []);
+      when(repo.getCurrentCars()).thenAnswer((_) async => []);
+      when(repo.getCurrentRepeats()).thenAnswer((_) async => []);
+      when(repo.startRepeatWriteBatch()).thenAnswer((_) async => MockWriteBatch());
+      when(repo.getCurrentTodos()).thenAnswer((_) async => []);
+      refuelingsBloc.add(LoadRefuelings());
+      carsBloc.add(LoadCars());
+      repeatsBloc.add(LoadRepeats());
+      todosBloc.add(LoadTodos());
+
+      // The mileage screen adds cars to the CarsBloc
+      carsBloc.add(AddCar(car3));
+      await emitsExactly(carsBloc, [CarsLoading(), CarsLoaded([]), CarsLoaded([car3])]);
+      // not doing anything for the lastcompleted or repeat interval screens
+
+      // This new car prompts a change in repeats, which prompts a change in todos.
+      // Using `emitsAnyOf` because the async nature of the streams means that
+      // we may or may not see the empty list state show up in the assert.
+      // Doesn't really matter either way if that happens, it shouldn't break
+      // the test.
+      final defaultRepeats = RepeatsBloc.defaults.asMap()
+          .map((k,v) => MapEntry(k, v.copyWith(id: '${k + 1}', cars: ['car3'])))
+          .values.toList();
+      expect(repeatsBloc, emitsAnyOf([RepeatsLoaded([]), RepeatsLoaded(defaultRepeats)]));
+      final defaultTodos = defaultRepeats.map((e) => Todo(id: e.id, name: e.name, carName: e.cars[0])).toList();
+      expect(todosBloc, emitsAnyOf([TodosLoaded([]), TodosLoaded(defaultTodos)]));
+
+      clearDatabases();
+    });
+
+    // more than any of the repeats intervals
+    test('1000000 miles', () async {
+      // tell the blocs that there was a new user signed up
+      final localRepo = SembastDataRepository(createDb: true, pathProvider: () async => Directory('.'));
+      when(dbBloc.state).thenReturn(DbLoaded(localRepo, true));
+
+      // Add a Load call to all blocs to force refresh
+      // This would happen automatically if we could write directly to the dbBloc's
+      // stream.
+      when(repo.getCurrentRefuelings()).thenAnswer((_) async => []);
+      when(repo.getCurrentCars()).thenAnswer((_) async => []);
+      when(repo.getCurrentRepeats()).thenAnswer((_) async => []);
+      when(repo.startRepeatWriteBatch()).thenAnswer((_) async => MockWriteBatch());
+      when(repo.getCurrentTodos()).thenAnswer((_) async => []);
+      refuelingsBloc.add(LoadRefuelings());
+      carsBloc.add(LoadCars());
+      repeatsBloc.add(LoadRepeats());
+      todosBloc.add(LoadTodos());
+
+      // The mileage screen adds cars to the CarsBloc
+      carsBloc.add(AddCar(car4));
+      await emitsExactly(carsBloc, [CarsLoading(), CarsLoaded([]), CarsLoaded([car4])]);
+      // not doing anything for the lastcompleted or repeat interval screens
+
+      // This new car prompts a change in repeats, which prompts a change in todos.
+      // Using `emitsAnyOf` because the async nature of the streams means that
+      // we may or may not see the empty list state show up in the assert.
+      // Doesn't really matter either way if that happens, it shouldn't break
+      // the test.
+      final defaultRepeats = RepeatsBloc.defaults.asMap()
+          .map((k,v) => MapEntry(k, v.copyWith(id: '${k + 1}', cars: ['car4'])))
+          .values.toList();
+      expect(repeatsBloc, emitsAnyOf([RepeatsLoaded([]), RepeatsLoaded(defaultRepeats)]));
+      final defaultTodos = defaultRepeats.map((e) => Todo(id: e.id, name: e.name, carName: e.cars[0])).toList();
+      expect(todosBloc, emitsAnyOf([TodosLoaded([]), TodosLoaded(defaultTodos)]));
+
+      clearDatabases();
+    });
   });
   group('last completed todos', () {
+    final car = Car(name: 'car', mileage: 10000);
+    final oil = Todo(name: 'oil', repeatName: 'oil', dueMileage: 8000, completed: true, completedDate: DateTime.fromMillisecondsSinceEpoch(0));
+    final tires = Todo(name: 'tires', repeatName: 'tires', dueMileage: 8000, completed: true, completedDate: DateTime.fromMillisecondsSinceEpoch(0));
 
+    final repo = MockRepo();
+    final dbBloc = MockDatabaseBloc();
+    final refuelingsBloc = RefuelingsBloc(dbBloc: dbBloc);
+    final carsBloc = CarsBloc(dbBloc: dbBloc, refuelingsBloc: refuelingsBloc);
+    final repeatsBloc = RepeatsBloc(dbBloc: dbBloc, carsBloc: carsBloc);
+    final notificationsBloc = MockNotificationsBloc();
+    final todosBloc = TodosBloc(dbBloc: dbBloc, carsBloc: carsBloc, notificationsBloc: notificationsBloc, repeatsBloc: repeatsBloc);
+    final filteredTodosBloc = FilteredTodosBloc(todosBloc: todosBloc);
+
+    setUp(clearDatabases);
+
+    test('oil', () async {
+      // tell the blocs that there was a new user signed up
+      final localRepo = SembastDataRepository(createDb: true, pathProvider: () async => Directory('.'));
+      when(dbBloc.state).thenReturn(DbLoaded(localRepo, true));
+
+      // Add a Load call to all blocs to force refresh
+      // This would happen automatically if we could write directly to the dbBloc's
+      // stream.
+      when(repo.getCurrentRefuelings()).thenAnswer((_) async => []);
+      when(repo.getCurrentCars()).thenAnswer((_) async => []);
+      when(repo.getCurrentRepeats()).thenAnswer((_) async => []);
+      when(repo.startRepeatWriteBatch()).thenAnswer((_) async => MockWriteBatch());
+      when(repo.getCurrentTodos()).thenAnswer((_) async => []);
+      refuelingsBloc.add(LoadRefuelings());
+      carsBloc.add(LoadCars());
+      repeatsBloc.add(LoadRepeats());
+      todosBloc.add(LoadTodos());
+      filteredTodosBloc.add(UpdateTodosFilter(VisibilityFilter.active));
+
+      // The mileage screen adds cars to the CarsBloc
+      carsBloc.add(AddCar(car));
+      await emitsExactly(carsBloc, [CarsLoading(), CarsLoaded([]), CarsLoaded([car])]);
+      // not doing anything for the lastcompleted or repeat interval screens
+
+      // This new car prompts a change in repeats, which prompts a change in todos.
+      final defaultRepeats = RepeatsBloc.defaults.asMap()
+          .map((k,v) => MapEntry(k, v.copyWith(id: '${k + 1}', cars: ['car'])))
+          .values.toList();
+      expect(repeatsBloc, emitsAnyOf([RepeatsLoaded([]), RepeatsLoaded(defaultRepeats)]));
+      final defaultTodos = defaultRepeats.map((e) => Todo(id: e.id, name: e.name, carName: e.cars[0])).toList();
+      expect(todosBloc, emitsAnyOf([TodosLoaded([]), TodosLoaded(defaultTodos)]));
+
+      // Create the todo for past oil change
+      final cars = (carsBloc.state as CarsLoaded).cars;
+      final specificOilChange = oil.copyWith(carName: cars[0].name);
+      todosBloc.add(AddTodo(specificOilChange));
+
+      // expect that:
+      // - todo shows up in the list
+      // - there is a new todo that is set for INTERVAL miles after the new todo <- TODO: this
+      // - completed todo does not show up in filteredToDo list
+      final updatedTodos = defaultTodos;
+      updatedTodos.add(specificOilChange);
+      // assuming that the todo will be added to the end of the list
+      await expectLater(todosBloc, emitsInOrder([TodosLoaded(defaultTodos), TodosLoaded(updatedTodos)]));
+      await expectLater(filteredTodosBloc, emitsInOrder([FilteredTodosLoaded(defaultTodos, VisibilityFilter.active), FilteredTodosLoaded(defaultTodos, VisibilityFilter.active)]));
+      clearDatabases();
+    });
+
+    test('oil & tires', () async {
+      // tell the blocs that there was a new user signed up
+      final localRepo = SembastDataRepository(createDb: true, pathProvider: () async => Directory('.'));
+      when(dbBloc.state).thenReturn(DbLoaded(localRepo, true));
+
+      // Add a Load call to all blocs to force refresh
+      // This would happen automatically if we could write directly to the dbBloc's
+      // stream.
+      when(repo.getCurrentRefuelings()).thenAnswer((_) async => []);
+      when(repo.getCurrentCars()).thenAnswer((_) async => []);
+      when(repo.getCurrentRepeats()).thenAnswer((_) async => []);
+      when(repo.startRepeatWriteBatch()).thenAnswer((_) async => MockWriteBatch());
+      when(repo.getCurrentTodos()).thenAnswer((_) async => []);
+      refuelingsBloc.add(LoadRefuelings());
+      carsBloc.add(LoadCars());
+      repeatsBloc.add(LoadRepeats());
+      todosBloc.add(LoadTodos());
+      filteredTodosBloc.add(UpdateTodosFilter(VisibilityFilter.active));
+
+      // The mileage screen adds cars to the CarsBloc
+      carsBloc.add(AddCar(car));
+      await emitsExactly(carsBloc, [CarsLoading(), CarsLoaded([]), CarsLoaded([car])]);
+      // not doing anything for the lastcompleted or repeat interval screens
+
+      // This new car prompts a change in repeats, which prompts a change in todos.
+      final defaultRepeats = RepeatsBloc.defaults.asMap()
+          .map((k,v) => MapEntry(k, v.copyWith(id: '${k + 1}', cars: ['car'])))
+          .values.toList();
+      expect(repeatsBloc, emitsAnyOf([RepeatsLoaded([]), RepeatsLoaded(defaultRepeats)]));
+      final defaultTodos = defaultRepeats.map((e) => Todo(id: e.id, name: e.name, carName: e.cars[0])).toList();
+      expect(todosBloc, emitsAnyOf([TodosLoaded([]), TodosLoaded(defaultTodos)]));
+
+      // Create the todo for past oil change
+      final cars = (carsBloc.state as CarsLoaded).cars;
+      final specificOilChange = oil.copyWith(carName: cars[0].name);
+      final specificTires = tires.copyWith(carName: cars[0].name);
+      todosBloc.add(AddTodo(specificOilChange));
+      todosBloc.add(AddTodo(specificTires));
+
+      // expect that:
+      // - todo shows up in the list
+      // - there is a new todo that is set for INTERVAL miles after the new todo <- TODO: this
+      // - completed todo does not show up in filteredToDo list
+      final todosFirstUpdate = defaultTodos;
+      todosFirstUpdate.add(specificOilChange);
+      final todosSecondUpdate = todosFirstUpdate;
+      todosSecondUpdate.add(specificTires);
+      // assuming that the todo will be added to the end of the list
+      await expectLater(todosBloc, emitsInOrder([TodosLoaded(defaultTodos), TodosLoaded(todosFirstUpdate), TodosLoaded(todosSecondUpdate)]));
+      await expectLater(filteredTodosBloc, emitsInOrder([FilteredTodosLoaded(defaultTodos, VisibilityFilter.active), FilteredTodosLoaded(defaultTodos, VisibilityFilter.active), FilteredTodosLoaded(defaultTodos, VisibilityFilter.active)]));
+      clearDatabases();
+    });
   });
 }

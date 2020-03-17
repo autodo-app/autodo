@@ -131,7 +131,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
   FutureOr<WriteBatchWrapper> startTodoWriteBatch() async {
     return SembastWriteBatch(
         dbFactory: dbFactory, dbPath: await _getFullFilePath(), store: _todos,
-        mutex: dbLock);
+        semaphore: dbLock);
   }
 
   // Refuelings
@@ -207,7 +207,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
         dbFactory: dbFactory,
         dbPath: await _getFullFilePath(),
         streamControllerUpdate: refuelingStreamUpdate,
-        mutex: dbLock);
+        semaphore: dbLock);
   }
 
   // Cars
@@ -280,7 +280,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
         dbPath: await _getFullFilePath(),
         store: _cars,
         streamControllerUpdate: carStreamUpdate,
-        mutex: dbLock);
+        semaphore: dbLock);
   }
 
   // Repeats
@@ -353,7 +353,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
         dbPath: await _getFullFilePath(),
         store: _repeats,
         streamControllerUpdate: _repeatsUpdateStream,
-        mutex: dbLock);
+        semaphore: dbLock);
   }
 
   @override

@@ -21,7 +21,6 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
 
   @override
   FilteredTodosState get initialState {
-    print(todosBloc.state);
     return todosBloc.state is TodosLoaded
         ? FilteredTodosLoaded(
             (todosBloc.state as TodosLoaded).todos,
