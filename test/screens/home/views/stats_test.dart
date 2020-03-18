@@ -7,7 +7,6 @@ import 'package:autodo/screens/home/views/stats.dart';
 import 'package:autodo/units/units.dart';
 import 'package:autodo/widgets/widgets.dart';
 import 'package:bloc_test/bloc_test.dart';
-import 'package:charts_flutter/flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
