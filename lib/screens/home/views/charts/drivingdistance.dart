@@ -117,7 +117,7 @@ class _DrivingDistanceHistoryState extends State<DrivingDistanceHistory> {
             child: DrivingDistanceChart(data),
           ),
           Text(
-            'Refueling Date',
+            JsonIntl.of(context).get(IntlKeys.refuelingDate),
             style: Theme.of(context).primaryTextTheme.bodyText2,
             textAlign: TextAlign.center,
           ),
