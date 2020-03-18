@@ -276,66 +276,45 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     return latest.dueMileage + mileageInterval;
   }
 
+  bool _todoIsOpenForRepeat(Todo t, Repeat r) =>
+    !(t.completed ?? true) && t.repeatName == r.name && t.carName == r.cars[0];
+
   Stream<TodosState> _mapRepeatsRefreshToState(RepeatsRefresh event) async* {
     // TODO figure out what was/wasn't updated based on metadata?
     // new repeats, updated repeats, and deleted repeats affect this
     // TODO currently not removing todos with a deleted repeat
     final todos = (state is TodosLoaded) ? (state as TodosLoaded).todos : [];
+    final cars = (_carsBloc.state as CarsLoaded).cars;
     final batch = await repo.startTodoWriteBatch();
     for (var r in event.repeats) {
-      if (todos.isNotEmpty &&
-          todos.any((t) => !(t.completed ?? true) && t.repeatName == r.name)) {
-        // redo the calculation for due date
+      if (todos.isNotEmpty && todos.any((t) => _todoIsOpenForRepeat(t, r))) {
+        // there is already an open todo for this repeat so redo the durMileage
+        // calc
         final Todo upcoming =
-            todos.firstWhere((t) => !t.completed && t.repeatName == r.name);
+            todos.firstWhere((t) => _todoIsOpenForRepeat(t, r));
         final updated = upcoming.copyWith(
             dueMileage: _calculateNextTodo(
                 todos.where((t) => t.repeatName == r.name).toList(),
                 r.mileageInterval));
 
         batch.updateData(updated.id, updated.toEntity().toDocument());
-        // updatedTodos = updatedTodos
-        //     .map((t) => (t.id == updated.id) ? updated : t)
-        //     .toList();
       } else {
-        // create a new todo for every car
-        final cars = (_carsBloc.state as CarsLoaded).cars;
-        final newTodos = cars
-            // if the repeat does not have a list of cars because it is a default
-            // then consider all cars to work
-            .where((c) => r?.cars?.contains(c.name) ?? true)
-            .map((c) {
-          final pastRepeats = todos
-              .where((t) => (t.repeatName == r.name) && (t.carName == c.name));
-          if (pastRepeats.isEmpty) {
-            // if the mileage interval is bigger than the car's current mileage,
-            // then assume that it has not been done before.
-            final dueMileage = (r.mileageInterval > c.mileage)
-                ? r.mileageInterval
-                : c.mileage + r.mileageInterval;
-            return Todo(
-                name: r.name,
-                carName: c.name,
-                repeatName: r.name,
-                dueMileage: dueMileage,
-                completed: false);
-          } else {
-            return Todo(
-                name: r.name,
-                carName: c.name,
-                repeatName: r.name,
-                dueMileage: _calculateNextTodo(pastRepeats, r.mileageInterval),
-                completed: false);
-          }
-        });
-        // newTodos.forEach((t) => repo.addNewTodo(t));
-        newTodos.forEach((t) => batch.setData(t.toEntity().toDocument()));
-        // updatedTodos.addAll(newTodos);
+        // create a new todo for the repeat
+        final c = cars.firstWhere((c) => c.name == r.cars[0]);
+        final dueMileage = (r.mileageInterval > c.mileage)
+                    ? r.mileageInterval
+                    : c.mileage + r.mileageInterval;
+        final upcoming = Todo(
+                    name: r.name,
+                    carName: c.name,
+                    repeatName: r.name,
+                    dueMileage: dueMileage,
+                    completed: false);
+        batch.setData(upcoming.toEntity().toDocument());
       }
     }
     await batch.commit();
     final updatedTodos = await repo.getCurrentTodos();
-    print(updatedTodos);
     yield TodosLoaded(updatedTodos);
   }
 

@@ -121,7 +121,8 @@ class SembastDataRepository extends Equatable implements DataRepository {
     final list = await _todos.find(db);
     final out = list
         .map((snap) => Todo.fromEntity(TodoEntity.fromRecord(snap)))
-        .toList();
+        .toList()
+        ..sort((a, b) => int.parse(a.id) > int.parse(b.id) ? 1 : -1);
     await db.close();
     dbLock.release();
     return out;

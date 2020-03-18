@@ -206,24 +206,6 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
   //   });
   // }
 
-  Stream<RepeatsState> _mapAddDefaultRepeatsToState(
-      AddDefaultRepeats event) async* {
-    // yield RepeatsLoaded(defaults);
-    if (repo == null) {
-      print('Error: trying to add default repeats but repo is null');
-      return;
-    }
-    final batch = await repo.startRepeatWriteBatch();
-    for (var r in defaults) {
-      batch.setData(r.toEntity().toDocument());
-    }
-    // need to wait on this, otherwise the "currentRepeats" call will return the
-    // old state
-    await batch.commit();
-    final updatedRepeats = await repo.getCurrentRepeats();
-    yield RepeatsLoaded(updatedRepeats);
-  }
-
   Stream<RepeatsState> _mapRepeatCarsUpdatedToState(
       RepeatCarsUpdated event) async* {
     if (repo == null) {
@@ -236,7 +218,7 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
     final curRepeats = (state as RepeatsLoaded).repeats;
     // gets the list of cars that do not yet have a repeat associated with them
     final newCars = event.cars
-        .map<Car>(
+        .map(
             (c) => curRepeats.any((r) => r.cars.contains(c.name)) ? null : c)
         .toList();
     newCars.removeWhere((c) => c == null);
