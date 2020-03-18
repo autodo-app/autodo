@@ -1,7 +1,12 @@
+import 'package:autodo/blocs/blocs.dart';
+import 'package:autodo/blocs/src/stats/efficiency/barrel.dart';
 import 'package:autodo/localization.dart';
 import 'package:autodo/models/models.dart';
+import 'package:autodo/units/units.dart';
+import 'package:autodo/widgets/widgets.dart';
 import 'package:charts_flutter/flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_intl/json_intl.dart';
 
 import 'shared.dart';
@@ -72,30 +77,67 @@ class FuelMileageChart extends StatelessWidget {
   }
 }
 
-class FuelMileageHistory extends StatelessWidget {
-  const FuelMileageHistory(this.data);
-
-  final List<Series> data;
+class FuelMileageHistory extends StatefulWidget {
+  const FuelMileageHistory();
 
   @override
-  Widget build(BuildContext context) => Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Padding(
-              padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
-            ),
-            Text(JsonIntl.of(context).get(IntlKeys.fuelEfficiencyHistory),
-                style: Theme.of(context).primaryTextTheme.subtitle2),
-            Container(
-              height: 300,
-              padding: EdgeInsets.all(15),
-              child: FuelMileageChart(data, false),
-            ),
-            Text(
-              'Refueling Date',
-              style: Theme.of(context).primaryTextTheme.bodyText2,
-              textAlign: TextAlign.center,
-            ),
-          ]);
+  _FuelMileageHistoryState createState() => _FuelMileageHistoryState();
+}
+
+class _FuelMileageHistoryState extends State<FuelMileageHistory> {
+  List<Series> data;
+  String error;
+
+  @override
+  void didChangeDependencies() {
+    final refuelingsBloc = BlocProvider.of<RefuelingsBloc>(context);
+
+    EfficiencyStats.fetch(refuelingsBloc, context).then((value) {
+      setState(() {
+        data = value;
+      });
+    }).catchError((e) {
+      setState(() {
+        error = e.toString();
+      });
+    });
+
+    super.didChangeDependencies();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (error != null) {
+      return Text(error);
+    }
+
+    if (data == null) {
+      return LoadingIndicator();
+    }
+
+    return Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Padding(
+            padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+          ),
+          Text(
+              JsonIntl.of(context).get(IntlKeys.fuelEfficiencyHistory, {
+                'distance': Distance.of(context).unitString(context),
+                'volume': Volume.of(context).unitString(context),
+              }),
+              style: Theme.of(context).primaryTextTheme.subtitle2),
+          Container(
+            height: 300,
+            padding: EdgeInsets.all(15),
+            child: FuelMileageChart(data, false),
+          ),
+          Text(
+            JsonIntl.of(context).get(IntlKeys.refuelingDate),
+            style: Theme.of(context).primaryTextTheme.bodyText2,
+            textAlign: TextAlign.center,
+          ),
+        ]);
+  }
 }
