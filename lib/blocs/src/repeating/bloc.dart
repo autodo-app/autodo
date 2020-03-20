@@ -238,6 +238,7 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
     // old state
     await batch.commit();
     final updatedRepeats = await repo.getCurrentRepeats();
+    print(updatedRepeats);
     yield RepeatsLoaded(updatedRepeats);
   }
 
