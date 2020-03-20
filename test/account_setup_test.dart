@@ -59,7 +59,7 @@ void main() {
   group('number of cars', () {
     final car1 = Car(name: 'car1', mileage: 10000);
     final car2 = Car(name: 'car2', mileage: 10000);
-    final car3 = Car(name: 'car3', mileage: 10000);
+    // final car3 = Car(name: 'car3', mileage: 10000);
     // setUp(clearDatabases);
 
     test('1 car, no prev todos', () async {
