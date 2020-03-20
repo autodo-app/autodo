@@ -32,7 +32,8 @@ class SembastWriteBatch extends Equatable implements WriteBatchWrapper {
       transactionList.add((txn) async => await store.record(id).put(txn, data));
 
   @override
-  void setData(data) => transactionList.add((txn) async => await store.add(txn, data));
+  void setData(data) =>
+      transactionList.add((txn) async => await store.add(txn, data));
 
   @override
   Future<void> commit() async {

@@ -19,7 +19,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
   SembastDataRepository(
       {@required createDb, dbFactory, this.dbPath = 'sample.db', pathProvider})
       : dbFactory = dbFactory ?? databaseFactoryIo,
-        pathProvider = pathProvider ?? getApplicationDocumentsDirectory{
+        pathProvider = pathProvider ?? getApplicationDocumentsDirectory {
     _todosStream.stream.listen(print);
   }
 
@@ -122,7 +122,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
     final out = list
         .map((snap) => Todo.fromEntity(TodoEntity.fromRecord(snap)))
         .toList()
-        ..sort((a, b) => int.parse(a.id) > int.parse(b.id) ? 1 : -1);
+          ..sort((a, b) => int.parse(a.id) > int.parse(b.id) ? 1 : -1);
     await db.close();
     dbLock.release();
     return out;
@@ -131,7 +131,9 @@ class SembastDataRepository extends Equatable implements DataRepository {
   @override
   FutureOr<WriteBatchWrapper> startTodoWriteBatch() async {
     return SembastWriteBatch(
-        dbFactory: dbFactory, dbPath: await _getFullFilePath(), store: _todos,
+        dbFactory: dbFactory,
+        dbPath: await _getFullFilePath(),
+        store: _todos,
         semaphore: dbLock);
   }
 

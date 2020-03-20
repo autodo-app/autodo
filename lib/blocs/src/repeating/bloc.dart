@@ -212,14 +212,14 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
       print('Error: trying to update repeats for cars update but repo is null');
       return;
     } else if (!(state is RepeatsLoaded)) {
-      print('Cannot update in response to cars loaded when state is not RepeatsLoaded');
+      print(
+          'Cannot update in response to cars loaded when state is not RepeatsLoaded');
       return;
     }
     final curRepeats = (state as RepeatsLoaded).repeats;
     // gets the list of cars that do not yet have a repeat associated with them
     final newCars = event.cars
-        .map(
-            (c) => curRepeats.any((r) => r.cars.contains(c.name)) ? null : c)
+        .map((c) => curRepeats.any((r) => r.cars.contains(c.name)) ? null : c)
         .toList();
     newCars.removeWhere((c) => c == null);
     if (newCars.isEmpty) {

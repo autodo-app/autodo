@@ -277,7 +277,9 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   }
 
   bool _todoIsOpenForRepeat(Todo t, Repeat r) =>
-    !(t.completed ?? true) && t.repeatName == r.name && t.carName == r.cars[0];
+      !(t.completed ?? true) &&
+      t.repeatName == r.name &&
+      t.carName == r.cars[0];
 
   Stream<TodosState> _mapRepeatsRefreshToState(RepeatsRefresh event) async* {
     // TODO figure out what was/wasn't updated based on metadata?
@@ -302,14 +304,14 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
         // create a new todo for the repeat
         final c = cars.firstWhere((c) => c.name == r.cars[0]);
         final dueMileage = (r.mileageInterval > c.mileage)
-                    ? r.mileageInterval
-                    : c.mileage + r.mileageInterval;
+            ? r.mileageInterval
+            : c.mileage + r.mileageInterval;
         final upcoming = Todo(
-                    name: r.name,
-                    carName: c.name,
-                    repeatName: r.name,
-                    dueMileage: dueMileage,
-                    completed: false);
+            name: r.name,
+            carName: c.name,
+            repeatName: r.name,
+            dueMileage: dueMileage,
+            completed: false);
         batch.setData(upcoming.toEntity().toDocument());
       }
     }
