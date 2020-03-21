@@ -63,4 +63,6 @@ abstract class DataRepository extends Equatable {
 
   // Paid or Ad-supported version
   Future<bool> getPaidStatus();
+
+  void upgrade(int curVer, int desVer);
 }

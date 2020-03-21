@@ -1,17 +1,8 @@
 name: autodo
-description: A new Flutter project.
+description: Car Maintenance Made Simple.
 
-# The following defines the version and build number for your application.
-# A version number is three numbers separated by dots, like 1.2.43
-# followed by an optional build number separated by a +.
-# Both the version and the builder number may be overridden in flutter
-# build by specifying --build-name and --build-number, respectively.
-# In Android, build-name is used as versionName while build-number used as versionCode.
-# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
-# In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
-# Read more about iOS versioning at
-# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 version: 0.3.0+14
+db_version: 2
 
 environment:
   sdk: ">=2.2.2 <3.0.0"
@@ -58,6 +49,7 @@ dependencies:
     git:
       url: https://gitlab.com/davbfr/preferences.git
       ref: rewrite-pref-service
+  yaml: ^2.2.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -98,6 +90,7 @@ flutter:
    - legal/privacy-policy.md
    - assets/keys.json
    - assets/intl/
+   - pubspec.yaml
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
@@ -213,6 +206,3 @@ flutter:
         style: italic
       - asset: fonts/ubuntu/Ubuntu-Th.ttf
         weight: 900
-
-    # - family: Montserrat
-    # - family: Raleway

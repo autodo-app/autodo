@@ -1,8 +1,12 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:flutter/services.dart';
+import 'package:autodo/repositories/repositories.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:equatable/equatable.dart';
+import 'package:yaml/yaml.dart';
 
 import 'data_repository.dart';
 import 'package:autodo/models/models.dart';
@@ -11,10 +15,32 @@ import 'write_batch_wrapper.dart';
 import 'firebase_write_batch.dart';
 
 class FirebaseDataRepository extends Equatable implements DataRepository {
-  FirebaseDataRepository({Firestore firestoreInstance, @required String uuid})
+  FirebaseDataRepository._({Firestore firestoreInstance, @required String uuid})
       : assert(uuid != null),
         _firestoreInstance = firestoreInstance ?? Firestore.instance,
         _uuid = uuid;
+
+  Future<void> _upgrade() async {
+    final text = await rootBundle.loadString('pubspec.yaml');
+    final pubspec = loadYaml(text);
+    final dbVersion = pubspec['db_version'];
+    final userDoc = await _userDoc.get();
+    final curVersion = userDoc.data['db_version'];
+    if (curVersion != dbVersion) {
+      upgrade(curVersion, dbVersion);
+    }
+  }
+
+  /// Main constructor for the object.
+  ///
+  /// Set up this way to allow for asynchronous behavior in the ctor. Will
+  /// check the user's current database version against the expected
+  /// version and migrate the data if needed.
+  static Future<FirebaseDataRepository> open({Firestore firestoreInstance, @required String uuid}) async {
+    final out = FirebaseDataRepository._(firestoreInstance: firestoreInstance, uuid: uuid);
+    await out._upgrade();
+    return out;
+  }
 
   final Firestore _firestoreInstance;
 
@@ -200,6 +226,11 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
   Future<bool> getPaidStatus() async {
     final snap = await _userDoc.get();
     return snap.data['paid'] as bool;
+  }
+
+  @override
+  void upgrade(int curVer, int desVer) {
+    print('here');
   }
 
   @override

@@ -2,12 +2,15 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:autodo/repositories/repositories.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
 import 'package:equatable/equatable.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:semaphore/semaphore.dart';
+import 'package:yaml/yaml.dart';
+
 
 import 'package:autodo/models/models.dart';
 import 'package:autodo/entities/entities.dart';
@@ -16,11 +19,32 @@ import 'write_batch_wrapper.dart';
 import 'sembast_write_batch.dart';
 
 class SembastDataRepository extends Equatable implements DataRepository {
-  SembastDataRepository(
-      {@required createDb, dbFactory, this.dbPath = 'sample.db', pathProvider})
+  SembastDataRepository._(
+      {@required createDb, dbFactory, this.dbPath, pathProvider})
       : dbFactory = dbFactory ?? databaseFactoryIo,
-        pathProvider = pathProvider ?? getApplicationDocumentsDirectory {
-    _todosStream.stream.listen(print);
+        pathProvider = pathProvider ?? getApplicationDocumentsDirectory;
+
+  Future<void> _upgrade() async {
+    final text = await rootBundle.loadString('pubspec.yaml');
+    final pubspec = loadYaml(text);
+    final dbVersion = pubspec['db_version'];
+    await dbLock.acquire();
+    final _db = await _openDb();
+    final curVersion = _db.version;
+    if (curVersion != dbVersion) {
+      upgrade(curVersion, dbVersion);
+    }
+  }
+
+  /// Main constructor for the object.
+  ///
+  /// Set up this way to allow for asynchronous behavior in the ctor. Will
+  /// check the user's current database version against the expected
+  /// version and migrate the data if needed.
+  static Future<SembastDataRepository> open({@required createDb, dbFactory, dbPath = 'sample.db', pathProvider}) async {
+    final out = SembastDataRepository._(createDb: createDb, dbFactory: dbFactory, dbPath: dbPath, pathProvider: pathProvider);
+    await out._upgrade();
+    return out;
   }
 
   static final Semaphore dbLock = LocalSemaphore(255);
@@ -64,10 +88,6 @@ class SembastDataRepository extends Equatable implements DataRepository {
   Future<Database> _openDb() async {
     final path = await _getFullFilePath();
     return await dbFactory.openDatabase(path, mode: DatabaseMode.neverFails);
-  }
-
-  Future<void> load() async {
-    await refuelingStreamUpdate();
   }
 
   @override
@@ -377,6 +397,11 @@ class SembastDataRepository extends Equatable implements DataRepository {
 
   Future<void> deleteDb() async {
     await dbFactory.deleteDatabase(await _getFullFilePath());
+  }
+
+  @override
+  void upgrade(int curVer, int desVer) {
+    print('upgrading...');
   }
 
   @override
