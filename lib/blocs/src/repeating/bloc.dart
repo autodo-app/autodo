@@ -18,11 +18,7 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
         _carsBloc = carsBloc {
     _dbSubscription = _dbBloc.listen((state) {
       if (state is DbLoaded) {
-        // if (state.newUser ?? false) {
-        //   add(AddDefaultRepeats());
-        // } else {
         add(LoadRepeats());
-        // }
       }
     });
     _repoSubscription = repo?.repeats()?.listen((repeats) {
@@ -78,7 +74,7 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
     } else if (event is DeleteRepeat) {
       yield* _mapDeleteRepeatToState(event);
     } else if (event is AddDefaultRepeats) {
-      yield* _mapAddDefaultRepeatsToState(event);
+      // yield* _mapAddDefaultRepeatsToState(event);
     } else if (event is RepeatCarsUpdated) {
       yield* _mapRepeatCarsUpdatedToState(event);
     }
@@ -98,23 +94,17 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
 
   Stream<RepeatsState> _mapAddRepeatToState(AddRepeat event) async* {
     if (state is RepeatsLoaded && repo != null) {
-      // don't add it to the cache until it is given an id
-      // final List<Repeat> updatedRepeats =
-      // List.from((state as RepeatsLoaded).repeats)..add(event.repeat);
-      // yield RepeatsLoaded(updatedRepeats);
       await repo.addNewRepeat(event.repeat);
       final updatedRepeats = (state as RepeatsLoaded).repeats;
       print(updatedRepeats);
       updatedRepeats.add(event.repeat);
       print(updatedRepeats);
       yield RepeatsLoaded(updatedRepeats);
-      // yield RepeatsLoaded(updatedRepeats); redundant because of the listener to the repository
     }
   }
 
   Stream<RepeatsState> _mapUpdateRepeatToState(UpdateRepeat event) async* {
     if (state is RepeatsLoaded && repo != null) {
-      //final updatedRepeats =
       (state as RepeatsLoaded).repeats.map<Repeat>((r) {
         if (r.id == null) {
           return (r.name == event.updatedRepeat.name) ? event.updatedRepeat : r;
@@ -216,35 +206,20 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
   //   });
   // }
 
-  Stream<RepeatsState> _mapAddDefaultRepeatsToState(
-      AddDefaultRepeats event) async* {
-    // yield RepeatsLoaded(defaults);
-    if (repo == null) {
-      print('Error: trying to add default repeats but repo is null');
-      return;
-    }
-    final batch = await repo.startRepeatWriteBatch();
-    for (var r in defaults) {
-      batch.setData(r.toEntity().toDocument());
-    }
-    // need to wait on this, otherwise the "currentRepeats" call will return the
-    // old state
-    await batch.commit();
-    final updatedRepeats = await repo.getCurrentRepeats();
-    yield RepeatsLoaded(updatedRepeats);
-  }
-
   Stream<RepeatsState> _mapRepeatCarsUpdatedToState(
       RepeatCarsUpdated event) async* {
     if (repo == null) {
       print('Error: trying to update repeats for cars update but repo is null');
       return;
+    } else if (!(state is RepeatsLoaded)) {
+      print(
+          'Cannot update in response to cars loaded when state is not RepeatsLoaded');
+      return;
     }
     final curRepeats = (state as RepeatsLoaded).repeats;
     // gets the list of cars that do not yet have a repeat associated with them
     final newCars = event.cars
-        .map<Car>(
-            (c) => curRepeats.any((r) => r.cars.contains(c.name)) ? null : c)
+        .map((c) => curRepeats.any((r) => r.cars.contains(c.name)) ? null : c)
         .toList();
     newCars.removeWhere((c) => c == null);
     if (newCars.isEmpty) {
@@ -254,7 +229,8 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
     final batch = await repo.startRepeatWriteBatch();
     newCars.forEach((c) {
       defaults.forEach((r) {
-        batch.setData(r.copyWith(cars: [c.name]).toEntity().toDocument());
+        final newRepeat = r.copyWith(cars: [c.name]);
+        batch.setData(newRepeat.toEntity().toDocument());
       });
     });
 
@@ -262,6 +238,7 @@ class RepeatsBloc extends Bloc<RepeatsEvent, RepeatsState> {
     // old state
     await batch.commit();
     final updatedRepeats = await repo.getCurrentRepeats();
+    print(updatedRepeats);
     yield RepeatsLoaded(updatedRepeats);
   }
 

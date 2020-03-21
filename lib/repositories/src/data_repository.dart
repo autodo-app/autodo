@@ -46,7 +46,7 @@ abstract class DataRepository extends Equatable {
   FutureOr<WriteBatchWrapper> startCarWriteBatch();
 
   // Repeats
-  Future<List<Repeat>> addNewRepeat(Repeat repeat);
+  Future<void> addNewRepeat(Repeat repeat);
 
   Future<void> deleteRepeat(Repeat repeat);
 
