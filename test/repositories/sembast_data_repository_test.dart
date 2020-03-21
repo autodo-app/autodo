@@ -12,8 +12,8 @@ import 'package:autodo/models/models.dart';
 Future<void> main() async {
   TestWidgetsFlutterBinding.ensureInitialized();
   var repository = await SembastDataRepository.open(
-        createDb: true, pathProvider: () async => Directory('.'));
-  group('SembastDataRepository', (){
+      createDb: true, pathProvider: () async => Directory('.'));
+  group('SembastDataRepository', () {
     group('todos', () {
       test('New Todo', () {
         expect(repository.addNewTodo(Todo()), completes);

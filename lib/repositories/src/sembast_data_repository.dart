@@ -36,8 +36,16 @@ class SembastDataRepository extends Equatable implements DataRepository {
   /// Set up this way to allow for asynchronous behavior in the ctor. Will
   /// check the user's current database version against the expected
   /// version and migrate the data if needed.
-  static Future<SembastDataRepository> open({@required createDb, dbFactory, dbPath = 'sample.db', pathProvider}) async {
-    final out = SembastDataRepository._(createDb: createDb, dbFactory: dbFactory, dbPath: dbPath, pathProvider: pathProvider);
+  static Future<SembastDataRepository> open(
+      {@required createDb,
+      dbFactory,
+      dbPath = 'sample.db',
+      pathProvider}) async {
+    final out = SembastDataRepository._(
+        createDb: createDb,
+        dbFactory: dbFactory,
+        dbPath: dbPath,
+        pathProvider: pathProvider);
     await out._upgrade();
     return out;
   }
@@ -389,7 +397,8 @@ class SembastDataRepository extends Equatable implements DataRepository {
       final todos = await getCurrentTodos();
       final todoWriteBatch = await startTodoWriteBatch();
       todos.map((t) {
-        final dueMileage = Distance(DistanceUnit.imperial, Locale('en-us')).unitToInternal(t.dueMileage);
+        final dueMileage = Distance(DistanceUnit.imperial, Locale('en-us'))
+            .unitToInternal(t.dueMileage);
         return t.copyWith(dueMileage: dueMileage);
       }).forEach((t) {
         todoWriteBatch.updateData(t.id, t.toDocument());
@@ -399,8 +408,10 @@ class SembastDataRepository extends Equatable implements DataRepository {
       final refuelings = await getCurrentRefuelings();
       final refuelingWriteBatch = await startRefuelingWriteBatch();
       refuelings.map((r) {
-        final mileage = Distance(DistanceUnit.imperial, Locale('en-us')).unitToInternal(r.mileage);
-        final amount = Volume(VolumeUnit.imperial, Locale('en-us')).unitToInternal(r.amount);
+        final mileage = Distance(DistanceUnit.imperial, Locale('en-us'))
+            .unitToInternal(r.mileage);
+        final amount = Volume(VolumeUnit.imperial, Locale('en-us'))
+            .unitToInternal(r.amount);
         final cost = Currency('USD', Locale('en-us')).unitToInternal(r.cost);
         // I don't think that efficiency needs to be updated because the stats
         // page will handle it, but that could be an issue
@@ -413,7 +424,8 @@ class SembastDataRepository extends Equatable implements DataRepository {
       final cars = await getCurrentCars();
       final carWriteBatch = await startCarWriteBatch();
       cars.map((c) {
-        final mileage = Distance(DistanceUnit.imperial, Locale('en-us')).unitToInternal(c.mileage);
+        final mileage = Distance(DistanceUnit.imperial, Locale('en-us'))
+            .unitToInternal(c.mileage);
         // distance rate and efficiency should similarly be updated by the stats
         // calcs here
         return c.copyWith(mileage: mileage);
@@ -425,7 +437,8 @@ class SembastDataRepository extends Equatable implements DataRepository {
       final repeats = await getCurrentRepeats();
       final repeatWriteBatch = await startRepeatWriteBatch();
       repeats.map((r) {
-        final mileageInterval = Distance(DistanceUnit.imperial, Locale('en-us')).unitToInternal(r.mileageInterval);
+        final mileageInterval = Distance(DistanceUnit.imperial, Locale('en-us'))
+            .unitToInternal(r.mileageInterval);
         return r.copyWith(mileageInterval: mileageInterval);
       }).forEach((r) {
         repeatWriteBatch.updateData(r.id, r.toDocument());
