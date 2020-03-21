@@ -121,6 +121,7 @@
   "verification_sent": "Le courriel de vérification a été envoyé",
   "verify_body_text": "Un courriel vous a été envoyé avec un lien pour valider votre compte.\n\nVous devez vérifier votre courriel pour utiliser auToDo.",
   "verify_email": "Vérifier les courriels",
+  "version": "Version {{ version }}",
   "welcome_desc": "L'entretien des voitures en toute simplicité.",
   "welcome": "Bienvenue dans auToDo !",
   "yes": "Oui"

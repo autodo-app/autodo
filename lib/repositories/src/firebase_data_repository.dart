@@ -1,18 +1,15 @@
 import 'dart:async';
 
-import 'package:flutter/services.dart';
-import 'package:autodo/repositories/repositories.dart';
+import 'package:autodo/models/models.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:equatable/equatable.dart';
-import 'package:yaml/yaml.dart';
+import 'package:flutter/material.dart';
 
+import 'package:autodo/screens/about/pubspec.dart';
 import 'package:autodo/units/units.dart';
 import 'data_repository.dart';
-import 'package:autodo/models/models.dart';
-import 'package:autodo/entities/entities.dart';
-import 'write_batch_wrapper.dart';
 import 'firebase_write_batch.dart';
+import 'write_batch_wrapper.dart';
 
 class FirebaseDataRepository extends Equatable implements DataRepository {
   FirebaseDataRepository._({Firestore firestoreInstance, @required String uuid})
@@ -21,9 +18,7 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
         _uuid = uuid;
 
   Future<void> _upgrade() async {
-    final text = await rootBundle.loadString('pubspec.yaml');
-    final pubspec = loadYaml(text);
-    final dbVersion = pubspec['db_version'];
+    final dbVersion = Pubspec.db_version;
     final userDoc = await _userDoc.get();
     final curVersion = userDoc.data['db_version'] ?? 0;
     if (curVersion != dbVersion) {
@@ -59,7 +54,7 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
 
   @override
   Future<void> addNewTodo(Todo todo) {
-    return _todos.add(todo.toEntity().toDocument());
+    return _todos.add(todo.toDocument());
   }
 
   @override
@@ -70,25 +65,19 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
   @override
   Stream<List<Todo>> todos() {
     return _todos.snapshots().map((snapshot) {
-      return snapshot.documents
-          .map((doc) => Todo.fromEntity(TodoEntity.fromSnapshot(doc)))
-          .toList();
+      return snapshot.documents.map((doc) => Todo.fromSnapshot(doc)).toList();
     });
   }
 
   @override
   Future<List<Todo>> getCurrentTodos() async {
     final snap = await _todos.getDocuments();
-    return snap.documents
-        .map((doc) => Todo.fromEntity(TodoEntity.fromSnapshot(doc)))
-        .toList();
+    return snap.documents.map((doc) => Todo.fromSnapshot(doc)).toList();
   }
 
   @override
   Future<void> updateTodo(Todo update) {
-    return _todos
-        .document(update.id)
-        .updateData(update.toEntity().toDocument());
+    return _todos.document(update.id).updateData(update.toDocument());
   }
 
   @override
@@ -99,7 +88,7 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
 
   @override
   Future<void> addNewRefueling(Refueling refueling) {
-    return _refuelings.add(refueling.toEntity().toDocument());
+    return _refuelings.add(refueling.toDocument());
   }
 
   @override
@@ -111,7 +100,7 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
   Stream<List<Refueling>> refuelings([bool forceRefresh]) {
     return _refuelings.snapshots().map((snapshot) {
       return snapshot.documents
-          .map((doc) => Refueling.fromEntity(RefuelingEntity.fromSnapshot(doc)))
+          .map((doc) => Refueling.fromSnapshot(doc))
           .toList();
     });
   }
@@ -119,16 +108,14 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
   @override
   Future<List<Refueling>> getCurrentRefuelings() async {
     final snap = await _refuelings.getDocuments();
-    return snap.documents
-        .map((doc) => Refueling.fromEntity(RefuelingEntity.fromSnapshot(doc)))
-        .toList();
+    return snap.documents.map((doc) => Refueling.fromSnapshot(doc)).toList();
   }
 
   @override
   Future<void> updateRefueling(Refueling refueling) {
     return _refuelings
         .document(refueling.id)
-        .updateData(refueling.toEntity().toDocument());
+        .updateData(refueling.toDocument());
   }
 
   @override
@@ -139,7 +126,7 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
 
   @override
   Future<void> addNewCar(Car car) {
-    return _cars.add(car.toEntity().toDocument());
+    return _cars.add(car.toDocument());
   }
 
   @override
@@ -150,23 +137,19 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
   @override
   Stream<List<Car>> cars() {
     return _cars.snapshots().map((snapshot) {
-      return snapshot.documents
-          .map((doc) => Car.fromEntity(CarEntity.fromSnapshot(doc)))
-          .toList();
+      return snapshot.documents.map((doc) => Car.fromSnapshot(doc)).toList();
     });
   }
 
   @override
   Future<List<Car>> getCurrentCars() async {
     final snap = await _cars.getDocuments();
-    return snap.documents
-        .map((doc) => Car.fromEntity(CarEntity.fromSnapshot(doc)))
-        .toList();
+    return snap.documents.map((doc) => Car.fromSnapshot(doc)).toList();
   }
 
   @override
   Future<void> updateCar(Car car) {
-    return _cars.document(car.id).updateData(car.toEntity().toDocument());
+    return _cars.document(car.id).updateData(car.toDocument());
   }
 
   @override
@@ -189,7 +172,7 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
   Stream<List<Repeat>> repeats() {
     return _repeats.snapshots().map((snapshot) {
       return snapshot.documents
-          .map((doc) => Repeat.fromEntity(RepeatEntity.fromSnapshot(doc)))
+          .map((doc) => Repeat.fromEntity(Repeat.fromSnapshot(doc)))
           .toList();
     });
   }
@@ -198,7 +181,7 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
   Future<List<Repeat>> getCurrentRepeats() async {
     final snap = await _repeats.getDocuments();
     return snap.documents
-        .map((doc) => Repeat.fromEntity(RepeatEntity.fromSnapshot(doc)))
+        .map((doc) => Repeat.fromEntity(Repeat.fromSnapshot(doc)))
         .toList();
   }
 
@@ -238,7 +221,7 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
         final dueMileage = Distance(DistanceUnit.imperial, Locale('en-us')).unitToInternal(t.dueMileage);
         return t.copyWith(dueMileage: dueMileage);
       }).forEach((t) {
-        todoWriteBatch.updateData(t.id, t.toEntity().toDocument());
+        todoWriteBatch.updateData(t.id, t.toDocument());
       });
       await todoWriteBatch.commit();
 
@@ -252,7 +235,7 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
         // page will handle it, but that could be an issue
         return r.copyWith(mileage: mileage, amount: amount, cost: cost);
       }).forEach((r) {
-        refuelingWriteBatch.updateData(r.id, r.toEntity().toDocument());
+        refuelingWriteBatch.updateData(r.id, r.toDocument());
       });
       await refuelingWriteBatch.commit();
 
@@ -264,7 +247,7 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
         // calcs here
         return c.copyWith(mileage: mileage);
       }).forEach((c) {
-        carWriteBatch.updateData(c.id, c.toEntity().toDocument());
+        carWriteBatch.updateData(c.id, c.toDocument());
       });
       await carWriteBatch.commit();
 
@@ -274,7 +257,7 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
         final mileageInterval = Distance(DistanceUnit.imperial, Locale('en-us')).unitToInternal(r.mileageInterval);
         return r.copyWith(mileageInterval: mileageInterval);
       }).forEach((r) {
-        repeatWriteBatch.updateData(r.id, r.toEntity().toDocument());
+        repeatWriteBatch.updateData(r.id, r.toDocument());
       });
       await repeatWriteBatch.commit();
     }

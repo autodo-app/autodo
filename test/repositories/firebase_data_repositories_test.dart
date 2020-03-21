@@ -47,7 +47,7 @@ Future<void> main() async {
       when(document.collection('todos')).thenAnswer((_) => collection);
 
       test('New Todo', () {
-        when(collection.add(Todo().toEntity().toDocument()))
+        when(collection.add(Todo().toDocument()))
             .thenAnswer((_) async => MockDocument());
         expect(repository.addNewTodo(Todo()), completes);
       });
@@ -56,7 +56,7 @@ Future<void> main() async {
         expect(repository.deleteTodo(Todo(id: '0')), completes);
       });
       test('Update Todo', () {
-        when(document.updateData(Todo(id: '0').toEntity().toDocument()))
+        when(document.updateData(Todo(id: '0').toDocument()))
             .thenAnswer((_) async {});
         expect(repository.updateTodo(Todo(id: '0')), completes);
       });
@@ -91,7 +91,7 @@ Future<void> main() async {
           mileage: 1000,
           date: DateTime.fromMillisecondsSinceEpoch(0),
         );
-        when(collection.add(refueling.toEntity().toDocument()))
+        when(collection.add(refueling.toDocument()))
             .thenAnswer((_) async => MockDocument());
         expect(repository.addNewRefueling(refueling), completes);
       });
@@ -116,7 +116,7 @@ Future<void> main() async {
           mileage: 1000,
           date: DateTime.fromMillisecondsSinceEpoch(0),
         );
-        when(document.updateData(refueling.toEntity().toDocument()))
+        when(document.updateData(refueling.toDocument()))
             .thenAnswer((_) async {});
         expect(repository.updateRefueling(refueling), completes);
       });
@@ -130,7 +130,7 @@ Future<void> main() async {
         );
         final snap = MockQuerySnapshot();
         final doc = MockDocSnapshot();
-        when(doc.data).thenAnswer((_) => refueling.toEntity().toDocument());
+        when(doc.data).thenAnswer((_) => refueling.toDocument());
         when(doc.documentID).thenAnswer((_) => null);
         when(snap.documents).thenAnswer((_) => [doc]);
         when(collection.snapshots())
@@ -150,7 +150,7 @@ Future<void> main() async {
       when(document.collection('cars')).thenAnswer((_) => collection);
 
       test('New Car', () {
-        when(collection.add(Car().toEntity().toDocument()))
+        when(collection.add(Car().toDocument()))
             .thenAnswer((_) async => MockDocument());
         expect(repository.addNewCar(Car()), completes);
       });
@@ -159,7 +159,7 @@ Future<void> main() async {
         expect(repository.deleteCar(Car(id: '0')), completes);
       });
       test('Update Car', () {
-        when(document.updateData(Car(id: '0').toEntity().toDocument()))
+        when(document.updateData(Car(id: '0').toDocument()))
             .thenAnswer((_) async {});
         expect(repository.updateCar(Car(id: '0')), completes);
       });

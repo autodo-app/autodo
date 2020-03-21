@@ -1,22 +1,19 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:autodo/repositories/repositories.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
-import 'package:equatable/equatable.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:flutter/material.dart';
 import 'package:semaphore/semaphore.dart';
-import 'package:yaml/yaml.dart';
+import 'package:equatable/equatable.dart';
 
+import 'package:autodo/screens/about/pubspec.dart';
 import 'package:autodo/units/units.dart';
 import 'package:autodo/models/models.dart';
-import 'package:autodo/entities/entities.dart';
 import 'data_repository.dart';
-import 'write_batch_wrapper.dart';
 import 'sembast_write_batch.dart';
+import 'write_batch_wrapper.dart';
 
 class SembastDataRepository extends Equatable implements DataRepository {
   SembastDataRepository._(
@@ -25,9 +22,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
         pathProvider = pathProvider ?? getApplicationDocumentsDirectory;
 
   Future<void> _upgrade() async {
-    final text = await rootBundle.loadString('pubspec.yaml');
-    final pubspec = loadYaml(text);
-    final dbVersion = pubspec['db_version'];
+    final dbVersion = Pubspec.db_version;
     await dbLock.acquire();
     final _db = await _openDb();
     final curVersion = _db.version;
@@ -95,7 +90,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
     await dbLock.acquire();
     try {
       final db = await _openDb();
-      await _todos.add(db, todo.toEntity().toDocument());
+      await _todos.add(db, todo.toDocument());
       _todosStream.add(await getCurrentTodos());
       await db.close();
     } finally {
@@ -108,7 +103,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
     await dbLock.acquire();
     try {
       final db = await _openDb();
-      await _todos.record(todo.id).put(db, todo.toEntity().toDocument());
+      await _todos.record(todo.id).put(db, todo.toDocument());
       _todosStream.add(await getCurrentTodos());
       await db.close();
     } finally {
@@ -139,10 +134,8 @@ class SembastDataRepository extends Equatable implements DataRepository {
     await dbLock.acquire();
     final db = await _openDb();
     final list = await _todos.find(db);
-    final out = list
-        .map((snap) => Todo.fromEntity(TodoEntity.fromRecord(snap)))
-        .toList()
-          ..sort((a, b) => int.parse(a.id) > int.parse(b.id) ? 1 : -1);
+    final out = list.map((snap) => Todo.fromRecord(snap)).toList()
+      ..sort((a, b) => int.parse(a.id) > int.parse(b.id) ? 1 : -1);
     await db.close();
     dbLock.release();
     return out;
@@ -164,9 +157,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
     final db = await _openDb();
     final list = await _refuelings.find(db,
         finder: Finder(sortOrders: [SortOrder('mileage')]));
-    final out = list
-        .map((snap) => Refueling.fromEntity(RefuelingEntity.fromRecord(snap)))
-        .toList();
+    final out = list.map((snap) => Refueling.fromRecord(snap)).toList();
     await db.close();
     dbLock.release();
     return out;
@@ -181,7 +172,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
     await dbLock.acquire();
     try {
       final db = await _openDb();
-      await _refuelings.add(db, refueling.toEntity().toDocument());
+      await _refuelings.add(db, refueling.toDocument());
       await refuelingStreamUpdate();
       await db.close();
     } finally {
@@ -194,9 +185,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
     await dbLock.acquire();
     try {
       final db = await _openDb();
-      await _refuelings
-          .record(refueling.id)
-          .put(db, refueling.toEntity().toDocument());
+      await _refuelings.record(refueling.id).put(db, refueling.toDocument());
       await refuelingStreamUpdate();
       await db.close();
     } finally {
@@ -241,8 +230,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
     final db = await _openDb();
     final list = await _cars.find(db,
         finder: Finder(sortOrders: [SortOrder('mileage')]));
-    final out =
-        list.map((snap) => Car.fromEntity(CarEntity.fromRecord(snap))).toList();
+    final out = list.map((snap) => Car.fromRecord(snap)).toList();
     await db.close();
     dbLock.release();
     return out;
@@ -257,7 +245,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
     await dbLock.acquire();
     try {
       final db = await _openDb();
-      await _cars.add(db, car.toEntity().toDocument());
+      await _cars.add(db, car.toDocument());
       await carStreamUpdate();
       await db.close();
     } finally {
@@ -270,7 +258,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
     await dbLock.acquire();
     try {
       final db = await _openDb();
-      await _cars.record(car.id).put(db, car.toEntity().toDocument());
+      await _cars.record(car.id).put(db, car.toDocument());
       await carStreamUpdate();
       await db.close();
     } finally {
@@ -313,9 +301,8 @@ class SembastDataRepository extends Equatable implements DataRepository {
     await dbLock.acquire();
     final db = await _openDb();
     final list = await _repeats.find(db);
-    final out = list
-        .map((snap) => Repeat.fromEntity(RepeatEntity.fromRecord(snap)))
-        .toList();
+    final out =
+        list.map((snap) => Repeat.fromEntity(Repeat.fromRecord(snap))).toList();
     await db.close();
     dbLock.release();
     return out;
@@ -405,7 +392,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
         final dueMileage = Distance(DistanceUnit.imperial, Locale('en-us')).unitToInternal(t.dueMileage);
         return t.copyWith(dueMileage: dueMileage);
       }).forEach((t) {
-        todoWriteBatch.updateData(t.id, t.toEntity().toDocument());
+        todoWriteBatch.updateData(t.id, t.toDocument());
       });
       await todoWriteBatch.commit();
 
@@ -419,7 +406,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
         // page will handle it, but that could be an issue
         return r.copyWith(mileage: mileage, amount: amount, cost: cost);
       }).forEach((r) {
-        refuelingWriteBatch.updateData(r.id, r.toEntity().toDocument());
+        refuelingWriteBatch.updateData(r.id, r.toDocument());
       });
       await refuelingWriteBatch.commit();
 
@@ -431,7 +418,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
         // calcs here
         return c.copyWith(mileage: mileage);
       }).forEach((c) {
-        carWriteBatch.updateData(c.id, c.toEntity().toDocument());
+        carWriteBatch.updateData(c.id, c.toDocument());
       });
       await carWriteBatch.commit();
 
@@ -441,7 +428,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
         final mileageInterval = Distance(DistanceUnit.imperial, Locale('en-us')).unitToInternal(r.mileageInterval);
         return r.copyWith(mileageInterval: mileageInterval);
       }).forEach((r) {
-        repeatWriteBatch.updateData(r.id, r.toEntity().toDocument());
+        repeatWriteBatch.updateData(r.id, r.toDocument());
       });
       await repeatWriteBatch.commit();
     }

@@ -1,8 +1,8 @@
-import 'package:meta/meta.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-
-import 'package:autodo/entities/entities.dart';
+import 'package:meta/meta.dart';
+import 'package:sembast/sembast.dart';
 
 @immutable
 class Refueling extends Equatable {
@@ -22,6 +22,46 @@ class Refueling extends Equatable {
         assert(amount != null),
         assert(carName != null);
 
+  factory Refueling.fromRecord(RecordSnapshot snap) {
+    return Refueling(
+      id: (snap.key is String) ? snap.key : '${snap.key}',
+      carName: snap.value['carName'],
+      mileage: snap.value['mileage'],
+      date: (snap.value['date'] == null)
+          ? null
+          : DateTime.fromMillisecondsSinceEpoch(snap.value['date']),
+      amount: snap.value['amount'] as double,
+      cost: snap.value['cost'] as double,
+      carColor: (snap.value['carColor'] == null)
+          ? null
+          : Color(snap.value['carColor'] as int),
+      efficiency: snap.value['efficiency'] as double,
+      efficiencyColor: (snap.value['efficiencyColor'] == null)
+          ? null
+          : Color(snap.value['efficiencyColor'] as int),
+    );
+  }
+
+  factory Refueling.fromSnapshot(DocumentSnapshot snap) {
+    return Refueling(
+      id: snap.documentID,
+      carName: snap.data['carName'],
+      mileage: snap.data['mileage'].toDouble(),
+      date: (snap.data['date'] == null)
+          ? null
+          : DateTime.fromMillisecondsSinceEpoch(snap.data['date']),
+      amount: snap.data['amount'] as double,
+      cost: snap.data['cost'] as double,
+      carColor: (snap.data['carColor'] == null)
+          ? null
+          : Color(snap.data['carColor'] as int),
+      efficiency: snap.data['efficiency'] as double,
+      efficiencyColor: (snap.data['efficiencyColor'] == null)
+          ? null
+          : Color(snap.data['efficiencyColor'] as int),
+    );
+  }
+
   final String id;
 
   final String carName;
@@ -30,9 +70,15 @@ class Refueling extends Equatable {
 
   final DateTime date;
 
-  final double amount, cost, efficiency;
+  final double amount;
 
-  final Color carColor, efficiencyColor;
+  final double cost;
+
+  final double efficiency;
+
+  final Color carColor;
+
+  final Color efficiencyColor;
 
   Refueling copyWith(
       {String id,
@@ -65,32 +111,26 @@ class Refueling extends Equatable {
         date?.toUtc(),
         amount,
         cost,
-        carColor,
+        carColor?.value,
         efficiency,
         efficiencyColor?.value
       ];
 
   @override
   String toString() {
-    return 'Refueling { carName: $carName, carColor: $carColor, id: $id, mileage: $mileage, date: ${date?.toUtc()}, amount: $amount, cost: $cost, efficiency: $efficiency, efficiencyColor: $efficiencyColor}';
+    return '$runtimeType { carName: $carName, carColor: $carColor, id: $id, mileage: $mileage, date: ${date?.toUtc()}, amount: $amount, cost: $cost, efficiency: $efficiency, efficiencyColor: $efficiencyColor }';
   }
 
-  RefuelingEntity toEntity() {
-    return RefuelingEntity(id, carName, mileage, date, amount, cost, carColor,
-        efficiency, efficiencyColor);
-  }
-
-  static Refueling fromEntity(RefuelingEntity entity) {
-    return Refueling(
-      carName: entity.carName,
-      id: entity.id,
-      mileage: entity.mileage,
-      date: entity.date,
-      amount: entity.amount,
-      cost: entity.cost,
-      carColor: entity.carColor,
-      efficiency: entity.efficiency,
-      efficiencyColor: entity.efficiencyColor,
-    );
+  Map<String, Object> toDocument() {
+    return {
+      'carName': carName,
+      'mileage': mileage,
+      'date': date?.millisecondsSinceEpoch,
+      'amount': amount,
+      'cost': cost,
+      'carColor': carColor?.value,
+      'efficiency': efficiency,
+      'efficiencyColor': efficiencyColor?.value
+    };
   }
 }

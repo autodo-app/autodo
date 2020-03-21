@@ -19,8 +19,6 @@ class MockAuthenticationBloc
     extends MockBloc<AuthenticationEvent, AuthenticationState>
     implements AuthenticationBloc {}
 
-class MockLegalBloc extends Mock implements LegalBloc {}
-
 void main() {
   group('SignupScreen', () {
     AuthRepository authRepository;
