@@ -221,8 +221,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
     final db = await _openDb();
     final list = await _cars.find(db,
         finder: Finder(sortOrders: [SortOrder('mileage')]));
-    final out =
-        list.map((snap) => Car.fromEntity(CarEntity.fromRecord(snap))).toList();
+    final out = list.map((snap) => Car.fromRecord(snap)).toList();
     await db.close();
     dbLock.release();
     return out;
@@ -237,7 +236,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
     await dbLock.acquire();
     try {
       final db = await _openDb();
-      await _cars.add(db, car.toEntity().toDocument());
+      await _cars.add(db, car.toDocument());
       await carStreamUpdate();
       await db.close();
     } finally {
@@ -250,7 +249,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
     await dbLock.acquire();
     try {
       final db = await _openDb();
-      await _cars.record(car.id).put(db, car.toEntity().toDocument());
+      await _cars.record(car.id).put(db, car.toDocument());
       await carStreamUpdate();
       await db.close();
     } finally {

@@ -148,7 +148,7 @@ void main() {
       when(document.collection('cars')).thenAnswer((_) => collection);
 
       test('New Car', () {
-        when(collection.add(Car().toEntity().toDocument()))
+        when(collection.add(Car().toDocument()))
             .thenAnswer((_) async => MockDocument());
         expect(repository.addNewCar(Car()), completes);
       });
@@ -157,7 +157,7 @@ void main() {
         expect(repository.deleteCar(Car(id: '0')), completes);
       });
       test('Update Car', () {
-        when(document.updateData(Car(id: '0').toEntity().toDocument()))
+        when(document.updateData(Car(id: '0').toDocument()))
             .thenAnswer((_) async {});
         expect(repository.updateCar(Car(id: '0')), completes);
       });

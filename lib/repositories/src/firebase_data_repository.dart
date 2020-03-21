@@ -113,7 +113,7 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
 
   @override
   Future<void> addNewCar(Car car) {
-    return _cars.add(car.toEntity().toDocument());
+    return _cars.add(car.toDocument());
   }
 
   @override
@@ -124,23 +124,19 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
   @override
   Stream<List<Car>> cars() {
     return _cars.snapshots().map((snapshot) {
-      return snapshot.documents
-          .map((doc) => Car.fromEntity(CarEntity.fromSnapshot(doc)))
-          .toList();
+      return snapshot.documents.map((doc) => Car.fromSnapshot(doc)).toList();
     });
   }
 
   @override
   Future<List<Car>> getCurrentCars() async {
     final snap = await _cars.getDocuments();
-    return snap.documents
-        .map((doc) => Car.fromEntity(CarEntity.fromSnapshot(doc)))
-        .toList();
+    return snap.documents.map((doc) => Car.fromSnapshot(doc)).toList();
   }
 
   @override
   Future<void> updateCar(Car car) {
-    return _cars.document(car.id).updateData(car.toEntity().toDocument());
+    return _cars.document(car.id).updateData(car.toDocument());
   }
 
   @override
