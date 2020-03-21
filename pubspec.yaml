@@ -1,29 +1,20 @@
 name: autodo
-description: A new Flutter project.
-
-# The following defines the version and build number for your application.
-# A version number is three numbers separated by dots, like 1.2.43
-# followed by an optional build number separated by a +.
-# Both the version and the builder number may be overridden in flutter
-# build by specifying --build-name and --build-number, respectively.
-# In Android, build-name is used as versionName while build-number used as versionCode.
-# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
-# In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
-# Read more about iOS versioning at
-# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+description: Car Maintenance Made Simple.
 version: 0.3.0+14
+authors:
+  - Jonathan Bayless <baylessj@purdue.edu>
+  - David PHAM-VAN <dev.nfet.net@gmail.com>
 
 environment:
-  sdk: ">=2.2.2 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  intl: ^0.16.0
-  json_intl:
-    git: https://github.com/DavBfr/json_intl
   flutter_localizations:
     sdk: flutter
+  intl: ^0.16.0
+  json_intl:
   cloud_firestore: ^0.12.9
   firebase_auth: 0.15.4
   shared_preferences: ^0.5.6
@@ -38,33 +29,33 @@ dependencies:
   equatable: any
   font_awesome_flutter: any
   autocomplete_textfield:
+  sentry: ^3.0.0
+  sembast: ^2.2.0
+  path_provider: ^1.5.1
+  firebase_admob:
+  in_app_purchase: ^0.3.0
+  semaphore: ^0.1.4
+  provider:
+  preferences:
+  cupertino_icons: ^0.1.2
+
+dependency_overrides:
+  autocomplete_textfield:
     git:
       url: git://github.com/baylessj/flutter-autocomplete-textfield.git
       ref: master
-  sentry: ^3.0.0
-  sembast: ^2.2.0
-      # path: /home/bayle/Documents/git/sembast.dart/sembast/ # used for getting more in-depth debugging
-  path_provider: ^1.5.1
+  firebase_core: 0.4.4
   firebase_admob:
     git:
       url: git://github.com/autodo-app/flutterfire.git
       ref: master
       path: packages/firebase_admob/
-    # path: /home/bayle/Documents/git/flutterfire/packages/firebase_admob/ # used for local testing
-  in_app_purchase: ^0.3.0
-  semaphore: ^0.1.4
-  provider:
+  json_intl:
+    git: https://github.com/DavBfr/json_intl
   preferences:
     git:
       url: https://gitlab.com/davbfr/preferences.git
       ref: rewrite-pref-service
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.2
-
-dependency_overrides:
-  firebase_core: 0.4.4
 
 dev_dependencies:
   flutter_test:
@@ -76,143 +67,123 @@ dev_dependencies:
   mockito: any
   pedantic:
 
-
-
-# For information on the generic Dart part of this file, see the
-# following page: https://www.dartlang.org/tools/pub/pubspec
-
-# The following section is specific to Flutter.
 flutter:
-
-  # The following line ensures that the Material Icons font is
-  # included with your application, so that you can use the icons in
-  # the material Icons class.
   uses-material-design: true
 
-  # To add assets to your application, add an assets section, like this:
   assets:
-   - img/logo.png
-   - img/icon.png
-   - img/icon-only.png
-   - img/icon-only-green.png
-   - legal/privacy-policy.md
-   - assets/keys.json
-   - assets/intl/
-
-  # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.dev/assets-and-images/#resolution-aware.
-
-  # For details regarding adding assets from package dependencies, see
-  # https://flutter.dev/assets-and-images/#from-packages
+    - img/logo.png
+    - img/icon.png
+    - img/icon-only.png
+    - img/icon-only-green.png
+    - legal/privacy-policy.md
+    - assets/keys.json
+    - assets/intl/
 
   fonts:
     - family: IBM Plex Sans
       fonts:
-      - asset: fonts/ibm-plex/IBMPlexSans-Thin.otf
-        weight: 100
-      - asset: fonts/ibm-plex/IBMPlexSans-ThinItalic.otf
-        weight: 100
-        style: italic
-      - asset: fonts/ibm-plex/IBMPlexSans-ExtraLightItalic.otf
-        weight: 200
-        style: italic
-      - asset: fonts/ibm-plex/IBMPlexSans-Light.otf
-        weight: 300
-      - asset: fonts/ibm-plex/IBMPlexSans-LightItalic.otf
-        weight: 300
-        style: italic
-      - asset: fonts/ibm-plex/IBMPlexSans-Regular.otf
-        weight: 400
-      - asset: fonts/ibm-plex/IBMPlexSans-Italic.otf
-        weight: 400
-        style: italic
-      - asset: fonts/ibm-plex/IBMPlexSans-Text.otf
-        weight: 500
-      - asset: fonts/ibm-plex/IBMPlexSans-TextItalic.otf
-        weight: 500
-        style: italic
-      - asset: fonts/ibm-plex/IBMPlexSans-Medium.otf
-        weight: 600
-      - asset: fonts/ibm-plex/IBMPlexSans-MediumItalic.otf
-        weight: 600
-        style: italic
-      - asset: fonts/ibm-plex/IBMPlexSans-SemiBold.otf
-        weight: 700
-      - asset: fonts/ibm-plex/IBMPlexSans-SemiBoldItalic.otf
-        weight: 700
-        style: italic
-      - asset: fonts/ibm-plex/IBMPlexSans-Bold.otf
-        weight: 800
-      - asset: fonts/ibm-plex/IBMPlexSans-BoldItalic.otf
-        weight: 800
+        - asset: fonts/ibm-plex/IBMPlexSans-Thin.otf
+          weight: 100
+        - asset: fonts/ibm-plex/IBMPlexSans-ThinItalic.otf
+          weight: 100
+          style: italic
+        - asset: fonts/ibm-plex/IBMPlexSans-ExtraLightItalic.otf
+          weight: 200
+          style: italic
+        - asset: fonts/ibm-plex/IBMPlexSans-Light.otf
+          weight: 300
+        - asset: fonts/ibm-plex/IBMPlexSans-LightItalic.otf
+          weight: 300
+          style: italic
+        - asset: fonts/ibm-plex/IBMPlexSans-Regular.otf
+          weight: 400
+        - asset: fonts/ibm-plex/IBMPlexSans-Italic.otf
+          weight: 400
+          style: italic
+        - asset: fonts/ibm-plex/IBMPlexSans-Text.otf
+          weight: 500
+        - asset: fonts/ibm-plex/IBMPlexSans-TextItalic.otf
+          weight: 500
+          style: italic
+        - asset: fonts/ibm-plex/IBMPlexSans-Medium.otf
+          weight: 600
+        - asset: fonts/ibm-plex/IBMPlexSans-MediumItalic.otf
+          weight: 600
+          style: italic
+        - asset: fonts/ibm-plex/IBMPlexSans-SemiBold.otf
+          weight: 700
+        - asset: fonts/ibm-plex/IBMPlexSans-SemiBoldItalic.otf
+          weight: 700
+          style: italic
+        - asset: fonts/ibm-plex/IBMPlexSans-Bold.otf
+          weight: 800
+        - asset: fonts/ibm-plex/IBMPlexSans-BoldItalic.otf
+          weight: 800
     - family: IBM Plex Serif
       fonts:
-      - asset: fonts/ibm-plex/IBMPlexSerif-Thin.otf
-        weight: 100
-      - asset: fonts/ibm-plex/IBMPlexSerif-ThinItalic.otf
-        weight: 100
-        style: italic
-      - asset: fonts/ibm-plex/IBMPlexSerif-ExtraLight.otf
-        weight: 200
-      - asset: fonts/ibm-plex/IBMPlexSerif-ExtraLightItalic.otf
-        weight: 200
-        style: italic
-      - asset: fonts/ibm-plex/IBMPlexSerif-Light.otf
-        weight: 300
-      - asset: fonts/ibm-plex/IBMPlexSerif-LightItalic.otf
-        weight: 300
-        style: italic
-      - asset: fonts/ibm-plex/IBMPlexSerif-Regular.otf
-        weight: 400
-      - asset: fonts/ibm-plex/IBMPlexSerif-Italic.otf
-        weight: 400
-        style: italic
-      - asset: fonts/ibm-plex/IBMPlexSerif-Text.otf
-        weight: 500
-      - asset: fonts/ibm-plex/IBMPlexSerif-TextItalic.otf
-        weight: 500
-        style: italic
-      - asset: fonts/ibm-plex/IBMPlexSerif-Medium.otf
-        weight: 600
-      - asset: fonts/ibm-plex/IBMPlexSerif-MediumItalic.otf
-        weight: 600
-        style: italic
-      - asset: fonts/ibm-plex/IBMPlexSerif-SemiBold.otf
-        weight: 700
-      - asset: fonts/ibm-plex/IBMPlexSerif-SemiBoldItalic.otf
-        weight: 700
-        style: italic
-      - asset: fonts/ibm-plex/IBMPlexSerif-Bold.otf
-        weight: 800
-      - asset: fonts/ibm-plex/IBMPlexSerif-BoldItalic.otf
-        weight: 800
-        style: italic
+        - asset: fonts/ibm-plex/IBMPlexSerif-Thin.otf
+          weight: 100
+        - asset: fonts/ibm-plex/IBMPlexSerif-ThinItalic.otf
+          weight: 100
+          style: italic
+        - asset: fonts/ibm-plex/IBMPlexSerif-ExtraLight.otf
+          weight: 200
+        - asset: fonts/ibm-plex/IBMPlexSerif-ExtraLightItalic.otf
+          weight: 200
+          style: italic
+        - asset: fonts/ibm-plex/IBMPlexSerif-Light.otf
+          weight: 300
+        - asset: fonts/ibm-plex/IBMPlexSerif-LightItalic.otf
+          weight: 300
+          style: italic
+        - asset: fonts/ibm-plex/IBMPlexSerif-Regular.otf
+          weight: 400
+        - asset: fonts/ibm-plex/IBMPlexSerif-Italic.otf
+          weight: 400
+          style: italic
+        - asset: fonts/ibm-plex/IBMPlexSerif-Text.otf
+          weight: 500
+        - asset: fonts/ibm-plex/IBMPlexSerif-TextItalic.otf
+          weight: 500
+          style: italic
+        - asset: fonts/ibm-plex/IBMPlexSerif-Medium.otf
+          weight: 600
+        - asset: fonts/ibm-plex/IBMPlexSerif-MediumItalic.otf
+          weight: 600
+          style: italic
+        - asset: fonts/ibm-plex/IBMPlexSerif-SemiBold.otf
+          weight: 700
+        - asset: fonts/ibm-plex/IBMPlexSerif-SemiBoldItalic.otf
+          weight: 700
+          style: italic
+        - asset: fonts/ibm-plex/IBMPlexSerif-Bold.otf
+          weight: 800
+        - asset: fonts/ibm-plex/IBMPlexSerif-BoldItalic.otf
+          weight: 800
+          style: italic
     - family: Ubuntu
       fonts:
-      - asset: fonts/ubuntu/Ubuntu-B.ttf
-        weight: 800
-      - asset: fonts/ubuntu/Ubuntu-BI.ttf
-        weight: 800
-        style: italic
-      - asset: fonts/ubuntu/Ubuntu-L.ttf
-        weight: 300
-      - asset: fonts/ubuntu/Ubuntu-LI.ttf
-        weight: 300
-        style: italic
-      - asset: fonts/ubuntu/Ubuntu-M.ttf
-        weight: 600
-        style: normal
-      - asset: fonts/ubuntu/Ubuntu-MI.ttf
-        weight: 600
-        style: italic
-      - asset: fonts/ubuntu/Ubuntu-R.ttf
-        weight: 400
-        style: italic
-      - asset: fonts/ubuntu/Ubuntu-RI.ttf
-        weight: 400
-        style: italic
-      - asset: fonts/ubuntu/Ubuntu-Th.ttf
-        weight: 900
-
-    # - family: Montserrat
-    # - family: Raleway
+        - asset: fonts/ubuntu/Ubuntu-B.ttf
+          weight: 800
+        - asset: fonts/ubuntu/Ubuntu-BI.ttf
+          weight: 800
+          style: italic
+        - asset: fonts/ubuntu/Ubuntu-L.ttf
+          weight: 300
+        - asset: fonts/ubuntu/Ubuntu-LI.ttf
+          weight: 300
+          style: italic
+        - asset: fonts/ubuntu/Ubuntu-M.ttf
+          weight: 600
+          style: normal
+        - asset: fonts/ubuntu/Ubuntu-MI.ttf
+          weight: 600
+          style: italic
+        - asset: fonts/ubuntu/Ubuntu-R.ttf
+          weight: 400
+          style: italic
+        - asset: fonts/ubuntu/Ubuntu-RI.ttf
+          weight: 400
+          style: italic
+        - asset: fonts/ubuntu/Ubuntu-Th.ttf
+          weight: 900
