@@ -89,7 +89,7 @@ void main() {
           mileage: 1000,
           date: DateTime.fromMillisecondsSinceEpoch(0),
         );
-        when(collection.add(refueling.toEntity().toDocument()))
+        when(collection.add(refueling.toDocument()))
             .thenAnswer((_) async => MockDocument());
         expect(repository.addNewRefueling(refueling), completes);
       });
@@ -114,7 +114,7 @@ void main() {
           mileage: 1000,
           date: DateTime.fromMillisecondsSinceEpoch(0),
         );
-        when(document.updateData(refueling.toEntity().toDocument()))
+        when(document.updateData(refueling.toDocument()))
             .thenAnswer((_) async {});
         expect(repository.updateRefueling(refueling), completes);
       });
@@ -128,7 +128,7 @@ void main() {
         );
         final snap = MockQuerySnapshot();
         final doc = MockDocSnapshot();
-        when(doc.data).thenAnswer((_) => refueling.toEntity().toDocument());
+        when(doc.data).thenAnswer((_) => refueling.toDocument());
         when(doc.documentID).thenAnswer((_) => null);
         when(snap.documents).thenAnswer((_) => [doc]);
         when(collection.snapshots())

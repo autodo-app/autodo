@@ -73,7 +73,7 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
 
   @override
   Future<void> addNewRefueling(Refueling refueling) {
-    return _refuelings.add(refueling.toEntity().toDocument());
+    return _refuelings.add(refueling.toDocument());
   }
 
   @override
@@ -85,7 +85,7 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
   Stream<List<Refueling>> refuelings([bool forceRefresh]) {
     return _refuelings.snapshots().map((snapshot) {
       return snapshot.documents
-          .map((doc) => Refueling.fromEntity(RefuelingEntity.fromSnapshot(doc)))
+          .map((doc) => Refueling.fromSnapshot(doc))
           .toList();
     });
   }
@@ -93,16 +93,14 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
   @override
   Future<List<Refueling>> getCurrentRefuelings() async {
     final snap = await _refuelings.getDocuments();
-    return snap.documents
-        .map((doc) => Refueling.fromEntity(RefuelingEntity.fromSnapshot(doc)))
-        .toList();
+    return snap.documents.map((doc) => Refueling.fromSnapshot(doc)).toList();
   }
 
   @override
   Future<void> updateRefueling(Refueling refueling) {
     return _refuelings
         .document(refueling.id)
-        .updateData(refueling.toEntity().toDocument());
+        .updateData(refueling.toDocument());
   }
 
   @override
