@@ -13,31 +13,31 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  intl: ^0.16.0
+  intl:
   json_intl:
-  cloud_firestore: ^0.12.9
-  firebase_auth: 0.15.4
-  shared_preferences: ^0.5.6
-  flutter_typeahead: ^1.6.1
-  flutter_local_notifications: ^0.8.4
-  url_launcher: ^5.2.3
-  charts_flutter: ^0.8.1
-  sliding_up_panel: ^0.3.6
-  bloc: ^3.0.0
-  flutter_bloc: ^3.2.0
-  google_sign_in: any
-  equatable: any
-  font_awesome_flutter: any
+  cloud_firestore:
+  firebase_auth:
+  shared_preferences:
+  flutter_typeahead:
+  flutter_local_notifications:
+  url_launcher:
+  charts_flutter:
+  sliding_up_panel:
+  bloc:
+  flutter_bloc:
+  google_sign_in:
+  equatable:
+  font_awesome_flutter:
   autocomplete_textfield:
-  sentry: ^3.0.0
-  sembast: ^2.2.0
-  path_provider: ^1.5.1
+  sentry:
+  sembast:
+  path_provider:
   firebase_admob:
-  in_app_purchase: ^0.3.0
-  semaphore: ^0.1.4
+  in_app_purchase:
+  semaphore:
   provider:
   preferences:
-  cupertino_icons: ^0.1.2
+  cupertino_icons:
 
 dependency_overrides:
   autocomplete_textfield:
@@ -62,9 +62,9 @@ dev_dependencies:
     sdk: flutter
   flutter_driver:
     sdk: flutter
-  test: ^1.6.3
-  bloc_test: ^3.1.0
-  mockito: any
+  test:
+  bloc_test:
+  mockito:
   pedantic:
 
 flutter:
