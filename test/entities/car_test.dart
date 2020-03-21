@@ -1,10 +1,8 @@
+import 'package:autodo/models/models.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:sembast/sembast.dart';
-
-import 'package:autodo/entities/entities.dart';
-import 'package:autodo/models/models.dart';
 
 class MockDocumentSnapshot extends Mock implements DocumentSnapshot {}
 
@@ -12,16 +10,27 @@ class MockRecordSnapshot extends Mock implements RecordSnapshot {}
 
 void main() {
   group('CarEntity', () {
-    final car = CarEntity(
-        '', '', 0, 0, 0.0, 0.0, DateTime.fromMillisecondsSinceEpoch(0), []);
+    final car = Car(
+      id: '',
+      name: '',
+      lastMileageUpdate: DateTime.fromMillisecondsSinceEpoch(0),
+    );
     test('props', () {
-      expect(car.props,
-          ['', '', 0, 0, 0.0, 0.0, DateTime.fromMillisecondsSinceEpoch(0), []]);
+      expect(car.props, [
+        '',
+        '',
+        0.0,
+        0,
+        0.0,
+        0.0,
+        DateTime.fromMillisecondsSinceEpoch(0, isUtc: true),
+        []
+      ]);
     });
     test('toString', () {
       expect(
           car.toString(),
-          'CarEntity { id: , name: , mileage: 0.0, '
+          'Car { id: , name: , mileage: 0.0, '
           'numRefuelings: 0, averageEfficiency: 0.0, distanceRate: '
           '0.0, lastMileageUpdate: ${DateTime.fromMillisecondsSinceEpoch(0)}, distanceRateHistory: [] }');
     });
@@ -41,16 +50,14 @@ void main() {
       final DocumentSnapshot snap = MockDocumentSnapshot();
       when(snap.documentID).thenReturn(docID);
       when(snap.data).thenReturn(doc);
-      final car = CarEntity(
-          '0',
-          'name',
-          0,
-          0,
-          0.0,
-          0.0,
-          DateTime.fromMillisecondsSinceEpoch(0),
-          [DistanceRatePoint(DateTime.fromMillisecondsSinceEpoch(0), 0.0)]);
-      expect(CarEntity.fromSnapshot(snap), car);
+      final car = Car(
+          id: '0',
+          name: 'name',
+          lastMileageUpdate: DateTime.fromMillisecondsSinceEpoch(0),
+          distanceRateHistory: [
+            DistanceRatePoint(DateTime.fromMillisecondsSinceEpoch(0), 0.0)
+          ]);
+      expect(Car.fromSnapshot(snap), car);
     });
     test('fromRecord', () {
       final doc = {
@@ -68,16 +75,14 @@ void main() {
       final RecordSnapshot snap = MockRecordSnapshot();
       when(snap.key).thenReturn(docID);
       when(snap.value).thenReturn(doc);
-      final car = CarEntity(
-          '0',
-          'name',
-          0,
-          0,
-          0.0,
-          0.0,
-          DateTime.fromMillisecondsSinceEpoch(0),
-          [DistanceRatePoint(DateTime.fromMillisecondsSinceEpoch(0), 0.0)]);
-      expect(CarEntity.fromRecord(snap), car);
+      final car = Car(
+          id: '0',
+          name: 'name',
+          lastMileageUpdate: DateTime.fromMillisecondsSinceEpoch(0),
+          distanceRateHistory: [
+            DistanceRatePoint(DateTime.fromMillisecondsSinceEpoch(0), 0.0)
+          ]);
+      expect(Car.fromRecord(snap), car);
     });
   });
 }
