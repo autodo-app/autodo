@@ -45,7 +45,7 @@ void main() {
       when(document.collection('todos')).thenAnswer((_) => collection);
 
       test('New Todo', () {
-        when(collection.add(Todo().toEntity().toDocument()))
+        when(collection.add(Todo().toDocument()))
             .thenAnswer((_) async => MockDocument());
         expect(repository.addNewTodo(Todo()), completes);
       });
@@ -54,7 +54,7 @@ void main() {
         expect(repository.deleteTodo(Todo(id: '0')), completes);
       });
       test('Update Todo', () {
-        when(document.updateData(Todo(id: '0').toEntity().toDocument()))
+        when(document.updateData(Todo(id: '0').toDocument()))
             .thenAnswer((_) async {});
         expect(repository.updateTodo(Todo(id: '0')), completes);
       });

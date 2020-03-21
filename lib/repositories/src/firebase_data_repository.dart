@@ -33,7 +33,7 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
 
   @override
   Future<void> addNewTodo(Todo todo) {
-    return _todos.add(todo.toEntity().toDocument());
+    return _todos.add(todo.toDocument());
   }
 
   @override
@@ -44,25 +44,19 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
   @override
   Stream<List<Todo>> todos() {
     return _todos.snapshots().map((snapshot) {
-      return snapshot.documents
-          .map((doc) => Todo.fromEntity(TodoEntity.fromSnapshot(doc)))
-          .toList();
+      return snapshot.documents.map((doc) => Todo.fromSnapshot(doc)).toList();
     });
   }
 
   @override
   Future<List<Todo>> getCurrentTodos() async {
     final snap = await _todos.getDocuments();
-    return snap.documents
-        .map((doc) => Todo.fromEntity(TodoEntity.fromSnapshot(doc)))
-        .toList();
+    return snap.documents.map((doc) => Todo.fromSnapshot(doc)).toList();
   }
 
   @override
   Future<void> updateTodo(Todo update) {
-    return _todos
-        .document(update.id)
-        .updateData(update.toEntity().toDocument());
+    return _todos.document(update.id).updateData(update.toDocument());
   }
 
   @override

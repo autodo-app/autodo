@@ -1,10 +1,8 @@
+import 'package:autodo/models/models.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sembast/sembast.dart';
-
-import 'package:autodo/entities/entities.dart';
-import 'package:autodo/models/models.dart';
 
 class MockDocumentSnapshot extends Mock implements DocumentSnapshot {}
 
@@ -12,18 +10,18 @@ class MockRecordSnapshot extends Mock implements RecordSnapshot {}
 
 void main() {
   group('TodoEntity', () {
-    final todo = TodoEntity(
-        '',
-        '',
-        '',
-        '',
-        TodoDueState.DUE_SOON,
-        0,
-        0,
-        false,
-        false,
-        DateTime.fromMillisecondsSinceEpoch(0),
-        DateTime.fromMillisecondsSinceEpoch(0));
+    final todo = Todo(
+        id: '',
+        name: '',
+        carName: '',
+        repeatName: '',
+        dueState: TodoDueState.DUE_SOON,
+        dueMileage: 0,
+        notificationID: 0,
+        completed: false,
+        estimatedDueDate: false,
+        completedDate: DateTime.fromMillisecondsSinceEpoch(0, isUtc: true),
+        dueDate: DateTime.fromMillisecondsSinceEpoch(0, isUtc: true));
     test('props', () {
       expect(todo.props, [
         '',
@@ -31,21 +29,23 @@ void main() {
         '',
         '',
         TodoDueState.DUE_SOON,
-        0,
+        0.0,
         0,
         false,
         false,
-        DateTime.fromMillisecondsSinceEpoch(0),
-        DateTime.fromMillisecondsSinceEpoch(0)
+        DateTime.fromMillisecondsSinceEpoch(0, isUtc: true),
+        DateTime.fromMillisecondsSinceEpoch(0, isUtc: true)
       ]);
     });
     test('toString', () {
       expect(
           todo.toString(),
-          'TodoEntity { id: , name: , carName: , repeatName'
-          ': , dueState: ${TodoDueState.DUE_SOON}, dueMileage: 0.0, notificationID: '
-          '0, completed: false, estimatedDueDate: false, completedDate: '
-          '${DateTime.fromMillisecondsSinceEpoch(0)}, dueDate: ${DateTime.fromMillisecondsSinceEpoch(0)} }');
+          'Todo { id: , name: , carName: , repeatName'
+          ': , dueState: ${TodoDueState.DUE_SOON}, dueMileage: 0.0, '
+          'notificationID: 0, completed: false, '
+          'estimatedDueDate: false, completedDate: '
+          '${DateTime.fromMillisecondsSinceEpoch(0, isUtc: true)}, dueDate: '
+          '${DateTime.fromMillisecondsSinceEpoch(0, isUtc: true)} }');
     });
     test('fromSnapshot', () {
       final doc = {
@@ -64,19 +64,19 @@ void main() {
       final DocumentSnapshot snap = MockDocumentSnapshot();
       when(snap.documentID).thenReturn(docID);
       when(snap.data).thenReturn(doc);
-      final todo = TodoEntity(
-          '0',
-          'name',
-          'car',
-          'repeat',
-          TodoDueState.values[0],
-          0,
-          0,
-          false,
-          false,
-          DateTime.fromMillisecondsSinceEpoch(0),
-          DateTime.fromMillisecondsSinceEpoch(0));
-      expect(TodoEntity.fromSnapshot(snap), todo);
+      final todo = Todo(
+          id: '0',
+          name: 'name',
+          carName: 'car',
+          repeatName: 'repeat',
+          dueState: TodoDueState.values[0],
+          dueMileage: 0,
+          notificationID: 0,
+          completed: false,
+          estimatedDueDate: false,
+          completedDate: DateTime.fromMillisecondsSinceEpoch(0),
+          dueDate: DateTime.fromMillisecondsSinceEpoch(0));
+      expect(Todo.fromSnapshot(snap), todo);
     });
     test('fromRecord', () {
       final doc = {
@@ -95,19 +95,19 @@ void main() {
       final RecordSnapshot snap = MockRecordSnapshot();
       when(snap.key).thenReturn(docID);
       when(snap.value).thenReturn(doc);
-      final todo = TodoEntity(
-          '0',
-          'name',
-          'car',
-          'repeat',
-          TodoDueState.values[0],
-          0,
-          0,
-          false,
-          false,
-          DateTime.fromMillisecondsSinceEpoch(0),
-          DateTime.fromMillisecondsSinceEpoch(0));
-      expect(TodoEntity.fromRecord(snap), todo);
+      final todo = Todo(
+          id: '0',
+          name: 'name',
+          carName: 'car',
+          repeatName: 'repeat',
+          dueState: TodoDueState.values[0],
+          dueMileage: 0,
+          notificationID: 0,
+          completed: false,
+          estimatedDueDate: false,
+          completedDate: DateTime.fromMillisecondsSinceEpoch(0),
+          dueDate: DateTime.fromMillisecondsSinceEpoch(0));
+      expect(Todo.fromRecord(snap), todo);
     });
   });
 }

@@ -75,7 +75,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
     await dbLock.acquire();
     try {
       final db = await _openDb();
-      await _todos.add(db, todo.toEntity().toDocument());
+      await _todos.add(db, todo.toDocument());
       _todosStream.add(await getCurrentTodos());
       await db.close();
     } finally {
@@ -88,7 +88,7 @@ class SembastDataRepository extends Equatable implements DataRepository {
     await dbLock.acquire();
     try {
       final db = await _openDb();
-      await _todos.record(todo.id).put(db, todo.toEntity().toDocument());
+      await _todos.record(todo.id).put(db, todo.toDocument());
       _todosStream.add(await getCurrentTodos());
       await db.close();
     } finally {
@@ -119,10 +119,8 @@ class SembastDataRepository extends Equatable implements DataRepository {
     await dbLock.acquire();
     final db = await _openDb();
     final list = await _todos.find(db);
-    final out = list
-        .map((snap) => Todo.fromEntity(TodoEntity.fromRecord(snap)))
-        .toList()
-          ..sort((a, b) => int.parse(a.id) > int.parse(b.id) ? 1 : -1);
+    final out = list.map((snap) => Todo.fromRecord(snap)).toList()
+      ..sort((a, b) => int.parse(a.id) > int.parse(b.id) ? 1 : -1);
     await db.close();
     dbLock.release();
     return out;

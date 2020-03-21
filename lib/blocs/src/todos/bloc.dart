@@ -129,7 +129,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
         date: out.dueDate,
         title: '${IntlKeys.todoDueSoon}: ${out.name}', // TODO: Translate this
         body: ''));
-    batch.updateData(out.id, out.toEntity().toDocument());
+    batch.updateData(out.id, out.toDocument());
     return out;
   }
 
@@ -257,7 +257,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       yield TodosLoaded(updatedTodos);
       final batch = await repo.startTodoWriteBatch();
       updatedTodos.forEach((updatedTodo) {
-        batch.updateData(updatedTodo.id, updatedTodo.toEntity().toDocument());
+        batch.updateData(updatedTodo.id, updatedTodo.toDocument());
       });
       await batch.commit();
     }
@@ -299,7 +299,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
                 todos.where((t) => t.repeatName == r.name).toList(),
                 r.mileageInterval));
 
-        batch.updateData(updated.id, updated.toEntity().toDocument());
+        batch.updateData(updated.id, updated.toDocument());
       } else {
         // create a new todo for the repeat
         final c = cars.firstWhere((c) => c.name == r.cars[0]);
@@ -312,7 +312,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
             repeatName: r.name,
             dueMileage: dueMileage,
             completed: false);
-        batch.setData(upcoming.toEntity().toDocument());
+        batch.setData(upcoming.toDocument());
       }
     }
     await batch.commit();
