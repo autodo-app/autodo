@@ -32,15 +32,15 @@ Future<void> main() async {
   when(collection.document('0')).thenAnswer((_) => document);
   when(document.get()).thenAnswer((realInvocation) async => docSnap);
   when(docSnap.data).thenReturn({'db_version': 2});
-  final repository = await
-      FirebaseDataRepository.open(uuid: '', firestoreInstance: firestore);
+  final repository =
+      await FirebaseDataRepository.open(uuid: '', firestoreInstance: firestore);
 
   group('FirebaseDataRepository', () {
     test('Null Assertion', () {
       final firestore = MockFirestore();
       expect(
-          () =>
-              FirebaseDataRepository.open(firestoreInstance: firestore, uuid: null),
+          () => FirebaseDataRepository.open(
+              firestoreInstance: firestore, uuid: null),
           throwsAssertionError);
     });
     // this doesn't work with actually trying to open documents

@@ -31,8 +31,10 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
   /// Set up this way to allow for asynchronous behavior in the ctor. Will
   /// check the user's current database version against the expected
   /// version and migrate the data if needed.
-  static Future<FirebaseDataRepository> open({Firestore firestoreInstance, @required String uuid}) async {
-    final out = FirebaseDataRepository._(firestoreInstance: firestoreInstance, uuid: uuid);
+  static Future<FirebaseDataRepository> open(
+      {Firestore firestoreInstance, @required String uuid}) async {
+    final out = FirebaseDataRepository._(
+        firestoreInstance: firestoreInstance, uuid: uuid);
     await out._upgrade();
     return out;
   }
@@ -218,7 +220,8 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
       final todos = await getCurrentTodos();
       final todoWriteBatch = startTodoWriteBatch();
       todos.map((t) {
-        final dueMileage = Distance(DistanceUnit.imperial, Locale('en-us')).unitToInternal(t.dueMileage);
+        final dueMileage = Distance(DistanceUnit.imperial, Locale('en-us'))
+            .unitToInternal(t.dueMileage);
         return t.copyWith(dueMileage: dueMileage);
       }).forEach((t) {
         todoWriteBatch.updateData(t.id, t.toDocument());
@@ -228,8 +231,10 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
       final refuelings = await getCurrentRefuelings();
       final refuelingWriteBatch = await startRefuelingWriteBatch();
       refuelings.map((r) {
-        final mileage = Distance(DistanceUnit.imperial, Locale('en-us')).unitToInternal(r.mileage);
-        final amount = Volume(VolumeUnit.imperial, Locale('en-us')).unitToInternal(r.amount);
+        final mileage = Distance(DistanceUnit.imperial, Locale('en-us'))
+            .unitToInternal(r.mileage);
+        final amount = Volume(VolumeUnit.imperial, Locale('en-us'))
+            .unitToInternal(r.amount);
         final cost = Currency('USD', Locale('en-us')).unitToInternal(r.cost);
         // I don't think that efficiency needs to be updated because the stats
         // page will handle it, but that could be an issue
@@ -242,7 +247,8 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
       final cars = await getCurrentCars();
       final carWriteBatch = startCarWriteBatch();
       cars.map((c) {
-        final mileage = Distance(DistanceUnit.imperial, Locale('en-us')).unitToInternal(c.mileage);
+        final mileage = Distance(DistanceUnit.imperial, Locale('en-us'))
+            .unitToInternal(c.mileage);
         // distance rate and efficiency should similarly be updated by the stats
         // calcs here
         return c.copyWith(mileage: mileage);
@@ -254,7 +260,8 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
       final repeats = await getCurrentRepeats();
       final repeatWriteBatch = startRepeatWriteBatch();
       repeats.map((r) {
-        final mileageInterval = Distance(DistanceUnit.imperial, Locale('en-us')).unitToInternal(r.mileageInterval);
+        final mileageInterval = Distance(DistanceUnit.imperial, Locale('en-us'))
+            .unitToInternal(r.mileageInterval);
         return r.copyWith(mileageInterval: mileageInterval);
       }).forEach((r) {
         repeatWriteBatch.updateData(r.id, r.toDocument());

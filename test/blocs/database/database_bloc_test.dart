@@ -28,7 +28,8 @@ class MockDocument extends Mock
     with EquatableMixin
     implements DocumentReference {}
 
-class MockDocSnap extends Mock with EquatableMixin implements DocumentSnapshot {}
+class MockDocSnap extends Mock with EquatableMixin implements DocumentSnapshot {
+}
 
 Future<void> main() async {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -42,10 +43,12 @@ Future<void> main() async {
   when(mockFirestore.collection('users'))
       .thenAnswer((_) => mockUsersCollection);
   final repo = await FirebaseDataRepository.open(
-              firestoreInstance: mockFirestore, uuid: 'abcd');
+      firestoreInstance: mockFirestore, uuid: 'abcd');
   final pathProvider = () async => Directory('.');
-  final sembastCreate = await SembastDataRepository.open(createDb: true, pathProvider: pathProvider);
-  final sembastOpen = await SembastDataRepository.open(createDb: false, pathProvider: pathProvider);
+  final sembastCreate = await SembastDataRepository.open(
+      createDb: true, pathProvider: pathProvider);
+  final sembastOpen = await SembastDataRepository.open(
+      createDb: false, pathProvider: pathProvider);
 
   group('DatabaseBloc', () {
     test('Null Auth Bloc', () {
@@ -60,12 +63,7 @@ Future<void> main() async {
           firestoreInstance: mockFirestore, authenticationBloc: authBloc);
     }, act: (bloc) async {
       bloc.add(UserLoggedIn('abcd', false));
-    }, expect: [
-      DbUninitialized(),
-      DbLoaded(
-          repo,
-          false)
-    ]);
+    }, expect: [DbUninitialized(), DbLoaded(repo, false)]);
     blocTest('UserLoggedOut', build: () {
       final authBloc = MockAuthenticationBloc();
       whenListen(authBloc, Stream.fromIterable([Unauthenticated()]));
@@ -89,9 +87,7 @@ Future<void> main() async {
       bloc.add(TrialLogin(true));
     }, expect: [
       DbUninitialized(),
-      DbLoaded(
-          sembastCreate,
-          true),
+      DbLoaded(sembastCreate, true),
     ]);
     blocTest('TrialLogin from authBloc', build: () {
       final authBloc = MockAuthenticationBloc();
@@ -104,9 +100,7 @@ Future<void> main() async {
       // bloc.add(TrialLogin(true));
     }, expect: [
       DbUninitialized(),
-      DbLoaded(
-          sembastOpen,
-          false),
+      DbLoaded(sembastOpen, false),
     ]);
   });
 }
