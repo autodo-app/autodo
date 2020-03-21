@@ -9,12 +9,11 @@ import 'package:autodo/repositories/src/sembast_write_batch.dart';
 import 'package:autodo/repositories/src/sembast_data_repository.dart';
 import 'package:autodo/models/models.dart';
 
-void main() {
+Future<void> main() async {
   TestWidgetsFlutterBinding.ensureInitialized();
-  group('SembastDataRepository', () {
-    var repository = SembastDataRepository(
+  var repository = await SembastDataRepository.open(
         createDb: true, pathProvider: () async => Directory('.'));
-
+  group('SembastDataRepository', (){
     group('todos', () {
       test('New Todo', () {
         expect(repository.addNewTodo(Todo()), completes);
@@ -27,7 +26,7 @@ void main() {
       });
       test('todos', () async {
         await databaseFactoryIo.deleteDatabase('todos.db');
-        repository = SembastDataRepository(
+        repository = await SembastDataRepository.open(
             createDb: true,
             pathProvider: () async => Directory('.'),
             dbPath: 'todos.db');
@@ -39,7 +38,7 @@ void main() {
       });
       test('batch', () async {
         WidgetsFlutterBinding.ensureInitialized();
-        repository = SembastDataRepository(
+        repository = await SembastDataRepository.open(
           createDb: true,
           pathProvider: () async => Directory('.'),
         );
@@ -70,7 +69,7 @@ void main() {
       });
       test('refuelings', () async {
         await databaseFactoryIo.deleteDatabase('refuelings.db');
-        repository = SembastDataRepository(
+        repository = await SembastDataRepository.open(
             createDb: true,
             pathProvider: () async => Directory('.'),
             dbPath: 'refuelings.db');
@@ -80,7 +79,7 @@ void main() {
       });
       test('batch', () async {
         WidgetsFlutterBinding.ensureInitialized();
-        repository = SembastDataRepository(
+        repository = await SembastDataRepository.open(
           createDb: true,
           pathProvider: () async => Directory('.'),
         );
@@ -104,7 +103,7 @@ void main() {
       });
       test('cars', () async {
         await databaseFactoryIo.deleteDatabase('cars.db');
-        repository = SembastDataRepository(
+        repository = await SembastDataRepository.open(
             createDb: true,
             pathProvider: () async => Directory('.'),
             dbPath: 'cars.db');
@@ -114,7 +113,7 @@ void main() {
       });
       test('batch', () async {
         WidgetsFlutterBinding.ensureInitialized();
-        repository = SembastDataRepository(
+        repository = await SembastDataRepository.open(
             createDb: true, pathProvider: () async => Directory('.'));
         expect(
             await repository.startCarWriteBatch(),
@@ -136,7 +135,7 @@ void main() {
       });
       test('repeats', () async {
         await databaseFactoryIo.deleteDatabase('repeats.db');
-        repository = SembastDataRepository(
+        repository = await SembastDataRepository.open(
             createDb: true,
             pathProvider: () async => Directory('.'),
             dbPath: 'repeats.db');
@@ -146,7 +145,7 @@ void main() {
       });
       test('batch', () async {
         WidgetsFlutterBinding.ensureInitialized();
-        repository = SembastDataRepository(
+        repository = await SembastDataRepository.open(
             createDb: true, pathProvider: () async => Directory('.'));
         expect(
             await repository.startRepeatWriteBatch(),

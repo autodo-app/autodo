@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:autodo/repositories/repositories.dart';
@@ -8,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:equatable/equatable.dart';
 import 'package:yaml/yaml.dart';
 
+import 'package:autodo/units/units.dart';
 import 'data_repository.dart';
 import 'package:autodo/models/models.dart';
 import 'package:autodo/entities/entities.dart';
@@ -25,9 +25,9 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
     final pubspec = loadYaml(text);
     final dbVersion = pubspec['db_version'];
     final userDoc = await _userDoc.get();
-    final curVersion = userDoc.data['db_version'];
+    final curVersion = userDoc.data['db_version'] ?? 0;
     if (curVersion != dbVersion) {
-      upgrade(curVersion, dbVersion);
+      await upgrade(curVersion, dbVersion);
     }
   }
 
@@ -229,8 +229,55 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
   }
 
   @override
-  void upgrade(int curVer, int desVer) {
-    print('here');
+  Future<void> upgrade(int curVer, int desVer) async {
+    if (curVer == 1 && desVer == 2) {
+      // Move to SI units internally
+      final todos = await getCurrentTodos();
+      final todoWriteBatch = startTodoWriteBatch();
+      todos.map((t) {
+        final dueMileage = Distance(DistanceUnit.imperial, Locale('en-us')).unitToInternal(t.dueMileage);
+        return t.copyWith(dueMileage: dueMileage);
+      }).forEach((t) {
+        todoWriteBatch.updateData(t.id, t.toEntity().toDocument());
+      });
+      await todoWriteBatch.commit();
+
+      final refuelings = await getCurrentRefuelings();
+      final refuelingWriteBatch = await startRefuelingWriteBatch();
+      refuelings.map((r) {
+        final mileage = Distance(DistanceUnit.imperial, Locale('en-us')).unitToInternal(r.mileage);
+        final amount = Volume(VolumeUnit.imperial, Locale('en-us')).unitToInternal(r.amount);
+        final cost = Currency('USD', Locale('en-us')).unitToInternal(r.cost);
+        // I don't think that efficiency needs to be updated because the stats
+        // page will handle it, but that could be an issue
+        return r.copyWith(mileage: mileage, amount: amount, cost: cost);
+      }).forEach((r) {
+        refuelingWriteBatch.updateData(r.id, r.toEntity().toDocument());
+      });
+      await refuelingWriteBatch.commit();
+
+      final cars = await getCurrentCars();
+      final carWriteBatch = startCarWriteBatch();
+      cars.map((c) {
+        final mileage = Distance(DistanceUnit.imperial, Locale('en-us')).unitToInternal(c.mileage);
+        // distance rate and efficiency should similarly be updated by the stats
+        // calcs here
+        return c.copyWith(mileage: mileage);
+      }).forEach((c) {
+        carWriteBatch.updateData(c.id, c.toEntity().toDocument());
+      });
+      await carWriteBatch.commit();
+
+      final repeats = await getCurrentRepeats();
+      final repeatWriteBatch = startRepeatWriteBatch();
+      repeats.map((r) {
+        final mileageInterval = Distance(DistanceUnit.imperial, Locale('en-us')).unitToInternal(r.mileageInterval);
+        return r.copyWith(mileageInterval: mileageInterval);
+      }).forEach((r) {
+        repeatWriteBatch.updateData(r.id, r.toEntity().toDocument());
+      });
+      await repeatWriteBatch.commit();
+    }
   }
 
   @override

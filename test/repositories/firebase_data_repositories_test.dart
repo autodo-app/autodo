@@ -19,27 +19,29 @@ class MockDocSnapshot extends Mock implements DocumentSnapshot {}
 
 class MockWriteBatch extends Mock implements WriteBatch {}
 
-void main() {
-  group('FirebaseDataRepository', () {
-    final firestore = MockFirestore();
-    final document = MockDocument();
-    final collection = MockCollection();
-    final repository =
-        FirebaseDataRepository(uuid: '', firestoreInstance: firestore);
-    when(firestore.collection('users')).thenAnswer((_) => collection);
-    when(collection.document('')).thenAnswer((_) => document);
-    when(collection.document('0')).thenAnswer((_) => document);
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final firestore = MockFirestore();
+  final document = MockDocument();
+  final collection = MockCollection();
+  final repository = await
+      FirebaseDataRepository.open(uuid: '', firestoreInstance: firestore);
+  when(firestore.collection('users')).thenAnswer((_) => collection);
+  when(collection.document('')).thenAnswer((_) => document);
+  when(collection.document('0')).thenAnswer((_) => document);
 
+  group('FirebaseDataRepository', () {
     test('Null Assertion', () {
       final firestore = MockFirestore();
       expect(
           () =>
-              FirebaseDataRepository(firestoreInstance: firestore, uuid: null),
+              FirebaseDataRepository.open(firestoreInstance: firestore, uuid: null),
           throwsAssertionError);
     });
-    test('Default Firestore', () {
+    test('Default Firestore', () async {
       WidgetsFlutterBinding.ensureInitialized();
-      expect(FirebaseDataRepository(uuid: '').props, [Firestore.instance, '']);
+      final repo = await FirebaseDataRepository.open(uuid: '');
+      expect(repo.props, [Firestore.instance, '']);
     });
     group('todos', () {
       when(document.collection('todos')).thenAnswer((_) => collection);

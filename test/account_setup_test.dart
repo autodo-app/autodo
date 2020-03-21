@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:autodo/repositories/src/sembast_data_repository.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:bloc_test/bloc_test.dart';
@@ -63,6 +64,7 @@ void main() {
     // setUp(clearDatabases);
 
     test('1 car, no prev todos', () async {
+      WidgetsFlutterBinding.ensureInitialized();
       final dbBloc = MockDatabaseBloc();
       final refuelingsBloc = RefuelingsBloc(dbBloc: dbBloc);
       final carsBloc = CarsBloc(dbBloc: dbBloc, refuelingsBloc: refuelingsBloc);
@@ -76,7 +78,7 @@ void main() {
       clearDatabase('cars1.db');
 
       // tell the blocs that there was a new user signed up
-      final localRepo = SembastDataRepository(
+      final localRepo = await SembastDataRepository.open(
           createDb: true,
           dbPath: 'cars1.db',
           pathProvider: () async => Directory('.'));
@@ -124,6 +126,7 @@ void main() {
       clearDatabase('cars1.db');
     });
     test('2 cars, no prev todos', () async {
+      WidgetsFlutterBinding.ensureInitialized();
       final dbBloc = MockDatabaseBloc();
       final refuelingsBloc = RefuelingsBloc(dbBloc: dbBloc);
       final carsBloc = CarsBloc(dbBloc: dbBloc, refuelingsBloc: refuelingsBloc);
@@ -137,7 +140,7 @@ void main() {
       clearDatabase('cars2.db');
 
       // tell the blocs that there was a new user signed up
-      final localRepo = SembastDataRepository(
+      final localRepo = await SembastDataRepository.open(
           createDb: true,
           dbPath: 'cars2.db',
           pathProvider: () async =>

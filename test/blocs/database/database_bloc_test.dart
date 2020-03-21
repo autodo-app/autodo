@@ -28,13 +28,24 @@ class MockDocument extends Mock
     with EquatableMixin
     implements DocumentReference {}
 
-void main() {
+class MockDocSnap extends Mock with EquatableMixin implements DocumentSnapshot {}
+
+Future<void> main() async {
   TestWidgetsFlutterBinding.ensureInitialized();
   final mockFirestore = MockFirestoreInstance();
   final mockUsersCollection = MockCollection();
-  when(mockUsersCollection.document('abcd')).thenAnswer((_) => MockDocument());
+  final mockDocSnap = MockDocSnap();
+  when(mockDocSnap.data).thenReturn({'db_version': 2});
+  final mockDocument = MockDocument();
+  when(mockDocument.get()).thenAnswer((realInvocation) async => mockDocSnap);
+  when(mockUsersCollection.document('abcd')).thenAnswer((_) => mockDocument);
   when(mockFirestore.collection('users'))
       .thenAnswer((_) => mockUsersCollection);
+  final repo = await FirebaseDataRepository.open(
+              firestoreInstance: mockFirestore, uuid: 'abcd');
+  final pathProvider = () async => Directory('.');
+  final sembastCreate = await SembastDataRepository.open(createDb: true, pathProvider: pathProvider);
+  final sembastOpen = await SembastDataRepository.open(createDb: false, pathProvider: pathProvider);
 
   group('DatabaseBloc', () {
     test('Null Auth Bloc', () {
@@ -52,8 +63,7 @@ void main() {
     }, expect: [
       DbUninitialized(),
       DbLoaded(
-          FirebaseDataRepository(
-              firestoreInstance: mockFirestore, uuid: 'abcd'),
+          repo,
           false)
     ]);
     blocTest('UserLoggedOut', build: () {
@@ -67,7 +77,7 @@ void main() {
       DbUninitialized(),
       DbNotLoaded(),
     ]);
-    final pathProvider = () async => Directory('.');
+
     blocTest('TrialLogin', build: () {
       final authBloc = MockAuthenticationBloc();
       // whenListen(authBloc, Stream.fromIterable([Unauthenticated()]));
@@ -80,7 +90,7 @@ void main() {
     }, expect: [
       DbUninitialized(),
       DbLoaded(
-          SembastDataRepository(createDb: true, pathProvider: pathProvider),
+          sembastCreate,
           true),
     ]);
     blocTest('TrialLogin from authBloc', build: () {
@@ -95,7 +105,7 @@ void main() {
     }, expect: [
       DbUninitialized(),
       DbLoaded(
-          SembastDataRepository(createDb: false, pathProvider: pathProvider),
+          sembastOpen,
           false),
     ]);
   });
