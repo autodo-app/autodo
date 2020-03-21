@@ -1,13 +1,40 @@
-import 'package:meta/meta.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-
-import 'package:autodo/entities/entities.dart';
+import 'package:meta/meta.dart';
+import 'package:sembast/sembast.dart';
 
 @immutable
 class Repeat extends Equatable {
-  const Repeat(
-      {this.id, this.name, this.mileageInterval, this.dateInterval, this.cars});
+  const Repeat({
+    this.id,
+    this.name,
+    this.mileageInterval,
+    this.dateInterval,
+    this.cars,
+  });
+
+  factory Repeat.fromSnapshot(DocumentSnapshot snap) {
+    return Repeat(
+        id: snap.documentID,
+        name: snap.data['name'] as String,
+        mileageInterval: (snap.data['mileageInterval'] as num)?.toDouble(),
+        dateInterval: (snap.data['dateInterval'] == null)
+            ? null
+            : Duration(days: snap.data['dateInterval'] as int),
+        cars: (snap.data['cars'] as List<dynamic>)?.cast<String>());
+  }
+
+  factory Repeat.fromRecord(RecordSnapshot snap) {
+    return Repeat(
+        id: (snap.key is String) ? snap.key : '${snap.key}',
+        name: snap.value['name'] as String,
+        mileageInterval: snap.value['mileageInterval'] as double,
+        dateInterval: (snap.value['dateInterval'] == null)
+            ? null
+            : Duration(days: snap.value['dateInterval'] as int),
+        cars: (snap.value['cars'] as List<dynamic>)?.cast<String>());
+  }
 
   final String id, name;
 
@@ -37,20 +64,23 @@ class Repeat extends Equatable {
 
   @override
   String toString() {
-    return 'Repeat { id: $id, name: $name, mileageInterval: $mileageInterval, dateInterval: $dateInterval, cars: $cars}';
+    return '$runtimeType { id: $id, name: $name, mileageInterval: $mileageInterval, dateInterval: $dateInterval, cars: $cars }';
   }
 
-  RepeatEntity toEntity() {
-    return RepeatEntity(id, name, mileageInterval, dateInterval, cars);
+  Repeat toEntity() {
+    return this;
   }
 
-  static Repeat fromEntity(RepeatEntity entity) {
-    return Repeat(
-      id: entity.id,
-      name: entity.name,
-      mileageInterval: entity.mileageInterval,
-      dateInterval: entity.dateInterval,
-      cars: entity.cars,
-    );
+  static Repeat fromEntity(Repeat entity) {
+    return entity;
+  }
+
+  Map<String, Object> toDocument() {
+    return {
+      'name': name,
+      'mileageInterval': mileageInterval,
+      'dateInterval': dateInterval?.inDays,
+      'cars': cars
+    };
   }
 }

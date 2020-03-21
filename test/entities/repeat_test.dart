@@ -1,9 +1,8 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:sembast/sembast.dart';
+import 'package:autodo/models/models.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-
-import 'package:autodo/entities/entities.dart';
+import 'package:sembast/sembast.dart';
 
 class MockDocumentSnapshot extends Mock implements DocumentSnapshot {}
 
@@ -11,7 +10,13 @@ class MockRecordSnapshot extends Mock implements RecordSnapshot {}
 
 void main() {
   group('RepeatEntity', () {
-    final repeat = RepeatEntity('', '', 0, Duration(hours: 0), ['']);
+    final repeat = Repeat(
+      id: '',
+      name: '',
+      mileageInterval: 0,
+      dateInterval: Duration(hours: 0),
+      cars: [''],
+    );
     test('props', () {
       expect(repeat.props, [
         '',
@@ -24,9 +29,9 @@ void main() {
     test('toString', () {
       expect(
           repeat.toString(),
-          'RepeatEntity { id: , name: , mileage'
+          'Repeat { id: , name: , mileage'
           'Interval: 0.0, dateInterval: ${Duration(hours: 0)}, cars: '
-          '[]}');
+          '[] }');
     });
     test('fromSnapshot', () {
       final doc = {
@@ -39,8 +44,14 @@ void main() {
       final DocumentSnapshot snap = MockDocumentSnapshot();
       when(snap.documentID).thenReturn(docID);
       when(snap.data).thenReturn(doc);
-      final repeat = RepeatEntity('0', 'name', 0, Duration(days: 0), ['test']);
-      expect(RepeatEntity.fromSnapshot(snap), repeat);
+      final repeat = Repeat(
+        id: '0',
+        name: 'name',
+        mileageInterval: 0,
+        dateInterval: Duration(days: 0),
+        cars: ['test'],
+      );
+      expect(Repeat.fromSnapshot(snap), repeat);
     });
     test('fromRecord', () {
       final doc = {
@@ -53,8 +64,14 @@ void main() {
       final RecordSnapshot snap = MockRecordSnapshot();
       when(snap.key).thenReturn(docID);
       when(snap.value).thenReturn(doc);
-      final repeat = RepeatEntity('0', 'name', 0, Duration(days: 0), ['test']);
-      expect(RepeatEntity.fromRecord(snap), repeat);
+      final repeat = Repeat(
+        id: '0',
+        name: 'name',
+        mileageInterval: 0,
+        dateInterval: Duration(days: 0),
+        cars: ['test'],
+      );
+      expect(Repeat.fromRecord(snap), repeat);
     });
   });
 }

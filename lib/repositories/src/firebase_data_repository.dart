@@ -1,14 +1,13 @@
 import 'dart:async';
 
+import 'package:autodo/models/models.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
 import 'data_repository.dart';
-import 'package:autodo/models/models.dart';
-import 'package:autodo/entities/entities.dart';
-import 'write_batch_wrapper.dart';
 import 'firebase_write_batch.dart';
+import 'write_batch_wrapper.dart';
 
 class FirebaseDataRepository extends Equatable implements DataRepository {
   FirebaseDataRepository({Firestore firestoreInstance, @required String uuid})
@@ -151,7 +150,7 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
   Stream<List<Repeat>> repeats() {
     return _repeats.snapshots().map((snapshot) {
       return snapshot.documents
-          .map((doc) => Repeat.fromEntity(RepeatEntity.fromSnapshot(doc)))
+          .map((doc) => Repeat.fromEntity(Repeat.fromSnapshot(doc)))
           .toList();
     });
   }
@@ -160,7 +159,7 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
   Future<List<Repeat>> getCurrentRepeats() async {
     final snap = await _repeats.getDocuments();
     return snap.documents
-        .map((doc) => Repeat.fromEntity(RepeatEntity.fromSnapshot(doc)))
+        .map((doc) => Repeat.fromEntity(Repeat.fromSnapshot(doc)))
         .toList();
   }
 

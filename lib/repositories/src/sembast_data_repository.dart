@@ -1,19 +1,18 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
+import 'package:autodo/models/models.dart';
 import 'package:autodo/repositories/repositories.dart';
-import 'package:sembast/sembast.dart';
-import 'package:sembast/sembast_io.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:semaphore/semaphore.dart';
+import 'package:sembast/sembast.dart';
+import 'package:sembast/sembast_io.dart';
 
-import 'package:autodo/models/models.dart';
-import 'package:autodo/entities/entities.dart';
 import 'data_repository.dart';
-import 'write_batch_wrapper.dart';
 import 'sembast_write_batch.dart';
+import 'write_batch_wrapper.dart';
 
 class SembastDataRepository extends Equatable implements DataRepository {
   SembastDataRepository(
@@ -286,9 +285,8 @@ class SembastDataRepository extends Equatable implements DataRepository {
     await dbLock.acquire();
     final db = await _openDb();
     final list = await _repeats.find(db);
-    final out = list
-        .map((snap) => Repeat.fromEntity(RepeatEntity.fromRecord(snap)))
-        .toList();
+    final out =
+        list.map((snap) => Repeat.fromEntity(Repeat.fromRecord(snap))).toList();
     await db.close();
     dbLock.release();
     return out;
