@@ -38,6 +38,7 @@ dependencies:
   provider:
   preferences:
   cupertino_icons:
+  about:
 
 dependency_overrides:
   autocomplete_textfield:
@@ -66,6 +67,7 @@ dev_dependencies:
   bloc_test:
   mockito:
   pedantic:
+  pubspec_extract:
 
 flutter:
   uses-material-design: true

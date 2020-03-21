@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:autodo/localization.dart';
+import 'package:autodo/screens/about/about.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_intl/json_intl.dart';
@@ -145,8 +146,15 @@ class NavDrawerState extends State<NavDrawer> {
                           // TODO: replace this with a flat button too.
                           Align(
                             alignment: Alignment.centerLeft,
-                            child: AboutListTile(
-                              applicationIcon: Icon(Icons.access_alarm),
+                            child: ListTile(
+                              title: Text(MaterialLocalizations.of(context)
+                                  .aboutListTileTitle(
+                                JsonIntl.of(context).get(IntlKeys.appTitle),
+                              )),
+                              onTap: () {
+                                Navigator.pop(context);
+                                about(context);
+                              },
                             ),
                           ),
                         ],
