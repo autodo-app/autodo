@@ -143,8 +143,7 @@ void main() {
       final localRepo = await SembastDataRepository.open(
           createDb: true,
           dbPath: 'cars2.db',
-          pathProvider: () async =>
-              Directory('./'));
+          pathProvider: () async => Directory('./'));
       when(dbBloc.state).thenReturn(DbLoaded(localRepo, true));
 
       // Add a Load call to all blocs to force refresh
