@@ -73,8 +73,8 @@ class IntlKeys {
   /// strings.json: 'Delete Account'
   static const deleteAccount = 'delete_account';
 
-  /// strings-fr.json: 'Historique des distances de conduite'
-  /// strings.json: 'Driving Distance History (mi/day)'
+  /// strings-fr.json: 'Historique des distances de conduite ({{ unit }} par jour)'
+  /// strings.json: 'Driving Distance History ({{ unit }} per day)'
   static const drivingDistanceHistory = 'driving_distance_history';
 
   /// strings-fr.json: 'Dû à'
@@ -129,8 +129,8 @@ class IntlKeys {
   /// strings.json: 'Forgot your password?'
   static const forgotYourPassword = 'forgot_your_password';
 
-  /// strings-fr.json: 'Historique de l\'efficacité énergétique'
-  /// strings.json: 'Fuel Efficiency History (mpg)'
+  /// strings-fr.json: 'Historique de l\'efficacité énergétique ({{ distance }} par {{ volume }})'
+  /// strings.json: 'Fuel Efficiency History ({{ distance }} per {{ volume }})'
   static const fuelEfficiencyHistory = 'fuel_efficiency_history';
 
   /// strings-fr.json: 'Je l\'ai !'
@@ -489,6 +489,10 @@ class IntlKeys {
   /// strings.json: 'Verify Email'
   static const verifyEmail = 'verify_email';
 
+  /// strings-fr.json: 'Version {{ version }}'
+  /// strings.json: 'Version {{ version }}'
+  static const version = 'version';
+
   /// strings-fr.json: 'L\'entretien des voitures en toute simplicité.'
   /// strings.json: 'Car maintenance made simple.'
   static const welcomeDesc = 'welcome_desc';
@@ -502,12 +506,8 @@ class IntlKeys {
   static const yes = 'yes';
 
   /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'mi'
-  static const distanceMilesShort = 'distance_miles_short';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'miles'
-  static const distanceMiles = 'distance_miles';
+  /// strings.json: 'Default currency'
+  static const defaultCurrency = 'default_currency';
 
   /// strings-fr.json: *** NOT TRANSLATED ***
   /// strings.json: 'km'
@@ -516,6 +516,14 @@ class IntlKeys {
   /// strings-fr.json: *** NOT TRANSLATED ***
   /// strings.json: 'kilometers'
   static const distanceKm = 'distance_km';
+
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings.json: 'mi'
+  static const distanceMilesShort = 'distance_miles_short';
+
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings.json: 'miles'
+  static const distanceMiles = 'distance_miles';
 
   /// strings-fr.json: *** NOT TRANSLATED ***
   /// strings.json: 'gal'
@@ -542,8 +550,8 @@ class IntlKeys {
   static const fuelLiters = 'fuel_liters';
 
   /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'Default currency'
-  static const defaultCurrency = 'default_currency';
+  /// strings.json: 'Misc'
+  static const groupMisc = 'group_misc';
 
   /// strings-fr.json: *** NOT TRANSLATED ***
   /// strings.json: 'Units'
@@ -554,14 +562,10 @@ class IntlKeys {
   static const lengthUnit = 'length_unit';
 
   /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'Fuel volume unit'
-  static const volumeUnit = 'volume_unit';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  /// strings.json: 'Misc'
-  static const groupMisc = 'group_misc';
-
-  /// strings-fr.json: *** NOT TRANSLATED ***
   /// strings.json: 'Need at least 3 refuelings to see efficiency data.'
   static const noDataRefuelings = 'no_data_refuelings';
+
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings.json: 'Fuel volume unit'
+  static const volumeUnit = 'volume_unit';
 }

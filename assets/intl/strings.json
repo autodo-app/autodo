@@ -136,6 +136,7 @@
   "verification_sent": "Verification Email Sent",
   "verify_body_text": "An email has been sent to you with a link to verify your account.\n\nYou must verify your email to use auToDo.",
   "verify_email": "Verify Email",
+  "version": "Version {{ version }}",
   "volume_unit": "Fuel volume unit",
   "welcome_desc": "Car maintenance made simple.",
   "welcome": "Welcome to auToDo!",

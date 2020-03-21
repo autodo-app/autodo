@@ -12,6 +12,9 @@ jobs:
       with:
         # flutter-version: '1.13.6-pre.32'
         channel: 'dev'
+    - run: flutter pub get
+    - run: flutter pub run json_intl -d lib/localization.dart
+    - run: flutter pub run pubspec_extract -d lib/screens/about/pubspec.dart
     - run: flutter format .
     - uses: stefanzweifel/git-auto-commit-action@v2.5.0
       with:
