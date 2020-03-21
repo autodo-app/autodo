@@ -144,7 +144,7 @@ void main() {
           createDb: true,
           dbPath: 'cars2.db',
           pathProvider: () async =>
-              Directory('/home/bayle/Documents/git/autodo'));
+              Directory('./'));
       when(dbBloc.state).thenReturn(DbLoaded(localRepo, true));
 
       // Add a Load call to all blocs to force refresh
