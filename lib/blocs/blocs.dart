@@ -1,6 +1,5 @@
 library blocs;
 
-export 'src/legal_text/barrel.dart';
 export 'src/cars/barrel.dart';
 export 'src/filtered_refuelings/barrel.dart';
 export 'src/filtered_todos/barrel.dart';
