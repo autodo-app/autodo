@@ -55,6 +55,7 @@ class Pubspec {
     'path_provider': null,
     'firebase_admob': null,
     'in_app_purchase': null,
+    'semaphore': null,
     'provider': null,
     'preferences': null,
     'cupertino_icons': null,
