@@ -22,8 +22,12 @@ class Volume extends UnitConversion<VolumeUnit> {
         Localizations.localeOf(context),
       );
 
+  // The constants here are defined to convert as:
+  // display_value = internal_value / constant
+  // and the expression `10 * usLiquidGallon` stores 10 US gallons into the database
+
   /// 1 liter is 1 cubic decimeter, which is 0.001 cubic meter
-  static const liter = 0.001;
+  static const liter = 1.0;
 
   /// Used in the United Kingdom and some Caribbean nations
   static const imperialGallon = 4.54609 * liter;
@@ -75,37 +79,35 @@ class Volume extends UnitConversion<VolumeUnit> {
     return '[$unit]';
   }
 
-  // Todo: Change database unit to SI.
   // For now the database values are in US gallons
   @override
   num internalToUnit(num value) {
     switch (unit) {
       case VolumeUnit.metric:
-        return value * usLiquidGallon / liter;
+        return value / liter;
 
       case VolumeUnit.imperial:
-        return value * usLiquidGallon / imperialGallon;
+        return value / imperialGallon;
 
       case VolumeUnit.us:
-        return value;
+        return value / usLiquidGallon;
     }
 
     throw UnimplementedError('Unit $unit not implemented');
   }
 
-  // Todo: Change database unit to SI.
   // For now the database values are in US gallons
   @override
   num unitToInternal(num value) {
     switch (unit) {
       case VolumeUnit.metric:
-        return value * liter / usLiquidGallon;
+        return value * liter;
 
       case VolumeUnit.imperial:
-        return value * imperialGallon / usLiquidGallon;
+        return value * imperialGallon;
 
       case VolumeUnit.us:
-        return value;
+        return value * usLiquidGallon;
     }
 
     throw UnimplementedError('Unit $unit not implemented');
