@@ -11,9 +11,10 @@ class Todo extends Equatable {
       {this.id,
       this.name,
       this.carName,
-      this.repeatName,
       this.dueState,
       this.dueMileage,
+      this.mileageRepeatInterval,
+      this.dateRepeatInterval,
       this.notificationID,
       this.completed,
       this.estimatedDueDate,
@@ -25,11 +26,13 @@ class Todo extends Equatable {
       id: snap.documentID,
       name: snap.data['name'] as String,
       carName: snap.data['carName'] as String,
-      repeatName: snap.data['repeatName'] as String,
       dueState: (snap.data['dueState'] == null)
           ? null
           : TodoDueState.values[snap.data['dueState']],
       dueMileage: (snap.data['dueMileage'] as num)?.toDouble(),
+      mileageRepeatInterval: (snap.data['mileageRepeatInterval'] as num)?.toDouble(),
+      dateRepeatInterval: (snap.data['dateRepeatInterval'] == null) ? null :
+        Duration(days: snap.data['dateRepeatInterval'] as int),
       notificationID: snap.data['notificationID'] as int,
       completed: snap.data['completed'] as bool,
       estimatedDueDate: snap.data['estimatedDueDate'] as bool,
@@ -47,11 +50,13 @@ class Todo extends Equatable {
       id: (snap.key is String) ? snap.key : '${snap.key}',
       name: snap.value['name'] as String,
       carName: snap.value['carName'] as String,
-      repeatName: snap.value['repeatName'] as String,
       dueState: (snap.value['dueState'] == null)
           ? null
           : TodoDueState.values[snap.value['dueState']],
       dueMileage: snap.value['dueMileage'] as double,
+      mileageRepeatInterval: (snap.value['mileageRepeatInterval'] as num)?.toDouble(),
+      dateRepeatInterval: (snap.value['dateRepeatInterval'] == null) ? null :
+        Duration(days: snap.value['dateRepeatInterval'] as int),
       notificationID: snap.value['notificationID'] as int,
       completed: snap.value['completed'] as bool,
       estimatedDueDate: snap.value['estimatedDueDate'] as bool,
@@ -64,25 +69,56 @@ class Todo extends Equatable {
     );
   }
 
-  final String id, name, carName, repeatName;
+  /// The key used to reference this item in the database.
+  final String id;
 
+  /// The user-facing name for the ToDo action.
+  final String name;
+
+  /// The name of the car that this ToDo action will be applied to.
+  final String carName;
+
+  /// An enumerated value specifying if the ToDo is close to being due or is
+  /// overdue.
   final TodoDueState dueState;
 
+  /// The car mileage distance when this ToDo action should be done.
   final double dueMileage;
 
+  /// The id value for the local notification corresponding to this action.
   final int notificationID;
 
-  final bool completed, estimatedDueDate;
+  /// True if the ToDo action has been performed, False otherwise
+  final bool completed;
 
-  final DateTime completedDate, dueDate;
+  /// True if the dueDate field of this ToDo is calculated from the car's
+  /// average driving distance rate, False if the user specified the date
+  /// explicitly when creating the ToDo.
+  final bool estimatedDueDate;
+
+  /// The date when the ToDo was actually completed. This can, and often does,
+  /// vary from the due date for the ToDo.
+  final DateTime completedDate;
+
+  /// The date when the ToDo should be completed.
+  final DateTime dueDate;
+
+  /// The distance at which this action should recur. If null then this ToDo
+  /// is either recurring by date or is a one-off task.
+  final double mileageRepeatInterval;
+
+  /// The time interval when this action should recur. If null then this ToDo
+  /// is either recurring by distance or is a one-off task.
+  final Duration dateRepeatInterval;
 
   Todo copyWith(
       {String id,
       String name,
       String carName,
-      String repeatName,
       TodoDueState dueState,
       double dueMileage,
+      double mileageRepeatInterval,
+      Duration dateRepeatInterval,
       int notificationID,
       bool completed,
       bool estimatedDueDate,
@@ -92,9 +128,10 @@ class Todo extends Equatable {
         id: id ?? this.id,
         name: name ?? this.name,
         carName: carName ?? this.carName,
-        repeatName: repeatName ?? this.repeatName,
         dueState: dueState ?? this.dueState,
         dueMileage: dueMileage ?? this.dueMileage,
+        mileageRepeatInterval: mileageRepeatInterval ?? this.mileageRepeatInterval,
+        dateRepeatInterval: dateRepeatInterval ?? this.dateRepeatInterval,
         notificationID: notificationID ?? this.notificationID,
         completed: completed ?? this.completed,
         estimatedDueDate: estimatedDueDate ?? this.estimatedDueDate,
@@ -107,9 +144,10 @@ class Todo extends Equatable {
         id,
         name,
         carName,
-        repeatName,
         dueState,
         dueMileage,
+        mileageRepeatInterval,
+        dateRepeatInterval,
         notificationID,
         completed,
         estimatedDueDate,
@@ -119,8 +157,10 @@ class Todo extends Equatable {
 
   @override
   String toString() {
-    return '$runtimeType { id: $id, name: $name, carName: $carName, repeatName: '
-        '$repeatName, dueState: $dueState, dueMileage: $dueMileage, '
+    return '$runtimeType { id: $id, name: $name, carName: $carName, '
+        'dueState: $dueState, dueMileage: $dueMileage, '
+        'mileageRepeatInterval: $mileageRepeatInterval, '
+        'dateRepeatInterval: $dateRepeatInterval, '
         'notificationID: $notificationID, completed: '
         '$completed, estimatedDueDate: $estimatedDueDate, completedDate: '
         '${completedDate?.toUtc()}, dueDate: ${dueDate?.toUtc()} }';
@@ -130,9 +170,10 @@ class Todo extends Equatable {
     return {
       'name': name,
       'carName': carName,
-      'repeatName': repeatName,
       'dueState': dueState?.index,
       'dueMileage': dueMileage,
+      'mileageRepeatInterval': mileageRepeatInterval,
+      'dateRepeatInterval': dateRepeatInterval?.inDays,
       'notificationID': notificationID,
       'completed': completed,
       'estimatedDueDate': estimatedDueDate,
