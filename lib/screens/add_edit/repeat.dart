@@ -1,5 +1,5 @@
 import 'package:autodo/blocs/blocs.dart';
-import 'package:autodo/localization.dart';
+import 'package:autodo/generated/localization.dart';
 import 'package:autodo/models/models.dart';
 import 'package:autodo/units/units.dart';
 import 'package:autodo/util.dart';

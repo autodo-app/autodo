@@ -1,4 +1,4 @@
-import 'package:autodo/localization.dart';
+import 'package:autodo/generated/localization.dart';
 import 'package:autodo/repositories/repositories.dart';
 import 'package:autodo/units/units.dart';
 import 'package:flutter_test/flutter_test.dart';

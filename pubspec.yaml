@@ -58,7 +58,6 @@ dependency_overrides:
     git:
       url: https://gitlab.com/davbfr/preferences.git
       ref: rewrite-pref-service
-  yaml: ^2.2.0
 
 dev_dependencies:
   flutter_test:

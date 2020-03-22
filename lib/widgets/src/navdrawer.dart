@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:autodo/localization.dart';
+import 'package:autodo/generated/localization.dart';
 import 'package:autodo/screens/about/about.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

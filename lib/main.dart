@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:autodo/localization.dart';
+import 'package:autodo/generated/localization.dart';
 import 'package:autodo/screens/settings/screen.dart';
 import 'package:bloc/bloc.dart';
 import 'package:firebase_core/firebase_core.dart';

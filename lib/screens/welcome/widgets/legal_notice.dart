@@ -1,5 +1,5 @@
 import 'package:about/about.dart';
-import 'package:autodo/localization.dart';
+import 'package:autodo/generated/localization.dart';
 import 'package:autodo/theme.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';

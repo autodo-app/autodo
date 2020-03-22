@@ -4,7 +4,7 @@ import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/models/models.dart';
-import 'package:autodo/localization.dart';
+import 'package:autodo/generated/localization.dart';
 import 'package:autodo/theme.dart';
 import 'package:autodo/util.dart';
 import 'package:json_intl/json_intl.dart';

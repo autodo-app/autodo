@@ -2,16 +2,14 @@ import 'dart:async';
 
 import 'package:autodo/models/models.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
 import 'package:autodo/generated/pubspec.dart';
-import 'package:autodo/units/units.dart';
 import 'data_repository.dart';
 import 'firebase_write_batch.dart';
 import 'write_batch_wrapper.dart';
 
-class FirebaseDataRepository extends Equatable implements DataRepository {
+class FirebaseDataRepository extends DataRepository {
   FirebaseDataRepository._({Firestore firestoreInstance, @required String uuid})
       : assert(uuid != null),
         _firestoreInstance = firestoreInstance ?? Firestore.instance,
@@ -211,62 +209,6 @@ class FirebaseDataRepository extends Equatable implements DataRepository {
   Future<bool> getPaidStatus() async {
     final snap = await _userDoc.get();
     return snap.data['paid'] as bool;
-  }
-
-  @override
-  Future<void> upgrade(int curVer, int desVer) async {
-    if (curVer == 1 && desVer == 2) {
-      // Move to SI units internally
-      final todos = await getCurrentTodos();
-      final todoWriteBatch = startTodoWriteBatch();
-      todos.map((t) {
-        final dueMileage = Distance(DistanceUnit.imperial, Locale('en-us'))
-            .unitToInternal(t.dueMileage);
-        return t.copyWith(dueMileage: dueMileage);
-      }).forEach((t) {
-        todoWriteBatch.updateData(t.id, t.toDocument());
-      });
-      await todoWriteBatch.commit();
-
-      final refuelings = await getCurrentRefuelings();
-      final refuelingWriteBatch = await startRefuelingWriteBatch();
-      refuelings.map((r) {
-        final mileage = Distance(DistanceUnit.imperial, Locale('en-us'))
-            .unitToInternal(r.mileage);
-        final amount = Volume(VolumeUnit.imperial, Locale('en-us'))
-            .unitToInternal(r.amount);
-        // I don't think that efficiency needs to be updated because the stats
-        // page will handle it, but that could be an issue
-        return r.copyWith(mileage: mileage, amount: amount);
-      }).forEach((r) {
-        refuelingWriteBatch.updateData(r.id, r.toDocument());
-      });
-      await refuelingWriteBatch.commit();
-
-      final cars = await getCurrentCars();
-      final carWriteBatch = startCarWriteBatch();
-      cars.map((c) {
-        final mileage = Distance(DistanceUnit.imperial, Locale('en-us'))
-            .unitToInternal(c.mileage);
-        // distance rate and efficiency should similarly be updated by the stats
-        // calcs here
-        return c.copyWith(mileage: mileage);
-      }).forEach((c) {
-        carWriteBatch.updateData(c.id, c.toDocument());
-      });
-      await carWriteBatch.commit();
-
-      final repeats = await getCurrentRepeats();
-      final repeatWriteBatch = startRepeatWriteBatch();
-      repeats.map((r) {
-        final mileageInterval = Distance(DistanceUnit.imperial, Locale('en-us'))
-            .unitToInternal(r.mileageInterval);
-        return r.copyWith(mileageInterval: mileageInterval);
-      }).forEach((r) {
-        repeatWriteBatch.updateData(r.id, r.toDocument());
-      });
-      await repeatWriteBatch.commit();
-    }
   }
 
   @override
