@@ -1,6 +1,6 @@
 import 'package:about/about.dart';
 import 'package:autodo/localization.dart';
-import 'package:autodo/screens/about/pubspec.dart';
+import 'package:autodo/generated/pubspec.dart';
 import 'package:flutter/material.dart';
 import 'package:json_intl/json_intl.dart';
 

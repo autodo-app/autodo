@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:semaphore/semaphore.dart';
 import 'package:equatable/equatable.dart';
 
-import 'package:autodo/screens/about/pubspec.dart';
+import 'package:autodo/generated/pubspec.dart';
 import 'package:autodo/units/units.dart';
 import 'package:autodo/models/models.dart';
 import 'data_repository.dart';
@@ -412,10 +412,9 @@ class SembastDataRepository extends Equatable implements DataRepository {
             .unitToInternal(r.mileage);
         final amount = Volume(VolumeUnit.imperial, Locale('en-us'))
             .unitToInternal(r.amount);
-        final cost = Currency('USD', Locale('en-us')).unitToInternal(r.cost);
         // I don't think that efficiency needs to be updated because the stats
         // page will handle it, but that could be an issue
-        return r.copyWith(mileage: mileage, amount: amount, cost: cost);
+        return r.copyWith(mileage: mileage, amount: amount);
       }).forEach((r) {
         refuelingWriteBatch.updateData(r.id, r.toDocument());
       });
