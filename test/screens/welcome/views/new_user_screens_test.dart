@@ -18,9 +18,6 @@ import 'package:provider/provider.dart';
 
 class MockCarsBloc extends Mock implements CarsBloc {}
 
-class MockRepeatsBloc extends MockBloc<RepeatsEvent, RepeatsState>
-    implements RepeatsBloc {}
-
 class MockAuthenticationBloc
     extends MockBloc<AuthenticationEvent, AuthenticationState>
     implements AuthenticationBloc {}
@@ -93,19 +90,6 @@ void main() {
       final todosBloc = MockTodosBloc();
       final carsBloc = MockCarsBloc();
       when(carsBloc.state).thenReturn(CarsLoaded([Car(name: 'test')]));
-      final repeatsBloc = MockRepeatsBloc();
-      whenListen(
-          repeatsBloc,
-          Stream.fromIterable([
-            RepeatsLoaded([
-              Repeat(name: 'oil', mileageInterval: 1000),
-              Repeat(name: 'tireRotation', mileageInterval: 1000)
-            ])
-          ]));
-      when(repeatsBloc.state).thenReturn(RepeatsLoaded([
-        Repeat(name: 'oil', mileageInterval: 1000),
-        Repeat(name: 'tireRotation', mileageInterval: 1000)
-      ]));
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
@@ -113,7 +97,6 @@ void main() {
             BlocProvider<AuthenticationBloc>.value(value: authBloc),
             BlocProvider<DatabaseBloc>.value(value: dbBloc),
             BlocProvider<CarsBloc>.value(value: carsBloc),
-            BlocProvider<RepeatsBloc>.value(value: repeatsBloc),
             BlocProvider<TodosBloc>.value(value: todosBloc),
           ], child: MaterialApp(home: NewUserScreen())),
         ),
@@ -135,19 +118,6 @@ void main() {
       final todosBloc = MockTodosBloc();
       final carsBloc = MockCarsBloc();
       when(carsBloc.state).thenReturn(CarsLoaded([Car(name: 'test')]));
-      final repeatsBloc = MockRepeatsBloc();
-      whenListen(
-          repeatsBloc,
-          Stream.fromIterable([
-            RepeatsLoaded([
-              Repeat(name: 'oil', mileageInterval: 1000),
-              Repeat(name: 'tireRotation', mileageInterval: 1000)
-            ])
-          ]));
-      when(repeatsBloc.state).thenReturn(RepeatsLoaded([
-        Repeat(name: 'oil', mileageInterval: 1000),
-        Repeat(name: 'tireRotation', mileageInterval: 1000)
-      ]));
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
@@ -155,7 +125,6 @@ void main() {
             BlocProvider<AuthenticationBloc>.value(value: authBloc),
             BlocProvider<DatabaseBloc>.value(value: dbBloc),
             BlocProvider<CarsBloc>.value(value: carsBloc),
-            BlocProvider<RepeatsBloc>.value(value: repeatsBloc),
             BlocProvider<TodosBloc>.value(value: todosBloc),
           ], child: MaterialApp(home: NewUserScreen())),
         ),
@@ -180,19 +149,6 @@ void main() {
       final todosBloc = MockTodosBloc();
       final carsBloc = MockCarsBloc();
       when(carsBloc.state).thenReturn(CarsLoaded([Car(name: 'test')]));
-      final repeatsBloc = MockRepeatsBloc();
-      whenListen(
-          repeatsBloc,
-          Stream.fromIterable([
-            RepeatsLoaded([
-              Repeat(name: 'oil', mileageInterval: 1000),
-              Repeat(name: 'tireRotation', mileageInterval: 1000)
-            ])
-          ]));
-      when(repeatsBloc.state).thenReturn(RepeatsLoaded([
-        Repeat(name: 'oil', mileageInterval: 1000),
-        Repeat(name: 'tireRotation', mileageInterval: 1000)
-      ]));
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
@@ -201,7 +157,6 @@ void main() {
                 BlocProvider<AuthenticationBloc>.value(value: authBloc),
                 BlocProvider<DatabaseBloc>.value(value: dbBloc),
                 BlocProvider<CarsBloc>.value(value: carsBloc),
-                BlocProvider<RepeatsBloc>.value(value: repeatsBloc),
                 BlocProvider<TodosBloc>.value(value: todosBloc),
               ],
               child: MaterialApp(home: NewUserScreen(), routes: {

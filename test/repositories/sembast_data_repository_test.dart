@@ -123,37 +123,5 @@ Future<void> main() async {
                 store: StoreRef('cars')));
       });
     });
-    group('repeats', () {
-      test('New', () {
-        expect(repository.addNewRepeat(Repeat()), completes);
-      });
-      test('Delete', () {
-        expect(repository.deleteRepeat(Repeat(id: '0')), completes);
-      });
-      test('Update', () {
-        expect(repository.updateRepeat(Repeat(id: '0')), completes);
-      });
-      test('repeats', () async {
-        await databaseFactoryIo.deleteDatabase('repeats.db');
-        repository = await SembastDataRepository.open(
-            createDb: true,
-            pathProvider: () async => Directory('.'),
-            dbPath: 'repeats.db');
-        repository.addNewRepeat(Repeat()); // ignore: unawaited_futures
-        expect(repository.repeats(), emits([Repeat(id: '1')]));
-        // await databaseFactoryIo.deleteDatabase('repeats.db');
-      });
-      test('batch', () async {
-        WidgetsFlutterBinding.ensureInitialized();
-        repository = await SembastDataRepository.open(
-            createDb: true, pathProvider: () async => Directory('.'));
-        expect(
-            await repository.startRepeatWriteBatch(),
-            SembastWriteBatch(
-                dbFactory: repository.dbFactory,
-                dbPath: './sample.db',
-                store: StoreRef('repeats')));
-      });
-    });
   });
 }

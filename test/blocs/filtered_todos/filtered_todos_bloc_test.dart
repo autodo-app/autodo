@@ -16,7 +16,6 @@ void main() {
         name: 'Oil',
         id: '0',
         carName: '',
-        repeatName: '',
         dueState: TodoDueState.DUE_SOON,
         dueMileage: 1000,
         notificationID: 0,

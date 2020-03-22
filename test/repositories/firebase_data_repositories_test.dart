@@ -188,43 +188,6 @@ Future<void> main() async {
                 firestoreInstance: firestore, collection: collection));
       });
     });
-    group('repeats', () {
-      when(document.collection('repeats')).thenAnswer((_) => collection);
-
-      test('New Repeat', () {
-        when(collection.getDocuments()).thenReturn(null);
-        when(collection.add(Repeat().toEntity().toDocument()))
-            .thenAnswer((_) async => MockDocument());
-        expect(repository.addNewRepeat(Repeat()), completes);
-      });
-      test('Delete Repeat', () {
-        when(document.delete()).thenAnswer((_) async {});
-        expect(repository.deleteRepeat(Repeat(id: '0')), completes);
-      });
-      test('Update Repeat', () {
-        when(document.updateData(Repeat(id: '0').toEntity().toDocument()))
-            .thenAnswer((_) async {});
-        expect(repository.updateRepeat(Repeat(id: '0')), completes);
-      });
-      test('repeats', () {
-        final snap = MockQuerySnapshot();
-        final doc = MockDocSnapshot();
-        when(doc.data).thenAnswer((_) => {});
-        when(doc.documentID).thenAnswer((_) => null);
-        when(snap.documents).thenAnswer((_) => [doc]);
-        when(collection.snapshots())
-            .thenAnswer((_) => Stream.fromIterable([snap]));
-        expect(repository.repeats(), emits([Repeat()]));
-      });
-      test('batch', () {
-        WidgetsFlutterBinding.ensureInitialized();
-        when(firestore.batch()).thenAnswer((_) => MockWriteBatch());
-        expect(
-            repository.startRepeatWriteBatch(),
-            FirebaseWriteBatch(
-                firestoreInstance: firestore, collection: collection));
-      });
-    });
     test('notificationID', () {
       final snap = MockDocSnapshot();
       when(snap.data).thenAnswer((_) => {});

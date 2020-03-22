@@ -44,17 +44,6 @@ void main() {
             'UpdateDueDates { cars: ${[Car()]} }');
       });
     });
-    group('RepeatsRefresh', () {
-      test('props', () {
-        expect(RepeatsRefresh([Repeat()]).props, [
-          [Repeat()]
-        ]);
-      });
-      test('toString', () {
-        expect(RepeatsRefresh([Repeat()]).toString(),
-            'RepeatsRefresh { repeats: ${[Repeat()]} }');
-      });
-    });
     group('CompleteTodo', () {
       test('props', () {
         expect(

@@ -1,7 +1,6 @@
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/models/models.dart';
 import 'package:autodo/screens/add_edit/barrel.dart';
-import 'package:autodo/screens/add_edit/forms/barrel.dart';
 import 'package:autodo/units/units.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
@@ -11,18 +10,13 @@ import 'package:mockito/mockito.dart';
 import 'package:preferences/preferences.dart';
 import 'package:provider/provider.dart';
 
-class MockRepeatsBloc extends MockBloc<RepeatsEvent, RepeatsState>
-    implements RepeatsBloc {}
-
 class MockCarsBloc extends MockBloc<CarsEvent, CarsState> implements CarsBloc {}
 
 void main() {
-  RepeatsBloc repeatsBloc;
   CarsBloc carsBloc;
   BasePrefService pref;
 
   setUp(() async {
-    repeatsBloc = MockRepeatsBloc();
     carsBloc = MockCarsBloc();
     pref = JustCachePrefService();
     await pref.setDefaultValues({
@@ -40,9 +34,6 @@ void main() {
           value: pref,
           child: MultiBlocProvider(
             providers: [
-              BlocProvider<RepeatsBloc>.value(
-                value: repeatsBloc,
-              ),
               BlocProvider<CarsBloc>.value(
                 value: carsBloc,
               ),
@@ -51,7 +42,7 @@ void main() {
               home: TodoAddEditScreen(
                 key: key,
                 isEditing: false,
-                onSave: (a, b, c, d, e) {},
+                onSave: (a, b, c, d) {},
               ),
             ),
           ),
@@ -64,15 +55,11 @@ void main() {
       final key = Key('screen');
       var saved = false;
       when(carsBloc.state).thenAnswer((_) => CarsLoaded([Car(name: 'test')]));
-      when(repeatsBloc.state).thenAnswer((_) => RepeatsLoaded([]));
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
           child: MultiBlocProvider(
             providers: [
-              BlocProvider<RepeatsBloc>.value(
-                value: repeatsBloc,
-              ),
               BlocProvider<CarsBloc>.value(
                 value: carsBloc,
               ),
@@ -81,7 +68,7 @@ void main() {
               home: TodoAddEditScreen(
                 key: key,
                 isEditing: false,
-                onSave: (a, b, c, d, e) {
+                onSave: (a, b, c, d) {
                   saved = true;
                 },
               ),
@@ -97,7 +84,6 @@ void main() {
           await tester.enterText(find.byWidget(field.widget), '10');
         }
       }
-      await tester.enterText(find.byType(RepeatForm), 'test');
       await tester.tap(find.byType(FloatingActionButton));
       await tester.pump();
       expect(saved, true);
@@ -105,15 +91,11 @@ void main() {
     testWidgets('date button', (WidgetTester tester) async {
       final key = Key('screen');
       when(carsBloc.state).thenAnswer((_) => CarsLoaded([]));
-      when(repeatsBloc.state).thenAnswer((_) => RepeatsLoaded([]));
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
           child: MultiBlocProvider(
             providers: [
-              BlocProvider<RepeatsBloc>.value(
-                value: repeatsBloc,
-              ),
               BlocProvider<CarsBloc>.value(
                 value: carsBloc,
               ),
@@ -122,7 +104,7 @@ void main() {
               home: TodoAddEditScreen(
                 key: key,
                 isEditing: false,
-                onSave: (a, b, c, d, e) {},
+                onSave: (a, b, c, d) {},
               ),
             ),
           ),

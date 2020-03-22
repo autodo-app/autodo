@@ -25,9 +25,6 @@ class MockTabBloc extends MockBloc<TabEvent, AppTab> implements TabBloc {}
 
 class MockCarsBloc extends MockBloc<CarsEvent, CarsState> implements CarsBloc {}
 
-class MockRepeatsBloc extends MockBloc<RepeatsEvent, RepeatsState>
-    implements RepeatsBloc {}
-
 class MockPaidVersionBloc extends MockBloc<PaidVersionEvent, PaidVersionState>
     implements PaidVersionBloc {}
 
@@ -180,13 +177,7 @@ void main() {
               CarsLoaded([Car()])
             ]));
         when(carsBloc.state).thenReturn(CarsLoaded([Car()]));
-        final repeatsBloc = MockRepeatsBloc();
-        when(repeatsBloc.state).thenReturn(RepeatsLoaded([Repeat()]));
-        whenListen(
-            repeatsBloc,
-            Stream.fromIterable([
-              RepeatsLoaded([Repeat()])
-            ]));
+
         await tester.pumpWidget(
           ChangeNotifierProvider<BasePrefService>.value(
             value: pref,
@@ -202,7 +193,6 @@ void main() {
                   value: tabBloc,
                 ),
                 BlocProvider<CarsBloc>.value(value: carsBloc),
-                BlocProvider<RepeatsBloc>.value(value: repeatsBloc),
                 BlocProvider<PaidVersionBloc>.value(value: paidBloc),
                 BlocProvider<RefuelingsBloc>.value(value: refuelingsBloc),
               ],
@@ -232,13 +222,6 @@ void main() {
             Stream.fromIterable([
               CarsLoaded([Car(name: 'test')])
             ]));
-        final repeatsBloc = MockRepeatsBloc();
-        when(repeatsBloc.state).thenReturn(RepeatsLoaded([Repeat()]));
-        whenListen(
-            repeatsBloc,
-            Stream.fromIterable([
-              RepeatsLoaded([Repeat()])
-            ]));
         await tester.pumpWidget(
           ChangeNotifierProvider<BasePrefService>.value(
             value: pref,
@@ -254,7 +237,6 @@ void main() {
                   value: tabBloc,
                 ),
                 BlocProvider<CarsBloc>.value(value: carsBloc),
-                BlocProvider<RepeatsBloc>.value(value: repeatsBloc),
                 BlocProvider<PaidVersionBloc>.value(value: paidBloc),
                 BlocProvider<RefuelingsBloc>.value(value: refuelingsBloc),
               ],
@@ -271,7 +253,6 @@ void main() {
         await tester.pumpAndSettle();
         await tester.tap(find.byKey(IntegrationTestKeys.fabKeys[2]));
         await tester.pumpAndSettle();
-        expect(find.byType(RepeatAddEditScreen), findsOneWidget);
       });
     });
   });

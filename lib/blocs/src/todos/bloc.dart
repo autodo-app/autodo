@@ -176,21 +176,6 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     await repo.updateTodo(event.updatedTodo);
   }
 
-  Todo _createNewTodoFromRepeat(repeat, todo) {
-    final CarsLoaded curCarsState = _carsBloc.state;
-    final curCar = curCarsState.cars.firstWhere((c) => c.name == todo.carName);
-
-    final nextDueMileage = curCar.mileage + repeat.mileageInterval;
-    final int daysToDue =
-        (repeat.mileageInterval / curCar.distanceRate).round();
-    final DateTime nextDueDate =
-        todo.completedDate.add(Duration(days: daysToDue));
-    final Todo next = todo.copyWith(
-        dueMileage: nextDueMileage, dueDate: nextDueDate, completed: false);
-    repo.addNewTodo(next);
-    return next;
-  }
-
   Stream<TodosState> _mapCompleteTodoToState(CompleteTodo event) async* {
     final curTodo = event.todo;
     if (_carsBloc.state is CarsLoaded &&
@@ -245,19 +230,6 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       });
       await batch.commit();
     }
-  }
-
-  double _calculateNextTodo(List<Todo> pastTodos, double mileageInterval) {
-    pastTodos.sort((a, b) {
-      if (a.dueMileage < b.dueMileage) {
-        return 1;
-      } else if (b.dueMileage < a.dueMileage) {
-        return -1;
-      }
-      return 0;
-    });
-    final latest = pastTodos.toList().last;
-    return latest.dueMileage + mileageInterval;
   }
 
   // Stream<TodosState> _mapRepeatsRefreshToState(RepeatsRefresh event) async* {
