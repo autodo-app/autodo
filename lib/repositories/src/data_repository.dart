@@ -47,19 +47,6 @@ abstract class DataRepository extends Equatable {
 
   FutureOr<WriteBatchWrapper> startCarWriteBatch();
 
-  // Repeats
-  Future<void> addNewRepeat(Repeat repeat);
-
-  Future<void> deleteRepeat(Repeat repeat);
-
-  Stream<List<Repeat>> repeats();
-
-  Future<List<Repeat>> getCurrentRepeats();
-
-  Future<void> updateRepeat(Repeat repeat);
-
-  FutureOr<WriteBatchWrapper> startRepeatWriteBatch();
-
   // Notifications
   Stream<int> notificationID();
 
@@ -108,16 +95,17 @@ abstract class DataRepository extends Equatable {
       });
       await carWriteBatch.commit();
 
-      final repeats = await getCurrentRepeats();
-      final repeatWriteBatch = await startRepeatWriteBatch();
-      repeats.map((r) {
-        final mileageInterval = Distance(DistanceUnit.imperial, Locale('en-us'))
-            .unitToInternal(r.mileageInterval);
-        return r.copyWith(mileageInterval: mileageInterval);
-      }).forEach((r) {
-        repeatWriteBatch.updateData(r.id, r.toDocument());
-      });
-      await repeatWriteBatch.commit();
+      // TODO 275: pull the repeat content directly from db without a model?
+      // final repeats = await getCurrentRepeats();
+      // final repeatWriteBatch = await startRepeatWriteBatch();
+      // repeats.map((r) {
+      //   final mileageInterval = Distance(DistanceUnit.imperial, Locale('en-us'))
+      //       .unitToInternal(r.mileageInterval);
+      //   return r.copyWith(mileageInterval: mileageInterval);
+      // }).forEach((r) {
+      //   repeatWriteBatch.updateData(r.id, r.toDocument());
+      // });
+      // await repeatWriteBatch.commit();
     }
   }
 }

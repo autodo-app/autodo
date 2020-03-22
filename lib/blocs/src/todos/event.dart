@@ -62,18 +62,6 @@ class UpdateDueDates extends TodosEvent {
   String toString() => 'UpdateDueDates { cars: $cars }';
 }
 
-class RepeatsRefresh extends TodosEvent {
-  const RepeatsRefresh(this.repeats);
-
-  final List<Repeat> repeats;
-
-  @override
-  List<Object> get props => [repeats];
-
-  @override
-  String toString() => 'RepeatsRefresh { repeats: $repeats }';
-}
-
 class CompleteTodo extends TodosEvent {
   const CompleteTodo(this.todo, [this.completedDate]);
 

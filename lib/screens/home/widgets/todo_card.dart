@@ -212,12 +212,11 @@ class _TodoEditButton extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (context) => TodoAddEditScreen(
                     isEditing: true,
-                    onSave: (name, dueDate, dueMileage, repeatName, carName) {
+                    onSave: (name, dueDate, dueMileage, carName) {
                       final out = todo.copyWith(
                         name: name,
                         dueDate: dueDate,
                         dueMileage: dueMileage,
-                        repeatName: repeatName,
                         carName: carName,
                       );
                       BlocProvider.of<TodosBloc>(context).add(UpdateTodo(out));

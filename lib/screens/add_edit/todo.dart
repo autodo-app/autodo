@@ -15,7 +15,7 @@ import 'package:autodo/generated/localization.dart';
 import 'package:autodo/util.dart';
 
 typedef _OnSaveCallback = Function(String name, DateTime dueDate,
-    double dueMileage, String repeatName, String carName);
+    double dueMileage, String carName);
 
 class _NameForm extends StatelessWidget {
   const _NameForm({this.todo, this.onSaved, this.node, this.nextNode});
@@ -283,7 +283,7 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
   ScrollController scrollCtrl;
   DateTime _dueDate;
   double _dueMileage;
-  String _name, _repeatName, _car;
+  String _name, _car;
 
   bool get isEditing => widget.isEditing;
 
@@ -373,24 +373,7 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
                     Padding(
                       padding: EdgeInsets.only(bottom: 15),
                     ),
-                    BlocBuilder<RepeatsBloc, RepeatsState>(
-                      builder: (context, state) {
-                        if (state is RepeatsLoaded) {
-                          return AutoScrollField(
-                            controller: scrollCtrl,
-                            focusNode: _repeatNode,
-                            position: 240,
-                            child: RepeatForm(
-                              todo: widget.todo,
-                              node: _repeatNode,
-                              onSaved: (val) => _repeatName = val,
-                              requireInput: false,
-                            ),
-                          );
-                        }
-                        return LoadingIndicator();
-                      },
-                    ),
+// TODO 275: Add a field here for date/mileage interval
                     Padding(
                       padding: EdgeInsets.only(bottom: 15),
                     ),
@@ -434,7 +417,7 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
           onPressed: () {
             if (_formKey.currentState.validate()) {
               _formKey.currentState.save();
-              widget.onSave(_name, _dueDate, _dueMileage, _repeatName, _car);
+              widget.onSave(_name, _dueDate, _dueMileage, _car);
               Navigator.pop(context);
             }
           },

@@ -159,46 +159,6 @@ class FirebaseDataRepository extends DataRepository {
   }
 
   @override
-  Future<void> addNewRepeat(Repeat repeat) async {
-    await _repeats.add(repeat.toEntity().toDocument());
-  }
-
-  @override
-  Future<void> deleteRepeat(Repeat repeat) {
-    return _repeats.document(repeat.id).delete();
-  }
-
-  @override
-  Stream<List<Repeat>> repeats() {
-    return _repeats.snapshots().map((snapshot) {
-      return snapshot.documents
-          .map((doc) => Repeat.fromEntity(Repeat.fromSnapshot(doc)))
-          .toList();
-    });
-  }
-
-  @override
-  Future<List<Repeat>> getCurrentRepeats() async {
-    final snap = await _repeats.getDocuments();
-    return snap.documents
-        .map((doc) => Repeat.fromEntity(Repeat.fromSnapshot(doc)))
-        .toList();
-  }
-
-  @override
-  Future<void> updateRepeat(Repeat repeat) {
-    return _repeats
-        .document(repeat.id)
-        .updateData(repeat.toEntity().toDocument());
-  }
-
-  @override
-  WriteBatchWrapper startRepeatWriteBatch() {
-    return FirebaseWriteBatch(
-        firestoreInstance: _firestoreInstance, collection: _repeats);
-  }
-
-  @override
   Stream<int> notificationID() {
     return _userDoc
         .snapshots()
