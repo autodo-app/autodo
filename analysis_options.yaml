@@ -3,22 +3,25 @@ include: package:pedantic/analysis_options.yaml
 
 analyzer:
   errors:
-    todo: ignore
-    unawaited_futures: warning
     always_declare_return_types: error
     await_only_futures: error
+    directives_ordering: warning
     file_names: error
     prefer_final_fields: error
+    prefer_relative_imports: warning
     prefer_single_quotes: error
+    prefer_typing_uninitialized_variables: error
+    todo: ignore
+    unawaited_futures: warning
     unnecessary_parenthesis: error
     use_function_type_syntax_for_parameters: warning
-    prefer_typing_uninitialized_variables: error
 
 linter:
   rules:
     - always_declare_return_types
     - avoid_void_async
     - await_only_futures
+    - directives_ordering
     - file_names
     - omit_local_variable_types
     - prefer_const_constructors_in_immutables
@@ -29,6 +32,7 @@ linter:
     - prefer_if_null_operators
     - prefer_interpolation_to_compose_strings
     - prefer_null_aware_operators
+    - prefer_relative_imports
     - prefer_single_quotes
     - prefer_typing_uninitialized_variables
     - sort_constructors_first
