@@ -1,10 +1,10 @@
-import 'package:autodo/util.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:sembast/sembast.dart';
 
+import '../../util.dart';
 import 'distanceratepoint.dart';
 
 @immutable

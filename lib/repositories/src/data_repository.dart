@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:autodo/models/models.dart';
-import 'package:autodo/units/units.dart';
 import 'package:equatable/equatable.dart';
 
+import '../../models/models.dart';
+import '../../units/units.dart';
 import 'write_batch_wrapper.dart';
 
 abstract class DataRepository extends Equatable {

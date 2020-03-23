@@ -6,7 +6,7 @@ import 'package:json_intl/json_intl.dart';
 import 'package:preferences/preferences.dart';
 import 'package:provider/provider.dart';
 
-import 'package:autodo/generated/localization.dart';
+import '../generated/localization.dart';
 import 'conversion.dart';
 
 enum DistanceUnit { metric, imperial }

@@ -1,10 +1,3 @@
-import 'package:autodo/blocs/blocs.dart';
-import 'package:autodo/integ_test_keys.dart';
-import 'package:autodo/generated/localization.dart';
-import 'package:autodo/models/models.dart';
-import 'package:autodo/screens/add_edit/barrel.dart';
-import 'package:autodo/units/units.dart';
-import 'package:autodo/widgets/widgets.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +5,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:json_intl/json_intl.dart';
 
+import '../../blocs/blocs.dart';
+import '../../generated/localization.dart';
+import '../../integ_test_keys.dart';
+import '../../models/models.dart';
+import '../../units/units.dart';
+import '../../widgets/widgets.dart';
+import '../add_edit/barrel.dart';
 import 'views/barrel.dart';
 
 class HomeScreen extends StatefulWidget {

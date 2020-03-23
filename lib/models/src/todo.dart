@@ -1,9 +1,10 @@
-import 'package:autodo/models/models.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:sembast/sembast.dart';
+
+import '../models.dart';
 
 @immutable
 class Todo extends Equatable {

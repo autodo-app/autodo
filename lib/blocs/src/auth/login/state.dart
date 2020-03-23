@@ -12,8 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:autodo/blocs/blocs.dart';
 import 'package:equatable/equatable.dart';
+
+import '../../../blocs.dart';
 
 /// Represents the current state of the [LoginForm] fields and validation.
 abstract class LoginState extends Equatable {

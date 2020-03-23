@@ -1,8 +1,9 @@
-import 'package:autodo/repositories/src/write_batch_wrapper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'write_batch_wrapper.dart';
 
 class FirebaseWriteBatch extends Equatable implements WriteBatchWrapper {
   FirebaseWriteBatch({@required firestoreInstance, @required collection})

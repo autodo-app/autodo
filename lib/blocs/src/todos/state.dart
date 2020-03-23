@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:autodo/models/models.dart';
+import '../../../models/models.dart';
 
 abstract class TodosState extends Equatable {
   const TodosState();
