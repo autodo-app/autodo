@@ -3,9 +3,12 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import '../../../flavor.dart';
 import '../../../repositories/repositories.dart';
+import '../../../repositories/src/demo_data_repository.dart';
 import '../../../repositories/src/sembast_data_repository.dart';
 import '../auth/barrel.dart';
 import 'event.dart';
@@ -86,6 +89,12 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
     final dataRepo =
         await SembastDataRepository.open(pathProvider: pathProvider);
     final storageRepo = LocalStorageRepository();
+
+    if (kFlavor.populateDemoData) {
+      // Load demo data
+      await dataRepo.copyFrom(DemoDataRepository());
+    }
+
     yield DbLoaded(dataRepo, storageRepo: storageRepo);
   }
 

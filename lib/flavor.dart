@@ -20,22 +20,25 @@ const kFlavor = kReleaseMode
         firebaseApiKey: Keys.firebaseTestKey,
         firebaseAppName: 'autodo',
         firebaseStorageUri: 'gs://autodo-49f21.appspot.com',
+        populateDemoData: true,
       );
 
 /// Default release application settings
 @immutable
 class FlavorData {
-  const FlavorData._(
-      {this.hasAds = false,
-      this.hasPaid = true,
-      this.useSentry = true,
-      this.hasAnalytics = true,
-      this.projectID = 'autodo-e93fc',
-      this.googleAppIDiOS = '1:356275435347:ios:4e46f5fa8de51c6faad3a6',
-      this.googleAppIDAndroid = '1:356275435347:android:5d33ed5a0494d852aad3a6',
-      this.firebaseApiKey = Keys.firebaseProdKey,
-      this.firebaseAppName = 'autodo-prod',
-      this.firebaseStorageUri = 'gs://autodo-e93fc.appspot.com'});
+  const FlavorData._({
+    this.hasAds = false,
+    this.hasPaid = true,
+    this.useSentry = true,
+    this.hasAnalytics = true,
+    this.projectID = 'autodo-e93fc',
+    this.googleAppIDiOS = '1:356275435347:ios:4e46f5fa8de51c6faad3a6',
+    this.googleAppIDAndroid = '1:356275435347:android:5d33ed5a0494d852aad3a6',
+    this.firebaseApiKey = Keys.firebaseProdKey,
+    this.firebaseAppName = 'autodo-prod',
+    this.firebaseStorageUri = 'gs://autodo-e93fc.appspot.com',
+    this.populateDemoData = false,
+  });
 
   /// Enable the Ads banner
   final bool hasAds;
@@ -70,4 +73,7 @@ class FlavorData {
   /// Google Application ID
   String get googleAppID =>
       Platform.isIOS ? googleAppIDiOS : googleAppIDAndroid;
+
+  /// Push Demo data on trial accounts
+  final bool populateDemoData;
 }
