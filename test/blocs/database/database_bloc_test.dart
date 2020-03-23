@@ -28,13 +28,27 @@ class MockDocument extends Mock
     with EquatableMixin
     implements DocumentReference {}
 
-void main() {
+class MockDocSnap extends Mock with EquatableMixin implements DocumentSnapshot {
+}
+
+Future<void> main() async {
   TestWidgetsFlutterBinding.ensureInitialized();
   final mockFirestore = MockFirestoreInstance();
   final mockUsersCollection = MockCollection();
-  when(mockUsersCollection.document('abcd')).thenAnswer((_) => MockDocument());
+  final mockDocSnap = MockDocSnap();
+  when(mockDocSnap.data).thenReturn({'db_version': 2});
+  final mockDocument = MockDocument();
+  when(mockDocument.get()).thenAnswer((realInvocation) async => mockDocSnap);
+  when(mockUsersCollection.document('abcd')).thenAnswer((_) => mockDocument);
   when(mockFirestore.collection('users'))
       .thenAnswer((_) => mockUsersCollection);
+  final repo = await FirebaseDataRepository.open(
+      firestoreInstance: mockFirestore, uuid: 'abcd');
+  final pathProvider = () async => Directory('.');
+  final sembastCreate = await SembastDataRepository.open(
+      createDb: true, pathProvider: pathProvider);
+  final sembastOpen = await SembastDataRepository.open(
+      createDb: false, pathProvider: pathProvider);
 
   group('DatabaseBloc', () {
     test('Null Auth Bloc', () {
@@ -49,13 +63,7 @@ void main() {
           firestoreInstance: mockFirestore, authenticationBloc: authBloc);
     }, act: (bloc) async {
       bloc.add(UserLoggedIn('abcd', false));
-    }, expect: [
-      DbUninitialized(),
-      DbLoaded(
-          FirebaseDataRepository(
-              firestoreInstance: mockFirestore, uuid: 'abcd'),
-          false)
-    ]);
+    }, expect: [DbUninitialized(), DbLoaded(repo, false)]);
     blocTest('UserLoggedOut', build: () {
       final authBloc = MockAuthenticationBloc();
       whenListen(authBloc, Stream.fromIterable([Unauthenticated()]));
@@ -67,7 +75,7 @@ void main() {
       DbUninitialized(),
       DbNotLoaded(),
     ]);
-    final pathProvider = () async => Directory('.');
+
     blocTest('TrialLogin', build: () {
       final authBloc = MockAuthenticationBloc();
       // whenListen(authBloc, Stream.fromIterable([Unauthenticated()]));
@@ -79,9 +87,7 @@ void main() {
       bloc.add(TrialLogin(true));
     }, expect: [
       DbUninitialized(),
-      DbLoaded(
-          SembastDataRepository(createDb: true, pathProvider: pathProvider),
-          true),
+      DbLoaded(sembastCreate, true),
     ]);
     blocTest('TrialLogin from authBloc', build: () {
       final authBloc = MockAuthenticationBloc();
@@ -94,9 +100,7 @@ void main() {
       // bloc.add(TrialLogin(true));
     }, expect: [
       DbUninitialized(),
-      DbLoaded(
-          SembastDataRepository(createDb: false, pathProvider: pathProvider),
-          false),
+      DbLoaded(sembastOpen, false),
     ]);
   });
 }

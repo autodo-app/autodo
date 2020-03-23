@@ -12,7 +12,7 @@ import '../cars/barrel.dart';
 import '../repeating/barrel.dart';
 import '../notifications/barrel.dart';
 import '../database/barrel.dart';
-import 'package:autodo/localization.dart';
+import 'package:autodo/generated/localization.dart';
 
 class TodosBloc extends Bloc<TodosEvent, TodosState> {
   TodosBloc(

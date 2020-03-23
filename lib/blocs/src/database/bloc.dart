@@ -52,7 +52,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
   }
 
   Stream<DatabaseState> _mapUserLoggedInToState(event) async* {
-    final repository = FirebaseDataRepository(
+    final repository = await FirebaseDataRepository.open(
       firestoreInstance: _firestoreInstance,
       uuid: event.uuid,
     );
@@ -62,7 +62,6 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
   Stream<DatabaseState> _mapUserLoggedOutToState(event) async* {
     if (state is DbLoaded &&
         (state as DbLoaded).repository is SembastDataRepository) {
-      print('deleting db');
       await ((state as DbLoaded).repository as SembastDataRepository)
           .deleteDb();
     }
@@ -74,9 +73,8 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       print('ignoring outdated trial login event');
       return;
     }
-    final repo = SembastDataRepository(
+    final repo = await SembastDataRepository.open(
         createDb: event.newUser, pathProvider: pathProvider);
-    await repo.load();
     yield DbLoaded(repo, event.newUser);
   }
 

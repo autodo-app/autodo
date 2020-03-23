@@ -23,6 +23,8 @@ class Pubspec {
 
   static const bool versionIsPreRelease = false;
 
+  static const int db_version = 2;
+
   static const Map<dynamic, dynamic> environment = <dynamic, dynamic>{
     'sdk': '>=2.7.0 <3.0.0',
   };
@@ -314,7 +316,7 @@ class Pubspec {
   };
 
   static const List<String> authors = <String>[
-    'Jonathan Bayless <baylessj@purdue.edu>',
+    'Jonathan Bayless <baylessjonathan@gmail.com>',
     'David PHAM-VAN <dev.nfet.net@gmail.com>',
   ];
 
@@ -324,7 +326,7 @@ class Pubspec {
   ];
 
   static const List<String> authorsEmail = <String>[
-    'baylessj@purdue.edu',
+    'baylessjonathan@gmail.com',
     'dev.nfet.net@gmail.com',
   ];
 }

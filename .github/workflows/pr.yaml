@@ -6,34 +6,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-      with: 
+      with:
         submodules: true
     - uses: subosito/flutter-action@v1
       with:
-        # flutter-version: '1.13.6-pre.32'
         channel: 'dev'
     - run: flutter pub get
-    - run: flutter pub run json_intl -d lib/localization.dart
-    - run: flutter pub run pubspec_extract -d lib/screens/about/pubspec.dart
+    - run: flutter pub run json_intl -d lib/generated/localization.dart
+    - run: flutter pub run pubspec_extract -d lib/generated/pubspec.dart
     - run: flutter format .
     - uses: stefanzweifel/git-auto-commit-action@v2.5.0
       with:
         commit_message: Apply automatic changes
         branch: ${{ github.head_ref }}
-
-        # Optional git params
-        # commit_options: '--no-verify --signoff'
-
-        # Optional glob pattern of files which should be added to the commit
-        # file_pattern: src/\*.js
-
-        # Optional repository path
         repository: .
 
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    # - uses: bltavares/actions/dartfmt@master
-    #   with:
-    #     args: "autofix"
-    #   env:
-    #     GITHUB_TOKEN: "${{ secrets.TOKEN }}"

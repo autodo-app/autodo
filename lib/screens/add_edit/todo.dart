@@ -11,7 +11,7 @@ import 'package:autodo/blocs/blocs.dart';
 import 'package:json_intl/json_intl.dart';
 import 'forms/barrel.dart';
 import 'package:autodo/integ_test_keys.dart';
-import 'package:autodo/localization.dart';
+import 'package:autodo/generated/localization.dart';
 import 'package:autodo/util.dart';
 
 typedef _OnSaveCallback = Function(String name, DateTime dueDate,

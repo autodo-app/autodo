@@ -1,8 +1,9 @@
 name: autodo
 description: Car Maintenance Made Simple.
 version: 0.3.0+14
+db_version: 2
 authors:
-  - Jonathan Bayless <baylessj@purdue.edu>
+  - Jonathan Bayless <baylessjonathan@gmail.com>
   - David PHAM-VAN <dev.nfet.net@gmail.com>
 
 environment:
