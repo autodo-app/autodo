@@ -33,15 +33,15 @@ void main() {
         expect(DeleteTodo(Todo()).toString(), 'DeleteTodo { todo: ${Todo()} }');
       });
     });
-    group('UpdateDueDates', () {
+    group('CarsUpdated', () {
       test('props', () {
-        expect(UpdateDueDates([Car()]).props, [
+        expect(CarsUpdated([Car()]).props, [
           [Car()]
         ]);
       });
       test('toString', () {
-        expect(UpdateDueDates([Car()]).toString(),
-            'UpdateDueDates { cars: ${[Car()]} }');
+        expect(CarsUpdated([Car()]).toString(),
+            'CarsUpdated { cars: ${[Car()]} }');
       });
     });
     group('CompleteTodo', () {

@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:autodo/repositories/src/sembast_data_repository.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:mockito/mockito.dart';
@@ -6,6 +10,7 @@ import 'package:equatable/equatable.dart';
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/repositories/repositories.dart';
 import 'package:autodo/models/models.dart';
+import 'package:autodo/util.dart';
 
 // ignore: must_be_immutable
 class MockDataRepository extends Mock
@@ -21,7 +26,19 @@ class MockWriteBatch extends Mock implements WriteBatchWrapper {}
 
 class MockDbBloc extends Mock implements DatabaseBloc {}
 
-void main() {
+void clearDatabase(name) {
+  for (var f in Directory('.').listSync()) {
+    if (f.path.contains(name)) {
+      f.deleteSync();
+    }
+  }
+}
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  clearDatabase('todosBloc.db');
+  final sembastTodosDataRepository = await SembastDataRepository.open(createDb: true, dbPath: 'todosBloc.db', pathProvider: () async => Directory('.'));
+
   group('TodosBloc', () {
     group('Null Assertions', () {
       test('Null Database Bloc', () {
@@ -269,37 +286,38 @@ void main() {
         TodosLoaded([todo1.copyWith(completed: true)]),
       ],
     );
-    final car = Car(
+    final car1 = Car(
         id: '0',
         name: 'test',
-        mileage: 1000,
-        distanceRate: 1.0,
+        mileage: 1000);
+    final car2 = car1.copyWith(distanceRate: 1.0,
         lastMileageUpdate: DateTime.fromMillisecondsSinceEpoch(0).toUtc());
     final todo3 = Todo(
         id: '0', carName: 'test', dueMileage: 2000, estimatedDueDate: true);
+    final defaults = TodosBloc.defaults.asMap()
+        .map((k, t) => MapEntry(k, t.copyWith(id: '${k + 1}', carName: 'test', dueMileage: t.mileageRepeatInterval)))
+        .values.toList();
+    // TODO 275: figure out how to prompt this event to fire
+    // final defaultsUpdated = defaults.map((t) {
+    //   final distanceToTodo = t.dueMileage - car2.mileage;
+    //   final daysToTodo = (distanceToTodo / car2.distanceRate).round();
+    //   final timeToTodo = Duration(days: daysToTodo);
+    //   final newDueDate =
+    //       roundToDay(car2.lastMileageUpdate.toUtc()).add(timeToTodo).toLocal();
+    //   return t.copyWith(estimatedDueDate: true, dueDate: newDueDate);
+    // }).toList();
     blocTest(
-      'UpdateDueDates',
+      'CarsUpdated',
       build: () {
         final carsBloc = MockCarsBloc();
         whenListen(
             carsBloc,
             Stream.fromIterable([
-              CarsLoaded([car])
+              CarsLoaded([car1])
             ]));
-        final dataRepository = MockDataRepository();
-        when(dataRepository.todos()).thenAnswer((_) => Stream.fromIterable([
-              [todo3]
-            ]));
-        when(dataRepository.getCurrentTodos()).thenAnswer((_) async => [todo3]);
-        final writeBatch = MockWriteBatch();
-        when(writeBatch.updateData(todo3.id, dynamic))
-            .thenAnswer((_) => (_) => _);
-        when(writeBatch.commit()).thenAnswer((_) async {});
-        when(dataRepository.startTodoWriteBatch())
-            .thenAnswer((_) => writeBatch);
         final notificationsBloc = MockNotificationsBloc();
         final dbBloc = MockDbBloc();
-        when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
+        when(dbBloc.state).thenAnswer((_) => DbLoaded(sembastTodosDataRepository));
         return TodosBloc(
             dbBloc: dbBloc,
             carsBloc: carsBloc,
@@ -310,24 +328,15 @@ void main() {
       },
       expect: [
         TodosLoading(),
-        TodosLoaded([todo3]),
-        TodosLoaded([
-          todo3.copyWith(
-              dueDate: DateTime.parse('1972-09-27 00:00:00.000Z'),
-              estimatedDueDate: true)
-        ]),
+        TodosLoaded([]),
+        TodosLoaded(defaults),
       ],
     );
     blocTest(
       'CompletedTodo',
       build: () {
         final carsBloc = MockCarsBloc();
-        whenListen(
-            carsBloc,
-            Stream.fromIterable([
-              CarsLoaded([car])
-            ]));
-        when(carsBloc.state).thenAnswer((_) => CarsLoaded([car]));
+        when(carsBloc.state).thenAnswer((_) => CarsLoaded([car1]));
 
         final dataRepository = MockDataRepository();
         when(dataRepository.todos()).thenAnswer((_) => Stream.fromIterable([

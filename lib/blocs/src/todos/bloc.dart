@@ -35,7 +35,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     });
     _carsSubscription = _carsBloc.listen((state) {
       if (state is CarsLoaded) {
-        add(UpdateDueDates(state.cars));
+        add(CarsUpdated(state.cars));
       }
     });
   }
@@ -46,6 +46,24 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
 
   final NotificationsBloc _notificationsBloc;
 
+  static final List<Todo> defaults = [
+    // TODO: Translate this
+    Todo(name: 'oil', mileageRepeatInterval: 3500, completed: false),
+    Todo(name: 'tireRotation', mileageRepeatInterval: 7500, completed: false),
+    Todo(name: 'engineFilter', mileageRepeatInterval: 45000, completed: false),
+    Todo(name: 'wiperBlades', mileageRepeatInterval: 30000, completed: false),
+    Todo(name: 'alignmentCheck', mileageRepeatInterval: 40000, completed: false),
+    Todo(name: 'cabinFilter', mileageRepeatInterval: 45000, completed: false),
+    Todo(name: 'tires', mileageRepeatInterval: 50000, completed: false),
+    Todo(name: 'brakes', mileageRepeatInterval: 60000, completed: false),
+    Todo(name: 'sparkPlugs', mileageRepeatInterval: 60000, completed: false),
+    Todo(name: 'frontStruts', mileageRepeatInterval: 75000, completed: false),
+    Todo(name: 'rearStruts', mileageRepeatInterval: 75000, completed: false),
+    Todo(name: 'battery', mileageRepeatInterval: 75000, completed: false),
+    Todo(name: 'serpentineBelt', mileageRepeatInterval: 150000, completed: false),
+    Todo(name: 'transmissionFluid', mileageRepeatInterval: 100000, completed: false),
+    Todo(name: 'coolantChange', mileageRepeatInterval: 100000, completed: false)
+  ];
 
   StreamSubscription _dataSubscription,
       _carsSubscription,
@@ -72,10 +90,10 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       yield* _mapDeleteTodoToState(event);
     } else if (event is ToggleAll) {
       yield* _mapToggleAllToState();
-    } else if (event is UpdateDueDates) {
-      yield* _mapUpdateDueDatesToState(event);
     } else if (event is CompleteTodo) {
       yield* _mapCompleteTodoToState(event);
+    } else if (event is CarsUpdated) {
+      yield* _mapCarsUpdatedToState(event);
     }
   }
 
@@ -104,7 +122,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
 
   Todo _updateDueDate(car, todo, batch) {
     final distanceToTodo = todo.dueMileage - car.mileage;
-    final int daysToTodo = (distanceToTodo / car.distanceRate).round();
+    final daysToTodo = (distanceToTodo / car.distanceRate).round();
     final timeToTodo = Duration(days: daysToTodo);
     final newDueDate =
         roundToDay(car.lastMileageUpdate.toUtc()).add(timeToTodo).toLocal();
@@ -121,31 +139,54 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
 
   bool _shouldUpdate(car, t) =>
       t.carName == car.name &&
-      (t.estimatedDueDate ?? false) &&
+      (t.estimatedDueDate ?? true) &&
       !(t.completed ?? false);
 
-  Stream<TodosState> _mapUpdateDueDatesToState(UpdateDueDates event) async* {
-    final cars = event.cars;
-    if (cars == null ||
-        cars.isEmpty ||
-        !(state is TodosLoaded) ||
-        repo == null) {
+  Stream<TodosState> _mapCarsUpdatedToState(CarsUpdated event) async* {
+    if (repo == null) {
+      print('Error: trying to update todos for cars update but repo is null');
+      return;
+    } else if (!(state is TodosLoaded)) {
+      print(
+          'Cannot update in response to cars loaded when state is not TodosLoaded');
       return;
     }
-
-    final TodosLoaded curState = state;
+    final cars = event.cars;
+    final curTodos = (state as TodosLoaded).todos;
     final batch = await repo.startTodoWriteBatch();
-    List<Todo> updatedTodos;
-    for (var car in cars) {
-      if (_carsCache?.contains(car) ?? false) continue;
 
-      updatedTodos = curState.todos
-          .map((t) => _shouldUpdate(car, t) ? _updateDueDate(car, t, batch) : t)
-          .toList();
-      yield TodosLoaded(updatedTodos);
-      _carsCache = cars;
-      await batch.commit();
+    // Add default todos to any new cars
+    final newCars = cars
+        .map((c) => curTodos.any((r) => r.carName == c.name) ? null : c)
+        .toList();
+    newCars.removeWhere((c) => c == null);
+    if (newCars.isNotEmpty) {
+      newCars.forEach((c) {
+        defaults.forEach((t) {
+          final dueMileage = (t.mileageRepeatInterval < c.mileage) ? (c.mileage + t.mileageRepeatInterval) : t.mileageRepeatInterval;
+          final newTodo = t.copyWith(carName: c.name, dueMileage: dueMileage);
+          batch.setData(newTodo.toDocument());
+        });
+      });
     }
+
+    // Update the dueDate based on the car's distance rate
+    cars.forEach((car) {
+      // only using existing todos here because the defaults don't have ID values
+      // yet. Additionally, any default todos that are added will be given to a
+      // new car that will not yet have a distanceRate established
+      curTodos.forEach((t) {
+        if(_shouldUpdate(car, t)){
+          _updateDueDate(car, t, batch);
+        }
+      });
+    });
+
+    // need to wait on this, otherwise the "currentTodos" call will return the
+    // old state
+    await batch.commit();
+    final updatedTodos = await repo.getCurrentTodos(); // replace them here for ID vals
+    yield TodosLoaded(updatedTodos);
   }
 
   Stream<TodosState> _mapAddTodoToState(AddTodo event) async* {
@@ -183,11 +224,11 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       var updatedTodos = (state as TodosLoaded).todos;
 
       // TODO 275: add a new todp here if its interval aren't null
-      // final RepeatsLoaded curRepeatsState = _repeatsBloc.state;
-      // final curRepeat = curRepeatsState.repeats
-      //     .firstWhere((r) => r.name == curTodo.repeatName, orElse: () => null);
-      // if (!curRepeat.props.every((p) => p == null)) {
-      //   final newTodo = _createNewTodoFromRepeat(curRepeat, curTodo);
+      // final TodosLoaded curTodosState = _TodosBloc.state;
+      // final curTodo = curTodosState.Todos
+      //     .firstWhere((r) => r.name == curTodo.TodoName, orElse: () => null);
+      // if (!curTodo.props.every((p) => p == null)) {
+      //   final newTodo = _createNewTodoFromTodo(curTodo, curTodo);
       //   updatedTodos = updatedTodos..add(newTodo);
       //   await repo.addNewTodo(newTodo);
       // }
@@ -231,45 +272,6 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       await batch.commit();
     }
   }
-
-  // Stream<TodosState> _mapRepeatsRefreshToState(RepeatsRefresh event) async* {
-  //   // TODO figure out what was/wasn't updated based on metadata?
-  //   // new repeats, updated repeats, and deleted repeats affect this
-  //   // TODO currently not removing todos with a deleted repeat
-  //   final todos = (state is TodosLoaded) ? (state as TodosLoaded).todos : [];
-  //   final cars = (_carsBloc.state as CarsLoaded).cars;
-  //   final batch = await repo.startTodoWriteBatch();
-  //   for (var r in event.repeats) {
-  //     if (todos.isNotEmpty && todos.any((t) => _todoIsOpenForRepeat(t, r))) {
-  //       // there is already an open todo for this repeat so redo the durMileage
-  //       // calc
-  //       final Todo upcoming =
-  //           todos.firstWhere((t) => _todoIsOpenForRepeat(t, r));
-  //       final updated = upcoming.copyWith(
-  //           dueMileage: _calculateNextTodo(
-  //               todos.where((t) => t.repeatName == r.name).toList(),
-  //               r.mileageInterval));
-
-  //       batch.updateData(updated.id, updated.toDocument());
-  //     } else {
-  //       // create a new todo for the repeat
-  //       final c = cars.firstWhere((c) => c.name == r.cars[0]);
-  //       final dueMileage = (r.mileageInterval > c.mileage)
-  //           ? r.mileageInterval
-  //           : c.mileage + r.mileageInterval;
-  //       final upcoming = Todo(
-  //           name: r.name,
-  //           carName: c.name,
-  //           repeatName: r.name,
-  //           dueMileage: dueMileage,
-  //           completed: false);
-  //       batch.setData(upcoming.toDocument());
-  //     }
-  //   }
-  //   await batch.commit();
-  //   final updatedTodos = await repo.getCurrentTodos();
-  //   yield TodosLoaded(updatedTodos);
-  // }
 
   @override
   Future<void> close() {

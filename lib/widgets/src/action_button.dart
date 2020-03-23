@@ -48,7 +48,6 @@ class _AutodoActionButtonState extends State<AutodoActionButton>
       'semanticLabel': 'Add Refueling',
     },
     {'data': Icons.build, 'semanticLabel': 'Add ToDo'},
-    {'data': Icons.autorenew, 'semanticLabel': 'Add Repeat'},
   ];
 
   @override

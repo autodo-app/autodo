@@ -25,13 +25,14 @@ class MockAuthenticationBloc
 class MockDatabaseBloc extends MockBloc<DatabaseEvent, DatabaseState>
     implements DatabaseBloc {}
 
-class MockTodosBloc extends Mock implements TodosBloc {}
+class MockTodosBloc extends MockBloc<TodosEvent, TodosState> implements TodosBloc {}
 
 // ignore: must_be_immutable
 class MockRepo extends Mock implements DataRepository {}
 
 void main() {
   BasePrefService pref;
+  final todosLoaded = TodosLoaded([Todo(name: 'oil', mileageRepeatInterval: 3500), Todo(name: 'tireRotation', mileageRepeatInterval: 7500)]);
 
   setUp(() async {
     pref = JustCachePrefService();
@@ -49,7 +50,6 @@ void main() {
         authBloc, Stream.fromIterable([RemoteAuthenticated('', '', false)]));
     when(authBloc.state).thenReturn(RemoteAuthenticated('', '', false));
     final dbBloc = MockDatabaseBloc();
-    // whenListen(dbBloc, Stream.fromIterable([DbLoaded(MockRepo())]));
     when(dbBloc.state).thenReturn(DbLoaded(MockRepo(), true));
     testWidgets('mileage', (tester) async {
       await tester.pumpWidget(
@@ -88,6 +88,7 @@ void main() {
     });
     testWidgets('set repeats', (tester) async {
       final todosBloc = MockTodosBloc();
+      when(todosBloc.state).thenReturn(todosLoaded);
       final carsBloc = MockCarsBloc();
       when(carsBloc.state).thenReturn(CarsLoaded([Car(name: 'test')]));
       await tester.pumpWidget(
@@ -116,6 +117,7 @@ void main() {
     });
     testWidgets('set repeats back', (tester) async {
       final todosBloc = MockTodosBloc();
+      when(todosBloc.state).thenReturn(TodosLoaded([Todo(name: 'oil'), Todo(name: 'tireRotation')]));
       final carsBloc = MockCarsBloc();
       when(carsBloc.state).thenReturn(CarsLoaded([Car(name: 'test')]));
       await tester.pumpWidget(
@@ -147,8 +149,11 @@ void main() {
     });
     testWidgets('set repeats next', (tester) async {
       final todosBloc = MockTodosBloc();
+      whenListen(todosBloc, Stream.fromIterable([todosLoaded]));
+      when(todosBloc.state).thenReturn(todosLoaded);
       final carsBloc = MockCarsBloc();
       when(carsBloc.state).thenReturn(CarsLoaded([Car(name: 'test')]));
+      final homeKey = GlobalKey();
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
@@ -160,7 +165,7 @@ void main() {
                 BlocProvider<TodosBloc>.value(value: todosBloc),
               ],
               child: MaterialApp(home: NewUserScreen(), routes: {
-                AutodoRoutes.home: (context) => Container(),
+                AutodoRoutes.home: (context) => Container(key: homeKey),
               })),
         ),
       );
@@ -178,7 +183,7 @@ void main() {
       expect(find.byType(SetRepeatsScreen), findsOneWidget);
       await tester.tap(find.text(IntlKeys.next));
       await tester.pumpAndSettle();
-      expect(find.byType(Container), findsOneWidget);
+      expect(find.byKey(homeKey), findsOneWidget);
     });
   });
 }

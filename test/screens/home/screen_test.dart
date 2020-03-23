@@ -211,49 +211,6 @@ void main() {
         await tester.pumpAndSettle();
         expect(find.byType(TodoAddEditScreen), findsOneWidget);
       });
-      testWidgets('repeat', (WidgetTester tester) async {
-        when(todosBloc.state).thenAnswer((_) => TodosLoaded([]));
-        when(tabBloc.state).thenAnswer((_) => AppTab.todos);
-        final scaffoldKey = Key('scaffold');
-        final carsBloc = MockCarsBloc();
-        when(carsBloc.state).thenReturn(CarsLoaded([Car(name: 'test')]));
-        whenListen(
-            carsBloc,
-            Stream.fromIterable([
-              CarsLoaded([Car(name: 'test')])
-            ]));
-        await tester.pumpWidget(
-          ChangeNotifierProvider<BasePrefService>.value(
-            value: pref,
-            child: MultiBlocProvider(
-              providers: [
-                BlocProvider<TodosBloc>.value(
-                  value: todosBloc,
-                ),
-                BlocProvider<FilteredTodosBloc>.value(
-                  value: filteredTodosBloc,
-                ),
-                BlocProvider<TabBloc>.value(
-                  value: tabBloc,
-                ),
-                BlocProvider<CarsBloc>.value(value: carsBloc),
-                BlocProvider<PaidVersionBloc>.value(value: paidBloc),
-                BlocProvider<RefuelingsBloc>.value(value: refuelingsBloc),
-              ],
-              child: MaterialApp(
-                home: Scaffold(
-                  body: HomeScreen(key: scaffoldKey),
-                ),
-              ),
-            ),
-          ),
-        );
-        await tester.pumpAndSettle();
-        await tester.tap(find.byKey(IntegrationTestKeys.mainFab));
-        await tester.pumpAndSettle();
-        await tester.tap(find.byKey(IntegrationTestKeys.fabKeys[2]));
-        await tester.pumpAndSettle();
-      });
     });
   });
 }
