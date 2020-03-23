@@ -11,7 +11,7 @@ import '../../../../widgets/widgets.dart';
 import 'shared.dart';
 
 class FuelMileageChart extends StatelessWidget {
-  const FuelMileageChart(this.seriesList, this.animate);
+  const FuelMileageChart(this.seriesList, {this.animate});
 
   final List<Series<FuelMileagePoint, DateTime>> seriesList;
 
@@ -129,7 +129,7 @@ class _FuelMileageHistoryState extends State<FuelMileageHistory> {
           Container(
             height: 300,
             padding: EdgeInsets.all(15),
-            child: FuelMileageChart(data, false),
+            child: FuelMileageChart(data),
           ),
           Text(
             JsonIntl.of(context).get(IntlKeys.refuelingDate),
