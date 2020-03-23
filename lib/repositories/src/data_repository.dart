@@ -53,6 +53,9 @@ abstract class DataRepository extends Equatable {
   // Paid or Ad-supported version
   Future<bool> getPaidStatus();
 
+  @deprecated
+  Future<List<Map<String, dynamic>>> getRepeats();
+
   Future<void> upgrade(int curVer, int desVer) async {
     if (curVer == 1 && desVer == 2) {
       // Move to SI units internally
@@ -94,18 +97,18 @@ abstract class DataRepository extends Equatable {
         carWriteBatch.updateData(c.id, c.toDocument());
       });
       await carWriteBatch.commit();
-
-      // TODO 275: pull the repeat content directly from db without a model?
-      // final repeats = await getCurrentRepeats();
-      // final repeatWriteBatch = await startRepeatWriteBatch();
-      // repeats.map((r) {
-      //   final mileageInterval = Distance(DistanceUnit.imperial, Locale('en-us'))
-      //       .unitToInternal(r.mileageInterval);
-      //   return r.copyWith(mileageInterval: mileageInterval);
-      // }).forEach((r) {
-      //   repeatWriteBatch.updateData(r.id, r.toDocument());
-      // });
-      // await repeatWriteBatch.commit();
+    }
+    if (curVer < 3 && desVer == 3) {
+      // Remove Repeats in favor of new Todo fields
+      final repeats = await getRepeats(); // ignore:deprecated_member_use_from_same_package
+      final todos = await getCurrentTodos();
+      final batch = await startTodoWriteBatch();
+      repeats.forEach((r) {
+        final todo = todos.firstWhere((t) => t.name == r['name'] && !t.completed);
+        final updatedTodo = todo.copyWith(mileageRepeatInterval: r['mileageInterval'], dateRepeatInterval: r['dateInterval']);
+        batch.updateData(updatedTodo.id, updatedTodo.toDocument());
+      });
+      await batch.commit();
     }
   }
 }

@@ -19,6 +19,7 @@ class Todo extends Equatable {
       this.completed,
       this.estimatedDueDate,
       this.completedDate,
+      this.completedMileage,
       this.dueDate});
 
   factory Todo.fromSnapshot(DocumentSnapshot snap) {
@@ -39,6 +40,7 @@ class Todo extends Equatable {
       completedDate: (snap.data['completedDate'] == null)
           ? null
           : DateTime.fromMillisecondsSinceEpoch(snap.data['completedDate']),
+      completedMileage: (snap.data['completedMileage'] as num)?.toDouble(),
       dueDate: (snap.data['dueDate'] == null)
           ? null
           : DateTime.fromMillisecondsSinceEpoch(snap.data['dueDate']),
@@ -63,6 +65,7 @@ class Todo extends Equatable {
       completedDate: (snap.value['completedDate'] == null)
           ? null
           : DateTime.fromMillisecondsSinceEpoch(snap.value['completedDate']),
+      completedMileage: (snap.value['completedMileage'] as num)?.toDouble(),
       dueDate: (snap.value['dueDate'] == null)
           ? null
           : DateTime.fromMillisecondsSinceEpoch(snap.value['dueDate']),
@@ -84,6 +87,9 @@ class Todo extends Equatable {
 
   /// The car mileage distance when this ToDo action should be done.
   final double dueMileage;
+
+  /// The car mileage distance when this ToDo action was completed.
+  final double completedMileage;
 
   /// The id value for the local notification corresponding to this action.
   final int notificationID;
@@ -123,6 +129,7 @@ class Todo extends Equatable {
       bool completed,
       bool estimatedDueDate,
       DateTime completedDate,
+      double completedMileage,
       DateTime dueDate}) {
     return Todo(
         id: id ?? this.id,
@@ -136,6 +143,7 @@ class Todo extends Equatable {
         completed: completed ?? this.completed,
         estimatedDueDate: estimatedDueDate ?? this.estimatedDueDate,
         completedDate: completedDate ?? this.completedDate,
+        completedMileage: completedMileage ?? this.completedMileage,
         dueDate: dueDate ?? this.dueDate);
   }
 
@@ -152,6 +160,7 @@ class Todo extends Equatable {
         completed,
         estimatedDueDate,
         completedDate?.toUtc(),
+        completedMileage,
         dueDate?.toUtc()
       ];
 
@@ -163,7 +172,8 @@ class Todo extends Equatable {
         'dateRepeatInterval: $dateRepeatInterval, '
         'notificationID: $notificationID, completed: '
         '$completed, estimatedDueDate: $estimatedDueDate, completedDate: '
-        '${completedDate?.toUtc()}, dueDate: ${dueDate?.toUtc()} }';
+        '${completedDate?.toUtc()}, completedMileage: $completedMileage, '
+        'dueDate: ${dueDate?.toUtc()} }';
   }
 
   Map<String, Object> toDocument() {
@@ -178,6 +188,7 @@ class Todo extends Equatable {
       'completed': completed,
       'estimatedDueDate': estimatedDueDate,
       'completedDate': completedDate?.millisecondsSinceEpoch,
+      'completedMileage': completedMileage,
       'dueDate': dueDate?.millisecondsSinceEpoch
     };
   }

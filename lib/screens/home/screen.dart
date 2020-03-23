@@ -95,12 +95,14 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
             builder: (context) => _ScreenWithBanner(
                     child: TodoAddEditScreen(
                   isEditing: false,
-                  onSave: (n, d, m, c) {
+                  onSave: (n, d, m, c, mR, dR) {
                     BlocProvider.of<TodosBloc>(context).add(AddTodo(Todo(
                         name: n,
                         dueDate: d,
                         dueMileage: m,
                         carName: c,
+                        mileageRepeatInterval: mR,
+                        dateRepeatInterval: dR,
                         completed: false)));
                   },
                 ))),

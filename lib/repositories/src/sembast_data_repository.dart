@@ -311,6 +311,14 @@ class SembastDataRepository extends DataRepository {
     return out;
   }
 
+  @override
+  Future<List<Map<String, dynamic>>> getRepeats() async {
+    await dbLock.acquire();
+    final db = await _openDb();
+    final repeats = await StoreRef('repeats').find(db);
+    return repeats.map((r) => r.value).toList();
+  }
+
   Future<void> deleteDb() async {
     await dbFactory.deleteDatabase(await _getFullFilePath());
   }

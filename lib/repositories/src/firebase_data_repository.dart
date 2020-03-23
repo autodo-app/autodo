@@ -50,8 +50,6 @@ class FirebaseDataRepository extends DataRepository {
 
   CollectionReference get _cars => _userDoc.collection('cars');
 
-  CollectionReference get _repeats => _userDoc.collection('repeats');
-
   @override
   Future<void> addNewTodo(Todo todo) {
     return _todos.add(todo.toDocument());
@@ -172,10 +170,16 @@ class FirebaseDataRepository extends DataRepository {
   }
 
   @override
+  Future<List<Map<String, dynamic>>> getRepeats() async {
+    final snap = await _userDoc.collection('repeats').getDocuments();
+    return snap.documents.map((d) => d.data).toList();
+  }
+
+  @override
   List<Object> get props => [_firestoreInstance, _uuid];
 
   @override
   String toString() => 'FirebaseDataRepository { firestoreInstance: '
       '$_firestoreInstance, uuid: $_uuid, userDoc: $_userDoc, todos: '
-      '$_todos, refuelings: $_refuelings, cars: $_cars, repeats: $_repeats }';
+      '$_todos, refuelings: $_refuelings, cars: $_cars }';
 }

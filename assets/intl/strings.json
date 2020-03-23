@@ -140,5 +140,11 @@
   "volume_unit": "Fuel volume unit",
   "welcome_desc": "Car maintenance made simple.",
   "welcome": "Welcome to auToDo!",
-  "yes": "Yes"
+  "yes": "Yes",
+  "never": "Never",
+  "weekly": "Weekly",
+  "monthly": "Monthly",
+  "yearly": "Yearly",
+  "custom": "Custom",
+  "repeat_caps": "REPEAT"
 }

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:autodo/screens/add_edit/forms/repeat_interval.dart';
 import 'package:autodo/units/units.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,7 +16,7 @@ import 'package:autodo/generated/localization.dart';
 import 'package:autodo/util.dart';
 
 typedef _OnSaveCallback = Function(String name, DateTime dueDate,
-    double dueMileage, String carName);
+    double dueMileage, String carName, double mileageRepeatInterval, Duration dateRepeatInterval);
 
 class _NameForm extends StatelessWidget {
   const _NameForm({this.todo, this.onSaved, this.node, this.nextNode});
@@ -284,6 +285,8 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
   DateTime _dueDate;
   double _dueMileage;
   String _name, _car;
+  double _mileageInterval;
+  Duration _dateInterval;
 
   bool get isEditing => widget.isEditing;
 
@@ -373,7 +376,12 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
                     Padding(
                       padding: EdgeInsets.only(bottom: 15),
                     ),
-// TODO 275: Add a field here for date/mileage interval
+                    RepeatIntervalSelector(
+                      existingTodo: widget.todo,
+                      onSaved: (mileageInterval, dateInterval) {
+                      _mileageInterval = mileageInterval;
+                      _dateInterval = dateInterval;
+                    }),
                     Padding(
                       padding: EdgeInsets.only(bottom: 15),
                     ),
@@ -417,7 +425,7 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
           onPressed: () {
             if (_formKey.currentState.validate()) {
               _formKey.currentState.save();
-              widget.onSave(_name, _dueDate, _dueMileage, _car);
+              widget.onSave(_name, _dueDate, _dueMileage, _car, _mileageInterval, _dateInterval);
               Navigator.pop(context);
             }
           },

@@ -10,7 +10,6 @@ import 'package:equatable/equatable.dart';
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/repositories/repositories.dart';
 import 'package:autodo/models/models.dart';
-import 'package:autodo/util.dart';
 
 // ignore: must_be_immutable
 class MockDataRepository extends Mock
@@ -289,15 +288,15 @@ Future<void> main() async {
     final car1 = Car(
         id: '0',
         name: 'test',
-        mileage: 1000);
-    final car2 = car1.copyWith(distanceRate: 1.0,
-        lastMileageUpdate: DateTime.fromMillisecondsSinceEpoch(0).toUtc());
+        mileage: 1000,
+        lastMileageUpdate: DateTime.fromMillisecondsSinceEpoch(0),
+        distanceRate: 1.0);
     final todo3 = Todo(
-        id: '0', carName: 'test', dueMileage: 2000, estimatedDueDate: true);
+        id: '0', carName: 'test', dueMileage: 1000, estimatedDueDate: true, mileageRepeatInterval: 1000);
     final defaults = TodosBloc.defaults.asMap()
         .map((k, t) => MapEntry(k, t.copyWith(id: '${k + 1}', carName: 'test', dueMileage: t.mileageRepeatInterval)))
         .values.toList();
-    // TODO 275: figure out how to prompt this event to fire
+    // TODO: figure out how to prompt this event to fire
     // final defaultsUpdated = defaults.map((t) {
     //   final distanceToTodo = t.dueMileage - car2.mileage;
     //   final daysToTodo = (distanceToTodo / car2.distanceRate).round();
@@ -332,6 +331,7 @@ Future<void> main() async {
         TodosLoaded(defaults),
       ],
     );
+    final completedTodos = [todo3];
     blocTest(
       'CompletedTodo',
       build: () {
@@ -342,12 +342,15 @@ Future<void> main() async {
         when(dataRepository.todos()).thenAnswer((_) => Stream.fromIterable([
               [todo3]
             ]));
-        when(dataRepository.getCurrentTodos()).thenAnswer((_) async => [todo3]);
-        when(dataRepository.addNewTodo(todo3)).thenAnswer((_) async {});
-        when(dataRepository.updateTodo(todo3)).thenAnswer((_) async {});
+        when(dataRepository.getCurrentTodos()).thenAnswer((_) async => completedTodos);
+        // when(dataRepository.addNewTodo(todo3)).thenAnswer((_) async {});
+        // when(dataRepository.updateTodo(todo3)).thenAnswer((_) async {});
         final writeBatch = MockWriteBatch();
         when(writeBatch.updateData(todo3.id, dynamic))
-            .thenAnswer((_) => (_) => _);
+            .thenAnswer((invoke) {
+              print(invoke.positionalArguments[1]);
+              completedTodos[0] = invoke.positionalArguments[1];});
+        when(writeBatch.setData(dynamic)).thenAnswer((invoke) {completedTodos.add(invoke.positionalArguments[0]);});
         when(writeBatch.commit()).thenAnswer((_) async {});
         when(dataRepository.startTodoWriteBatch())
             .thenAnswer((_) => writeBatch);
@@ -370,8 +373,15 @@ Future<void> main() async {
         TodosLoaded([
           todo3.copyWith(
               completed: true,
-              completedDate: DateTime.fromMillisecondsSinceEpoch(0))
+              completedDate: DateTime.fromMillisecondsSinceEpoch(0),
+              completedMileage: car1.mileage),
+          todo3.copyWith(
+            dueMileage: 2000,
+            dueDate: DateTime.fromMillisecondsSinceEpoch(0).add(Duration(days: 1000)),
+            estimatedDueDate: true
+          )
         ]),
+        TodosLoaded([todo3]), // the database doesn't update properly in unit tests so it will overwrite the correct value
       ],
     );
     blocTest(

@@ -568,4 +568,28 @@ class IntlKeys {
   /// strings.json: 'Yes'
   /// strings-fr.json: 'Oui'
   static const yes = 'yes';
+
+  /// strings.json: 'Never'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const never = 'never';
+
+  /// strings.json: 'Weekly'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const weekly = 'weekly';
+
+  /// strings.json: 'Monthly'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const monthly = 'monthly';
+
+  /// strings.json: 'Yearly'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const yearly = 'yearly';
+
+  /// strings.json: 'Custom'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const custom = 'custom';
+
+  /// strings.json: 'REPEAT'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const repeatCaps = 'repeat_caps';
 }
