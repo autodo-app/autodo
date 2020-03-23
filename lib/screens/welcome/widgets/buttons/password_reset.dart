@@ -1,11 +1,11 @@
-import 'package:autodo/repositories/repositories.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:autodo/blocs/blocs.dart';
-import 'package:autodo/generated/localization.dart';
-import 'package:autodo/theme.dart';
 import 'package:json_intl/json_intl.dart';
+
+import '../../../../blocs/blocs.dart';
+import '../../../../generated/localization.dart';
+import '../../../../repositories/repositories.dart';
+import '../../../../theme.dart';
 
 class _PasswordResetDialog extends StatefulWidget {
   const _PasswordResetDialog(Key key, this.email, this.authRepository)

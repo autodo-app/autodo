@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:autodo/models/models.dart';
-import 'package:autodo/generated/localization.dart';
 import 'package:json_intl/json_intl.dart';
+
+import '../../generated/localization.dart';
+import '../../models/models.dart';
 
 class DeleteTodoSnackBar extends SnackBar {
   DeleteTodoSnackBar({

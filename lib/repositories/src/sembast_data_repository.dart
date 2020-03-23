@@ -1,14 +1,15 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:semaphore/semaphore.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
-import 'package:flutter/material.dart';
-import 'package:semaphore/semaphore.dart';
 
-import 'package:autodo/generated/pubspec.dart';
-import 'package:autodo/models/models.dart';
+import '../../generated/pubspec.dart';
+import '../../models/models.dart';
+import '../repositories.dart';
 import 'data_repository.dart';
 import 'sembast_write_batch.dart';
 import 'write_batch_wrapper.dart';

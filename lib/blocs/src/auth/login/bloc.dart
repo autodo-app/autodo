@@ -14,15 +14,15 @@
 
 import 'dart:async';
 
-import 'package:autodo/repositories/repositories.dart';
-import 'package:flutter/foundation.dart';
 import 'package:bloc/bloc.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../../../../repositories/repositories.dart';
+import '../../../validators.dart';
 import '../barrel.dart';
-import 'package:autodo/blocs/validators.dart';
 import 'event.dart';
 import 'state.dart';
 

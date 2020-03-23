@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:autodo/blocs/blocs.dart';
-import 'package:autodo/generated/localization.dart';
 import 'package:json_intl/json_intl.dart';
+
+import '../../../../blocs/blocs.dart';
+import '../../../../generated/localization.dart';
 
 class EmailForm extends StatelessWidget {
   const EmailForm({this.onSaved, this.node, this.nextNode, this.login = true});

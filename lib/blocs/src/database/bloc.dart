@@ -1,15 +1,15 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:autodo/repositories/src/sembast_data_repository.dart';
 import 'package:bloc/bloc.dart';
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
-import 'package:autodo/repositories/repositories.dart';
+import '../../../repositories/repositories.dart';
+import '../../../repositories/src/sembast_data_repository.dart';
+import '../auth/barrel.dart';
 import 'event.dart';
 import 'state.dart';
-import '../auth/barrel.dart';
 
 class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
   DatabaseBloc(

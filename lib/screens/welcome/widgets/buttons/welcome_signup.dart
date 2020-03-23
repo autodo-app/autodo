@@ -1,8 +1,8 @@
-import 'package:autodo/generated/localization.dart';
 import 'package:flutter/material.dart';
-
-import 'package:autodo/routes.dart';
 import 'package:json_intl/json_intl.dart';
+
+import '../../../../generated/localization.dart';
+import '../../../../routes.dart';
 
 class SignupButton extends StatelessWidget {
   const SignupButton({Key key, this.buttonPadding}) : super(key: key);

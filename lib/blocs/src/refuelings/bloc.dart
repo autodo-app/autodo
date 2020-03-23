@@ -1,13 +1,13 @@
 import 'dart:async';
 
-import 'package:autodo/blocs/blocs.dart';
-import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 
+import '../../../models/models.dart';
+import '../../../repositories/repositories.dart';
+import '../../blocs.dart';
 import 'event.dart';
 import 'state.dart';
-import 'package:autodo/repositories/repositories.dart';
-import 'package:autodo/models/models.dart';
 
 class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
   RefuelingsBloc({@required dbBloc})

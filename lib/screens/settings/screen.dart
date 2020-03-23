@@ -1,12 +1,12 @@
-import 'package:autodo/generated/localization.dart';
-import 'package:autodo/units/units.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:autodo/blocs/blocs.dart';
-import 'package:autodo/routes.dart';
 import 'package:json_intl/json_intl.dart';
 import 'package:preferences/preferences.dart';
+
+import '../../blocs/blocs.dart';
+import '../../generated/localization.dart';
+import '../../routes.dart';
+import '../../units/units.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override

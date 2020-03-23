@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:autodo/models/models.dart';
+import '../../../models/models.dart';
 
 abstract class RepeatsState extends Equatable {
   const RepeatsState();

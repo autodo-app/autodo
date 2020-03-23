@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:autodo/blocs/blocs.dart';
-import 'package:autodo/widgets/widgets.dart';
-import 'package:autodo/models/models.dart';
+import '../../../blocs/blocs.dart';
+import '../../../models/models.dart';
+import '../../../widgets/widgets.dart';
 
 class TodoDeleteButton extends StatelessWidget {
   const TodoDeleteButton({Key key, @required this.todo}) : super(key: key);
