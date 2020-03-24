@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:sembast/sembast.dart';
 
+import 'repeat_interval.dart';
+
 @immutable
 class Todo extends Equatable {
   const Todo(
@@ -32,8 +34,11 @@ class Todo extends Equatable {
           : TodoDueState.values[snap.data['dueState']],
       dueMileage: (snap.data['dueMileage'] as num)?.toDouble(),
       mileageRepeatInterval: (snap.data['mileageRepeatInterval'] as num)?.toDouble(),
-      dateRepeatInterval: (snap.data['dateRepeatInterval'] == null) ? null :
-        Duration(days: snap.data['dateRepeatInterval'] as int),
+      dateRepeatInterval: RepeatInterval(
+        days: snap.data['dateRepeatIntervalDays'],
+        months: snap.data['dateRepeatIntervalMonths'],
+        years: snap.data['dateRepeatIntervalYears'],
+      ),
       notificationID: snap.data['notificationID'] as int,
       completed: snap.data['completed'] as bool,
       estimatedDueDate: snap.data['estimatedDueDate'] as bool,
@@ -57,8 +62,11 @@ class Todo extends Equatable {
           : TodoDueState.values[snap.value['dueState']],
       dueMileage: snap.value['dueMileage'] as double,
       mileageRepeatInterval: (snap.value['mileageRepeatInterval'] as num)?.toDouble(),
-      dateRepeatInterval: (snap.value['dateRepeatInterval'] == null) ? null :
-        Duration(days: snap.value['dateRepeatInterval'] as int),
+      dateRepeatInterval: RepeatInterval(
+        days: snap.value['dateRepeatIntervalDays'],
+        months: snap.value['dateRepeatIntervalMonths'],
+        years: snap.value['dateRepeatIntervalYears'],
+      ),
       notificationID: snap.value['notificationID'] as int,
       completed: snap.value['completed'] as bool,
       estimatedDueDate: snap.value['estimatedDueDate'] as bool,
@@ -115,7 +123,7 @@ class Todo extends Equatable {
 
   /// The time interval when this action should recur. If null then this ToDo
   /// is either recurring by distance or is a one-off task.
-  final Duration dateRepeatInterval;
+  final RepeatInterval dateRepeatInterval;
 
   Todo copyWith(
       {String id,
@@ -124,7 +132,7 @@ class Todo extends Equatable {
       TodoDueState dueState,
       double dueMileage,
       double mileageRepeatInterval,
-      Duration dateRepeatInterval,
+      RepeatInterval dateRepeatInterval,
       int notificationID,
       bool completed,
       bool estimatedDueDate,
@@ -183,7 +191,9 @@ class Todo extends Equatable {
       'dueState': dueState?.index,
       'dueMileage': dueMileage,
       'mileageRepeatInterval': mileageRepeatInterval,
-      'dateRepeatInterval': dateRepeatInterval?.inDays,
+      'dateRepeatIntervalDays': dateRepeatInterval.days,
+      'dateRepeatIntervalMonths': dateRepeatInterval.months,
+      'dateRepeatIntervalYears': dateRepeatInterval.years,
       'notificationID': notificationID,
       'completed': completed,
       'estimatedDueDate': estimatedDueDate,

@@ -13,3 +13,4 @@ export 'src/distancepoint.dart';
 export 'src/fuel_mileage_point.dart';
 export 'src/stats/driving_distance.dart';
 export 'src/stats/efficiency.dart';
+export 'src/repeat_interval.dart';

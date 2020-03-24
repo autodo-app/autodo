@@ -16,7 +16,7 @@ import 'package:autodo/generated/localization.dart';
 import 'package:autodo/util.dart';
 
 typedef _OnSaveCallback = Function(String name, DateTime dueDate,
-    double dueMileage, String carName, double mileageRepeatInterval, Duration dateRepeatInterval);
+    double dueMileage, String carName, double mileageRepeatInterval, RepeatInterval dateRepeatInterval);
 
 class _NameForm extends StatelessWidget {
   const _NameForm({this.todo, this.onSaved, this.node, this.nextNode});
@@ -286,7 +286,7 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
   double _dueMileage;
   String _name, _car;
   double _mileageInterval;
-  Duration _dateInterval;
+  RepeatInterval _dateInterval;
 
   bool get isEditing => widget.isEditing;
 
@@ -376,6 +376,7 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
                     Padding(
                       padding: EdgeInsets.only(bottom: 15),
                     ),
+                    // TODO: put a button that links to the repeat interval selector here, it should be its own screen
                     RepeatIntervalSelector(
                       existingTodo: widget.todo,
                       onSaved: (mileageInterval, dateInterval) {

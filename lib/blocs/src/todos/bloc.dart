@@ -248,7 +248,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       updatedTodos.add(newTodo);
     } else if (completedTodo.dateRepeatInterval != null) {
       final newTodo = curTodo.copyWith(
-        dueDate: roundToDay(completedTodo.completedDate.add(curTodo.dateRepeatInterval)),
+        dueDate: roundToDay(curTodo.dateRepeatInterval.addToDate(curTodo.completedDate)),
       );
       batch.setData(newTodo.toDocument());
       updatedTodos.add(newTodo);

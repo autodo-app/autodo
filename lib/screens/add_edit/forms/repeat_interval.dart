@@ -14,7 +14,7 @@ import 'package:autodo/util.dart';
 class RepeatIntervalSelector extends StatefulWidget {
   const RepeatIntervalSelector({@required this.onSaved, this.existingTodo});
 
-  final Function(double, Duration) onSaved;
+  final Function(double, RepeatInterval) onSaved;
   final Todo existingTodo;
 
   @override
@@ -22,16 +22,16 @@ class RepeatIntervalSelector extends StatefulWidget {
 }
 
 enum DateRepeatInterval { NEVER, WEEKLY, MONTHLY, YEARLY, CUSTOM }
-const Map<DateRepeatInterval, Duration> dateIntervals = {
+const Map<DateRepeatInterval, RepeatInterval> dateIntervals = {
   DateRepeatInterval.NEVER: null,
-  DateRepeatInterval.WEEKLY: Duration(days: 7),
+  DateRepeatInterval.WEEKLY: RepeatInterval(days: 7),
   // TODO: Dart doesn't natively support incrementing by months or years
-  DateRepeatInterval.MONTHLY: null,
-  DateRepeatInterval.YEARLY: null,
+  DateRepeatInterval.MONTHLY: RepeatInterval(months: 1),
+  DateRepeatInterval.YEARLY: RepeatInterval(years: 1),
   DateRepeatInterval.CUSTOM: null,
 };
 
-DateRepeatInterval _mapDateIntervalBackwards(Duration duration) {
+DateRepeatInterval _mapDateIntervalBackwards(RepeatInterval duration) {
   return dateIntervals.keys.firstWhere(
     (k) => dateIntervals[k] == duration, orElse: () => DateRepeatInterval.CUSTOM);
 }
@@ -154,7 +154,7 @@ class _DateRepeatSelectorState extends State<_DateRepeatSelector> {
 
 class _RepeatIntervalSelectorState extends State<RepeatIntervalSelector> {
   double _mileageInterval;
-  Duration _dateInterval;
+  RepeatInterval _dateInterval;
   final _formKey = GlobalKey<FormState>();
 
   @override
