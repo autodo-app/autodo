@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:autodo/blocs/blocs.dart';
-import 'package:autodo/routes.dart';
-import 'package:autodo/generated/localization.dart';
 import 'package:json_intl/json_intl.dart';
+
+import '../../../../blocs/blocs.dart';
+import '../../../../generated/localization.dart';
+import '../../../../routes.dart';
 import '../../widgets/barrel.dart';
 
 class LoginForm extends StatefulWidget {

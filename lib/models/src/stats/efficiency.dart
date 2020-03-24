@@ -1,11 +1,12 @@
 import 'dart:math';
 
-import 'package:autodo/blocs/blocs.dart';
-import 'package:autodo/models/models.dart';
-import 'package:autodo/units/units.dart';
-import 'package:autodo/util.dart';
 import 'package:charts_flutter/flutter.dart';
 import 'package:flutter/widgets.dart';
+
+import '../../../blocs/blocs.dart';
+import '../../../units/units.dart';
+import '../../../util.dart';
+import '../../models.dart';
 
 class EfficiencyStats {
   static const EMA_CUTOFF = 8;

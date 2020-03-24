@@ -1,12 +1,13 @@
-import 'package:autodo/blocs/blocs.dart';
-import 'package:autodo/generated/localization.dart';
-import 'package:autodo/models/models.dart';
-import 'package:autodo/screens/add_edit/repeat.dart';
-import 'package:autodo/units/units.dart';
-import 'package:autodo/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_intl/json_intl.dart';
+
+import '../../../blocs/blocs.dart';
+import '../../../generated/localization.dart';
+import '../../../models/models.dart';
+import '../../../units/units.dart';
+import '../../../widgets/widgets.dart';
+import '../../add_edit/repeat.dart';
 
 class _RepeatTitle extends StatelessWidget {
   const _RepeatTitle(this.repeat, {Key key}) : super(key: key);

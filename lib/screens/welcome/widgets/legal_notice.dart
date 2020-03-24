@@ -1,9 +1,10 @@
 import 'package:about/about.dart';
-import 'package:autodo/generated/localization.dart';
-import 'package:autodo/theme.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:json_intl/json_intl.dart';
+
+import '../../../generated/localization.dart';
+import '../../../theme.dart';
 
 class LegalNotice extends StatelessWidget {
   void _privacyPolicy(context) {

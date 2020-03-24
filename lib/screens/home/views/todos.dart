@@ -1,9 +1,9 @@
-import 'package:autodo/integ_test_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:autodo/blocs/blocs.dart';
-import 'package:autodo/widgets/widgets.dart';
+import '../../../blocs/blocs.dart';
+import '../../../integ_test_keys.dart';
+import '../../../widgets/widgets.dart';
 import '../widgets/barrel.dart';
 
 class TodosScreen extends StatelessWidget {

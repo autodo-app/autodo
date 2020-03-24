@@ -1,6 +1,7 @@
-import 'package:autodo/generated/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:json_intl/json_intl.dart';
+
+import '../../generated/localization.dart';
 
 class EditCarListScreen extends StatelessWidget {
   const EditCarListScreen({Key key}) : super(key: key);
