@@ -1,4 +1,4 @@
-package com.jonathanbayless.autodo
+package com.autodo.autodo
 
 import android.os.Bundle
 

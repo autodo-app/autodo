@@ -22,7 +22,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
 
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
-  static final channelID = 'com.jonathanbayless.autodo';
+  static final channelID = 'com.autodo.autodo';
 
   static final channelName = 'auToDo';
 
