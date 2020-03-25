@@ -26,7 +26,11 @@ class SembastDataRepository extends DataRepository {
     final _db = await _openDb();
     final curVersion = _db.version;
     if (curVersion != dbVersion) {
-      await upgrade(curVersion, dbVersion);
+      final newVersion = await upgrade(curVersion, dbVersion);
+      if (newVersion == dbVersion) {
+        // upgrade went successfully
+        await StoreRef.main().record('version').put(_db, newVersion);
+      }
     }
   }
 

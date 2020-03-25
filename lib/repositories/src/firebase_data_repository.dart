@@ -20,7 +20,12 @@ class FirebaseDataRepository extends DataRepository {
     final userDoc = await _userDoc.get();
     final curVersion = userDoc.data['db_version'] ?? 0;
     if (curVersion != dbVersion) {
-      await upgrade(curVersion, dbVersion);
+      final newVersion = await upgrade(curVersion, dbVersion);
+      if (newVersion == dbVersion) {
+        // upgrade worked successfully
+        userDoc.data['db_version'] = newVersion;
+        await _userDoc.setData(userDoc.data);
+      }
     }
   }
 
