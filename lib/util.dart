@@ -16,14 +16,19 @@ String titleCase(String input) {
 String requiredValidator(String val) =>
     (val == null || val == '') ? 'This field is required.' : null;
 
-String doubleValidator(String val) {
-  if (requiredValidator(val) != null) return requiredValidator(val);
+String doubleNoRequire(String val) {
+  if (val == null || val == '') return null;
   try {
     double.parse(val);
   } catch (e) {
     return 'Number';
   }
   return null;
+}
+
+String doubleValidator(String val) {
+  if (requiredValidator(val) != null) return requiredValidator(val);
+  return doubleNoRequire(val);
 }
 
 String intNoRequire(String val) {

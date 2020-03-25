@@ -279,7 +279,7 @@ class TodoAddEditScreen extends StatefulWidget {
 }
 
 class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
-  FocusNode _nameNode, _dateNode, _mileageNode, _repeatNode, _carNode;
+  FocusNode _nameNode, _dateNode, _mileageNode, _carNode;
   final _formKey = GlobalKey<FormState>();
   ScrollController scrollCtrl;
   DateTime _dueDate;
@@ -296,7 +296,6 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
     _nameNode = FocusNode();
     _dateNode = FocusNode();
     _mileageNode = FocusNode();
-    _repeatNode = FocusNode();
     _carNode = FocusNode();
     scrollCtrl = ScrollController();
   }
@@ -306,7 +305,6 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
     _nameNode.dispose();
     _dateNode.dispose();
     _mileageNode.dispose();
-    _repeatNode.dispose();
     _carNode.dispose();
     scrollCtrl.dispose();
     super.dispose();
@@ -316,6 +314,44 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
       (cars.map((c) => c.name).contains(widget.todo?.carName))
           ? cars.map((c) => c.name == widget.todo?.carName)
           : List.generate(cars.length, (idx) => (idx == 0) ? true : false);
+
+  /// Generates a string detailing the chronological repeating interval.
+  ///
+  /// Currently set up to concatenate days, months, years, etc. if there are
+  /// more than one kind of interval specified in the case of a custom interval.
+  String _repeatIntervalToString(interval) {
+    var out = 'Every ';
+    if (interval?.days != null) {
+      if (interval.days == 1) {
+        // singular
+        out += JsonIntl.of(context).get(IntlKeys.day);
+      } else if (interval.days == 7) {
+        // weekly
+        out += JsonIntl.of(context).get(IntlKeys.week);
+      } else {
+        out += '${interval.days} ${JsonIntl.of(context).get(IntlKeys.days)}';
+      }
+
+    } else if (interval?.months != null) {
+      if (interval.months == 1) {
+        // singular
+        out += JsonIntl.of(context).get(IntlKeys.month);
+      } else {
+        out += '${interval.months} ${JsonIntl.of(context).get(IntlKeys.months)}';
+      }
+    } else if (interval?.years != null) {
+      if (interval.years == 1) {
+        // singular
+        out += JsonIntl.of(context).get(IntlKeys.year);
+      } else {
+        out += '${interval.years} ${JsonIntl.of(context).get(IntlKeys.years)}';
+      }
+    } else {
+      // all fields are null
+      return JsonIntl.of(context).get(IntlKeys.never);
+    }
+    return out;
+  }
 
   @override
   Widget build(context) => Scaffold(
@@ -368,7 +404,7 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
                       child: _MileageForm(
                         todo: widget.todo,
                         node: _mileageNode,
-                        nextNode: _repeatNode,
+                        nextNode: null,
                         onSaved: (val) => _dueMileage = double.parse(val),
                       ),
                       focusNode: _mileageNode,
@@ -376,13 +412,24 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
                     Padding(
                       padding: EdgeInsets.only(bottom: 15),
                     ),
-                    // TODO: put a button that links to the repeat interval selector here, it should be its own screen
-                    RepeatIntervalSelector(
-                      existingTodo: widget.todo,
-                      onSaved: (mileageInterval, dateInterval) {
-                      _mileageInterval = mileageInterval;
-                      _dateInterval = dateInterval;
-                    }),
+                    ListTile(
+                      leading: Icon(Icons.repeat),
+                      title: Text(JsonIntl.of(context).get(IntlKeys.repeat)),
+                      subtitle: Text(_repeatIntervalToString(_dateInterval) ?? ''),
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => RepeatIntervalSelector(
+                            initialMileage: _dueMileage ?? widget.todo?.dueMileage,
+                            initialDate: _dateInterval ?? widget.todo?.dateRepeatInterval,
+                            onSaved: (mileageInterval, dateInterval) {
+                              setState(() {
+                                _mileageInterval = mileageInterval;
+                                _dateInterval = dateInterval;
+                              });
+                          }),
+                        ));
+                      },
+                    ),
                     Padding(
                       padding: EdgeInsets.only(bottom: 15),
                     ),

@@ -1,3 +1,4 @@
+import 'package:autodo/units/units.dart';
 import 'package:flutter/material.dart';
 import 'package:json_intl/json_intl.dart';
 
@@ -12,10 +13,11 @@ import 'package:autodo/util.dart';
 /// Requires the onSaved parameter as a callback for filling in the form's data
 /// when it is saved.
 class RepeatIntervalSelector extends StatefulWidget {
-  const RepeatIntervalSelector({@required this.onSaved, this.existingTodo});
+  const RepeatIntervalSelector({@required this.onSaved, this.initialMileage, this.initialDate});
 
   final Function(double, RepeatInterval) onSaved;
-  final Todo existingTodo;
+  final double initialMileage;
+  final RepeatInterval initialDate;
 
   @override
   _RepeatIntervalSelectorState createState() => _RepeatIntervalSelectorState();
@@ -25,7 +27,6 @@ enum DateRepeatInterval { NEVER, WEEKLY, MONTHLY, YEARLY, CUSTOM }
 const Map<DateRepeatInterval, RepeatInterval> dateIntervals = {
   DateRepeatInterval.NEVER: null,
   DateRepeatInterval.WEEKLY: RepeatInterval(days: 7),
-  // TODO: Dart doesn't natively support incrementing by months or years
   DateRepeatInterval.MONTHLY: RepeatInterval(months: 1),
   DateRepeatInterval.YEARLY: RepeatInterval(years: 1),
   DateRepeatInterval.CUSTOM: null,
@@ -44,21 +45,16 @@ class _MileageRepeatSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-    child: Row(
-      children: [
-        Text(JsonIntl.of(context).get(IntlKeys.mileage)),
-        TextFormField(
-          decoration: defaultInputDecoration(
-            JsonIntl.of(context).get(IntlKeys.requiredLiteral),
-            JsonIntl.of(context).get(IntlKeys.mileageInterval)),
-          keyboardType: TextInputType.number,
-          initialValue: '$initial',
-          validator: doubleValidator,
-          onSaved: (val) => onSaved(double.parse(val)),
-        ),
-      ],
+    child: TextFormField(
+      decoration: defaultInputDecoration(
+        Distance.of(context).unitString(context, short: true),
+        JsonIntl.of(context).get(IntlKeys.mileageInterval)),
+      keyboardType: TextInputType.number,
+      initialValue: initial == null ? '' : '$initial',
+      validator: doubleNoRequire,
+      onSaved: (val) => onSaved((val == null || val == '') ? null : double.parse(val)),
     ),
-    padding: EdgeInsets.all(5),
+    padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
   );
 }
 
@@ -172,18 +168,28 @@ class _RepeatIntervalSelectorState extends State<RepeatIntervalSelector> {
         },
       ),
     ),
-    body: ListView(
-      children: [
-        Text('Mileage Repeat Interval'),
-        _MileageRepeatSelector(
-          onSaved: (interval) => _mileageInterval = interval,
-          initial: widget.existingTodo?.mileageRepeatInterval,),
-        Padding(padding: EdgeInsets.all(10),),
-        Text('Date Repeat Interval'),
-        _DateRepeatSelector(
-          onSaved: (interval) => _dateInterval = dateIntervals[interval],
-          initial: _mapDateIntervalBackwards(widget.existingTodo?.dateRepeatInterval),),
-      ]
+    body: Form(
+      key: _formKey,
+      child: Center(
+        child: ListView(
+          children: [
+            _MileageRepeatSelector(
+              onSaved: (interval) => _mileageInterval = interval,
+              initial: widget.initialMileage,),
+            Container(
+              child: Divider(),
+              padding: EdgeInsets.all(10),
+            ),
+            Center(child:Text('Date Repeat Interval'),),
+            Padding(padding: EdgeInsets.all(10),),
+            _DateRepeatSelector(
+              onSaved: (interval) {
+                _dateInterval = dateIntervals[interval];
+              },
+              initial: _mapDateIntervalBackwards(widget.initialDate),),
+          ]
+        ),
+      ),
     ),
   );
 }

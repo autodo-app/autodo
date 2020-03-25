@@ -246,6 +246,10 @@ class IntlKeys {
   static const markAllIncomplete = 'mark_all_incomplete';
 
   /// strings.json: 'Mileage Interval *'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const mileageIntervalStar = 'mileage_interval_star';
+
+  /// strings.json: 'Mileage Interval'
   /// strings-fr.json: 'Intervalle de kilométrage *'
   static const mileageInterval = 'mileage_interval';
 
@@ -589,7 +593,39 @@ class IntlKeys {
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const custom = 'custom';
 
+  /// strings.json: 'Repeat'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const repeat = 'repeat';
+
   /// strings.json: 'REPEAT'
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const repeatCaps = 'repeat_caps';
+
+  /// strings.json: 'Days'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const days = 'days';
+
+  /// strings.json: 'Day'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const day = 'day';
+
+  /// strings.json: 'Month'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const month = 'month';
+
+  /// strings.json: 'Months'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const months = 'months';
+
+  /// strings.json: 'Week'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const week = 'week';
+
+  /// strings.json: 'Years'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const years = 'years';
+
+  /// strings.json: 'Year'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const year = 'year';
 }
