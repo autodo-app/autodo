@@ -33,7 +33,7 @@ Future<void> main() async {
         // This is deliberately not await-ed to ensure that the stream matcher
         // receives the new todo event
         repository.addNewTodo(Todo(name: 'test')); // ignore: unawaited_futures
-        expect(repository.todos(), emits([Todo(id: '1', name: 'test')]));
+        expect(repository.todos(), emits([Todo(id: '1', name: 'test', dateRepeatInterval: RepeatInterval())]));
         // await databaseFactoryIo.deleteDatabase('todos.db');
       });
       test('batch', () async {

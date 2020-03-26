@@ -7,22 +7,6 @@ import 'package:autodo/generated/localization.dart';
 import 'package:autodo/theme.dart';
 import 'package:autodo/util.dart';
 
-/// Modeled off of the design of the Android Calendar app's repeat interval
-/// selector.
-///
-/// Requires the onSaved parameter as a callback for filling in the form's data
-/// when it is saved.
-class RepeatIntervalSelector extends StatefulWidget {
-  const RepeatIntervalSelector({@required this.onSaved, this.initialMileage, this.initialDate});
-
-  final Function(double, RepeatInterval) onSaved;
-  final double initialMileage;
-  final RepeatInterval initialDate;
-
-  @override
-  _RepeatIntervalSelectorState createState() => _RepeatIntervalSelectorState();
-}
-
 enum DateRepeatInterval { NEVER, WEEKLY, MONTHLY, YEARLY, CUSTOM }
 const Map<DateRepeatInterval, RepeatInterval> dateIntervals = {
   DateRepeatInterval.NEVER: null,
@@ -31,6 +15,29 @@ const Map<DateRepeatInterval, RepeatInterval> dateIntervals = {
   DateRepeatInterval.YEARLY: RepeatInterval(years: 1),
   DateRepeatInterval.CUSTOM: null,
 };
+
+/// Modeled off of the design of the Android Calendar app's repeat interval
+/// selector.
+///
+/// Requires the onSaved parameter as a callback for filling in the form's data
+/// when it is saved.
+class RepeatIntervalSelector extends StatefulWidget {
+  const RepeatIntervalSelector({Key key, @required this.onSaved, this.initialMileage, this.initialDate}) : super(key: key);
+
+  final Function(double, RepeatInterval) onSaved;
+  final double initialMileage;
+  final RepeatInterval initialDate;
+  static const Map<DateRepeatInterval, ValueKey> radioKeys = {
+    DateRepeatInterval.NEVER: ValueKey('NEVER'),
+    DateRepeatInterval.WEEKLY: ValueKey('WEEKLY'),
+    DateRepeatInterval.MONTHLY: ValueKey('MONTHLY'),
+    DateRepeatInterval.YEARLY: ValueKey('YEARLY'),
+    DateRepeatInterval.CUSTOM: ValueKey('CUSTOM'),
+  };
+
+  @override
+  RepeatIntervalSelectorState createState() => RepeatIntervalSelectorState();
+}
 
 DateRepeatInterval _mapDateIntervalBackwards(RepeatInterval duration) {
   return dateIntervals.keys.firstWhere(
@@ -83,6 +90,7 @@ class _DateRepeatSelectorState extends State<_DateRepeatSelector> {
           ListTile(
             title: Text(JsonIntl.of(context).get(IntlKeys.never)),
             leading: Radio(
+              key: RepeatIntervalSelector.radioKeys[DateRepeatInterval.NEVER],
               value: DateRepeatInterval.NEVER,
               groupValue: _interval,
               onChanged: (value) {
@@ -95,6 +103,7 @@ class _DateRepeatSelectorState extends State<_DateRepeatSelector> {
           ListTile(
             title: Text(JsonIntl.of(context).get(IntlKeys.weekly)),
             leading: Radio(
+              key: RepeatIntervalSelector.radioKeys[DateRepeatInterval.WEEKLY],
               value: DateRepeatInterval.WEEKLY,
               groupValue: _interval,
               onChanged: (value) {
@@ -107,6 +116,7 @@ class _DateRepeatSelectorState extends State<_DateRepeatSelector> {
           ListTile(
             title: Text(JsonIntl.of(context).get(IntlKeys.monthly)),
             leading: Radio(
+              key: RepeatIntervalSelector.radioKeys[DateRepeatInterval.MONTHLY],
               value: DateRepeatInterval.MONTHLY,
               groupValue: _interval,
               onChanged: (value) {
@@ -119,6 +129,7 @@ class _DateRepeatSelectorState extends State<_DateRepeatSelector> {
           ListTile(
             title: Text(JsonIntl.of(context).get(IntlKeys.yearly)),
             leading: Radio(
+              key: RepeatIntervalSelector.radioKeys[DateRepeatInterval.YEARLY],
               value: DateRepeatInterval.YEARLY,
               groupValue: _interval,
               onChanged: (value) {
@@ -131,6 +142,7 @@ class _DateRepeatSelectorState extends State<_DateRepeatSelector> {
           ListTile(
             title: Text(JsonIntl.of(context).get(IntlKeys.custom)),
             leading: Radio(
+              key: RepeatIntervalSelector.radioKeys[DateRepeatInterval.CUSTOM],
               value: DateRepeatInterval.CUSTOM,
               groupValue: _interval,
               onChanged: (value) {
@@ -148,9 +160,9 @@ class _DateRepeatSelectorState extends State<_DateRepeatSelector> {
   );
 }
 
-class _RepeatIntervalSelectorState extends State<RepeatIntervalSelector> {
+class RepeatIntervalSelectorState extends State<RepeatIntervalSelector> {
   double _mileageInterval;
-  RepeatInterval _dateInterval;
+  RepeatInterval dateInterval;
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -162,7 +174,7 @@ class _RepeatIntervalSelectorState extends State<RepeatIntervalSelector> {
         onPressed: () {
           if (_formKey.currentState.validate()) {
             _formKey.currentState.save();
-            widget.onSaved(_mileageInterval, _dateInterval);
+            widget.onSaved(_mileageInterval, dateInterval);
             Navigator.pop(context);
           }
         },
@@ -184,7 +196,7 @@ class _RepeatIntervalSelectorState extends State<RepeatIntervalSelector> {
             Padding(padding: EdgeInsets.all(10),),
             _DateRepeatSelector(
               onSaved: (interval) {
-                _dateInterval = dateIntervals[interval];
+                dateInterval = dateIntervals[interval];
               },
               initial: _mapDateIntervalBackwards(widget.initialDate),),
           ]

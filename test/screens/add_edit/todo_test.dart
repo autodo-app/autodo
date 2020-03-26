@@ -1,6 +1,7 @@
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/models/models.dart';
 import 'package:autodo/screens/add_edit/barrel.dart';
+import 'package:autodo/screens/add_edit/forms/repeat_interval.dart';
 import 'package:autodo/units/units.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:preferences/preferences.dart';
 import 'package:provider/provider.dart';
+import 'package:autodo/screens/add_edit/forms/barrel.dart';
 
 class MockCarsBloc extends MockBloc<CarsEvent, CarsState> implements CarsBloc {}
 
@@ -50,6 +52,58 @@ void main() {
       );
       await tester.pump();
       expect(find.byKey(key), findsOneWidget);
+    });
+    testWidgets('render w/car toggle form', (WidgetTester tester) async {
+      final key = Key('screen');
+      when(carsBloc.state).thenReturn(CarsLoaded([Car(name: '1'), Car(name: '2')]));
+      await tester.pumpWidget(
+        ChangeNotifierProvider<BasePrefService>.value(
+          value: pref,
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider<CarsBloc>.value(
+                value: carsBloc,
+              ),
+            ],
+            child: MaterialApp(
+              home: TodoAddEditScreen(
+                key: key,
+                isEditing: false,
+                onSave: (a, b, c, d, e, f) {},
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.byKey(key), findsOneWidget);
+      expect(find.byType(CarToggleForm), findsOneWidget);
+    });
+    testWidgets('render w/car autocomplete form', (WidgetTester tester) async {
+      final key = Key('screen');
+      when(carsBloc.state).thenReturn(CarsLoaded([Car(name: '1'), Car(name: '2'), Car(name: '3'), Car(name: '4')]));
+      await tester.pumpWidget(
+        ChangeNotifierProvider<BasePrefService>.value(
+          value: pref,
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider<CarsBloc>.value(
+                value: carsBloc,
+              ),
+            ],
+            child: MaterialApp(
+              home: TodoAddEditScreen(
+                key: key,
+                isEditing: false,
+                onSave: (a, b, c, d, e, f) {},
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.byKey(key), findsOneWidget);
+      expect(find.byType(CarForm), findsOneWidget);
     });
     testWidgets('save', (WidgetTester tester) async {
       final key = Key('screen');
@@ -114,6 +168,69 @@ void main() {
       await tester.tap(find.byType(IconButton));
       await tester.pumpAndSettle();
       expect(find.byType(Dialog), findsOneWidget);
+    });
+    testWidgets('repeat button', (WidgetTester tester) async {
+      final key = Key('screen');
+      when(carsBloc.state).thenAnswer((_) => CarsLoaded([]));
+      await tester.pumpWidget(
+        ChangeNotifierProvider<BasePrefService>.value(
+          value: pref,
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider<CarsBloc>.value(
+                value: carsBloc,
+              ),
+            ],
+            child: MaterialApp(
+              home: TodoAddEditScreen(
+                key: key,
+                isEditing: false,
+                onSave: (a, b, c, d, e, f) {},
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.repeat));
+      await tester.pumpAndSettle();
+      expect(find.byType(RepeatIntervalSelector), findsOneWidget);
+    });
+    testWidgets('repeatIntervalToString', (WidgetTester tester) async {
+      final key = GlobalKey<TodoAddEditScreenState>();
+      when(carsBloc.state).thenAnswer((_) => CarsLoaded([]));
+      final screen = TodoAddEditScreen(
+        key: key,
+        isEditing: false,
+        onSave: (a, b, c, d, e, f) {},
+      );
+      await tester.pumpWidget(
+        ChangeNotifierProvider<BasePrefService>.value(
+          value: pref,
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider<CarsBloc>.value(
+                value: carsBloc,
+              ),
+            ],
+            child: MaterialApp(
+              home: screen,
+              locale: Locale('en'),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      // now check all repeatIntervalString options
+      expect(key.currentState.repeatIntervalToString(RepeatInterval()), 'never');
+      expect(key.currentState.repeatIntervalToString(RepeatInterval(days: 1)), 'Every day');
+      expect(key.currentState.repeatIntervalToString(RepeatInterval(days: 2)), 'Every 2 days');
+      expect(key.currentState.repeatIntervalToString(RepeatInterval(days: 7)), 'Every week');
+      expect(key.currentState.repeatIntervalToString(RepeatInterval(months: 1)), 'Every month');
+      expect(key.currentState.repeatIntervalToString(RepeatInterval(months: 2)), 'Every 2 months');
+      expect(key.currentState.repeatIntervalToString(RepeatInterval(years: 1)), 'Every year');
+      expect(key.currentState.repeatIntervalToString(RepeatInterval(years: 2)), 'Every 2 years');
     });
   });
 }

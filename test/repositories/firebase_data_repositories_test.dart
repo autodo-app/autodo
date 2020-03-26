@@ -74,7 +74,7 @@ Future<void> main() async {
         when(snap.documents).thenAnswer((_) => [doc]);
         when(collection.snapshots())
             .thenAnswer((_) => Stream.fromIterable([snap]));
-        expect(repository.todos(), emits([Todo()]));
+        expect(repository.todos(), emits([Todo(dateRepeatInterval: RepeatInterval())]));
       });
       test('batch', () {
         WidgetsFlutterBinding.ensureInitialized();

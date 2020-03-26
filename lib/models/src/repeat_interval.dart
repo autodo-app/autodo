@@ -14,4 +14,7 @@ class RepeatInterval extends Equatable {
 
   @override
   List<Object> get props => [days, months, years];
+
+  @override
+  String toString() => 'RepeatInterval { days: $days months: $months years: $years }';
 }

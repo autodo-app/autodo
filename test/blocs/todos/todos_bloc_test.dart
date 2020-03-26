@@ -292,9 +292,9 @@ Future<void> main() async {
         lastMileageUpdate: DateTime.fromMillisecondsSinceEpoch(0),
         distanceRate: 1.0);
     final todo3 = Todo(
-        id: '0', carName: 'test', dueMileage: 1000, estimatedDueDate: true, mileageRepeatInterval: 1000);
+        id: '0', carName: 'test', dueMileage: 1000, estimatedDueDate: true, mileageRepeatInterval: 1000, dateRepeatInterval: RepeatInterval());
     final defaults = TodosBloc.defaults.asMap()
-        .map((k, t) => MapEntry(k, t.copyWith(id: '${k + 1}', carName: 'test', dueMileage: t.mileageRepeatInterval)))
+        .map((k, t) => MapEntry(k, t.copyWith(id: '${k + 1}', carName: 'test', dueMileage: t.mileageRepeatInterval, dateRepeatInterval: RepeatInterval())))
         .values.toList();
     // TODO: figure out how to prompt this event to fire
     // final defaultsUpdated = defaults.map((t) {
