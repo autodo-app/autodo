@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:json_intl/json_intl.dart';
 
@@ -23,7 +22,9 @@ const Map<DateRepeatInterval, RepeatInterval> dateIntervals = {
 /// Requires the onSaved parameter as a callback for filling in the form's data
 /// when it is saved.
 class RepeatIntervalSelector extends StatefulWidget {
-  const RepeatIntervalSelector({Key key, @required this.onSaved, this.initialMileage, this.initialDate}) : super(key: key);
+  const RepeatIntervalSelector(
+      {Key key, @required this.onSaved, this.initialMileage, this.initialDate})
+      : super(key: key);
 
   final Function(double, RepeatInterval) onSaved;
   final double initialMileage;
@@ -41,8 +42,8 @@ class RepeatIntervalSelector extends StatefulWidget {
 }
 
 DateRepeatInterval _mapDateIntervalBackwards(RepeatInterval duration) {
-  return dateIntervals.keys.firstWhere(
-    (k) => dateIntervals[k] == duration, orElse: () => DateRepeatInterval.CUSTOM);
+  return dateIntervals.keys.firstWhere((k) => dateIntervals[k] == duration,
+      orElse: () => DateRepeatInterval.CUSTOM);
 }
 
 class _MileageRepeatSelector extends StatelessWidget {
@@ -53,17 +54,18 @@ class _MileageRepeatSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-    child: TextFormField(
-      decoration: defaultInputDecoration(
-        Distance.of(context).unitString(context, short: true),
-        JsonIntl.of(context).get(IntlKeys.mileageInterval)),
-      keyboardType: TextInputType.number,
-      initialValue: initial == null ? '' : '$initial',
-      validator: doubleNoRequire,
-      onSaved: (val) => onSaved((val == null || val == '') ? null : double.parse(val)),
-    ),
-    padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-  );
+        child: TextFormField(
+          decoration: defaultInputDecoration(
+              Distance.of(context).unitString(context, short: true),
+              JsonIntl.of(context).get(IntlKeys.mileageInterval)),
+          keyboardType: TextInputType.number,
+          initialValue: initial == null ? '' : '$initial',
+          validator: doubleNoRequire,
+          onSaved: (val) =>
+              onSaved((val == null || val == '') ? null : double.parse(val)),
+        ),
+        padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+      );
 }
 
 class _DateRepeatSelector extends StatefulWidget {
@@ -85,80 +87,83 @@ class _DateRepeatSelectorState extends State<_DateRepeatSelector> {
 
   @override
   Widget build(BuildContext context) => FormField(
-    builder: (state) => Container(
-      child: Column(
-        children: <Widget>[
-          ListTile(
-            title: Text(JsonIntl.of(context).get(IntlKeys.never)),
-            leading: Radio(
-              key: RepeatIntervalSelector.radioKeys[DateRepeatInterval.NEVER],
-              value: DateRepeatInterval.NEVER,
-              groupValue: _interval,
-              onChanged: (value) {
-                setState(() {
-                  _interval = value;
-                });
-              },
+        builder: (state) => Container(
+            child: Column(
+          children: <Widget>[
+            ListTile(
+              title: Text(JsonIntl.of(context).get(IntlKeys.never)),
+              leading: Radio(
+                key: RepeatIntervalSelector.radioKeys[DateRepeatInterval.NEVER],
+                value: DateRepeatInterval.NEVER,
+                groupValue: _interval,
+                onChanged: (value) {
+                  setState(() {
+                    _interval = value;
+                  });
+                },
+              ),
             ),
-          ),
-          ListTile(
-            title: Text(JsonIntl.of(context).get(IntlKeys.weekly)),
-            leading: Radio(
-              key: RepeatIntervalSelector.radioKeys[DateRepeatInterval.WEEKLY],
-              value: DateRepeatInterval.WEEKLY,
-              groupValue: _interval,
-              onChanged: (value) {
-                setState(() {
-                  _interval = value;
-                });
-              },
+            ListTile(
+              title: Text(JsonIntl.of(context).get(IntlKeys.weekly)),
+              leading: Radio(
+                key:
+                    RepeatIntervalSelector.radioKeys[DateRepeatInterval.WEEKLY],
+                value: DateRepeatInterval.WEEKLY,
+                groupValue: _interval,
+                onChanged: (value) {
+                  setState(() {
+                    _interval = value;
+                  });
+                },
+              ),
             ),
-          ),
-          ListTile(
-            title: Text(JsonIntl.of(context).get(IntlKeys.monthly)),
-            leading: Radio(
-              key: RepeatIntervalSelector.radioKeys[DateRepeatInterval.MONTHLY],
-              value: DateRepeatInterval.MONTHLY,
-              groupValue: _interval,
-              onChanged: (value) {
-                setState(() {
-                  _interval = value;
-                });
-              },
+            ListTile(
+              title: Text(JsonIntl.of(context).get(IntlKeys.monthly)),
+              leading: Radio(
+                key: RepeatIntervalSelector
+                    .radioKeys[DateRepeatInterval.MONTHLY],
+                value: DateRepeatInterval.MONTHLY,
+                groupValue: _interval,
+                onChanged: (value) {
+                  setState(() {
+                    _interval = value;
+                  });
+                },
+              ),
             ),
-          ),
-          ListTile(
-            title: Text(JsonIntl.of(context).get(IntlKeys.yearly)),
-            leading: Radio(
-              key: RepeatIntervalSelector.radioKeys[DateRepeatInterval.YEARLY],
-              value: DateRepeatInterval.YEARLY,
-              groupValue: _interval,
-              onChanged: (value) {
-                setState(() {
-                  _interval = value;
-                });
-              },
+            ListTile(
+              title: Text(JsonIntl.of(context).get(IntlKeys.yearly)),
+              leading: Radio(
+                key:
+                    RepeatIntervalSelector.radioKeys[DateRepeatInterval.YEARLY],
+                value: DateRepeatInterval.YEARLY,
+                groupValue: _interval,
+                onChanged: (value) {
+                  setState(() {
+                    _interval = value;
+                  });
+                },
+              ),
             ),
-          ),
-          ListTile(
-            title: Text(JsonIntl.of(context).get(IntlKeys.custom)),
-            leading: Radio(
-              key: RepeatIntervalSelector.radioKeys[DateRepeatInterval.CUSTOM],
-              value: DateRepeatInterval.CUSTOM,
-              groupValue: _interval,
-              onChanged: (value) {
-                setState(() {
-                  _interval = value;
-                });
-              },
+            ListTile(
+              title: Text(JsonIntl.of(context).get(IntlKeys.custom)),
+              leading: Radio(
+                key:
+                    RepeatIntervalSelector.radioKeys[DateRepeatInterval.CUSTOM],
+                value: DateRepeatInterval.CUSTOM,
+                groupValue: _interval,
+                onChanged: (value) {
+                  setState(() {
+                    _interval = value;
+                  });
+                },
+              ),
             ),
-          ),
-        ],
-      )
-    ),
-    validator: (_) => null,
-    onSaved: widget.onSaved(_interval),
-  );
+          ],
+        )),
+        validator: (_) => null,
+        onSaved: widget.onSaved(_interval),
+      );
 }
 
 class RepeatIntervalSelectorState extends State<RepeatIntervalSelector> {
@@ -168,41 +173,45 @@ class RepeatIntervalSelectorState extends State<RepeatIntervalSelector> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(
-      title: Text(JsonIntl.of(context).get(IntlKeys.repeatCaps)),
-      leading: IconButton(
-        icon: Icon(Icons.arrow_back),
-        onPressed: () {
-          if (_formKey.currentState.validate()) {
-            _formKey.currentState.save();
-            widget.onSaved(_mileageInterval, dateInterval);
-            Navigator.pop(context);
-          }
-        },
-      ),
-    ),
-    body: Form(
-      key: _formKey,
-      child: Center(
-        child: ListView(
-          children: [
-            _MileageRepeatSelector(
-              onSaved: (interval) => _mileageInterval = interval,
-              initial: widget.initialMileage,),
-            Container(
-              child: Divider(),
-              padding: EdgeInsets.all(10),
-            ),
-            Center(child:Text('Date Repeat Interval'),),
-            Padding(padding: EdgeInsets.all(10),),
-            _DateRepeatSelector(
-              onSaved: (interval) {
-                dateInterval = dateIntervals[interval];
-              },
-              initial: _mapDateIntervalBackwards(widget.initialDate),),
-          ]
+        appBar: AppBar(
+          title: Text(JsonIntl.of(context).get(IntlKeys.repeatCaps)),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              if (_formKey.currentState.validate()) {
+                _formKey.currentState.save();
+                widget.onSaved(_mileageInterval, dateInterval);
+                Navigator.pop(context);
+              }
+            },
+          ),
         ),
-      ),
-    ),
-  );
+        body: Form(
+          key: _formKey,
+          child: Center(
+            child: ListView(children: [
+              _MileageRepeatSelector(
+                onSaved: (interval) => _mileageInterval = interval,
+                initial: widget.initialMileage,
+              ),
+              Container(
+                child: Divider(),
+                padding: EdgeInsets.all(10),
+              ),
+              Center(
+                child: Text('Date Repeat Interval'),
+              ),
+              Padding(
+                padding: EdgeInsets.all(10),
+              ),
+              _DateRepeatSelector(
+                onSaved: (interval) {
+                  dateInterval = dateIntervals[interval];
+                },
+                initial: _mapDateIntervalBackwards(widget.initialDate),
+              ),
+            ]),
+          ),
+        ),
+      );
 }

@@ -33,7 +33,8 @@ class Todo extends Equatable {
           ? null
           : TodoDueState.values[snap.data['dueState']],
       dueMileage: (snap.data['dueMileage'] as num)?.toDouble(),
-      mileageRepeatInterval: (snap.data['mileageRepeatInterval'] as num)?.toDouble(),
+      mileageRepeatInterval:
+          (snap.data['mileageRepeatInterval'] as num)?.toDouble(),
       dateRepeatInterval: RepeatInterval(
         days: snap.data['dateRepeatIntervalDays'],
         months: snap.data['dateRepeatIntervalMonths'],
@@ -61,7 +62,8 @@ class Todo extends Equatable {
           ? null
           : TodoDueState.values[snap.value['dueState']],
       dueMileage: snap.value['dueMileage'] as double,
-      mileageRepeatInterval: (snap.value['mileageRepeatInterval'] as num)?.toDouble(),
+      mileageRepeatInterval:
+          (snap.value['mileageRepeatInterval'] as num)?.toDouble(),
       dateRepeatInterval: RepeatInterval(
         days: snap.value['dateRepeatIntervalDays'],
         months: snap.value['dateRepeatIntervalMonths'],
@@ -145,7 +147,8 @@ class Todo extends Equatable {
         carName: carName ?? this.carName,
         dueState: dueState ?? this.dueState,
         dueMileage: dueMileage ?? this.dueMileage,
-        mileageRepeatInterval: mileageRepeatInterval ?? this.mileageRepeatInterval,
+        mileageRepeatInterval:
+            mileageRepeatInterval ?? this.mileageRepeatInterval,
         dateRepeatInterval: dateRepeatInterval ?? this.dateRepeatInterval,
         notificationID: notificationID ?? this.notificationID,
         completed: completed ?? this.completed,

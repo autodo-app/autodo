@@ -1,6 +1,5 @@
 import 'dart:async';
 
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -15,8 +14,13 @@ import '../../util.dart';
 import '../../widgets/widgets.dart';
 import 'forms/barrel.dart';
 
-typedef _OnSaveCallback = Function(String name, DateTime dueDate,
-    double dueMileage, String carName, double mileageRepeatInterval, RepeatInterval dateRepeatInterval);
+typedef _OnSaveCallback = Function(
+    String name,
+    DateTime dueDate,
+    double dueMileage,
+    String carName,
+    double mileageRepeatInterval,
+    RepeatInterval dateRepeatInterval);
 
 class _NameForm extends StatelessWidget {
   const _NameForm({this.todo, this.onSaved, this.node, this.nextNode});
@@ -270,13 +274,13 @@ class TodoAddEditScreenState extends State<TodoAddEditScreen> {
       } else {
         out += '${interval.days} ${JsonIntl.of(context).get(IntlKeys.days)}';
       }
-
     } else if (interval?.months != null) {
       if (interval.months == 1) {
         // singular
         out += JsonIntl.of(context).get(IntlKeys.month);
       } else {
-        out += '${interval.months} ${JsonIntl.of(context).get(IntlKeys.months)}';
+        out +=
+            '${interval.months} ${JsonIntl.of(context).get(IntlKeys.months)}';
       }
     } else if (interval?.years != null) {
       if (interval.years == 1) {
@@ -354,19 +358,24 @@ class TodoAddEditScreenState extends State<TodoAddEditScreen> {
                     ListTile(
                       leading: Icon(Icons.repeat),
                       title: Text(JsonIntl.of(context).get(IntlKeys.repeat)),
-                      subtitle: Text(repeatIntervalToString(_dateInterval) ?? ''),
+                      subtitle:
+                          Text(repeatIntervalToString(_dateInterval) ?? ''),
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(
-                          builder: (context) => RepeatIntervalSelector(
-                            initialMileage: _dueMileage ?? widget.todo?.dueMileage,
-                            initialDate: _dateInterval ?? widget.todo?.dateRepeatInterval,
-                            onSaved: (mileageInterval, dateInterval) {
-                              setState(() {
-                                _mileageInterval = mileageInterval;
-                                _dateInterval = dateInterval;
-                              });
-                          }),
-                        ));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => RepeatIntervalSelector(
+                                  initialMileage:
+                                      _dueMileage ?? widget.todo?.dueMileage,
+                                  initialDate: _dateInterval ??
+                                      widget.todo?.dateRepeatInterval,
+                                  onSaved: (mileageInterval, dateInterval) {
+                                    setState(() {
+                                      _mileageInterval = mileageInterval;
+                                      _dateInterval = dateInterval;
+                                    });
+                                  }),
+                            ));
                       },
                     ),
                     Padding(
@@ -412,7 +421,8 @@ class TodoAddEditScreenState extends State<TodoAddEditScreen> {
           onPressed: () {
             if (_formKey.currentState.validate()) {
               _formKey.currentState.save();
-              widget.onSave(_name, _dueDate, _dueMileage, _car, _mileageInterval, _dateInterval);
+              widget.onSave(_name, _dueDate, _dueMileage, _car,
+                  _mileageInterval, _dateInterval);
               Navigator.pop(context);
             }
           },

@@ -25,14 +25,18 @@ class MockAuthenticationBloc
 class MockDatabaseBloc extends MockBloc<DatabaseEvent, DatabaseState>
     implements DatabaseBloc {}
 
-class MockTodosBloc extends MockBloc<TodosEvent, TodosState> implements TodosBloc {}
+class MockTodosBloc extends MockBloc<TodosEvent, TodosState>
+    implements TodosBloc {}
 
 // ignore: must_be_immutable
 class MockRepo extends Mock implements DataRepository {}
 
 void main() {
   BasePrefService pref;
-  final todosLoaded = TodosLoaded([Todo(name: 'oil', mileageRepeatInterval: 3500), Todo(name: 'tireRotation', mileageRepeatInterval: 7500)]);
+  final todosLoaded = TodosLoaded([
+    Todo(name: 'oil', mileageRepeatInterval: 3500),
+    Todo(name: 'tireRotation', mileageRepeatInterval: 7500)
+  ]);
 
   setUp(() async {
     pref = JustCachePrefService();
@@ -117,7 +121,8 @@ void main() {
     });
     testWidgets('set repeats back', (tester) async {
       final todosBloc = MockTodosBloc();
-      when(todosBloc.state).thenReturn(TodosLoaded([Todo(name: 'oil'), Todo(name: 'tireRotation')]));
+      when(todosBloc.state).thenReturn(
+          TodosLoaded([Todo(name: 'oil'), Todo(name: 'tireRotation')]));
       final carsBloc = MockCarsBloc();
       when(carsBloc.state).thenReturn(CarsLoaded([Car(name: 'test')]));
       await tester.pumpWidget(

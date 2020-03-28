@@ -36,7 +36,10 @@ void clearDatabase(name) {
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   clearDatabase('todosBloc.db');
-  final sembastTodosDataRepository = await SembastDataRepository.open(createDb: true, dbPath: 'todosBloc.db', pathProvider: () async => Directory('.'));
+  final sembastTodosDataRepository = await SembastDataRepository.open(
+      createDb: true,
+      dbPath: 'todosBloc.db',
+      pathProvider: () async => Directory('.'));
 
   group('TodosBloc', () {
     group('Null Assertions', () {
@@ -65,9 +68,7 @@ Future<void> main() async {
         final dbBloc = MockDbBloc();
         expect(
             () => TodosBloc(
-                carsBloc: carsBloc,
-                notificationsBloc: null,
-                dbBloc: dbBloc),
+                carsBloc: carsBloc, notificationsBloc: null, dbBloc: dbBloc),
             throwsAssertionError);
       });
     });
@@ -292,10 +293,23 @@ Future<void> main() async {
         lastMileageUpdate: DateTime.fromMillisecondsSinceEpoch(0),
         distanceRate: 1.0);
     final todo3 = Todo(
-        id: '0', carName: 'test', dueMileage: 1000, estimatedDueDate: true, mileageRepeatInterval: 1000, dateRepeatInterval: RepeatInterval());
-    final defaults = TodosBloc.defaults.asMap()
-        .map((k, t) => MapEntry(k, t.copyWith(id: '${k + 1}', carName: 'test', dueMileage: t.mileageRepeatInterval, dateRepeatInterval: RepeatInterval())))
-        .values.toList();
+        id: '0',
+        carName: 'test',
+        dueMileage: 1000,
+        estimatedDueDate: true,
+        mileageRepeatInterval: 1000,
+        dateRepeatInterval: RepeatInterval());
+    final defaults = TodosBloc.defaults
+        .asMap()
+        .map((k, t) => MapEntry(
+            k,
+            t.copyWith(
+                id: '${k + 1}',
+                carName: 'test',
+                dueMileage: t.mileageRepeatInterval,
+                dateRepeatInterval: RepeatInterval())))
+        .values
+        .toList();
     // TODO: figure out how to prompt this event to fire
     // final defaultsUpdated = defaults.map((t) {
     //   final distanceToTodo = t.dueMileage - car2.mileage;
@@ -316,7 +330,8 @@ Future<void> main() async {
             ]));
         final notificationsBloc = MockNotificationsBloc();
         final dbBloc = MockDbBloc();
-        when(dbBloc.state).thenAnswer((_) => DbLoaded(sembastTodosDataRepository));
+        when(dbBloc.state)
+            .thenAnswer((_) => DbLoaded(sembastTodosDataRepository));
         return TodosBloc(
             dbBloc: dbBloc,
             carsBloc: carsBloc,
@@ -342,15 +357,18 @@ Future<void> main() async {
         when(dataRepository.todos()).thenAnswer((_) => Stream.fromIterable([
               [todo3]
             ]));
-        when(dataRepository.getCurrentTodos()).thenAnswer((_) async => completedTodos);
+        when(dataRepository.getCurrentTodos())
+            .thenAnswer((_) async => completedTodos);
         // when(dataRepository.addNewTodo(todo3)).thenAnswer((_) async {});
         // when(dataRepository.updateTodo(todo3)).thenAnswer((_) async {});
         final writeBatch = MockWriteBatch();
-        when(writeBatch.updateData(todo3.id, dynamic))
-            .thenAnswer((invoke) {
-              print(invoke.positionalArguments[1]);
-              completedTodos[0] = invoke.positionalArguments[1];});
-        when(writeBatch.setData(dynamic)).thenAnswer((invoke) {completedTodos.add(invoke.positionalArguments[0]);});
+        when(writeBatch.updateData(todo3.id, dynamic)).thenAnswer((invoke) {
+          print(invoke.positionalArguments[1]);
+          completedTodos[0] = invoke.positionalArguments[1];
+        });
+        when(writeBatch.setData(dynamic)).thenAnswer((invoke) {
+          completedTodos.add(invoke.positionalArguments[0]);
+        });
         when(writeBatch.commit()).thenAnswer((_) async {});
         when(dataRepository.startTodoWriteBatch())
             .thenAnswer((_) => writeBatch);
@@ -376,12 +394,14 @@ Future<void> main() async {
               completedDate: DateTime.fromMillisecondsSinceEpoch(0),
               completedMileage: car1.mileage),
           todo3.copyWith(
-            dueMileage: 2000,
-            dueDate: DateTime.fromMillisecondsSinceEpoch(0).add(Duration(days: 1000)),
-            estimatedDueDate: true
-          )
+              dueMileage: 2000,
+              dueDate: DateTime.fromMillisecondsSinceEpoch(0)
+                  .add(Duration(days: 1000)),
+              estimatedDueDate: true)
         ]),
-        TodosLoaded([todo3]), // the database doesn't update properly in unit tests so it will overwrite the correct value
+        TodosLoaded([
+          todo3
+        ]), // the database doesn't update properly in unit tests so it will overwrite the correct value
       ],
     );
     blocTest(

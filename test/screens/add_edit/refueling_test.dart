@@ -84,7 +84,12 @@ void main() {
                   key: key,
                   isEditing: false,
                   onSave: (a, b, c, d, e) {},
-                  cars: [Car(name: '1'), Car(name: '2'), Car(name: '3'), Car(name: '4')]),
+                  cars: [
+                    Car(name: '1'),
+                    Car(name: '2'),
+                    Car(name: '3'),
+                    Car(name: '4')
+                  ]),
             ),
           ),
         ),

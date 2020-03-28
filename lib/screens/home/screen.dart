@@ -58,7 +58,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
     AppTab.todos: TodosScreen(),
     AppTab.refuelings: RefuelingsScreen(),
     AppTab.stats: StatisticsScreen(),
-    AppTab.repeats: Container(), // TODO 275: replace this screen with a cars screen?
+    AppTab.repeats:
+        Container(), // TODO 275: replace this screen with a cars screen?
   };
 
   final Key todosTabKey;

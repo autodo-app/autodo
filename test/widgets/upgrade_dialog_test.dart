@@ -20,22 +20,24 @@ void main() {
   group('Upgrade Dialog', () {
     testWidgets('render - no trial', (tester) async {
       final key = GlobalKey<ScaffoldState>();
-      await tester.pumpWidget(
-        ChangeNotifierProvider<BasePrefService>.value(
-          value: pref,
-          child: MaterialApp(
-              home: Scaffold(
-                key: key,
-                body: GestureDetector(
-                  onTap: () {
-                    showDialog(context: key.currentContext, builder: (context) => UpgradeDialog(context: context, trialUser: false,));
-                  },
-                ),
+      await tester.pumpWidget(ChangeNotifierProvider<BasePrefService>.value(
+        value: pref,
+        child: MaterialApp(
+            home: Scaffold(
+              key: key,
+              body: GestureDetector(
+                onTap: () {
+                  showDialog(
+                      context: key.currentContext,
+                      builder: (context) => UpgradeDialog(
+                            context: context,
+                            trialUser: false,
+                          ));
+                },
               ),
-              locale: Locale('en')
             ),
-        )
-      );
+            locale: Locale('en')),
+      ));
       await tester.pump();
       await tester.tap(find.byType(GestureDetector));
       await tester.pumpAndSettle();
@@ -43,22 +45,24 @@ void main() {
     });
     testWidgets('render - trial', (tester) async {
       final key = GlobalKey<ScaffoldState>();
-      await tester.pumpWidget(
-        ChangeNotifierProvider<BasePrefService>.value(
-          value: pref,
-          child: MaterialApp(
-              home: Scaffold(
-                key: key,
-                body: GestureDetector(
-                  onTap: () {
-                    showDialog(context: key.currentContext, builder: (context) => UpgradeDialog(context: context, trialUser: true,));
-                  },
-                ),
+      await tester.pumpWidget(ChangeNotifierProvider<BasePrefService>.value(
+        value: pref,
+        child: MaterialApp(
+            home: Scaffold(
+              key: key,
+              body: GestureDetector(
+                onTap: () {
+                  showDialog(
+                      context: key.currentContext,
+                      builder: (context) => UpgradeDialog(
+                            context: context,
+                            trialUser: true,
+                          ));
+                },
               ),
-              locale: Locale('en')
             ),
-        )
-      );
+            locale: Locale('en')),
+      ));
       await tester.pump();
       await tester.tap(find.byType(GestureDetector));
       await tester.pumpAndSettle();

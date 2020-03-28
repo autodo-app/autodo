@@ -74,13 +74,12 @@ void main() {
             .thenReturn(CarsLoaded([Car(name: 'test'), Car(name: 'test1')]));
         await tester.pumpWidget(
           ChangeNotifierProvider<BasePrefService>.value(
-              value: pref,
-              child: MultiBlocProvider(
-                providers: [BlocProvider<CarsBloc>.value(value: carsBloc)],
-                child: MaterialApp(
-                  home: RepeatIntervalSelector(onSaved: (a, b) {})
-                ),
-              ),
+            value: pref,
+            child: MultiBlocProvider(
+              providers: [BlocProvider<CarsBloc>.value(value: carsBloc)],
+              child:
+                  MaterialApp(home: RepeatIntervalSelector(onSaved: (a, b) {})),
+            ),
           ),
         );
         await tester.pump();
@@ -93,29 +92,33 @@ void main() {
             .thenReturn(CarsLoaded([Car(name: 'test'), Car(name: 'test1')]));
         await tester.pumpWidget(
           ChangeNotifierProvider<BasePrefService>.value(
-              value: pref,
-              child: MultiBlocProvider(
-                providers: [BlocProvider<CarsBloc>.value(value: carsBloc)],
-                child: MaterialApp(
-                  home: RepeatIntervalSelector(key: key, onSaved: (a, b) {})
-                ),
-              ),
+            value: pref,
+            child: MultiBlocProvider(
+              providers: [BlocProvider<CarsBloc>.value(value: carsBloc)],
+              child: MaterialApp(
+                  home: RepeatIntervalSelector(key: key, onSaved: (a, b) {})),
+            ),
           ),
         );
         await tester.pump();
-        await tester.tap(find.byKey(RepeatIntervalSelector.radioKeys[DateRepeatInterval.WEEKLY]));
+        await tester.tap(find.byKey(
+            RepeatIntervalSelector.radioKeys[DateRepeatInterval.WEEKLY]));
         await tester.pumpAndSettle();
         expect(key.currentState.dateInterval, RepeatInterval(days: 7));
-        await tester.tap(find.byKey(RepeatIntervalSelector.radioKeys[DateRepeatInterval.MONTHLY]));
+        await tester.tap(find.byKey(
+            RepeatIntervalSelector.radioKeys[DateRepeatInterval.MONTHLY]));
         await tester.pumpAndSettle();
         expect(key.currentState.dateInterval, RepeatInterval(months: 1));
-        await tester.tap(find.byKey(RepeatIntervalSelector.radioKeys[DateRepeatInterval.YEARLY]));
+        await tester.tap(find.byKey(
+            RepeatIntervalSelector.radioKeys[DateRepeatInterval.YEARLY]));
         await tester.pumpAndSettle();
         expect(key.currentState.dateInterval, RepeatInterval(years: 1));
-        await tester.tap(find.byKey(RepeatIntervalSelector.radioKeys[DateRepeatInterval.CUSTOM]));
+        await tester.tap(find.byKey(
+            RepeatIntervalSelector.radioKeys[DateRepeatInterval.CUSTOM]));
         await tester.pumpAndSettle();
         expect(key.currentState.dateInterval, null);
-        await tester.tap(find.byKey(RepeatIntervalSelector.radioKeys[DateRepeatInterval.NEVER]));
+        await tester.tap(find
+            .byKey(RepeatIntervalSelector.radioKeys[DateRepeatInterval.NEVER]));
         await tester.pump();
         expect(key.currentState.dateInterval, null);
         expect(find.byType(RepeatIntervalSelector), findsOneWidget);
@@ -127,13 +130,13 @@ void main() {
         var saved = false;
         await tester.pumpWidget(
           ChangeNotifierProvider<BasePrefService>.value(
-              value: pref,
-              child: MultiBlocProvider(
-                providers: [BlocProvider<CarsBloc>.value(value: carsBloc)],
-                child: MaterialApp(
-                  home: RepeatIntervalSelector(onSaved: (a, b) {saved = true;})
-                ),
-              ),
+            value: pref,
+            child: MultiBlocProvider(
+              providers: [BlocProvider<CarsBloc>.value(value: carsBloc)],
+              child: MaterialApp(home: RepeatIntervalSelector(onSaved: (a, b) {
+                saved = true;
+              })),
+            ),
           ),
         );
         await tester.pump();

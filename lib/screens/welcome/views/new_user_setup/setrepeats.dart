@@ -64,7 +64,8 @@ class _TireRotationInterval extends StatelessWidget {
       key: IntegrationTestKeys.setTireRotationInterval,
       maxLines: 1,
       autofocus: false,
-      initialValue: distance.format(todo.mileageRepeatInterval, textField: true),
+      initialValue:
+          distance.format(todo.mileageRepeatInterval, textField: true),
       decoration: defaultInputDecoration('(${distance.unitString(context)})',
           'Tire Rotation Interval (${distance.unitString(context)})'), // Todo: Translate
       validator: intValidator,
@@ -132,8 +133,7 @@ class _Card extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-              child:
-                  _TireRotationInterval(tireRotationTodo, tireRotationNode),
+              child: _TireRotationInterval(tireRotationTodo, tireRotationNode),
             ),
             Container(
               child: Row(
@@ -231,13 +231,11 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen>
     }
 
     return BlocBuilder<TodosBloc, TodosState>(builder: (context, state) {
-      if (!(state is TodosLoaded) ||
-          (state as TodosLoaded).todos.isEmpty) {
+      if (!(state is TodosLoaded) || (state as TodosLoaded).todos.isEmpty) {
         return LoadingIndicator();
       }
-      final oilTodo = (state as TodosLoaded)
-          .todos
-          .firstWhere((val) => val.name == 'oil');
+      final oilTodo =
+          (state as TodosLoaded).todos.firstWhere((val) => val.name == 'oil');
       final tireRotationTodo = (state as TodosLoaded)
           .todos
           .firstWhere((val) => val.name == 'tireRotation');

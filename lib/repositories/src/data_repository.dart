@@ -97,12 +97,16 @@ abstract class DataRepository extends Equatable {
     }
     if (curVer < 3 && desVer == 3) {
       // Remove Repeats in favor of new Todo fields
-      final repeats = await getRepeats(); // ignore:deprecated_member_use_from_same_package
+      final repeats =
+          await getRepeats(); // ignore:deprecated_member_use_from_same_package
       final todos = await getCurrentTodos();
       final batch = await startTodoWriteBatch();
       repeats.forEach((r) {
-        final todo = todos.firstWhere((t) => t.name == r['name'] && !t.completed);
-        final updatedTodo = todo.copyWith(mileageRepeatInterval: r['mileageInterval'], dateRepeatInterval: r['dateInterval']);
+        final todo =
+            todos.firstWhere((t) => t.name == r['name'] && !t.completed);
+        final updatedTodo = todo.copyWith(
+            mileageRepeatInterval: r['mileageInterval'],
+            dateRepeatInterval: r['dateInterval']);
         batch.updateData(updatedTodo.id, updatedTodo.toDocument());
       });
       await batch.commit();

@@ -55,7 +55,8 @@ void main() {
     });
     testWidgets('render w/car toggle form', (WidgetTester tester) async {
       final key = Key('screen');
-      when(carsBloc.state).thenReturn(CarsLoaded([Car(name: '1'), Car(name: '2')]));
+      when(carsBloc.state)
+          .thenReturn(CarsLoaded([Car(name: '1'), Car(name: '2')]));
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
@@ -81,7 +82,8 @@ void main() {
     });
     testWidgets('render w/car autocomplete form', (WidgetTester tester) async {
       final key = Key('screen');
-      when(carsBloc.state).thenReturn(CarsLoaded([Car(name: '1'), Car(name: '2'), Car(name: '3'), Car(name: '4')]));
+      when(carsBloc.state).thenReturn(CarsLoaded(
+          [Car(name: '1'), Car(name: '2'), Car(name: '3'), Car(name: '4')]));
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
@@ -223,14 +225,22 @@ void main() {
       await tester.pumpAndSettle();
 
       // now check all repeatIntervalString options
-      expect(key.currentState.repeatIntervalToString(RepeatInterval()), 'never');
-      expect(key.currentState.repeatIntervalToString(RepeatInterval(days: 1)), 'Every day');
-      expect(key.currentState.repeatIntervalToString(RepeatInterval(days: 2)), 'Every 2 days');
-      expect(key.currentState.repeatIntervalToString(RepeatInterval(days: 7)), 'Every week');
-      expect(key.currentState.repeatIntervalToString(RepeatInterval(months: 1)), 'Every month');
-      expect(key.currentState.repeatIntervalToString(RepeatInterval(months: 2)), 'Every 2 months');
-      expect(key.currentState.repeatIntervalToString(RepeatInterval(years: 1)), 'Every year');
-      expect(key.currentState.repeatIntervalToString(RepeatInterval(years: 2)), 'Every 2 years');
+      expect(
+          key.currentState.repeatIntervalToString(RepeatInterval()), 'never');
+      expect(key.currentState.repeatIntervalToString(RepeatInterval(days: 1)),
+          'Every day');
+      expect(key.currentState.repeatIntervalToString(RepeatInterval(days: 2)),
+          'Every 2 days');
+      expect(key.currentState.repeatIntervalToString(RepeatInterval(days: 7)),
+          'Every week');
+      expect(key.currentState.repeatIntervalToString(RepeatInterval(months: 1)),
+          'Every month');
+      expect(key.currentState.repeatIntervalToString(RepeatInterval(months: 2)),
+          'Every 2 months');
+      expect(key.currentState.repeatIntervalToString(RepeatInterval(years: 1)),
+          'Every year');
+      expect(key.currentState.repeatIntervalToString(RepeatInterval(years: 2)),
+          'Every 2 years');
     });
   });
 }
