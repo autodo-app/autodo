@@ -28,19 +28,24 @@ import 'widgets/widgets.dart';
 
 SentryClient _sentry;
 
-Future<void> _reportError(dynamic error, dynamic stackTrace) async {
-  print('Caught error: $error');
-  if (!kReleaseMode) {
-    // Print the full stacktrace in debug mode.
-    print(stackTrace);
-    return;
-  } else {
-    // Send the Exception and Stacktrace to Sentry in Production mode.
-    await _sentry.captureException(
-      exception: error,
-      stackTrace: stackTrace,
-    );
+Future<void> _reportError(
+  FlutterErrorDetails details, {
+  bool forceReport = false,
+}) async {
+  if (kFlavor.useSentry) {
+    try {
+      // Send the Exception and Stacktrace to Sentry
+      await _sentry.captureException(
+        exception: details.exception,
+        stackTrace: details.stack,
+      );
+    } catch (e) {
+      print('Sending report to sentry.io failed: $e');
+    }
   }
+
+  // Use Flutter's pretty error logging to the device's console.
+  FlutterError.dumpErrorToConsole(details, forceReport: forceReport);
 }
 
 Future<void> run(bool integrationTest) async {
@@ -165,10 +170,13 @@ Future<Map> init() async {
 
 Future<void> main() async {
   final keys = await init();
-  _sentry = SentryClient(dsn: keys['sentry-dsn']);
-  await runZoned<Future<void>>(() async {
-    await run(false);
-  }, onError: _reportError);
+
+  if (kFlavor.useSentry) {
+    _sentry = SentryClient(dsn: keys['sentry-dsn']);
+  }
+
+  FlutterError.onError = _reportError;
+  await run(false);
 }
 
 class App extends StatelessWidget {
