@@ -404,7 +404,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "960339ec63556a3bb94ce2177d9e9391aa7f3ee3"
+      resolved-ref: df139c8ead6ce23ea218a5bf85fec3b25dae2ed6
       url: "https://github.com/DavBfr/json_intl"
     source: git
     version: "0.0.1"
