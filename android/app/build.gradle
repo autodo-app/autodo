@@ -64,7 +64,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.jonathanbayless.autodo"
+        applicationId 'com.autodo.autodo'
         minSdkVersion 23
         targetSdkVersion 28
         multiDexEnabled true
@@ -85,10 +85,10 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.release
-	        
+
             shrinkResources false
             minifyEnabled true
-            
+
             useProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -101,9 +101,6 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    // testImplementation 'junit:junit:4.12'
-    // androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    // androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
 
 apply plugin: 'com.google.gms.google-services'  // Google Play services Gradle plugin

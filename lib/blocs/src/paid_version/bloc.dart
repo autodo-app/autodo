@@ -59,7 +59,7 @@ class PaidVersionBloc extends Bloc<PaidVersionEvent, PaidVersionState> {
 
   RouteObserver observer = RouteObserver();
 
-  static const platform = MethodChannel('com.jonathanbayless.autodo/iap');
+  static const platform = MethodChannel('com.autodo.autodo/iap');
 
   DataRepository get repo => (_dbBloc.state is DbLoaded)
       ? (_dbBloc.state as DbLoaded).repository

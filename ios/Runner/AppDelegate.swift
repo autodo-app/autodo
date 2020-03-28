@@ -10,7 +10,7 @@ import StoreKit
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-    
+
     IAPManager.shared.getProducts { (result) in
         DispatchQueue.main.async {
             switch result {
@@ -21,7 +21,7 @@ import StoreKit
     }
 
     let controller : FlutterViewController = window?.rootViewController as! FlutterViewController
-    let iapChannel = FlutterMethodChannel(name: "com.jonathanbayless.autodo/iap",
+    let iapChannel = FlutterMethodChannel(name: "com.autodo.autodo/iap",
                                           binaryMessenger: controller.binaryMessenger)
     iapChannel.setMethodCallHandler(handle)
 
@@ -31,7 +31,7 @@ import StoreKit
     }
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
-    
+
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         if call.method == "fetchPurchases" {
           self.fetchPurchases(result: result)
@@ -43,7 +43,7 @@ import StoreKit
     }
 
   private func purchase(item: Int) -> Bool {
-    
+
     if !IAPManager.shared.canMakePayments() {
       return false
     } else {
