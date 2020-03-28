@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:json_intl/json_intl.dart';
 
 import '../../blocs/blocs.dart';
+import '../../flavor.dart';
 import '../../generated/localization.dart';
 import '../../integ_test_keys.dart';
 import '../../models/models.dart';
@@ -68,6 +69,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
   BannerAd _bannerAd;
 
   bool _bannerShown = false;
+
+  static bool _adMobInitialized = false;
 
   // this has to be a function so that it returns a different route each time
   // the lifecycle of a MaterialPageRoute requires that it not be reused.
@@ -140,15 +143,19 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    BlocProvider.of<PaidVersionBloc>(context)
-        .observer
-        .subscribe(this, ModalRoute.of(context));
+
+    if (kFlavor.hasPaid) {
+      BlocProvider.of<PaidVersionBloc>(context)
+          .observer
+          .subscribe(this, ModalRoute.of(context));
+    }
   }
 
   @override
   Future<void> didPush() async {
     // Route was pushed onto navigator and is now topmost route.
-    if (ModalRoute.of(context).isCurrent) {
+
+    if (kFlavor.hasAds && ModalRoute.of(context).isCurrent) {
       _bannerShown = true;
       await _bannerAd?.dispose(); // clear old banner ad if one exists
       _bannerAd = _bannerAdConfig();
@@ -160,7 +167,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
   @override
   Future<void> didPop() async {
     // Current route was popped off the navigator.
-    if (_bannerShown) {
+    if (kFlavor.hasAds && _bannerShown) {
       _bannerShown = false;
       await _bannerAd?.dispose(); // clear old banner ad if one exists
     }
@@ -169,7 +176,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
   @override
   Future<void> didPushNext() async {
     // Another route is now above this route
-    if (_bannerShown) {
+    if (kFlavor.hasAds && _bannerShown) {
       _bannerShown = false;
       await _bannerAd?.dispose(); // clear old banner ad if one exists
     }
@@ -178,53 +185,75 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
 
   @override
   void initState() {
-    FirebaseAdMob.instance.initialize(appId: BannerAd.testAdUnitId);
+    if (kFlavor.hasAds && !_adMobInitialized) {
+      FirebaseAdMob.instance.initialize(appId: BannerAd.testAdUnitId);
+      _adMobInitialized = true;
+    }
+
     super.initState();
   }
 
   List<Widget> fakeBottomButtons = [Container(height: 50)];
 
+  Widget buildScreen(BuildContext context, AppTab activeTab) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(JsonIntl.of(context).get(IntlKeys.appTitle)),
+        actions: [ExtraActions()],
+      ),
+      drawer: NavDrawer(),
+      body: views[activeTab],
+      floatingActionButton: actionButton,
+      bottomNavigationBar: TabSelector(
+        activeTab: activeTab,
+        onTabSelected: (tab) =>
+            BlocProvider.of<TabBloc>(context).add(UpdateTab(tab)),
+        todosTabKey: todosTabKey,
+        refuelingsTabKey: ValueKey('__refuelings_tab_button__'),
+        repeatsTabKey: ValueKey('__repeats_tab_button__'),
+      ),
+    );
+  }
+
   @override
-  Widget build(context) => MultiBlocProvider(
-          providers: [
-            BlocProvider<FilteredRefuelingsBloc>(
-                create: (context) => FilteredRefuelingsBloc(
-                    carsBloc: BlocProvider.of<CarsBloc>(context),
-                    refuelingsBloc: BlocProvider.of<RefuelingsBloc>(context))),
-            BlocProvider<FilteredTodosBloc>(
-                create: (context) => FilteredTodosBloc(
-                    todosBloc: BlocProvider.of<TodosBloc>(context))),
-          ],
-          child: BlocBuilder<PaidVersionBloc, PaidVersionState>(
-              builder: (context, paid) {
-            if (paid is PaidVersion && _bannerShown) {
-              _bannerAd?.dispose()?.then((_) {
-                setState(() {
-                  _bannerShown = false;
-                });
-              });
-            }
-            return BlocBuilder<TabBloc, AppTab>(
-                builder: (context, activeTab) => _ScreenWithBanner(
+  Widget build(context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<FilteredRefuelingsBloc>(
+            create: (context) => FilteredRefuelingsBloc(
+                carsBloc: BlocProvider.of<CarsBloc>(context),
+                refuelingsBloc: BlocProvider.of<RefuelingsBloc>(context))),
+        BlocProvider<FilteredTodosBloc>(
+            create: (context) => FilteredTodosBloc(
+                todosBloc: BlocProvider.of<TodosBloc>(context))),
+      ],
+      child: kFlavor.hasAds
+          ? (kFlavor.hasPaid
+              ? BlocBuilder<PaidVersionBloc, PaidVersionState>(
+                  builder: (context, paid) {
+                  if (paid is PaidVersion && _bannerShown) {
+                    _bannerAd?.dispose()?.then((_) {
+                      setState(() {
+                        _bannerShown = false;
+                      });
+                    });
+                  }
+                  return BlocBuilder<TabBloc, AppTab>(
+                    builder: (context, activeTab) => _ScreenWithBanner(
+                      bannerShown: _bannerShown,
+                      child: buildScreen(context, activeTab),
+                    ),
+                  );
+                })
+              : BlocBuilder<TabBloc, AppTab>(
+                  builder: (context, activeTab) => _ScreenWithBanner(
                     bannerShown: _bannerShown,
-                    child: Scaffold(
-                        appBar: AppBar(
-                          title:
-                              Text(JsonIntl.of(context).get(IntlKeys.appTitle)),
-                          actions: [ExtraActions()],
-                        ),
-                        drawer: NavDrawer(),
-                        body: views[activeTab],
-                        floatingActionButton: actionButton,
-                        bottomNavigationBar: TabSelector(
-                          activeTab: activeTab,
-                          onTabSelected: (tab) =>
-                              BlocProvider.of<TabBloc>(context)
-                                  .add(UpdateTab(tab)),
-                          todosTabKey: todosTabKey,
-                          refuelingsTabKey:
-                              ValueKey('__refuelings_tab_button__'),
-                          repeatsTabKey: ValueKey('__repeats_tab_button__'),
-                        ))));
-          }));
+                    child: buildScreen(context, activeTab),
+                  ),
+                ))
+          : BlocBuilder<TabBloc, AppTab>(
+              builder: buildScreen,
+            ),
+    );
+  }
 }

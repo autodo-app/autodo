@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_intl/json_intl.dart';
 
 import '../../blocs/blocs.dart';
+import '../../flavor.dart';
 import '../../generated/localization.dart';
 import '../../routes.dart';
 import '../../screens/about/about.dart';
@@ -72,20 +73,21 @@ class NavDrawerState extends State<NavDrawer> {
           onPressed: () =>
               Navigator.popAndPushNamed(context, AutodoRoutes.settingsScreen),
         ),
-        FlatButton(
-          key: ValueKey('__upgrade_drawer_button__'),
-          child: Text(JsonIntl.of(context).get(IntlKeys.upgrade),
-              style: Theme.of(context)
-                  .primaryTextTheme
-                  .button
-                  .copyWith(color: Theme.of(context).primaryColor)),
-          onPressed: () => showDialog(
-              context: context,
-              child: UpgradeDialog(
+        if (kFlavor.hasPaid)
+          FlatButton(
+            key: ValueKey('__upgrade_drawer_button__'),
+            child: Text(JsonIntl.of(context).get(IntlKeys.upgrade),
+                style: Theme.of(context)
+                    .primaryTextTheme
+                    .button
+                    .copyWith(color: Theme.of(context).primaryColor)),
+            onPressed: () => showDialog(
                 context: context,
-                trialUser: trialUser,
-              )),
-        )
+                child: UpgradeDialog(
+                  context: context,
+                  trialUser: trialUser,
+                )),
+          )
       ];
 
   @override

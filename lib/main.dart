@@ -15,6 +15,7 @@ import 'package:sentry/sentry.dart';
 
 import 'blocs/blocs.dart';
 import 'delegate.dart';
+import 'flavor.dart';
 import 'generated/localization.dart';
 import 'repositories/repositories.dart';
 import 'routes.dart';
@@ -69,11 +70,12 @@ Future<void> run(bool integrationTest) async {
             ),
             child: MultiBlocProvider(
               providers: [
-                BlocProvider<PaidVersionBloc>(
-                  create: (context) => PaidVersionBloc(
-                      dbBloc: BlocProvider.of<DatabaseBloc>(context))
-                    ..add(LoadPaidVersion()),
-                ),
+                if (kFlavor.hasPaid)
+                  BlocProvider<PaidVersionBloc>(
+                    create: (context) => PaidVersionBloc(
+                        dbBloc: BlocProvider.of<DatabaseBloc>(context))
+                      ..add(LoadPaidVersion()),
+                  ),
                 BlocProvider<NotificationsBloc>(
                   create: (context) => NotificationsBloc(
                     dbBloc: BlocProvider.of<DatabaseBloc>(context),
@@ -170,8 +172,11 @@ Future<void> main() async {
 }
 
 class App extends StatelessWidget {
-  const App({@required theme, @required authRepository, this.integrationTest})
-      : assert(theme != null),
+  const App({
+    @required ThemeData theme,
+    @required AuthRepository authRepository,
+    this.integrationTest,
+  })  : assert(theme != null),
         assert(authRepository != null),
         _theme = theme,
         _authRepository = authRepository;
@@ -226,7 +231,9 @@ class App extends StatelessWidget {
       },
       theme: _theme,
       debugShowCheckedModeBanner: false,
-      navigatorObservers: [BlocProvider.of<PaidVersionBloc>(context).observer],
+      navigatorObservers: [
+        if (kFlavor.hasPaid) BlocProvider.of<PaidVersionBloc>(context).observer,
+      ],
     );
   }
 }
