@@ -1,6 +1,6 @@
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:flutter/material.dart';
-import 'package:autodo/theme.dart';
+import '../../../../theme.dart';
 
 class AccountSetupScreen extends StatefulWidget {
   const AccountSetupScreen({@required this.header, @required this.panel});

@@ -1,10 +1,12 @@
 import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+
+import '../../../models/models.dart';
+import '../todos/barrel.dart';
 import 'event.dart';
 import 'state.dart';
-import '../todos/barrel.dart';
-import 'package:autodo/models/models.dart';
 
 class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
   FilteredTodosBloc({@required this.todosBloc}) {

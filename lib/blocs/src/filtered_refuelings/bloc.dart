@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
-import 'package:autodo/models/models.dart';
-import 'package:autodo/util.dart';
+import '../../../models/models.dart';
+import '../../../util.dart';
 import '../cars/barrel.dart';
 import '../refuelings/barrel.dart';
 import 'event.dart';

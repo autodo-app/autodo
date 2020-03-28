@@ -1,14 +1,14 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:autodo/widgets/widgets.dart';
-import 'package:autodo/blocs/blocs.dart';
-import 'package:autodo/integ_test_keys.dart';
-import 'package:autodo/theme.dart';
-import 'mileage.dart';
+import '../../../../blocs/blocs.dart';
+import '../../../../integ_test_keys.dart';
+import '../../../../theme.dart';
+import '../../../../widgets/widgets.dart';
 import 'latestcompleted.dart';
-import 'setrepeats.dart';
+import 'mileage.dart';
 import 'new_user_screen_page.dart';
+import 'setrepeats.dart';
 
 class NewUserScreen extends StatefulWidget {
   const NewUserScreen({Key key = IntegrationTestKeys.newUserScreen})

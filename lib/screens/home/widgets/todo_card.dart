@@ -1,14 +1,14 @@
-import 'package:autodo/blocs/blocs.dart';
-import 'package:autodo/generated/localization.dart';
-import 'package:autodo/models/models.dart';
-import 'package:autodo/screens/add_edit/barrel.dart';
-import 'package:autodo/theme.dart';
-import 'package:autodo/units/units.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:json_intl/json_intl.dart';
 
+import '../../../blocs/blocs.dart';
+import '../../../generated/localization.dart';
+import '../../../models/models.dart';
+import '../../../theme.dart';
+import '../../../units/units.dart';
+import '../../add_edit/barrel.dart';
 import 'todo_delete_button.dart';
 
 const int DUE_SOON_INTERVAL = 100;

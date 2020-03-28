@@ -1,13 +1,13 @@
 import 'dart:async';
 
-import 'package:autodo/generated/localization.dart';
-import 'package:autodo/models/models.dart';
-import 'package:autodo/units/units.dart';
-import 'package:autodo/util.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:json_intl/json_intl.dart';
 
+import '../../generated/localization.dart';
+import '../../models/models.dart';
+import '../../units/units.dart';
+import '../../util.dart';
 import 'forms/barrel.dart';
 
 typedef _OnSaveCallback = Function(

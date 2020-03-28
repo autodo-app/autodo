@@ -6,7 +6,7 @@ import 'package:json_intl/json_intl.dart';
 import 'package:preferences/preferences.dart';
 import 'package:provider/provider.dart';
 
-import 'package:autodo/generated/localization.dart';
+import '../generated/localization.dart';
 import 'conversion.dart';
 
 enum DistanceUnit { metric, imperial }
@@ -22,7 +22,15 @@ class Distance extends UnitConversion<DistanceUnit> {
         Localizations.localeOf(context),
       );
 
-  static const kilometer = 1000.0;
+  // The constants here are defined to convert as:
+  // display_value = internal_value / constant
+  // and the expression `10 * miles` stores 10 miles into the database
+
+  /// 1 kilometer is 1000 meters
+  static const kilometer = 1.0;
+
+  /// The international mile is precisely equal to 1.609344 km
+  /// It is used in Liberia, Myanmar, the United Kingdom and the United States
   static const miles = 1.609344 * kilometer;
 
   @override
@@ -62,29 +70,27 @@ class Distance extends UnitConversion<DistanceUnit> {
     return '[$unit]';
   }
 
-  // Todo: Change database unit to SI.
   // For now the database values are in miles
   @override
   num internalToUnit(num value) {
     switch (unit) {
       case DistanceUnit.metric:
-        return value * miles / kilometer;
+        return value / kilometer;
       case DistanceUnit.imperial:
-        return value;
+        return value / miles;
     }
 
     throw UnimplementedError('Unit $unit not implemented');
   }
 
-  // Todo: Change database unit to SI.
   // For now the database values are in miles
   @override
   num unitToInternal(num value) {
     switch (unit) {
       case DistanceUnit.metric:
-        return value * kilometer / miles;
+        return value * kilometer;
       case DistanceUnit.imperial:
-        return value;
+        return value * miles;
     }
 
     throw UnimplementedError('Unit $unit not implemented');

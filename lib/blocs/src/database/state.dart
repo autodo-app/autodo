@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import 'package:autodo/repositories/repositories.dart';
+import '../../../repositories/repositories.dart';
 
 abstract class DatabaseState extends Equatable {
   const DatabaseState();

@@ -1,17 +1,17 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:bloc/bloc.dart';
+import 'package:flutter/foundation.dart';
 
+import '../../../generated/localization.dart';
+import '../../../models/models.dart';
+import '../../../repositories/repositories.dart';
+import '../../../util.dart';
+import '../cars/barrel.dart';
+import '../database/barrel.dart';
+import '../notifications/barrel.dart';
 import 'event.dart';
 import 'state.dart';
-import 'package:autodo/repositories/repositories.dart';
-import 'package:autodo/models/models.dart';
-import 'package:autodo/util.dart';
-import '../cars/barrel.dart';
-import '../notifications/barrel.dart';
-import '../database/barrel.dart';
-import 'package:autodo/generated/localization.dart';
 
 class TodosBloc extends Bloc<TodosEvent, TodosState> {
   TodosBloc(

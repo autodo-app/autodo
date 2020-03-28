@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:autodo/generated/localization.dart';
-import 'package:autodo/screens/settings/screen.dart';
 import 'package:bloc/bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
@@ -17,9 +15,11 @@ import 'package:sentry/sentry.dart';
 
 import 'blocs/blocs.dart';
 import 'delegate.dart';
+import 'generated/localization.dart';
 import 'repositories/repositories.dart';
 import 'routes.dart';
 import 'screens/screens.dart';
+import 'screens/settings/screen.dart';
 import 'secret_loader.dart';
 import 'theme.dart';
 import 'units/units.dart';

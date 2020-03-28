@@ -1,11 +1,12 @@
-import 'package:autodo/units/units.dart';
+
 import 'package:flutter/material.dart';
 import 'package:json_intl/json_intl.dart';
 
-import 'package:autodo/models/models.dart';
-import 'package:autodo/generated/localization.dart';
-import 'package:autodo/theme.dart';
-import 'package:autodo/util.dart';
+import '../../../generated/localization.dart';
+import '../../../models/models.dart';
+import '../../../theme.dart';
+import '../../../units/units.dart';
+import '../../../util.dart';
 
 enum DateRepeatInterval { NEVER, WEEKLY, MONTHLY, YEARLY, CUSTOM }
 const Map<DateRepeatInterval, RepeatInterval> dateIntervals = {

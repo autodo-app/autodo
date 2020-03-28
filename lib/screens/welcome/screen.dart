@@ -1,8 +1,9 @@
-import 'package:autodo/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+
+import '../../integ_test_keys.dart';
+import '../../theme.dart';
 import 'widgets/barrel.dart';
-import 'package:autodo/integ_test_keys.dart';
 
 class WelcomeScreen extends StatelessWidget {
   WelcomeScreen({Key key = IntegrationTestKeys.welcomeScreen, this.dotKeys})

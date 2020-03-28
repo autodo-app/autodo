@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-
-import 'package:autodo/generated/localization.dart';
 import 'package:json_intl/json_intl.dart';
+
+import '../../../../generated/localization.dart';
 
 class SignupSubmitButton extends StatelessWidget {
   const SignupSubmitButton({this.onPressed});

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-import 'package:autodo/repositories/repositories.dart';
+import '../../../repositories/repositories.dart';
 import '../database/barrel.dart';
 import 'event.dart';
 import 'state.dart';
@@ -22,7 +22,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
 
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
-  static final channelID = 'com.jonathanbayless.autodo';
+  static final channelID = 'com.autodo.autodo';
 
   static final channelName = 'auToDo';
 

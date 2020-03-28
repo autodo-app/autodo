@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:autodo/integ_test_keys.dart';
-import 'package:autodo/generated/localization.dart';
-import 'package:autodo/units/units.dart';
-import 'package:autodo/widgets/widgets.dart';
-import 'package:autodo/models/models.dart';
-import 'package:autodo/blocs/blocs.dart';
-import 'package:autodo/theme.dart';
-import 'package:autodo/util.dart';
-import 'package:autodo/routes.dart';
 import 'package:json_intl/json_intl.dart';
-import 'new_user_screen_page.dart';
+
+import '../../../../blocs/blocs.dart';
+import '../../../../generated/localization.dart';
+import '../../../../integ_test_keys.dart';
+import '../../../../models/models.dart';
+import '../../../../routes.dart';
+import '../../../../theme.dart';
+import '../../../../units/units.dart';
+import '../../../../util.dart';
+import '../../../../widgets/widgets.dart';
 import 'base.dart';
+import 'new_user_screen_page.dart';
 
 const int cardAppearDuration = 200; // in ms
 

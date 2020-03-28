@@ -1,9 +1,10 @@
-import 'package:autodo/blocs/blocs.dart';
-import 'package:autodo/models/models.dart';
-import 'package:autodo/models/src/distanceratepoint.dart';
-import 'package:autodo/units/units.dart';
 import 'package:charts_flutter/flutter.dart';
 import 'package:flutter/widgets.dart';
+
+import '../../../blocs/blocs.dart';
+import '../../../units/units.dart';
+import '../../models.dart';
+import '../distanceratepoint.dart';
 
 class DrivingDistanceStats {
   static Future<List<Series<DistanceRatePoint, DateTime>>> fetch(

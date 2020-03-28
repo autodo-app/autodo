@@ -88,7 +88,6 @@ class Pubspec {
         'ref': 'rewrite-pref-service',
       },
     },
-    'yaml': '^2.2.0',
   };
 
   static const Map<dynamic, dynamic> dev_dependencies = <dynamic, dynamic>{

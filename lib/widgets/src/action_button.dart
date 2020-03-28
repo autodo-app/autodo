@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
-import 'package:autodo/integ_test_keys.dart';
+import '../../integ_test_keys.dart';
 
 class AutodoActionButton extends StatefulWidget {
   const AutodoActionButton({

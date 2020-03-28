@@ -1,6 +1,7 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'dart:math' as math;
 
 ///
 /// Much thanks to https://stackoverflow.com/a/49621060 for this.

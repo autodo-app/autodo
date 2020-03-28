@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:autodo/repositories/repositories.dart';
-import 'package:autodo/repositories/src/sembast_data_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
+import '../../../repositories/repositories.dart';
+import '../../../repositories/src/sembast_data_repository.dart';
 import '../database/barrel.dart';
 import 'event.dart';
 import 'state.dart';
@@ -59,7 +59,7 @@ class PaidVersionBloc extends Bloc<PaidVersionEvent, PaidVersionState> {
 
   RouteObserver observer = RouteObserver();
 
-  static const platform = MethodChannel('com.jonathanbayless.autodo/iap');
+  static const platform = MethodChannel('com.autodo.autodo/iap');
 
   DataRepository get repo => (_dbBloc.state is DbLoaded)
       ? (_dbBloc.state as DbLoaded).repository

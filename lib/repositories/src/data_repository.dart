@@ -1,10 +1,9 @@
 import 'dart:async';
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 
-import 'package:autodo/units/units.dart';
-import 'package:autodo/models/models.dart';
+import '../../models/models.dart';
+import '../../units/units.dart';
 import 'write_batch_wrapper.dart';
 
 abstract class DataRepository extends Equatable {
@@ -62,8 +61,8 @@ abstract class DataRepository extends Equatable {
       final todos = await getCurrentTodos();
       final todoWriteBatch = await startTodoWriteBatch();
       todos.map((t) {
-        final dueMileage = Distance(DistanceUnit.imperial, Locale('en-us'))
-            .unitToInternal(t.dueMileage);
+        final dueMileage =
+            t.dueMileage == null ? null : t.dueMileage * Distance.miles;
         return t.copyWith(dueMileage: dueMileage);
       }).forEach((t) {
         todoWriteBatch.updateData(t.id, t.toDocument());
@@ -73,10 +72,9 @@ abstract class DataRepository extends Equatable {
       final refuelings = await getCurrentRefuelings();
       final refuelingWriteBatch = await startRefuelingWriteBatch();
       refuelings.map((r) {
-        final mileage = Distance(DistanceUnit.imperial, Locale('en-us'))
-            .unitToInternal(r.mileage);
-        final amount = Volume(VolumeUnit.imperial, Locale('en-us'))
-            .unitToInternal(r.amount);
+        final mileage = r.mileage == null ? null : r.mileage * Distance.miles;
+        final amount =
+            r.amount == null ? null : r.amount * Volume.usLiquidGallon;
         // I don't think that efficiency needs to be updated because the stats
         // page will handle it, but that could be an issue
         return r.copyWith(mileage: mileage, amount: amount);
@@ -88,8 +86,7 @@ abstract class DataRepository extends Equatable {
       final cars = await getCurrentCars();
       final carWriteBatch = await startCarWriteBatch();
       cars.map((c) {
-        final mileage = Distance(DistanceUnit.imperial, Locale('en-us'))
-            .unitToInternal(c.mileage);
+        final mileage = c.mileage == null ? null : c.mileage * Distance.miles;
         // distance rate and efficiency should similarly be updated by the stats
         // calcs here
         return c.copyWith(mileage: mileage);

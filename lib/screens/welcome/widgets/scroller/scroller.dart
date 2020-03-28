@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-import 'welcome.dart';
 import 'tutorial1.dart';
 import 'tutorial2.dart';
+import 'welcome.dart';
 
 class WelcomePageScroller extends StatefulWidget {
   WelcomePageScroller({this.lastPageNotifier});

@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:autodo/models/models.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import 'package:autodo/generated/pubspec.dart';
+import '../../generated/pubspec.dart';
+import '../../models/models.dart';
 import 'data_repository.dart';
 import 'firebase_write_batch.dart';
 import 'write_batch_wrapper.dart';

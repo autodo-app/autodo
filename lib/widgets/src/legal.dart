@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:autodo/generated/localization.dart';
-import 'package:autodo/theme.dart';
 import 'package:json_intl/json_intl.dart';
+
+import '../../generated/localization.dart';
+import '../../theme.dart';
 
 class PrivacyPolicy extends StatelessWidget {
   const PrivacyPolicy(this.text, {Key key, this.buttonKey}) : super(key: key);
