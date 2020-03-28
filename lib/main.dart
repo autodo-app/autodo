@@ -164,9 +164,9 @@ Future<Map> init() async {
 Future<void> main() async {
   final keys = await init();
   _sentry = SentryClient(dsn: keys['sentry-dsn']);
-  await runZoned<Future<void>>(() async {
+  await runZonedGuarded<Future<void>>(() async {
     await run(false);
-  }, onError: _reportError);
+  }, _reportError);
 }
 
 class App extends StatelessWidget {
