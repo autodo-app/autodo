@@ -5,6 +5,10 @@ class IntlKeys {
   /// strings-fr.json: 'Nom de l\'action *'
   static const actionName = 'action_name';
 
+  /// strings.json: 'Add'
+  /// strings-fr.json: 'Ajouter'
+  static const add = 'add';
+
   /// strings.json: 'Add Refueling'
   /// strings-fr.json: 'Ajouter un plein'
   static const addRefueling = 'add_refueling';
@@ -16,10 +20,6 @@ class IntlKeys {
   /// strings.json: 'Add Todo'
   /// strings-fr.json: 'Ajouter une tâche'
   static const addTodo = 'add_todo';
-
-  /// strings.json: 'Add'
-  /// strings-fr.json: 'Ajouter'
-  static const add = 'add';
 
   /// strings.json: 'Already have an account?'
   /// strings-fr.json: 'Vous avez déjà un compte?'
@@ -65,33 +65,45 @@ class IntlKeys {
   /// strings-fr.json: 'Créer un compte'
   static const createAnAccount = 'create_an_account';
 
+  /// strings.json: 'Custom'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const custom = 'custom';
+
+  /// strings.json: 'Day'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const day = 'day';
+
+  /// strings.json: 'Days'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const days = 'days';
+
   /// strings.json: 'Default currency'
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const defaultCurrency = 'default_currency';
-
-  /// strings.json: 'Deleting your account will permanently remove all data associated with your account.\n\n Are you sure you want to proceed?'
-  /// strings-fr.json: 'La suppression de votre compte supprimera définitivement toutes les données associées à votre compte.\n\n Êtes-vous sur de vouloir continuer?'
-  static const deleteAccountMessage = 'delete_account_message';
 
   /// strings.json: 'Delete Account'
   /// strings-fr.json: 'Supprimer le compte'
   static const deleteAccount = 'delete_account';
 
-  /// strings.json: 'km'
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  static const distanceKmShort = 'distance_km_short';
+  /// strings.json: 'Deleting your account will permanently remove all data associated with your account.\n\n Are you sure you want to proceed?'
+  /// strings-fr.json: 'La suppression de votre compte supprimera définitivement toutes les données associées à votre compte.\n\n Êtes-vous sur de vouloir continuer?'
+  static const deleteAccountMessage = 'delete_account_message';
 
   /// strings.json: 'kilometers'
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const distanceKm = 'distance_km';
 
-  /// strings.json: 'mi'
+  /// strings.json: 'km'
   /// strings-fr.json: *** NOT TRANSLATED ***
-  static const distanceMilesShort = 'distance_miles_short';
+  static const distanceKmShort = 'distance_km_short';
 
   /// strings.json: 'miles'
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const distanceMiles = 'distance_miles';
+
+  /// strings.json: 'mi'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const distanceMilesShort = 'distance_miles_short';
 
   /// strings.json: 'Driving Distance History ({{ unit }} per day)'
   /// strings-fr.json: 'Historique des distances de conduite ({{ unit }} par jour)'
@@ -137,6 +149,10 @@ class IntlKeys {
   /// strings-fr.json: 'Email'
   static const email = 'email';
 
+  /// strings.json: 'Every'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const every = 'every';
+
   /// strings.json: 'Filter ToDos'
   /// strings-fr.json: 'Filtrer les tâches'
   static const filterTodos = 'filter_todos';
@@ -153,29 +169,29 @@ class IntlKeys {
   /// strings-fr.json: 'Historique de l\'efficacité énergétique ({{ distance }} par {{ volume }})'
   static const fuelEfficiencyHistory = 'fuel_efficiency_history';
 
-  /// strings.json: 'gal'
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  static const fuelGallonsImperialShort = 'fuel_gallons_imperial_short';
-
   /// strings.json: 'gallons'
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const fuelGallonsImperial = 'fuel_gallons_imperial';
 
   /// strings.json: 'gal'
   /// strings-fr.json: *** NOT TRANSLATED ***
-  static const fuelGallonsUsShort = 'fuel_gallons_us_short';
+  static const fuelGallonsImperialShort = 'fuel_gallons_imperial_short';
 
   /// strings.json: 'US gallons'
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const fuelGallonsUs = 'fuel_gallons_us';
 
-  /// strings.json: 'l'
+  /// strings.json: 'gal'
   /// strings-fr.json: *** NOT TRANSLATED ***
-  static const fuelLitersShort = 'fuel_liters_short';
+  static const fuelGallonsUsShort = 'fuel_gallons_us_short';
 
   /// strings.json: 'liters'
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const fuelLiters = 'fuel_liters';
+
+  /// strings.json: 'l'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const fuelLitersShort = 'fuel_liters_short';
 
   /// strings.json: 'Got It!'
   /// strings-fr.json: 'Je l\'ai !'
@@ -229,13 +245,13 @@ class IntlKeys {
   /// strings-fr.json: 'Se connecter...'
   static const loggingInEllipsis = 'logging_in_ellipsis';
 
-  /// strings.json: 'Login Failure'
-  /// strings-fr.json: 'Erreur d\'authentification'
-  static const loginFailure = 'login_failure';
-
   /// strings.json: 'Login'
   /// strings-fr.json: 'S\'identifier'
   static const login = 'login';
+
+  /// strings.json: 'Login Failure'
+  /// strings-fr.json: 'Erreur d\'authentification'
+  static const loginFailure = 'login_failure';
 
   /// strings.json: 'Mark All Complete'
   /// strings-fr.json: 'Marquer tout comme terminé'
@@ -245,33 +261,49 @@ class IntlKeys {
   /// strings-fr.json: 'Marquer tout comme incomplet'
   static const markAllIncomplete = 'mark_all_incomplete';
 
-  /// strings.json: 'Mileage Interval *'
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  static const mileageIntervalStar = 'mileage_interval_star';
+  /// strings.json: 'Mileage'
+  /// strings-fr.json: 'Kilométrage'
+  static const mileage = 'mileage';
 
   /// strings.json: 'Mileage Interval'
   /// strings-fr.json: 'Intervalle de kilométrage *'
   static const mileageInterval = 'mileage_interval';
 
-  /// strings.json: 'Mileage'
-  /// strings-fr.json: 'Kilométrage'
-  static const mileage = 'mileage';
+  /// strings.json: 'Mileage Interval *'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const mileageIntervalStar = 'mileage_interval_star';
+
+  /// strings.json: 'Month'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const month = 'month';
+
+  /// strings.json: 'Monthly'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const monthly = 'monthly';
+
+  /// strings.json: 'Months'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const months = 'months';
+
+  /// strings.json: 'Never'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const never = 'never';
 
   /// strings.json: 'Next'
   /// strings-fr.json: 'Suite'
   static const next = 'next';
 
-  /// strings.json: 'Need at least 3 refuelings to see efficiency data.'
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  static const noDataRefuelings = 'no_data_refuelings';
+  /// strings.json: 'no'
+  /// strings-fr.json: 'non'
+  static const no = 'no';
 
   /// strings.json: 'No Data Available to Display.'
   /// strings-fr.json: 'Aucune donnée disponible à afficher.'
   static const noData = 'no_data';
 
-  /// strings.json: 'no'
-  /// strings-fr.json: 'non'
-  static const no = 'no';
+  /// strings.json: 'Need at least 3 refuelings to see efficiency data.'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const noDataRefuelings = 'no_data_refuelings';
 
   /// strings.json: 'Odometer Reading'
   /// strings-fr.json: 'Relevé du compteur kilométrique'
@@ -305,6 +337,10 @@ class IntlKeys {
   /// strings-fr.json: 'achat'
   static const purchase = 'purchase';
 
+  /// strings.json: 'Refueling'
+  /// strings-fr.json: 'plein'
+  static const refueling = 'refueling';
+
   /// strings.json: 'Refueling Amount'
   /// strings-fr.json: 'Quantité du plein'
   static const refuelingAmount = 'refueling_amount';
@@ -317,10 +353,6 @@ class IntlKeys {
   /// strings-fr.json: 'plein supprimé.'
   static const refuelingDeleted = 'refueling_deleted';
 
-  /// strings.json: 'Refueling'
-  /// strings-fr.json: 'plein'
-  static const refueling = 'refueling';
-
   /// strings.json: 'Refuelings'
   /// strings-fr.json: 'pleins'
   static const refuelings = 'refuelings';
@@ -328,6 +360,10 @@ class IntlKeys {
   /// strings.json: 'Remove'
   /// strings-fr.json: 'Retirer'
   static const remove = 'remove';
+
+  /// strings.json: 'Repeat'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const repeat = 'repeat';
 
   /// strings.json: 'Alignment Check'
   /// strings-fr.json: 'Contrôle d\'alignement'
@@ -344,6 +380,10 @@ class IntlKeys {
   /// strings.json: 'Cabin Filter'
   /// strings-fr.json: 'Filtre d\'habitacle'
   static const repeatCabinFilter = 'repeat_cabin_filter';
+
+  /// strings.json: 'REPEAT'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const repeatCaps = 'repeat_caps';
 
   /// strings.json: 'Coolant Change'
   /// strings-fr.json: 'Changement du liquide de refroidissement'
@@ -409,13 +449,13 @@ class IntlKeys {
   /// strings-fr.json: 'Sauvegarder les modifications'
   static const saveChanges = 'save_changes';
 
-  /// strings.json: 'Send Password Reset'
-  /// strings-fr.json: 'Envoyer la réinitialisation du mot de passe'
-  static const sendPasswordReset = 'send_password_reset';
-
   /// strings.json: 'Send'
   /// strings-fr.json: 'Envoyer'
   static const send = 'send';
+
+  /// strings.json: 'Send Password Reset'
+  /// strings-fr.json: 'Envoyer la réinitialisation du mot de passe'
+  static const sendPasswordReset = 'send_password_reset';
 
   /// strings.json: 'Settings'
   /// strings-fr.json: 'Réglages'
@@ -425,13 +465,13 @@ class IntlKeys {
   /// strings-fr.json: 'Afficher les tâches actives'
   static const showActive = 'show_active';
 
-  /// strings.json: 'Show All ToDos'
-  /// strings-fr.json: 'Afficher toutes les tâches'
-  static const showAllTodos = 'show_all_toDos';
-
   /// strings.json: 'Show All'
   /// strings-fr.json: 'Afficher tout'
   static const showAll = 'show_all';
+
+  /// strings.json: 'Show All ToDos'
+  /// strings-fr.json: 'Afficher toutes les tâches'
+  static const showAllTodos = 'show_all_toDos';
 
   /// strings.json: 'Show Completed'
   /// strings-fr.json: 'Afficher les tâches terminées'
@@ -457,13 +497,13 @@ class IntlKeys {
   /// strings-fr.json: 'S\'inscrire'
   static const signup = 'signup';
 
-  /// strings.json: 'Set recurring tasks to never worry about forgetting a maintenance task again.'
-  /// strings-fr.json: 'Définissez des tâches récurrentes pour ne plus jamais vous soucier d\'oublier une tâche de maintenance.'
-  static const simplifyTasksDesc = 'simplify_tasks_desc';
-
   /// strings.json: 'Simplify Your Tasks'
   /// strings-fr.json: 'Simplifiez vos tâches'
   static const simplifyTasks = 'simplify_tasks';
+
+  /// strings.json: 'Set recurring tasks to never worry about forgetting a maintenance task again.'
+  /// strings-fr.json: 'Définissez des tâches récurrentes pour ne plus jamais vous soucier d\'oublier une tâche de maintenance.'
+  static const simplifyTasksDesc = 'simplify_tasks_desc';
 
   /// strings.json: 'Stats'
   /// strings-fr.json: 'Statistiques'
@@ -501,13 +541,13 @@ class IntlKeys {
   /// strings-fr.json: 'Prix total'
   static const totalPrice = 'total_price';
 
-  /// strings.json: 'Create todo items and recurring events that notify you on your terms.'
-  /// strings-fr.json: 'Créez des tâches et des événements récurrents qui vous informent sur vos conditions.'
-  static const trackMaintenanceDesc = 'track_maintenance_desc';
-
   /// strings.json: 'Track Maintenance'
   /// strings-fr.json: 'Maintenance des voies'
   static const trackMaintenance = 'track_maintenance';
+
+  /// strings.json: 'Create todo items and recurring events that notify you on your terms.'
+  /// strings-fr.json: 'Créez des tâches et des événements récurrents qui vous informent sur vos conditions.'
+  static const trackMaintenanceDesc = 'track_maintenance_desc';
 
   /// strings.json: 'TRY WITHOUT AN ACCOUNT'
   /// strings-fr.json: 'ESSAYEZ SANS COMPTE'
@@ -521,6 +561,14 @@ class IntlKeys {
   /// strings-fr.json: 'À venir :'
   static const upcoming = 'upcoming';
 
+  /// strings.json: 'UPGRADE'
+  /// strings-fr.json: 'METTRE À JOUR'
+  static const upgrade = 'upgrade';
+
+  /// strings.json: 'Upgrade to Paid Version'
+  /// strings-fr.json: 'Mettre à niveau vers la version payante'
+  static const upgradePaidVersion = 'upgrade_paid_version';
+
   /// strings.json: 'For a small, one time fee you can upgrade your account to the Paid Version of auToDo, where ads are removed.'
   /// strings-fr.json: 'Pour une somme modique, vous pouvez mettre à niveau votre compte vers la version payante d’auToDo, où les publicités sont supprimées.'
   static const upgradePaidVersionDesc = 'upgrade_paid_version_desc';
@@ -528,14 +576,6 @@ class IntlKeys {
   /// strings.json: 'Trial Users cannot upgrade to the paid version of auToDo. Please create an account first.'
   /// strings-fr.json: 'Les utilisateurs d\'essai ne peuvent pas passer à la version payante d\'auToDo. Veuillez d\'abord créer un compte.'
   static const upgradePaidVersionTrial = 'upgrade_paid_version_trial';
-
-  /// strings.json: 'Upgrade to Paid Version'
-  /// strings-fr.json: 'Mettre à niveau vers la version payante'
-  static const upgradePaidVersion = 'upgrade_paid_version';
-
-  /// strings.json: 'UPGRADE'
-  /// strings-fr.json: 'METTRE À JOUR'
-  static const upgrade = 'upgrade';
 
   /// strings.json: 'Please check the specified email address for an email from auToDo. This email will contain a link through which you can verify your account and use the app.'
   /// strings-fr.json: 'Veuillez vérifier votre boite de courriel pour un courriel de la part d\'auToDo. Ce courriel contiendra un lien qui permet de valider votre compte et utiliser l\'application.'
@@ -561,75 +601,35 @@ class IntlKeys {
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const volumeUnit = 'volume_unit';
 
-  /// strings.json: 'Car maintenance made simple.'
-  /// strings-fr.json: 'L\'entretien des voitures en toute simplicité.'
-  static const welcomeDesc = 'welcome_desc';
-
-  /// strings.json: 'Welcome to auToDo!'
-  /// strings-fr.json: 'Bienvenue dans auToDo !'
-  static const welcome = 'welcome';
-
-  /// strings.json: 'Yes'
-  /// strings-fr.json: 'Oui'
-  static const yes = 'yes';
-
-  /// strings.json: 'Never'
+  /// strings.json: 'Week'
   /// strings-fr.json: *** NOT TRANSLATED ***
-  static const never = 'never';
+  static const week = 'week';
 
   /// strings.json: 'Weekly'
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const weekly = 'weekly';
 
-  /// strings.json: 'Monthly'
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  static const monthly = 'monthly';
+  /// strings.json: 'Welcome to auToDo!'
+  /// strings-fr.json: 'Bienvenue dans auToDo !'
+  static const welcome = 'welcome';
 
-  /// strings.json: 'Yearly'
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  static const yearly = 'yearly';
-
-  /// strings.json: 'Custom'
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  static const custom = 'custom';
-
-  /// strings.json: 'Repeat'
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  static const repeat = 'repeat';
-
-  /// strings.json: 'REPEAT'
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  static const repeatCaps = 'repeat_caps';
-
-  /// strings.json: 'Days'
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  static const days = 'days';
-
-  /// strings.json: 'Day'
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  static const day = 'day';
-
-  /// strings.json: 'Month'
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  static const month = 'month';
-
-  /// strings.json: 'Months'
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  static const months = 'months';
-
-  /// strings.json: 'Week'
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  static const week = 'week';
-
-  /// strings.json: 'Years'
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  static const years = 'years';
+  /// strings.json: 'Car maintenance made simple.'
+  /// strings-fr.json: 'L\'entretien des voitures en toute simplicité.'
+  static const welcomeDesc = 'welcome_desc';
 
   /// strings.json: 'Year'
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const year = 'year';
 
-  /// strings.json: 'Every'
+  /// strings.json: 'Yearly'
   /// strings-fr.json: *** NOT TRANSLATED ***
-  static const every = 'every';
+  static const yearly = 'yearly';
+
+  /// strings.json: 'Years'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const years = 'years';
+
+  /// strings.json: 'Yes'
+  /// strings-fr.json: 'Oui'
+  static const yes = 'yes';
 }

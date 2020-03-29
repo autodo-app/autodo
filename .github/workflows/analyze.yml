@@ -12,5 +12,6 @@ jobs:
       with:
         channel: 'dev'
     - run: flutter pub get
-    - run: mkdir -p assets && echo "${{ secrets.keys_json }}" > assets/keys.json
+    - run: echo "${{ secrets.keys_json }}" > keys.json
+    - run: flutter pub run pubspec_extract -s keys.json -d lib/generated/keys.dart -c Keys
     - run: flutter analyze

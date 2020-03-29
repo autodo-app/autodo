@@ -20,13 +20,30 @@ class SembastDataRepository extends DataRepository {
       : dbFactory = dbFactory ?? databaseFactoryIo,
         pathProvider = pathProvider ?? getApplicationDocumentsDirectory;
 
-  Future<void> _upgrade() async {
+  Future<void> _setDatabaseVersion(int version) async {
+    await dbLock.acquire();
+    final _db = await _openDb();
+    await StoreRef.main().record('version').put(_db, version);
+    await _db.close();
+    dbLock.release();
+  }
+
+  Future<void> _upgrade(bool createDb) async {
     final dbVersion = Pubspec.db_version;
     await dbLock.acquire();
     final _db = await _openDb();
     final curVersion = _db.version;
-    if (curVersion != dbVersion) {
-      await upgrade(curVersion, dbVersion);
+    await _db.close();
+    dbLock.release();
+
+    if (createDb) {
+      await _setDatabaseVersion(dbVersion);
+    } else if (curVersion != dbVersion) {
+      final newVersion = await upgrade(curVersion, dbVersion);
+      if (newVersion == dbVersion) {
+        // upgrade went successfully
+        await _setDatabaseVersion(newVersion);
+      }
     }
   }
 
@@ -45,7 +62,7 @@ class SembastDataRepository extends DataRepository {
         dbFactory: dbFactory,
         dbPath: dbPath,
         pathProvider: pathProvider);
-    await out._upgrade();
+    await out._upgrade(createDb);
     return out;
   }
 

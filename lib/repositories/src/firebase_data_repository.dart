@@ -15,12 +15,25 @@ class FirebaseDataRepository extends DataRepository {
         _firestoreInstance = firestoreInstance ?? Firestore.instance,
         _uuid = uuid;
 
-  Future<void> _upgrade() async {
+  Future<void> _setDatabaseVersion(
+      DocumentSnapshot userDoc, int newVersion) async {
+    userDoc.data['db_version'] = newVersion;
+    await _userDoc.setData(userDoc.data);
+  }
+
+  Future<void> _upgrade(bool newUser) async {
     final dbVersion = Pubspec.db_version;
     final userDoc = await _userDoc.get();
-    final curVersion = userDoc.data['db_version'] ?? 0;
-    if (curVersion != dbVersion) {
-      await upgrade(curVersion, dbVersion);
+    final curVersion = userDoc.data['db_version'] ?? 1;
+
+    if (newUser) {
+      await _setDatabaseVersion(userDoc, dbVersion);
+    } else if (curVersion != dbVersion) {
+      final newVersion = await upgrade(curVersion, dbVersion);
+      if (newVersion == dbVersion) {
+        // upgrade worked successfully
+        await _setDatabaseVersion(userDoc, newVersion);
+      }
     }
   }
 
@@ -30,10 +43,10 @@ class FirebaseDataRepository extends DataRepository {
   /// check the user's current database version against the expected
   /// version and migrate the data if needed.
   static Future<FirebaseDataRepository> open(
-      {Firestore firestoreInstance, @required String uuid}) async {
+      {Firestore firestoreInstance, @required String uuid, newUser}) async {
     final out = FirebaseDataRepository._(
         firestoreInstance: firestoreInstance, uuid: uuid);
-    await out._upgrade();
+    await out._upgrade(newUser ?? false);
     return out;
   }
 

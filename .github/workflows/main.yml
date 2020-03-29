@@ -16,7 +16,8 @@ jobs:
       with:
         channel: 'dev'
     - run: flutter pub get
-    - run: mkdir -p assets && echo '${{ secrets.keys_json }}' > assets/keys.json
+    - run: echo '${{ secrets.keys_json }}' > keys.json
+    - run: flutter pub run pubspec_extract -s keys.json -d lib/generated/keys.dart -c Keys
     - run: echo '${{ secrets.store_file }}' | base64 --decode > ~/keystore.jks
     - run: echo '${{ secrets.google_services_test }}' > ./android/app/src/debug/google-services.json
     - run: echo '${{ secrets.google_services_prod }}' > ./android/app/src/release/google-services.json
@@ -41,7 +42,8 @@ jobs:
         channel: 'dev'
     - run: flutter pub get
     - run: mkdir -p assets ios/Release
-    - run: echo '${{ secrets.keys_json }}' > assets/keys.json
+    - run: echo '${{ secrets.keys_json }}' > keys.json
+    - run: flutter pub run pubspec_extract -s keys.json -d lib/generated/keys.dart -c Keys
     - run: echo '${{ secrets.google_services_plist }}' > ./ios/Release/GoogleService-Info.plist
     - run: echo '${{ secrets.info_plist }}' > ./ios/Release/Info.plist
     - run: flutter clean

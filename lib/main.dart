@@ -15,31 +15,37 @@ import 'package:sentry/sentry.dart';
 
 import 'blocs/blocs.dart';
 import 'delegate.dart';
+import 'flavor.dart';
+import 'generated/keys.dart';
 import 'generated/localization.dart';
 import 'repositories/repositories.dart';
 import 'routes.dart';
 import 'screens/screens.dart';
 import 'screens/settings/screen.dart';
-import 'secret_loader.dart';
 import 'theme.dart';
 import 'units/units.dart';
 import 'widgets/widgets.dart';
 
 SentryClient _sentry;
 
-Future<void> _reportError(dynamic error, dynamic stackTrace) async {
-  print('Caught error: $error');
-  if (!kReleaseMode) {
-    // Print the full stacktrace in debug mode.
-    print(stackTrace);
-    return;
-  } else {
-    // Send the Exception and Stacktrace to Sentry in Production mode.
-    await _sentry.captureException(
-      exception: error,
-      stackTrace: stackTrace,
-    );
+Future<void> _reportError(
+  FlutterErrorDetails details, {
+  bool forceReport = false,
+}) async {
+  if (kFlavor.useSentry) {
+    try {
+      // Send the Exception and Stacktrace to Sentry
+      await _sentry.captureException(
+        exception: details.exception,
+        stackTrace: details.stack,
+      );
+    } catch (e) {
+      print('Sending report to sentry.io failed: $e');
+    }
   }
+
+  // Use Flutter's pretty error logging to the device's console.
+  FlutterError.dumpErrorToConsole(details, forceReport: forceReport);
 }
 
 Future<void> run(bool integrationTest) async {
@@ -69,11 +75,12 @@ Future<void> run(bool integrationTest) async {
             ),
             child: MultiBlocProvider(
               providers: [
-                BlocProvider<PaidVersionBloc>(
-                  create: (context) => PaidVersionBloc(
-                      dbBloc: BlocProvider.of<DatabaseBloc>(context))
-                    ..add(LoadPaidVersion()),
-                ),
+                if (kFlavor.hasPaid)
+                  BlocProvider<PaidVersionBloc>(
+                    create: (context) => PaidVersionBloc(
+                        dbBloc: BlocProvider.of<DatabaseBloc>(context))
+                      ..add(LoadPaidVersion()),
+                  ),
                 BlocProvider<NotificationsBloc>(
                   create: (context) => NotificationsBloc(
                     dbBloc: BlocProvider.of<DatabaseBloc>(context),
@@ -114,10 +121,10 @@ Future<void> run(bool integrationTest) async {
   );
 }
 
-Future<void> configureFirebase(keys) async {
+Future<void> configureFirebase() async {
   String googleAppID, projectID, apiKey;
   if (kReleaseMode) {
-    apiKey = keys['firebase-prod-key'];
+    apiKey = Keys.firebaseProdKey;
     projectID = 'autodo-e93fc';
     if (Platform.isIOS) {
       googleAppID = '1:356275435347:ios:4e46f5fa8de51c6faad3a6';
@@ -125,7 +132,7 @@ Future<void> configureFirebase(keys) async {
       googleAppID = '1:356275435347:android:5d33ed5a0494d852aad3a6';
     }
   } else {
-    apiKey = keys['firebase-test-key'];
+    apiKey = Keys.firebaseTestKey;
     projectID = 'autodo-49f21';
     if (Platform.isIOS) {
       googleAppID = '1:617460744396:ios:7da25d96edce10cefc4269';
@@ -143,27 +150,31 @@ Future<void> configureFirebase(keys) async {
       ));
 }
 
-Future<Map> init() async {
+Future<void> init() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final Map keys = await SecretLoader(secretPath: 'assets/keys.json').load();
-  await configureFirebase(keys);
-  InAppPurchaseConnection
-      .enablePendingPurchases(); // required in init for Android
+  await configureFirebase();
+  // required in init for Android
+  InAppPurchaseConnection.enablePendingPurchases();
   BlocSupervisor.delegate = AutodoBlocDelegate();
-  return keys;
 }
 
 Future<void> main() async {
-  final keys = await init();
-  _sentry = SentryClient(dsn: keys['sentry-dsn']);
-  await runZoned<Future<void>>(() async {
-    await run(false);
-  }, onError: _reportError);
+  await init();
+
+  if (kFlavor.useSentry) {
+    _sentry = SentryClient(dsn: Keys.sentryDsn);
+  }
+
+  FlutterError.onError = _reportError;
+  await run(false);
 }
 
 class App extends StatelessWidget {
-  const App({@required theme, @required authRepository, this.integrationTest})
-      : assert(theme != null),
+  const App({
+    @required ThemeData theme,
+    @required AuthRepository authRepository,
+    this.integrationTest,
+  })  : assert(theme != null),
         assert(authRepository != null),
         _theme = theme,
         _authRepository = authRepository;
@@ -218,7 +229,9 @@ class App extends StatelessWidget {
       },
       theme: _theme,
       debugShowCheckedModeBanner: false,
-      navigatorObservers: [BlocProvider.of<PaidVersionBloc>(context).observer],
+      navigatorObservers: [
+        if (kFlavor.hasPaid) BlocProvider.of<PaidVersionBloc>(context).observer,
+      ],
     );
   }
 }
