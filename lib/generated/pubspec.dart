@@ -112,7 +112,6 @@ class Pubspec {
       'img/icon-only.png',
       'img/icon-only-green.png',
       'legal/privacy-policy.md',
-      'assets/keys.json',
       'assets/intl/',
     ],
     'fonts': <dynamic>[
