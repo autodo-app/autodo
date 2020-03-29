@@ -56,7 +56,7 @@ abstract class DataRepository extends Equatable {
   Future<List<Map<String, dynamic>>> getRepeats();
 
   Future<int> upgrade(int curVer, int desVer) async {
-    if (curVer == 1 && desVer == 2) {
+    if (curVer == 1 && desVer >= 2) {
       // Move to SI units internally
       final todos = await getCurrentTodos();
       final todoWriteBatch = await startTodoWriteBatch();
