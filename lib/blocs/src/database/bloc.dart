@@ -53,9 +53,9 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
 
   Stream<DatabaseState> _mapUserLoggedInToState(event) async* {
     final repository = await FirebaseDataRepository.open(
-      firestoreInstance: _firestoreInstance,
-      uuid: event.uuid,
-    );
+        firestoreInstance: _firestoreInstance,
+        uuid: event.uuid,
+        newUser: event.newUser);
     yield DbLoaded(repository, event.newUser);
   }
 

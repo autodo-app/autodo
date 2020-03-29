@@ -65,7 +65,7 @@ abstract class DataRepository extends Equatable {
   // Paid or Ad-supported version
   Future<bool> getPaidStatus();
 
-  Future<void> upgrade(int curVer, int desVer) async {
+  Future<int> upgrade(int curVer, int desVer) async {
     if (curVer == 1 && desVer == 2) {
       // Move to SI units internally
       final todos = await getCurrentTodos();
@@ -117,5 +117,7 @@ abstract class DataRepository extends Equatable {
       });
       await repeatWriteBatch.commit();
     }
+
+    return desVer;
   }
 }
