@@ -17,6 +17,7 @@ dependencies:
   intl:
   json_intl:
   cloud_firestore:
+  firebase_analytics:
   firebase_auth:
   shared_preferences:
   flutter_typeahead:

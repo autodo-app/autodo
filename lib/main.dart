@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -70,6 +72,7 @@ class AppProviderState extends State<AppProvider> {
   AuthRepository authRepository;
   ThemeData theme;
   SharedPrefService service;
+  final analytics = kFlavor.hasAnalytics ? FirebaseAnalytics() : null;
 
   Future<void> _configureFirebase() async {
     String googleAppID, projectID, apiKey;
@@ -174,7 +177,8 @@ class AppProviderState extends State<AppProvider> {
                       child: App(
                           theme: theme,
                           authRepository: authRepository,
-                          integrationTest: widget.integrationTest),
+                          integrationTest: widget.integrationTest,
+                          analytics: analytics),
                     ),
                   ),
                 ),
@@ -192,6 +196,7 @@ class App extends StatelessWidget {
     @required ThemeData theme,
     @required AuthRepository authRepository,
     this.integrationTest,
+    this.analytics,
   })  : assert(theme != null),
         assert(authRepository != null),
         _theme = theme,
@@ -202,6 +207,8 @@ class App extends StatelessWidget {
   final AuthRepository _authRepository;
 
   final bool integrationTest;
+
+  final FirebaseAnalytics analytics;
 
   @override
   Widget build(context) {
@@ -249,6 +256,7 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       navigatorObservers: [
         if (kFlavor.hasPaid) BlocProvider.of<PaidVersionBloc>(context).observer,
+        if (analytics != null) FirebaseAnalyticsObserver(analytics: analytics),
       ],
     );
   }
