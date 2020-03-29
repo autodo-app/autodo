@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -75,32 +74,14 @@ class AppProviderState extends State<AppProvider> {
   final analytics = kFlavor.hasAnalytics ? FirebaseAnalytics() : null;
 
   Future<void> _configureFirebase() async {
-    String googleAppID, projectID, apiKey;
-    if (kReleaseMode) {
-      apiKey = Keys.firebaseProdKey;
-      projectID = 'autodo-e93fc';
-      if (Platform.isIOS) {
-        googleAppID = '1:356275435347:ios:4e46f5fa8de51c6faad3a6';
-      } else {
-        googleAppID = '1:356275435347:android:5d33ed5a0494d852aad3a6';
-      }
-    } else {
-      apiKey = Keys.firebaseTestKey;
-      projectID = 'autodo-49f21';
-      if (Platform.isIOS) {
-        googleAppID = '1:617460744396:ios:7da25d96edce10cefc4269';
-      } else {
-        googleAppID = '1:617460744396:android:400cbb86de167047';
-      }
-    }
-
     await FirebaseApp.configure(
-        name: 'autodo',
-        options: FirebaseOptions(
-          googleAppID: googleAppID,
-          projectID: projectID,
-          apiKey: apiKey,
-        ));
+      name: kFlavor.firebaseAppName,
+      options: FirebaseOptions(
+        googleAppID: kFlavor.googleAppID,
+        projectID: kFlavor.projectID,
+        apiKey: kFlavor.firebaseApiKey,
+      ),
+    );
   }
 
   Future<void> _initMainWidget() async {
