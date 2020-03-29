@@ -16,12 +16,12 @@ import 'package:sentry/sentry.dart';
 import 'blocs/blocs.dart';
 import 'delegate.dart';
 import 'flavor.dart';
+import 'generated/keys.dart';
 import 'generated/localization.dart';
 import 'repositories/repositories.dart';
 import 'routes.dart';
 import 'screens/screens.dart';
 import 'screens/settings/screen.dart';
-import 'secret_loader.dart';
 import 'theme.dart';
 import 'units/units.dart';
 import 'widgets/widgets.dart';
@@ -129,10 +129,10 @@ Future<void> run(bool integrationTest) async {
   );
 }
 
-Future<void> configureFirebase(keys) async {
+Future<void> configureFirebase() async {
   String googleAppID, projectID, apiKey;
   if (kReleaseMode) {
-    apiKey = keys['firebase-prod-key'];
+    apiKey = Keys.firebaseProdKey;
     projectID = 'autodo-e93fc';
     if (Platform.isIOS) {
       googleAppID = '1:356275435347:ios:4e46f5fa8de51c6faad3a6';
@@ -140,7 +140,7 @@ Future<void> configureFirebase(keys) async {
       googleAppID = '1:356275435347:android:5d33ed5a0494d852aad3a6';
     }
   } else {
-    apiKey = keys['firebase-test-key'];
+    apiKey = Keys.firebaseTestKey;
     projectID = 'autodo-49f21';
     if (Platform.isIOS) {
       googleAppID = '1:617460744396:ios:7da25d96edce10cefc4269';
@@ -158,21 +158,19 @@ Future<void> configureFirebase(keys) async {
       ));
 }
 
-Future<Map> init() async {
+Future<void> init() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final Map keys = await SecretLoader(secretPath: 'assets/keys.json').load();
-  await configureFirebase(keys);
-  InAppPurchaseConnection
-      .enablePendingPurchases(); // required in init for Android
+  await configureFirebase();
+  // required in init for Android
+  InAppPurchaseConnection.enablePendingPurchases();
   BlocSupervisor.delegate = AutodoBlocDelegate();
-  return keys;
 }
 
 Future<void> main() async {
-  final keys = await init();
+  await init();
 
   if (kFlavor.useSentry) {
-    _sentry = SentryClient(dsn: keys['sentry-dsn']);
+    _sentry = SentryClient(dsn: Keys.sentryDsn);
   }
 
   FlutterError.onError = _reportError;
