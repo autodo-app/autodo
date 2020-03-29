@@ -9,6 +9,7 @@ const kFlavor = kReleaseMode
     FlavorData._(
         hasPaid: false,
         useSentry: false,
+        hasAnalytics: false,
       );
 
 /// Default release application settings
@@ -18,6 +19,7 @@ class FlavorData {
     this.hasAds = false,
     this.hasPaid = true,
     this.useSentry = true,
+    this.hasAnalytics = true,
   });
 
   /// Enable the Ads banner
@@ -28,4 +30,7 @@ class FlavorData {
 
   /// Send the runtime errors to Sentry
   final bool useSentry;
+
+  /// Add analytics to the app
+  final bool hasAnalytics;
 }

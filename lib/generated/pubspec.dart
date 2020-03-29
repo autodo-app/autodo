@@ -39,6 +39,7 @@ class Pubspec {
     'intl': null,
     'json_intl': null,
     'cloud_firestore': null,
+    'firebase_analytics': null,
     'firebase_auth': null,
     'shared_preferences': null,
     'flutter_typeahead': null,

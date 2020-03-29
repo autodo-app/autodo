@@ -176,6 +176,8 @@ PODS:
   - Firebase/AdMob (6.15.0):
     - Firebase/CoreOnly
     - Google-Mobile-Ads-SDK (~> 7.50)
+  - Firebase/Analytics (6.15.0):
+    - Firebase/Core
   - Firebase/Auth (6.15.0):
     - Firebase/CoreOnly
     - FirebaseAuth (~> 6.4.2)
@@ -189,6 +191,10 @@ PODS:
     - FirebaseFirestore (~> 1.9.0)
   - firebase_admob (0.0.1):
     - Firebase/AdMob
+    - Firebase/Core
+    - Flutter
+  - firebase_analytics (0.0.1):
+    - Firebase/Analytics (~> 6.0)
     - Firebase/Core
     - Flutter
   - firebase_auth (0.0.1):
@@ -351,6 +357,7 @@ PODS:
 DEPENDENCIES:
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - firebase_admob (from `.symlinks/plugins/firebase_admob/ios`)
+  - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_auth_web (from `.symlinks/plugins/firebase_auth_web/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
@@ -405,6 +412,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/cloud_firestore/ios"
   firebase_admob:
     :path: ".symlinks/plugins/firebase_admob/ios"
+  firebase_analytics:
+    :path: ".symlinks/plugins/firebase_analytics/ios"
   firebase_auth:
     :path: ".symlinks/plugins/firebase_auth/ios"
   firebase_auth_web:
@@ -451,6 +460,7 @@ SPEC CHECKSUMS:
   cloud_firestore: 10fd4a09ebffc33efd64708106e2e7de701fe9ae
   Firebase: 5d77105d9740a07ca6b16927ca971db7e860faaf
   firebase_admob: d8c2bc95b5e0069406280ce6adb816cdee6aa595
+  firebase_analytics: dacdcfc524d722fff13dcff942f0dfa47e6be567
   firebase_auth: 1f46484071219159ad6c64d304af425ad7373052
   firebase_auth_web: 0955c07bcc06e84af76b9d4e32e6f31518f2d7de
   firebase_core: dc539d4bdc69894823e4a6e557034a9e48960f21
