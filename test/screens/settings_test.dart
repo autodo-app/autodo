@@ -34,5 +34,23 @@ void main() {
       );
       expect(find.byType(SettingsScreen), findsOneWidget);
     });
+
+    testWidgets('delete account dialog render', (tester) async {
+      await tester.pumpWidget(
+        ChangeNotifierProvider<BasePrefService>.value(
+          value: pref,
+          child: PrefService(
+            service: pref,
+            child: MaterialApp(
+              home: SettingsScreen(),
+            ),
+          ),
+        ),
+      );
+      expect(find.byType(SettingsScreen), findsOneWidget);
+      await tester.tap(find.byKey(ValueKey('__delete_account_button__')));
+      await tester.pumpAndSettle();
+      expect(find.byType(Dialog), findsOneWidget);
+    });
   });
 }

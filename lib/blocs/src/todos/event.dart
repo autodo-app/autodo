@@ -50,8 +50,8 @@ class ClearCompleted extends TodosEvent {}
 
 class ToggleAll extends TodosEvent {}
 
-class UpdateDueDates extends TodosEvent {
-  const UpdateDueDates(this.cars);
+class CarsUpdated extends TodosEvent {
+  const CarsUpdated(this.cars);
 
   final List<Car> cars;
 
@@ -59,19 +59,7 @@ class UpdateDueDates extends TodosEvent {
   List<Object> get props => [cars];
 
   @override
-  String toString() => 'UpdateDueDates { cars: $cars }';
-}
-
-class RepeatsRefresh extends TodosEvent {
-  const RepeatsRefresh(this.repeats);
-
-  final List<Repeat> repeats;
-
-  @override
-  List<Object> get props => [repeats];
-
-  @override
-  String toString() => 'RepeatsRefresh { repeats: $repeats }';
+  String toString() => 'CarsUpdated { cars: $cars }';
 }
 
 class CompleteTodo extends TodosEvent {

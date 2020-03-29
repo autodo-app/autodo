@@ -17,11 +17,11 @@ import 'new_user_screen_page.dart';
 const int cardAppearDuration = 200; // in ms
 
 class _OilInterval extends StatelessWidget {
-  const _OilInterval(this.repeat, this.node, this.nextNode);
+  const _OilInterval(this.todo, this.node, this.nextNode);
 
   final FocusNode node, nextNode;
 
-  final Repeat repeat;
+  final Todo todo;
 
   @override
   Widget build(context) {
@@ -32,15 +32,15 @@ class _OilInterval extends StatelessWidget {
       maxLines: 1,
       autofocus: false,
       initialValue: distance.format(
-        repeat.mileageInterval,
+        todo.mileageRepeatInterval,
         textField: true,
       ),
       decoration: defaultInputDecoration('(${distance.unitString(context)})',
           'Oil Change Interval (${distance.unitString(context)})'),
       validator: intValidator,
-      onSaved: (val) => BlocProvider.of<RepeatsBloc>(context).add(UpdateRepeat(
-          repeat.copyWith(
-              mileageInterval:
+      onSaved: (val) => BlocProvider.of<TodosBloc>(context).add(UpdateTodo(
+          todo.copyWith(
+              mileageRepeatInterval:
                   distance.unitToInternal(double.parse(val.trim()))))),
       focusNode: node,
       textInputAction: TextInputAction.next,
@@ -50,11 +50,11 @@ class _OilInterval extends StatelessWidget {
 }
 
 class _TireRotationInterval extends StatelessWidget {
-  const _TireRotationInterval(this.repeat, this.node);
+  const _TireRotationInterval(this.todo, this.node);
 
   final FocusNode node;
 
-  final Repeat repeat;
+  final Todo todo;
 
   @override
   Widget build(context) {
@@ -64,13 +64,14 @@ class _TireRotationInterval extends StatelessWidget {
       key: IntegrationTestKeys.setTireRotationInterval,
       maxLines: 1,
       autofocus: false,
-      initialValue: distance.format(repeat.mileageInterval, textField: true),
+      initialValue:
+          distance.format(todo.mileageRepeatInterval, textField: true),
       decoration: defaultInputDecoration('(${distance.unitString(context)})',
           'Tire Rotation Interval (${distance.unitString(context)})'), // Todo: Translate
       validator: intValidator,
-      onSaved: (val) => BlocProvider.of<RepeatsBloc>(context).add(UpdateRepeat(
-          repeat.copyWith(
-              mileageInterval:
+      onSaved: (val) => BlocProvider.of<TodosBloc>(context).add(UpdateTodo(
+          todo.copyWith(
+              mileageRepeatInterval:
                   distance.unitToInternal(double.parse(val.trim()))))),
       focusNode: node,
       textInputAction: TextInputAction.done,
@@ -109,10 +110,10 @@ class _HeaderText extends StatelessWidget {
 }
 
 class _Card extends StatelessWidget {
-  const _Card(this.oilRepeat, this.tireRotationRepeat, this.oilNode,
+  const _Card(this.oilTodo, this.tireRotationTodo, this.oilNode,
       this.tireRotationNode, this.onNext);
 
-  final Repeat oilRepeat, tireRotationRepeat;
+  final Todo oilTodo, tireRotationTodo;
 
   final FocusNode oilNode, tireRotationNode;
 
@@ -128,12 +129,11 @@ class _Card extends StatelessWidget {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-              child: _OilInterval(oilRepeat, oilNode, tireRotationNode),
+              child: _OilInterval(oilTodo, oilNode, tireRotationNode),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-              child:
-                  _TireRotationInterval(tireRotationRepeat, tireRotationNode),
+              child: _TireRotationInterval(tireRotationTodo, tireRotationNode),
             ),
             Container(
               child: Row(
@@ -230,25 +230,21 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen>
       pageWillBeVisible = false;
     }
 
-    return BlocBuilder<RepeatsBloc, RepeatsState>(builder: (context, state) {
-      if (!(state is RepeatsLoaded) ||
-          (state as RepeatsLoaded).repeats.isEmpty) {
+    return BlocBuilder<TodosBloc, TodosState>(builder: (context, state) {
+      if (!(state is TodosLoaded) || (state as TodosLoaded).todos.isEmpty) {
         return LoadingIndicator();
       }
-      final oilRepeat = (state as RepeatsLoaded)
-          .repeats
-          .firstWhere((val) => val.name == 'oil');
-      final tireRotationRepeat = (state as RepeatsLoaded)
-          .repeats
+      final oilTodo =
+          (state as TodosLoaded).todos.firstWhere((val) => val.name == 'oil');
+      final tireRotationTodo = (state as TodosLoaded)
+          .todos
           .firstWhere((val) => val.name == 'tireRotation');
-      print('oil $oilRepeat tire $tireRotationRepeat');
-
       return Form(
           key: widget.repeatKey,
           child: AccountSetupScreen(
               header: _HeaderText(),
               panel: _Card(
-                  oilRepeat, tireRotationRepeat, _oilNode, _tiresNode, _next)));
+                  oilTodo, tireRotationTodo, _oilNode, _tiresNode, _next)));
     });
   }
 }

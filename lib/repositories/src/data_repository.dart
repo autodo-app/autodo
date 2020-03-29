@@ -46,24 +46,14 @@ abstract class DataRepository extends Equatable {
 
   FutureOr<WriteBatchWrapper> startCarWriteBatch();
 
-  // Repeats
-  Future<void> addNewRepeat(Repeat repeat);
-
-  Future<void> deleteRepeat(Repeat repeat);
-
-  Stream<List<Repeat>> repeats();
-
-  Future<List<Repeat>> getCurrentRepeats();
-
-  Future<void> updateRepeat(Repeat repeat);
-
-  FutureOr<WriteBatchWrapper> startRepeatWriteBatch();
-
   // Notifications
   Stream<int> notificationID();
 
   // Paid or Ad-supported version
   Future<bool> getPaidStatus();
+
+  @deprecated
+  Future<List<Map<String, dynamic>>> getRepeats();
 
   Future<int> upgrade(int curVer, int desVer) async {
     if (curVer == 1 && desVer == 2) {
@@ -104,18 +94,22 @@ abstract class DataRepository extends Equatable {
         carWriteBatch.updateData(c.id, c.toDocument());
       });
       await carWriteBatch.commit();
-
-      final repeats = await getCurrentRepeats();
-      final repeatWriteBatch = await startRepeatWriteBatch();
-      repeats.map((r) {
-        final mileageInterval = r.mileageInterval == null
-            ? null
-            : r.mileageInterval * Distance.miles;
-        return r.copyWith(mileageInterval: mileageInterval);
-      }).forEach((r) {
-        repeatWriteBatch.updateData(r.id, r.toDocument());
+    }
+    if (curVer < 3 && desVer == 3) {
+      // Remove Repeats in favor of new Todo fields
+      final repeats =
+          await getRepeats(); // ignore:deprecated_member_use_from_same_package
+      final todos = await getCurrentTodos();
+      final batch = await startTodoWriteBatch();
+      repeats.forEach((r) {
+        final todo =
+            todos.firstWhere((t) => t.name == r['name'] && !t.completed);
+        final updatedTodo = todo.copyWith(
+            mileageRepeatInterval: r['mileageInterval'],
+            dateRepeatInterval: r['dateInterval']);
+        batch.updateData(updatedTodo.id, updatedTodo.toDocument());
       });
-      await repeatWriteBatch.commit();
+      await batch.commit();
     }
 
     return desVer;

@@ -10,15 +10,13 @@ import '../../../theme.dart';
 import '../../../util.dart';
 
 class CarForm extends StatefulWidget {
-  CarForm({
+  const CarForm({
     Key key,
     this.initialValue,
     @required this.onSaved,
     @required this.node,
     @required this.nextNode,
-  }) : super(key: key) {
-    print(initialValue);
-  }
+  }) : super(key: key);
 
   final String initialValue;
 

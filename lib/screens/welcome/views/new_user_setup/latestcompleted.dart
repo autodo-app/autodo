@@ -53,7 +53,6 @@ class _TodoFieldsState extends State<_TodoFields> {
         if (val == null || val == '') return;
         BlocProvider.of<TodosBloc>(context).add(AddTodo(Todo(
             name: 'oil',
-            repeatName: 'oil',
             carName: widget.c.name,
             completed: true,
             completedDate: DateTime.now(),
@@ -77,7 +76,6 @@ class _TodoFieldsState extends State<_TodoFields> {
         if (val == null || val == '') return;
         BlocProvider.of<TodosBloc>(context).add(AddTodo(Todo(
             name: 'tireRotation',
-            repeatName: 'tireRotation',
             carName: widget.c.name,
             completed: true,
             completedDate: DateTime.now(),

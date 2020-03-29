@@ -8,6 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:preferences/preferences.dart';
 import 'package:provider/provider.dart';
+import 'package:autodo/screens/add_edit/forms/barrel.dart';
 
 class MockCarsBloc extends Mock implements CarsBloc {}
 
@@ -45,6 +46,57 @@ void main() {
       );
       await tester.pump();
       expect(find.byKey(key), findsOneWidget);
+    });
+    testWidgets('render w/toggle', (WidgetTester tester) async {
+      final key = Key('screen');
+      final carsBloc = MockCarsBloc();
+      when(carsBloc.state).thenReturn(CarsLoaded([Car()]));
+      await tester.pumpWidget(
+        ChangeNotifierProvider<BasePrefService>.value(
+          value: pref,
+          child: MultiBlocProvider(
+            providers: [BlocProvider<CarsBloc>.value(value: carsBloc)],
+            child: MaterialApp(
+              home: RefuelingAddEditScreen(
+                  key: key,
+                  isEditing: false,
+                  onSave: (a, b, c, d, e) {},
+                  cars: [Car(name: '1'), Car(name: '2')]),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.byKey(key), findsOneWidget);
+      expect(find.byType(CarToggleForm), findsOneWidget);
+    });
+    testWidgets('render w/autocomplete', (WidgetTester tester) async {
+      final key = Key('screen');
+      final carsBloc = MockCarsBloc();
+      when(carsBloc.state).thenReturn(CarsLoaded([Car()]));
+      await tester.pumpWidget(
+        ChangeNotifierProvider<BasePrefService>.value(
+          value: pref,
+          child: MultiBlocProvider(
+            providers: [BlocProvider<CarsBloc>.value(value: carsBloc)],
+            child: MaterialApp(
+              home: RefuelingAddEditScreen(
+                  key: key,
+                  isEditing: false,
+                  onSave: (a, b, c, d, e) {},
+                  cars: [
+                    Car(name: '1'),
+                    Car(name: '2'),
+                    Car(name: '3'),
+                    Car(name: '4')
+                  ]),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.byKey(key), findsOneWidget);
+      expect(find.byType(CarForm), findsOneWidget);
     });
     testWidgets('save', (WidgetTester tester) async {
       final key = Key('screen');

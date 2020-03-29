@@ -99,26 +99,18 @@ Future<void> run(bool integrationTest) async {
                   refuelingsBloc: BlocProvider.of<RefuelingsBloc>(context),
                   // )..add(LoadCars()),
                 ),
-                child: BlocProvider<RepeatsBloc>(
-                  create: (context) => RepeatsBloc(
-                    dbBloc: BlocProvider.of<DatabaseBloc>(context),
-                    carsBloc: BlocProvider.of<CarsBloc>(context),
-                    // )..add(LoadRepeats()),
-                  ),
-                  child: BlocProvider<TodosBloc>(
-                    create: (context) => TodosBloc(
-                        dbBloc: BlocProvider.of<DatabaseBloc>(context),
-                        notificationsBloc:
-                            BlocProvider.of<NotificationsBloc>(context),
-                        carsBloc: BlocProvider.of<CarsBloc>(context),
-                        repeatsBloc: BlocProvider.of<RepeatsBloc>(context))
-                    // ..add(LoadTodos()),
-                    ,
-                    child: App(
-                        theme: theme,
-                        authRepository: authRepository,
-                        integrationTest: integrationTest),
-                  ),
+                child: BlocProvider<TodosBloc>(
+                  create: (context) => TodosBloc(
+                      dbBloc: BlocProvider.of<DatabaseBloc>(context),
+                      notificationsBloc:
+                          BlocProvider.of<NotificationsBloc>(context),
+                      carsBloc: BlocProvider.of<CarsBloc>(context))
+                  // ..add(LoadTodos()),
+                  ,
+                  child: App(
+                      theme: theme,
+                      authRepository: authRepository,
+                      integrationTest: integrationTest),
                 ),
               ),
             ),

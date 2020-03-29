@@ -87,11 +87,6 @@ class SembastDataRepository extends DataRepository {
   final StreamController<List<Car>> _carsStream =
       StreamController<List<Car>>.broadcast();
 
-  StoreRef get _repeats => StoreRef('repeats');
-
-  final StreamController<List<Repeat>> _repeatsStream =
-      StreamController<List<Repeat>>.broadcast();
-
   final StreamController<int> _notificationIdStream =
       StreamController<int>.broadcast();
 
@@ -318,78 +313,6 @@ class SembastDataRepository extends DataRepository {
         semaphore: dbLock);
   }
 
-  // Repeats
-
-  @override
-  Future<List<Repeat>> getCurrentRepeats() async {
-    await dbLock.acquire();
-    final db = await _openDb();
-    final list = await _repeats.find(db);
-    final out =
-        list.map((snap) => Repeat.fromEntity(Repeat.fromRecord(snap))).toList();
-    await db.close();
-    dbLock.release();
-    return out;
-  }
-
-  Future<void> _repeatsUpdateStream() async {
-    _repeatsStream.add(await getCurrentRepeats());
-  }
-
-  @override
-  Future<void> addNewRepeat(Repeat repeat) async {
-    await dbLock.acquire();
-    try {
-      final db = await _openDb();
-      await _repeats.add(db, repeat.toEntity().toDocument());
-      await _repeatsUpdateStream();
-      await db.close();
-    } finally {
-      dbLock.release();
-    }
-  }
-
-  @override
-  Future<void> updateRepeat(Repeat repeat) async {
-    await dbLock.acquire();
-    try {
-      final db = await _openDb();
-      await _repeats.record(repeat.id).put(db, repeat.toEntity().toDocument());
-      await _repeatsUpdateStream();
-      await db.close();
-    } finally {
-      dbLock.release();
-    }
-  }
-
-  @override
-  Future<void> deleteRepeat(Repeat repeat) async {
-    await dbLock.acquire();
-    try {
-      final db = await _openDb();
-      await _repeats.record(repeat.id).delete(db);
-      await _repeatsUpdateStream();
-      await db.close();
-    } finally {
-      dbLock.release();
-    }
-  }
-
-  @override
-  Stream<List<Repeat>> repeats() {
-    return _repeatsStream.stream;
-  }
-
-  @override
-  FutureOr<WriteBatchWrapper> startRepeatWriteBatch() async {
-    return SembastWriteBatch(
-        dbFactory: dbFactory,
-        dbPath: await _getFullFilePath(),
-        store: _repeats,
-        streamControllerUpdate: _repeatsUpdateStream,
-        semaphore: dbLock);
-  }
-
   @override
   Stream<int> notificationID() {
     return _notificationIdStream.stream;
@@ -404,6 +327,14 @@ class SembastDataRepository extends DataRepository {
     await db.close();
     dbLock.release();
     return out;
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> getRepeats() async {
+    await dbLock.acquire();
+    final db = await _openDb();
+    final repeats = await StoreRef('repeats').find(db);
+    return repeats.map((r) => r.value).toList();
   }
 
   Future<void> deleteDb() async {

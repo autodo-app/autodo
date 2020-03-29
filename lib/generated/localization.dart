@@ -65,6 +65,18 @@ class IntlKeys {
   /// strings-fr.json: 'Créer un compte'
   static const createAnAccount = 'create_an_account';
 
+  /// strings.json: 'Custom'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const custom = 'custom';
+
+  /// strings.json: 'Day'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const day = 'day';
+
+  /// strings.json: 'Days'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const days = 'days';
+
   /// strings.json: 'Default currency'
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const defaultCurrency = 'default_currency';
@@ -136,6 +148,10 @@ class IntlKeys {
   /// strings.json: 'Email'
   /// strings-fr.json: 'Email'
   static const email = 'email';
+
+  /// strings.json: 'Every'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const every = 'every';
 
   /// strings.json: 'Filter ToDos'
   /// strings-fr.json: 'Filtrer les tâches'
@@ -249,9 +265,29 @@ class IntlKeys {
   /// strings-fr.json: 'Kilométrage'
   static const mileage = 'mileage';
 
-  /// strings.json: 'Mileage Interval *'
+  /// strings.json: 'Mileage Interval'
   /// strings-fr.json: 'Intervalle de kilométrage *'
   static const mileageInterval = 'mileage_interval';
+
+  /// strings.json: 'Mileage Interval *'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const mileageIntervalStar = 'mileage_interval_star';
+
+  /// strings.json: 'Month'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const month = 'month';
+
+  /// strings.json: 'Monthly'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const monthly = 'monthly';
+
+  /// strings.json: 'Months'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const months = 'months';
+
+  /// strings.json: 'Never'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const never = 'never';
 
   /// strings.json: 'Next'
   /// strings-fr.json: 'Suite'
@@ -325,6 +361,10 @@ class IntlKeys {
   /// strings-fr.json: 'Retirer'
   static const remove = 'remove';
 
+  /// strings.json: 'Repeat'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const repeat = 'repeat';
+
   /// strings.json: 'Alignment Check'
   /// strings-fr.json: 'Contrôle d\'alignement'
   static const repeatAlignmentCheck = 'repeat_alignment_check';
@@ -340,6 +380,10 @@ class IntlKeys {
   /// strings.json: 'Cabin Filter'
   /// strings-fr.json: 'Filtre d\'habitacle'
   static const repeatCabinFilter = 'repeat_cabin_filter';
+
+  /// strings.json: 'REPEAT'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const repeatCaps = 'repeat_caps';
 
   /// strings.json: 'Coolant Change'
   /// strings-fr.json: 'Changement du liquide de refroidissement'
@@ -557,6 +601,14 @@ class IntlKeys {
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const volumeUnit = 'volume_unit';
 
+  /// strings.json: 'Week'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const week = 'week';
+
+  /// strings.json: 'Weekly'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const weekly = 'weekly';
+
   /// strings.json: 'Welcome to auToDo!'
   /// strings-fr.json: 'Bienvenue dans auToDo !'
   static const welcome = 'welcome';
@@ -564,6 +616,18 @@ class IntlKeys {
   /// strings.json: 'Car maintenance made simple.'
   /// strings-fr.json: 'L\'entretien des voitures en toute simplicité.'
   static const welcomeDesc = 'welcome_desc';
+
+  /// strings.json: 'Year'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const year = 'year';
+
+  /// strings.json: 'Yearly'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const yearly = 'yearly';
+
+  /// strings.json: 'Years'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const years = 'years';
 
   /// strings.json: 'Yes'
   /// strings-fr.json: 'Oui'

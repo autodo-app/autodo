@@ -63,8 +63,6 @@ class FirebaseDataRepository extends DataRepository {
 
   CollectionReference get _cars => _userDoc.collection('cars');
 
-  CollectionReference get _repeats => _userDoc.collection('repeats');
-
   @override
   Future<void> addNewTodo(Todo todo) {
     return _todos.add(todo.toDocument());
@@ -172,46 +170,6 @@ class FirebaseDataRepository extends DataRepository {
   }
 
   @override
-  Future<void> addNewRepeat(Repeat repeat) async {
-    await _repeats.add(repeat.toEntity().toDocument());
-  }
-
-  @override
-  Future<void> deleteRepeat(Repeat repeat) {
-    return _repeats.document(repeat.id).delete();
-  }
-
-  @override
-  Stream<List<Repeat>> repeats() {
-    return _repeats.snapshots().map((snapshot) {
-      return snapshot.documents
-          .map((doc) => Repeat.fromEntity(Repeat.fromSnapshot(doc)))
-          .toList();
-    });
-  }
-
-  @override
-  Future<List<Repeat>> getCurrentRepeats() async {
-    final snap = await _repeats.getDocuments();
-    return snap.documents
-        .map((doc) => Repeat.fromEntity(Repeat.fromSnapshot(doc)))
-        .toList();
-  }
-
-  @override
-  Future<void> updateRepeat(Repeat repeat) {
-    return _repeats
-        .document(repeat.id)
-        .updateData(repeat.toEntity().toDocument());
-  }
-
-  @override
-  WriteBatchWrapper startRepeatWriteBatch() {
-    return FirebaseWriteBatch(
-        firestoreInstance: _firestoreInstance, collection: _repeats);
-  }
-
-  @override
   Stream<int> notificationID() {
     return _userDoc
         .snapshots()
@@ -225,10 +183,16 @@ class FirebaseDataRepository extends DataRepository {
   }
 
   @override
+  Future<List<Map<String, dynamic>>> getRepeats() async {
+    final snap = await _userDoc.collection('repeats').getDocuments();
+    return snap.documents.map((d) => d.data).toList();
+  }
+
+  @override
   List<Object> get props => [_firestoreInstance, _uuid];
 
   @override
   String toString() => 'FirebaseDataRepository { firestoreInstance: '
       '$_firestoreInstance, uuid: $_uuid, userDoc: $_userDoc, todos: '
-      '$_todos, refuelings: $_refuelings, cars: $_cars, repeats: $_repeats }';
+      '$_todos, refuelings: $_refuelings, cars: $_cars }';
 }

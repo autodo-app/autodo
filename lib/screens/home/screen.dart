@@ -59,7 +59,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
     AppTab.todos: TodosScreen(),
     AppTab.refuelings: RefuelingsScreen(),
     AppTab.stats: StatisticsScreen(),
-    AppTab.repeats: RepeatsScreen(),
+    AppTab.repeats:
+        Container(), // TODO 275: replace this screen with a cars screen?
   };
 
   final Key todosTabKey;
@@ -98,23 +99,15 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
             builder: (context) => _ScreenWithBanner(
                     child: TodoAddEditScreen(
                   isEditing: false,
-                  onSave: (n, d, m, r, c) {
+                  onSave: (n, d, m, c, mR, dR) {
                     BlocProvider.of<TodosBloc>(context).add(AddTodo(Todo(
                         name: n,
                         dueDate: d,
                         dueMileage: m,
-                        repeatName: r,
                         carName: c,
+                        mileageRepeatInterval: mR,
+                        dateRepeatInterval: dR,
                         completed: false)));
-                  },
-                ))),
-        MaterialPageRoute(
-            builder: (context) => _ScreenWithBanner(
-                    child: RepeatAddEditScreen(
-                  isEditing: false,
-                  onSave: (n, i, c) {
-                    BlocProvider.of<RepeatsBloc>(context).add(AddRepeat(
-                        Repeat(name: n, mileageInterval: i, cars: c)));
                   },
                 ))),
       ];

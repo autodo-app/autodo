@@ -32,12 +32,11 @@ void main() {
       // open the button
       await tester.tap(find.byKey(mainKey));
       await tester.pumpAndSettle(const Duration(milliseconds: 10));
-      expect(find.byType(FloatingActionButton), findsNWidgets(4));
+      expect(find.byType(FloatingActionButton), findsNWidgets(3));
 
       // press the mini buttons
-      await tester.tap(find.byKey(miniKeys[2]));
+      await tester.tap(find.byKey(miniKeys[1]));
       await tester.pump();
-      // expect(navCount, 1);
       // currently doing nothing on button press
 
       await tester.tap(find.byKey(mainKey));

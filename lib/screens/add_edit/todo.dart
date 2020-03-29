@@ -14,8 +14,13 @@ import '../../util.dart';
 import '../../widgets/widgets.dart';
 import 'forms/barrel.dart';
 
-typedef _OnSaveCallback = Function(String name, DateTime dueDate,
-    double dueMileage, String repeatName, String carName);
+typedef _OnSaveCallback = Function(
+    String name,
+    DateTime dueDate,
+    double dueMileage,
+    String carName,
+    double mileageRepeatInterval,
+    RepeatInterval dateRepeatInterval);
 
 class _NameForm extends StatelessWidget {
   const _NameForm({this.todo, this.onSaved, this.node, this.nextNode});
@@ -196,67 +201,6 @@ class _MileageForm extends StatelessWidget {
   }
 }
 
-class _CarToggleForm extends StatefulWidget {
-  const _CarToggleForm(this.initialState, this.cars, this.onSaved);
-
-  final List<bool> initialState;
-
-  final List<Car> cars;
-
-  final Function onSaved;
-
-  @override
-  _CarToggleFormState createState() =>
-      _CarToggleFormState(initialState, cars, onSaved);
-}
-
-class _CarToggleFormState extends State<_CarToggleForm> {
-  _CarToggleFormState(this.isSelected, this.cars, this.onSaved);
-
-  List<bool> isSelected;
-
-  final List<Car> cars;
-
-  final Function onSaved;
-
-  @override
-  Widget build(context) => FormField(
-        builder: (state) => Center(
-          child: ToggleButtons(
-            children: cars.map((c) => Text(c.name)).toList(),
-            onPressed: (int index) {
-              setState(() {
-                for (var buttonIndex = 0;
-                    buttonIndex < isSelected.length;
-                    buttonIndex++) {
-                  if (buttonIndex == index) {
-                    isSelected[buttonIndex] = true;
-                  } else {
-                    isSelected[buttonIndex] = false;
-                  }
-                }
-              });
-            },
-            isSelected: isSelected,
-            // Constraints are per the Material spec
-            constraints: BoxConstraints(minWidth: 88, minHeight: 36),
-            textStyle: Theme.of(context).primaryTextTheme.button,
-            color: Theme.of(context)
-                .primaryTextTheme
-                .button
-                .color
-                .withOpacity(0.7),
-            selectedColor: Theme.of(context).accentTextTheme.button.color,
-            fillColor: Theme.of(context).primaryColor,
-            borderWidth: 2.0,
-            borderRadius: BorderRadius.circular(5),
-          ),
-        ),
-        onSaved: (_) => onSaved(isSelected),
-        validator: (_) => null,
-      );
-}
-
 class TodoAddEditScreen extends StatefulWidget {
   TodoAddEditScreen({
     Key key = IntegrationTestKeys.addEditTodo,
@@ -274,16 +218,18 @@ class TodoAddEditScreen extends StatefulWidget {
   final Todo todo;
 
   @override
-  _TodoAddEditScreenState createState() => _TodoAddEditScreenState();
+  TodoAddEditScreenState createState() => TodoAddEditScreenState();
 }
 
-class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
-  FocusNode _nameNode, _dateNode, _mileageNode, _repeatNode, _carNode;
+class TodoAddEditScreenState extends State<TodoAddEditScreen> {
+  FocusNode _nameNode, _dateNode, _mileageNode, _carNode;
   final _formKey = GlobalKey<FormState>();
   ScrollController scrollCtrl;
   DateTime _dueDate;
   double _dueMileage;
-  String _name, _repeatName, _car;
+  String _name, _car;
+  double _mileageInterval;
+  RepeatInterval _dateInterval;
 
   bool get isEditing => widget.isEditing;
 
@@ -293,7 +239,6 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
     _nameNode = FocusNode();
     _dateNode = FocusNode();
     _mileageNode = FocusNode();
-    _repeatNode = FocusNode();
     _carNode = FocusNode();
     scrollCtrl = ScrollController();
   }
@@ -303,7 +248,6 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
     _nameNode.dispose();
     _dateNode.dispose();
     _mileageNode.dispose();
-    _repeatNode.dispose();
     _carNode.dispose();
     scrollCtrl.dispose();
     super.dispose();
@@ -313,6 +257,44 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
       (cars.map((c) => c.name).contains(widget.todo?.carName))
           ? cars.map((c) => c.name == widget.todo?.carName)
           : List.generate(cars.length, (idx) => (idx == 0) ? true : false);
+
+  /// Generates a string detailing the chronological repeating interval.
+  ///
+  /// Currently set up to concatenate days, months, years, etc. if there are
+  /// more than one kind of interval specified in the case of a custom interval.
+  String repeatIntervalToString(interval) {
+    var out = '${JsonIntl.of(context).get(IntlKeys.every)} ';
+    if (interval?.days != null) {
+      if (interval.days == 1) {
+        // singular
+        out += JsonIntl.of(context).get(IntlKeys.day);
+      } else if (interval.days == 7) {
+        // weekly
+        out += JsonIntl.of(context).get(IntlKeys.week);
+      } else {
+        out += '${interval.days} ${JsonIntl.of(context).get(IntlKeys.days)}';
+      }
+    } else if (interval?.months != null) {
+      if (interval.months == 1) {
+        // singular
+        out += JsonIntl.of(context).get(IntlKeys.month);
+      } else {
+        out +=
+            '${interval.months} ${JsonIntl.of(context).get(IntlKeys.months)}';
+      }
+    } else if (interval?.years != null) {
+      if (interval.years == 1) {
+        // singular
+        out += JsonIntl.of(context).get(IntlKeys.year);
+      } else {
+        out += '${interval.years} ${JsonIntl.of(context).get(IntlKeys.years)}';
+      }
+    } else {
+      // all fields are null
+      return JsonIntl.of(context).get(IntlKeys.never);
+    }
+    return out;
+  }
 
   @override
   Widget build(context) => Scaffold(
@@ -365,7 +347,7 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
                       child: _MileageForm(
                         todo: widget.todo,
                         node: _mileageNode,
-                        nextNode: _repeatNode,
+                        nextNode: null,
                         onSaved: (val) => _dueMileage = double.parse(val),
                       ),
                       focusNode: _mileageNode,
@@ -373,22 +355,27 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
                     Padding(
                       padding: EdgeInsets.only(bottom: 15),
                     ),
-                    BlocBuilder<RepeatsBloc, RepeatsState>(
-                      builder: (context, state) {
-                        if (state is RepeatsLoaded) {
-                          return AutoScrollField(
-                            controller: scrollCtrl,
-                            focusNode: _repeatNode,
-                            position: 240,
-                            child: RepeatForm(
-                              todo: widget.todo,
-                              node: _repeatNode,
-                              onSaved: (val) => _repeatName = val,
-                              requireInput: false,
-                            ),
-                          );
-                        }
-                        return LoadingIndicator();
+                    ListTile(
+                      leading: Icon(Icons.repeat),
+                      title: Text(JsonIntl.of(context).get(IntlKeys.repeat)),
+                      subtitle:
+                          Text(repeatIntervalToString(_dateInterval) ?? ''),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => RepeatIntervalSelector(
+                                  initialMileage:
+                                      _dueMileage ?? widget.todo?.dueMileage,
+                                  initialDate: _dateInterval ??
+                                      widget.todo?.dateRepeatInterval,
+                                  onSaved: (mileageInterval, dateInterval) {
+                                    setState(() {
+                                      _mileageInterval = mileageInterval;
+                                      _dateInterval = dateInterval;
+                                    });
+                                  }),
+                            ));
                       },
                     ),
                     Padding(
@@ -400,7 +387,7 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
                           if (state.cars.length <= 1) {
                             return Container();
                           } else if (state.cars.length < 4) {
-                            return _CarToggleForm(
+                            return CarToggleForm(
                               _carsToInitialState(state.cars),
                               state.cars,
                               (List<bool> isSelected) => _car = state
@@ -434,7 +421,8 @@ class _TodoAddEditScreenState extends State<TodoAddEditScreen> {
           onPressed: () {
             if (_formKey.currentState.validate()) {
               _formKey.currentState.save();
-              widget.onSave(_name, _dueDate, _dueMileage, _repeatName, _car);
+              widget.onSave(_name, _dueDate, _dueMileage, _car,
+                  _mileageInterval, _dateInterval);
               Navigator.pop(context);
             }
           },

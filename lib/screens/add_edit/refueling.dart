@@ -262,67 +262,6 @@ class _DateFormState extends State<_DateForm> {
       ]);
 }
 
-class _CarToggleForm extends StatefulWidget {
-  const _CarToggleForm(this.initialState, this.cars, this.onSaved);
-
-  final List<bool> initialState;
-
-  final List<Car> cars;
-
-  final Function onSaved;
-
-  @override
-  _CarToggleFormState createState() =>
-      _CarToggleFormState(initialState, cars, onSaved);
-}
-
-class _CarToggleFormState extends State<_CarToggleForm> {
-  _CarToggleFormState(this.isSelected, this.cars, this.onSaved);
-
-  List<bool> isSelected;
-
-  final List<Car> cars;
-
-  final Function onSaved;
-
-  @override
-  Widget build(context) => FormField(
-        builder: (state) => Center(
-          child: ToggleButtons(
-            children: cars.map((c) => Text(c.name)).toList(),
-            onPressed: (int index) {
-              setState(() {
-                for (var buttonIndex = 0;
-                    buttonIndex < isSelected.length;
-                    buttonIndex++) {
-                  if (buttonIndex == index) {
-                    isSelected[buttonIndex] = true;
-                  } else {
-                    isSelected[buttonIndex] = false;
-                  }
-                }
-              });
-            },
-            isSelected: isSelected,
-            // Constraints are per the Material spec
-            constraints: BoxConstraints(minWidth: 88, minHeight: 36),
-            textStyle: Theme.of(context).primaryTextTheme.button,
-            color: Theme.of(context)
-                .primaryTextTheme
-                .button
-                .color
-                .withOpacity(0.7),
-            selectedColor: Theme.of(context).accentTextTheme.button.color,
-            fillColor: Theme.of(context).primaryColor,
-            borderWidth: 2.0,
-            borderRadius: BorderRadius.circular(5),
-          ),
-        ),
-        onSaved: (_) => onSaved(isSelected),
-        validator: (_) => null,
-      );
-}
-
 class RefuelingAddEditScreen extends StatefulWidget {
   const RefuelingAddEditScreen({
     Key key = const ValueKey('__add_edit_refueling__'),
@@ -399,7 +338,7 @@ class _RefuelingAddEditScreenState extends State<RefuelingAddEditScreen> {
                     (widget.cars.length <= 1)
                         ? Container()
                         : (widget.cars.length < 4)
-                            ? _CarToggleForm(
+                            ? CarToggleForm(
                                 _carsToInitialState(),
                                 widget.cars,
                                 (List<bool> isSelected) => _car = widget

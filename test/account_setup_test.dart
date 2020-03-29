@@ -68,13 +68,11 @@ void main() {
       final dbBloc = MockDatabaseBloc();
       final refuelingsBloc = RefuelingsBloc(dbBloc: dbBloc);
       final carsBloc = CarsBloc(dbBloc: dbBloc, refuelingsBloc: refuelingsBloc);
-      final repeatsBloc = RepeatsBloc(dbBloc: dbBloc, carsBloc: carsBloc);
       final notificationsBloc = MockNotificationsBloc();
       final todosBloc = TodosBloc(
           dbBloc: dbBloc,
           carsBloc: carsBloc,
-          notificationsBloc: notificationsBloc,
-          repeatsBloc: repeatsBloc);
+          notificationsBloc: notificationsBloc);
       clearDatabase('cars1.db');
 
       // tell the blocs that there was a new user signed up
@@ -91,7 +89,6 @@ void main() {
       carsBloc.add(LoadCars());
       await expectLater(
           carsBloc, emitsInOrder([CarsLoading(), CarsLoaded([])]));
-      repeatsBloc.add(LoadRepeats());
       todosBloc.add(LoadTodos());
 
       // The mileage screen adds cars to the CarsBloc
@@ -109,19 +106,11 @@ void main() {
       // we may or may not see the empty list state show up in the assert.
       // Doesn't really matter either way if that happens, it shouldn't break
       // the test.
-      final defaultRepeats = RepeatsBloc.defaults
-          .asMap()
-          .map(
-              (k, v) => MapEntry(k, v.copyWith(id: '${k + 1}', cars: ['car1'])))
-          .values
-          .toList();
-      expect(repeatsBloc,
-          emitsAnyOf([RepeatsLoaded([]), RepeatsLoaded(defaultRepeats)]));
-      final defaultTodos = defaultRepeats
-          .map((e) => Todo(id: e.id, name: e.name, carName: e.cars[0]))
-          .toList();
-      expect(
-          todosBloc, emitsAnyOf([TodosLoaded([]), TodosLoaded(defaultTodos)]));
+      // final defaultTodos = defaultRepeats
+      //     .map((e) => Todo(id: e.id, name: e.name, carName: e.cars[0]))
+      //     .toList();
+      // expect(
+      //     todosBloc, emitsAnyOf([TodosLoaded([]), TodosLoaded(defaultTodos)]));
 
       clearDatabase('cars1.db');
     });
@@ -130,13 +119,11 @@ void main() {
       final dbBloc = MockDatabaseBloc();
       final refuelingsBloc = RefuelingsBloc(dbBloc: dbBloc);
       final carsBloc = CarsBloc(dbBloc: dbBloc, refuelingsBloc: refuelingsBloc);
-      final repeatsBloc = RepeatsBloc(dbBloc: dbBloc, carsBloc: carsBloc);
       final notificationsBloc = MockNotificationsBloc();
       final todosBloc = TodosBloc(
           dbBloc: dbBloc,
           carsBloc: carsBloc,
-          notificationsBloc: notificationsBloc,
-          repeatsBloc: repeatsBloc);
+          notificationsBloc: notificationsBloc);
       clearDatabase('cars2.db');
 
       // tell the blocs that there was a new user signed up
@@ -151,7 +138,6 @@ void main() {
       // stream.
       refuelingsBloc.add(LoadRefuelings());
       carsBloc.add(LoadCars());
-      repeatsBloc.add(LoadRepeats());
       todosBloc.add(LoadTodos());
 
       // The mileage screen adds cars to the CarsBloc
@@ -167,43 +153,6 @@ void main() {
       // we may or may not see the empty list state show up in the assert.
       // Doesn't really matter either way if that happens, it shouldn't break
       // the test.
-      final defaultRepeats = RepeatsBloc.defaults
-          .asMap()
-          .map(
-              (k, v) => MapEntry(k, v.copyWith(id: '${k + 1}', cars: ['car1'])))
-          .values
-          .toList();
-      final car2Defaults = RepeatsBloc.defaults
-          .asMap()
-          .map((k, v) => MapEntry(
-              k,
-              v.copyWith(
-                  id: '${k + 1 + RepeatsBloc.defaults.length}',
-                  cars: ['car2'])))
-          .values
-          .toList();
-      final defaultRepeats2 = defaultRepeats + car2Defaults;
-      // await expectLater(repeatsBloc, emitsInOrder([ignoreAll([RepeatsLoading(), RepeatsLoaded([]), RepeatsLoaded(defaultRepeats)]), RepeatsLoaded(defaultRepeats2)]));
-      expect(repeatsBloc, mayEmit(RepeatsLoaded(defaultRepeats2)));
-      // final defaultTodos = defaultRepeats.map((e) => Todo(
-      //   id: e.id,
-      //   name: e.name,
-      //   carName: e.cars[0],
-      //   repeatName: e.name,
-      //   dueMileage: (e.mileageInterval < car1.mileage) ? car1.mileage + e.mileageInterval : e.mileageInterval,
-      //   completed: false)).toList();
-      final defaultTodos2 = defaultRepeats2
-          .map((e) => Todo(
-              id: e.id,
-              name: e.name,
-              carName: e.cars[0],
-              repeatName: e.name,
-              dueMileage: (e.mileageInterval < car1.mileage)
-                  ? car1.mileage + e.mileageInterval
-                  : e.mileageInterval,
-              completed: false))
-          .toList();
-      expect(todosBloc, mayEmit(TodosLoaded(defaultTodos2)));
 
       clearDatabase('cars2.db');
     });
