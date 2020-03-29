@@ -263,7 +263,7 @@ class TodoAddEditScreenState extends State<TodoAddEditScreen> {
   /// Currently set up to concatenate days, months, years, etc. if there are
   /// more than one kind of interval specified in the case of a custom interval.
   String repeatIntervalToString(interval) {
-    var out = 'Every ';
+    var out = '${JsonIntl.of(context).get(IntlKeys.every)} ';
     if (interval?.days != null) {
       if (interval.days == 1) {
         // singular
