@@ -51,7 +51,7 @@ class Refueling extends Equatable {
           ? null
           : DateTime.fromMillisecondsSinceEpoch(snap.data['date']),
       amount: snap.data['amount'] as double,
-      cost: snap.data['cost'] as double,
+      cost: snap.data['cost'].toDouble(),
       carColor: (snap.data['carColor'] == null)
           ? null
           : Color(snap.data['carColor'] as int),
