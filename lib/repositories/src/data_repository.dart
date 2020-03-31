@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:equatable/equatable.dart';
+import 'package:meta/meta.dart';
 
 import '../../models/models.dart';
 import '../../units/units.dart';
@@ -55,6 +56,7 @@ abstract class DataRepository extends Equatable {
   @deprecated
   Future<List<Map<String, dynamic>>> getRepeats();
 
+  @protected
   Future<int> upgrade(int curVer, int desVer) async {
     if (curVer == 1 && desVer >= 2) {
       // Move to SI units internally

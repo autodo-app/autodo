@@ -11,8 +11,8 @@ import 'package:autodo/models/models.dart';
 
 Future<void> main() async {
   TestWidgetsFlutterBinding.ensureInitialized();
-  var repository = await SembastDataRepository.open(
-      createDb: true, pathProvider: () async => Directory('.'));
+  var repository =
+      await SembastDataRepository.open(pathProvider: () => Directory('.'));
   group('SembastDataRepository', () {
     group('todos', () {
       test('New Todo', () {
@@ -27,9 +27,7 @@ Future<void> main() async {
       test('todos', () async {
         await databaseFactoryIo.deleteDatabase('todos.db');
         repository = await SembastDataRepository.open(
-            createDb: true,
-            pathProvider: () async => Directory('.'),
-            dbPath: 'todos.db');
+            pathProvider: () => Directory('.'), dbPath: 'todos.db');
         // This is deliberately not await-ed to ensure that the stream matcher
         // receives the new todo event
         repository.addNewTodo(Todo(name: 'test')); // ignore: unawaited_futures
@@ -43,15 +41,10 @@ Future<void> main() async {
       test('batch', () async {
         WidgetsFlutterBinding.ensureInitialized();
         repository = await SembastDataRepository.open(
-          createDb: true,
-          pathProvider: () async => Directory('.'),
+          pathProvider: () => Directory('.'),
         );
-        expect(
-            await repository.startTodoWriteBatch(),
-            SembastWriteBatch(
-                dbFactory: repository.dbFactory,
-                dbPath: './sample.db',
-                store: StoreRef('todos')));
+        expect(await repository.startTodoWriteBatch(),
+            SembastWriteBatch(repository, store: StoreRef('todos')));
       });
     });
     group('refuelings', () {
@@ -74,9 +67,7 @@ Future<void> main() async {
       test('refuelings', () async {
         await databaseFactoryIo.deleteDatabase('refuelings.db');
         repository = await SembastDataRepository.open(
-            createDb: true,
-            pathProvider: () async => Directory('.'),
-            dbPath: 'refuelings.db');
+            pathProvider: () => Directory('.'), dbPath: 'refuelings.db');
         repository.addNewRefueling(ref); // ignore: unawaited_futures
         expect(repository.refuelings(), emits([ref]));
         // await databaseFactoryIo.deleteDatabase('refuelings.db');
@@ -84,15 +75,10 @@ Future<void> main() async {
       test('batch', () async {
         WidgetsFlutterBinding.ensureInitialized();
         repository = await SembastDataRepository.open(
-          createDb: true,
-          pathProvider: () async => Directory('.'),
+          pathProvider: () => Directory('.'),
         );
-        expect(
-            await repository.startRefuelingWriteBatch(),
-            SembastWriteBatch(
-                dbFactory: repository.dbFactory,
-                dbPath: './sample.db',
-                store: StoreRef('refuelings')));
+        expect(await repository.startRefuelingWriteBatch(),
+            SembastWriteBatch(repository, store: StoreRef('refuelings')));
       });
     });
     group('cars', () {
@@ -108,9 +94,7 @@ Future<void> main() async {
       test('cars', () async {
         await databaseFactoryIo.deleteDatabase('cars.db');
         repository = await SembastDataRepository.open(
-            createDb: true,
-            pathProvider: () async => Directory('.'),
-            dbPath: 'cars.db');
+            pathProvider: () => Directory('.'), dbPath: 'cars.db');
         repository.addNewCar(Car()); // ignore: unawaited_futures
         expect(repository.cars(), emits([Car(id: '1')]));
         // await databaseFactoryIo.deleteDatabase('cars.db');
@@ -118,13 +102,9 @@ Future<void> main() async {
       test('batch', () async {
         WidgetsFlutterBinding.ensureInitialized();
         repository = await SembastDataRepository.open(
-            createDb: true, pathProvider: () async => Directory('.'));
-        expect(
-            await repository.startCarWriteBatch(),
-            SembastWriteBatch(
-                dbFactory: repository.dbFactory,
-                dbPath: './sample.db',
-                store: StoreRef('cars')));
+            pathProvider: () => Directory('.'));
+        expect(await repository.startCarWriteBatch(),
+            SembastWriteBatch(repository, store: StoreRef('cars')));
       });
     });
   });

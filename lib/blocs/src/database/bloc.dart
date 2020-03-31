@@ -51,7 +51,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
     }
   }
 
-  Stream<DatabaseState> _mapUserLoggedInToState(event) async* {
+  Stream<DatabaseState> _mapUserLoggedInToState(UserLoggedIn event) async* {
     final repository = await FirebaseDataRepository.open(
         firestoreInstance: _firestoreInstance,
         uuid: event.uuid,
@@ -59,23 +59,40 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
     yield DbLoaded(repository, event.newUser);
   }
 
-  Stream<DatabaseState> _mapUserLoggedOutToState(event) async* {
-    if (state is DbLoaded &&
-        (state as DbLoaded).repository is SembastDataRepository) {
-      await ((state as DbLoaded).repository as SembastDataRepository)
-          .deleteDb();
+  Stream<DatabaseState> _mapUserLoggedOutToState(UserLoggedOut event) async* {
+    if (state is DbLoaded) {
+      final repo = (state as DbLoaded).repository;
+      if (repo is SembastDataRepository) {
+        await repo.close();
+        // ToDo: We should leave the DB on disk if they logged out by mistake
+        await SembastDataRepository.deleteDb(repo.db.path);
+      }
     }
     yield DbNotLoaded();
   }
 
-  Stream<DatabaseState> _mapTrialLoginToState(event) async* {
+  Stream<DatabaseState> _mapTrialLoginToState(TrialLogin event) async* {
     if (state is DbLoaded) {
-      print('ignoring outdated trial login event');
-      return;
+      // Close the old database, open the new one
+      final repo = (state as DbLoaded).repository;
+      if (repo is SembastDataRepository) {
+        await repo.close();
+      }
     }
-    final repo = await SembastDataRepository.open(
-        createDb: event.newUser, pathProvider: pathProvider);
-    yield DbLoaded(repo, event.newUser);
+
+    var newUser = event.newUser;
+
+    if (!newUser) {
+      // Check if the DB already exists
+      final file = File(
+          await SembastDataRepository.getFullPath(pathProvider: pathProvider));
+      if (await file.exists()) {
+        newUser = false;
+      }
+    }
+
+    final repo = await SembastDataRepository.open(pathProvider: pathProvider);
+    yield DbLoaded(repo, newUser);
   }
 
   @override
