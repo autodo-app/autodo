@@ -46,7 +46,8 @@ Future<void> editRefueling(FlutterDriver driver) async {
       find.byValueKey('__refueling_card_edit_test_${2000 * 1.609344}'),
       dyScroll: -100.0);
   print('tapping');
-  await driver.tap(find.byValueKey('__refueling_card_edit_test_${2000 * 1.609344}'));
+  await driver
+      .tap(find.byValueKey('__refueling_card_edit_test_${2000 * 1.609344}'));
 
   // edit screen
   await driver.waitFor(find.byType('RefuelingAddEditScreen'));
@@ -67,9 +68,10 @@ Future<void> deleteRefueling(FlutterDriver driver) async {
       find.byValueKey('__refueling_delete_button_test_${3000 * 1.609344}'),
       dyScroll: -100.0);
   print('tapping');
-  await driver.tap(find.byValueKey('__refueling_delete_button_test_${3000 * 1.609344}'));
+  await driver.tap(
+      find.byValueKey('__refueling_delete_button_test_${3000 * 1.609344}'));
 
   // verify that the card no longer exists
-  await driver
-      .waitForAbsent(find.byValueKey('__refueling_card_edit_test_${3000 * 1.609344}'));
+  await driver.waitForAbsent(
+      find.byValueKey('__refueling_card_edit_test_${3000 * 1.609344}'));
 }
