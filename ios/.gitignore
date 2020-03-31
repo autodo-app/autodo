@@ -34,3 +34,6 @@ Runner/GeneratedPluginRegistrant.*
 # Plists
 GoogleService-Info.plist
 Info.plist
+Gemfile.lock
+fastlane/README.md
+fastlane/report.xml

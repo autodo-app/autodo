@@ -1,0 +1,16 @@
+default_platform(:ios)
+
+platform :ios do
+  desc 'Submit a new Beta Build to TestFlight'
+  lane :beta do
+    gym(
+      export_method: 'app-store',
+    )
+		pilot(
+			skip_submission: true,
+			distribute_external: false,
+			beta_app_feedback_email: 'contact@autodo.app',
+			changelog: 'New version',
+		)
+  end
+end
