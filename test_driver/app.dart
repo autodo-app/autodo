@@ -6,6 +6,7 @@ Future<void> main() async {
   enableFlutterDriverExtension();
 
   // run the app
-  await app.init();
-  await app.run(true);
+  // await app.init();
+  // await app.run(true);
+  app.run(true);
 }

@@ -48,78 +48,7 @@ Future<void> _reportError(
   FlutterError.dumpErrorToConsole(details, forceReport: forceReport);
 }
 
-Future<void> run(bool integrationTest) async {
-  final AuthRepository authRepository = FirebaseAuthRepository();
-  final theme = createTheme();
 
-  final locale = WidgetsBinding.instance.window.locale ?? Locale('en', 'US');
-  final service = await SharedPrefService.init();
-  await service.setDefaultValues({
-    'length_unit': Distance.getDefault(locale).index,
-    'volume_unit': Volume.getDefault(locale).index,
-    'currency': Currency.getDefault(locale),
-  });
-
-  runApp(
-    PrefService(
-      service: service,
-      child: ChangeNotifierProvider<BasePrefService>.value(
-        value: service,
-        child: BlocProvider<AuthenticationBloc>(
-          create: (context) =>
-              AuthenticationBloc(userRepository: authRepository)
-                ..add(AppStarted(integrationTest: integrationTest)),
-          child: BlocProvider<DatabaseBloc>(
-            create: (context) => DatabaseBloc(
-              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-            ),
-            child: MultiBlocProvider(
-              providers: [
-                if (kFlavor.hasPaid)
-                  BlocProvider<PaidVersionBloc>(
-                    create: (context) => PaidVersionBloc(
-                        dbBloc: BlocProvider.of<DatabaseBloc>(context))
-                      ..add(LoadPaidVersion()),
-                  ),
-                BlocProvider<NotificationsBloc>(
-                  create: (context) => NotificationsBloc(
-                    dbBloc: BlocProvider.of<DatabaseBloc>(context),
-                  )..add(LoadNotifications()),
-                ),
-                BlocProvider<RefuelingsBloc>(
-                  create: (context) => RefuelingsBloc(
-                    dbBloc: BlocProvider.of<DatabaseBloc>(context),
-                    // )..add(LoadRefuelings()),
-                  ),
-                ),
-              ],
-              child: BlocProvider<CarsBloc>(
-                create: (context) => CarsBloc(
-                  dbBloc: BlocProvider.of<DatabaseBloc>(context),
-                  refuelingsBloc: BlocProvider.of<RefuelingsBloc>(context),
-                  // )..add(LoadCars()),
-                ),
-                child: BlocProvider<TodosBloc>(
-                  create: (context) => TodosBloc(
-                      dbBloc: BlocProvider.of<DatabaseBloc>(context),
-                      notificationsBloc:
-                          BlocProvider.of<NotificationsBloc>(context),
-                      carsBloc: BlocProvider.of<CarsBloc>(context))
-                  // ..add(LoadTodos()),
-                  ,
-                  child: App(
-                      theme: theme,
-                      authRepository: authRepository,
-                      integrationTest: integrationTest),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    ),
-  );
-}
 
 Future<void> configureFirebase() async {
   String googleAppID, projectID, apiKey;
@@ -150,23 +79,115 @@ Future<void> configureFirebase() async {
       ));
 }
 
-Future<void> init() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await configureFirebase();
-  // required in init for Android
-  InAppPurchaseConnection.enablePendingPurchases();
-  BlocSupervisor.delegate = AutodoBlocDelegate();
-}
+void run(bool integrationTest) => runApp(AppProvider(integrationTest));
 
 Future<void> main() async {
-  await init();
-
   if (kFlavor.useSentry) {
     _sentry = SentryClient(dsn: Keys.sentryDsn);
   }
 
   FlutterError.onError = _reportError;
-  await run(false);
+  run(false);
+}
+
+class AppProvider extends StatefulWidget {
+  const AppProvider(this.integrationTest);
+
+  final bool integrationTest;
+
+  @override
+  AppProviderState createState() => AppProviderState();
+}
+
+class AppProviderState extends State<AppProvider> {
+  AuthRepository authRepository;
+  ThemeData theme;
+  SharedPrefService service;
+
+  Future<void> initMainWidget() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await configureFirebase();
+    // required in init for Android
+    InAppPurchaseConnection.enablePendingPurchases();
+    BlocSupervisor.delegate = AutodoBlocDelegate();
+
+    authRepository = FirebaseAuthRepository();
+    theme = createTheme();
+
+    final locale = WidgetsBinding.instance.window.locale ?? Locale('en', 'US');
+    service = await SharedPrefService.init();
+    await service.setDefaultValues({
+      'length_unit': Distance.getDefault(locale).index,
+      'volume_unit': Volume.getDefault(locale).index,
+      'currency': Currency.getDefault(locale),
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: initMainWidget(),
+      builder: (context, res) {
+        if (res.connectionState == ConnectionState.done) {
+          return PrefService(
+            service: service,
+            child: ChangeNotifierProvider<BasePrefService>.value(
+              value: service,
+              child: BlocProvider<AuthenticationBloc>(
+                create: (context) =>
+                    AuthenticationBloc(userRepository: authRepository)
+                      ..add(AppStarted(integrationTest: widget.integrationTest)),
+                child: BlocProvider<DatabaseBloc>(
+                  create: (context) => DatabaseBloc(
+                    authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+                  ),
+                  child: MultiBlocProvider(
+                    providers: [
+                      if (kFlavor.hasPaid)
+                        BlocProvider<PaidVersionBloc>(
+                          create: (context) => PaidVersionBloc(
+                              dbBloc: BlocProvider.of<DatabaseBloc>(context))
+                            ..add(LoadPaidVersion()),
+                        ),
+                      BlocProvider<NotificationsBloc>(
+                        create: (context) => NotificationsBloc(
+                          dbBloc: BlocProvider.of<DatabaseBloc>(context),
+                        )..add(LoadNotifications()),
+                      ),
+                      BlocProvider<RefuelingsBloc>(
+                        create: (context) => RefuelingsBloc(
+                          dbBloc: BlocProvider.of<DatabaseBloc>(context),
+                        ),
+                      ),
+                    ],
+                    child: BlocProvider<CarsBloc>(
+                      create: (context) => CarsBloc(
+                        dbBloc: BlocProvider.of<DatabaseBloc>(context),
+                        refuelingsBloc: BlocProvider.of<RefuelingsBloc>(context),
+                      ),
+                      child: BlocProvider<TodosBloc>(
+                        create: (context) => TodosBloc(
+                            dbBloc: BlocProvider.of<DatabaseBloc>(context),
+                            notificationsBloc:
+                                BlocProvider.of<NotificationsBloc>(context),
+                            carsBloc: BlocProvider.of<CarsBloc>(context)),
+                        child: App(
+                            theme: theme,
+                            authRepository: authRepository,
+                            integrationTest: widget.integrationTest),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        } else {
+           return Container();
+        }
+      },
+    );
+  }
 }
 
 class App extends StatelessWidget {
