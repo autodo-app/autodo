@@ -1,6 +1,7 @@
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/models/models.dart';
 import 'package:autodo/screens/add_edit/barrel.dart';
+import 'package:autodo/screens/add_edit/forms/barrel.dart';
 import 'package:autodo/screens/add_edit/forms/repeat_interval.dart';
 import 'package:autodo/units/units.dart';
 import 'package:bloc_test/bloc_test.dart';
@@ -10,7 +11,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:preferences/preferences.dart';
 import 'package:provider/provider.dart';
-import 'package:autodo/screens/add_edit/forms/barrel.dart';
 
 class MockCarsBloc extends MockBloc<CarsEvent, CarsState> implements CarsBloc {}
 
@@ -228,19 +228,19 @@ void main() {
       expect(
           key.currentState.repeatIntervalToString(RepeatInterval()), 'never');
       expect(key.currentState.repeatIntervalToString(RepeatInterval(days: 1)),
-          'Every day');
+          'every day');
       expect(key.currentState.repeatIntervalToString(RepeatInterval(days: 2)),
-          'Every 2 days');
+          'every 2 days');
       expect(key.currentState.repeatIntervalToString(RepeatInterval(days: 7)),
-          'Every week');
+          'every week');
       expect(key.currentState.repeatIntervalToString(RepeatInterval(months: 1)),
-          'Every month');
+          'every month');
       expect(key.currentState.repeatIntervalToString(RepeatInterval(months: 2)),
-          'Every 2 months');
+          'every 2 months');
       expect(key.currentState.repeatIntervalToString(RepeatInterval(years: 1)),
-          'Every year');
+          'every year');
       expect(key.currentState.repeatIntervalToString(RepeatInterval(years: 2)),
-          'Every 2 years');
+          'every 2 years');
     });
   });
 }

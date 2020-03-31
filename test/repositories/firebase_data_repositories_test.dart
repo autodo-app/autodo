@@ -1,11 +1,11 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-
+import 'package:autodo/generated/pubspec.dart';
+import 'package:autodo/models/models.dart';
 import 'package:autodo/repositories/repositories.dart';
 import 'package:autodo/repositories/src/firebase_write_batch.dart';
-import 'package:autodo/models/models.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
 
 class MockFirestore extends Mock implements Firestore {}
 
@@ -31,7 +31,7 @@ Future<void> main() async {
   when(collection.document('')).thenAnswer((_) => document);
   when(collection.document('0')).thenAnswer((_) => document);
   when(document.get()).thenAnswer((realInvocation) async => docSnap);
-  when(docSnap.data).thenReturn({'db_version': 2});
+  when(docSnap.data).thenReturn({'db_version': Pubspec.db_version});
   final repository =
       await FirebaseDataRepository.open(uuid: '', firestoreInstance: firestore);
 
