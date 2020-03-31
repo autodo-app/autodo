@@ -48,8 +48,6 @@ Future<void> _reportError(
   FlutterError.dumpErrorToConsole(details, forceReport: forceReport);
 }
 
-
-
 Future<void> configureFirebase() async {
   String googleAppID, projectID, apiKey;
   if (kReleaseMode) {
@@ -134,12 +132,13 @@ class AppProviderState extends State<AppProvider> {
             child: ChangeNotifierProvider<BasePrefService>.value(
               value: service,
               child: BlocProvider<AuthenticationBloc>(
-                create: (context) =>
-                    AuthenticationBloc(userRepository: authRepository)
-                      ..add(AppStarted(integrationTest: widget.integrationTest)),
+                create: (context) => AuthenticationBloc(
+                    userRepository: authRepository)
+                  ..add(AppStarted(integrationTest: widget.integrationTest)),
                 child: BlocProvider<DatabaseBloc>(
                   create: (context) => DatabaseBloc(
-                    authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+                    authenticationBloc:
+                        BlocProvider.of<AuthenticationBloc>(context),
                   ),
                   child: MultiBlocProvider(
                     providers: [
@@ -163,7 +162,8 @@ class AppProviderState extends State<AppProvider> {
                     child: BlocProvider<CarsBloc>(
                       create: (context) => CarsBloc(
                         dbBloc: BlocProvider.of<DatabaseBloc>(context),
-                        refuelingsBloc: BlocProvider.of<RefuelingsBloc>(context),
+                        refuelingsBloc:
+                            BlocProvider.of<RefuelingsBloc>(context),
                       ),
                       child: BlocProvider<TodosBloc>(
                         create: (context) => TodosBloc(
@@ -183,7 +183,7 @@ class AppProviderState extends State<AppProvider> {
             ),
           );
         } else {
-           return Container();
+          return Container();
         }
       },
     );
