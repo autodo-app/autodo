@@ -11,8 +11,9 @@ class RepeatInterval extends Equatable {
 
   DateTime addToDate(DateTime date) {
     final utc = date.toUtc();
-    return DateTime(utc.year + (years ?? 0),
-      utc.month + (months ?? 0), utc.day + (days ?? 0)).toLocal();
+    return DateTime(utc.year + (years ?? 0), utc.month + (months ?? 0),
+            utc.day + (days ?? 0))
+        .toLocal();
   }
 
   @override
