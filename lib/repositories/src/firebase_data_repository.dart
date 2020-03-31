@@ -17,14 +17,15 @@ class FirebaseDataRepository extends DataRepository {
 
   Future<void> _setDatabaseVersion(
       DocumentSnapshot userDoc, int newVersion) async {
-    userDoc.data['db_version'] = newVersion;
+    final out = userDoc.data ?? {};
+    out['db_version'] = newVersion;
     await _userDoc.setData(userDoc.data);
   }
 
   Future<void> _upgrade(bool newUser) async {
     final dbVersion = Pubspec.db_version;
     final userDoc = await _userDoc.get();
-    final curVersion = userDoc.data['db_version'] ?? 1;
+    final curVersion = userDoc?.data['db_version'] ?? 1;
 
     if (newUser) {
       await _setDatabaseVersion(userDoc, dbVersion);
