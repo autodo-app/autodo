@@ -1,14 +1,14 @@
 import 'dart:io';
 
+import 'package:autodo/blocs/blocs.dart';
+import 'package:autodo/generated/pubspec.dart';
+import 'package:autodo/repositories/repositories.dart';
 import 'package:autodo/repositories/src/sembast_data_repository.dart';
 import 'package:bloc_test/bloc_test.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-
-import 'package:autodo/blocs/blocs.dart';
-import 'package:autodo/repositories/repositories.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
 
 class MockAuthenticationBloc extends Mock implements AuthenticationBloc {}
 
@@ -36,7 +36,7 @@ Future<void> main() async {
   final mockFirestore = MockFirestoreInstance();
   final mockUsersCollection = MockCollection();
   final mockDocSnap = MockDocSnap();
-  when(mockDocSnap.data).thenReturn({'db_version': 2});
+  when(mockDocSnap.data).thenReturn({'db_version': Pubspec.db_version});
   final mockDocument = MockDocument();
   when(mockDocument.get()).thenAnswer((realInvocation) async => mockDocSnap);
   when(mockUsersCollection.document('abcd')).thenAnswer((_) => mockDocument);
