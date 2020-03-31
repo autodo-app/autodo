@@ -9,8 +9,11 @@ class RepeatInterval extends Equatable {
 
   final int years;
 
-  DateTime addToDate(DateTime date) => DateTime(date.year + (years ?? 0),
-      date.month + (months ?? 0), date.day + (days ?? 0));
+  DateTime addToDate(DateTime date) {
+    final utc = date.toUtc();
+    return DateTime(utc.year + (years ?? 0),
+      utc.month + (months ?? 0), utc.day + (days ?? 0)).toLocal();
+  }
 
   @override
   List<Object> get props => [days, months, years];
