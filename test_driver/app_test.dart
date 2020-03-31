@@ -10,6 +10,9 @@ void main() {
     // Connect to the Flutter driver before running any tests.
     setUpAll(() async {
       driver = await FlutterDriver.connect();
+      // wait for the welcome screen to appear before we start running tests
+      await driver.waitFor(find.byValueKey('__welcome_screen__'),
+          timeout: Duration(minutes: 5));
     });
 
     // Close the connection to the driver after the tests have completed.
@@ -31,12 +34,12 @@ void main() {
     test('edit refueling', () async => await editRefueling(driver));
     test('delete refueling', () async => await deleteRefueling(driver));
 
-    // Repeats
-    test('switch to repeats tab', () async => await showRepeatsTab(driver));
-    test('check for defaults', () async => await checkForDefaults(driver));
-    test('new repeat', () async => await newRepeat(driver));
-    test('edit repeat', () async => await editRepeat(driver));
-    test('delete repeat', () async => await deleteRepeat(driver));
+    // // Repeats
+    // test('switch to repeats tab', () async => await showRepeatsTab(driver));
+    // test('check for defaults', () async => await checkForDefaults(driver));
+    // test('new repeat', () async => await newRepeat(driver));
+    // test('edit repeat', () async => await editRepeat(driver));
+    // test('delete repeat', () async => await deleteRepeat(driver));
 
     // last auth tests
     test('sign out', () async => await signOut(driver));
@@ -53,9 +56,9 @@ void main() {
     });
 
     // Close the connection to the driver after the tests have completed.
-    tearDownAll(() async {
-      await driver?.close();
-    });
+    // tearDownAll(() async {
+    //   await driver?.close();
+    // });
 
     test('start trial', () async => await startTrial(driver));
     // Todos
@@ -71,12 +74,12 @@ void main() {
     test('edit refueling', () async => await editRefueling(driver));
     test('delete refueling', () async => await deleteRefueling(driver));
 
-    // Repeats
-    test('switch to repeats tab', () async => await showRepeatsTab(driver));
-    test('check for defaults', () async => await checkForDefaults(driver));
-    test('new repeat', () async => await newRepeat(driver));
-    test('edit repeat', () async => await editRepeat(driver));
-    test('delete repeat', () async => await deleteRepeat(driver));
+    // // Repeats
+    // test('switch to repeats tab', () async => await showRepeatsTab(driver));
+    // test('check for defaults', () async => await checkForDefaults(driver));
+    // test('new repeat', () async => await newRepeat(driver));
+    // test('edit repeat', () async => await editRepeat(driver));
+    // test('delete repeat', () async => await deleteRepeat(driver));
 
     // last auth tests
     test('sign out', () async => await signOut(driver));

@@ -5,9 +5,9 @@ class Pubspec {
 
   static const String description = 'Car Maintenance Made Simple.';
 
-  static const String versionFull = '0.3.0+14';
+  static const String versionFull = '0.3.1+15';
 
-  static const String version = '0.3.0';
+  static const String version = '0.3.1';
 
   static const String versionSmall = '0.3';
 
@@ -15,15 +15,15 @@ class Pubspec {
 
   static const int versionMinor = 3;
 
-  static const int versionPatch = 0;
+  static const int versionPatch = 1;
 
-  static const int versionBuild = 14;
+  static const int versionBuild = 15;
 
   static const String versionPreRelease = null;
 
   static const bool versionIsPreRelease = false;
 
-  static const int db_version = 2;
+  static const int db_version = 3;
 
   static const Map<dynamic, dynamic> environment = <dynamic, dynamic>{
     'sdk': '>=2.7.0 <3.0.0',
