@@ -138,7 +138,8 @@ class AppProviderState extends State<AppProvider> {
                     ..add(AppStarted(integrationTest: widget.integrationTest)),
               child: BlocProvider<DatabaseBloc>(
                 create: (context) => DatabaseBloc(
-                  authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+                  authenticationBloc:
+                      BlocProvider.of<AuthenticationBloc>(context),
                 ),
                 child: MultiBlocProvider(
                   providers: [
