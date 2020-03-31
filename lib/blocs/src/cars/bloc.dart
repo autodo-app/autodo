@@ -142,6 +142,7 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
         // first refueling for this car
         averageEfficiency = thisCarsRefuelings[0].efficiency;
       } else {
+        // Todo: Exception: StateError (Bad state: No element)
         final sum = thisCarsRefuelings
             .map((e) => e.efficiency ?? 0.0)
             .reduce((value, element) => value + element);

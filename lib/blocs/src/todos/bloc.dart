@@ -129,7 +129,12 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     }
 
     final distanceToTodo = dueMileage - car.mileage;
-    final daysToTodo = (distanceToTodo / car.distanceRate).round();
+    var daysToTodo = 0; // ToDo: Needs proper fix
+    try {
+      daysToTodo = (distanceToTodo / car.distanceRate).round();
+    } catch (e) {
+      print(e);
+    }
     final timeToTodo = Duration(days: daysToTodo);
     return roundToDay(car.lastMileageUpdate.toUtc()).add(timeToTodo).toLocal();
   }
