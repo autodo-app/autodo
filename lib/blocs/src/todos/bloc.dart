@@ -124,6 +124,10 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   }
 
   DateTime _calcDueDate(Car car, double dueMileage) {
+    if (car.distanceRate == 0 || car.distanceRate == null) {
+      return null;
+    }
+
     final distanceToTodo = dueMileage - car.mileage;
     final daysToTodo = (distanceToTodo / car.distanceRate).round();
     final timeToTodo = Duration(days: daysToTodo);
