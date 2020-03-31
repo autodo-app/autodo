@@ -37,9 +37,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   clearDatabase('todosBloc.db');
   final sembastTodosDataRepository = await SembastDataRepository.open(
-      createDb: true,
-      dbPath: 'todosBloc.db',
-      pathProvider: () async => Directory('.'));
+      dbPath: 'todosBloc.db', pathProvider: () => Directory('.'));
 
   group('TodosBloc', () {
     group('Null Assertions', () {

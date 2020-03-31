@@ -1,31 +1,25 @@
 import 'package:equatable/equatable.dart';
-import 'package:semaphore/semaphore.dart';
-import 'package:sembast/sembast.dart';
 import 'package:flutter/material.dart';
+import 'package:sembast/sembast.dart';
 
+import 'sembast_data_repository.dart';
 import 'write_batch_wrapper.dart';
 
 class SembastWriteBatch extends Equatable implements WriteBatchWrapper {
-  SembastWriteBatch({
+  SembastWriteBatch(
+    this.repository, {
     transactionList,
     @required this.store,
-    @required this.dbFactory,
-    @required this.dbPath,
-    this.semaphore,
     this.streamControllerUpdate,
   }) : transactionList = transactionList ?? [];
 
   final List<Function(DatabaseClient)> transactionList;
 
+  final SembastDataRepository repository;
+
   final StoreRef store;
 
-  final DatabaseFactory dbFactory;
-
-  final String dbPath;
-
   final Function streamControllerUpdate;
-
-  final Semaphore semaphore;
 
   @override
   void updateData(id, data) =>
@@ -37,25 +31,24 @@ class SembastWriteBatch extends Equatable implements WriteBatchWrapper {
 
   @override
   Future<void> commit() async {
-    await semaphore?.acquire();
+    await repository.dbLock.acquire();
     try {
-      final db = await dbFactory.openDatabase(dbPath);
-      await db.transaction((transaction) async {
+      await repository.db.transaction((transaction) async {
         // a .forEach loop didn't await properly here... not sure why
         for (var txn in transactionList) {
           await txn(transaction);
         }
       });
-      await db.close();
       if (streamControllerUpdate != null) await streamControllerUpdate();
     } finally {
-      semaphore?.release();
+      repository.dbLock.release();
     }
   }
 
   @override
-  List<Object> get props => [store, dbPath];
+  List<Object> get props => [store, repository.db.path];
 
   @override
-  String toString() => 'SembastWriteBatch { store: $store, path: $dbPath }';
+  String toString() =>
+      'SembastWriteBatch { store: $store, path: ${repository.db.path} }';
 }

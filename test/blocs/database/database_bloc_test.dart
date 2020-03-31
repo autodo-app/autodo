@@ -45,10 +45,10 @@ Future<void> main() async {
   final repo = await FirebaseDataRepository.open(
       firestoreInstance: mockFirestore, uuid: 'abcd');
   final pathProvider = () async => Directory('.');
-  final sembastCreate = await SembastDataRepository.open(
-      createDb: true, pathProvider: pathProvider);
-  final sembastOpen = await SembastDataRepository.open(
-      createDb: false, pathProvider: pathProvider);
+  final sembastCreate =
+      await SembastDataRepository.open(pathProvider: pathProvider);
+  final sembastOpen =
+      await SembastDataRepository.open(pathProvider: pathProvider);
 
   group('DatabaseBloc', () {
     test('Null Auth Bloc', () {
