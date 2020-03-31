@@ -1,0 +1,2 @@
+json_key_file("fastlane/playstore-api-key.json")
+package_name("com.autodo.autodo")

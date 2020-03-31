@@ -6,3 +6,7 @@ gradle-wrapper.jar
 /local.properties
 GeneratedPluginRegistrant.java
 *.iml
+Gemfile.lock
+fastlane/playstore-api-key.json
+fastlane/README.md
+fastlane/report.xml
