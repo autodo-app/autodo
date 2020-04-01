@@ -21,12 +21,21 @@ class CarCard extends StatelessWidget {
           width: 140,
           child: Column(
             children: <Widget>[
-              CachedNetworkImage(
-                fit: BoxFit.fill,
-                height: 80,
-                placeholder: (context, url) => CircularProgressIndicator(),
-                errorWidget: (context, url, error) => Icon(Icons.error),
-                imageUrl: 'https://picsum.photos/250?image=9',
+              FutureBuilder(
+                future: car.getImageDownloadUrl(),
+                builder: (context, snap) {
+                  if (snap.connectionState != ConnectionState.done) {
+                    return CircularProgressIndicator();
+                  }
+                  return CachedNetworkImage(
+                    fit: BoxFit.fill,
+                    height: 80,
+                    placeholder: (context, url) => CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                    // imageUrl: 'https://picsum.photos/250?image=9',
+                    imageUrl: snap.data,
+                  );
+                }
               ),
               Padding(padding: EdgeInsets.all(5),),
               Center(

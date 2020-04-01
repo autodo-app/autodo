@@ -42,6 +42,7 @@ dependencies:
   cupertino_icons:
   about:
   cached_network_image:
+  firebase_storage:
 
 dependency_overrides:
   autocomplete_textfield:

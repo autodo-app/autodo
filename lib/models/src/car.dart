@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:sembast/sembast.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import '../../util.dart';
 import 'distanceratepoint.dart';
@@ -110,6 +111,14 @@ class Car extends Equatable {
   final DateTime lastMileageUpdate;
 
   final List<DistanceRatePoint> distanceRateHistory;
+
+  final String imageName = 'sonic.jpg';
+
+  Future<String> getImageDownloadUrl() async {
+    final ref = await FirebaseStorage.instance.getReferenceFromUrl('gs://autodo-49f21.appspot.com/sonic.jpg');
+    final url = await ref.getDownloadURL();
+    return url;
+  }
 
   Car copyWith(
       {String id,
