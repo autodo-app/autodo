@@ -41,6 +41,7 @@ dependencies:
   preferences:
   cupertino_icons:
   about:
+  cached_network_image:
 
 dependency_overrides:
   autocomplete_textfield:
