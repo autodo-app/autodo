@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_intl/json_intl.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import '../../../blocs/blocs.dart';
 import '../../../generated/localization.dart';
@@ -168,6 +170,27 @@ class GarageScreen extends StatelessWidget {
           Padding(padding: EdgeInsets.all(2),),
           _PartsButton(),
           Padding(padding: EdgeInsets.all(2),),
+          RaisedButton(
+            child: Text('upload'),
+            onPressed: () async {
+              await ImagePicker.pickImage(source: ImageSource.gallery).then((image) async {
+                // setState(() {
+                //   _image = image;
+                // });
+                final storageReference = FirebaseStorage.instance
+                    .ref()
+                    .child('${image.path}');
+                final uploadTask = storageReference.putFile(image);
+                await uploadTask.onComplete;
+                print('File Uploaded');
+                await storageReference.getDownloadURL().then((fileURL) {
+                  // setState(() {
+                  //   _uploadedFileURL = fileURL;
+                  // });
+                });
+              });
+            },
+          )
         ],
       ),
     );

@@ -43,6 +43,7 @@ dependencies:
   about:
   cached_network_image:
   firebase_storage:
+  image_picker:
 
 dependency_overrides:
   autocomplete_textfield:
