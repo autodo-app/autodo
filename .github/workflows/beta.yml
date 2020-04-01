@@ -26,32 +26,9 @@ jobs:
     - run: echo '${{ secrets.google_services_prod }}' > ./android/app/src/release/google-services.json
     - run: echo '${{ secrets.playstore-api-key }}' > ./android/fastlane/playstore-api-key.json
     - run: flutter build appbundle --release --target-platform android-arm,android-arm64,android-x64
-    - run: cd android; fastlane beta
       env:
         KEY_ALIAS: ${{ secrets.key_alias }}
         KEY_PASSWORD: ${{ secrets.key_password }}
         STORE_FILE: ~/keystore.jks
         STORE_PASSWORD: ${{ secrets.store_password }}
-  build-ios:
-    name: Build iOS
-    runs-on: macos-latest
-    steps:
-    - uses: actions/checkout@v1
-      with:
-        submodules: true
-    - uses: actions/setup-java@v1
-      with:
-        java-version: '12.x'
-    - uses: subosito/flutter-action@v1
-      with:
-        channel: 'dev'
-    - run: flutter pub get
-    - run: mkdir -p assets ios/Release
-    - run: echo '${{ secrets.keys_json }}' > keys.json
-    - run: flutter pub run pubspec_extract -s keys.json -d lib/generated/keys.dart -c Keys
-    - run: echo '${{ secrets.google_services_plist }}' > ./ios/Release/GoogleService-Info.plist
-    - run: echo '${{ secrets.info_plist }}' > ./ios/Release/Info.plist
-    - run: flutter clean
-    - run: rm ./ios/Podfile.lock
-    - run: pushd ./ios && pod deintegrate
-    - run: flutter build ios --release --no-codesign
+    - run: cd android; fastlane beta
