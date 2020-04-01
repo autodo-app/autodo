@@ -2,7 +2,8 @@
 on:
   push:
     branches-ignore:
-      - '293-fastlane'
+      - develop
+      - master
 name: Build
 jobs:
   build-android:
