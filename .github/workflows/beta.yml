@@ -17,18 +17,13 @@ jobs:
     - uses: subosito/flutter-action@v1
       with:
         channel: 'dev'
-    - run: 'VER=$(git describe --abbrev=0) sed "s/^version:.*/version: $VER+${{ github.run_id }}/g" pubspec.yaml'
-    - run: flutter pub get
     - run: echo '${{ secrets.keys_json }}' > keys.json
-    - run: flutter pub run pubspec_extract -s keys.json -d lib/generated/keys.dart -c Keys
     - run: echo '${{ secrets.store_file }}' | base64 --decode > ~/keystore.jks
-    - run: echo '${{ secrets.google_services_test }}' > ./android/app/src/debug/google-services.json
     - run: echo '${{ secrets.google_services_prod }}' > ./android/app/src/release/google-services.json
     - run: echo '${{ secrets.playstore-api-key }}' > ./android/fastlane/playstore-api-key.json
-    - run: flutter build appbundle --release --target-platform android-arm,android-arm64,android-x64
+    - run: make BUILD_NAME=$(git describe --abbrev=0) BUILD_NUMBER=${{ github.run_id }} build-android
       env:
         KEY_ALIAS: ${{ secrets.key_alias }}
         KEY_PASSWORD: ${{ secrets.key_password }}
         STORE_FILE: ~/keystore.jks
         STORE_PASSWORD: ${{ secrets.store_password }}
-    - run: cd android; fastlane beta
