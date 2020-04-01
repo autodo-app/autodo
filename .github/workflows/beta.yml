@@ -1,12 +1,11 @@
-# https://medium.com/better-programming/ci-cd-for-flutter-apps-using-github-actions-b833f8f7aac
 on:
   push:
-    branches-ignore:
-      - '293-fastlane'
-name: Build
+    branches:
+      - 293-fastlane
+name: Publish Beta
 jobs:
   build-android:
-    name: Build APK
+    name: Publish Beta APK
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
@@ -18,13 +17,16 @@ jobs:
     - uses: subosito/flutter-action@v1
       with:
         channel: 'dev'
+    - run: 'VER=$(git describe --abbrev=0) sed "s/^version:.*/version: $VER+${{ github.run_id }}/g" pubspec.yaml'
     - run: flutter pub get
     - run: echo '${{ secrets.keys_json }}' > keys.json
     - run: flutter pub run pubspec_extract -s keys.json -d lib/generated/keys.dart -c Keys
     - run: echo '${{ secrets.store_file }}' | base64 --decode > ~/keystore.jks
     - run: echo '${{ secrets.google_services_test }}' > ./android/app/src/debug/google-services.json
     - run: echo '${{ secrets.google_services_prod }}' > ./android/app/src/release/google-services.json
-    - run: flutter build apk --debug --split-per-abi
+    - run: echo '${{ secrets.playstore-api-key }}' > ./android/fastlane/playstore-api-key.json
+    - run: flutter build appbundle --release --target-platform android-arm,android-arm64,android-x64
+    - run: cd android; fastlane beta
       env:
         KEY_ALIAS: ${{ secrets.key_alias }}
         KEY_PASSWORD: ${{ secrets.key_password }}
