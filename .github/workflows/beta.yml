@@ -27,4 +27,4 @@ jobs:
         KEY_PASSWORD: ${{ secrets.key_password }}
         STORE_FILE: keystore.jks
         STORE_PASSWORD: ${{ secrets.store_password }}
-        BUILD_NUMBER: ${{ github.run_id }}
+        BUILD_NUMBER: ${{ github.run_number }}
