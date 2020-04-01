@@ -1,1 +1,1 @@
-enum AppTab { todos, refuelings, stats, repeats }
+enum AppTab { todos, refuelings, stats, garage }

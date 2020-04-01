@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
     AppTab.todos: TodosScreen(),
     AppTab.refuelings: RefuelingsScreen(),
     AppTab.stats: StatisticsScreen(),
-    AppTab.repeats: GarageScreen(), // TODO 275: replace this screen with a cars screen?
+    AppTab.garage: GarageScreen(), // TODO 275: replace this screen with a cars screen?
   };
 
   final Key todosTabKey;
@@ -189,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
 
   Widget buildScreen(BuildContext context, AppTab activeTab) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: (activeTab == AppTab.garage) ? null : AppBar(
         title: Text(JsonIntl.of(context).get(IntlKeys.appTitle)),
         actions: [ExtraActions()],
       ),

@@ -22,36 +22,44 @@ class _Header extends StatelessWidget {
       colors: [mainColors[700], mainColors[900]]);
 
   final BoxDecoration decoration = BoxDecoration(
-      borderRadius: BorderRadius.circular(25),
+      borderRadius: BorderRadius.only(
+        bottomLeft: Radius.circular(25),
+        bottomRight: Radius.circular(25),
+        topLeft: Radius.zero,
+        topRight: Radius.zero),
       gradient: LinearGradient.lerp(grad1, grad2, 0.5));
 
   @override
-  Widget build(BuildContext context) => Card(
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.only(
-        bottomLeft: Radius.circular(25),
-        bottomRight: Radius.circular(25))),
-    child: Container(
-      decoration: decoration,
-      child: Column(
-        children: <Widget>[
-          Text("Jonathan's Garage"),
-          Row(
-            children: <Widget>[
-              IconButton(
-                icon: Icon(Icons.account_circle),
-                onPressed: () {},
-              ),
-              Text('PRO'),
-              IconButton(
-                icon: Icon(Icons.settings),
-                onPressed: () {},
-              )
-            ],
-          )
-        ],
-      )
-    ),
+  Widget build(BuildContext context) => Container(
+    decoration: decoration,
+    child: Column(
+      children: <Widget>[
+        Padding(padding: EdgeInsets.all(25),),
+        Text(
+          "Jonathan's Garage",
+          style: Theme.of(context).accentTextTheme.headline4),
+        Padding(padding: EdgeInsets.all(5),),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            IconButton(
+              icon: Icon(Icons.account_circle),
+              color: Theme.of(context).accentTextTheme.button.color,
+              onPressed: () {},
+            ),
+            Text(
+              'PRO',
+              style: Theme.of(context).accentTextTheme.button),
+            IconButton(
+              icon: Icon(Icons.settings),
+              color: Theme.of(context).accentTextTheme.button.color,
+              onPressed: () {},
+            )
+          ],
+        ),
+        Padding(padding: EdgeInsets.all(5),),
+      ],
+    )
   );
 }
 
@@ -63,10 +71,15 @@ class _CarGrid extends StatelessWidget {
         return LoadingIndicator();
       }
       final cars = (state as CarsLoaded).cars;
-      return SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: cars.map((c) => CarCard(c)).toList(),
+      return Container(
+        padding: EdgeInsets.all(5),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: cars.map((c) => CarCard(c)).toList(),
+          )
         )
       );
     }
@@ -75,64 +88,67 @@ class _CarGrid extends StatelessWidget {
 
 class _MechanicButton extends StatelessWidget {
   @override
-  Widget build(BuildContext context) => RaisedButton(
-    elevation: 5.0,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(
-        Radius.circular(25)
-      )
-    ),
-    color: Theme.of(context).primaryColor,
-    child: ListTile(
-      leading: Icon(Icons.search),
-      title: Text(
-        JsonIntl.of(context).get(IntlKeys.findAMechanic),
-        style: Theme.of(context).accentTextTheme.button
+  Widget build(BuildContext context) => Container(
+    padding: EdgeInsets.all(10),
+    child: RaisedButton(
+      elevation: 5.0,
+      shape: Theme.of(context).buttonTheme.shape,
+      color: Theme.of(context).primaryColor,
+      child: ListTile(
+        leading: Icon(
+          Icons.search,
+          color: Theme.of(context).accentTextTheme.button.color,),
+        title: Text(
+          JsonIntl.of(context).get(IntlKeys.findAMechanic),
+          style: Theme.of(context).accentTextTheme.button
+        ),
       ),
+      onPressed: () {},
     ),
-    onPressed: () {},
   );
 }
 
 class _DiyButton extends StatelessWidget {
   @override
-  Widget build(BuildContext context) => RaisedButton(
-    elevation: 5.0,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(
-        Radius.circular(25)
-      )
-    ),
-    color: Theme.of(context).cardColor,
-    child: ListTile(
-      leading: Icon(Icons.build),
-      title: Text(
-        JsonIntl.of(context).get(IntlKeys.learnToDiy),
-        style: Theme.of(context).primaryTextTheme.button
+  Widget build(BuildContext context) => Container(
+    padding: EdgeInsets.all(10),
+    child: RaisedButton(
+      elevation: 5.0,
+      shape: Theme.of(context).buttonTheme.shape,
+      color: Theme.of(context).buttonTheme.colorScheme.background,
+      child: ListTile(
+        leading: Icon(
+          Icons.build,
+          color: Theme.of(context).accentTextTheme.button.color,),
+        title: Text(
+          JsonIntl.of(context).get(IntlKeys.learnToDiy),
+          style: Theme.of(context).accentTextTheme.button
+        ),
       ),
+      onPressed: () {},
     ),
-    onPressed: () {},
   );
 }
 
 class _PartsButton extends StatelessWidget {
   @override
-  Widget build(BuildContext context) => RaisedButton(
-    elevation: 5.0,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(
-        Radius.circular(25)
-      )
-    ),
-    color: Theme.of(context).cardColor,
-    child: ListTile(
-      leading: Icon(Icons.build),
-      title: Text(
-        JsonIntl.of(context).get(IntlKeys.findParts),
-        style: Theme.of(context).primaryTextTheme.button
+  Widget build(BuildContext context) => Container(
+    padding: EdgeInsets.all(10),
+    child: RaisedButton(
+      elevation: 5.0,
+      shape: Theme.of(context).buttonTheme.shape,
+      color: Theme.of(context).buttonTheme.colorScheme.background,
+      child: ListTile(
+        leading: Icon(
+          Icons.build,
+          color: Theme.of(context).accentTextTheme.button.color,),
+        title: Text(
+          JsonIntl.of(context).get(IntlKeys.findParts),
+          style: Theme.of(context).accentTextTheme.button
+        ),
       ),
+      onPressed: () {},
     ),
-    onPressed: () {},
   );
 }
 
@@ -143,10 +159,15 @@ class GarageScreen extends StatelessWidget {
       child: Column(
         children: <Widget>[
           _Header(),
+          Padding(padding: EdgeInsets.all(5),),
           _CarGrid(),
+          Padding(padding: EdgeInsets.all(5),),
           _MechanicButton(),
+          Padding(padding: EdgeInsets.all(5),),
           _DiyButton(),
+          Padding(padding: EdgeInsets.all(5),),
           _PartsButton(),
+          Padding(padding: EdgeInsets.all(5),),
         ],
       ),
     );
