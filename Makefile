@@ -19,4 +19,5 @@ lib/generated/pubspec.dart: pubspec.yaml .dart_tool/package_config.json
 
 build-android: lib/generated/keys.dart lib/generated/localization.dart lib/generated/pubspec.dart android/app/src/release/google-services.json android/app/$(STORE_FILE)
 	flutter build appbundle --release --target-platform android-arm,android-arm64,android-x64
-	cd android; bundle exec fastlane beta
+	which fastlane || sudo gem install fastlane -NV
+	cd android; fastlane beta
