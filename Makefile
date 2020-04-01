@@ -1,5 +1,6 @@
 BUILD_NAME?=$(shell grep -E '^version:' pubspec.yaml | sed -E 's/version:\s*([^+]+).*/\1/g')
 BUILD_NUMBER?=$(shell grep -E '^version:' pubspec.yaml | sed -E 's/version:\s*[^+]+\+(.*)/\1/g')
+STORE_FILE?=keystore.jks
 
 all: lib/generated/keys.dart lib/generated/localization.dart lib/generated/pubspec.dart
 
@@ -16,6 +17,6 @@ lib/generated/localization.dart: $(shell find assets/intl/*.json) .dart_tool/pac
 lib/generated/pubspec.dart: pubspec.yaml .dart_tool/package_config.json
 	flutter pub run pubspec_extract -s $< -d $@
 
-build-android: lib/generated/keys.dart lib/generated/localization.dart lib/generated/pubspec.dart android/app/src/release/google-services.json
+build-android: lib/generated/keys.dart lib/generated/localization.dart lib/generated/pubspec.dart android/app/src/release/google-services.json android/app/$(STORE_FILE)
 	flutter build appbundle --release --target-platform android-arm,android-arm64,android-x64
 	cd android; fastlane beta

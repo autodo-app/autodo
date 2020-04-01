@@ -18,12 +18,13 @@ jobs:
       with:
         channel: 'dev'
     - run: echo '${{ secrets.keys_json }}' > keys.json
-    - run: echo '${{ secrets.store_file }}' | base64 --decode > ~/keystore.jks
+    - run: echo '${{ secrets.store_file }}' | base64 --decode > android/app/keystore.jks
     - run: echo '${{ secrets.google_services_prod }}' > ./android/app/src/release/google-services.json
     - run: echo '${{ secrets.playstore-api-key }}' > ./android/fastlane/playstore-api-key.json
-    - run: make BUILD_NAME=$(git describe --abbrev=0) BUILD_NUMBER=${{ github.run_id }} build-android
+    - run: make BUILD_NAME=$(git describe --abbrev=0) build-android
       env:
         KEY_ALIAS: ${{ secrets.key_alias }}
         KEY_PASSWORD: ${{ secrets.key_password }}
-        STORE_FILE: ~/keystore.jks
+        STORE_FILE: keystore.jks
         STORE_PASSWORD: ${{ secrets.store_password }}
+        BUILD_NUMBER: ${{ github.run_id }}
