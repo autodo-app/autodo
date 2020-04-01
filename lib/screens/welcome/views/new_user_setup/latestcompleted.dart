@@ -6,6 +6,7 @@ import '../../../../blocs/blocs.dart';
 import '../../../../generated/localization.dart';
 import '../../../../integ_test_keys.dart';
 import '../../../../models/models.dart';
+import '../../../../routes.dart';
 import '../../../../theme.dart';
 import '../../../../units/units.dart';
 import '../../../../util.dart';
@@ -237,7 +238,8 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
                     'Skip',
                     style: Theme.of(context).primaryTextTheme.button,
                   ),
-                  onPressed: () => Navigator.popAndPushNamed(context, '/load'),
+                  onPressed: () =>
+                      Navigator.popAndPushNamed(context, AutodoRoutes.home),
                 ),
                 FlatButton(
                   key: IntegrationTestKeys.latestNextButton,
