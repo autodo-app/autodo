@@ -147,7 +147,7 @@ class _Card extends StatelessWidget {
                       style: Theme.of(context).primaryTextTheme.button,
                     ),
                     onPressed: () =>
-                        Navigator.popAndPushNamed(context, '/load'),
+                        Navigator.popAndPushNamed(context, AutodoRoutes.home),
                   ),
                   FlatButton(
                     key: IntegrationTestKeys.setRepeatsNext,
