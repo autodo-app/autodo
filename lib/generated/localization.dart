@@ -157,6 +157,14 @@ class IntlKeys {
   /// strings-fr.json: 'Filtrer les tâches'
   static const filterTodos = 'filter_todos';
 
+  /// strings.json: 'Find A Mechanic'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const findAMechanic = 'find_a_mechanic';
+
+  /// strings.json: 'Find Parts'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const findParts = 'find_parts';
+
   /// strings.json: 'First Time Doing This Task.'
   /// strings-fr.json: 'Première exécution de cette tâche.'
   static const firstTimeDoingTask = 'first_time_doing_task';
@@ -212,6 +220,10 @@ class IntlKeys {
   /// strings.json: 'Not a valid date'
   /// strings-fr.json: 'Date invalide'
   static const invalidDate = 'invalid_date';
+
+  /// strings.json: 'Learn to D.I.Y'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const learnToDiy = 'learn_to_diy';
 
   /// strings.json: 'By signing up, you agree to the'
   /// strings-fr.json: 'En vous inscrivant, vous acceptez les'
