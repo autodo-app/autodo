@@ -44,6 +44,7 @@ dependencies:
   cached_network_image:
   firebase_storage:
   image_picker:
+  dotted_border:
 
 dependency_overrides:
   autocomplete_textfield:

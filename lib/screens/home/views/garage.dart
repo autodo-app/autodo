@@ -1,4 +1,3 @@
-
 /// Garage Screen showing the user's vehicles, parts, and some maintenance tips.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -80,7 +79,7 @@ class _CarGrid extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
-            children: cars.map((c) => CarCard(c)).toList(),
+            children: cars.map<Widget>((c) => CarCard(c)).toList()..add(NewCarCard()),
           )
         )
       );
