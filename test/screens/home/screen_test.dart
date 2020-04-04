@@ -21,8 +21,6 @@ class MockFilteredTodosBloc
     extends MockBloc<FilteredTodosLoaded, FilteredTodosState>
     implements FilteredTodosBloc {}
 
-class MockTabBloc extends MockBloc<TabEvent, AppTab> implements TabBloc {}
-
 class MockCarsBloc extends MockBloc<CarsEvent, CarsState> implements CarsBloc {}
 
 class MockPaidVersionBloc extends MockBloc<PaidVersionEvent, PaidVersionState>
@@ -35,7 +33,6 @@ void main() {
   group('HomeScreen', () {
     TodosBloc todosBloc;
     FilteredTodosBloc filteredTodosBloc;
-    TabBloc tabBloc;
     PaidVersionBloc paidBloc;
     CarsBloc carsBloc;
     RefuelingsBloc refuelingsBloc;
@@ -44,7 +41,6 @@ void main() {
     setUp(() async {
       todosBloc = MockTodosBloc();
       filteredTodosBloc = MockFilteredTodosBloc();
-      tabBloc = MockTabBloc();
       paidBloc = MockPaidVersionBloc();
       when(paidBloc.observer).thenReturn(RouteObserver());
       carsBloc = MockCarsBloc();
@@ -61,7 +57,6 @@ void main() {
 
     testWidgets('renders correctly', (WidgetTester tester) async {
       when(todosBloc.state).thenAnswer((_) => TodosLoaded(todos: []));
-      when(tabBloc.state).thenAnswer((_) => AppTab.todos);
       final scaffoldKey = Key('scaffold');
       await tester.pumpWidget(
         MultiBlocProvider(
@@ -72,16 +67,13 @@ void main() {
             BlocProvider<FilteredTodosBloc>.value(
               value: filteredTodosBloc,
             ),
-            BlocProvider<TabBloc>.value(
-              value: tabBloc,
-            ),
             BlocProvider<PaidVersionBloc>.value(value: paidBloc),
             BlocProvider<CarsBloc>.value(value: carsBloc),
             BlocProvider<RefuelingsBloc>.value(value: refuelingsBloc),
           ],
           child: MaterialApp(
             home: Scaffold(
-              body: HomeScreen(key: scaffoldKey),
+              body: HomeScreen(key: scaffoldKey, tab: AppTab.todos),
             ),
           ),
         ),
@@ -93,9 +85,7 @@ void main() {
 
     testWidgets('tab switch', (WidgetTester tester) async {
       when(todosBloc.state).thenAnswer((_) => TodosLoaded(todos: []));
-      when(tabBloc.state).thenAnswer((_) => AppTab.todos);
-      when(tabBloc.add(UpdateTab(AppTab.todos))).thenAnswer((_) => null);
-      final scaffoldKey = Key('scaffold');
+      final scaffoldKey = GlobalKey<HomeScreenState>();
       final todosTabKey = Key('tab');
       await tester.pumpWidget(
         MultiBlocProvider(
@@ -106,16 +96,17 @@ void main() {
             BlocProvider<FilteredTodosBloc>.value(
               value: filteredTodosBloc,
             ),
-            BlocProvider<TabBloc>.value(
-              value: tabBloc,
-            ),
             BlocProvider<PaidVersionBloc>.value(value: paidBloc),
             BlocProvider<CarsBloc>.value(value: carsBloc),
             BlocProvider<RefuelingsBloc>.value(value: refuelingsBloc),
           ],
           child: MaterialApp(
             home: Scaffold(
-              body: HomeScreen(key: scaffoldKey, todosTabKey: todosTabKey),
+              body: HomeScreen(
+                key: scaffoldKey,
+                todosTabKey: todosTabKey,
+                tab: AppTab.refuelings,
+              ),
             ),
           ),
         ),
@@ -124,12 +115,11 @@ void main() {
 
       await tester.tap(find.byKey(todosTabKey));
       await tester.pump();
-      verify(tabBloc.add(UpdateTab(AppTab.todos))).called(1);
+      expect(scaffoldKey.currentState.tab, AppTab.todos);
     });
     group('fab routes', () {
       testWidgets('refueling', (WidgetTester tester) async {
         when(todosBloc.state).thenAnswer((_) => TodosLoaded(todos: []));
-        when(tabBloc.state).thenAnswer((_) => AppTab.todos);
         final scaffoldKey = Key('scaffold');
         final carsBloc = MockCarsBloc();
         when(carsBloc.state).thenReturn(CarsLoaded([Car()]));
@@ -144,16 +134,13 @@ void main() {
                 BlocProvider<FilteredTodosBloc>.value(
                   value: filteredTodosBloc,
                 ),
-                BlocProvider<TabBloc>.value(
-                  value: tabBloc,
-                ),
                 BlocProvider<CarsBloc>.value(value: carsBloc),
                 BlocProvider<PaidVersionBloc>.value(value: paidBloc),
                 BlocProvider<RefuelingsBloc>.value(value: refuelingsBloc),
               ],
               child: MaterialApp(
                 home: Scaffold(
-                  body: HomeScreen(key: scaffoldKey),
+                  body: HomeScreen(key: scaffoldKey, tab: AppTab.todos),
                 ),
               ),
             ),
@@ -168,7 +155,6 @@ void main() {
       });
       testWidgets('todo', (WidgetTester tester) async {
         when(todosBloc.state).thenAnswer((_) => TodosLoaded(todos: []));
-        when(tabBloc.state).thenAnswer((_) => AppTab.todos);
         final scaffoldKey = Key('scaffold');
         final carsBloc = MockCarsBloc();
         whenListen(
@@ -189,16 +175,13 @@ void main() {
                 BlocProvider<FilteredTodosBloc>.value(
                   value: filteredTodosBloc,
                 ),
-                BlocProvider<TabBloc>.value(
-                  value: tabBloc,
-                ),
                 BlocProvider<CarsBloc>.value(value: carsBloc),
                 BlocProvider<PaidVersionBloc>.value(value: paidBloc),
                 BlocProvider<RefuelingsBloc>.value(value: refuelingsBloc),
               ],
               child: MaterialApp(
                 home: Scaffold(
-                  body: HomeScreen(key: scaffoldKey),
+                  body: HomeScreen(key: scaffoldKey, tab: AppTab.todos),
                 ),
               ),
             ),

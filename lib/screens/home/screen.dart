@@ -16,19 +16,22 @@ import '../add_edit/barrel.dart';
 import 'views/barrel.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen(
-      {Key key = IntegrationTestKeys.homeScreen,
-      this.todosTabKey,
-      this.integrationTest = false})
-      : super(key: key);
+  const HomeScreen({
+    Key key = IntegrationTestKeys.homeScreen,
+    this.todosTabKey,
+    this.integrationTest = false,
+    this.tab = AppTab.todos,
+  }) : super(key: key);
 
   final Key todosTabKey;
 
   final bool integrationTest;
 
+  final AppTab tab;
+
   @override
-  _HomeScreenState createState() =>
-      _HomeScreenState(todosTabKey, integrationTest);
+  HomeScreenState createState() =>
+      HomeScreenState(todosTabKey, integrationTest);
 }
 
 class _ScreenWithBanner extends StatelessWidget {
@@ -52,8 +55,8 @@ class _ScreenWithBanner extends StatelessWidget {
       ));
 }
 
-class _HomeScreenState extends State<HomeScreen> with RouteAware {
-  _HomeScreenState(this.todosTabKey, this.integrationTest);
+class HomeScreenState extends State<HomeScreen> with RouteAware {
+  HomeScreenState(this.todosTabKey, this.integrationTest);
 
   final Map<AppTab, Widget> views = {
     AppTab.todos: TodosScreen(),
@@ -71,6 +74,16 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
   bool _bannerShown = false;
 
   static bool _adMobInitialized = false;
+
+  AppTab _tab;
+
+  AppTab get tab => _tab;
+
+  set tab(AppTab tab) {
+    setState(() {
+      _tab = tab;
+    });
+  }
 
   // this has to be a function so that it returns a different route each time
   // the lifecycle of a MaterialPageRoute requires that it not be reused.
@@ -195,6 +208,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
 
   @override
   void initState() {
+    _tab = widget.tab;
     if (kFlavor.hasAds && !_adMobInitialized) {
       FirebaseAdMob.instance.initialize(appId: BannerAd.testAdUnitId);
       _adMobInitialized = true;
@@ -205,20 +219,19 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
 
   List<Widget> fakeBottomButtons = [Container(height: 50)];
 
-  Widget buildScreen(BuildContext context, AppTab activeTab) {
+  Widget buildScreen(BuildContext context) {
     return Scaffold(
-      appBar: (activeTab == AppTab.garage)
+      appBar: (_tab == AppTab.garage)
           ? null
           : AppBar(
               title: Text(JsonIntl.of(context).get(IntlKeys.appTitle)),
               actions: [ExtraActions()],
             ),
-      body: views[activeTab],
+      body: views[_tab],
       floatingActionButton: actionButton,
       bottomNavigationBar: TabSelector(
-        activeTab: activeTab,
-        onTabSelected: (tab) =>
-            BlocProvider.of<TabBloc>(context).add(UpdateTab(tab)),
+        activeTab: _tab,
+        onTabSelected: (_tab) => tab = _tab,
         todosTabKey: todosTabKey,
         refuelingsTabKey: ValueKey('__refuelings_tab_button__'),
         garageTabKey: ValueKey('__garage_tab_button__'),
@@ -249,22 +262,13 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                       });
                     });
                   }
-                  return BlocBuilder<TabBloc, AppTab>(
-                    builder: (context, activeTab) => _ScreenWithBanner(
-                      bannerShown: _bannerShown,
-                      child: buildScreen(context, activeTab),
-                    ),
-                  );
+                  return buildScreen(context);
                 })
-              : BlocBuilder<TabBloc, AppTab>(
-                  builder: (context, activeTab) => _ScreenWithBanner(
-                    bannerShown: _bannerShown,
-                    child: buildScreen(context, activeTab),
-                  ),
+              : _ScreenWithBanner(
+                  bannerShown: _bannerShown,
+                  child: buildScreen(context),
                 ))
-          : BlocBuilder<TabBloc, AppTab>(
-              builder: buildScreen,
-            ),
+          : buildScreen(context),
     );
   }
 }
