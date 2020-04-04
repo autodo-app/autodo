@@ -19,6 +19,11 @@ class Car extends Equatable {
     double distanceRate,
     DateTime lastMileageUpdate,
     List<DistanceRatePoint> distanceRateHistory,
+    String make,
+    String model,
+    int year,
+    String plate,
+    String vin,
   }) =>
       Car._(
         id: id ?? '',
@@ -30,6 +35,11 @@ class Car extends Equatable {
         lastMileageUpdate: lastMileageUpdate ??
             roundToDay(DateTime.fromMillisecondsSinceEpoch(0)),
         distanceRateHistory: distanceRateHistory ?? const <DistanceRatePoint>[],
+        make: make ?? '',
+        model: model ?? '',
+        year: year ?? 0,
+        plate: plate ?? '',
+        vin: vin ?? ''
       );
 
   factory Car.fromSnapshot(DocumentSnapshot snap) {
@@ -52,7 +62,13 @@ class Car extends Equatable {
                   p['distanceRate'],
                 ))
             ?.toList()
-            ?.cast<DistanceRatePoint>());
+            ?.cast<DistanceRatePoint>(),
+        make: snap.data['make'] as String,
+        model: snap.data['model'] as String,
+        year: snap.data['year'] as int,
+        plate: snap.data['plate'] as String,
+        vin: snap.data['vin'] as String
+    );
   }
 
   factory Car.fromRecord(RecordSnapshot snap) {
@@ -75,7 +91,13 @@ class Car extends Equatable {
                   p['distanceRate'],
                 ))
             ?.toList()
-            ?.cast<DistanceRatePoint>());
+            ?.cast<DistanceRatePoint>(),
+        make: snap.value['make'] as String,
+        model: snap.value['model'] as String,
+        year: snap.value['year'] as int,
+        plate: snap.value['plate'] as String,
+        vin: snap.value['vin'] as String
+    );
   }
 
   const Car._({
@@ -87,6 +109,11 @@ class Car extends Equatable {
     @required this.distanceRate,
     @required this.lastMileageUpdate,
     @required this.distanceRateHistory,
+    @required this.make,
+    @required this.model,
+    @required this.year,
+    @required this.plate,
+    @required this.vin
   })  : assert(id != null),
         assert(name != null),
         assert(mileage != null),
@@ -94,7 +121,12 @@ class Car extends Equatable {
         assert(averageEfficiency != null),
         assert(distanceRate != null),
         assert(lastMileageUpdate != null),
-        assert(distanceRateHistory != null);
+        assert(distanceRateHistory != null),
+        assert(make != null),
+        assert(model != null),
+        assert(year != null),
+        assert(plate != null),
+        assert(vin != null);
 
   final String id;
 
@@ -114,6 +146,16 @@ class Car extends Equatable {
 
   final String imageName = 'sonic.jpg';
 
+  final String make;
+
+  final String model;
+
+  final int year;
+
+  final String plate;
+
+  final String vin;
+
   Future<String> getImageDownloadUrl() async {
     final ref = await FirebaseStorage.instance.getReferenceFromUrl('gs://autodo-49f21.appspot.com/sonic.jpg');
     final url = await ref.getDownloadURL();
@@ -128,7 +170,12 @@ class Car extends Equatable {
       double averageEfficiency,
       double distanceRate,
       DateTime lastMileageUpdate,
-      List<DistanceRatePoint> distanceRateHistory}) {
+      List<DistanceRatePoint> distanceRateHistory,
+      String make,
+      String model,
+      int year,
+      String plate,
+      String vin}) {
     return Car(
         id: id ?? this.id,
         name: name ?? this.name,
@@ -137,7 +184,12 @@ class Car extends Equatable {
         averageEfficiency: averageEfficiency ?? this.averageEfficiency,
         distanceRate: distanceRate ?? this.distanceRate,
         lastMileageUpdate: lastMileageUpdate ?? this.lastMileageUpdate,
-        distanceRateHistory: distanceRateHistory ?? this.distanceRateHistory);
+        distanceRateHistory: distanceRateHistory ?? this.distanceRateHistory,
+        make: make ?? this.make,
+        model: model ?? this.model,
+        year: year ?? this.year,
+        plate: plate ?? this.plate,
+        vin: vin ?? this.vin);
   }
 
   @override
@@ -149,7 +201,12 @@ class Car extends Equatable {
         averageEfficiency,
         distanceRate,
         lastMileageUpdate?.toUtc(),
-        distanceRateHistory
+        distanceRateHistory,
+        make,
+        model,
+        year,
+        plate,
+        vin
       ];
 
   @override
@@ -170,7 +227,12 @@ class Car extends Equatable {
               'date': p.date.millisecondsSinceEpoch,
               'distanceRate': p.distanceRate
             }))
-          ?.toList()
+          ?.toList(),
+      'make': make,
+      'model': model,
+      'year': year,
+      'plate': plate,
+      'vin': vin
     };
   }
 }

@@ -32,7 +32,6 @@ class CarCard extends StatelessWidget {
                   height: 80,
                   placeholder: (context, url) => CircularProgressIndicator(),
                   errorWidget: (context, url, error) => Icon(Icons.error),
-                  // imageUrl: 'https://picsum.photos/250?image=9',
                   imageUrl: snap.data,
                 );
               }
