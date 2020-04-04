@@ -109,6 +109,20 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                         completed: false)));
                   },
                 ))),
+        MaterialPageRoute(
+            builder: (context) => _ScreenWithBanner(
+                    child: CarAddEditScreen(
+                  isEditing: false,
+                  onSave: (m, make, model, y, p, v) {
+                    BlocProvider.of<CarsBloc>(context).add(AddCar(Car(
+                      mileage: m,
+                      make: make,
+                      model: model,
+                      year: y,
+                      plate: p,
+                      vin: v)));
+                  },
+                ))),
       ];
 
   Widget get actionButton =>

@@ -103,10 +103,11 @@ class _TwoPartNoEdit extends StatelessWidget {
 
 /// Shows Car Details and can be put into edit mode
 class CarAddEditScreen extends StatefulWidget {
-  const CarAddEditScreen({this.car, this.onSaved});
+  const CarAddEditScreen({this.car, this.onSave, this.isEditing});
 
   final Car car;
-  final Function onSaved;
+  final Function onSave;
+  final bool isEditing;
 
   @override
   CarAddEditScreenState createState() => CarAddEditScreenState();
@@ -139,7 +140,7 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
         icon: Icon(Icons.arrow_back),
         onPressed: () => Navigator.pop(context),
       ),
-      title: Text(JsonIntl.of(context).get(IntlKeys.editCarList)),
+      // title: Text(JsonIntl.of(context).get(IntlKeys.editCarList)),
     ),
     body: Form(
       key: _formKey,
@@ -233,7 +234,7 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
                     _formKey.currentState.save();
-                    widget.onSaved(_odom, _make, _model, _year, _plate, _vin);
+                    widget.onSave(_odom, _make, _model, _year, _plate, _vin);
                     Navigator.pop(context);
                   }
                 },
