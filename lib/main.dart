@@ -72,6 +72,12 @@ class AppProviderState extends State<AppProvider> {
   ThemeData theme;
   SharedPrefService service;
   final analytics = kFlavor.hasAnalytics ? FirebaseAnalytics() : null;
+  var _initialized = false;
+
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _initMainWidget();
+  }
 
   Future<void> _configureFirebase() async {
     await FirebaseApp.configure(
@@ -85,6 +91,10 @@ class AppProviderState extends State<AppProvider> {
   }
 
   Future<void> _initMainWidget() async {
+    if (_initialized) {
+      return;
+    }
+
     WidgetsFlutterBinding.ensureInitialized();
     await _configureFirebase();
     // required in init for Android
@@ -102,73 +112,71 @@ class AppProviderState extends State<AppProvider> {
       'efficiency_unit': Efficiency.getDefault(locale).index,
       'currency': Currency.getDefault(locale),
     });
+
+    setState(() {
+      _initialized = true;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _initMainWidget(),
-      builder: (context, res) {
-        if (res.connectionState != ConnectionState.done) {
-          return Container();
-        }
+    if (!_initialized) {
+      return Container();
+    }
 
-        return PrefService(
-          service: service,
-          child: ChangeNotifierProvider<BasePrefService>.value(
-            value: service,
-            child: BlocProvider<AuthenticationBloc>(
-              create: (context) =>
-                  AuthenticationBloc(userRepository: authRepository)
-                    ..add(AppStarted(integrationTest: widget.integrationTest)),
-              child: BlocProvider<DatabaseBloc>(
-                create: (context) => DatabaseBloc(
-                  authenticationBloc:
-                      BlocProvider.of<AuthenticationBloc>(context),
-                ),
-                child: MultiBlocProvider(
-                  providers: [
-                    if (kFlavor.hasPaid)
-                      BlocProvider<PaidVersionBloc>(
-                        create: (context) => PaidVersionBloc(
-                            dbBloc: BlocProvider.of<DatabaseBloc>(context))
-                          ..add(LoadPaidVersion()),
-                      ),
-                    BlocProvider<NotificationsBloc>(
-                      create: (context) => NotificationsBloc(
-                        dbBloc: BlocProvider.of<DatabaseBloc>(context),
-                      )..add(LoadNotifications()),
-                    ),
-                    BlocProvider<RefuelingsBloc>(
-                      create: (context) => RefuelingsBloc(
-                        dbBloc: BlocProvider.of<DatabaseBloc>(context),
-                      ),
-                    ),
-                  ],
-                  child: BlocProvider<CarsBloc>(
-                    create: (context) => CarsBloc(
-                      dbBloc: BlocProvider.of<DatabaseBloc>(context),
-                      refuelingsBloc: BlocProvider.of<RefuelingsBloc>(context),
-                    ),
-                    child: BlocProvider<TodosBloc>(
-                      create: (context) => TodosBloc(
-                          dbBloc: BlocProvider.of<DatabaseBloc>(context),
-                          notificationsBloc:
-                              BlocProvider.of<NotificationsBloc>(context),
-                          carsBloc: BlocProvider.of<CarsBloc>(context)),
-                      child: App(
-                          theme: theme,
-                          authRepository: authRepository,
-                          integrationTest: widget.integrationTest,
-                          analytics: analytics),
-                    ),
+    return PrefService(
+      service: service,
+      child: ChangeNotifierProvider<BasePrefService>.value(
+        value: service,
+        child: BlocProvider<AuthenticationBloc>(
+          create: (context) =>
+              AuthenticationBloc(userRepository: authRepository)
+                ..add(AppStarted(integrationTest: widget.integrationTest)),
+          child: BlocProvider<DatabaseBloc>(
+            create: (context) => DatabaseBloc(
+              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+            ),
+            child: MultiBlocProvider(
+              providers: [
+                if (kFlavor.hasPaid)
+                  BlocProvider<PaidVersionBloc>(
+                    create: (context) => PaidVersionBloc(
+                        dbBloc: BlocProvider.of<DatabaseBloc>(context))
+                      ..add(LoadPaidVersion()),
                   ),
+                BlocProvider<NotificationsBloc>(
+                  create: (context) => NotificationsBloc(
+                    dbBloc: BlocProvider.of<DatabaseBloc>(context),
+                  )..add(LoadNotifications()),
+                ),
+                BlocProvider<RefuelingsBloc>(
+                  create: (context) => RefuelingsBloc(
+                    dbBloc: BlocProvider.of<DatabaseBloc>(context),
+                  ),
+                ),
+              ],
+              child: BlocProvider<CarsBloc>(
+                create: (context) => CarsBloc(
+                  dbBloc: BlocProvider.of<DatabaseBloc>(context),
+                  refuelingsBloc: BlocProvider.of<RefuelingsBloc>(context),
+                ),
+                child: BlocProvider<TodosBloc>(
+                  create: (context) => TodosBloc(
+                      dbBloc: BlocProvider.of<DatabaseBloc>(context),
+                      notificationsBloc:
+                          BlocProvider.of<NotificationsBloc>(context),
+                      carsBloc: BlocProvider.of<CarsBloc>(context)),
+                  child: App(
+                      theme: theme,
+                      authRepository: authRepository,
+                      integrationTest: widget.integrationTest,
+                      analytics: analytics),
                 ),
               ),
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }
