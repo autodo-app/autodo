@@ -155,6 +155,8 @@ class AuthenticationBloc
   /// [LoggedIn] and [SignedUp] events to make the action more easily accessible
   /// to the home screen presentation layer.
   Stream<AuthenticationState> _mapLogOutToState() async* {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(trialUserKey, false);
     yield Unauthenticated();
     await _userRepository.signOut();
   }
