@@ -222,15 +222,17 @@ class MileageScreenState extends State<MileageScreen> {
                           formKeys.add(GlobalKey<FormState>());
                         }),
                       ),
-                      FlatButton.icon(
-                        padding: EdgeInsets.all(0),
-                        icon: Icon(Icons.delete),
-                        label: Text(JsonIntl.of(context).get(IntlKeys.remove)),
-                        onPressed: () {
-                          if (cars.length < 2) return;
-                          setState(() => cars.removeAt(cars.length - 1));
-                        },
-                      ),
+                      if (cars.length > 1)
+                        FlatButton.icon(
+                          padding: EdgeInsets.all(0),
+                          icon: Icon(Icons.delete),
+                          label:
+                              Text(JsonIntl.of(context).get(IntlKeys.remove)),
+                          onPressed: () {
+                            if (cars.length < 2) return;
+                            setState(() => cars.removeAt(cars.length - 1));
+                          },
+                        ),
                     ],
                   ),
                   FlatButton(
