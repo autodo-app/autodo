@@ -10,7 +10,7 @@ import 'event.dart';
 import 'state.dart';
 
 class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
-  RefuelingsBloc({@required dbBloc})
+  RefuelingsBloc({@required DatabaseBloc dbBloc})
       : assert(dbBloc != null),
         _dbBloc = dbBloc {
     _dataSubscription = _dbBloc.listen((state) {

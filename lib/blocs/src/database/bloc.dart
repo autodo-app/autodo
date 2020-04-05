@@ -61,6 +61,8 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
   }
 
   Stream<DatabaseState> _mapUserLoggedOutToState(UserLoggedOut event) async* {
+    yield DbNotLoaded();
+
     if (state is DbLoaded) {
       final repo = (state as DbLoaded).dataRepo;
       if (repo is SembastDataRepository) {
@@ -69,7 +71,6 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
         await SembastDataRepository.deleteDb(repo.db.path);
       }
     }
-    yield DbNotLoaded();
   }
 
   Stream<DatabaseState> _mapTrialLoginToState(TrialLogin event) async* {
