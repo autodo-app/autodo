@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_intl/json_intl.dart';
 
+import '../../blocs/blocs.dart';
 import '../../generated/localization.dart';
 import '../../models/models.dart';
 import '../../theme.dart';
@@ -21,46 +24,85 @@ import '../../util.dart';
 enum CarDetailsMode { DETAILS, ADD, EDIT }
 
 class _HeaderWithImage extends StatelessWidget {
-  const _HeaderWithImage({this.carName, this.imageUrl});
+  const _HeaderWithImage({this.carName, this.imageUrl, this.onEdit, this.onDelete});
 
   final String carName;
   final Future<String> imageUrl;
+  final Function onEdit, onDelete;
 
   @override
-  Widget build(BuildContext context) => Hero(
-    tag: carName ?? 'new_car',
-    child: Stack(
-      children: <Widget>[
-        FutureBuilder(
-              future: imageUrl,
-              builder: (context, snap) {
-                if (snap.connectionState != ConnectionState.done) {
-                  return CircularProgressIndicator();
+  Widget build(BuildContext context) => ClipRect(
+    child: Container(
+      height: 150,
+      width: double.infinity,
+      padding: EdgeInsets.only(bottom: 5),
+      child: Hero(
+        tag: carName ?? 'new_car',
+        child: Stack(
+          children: <Widget>[
+            Align(
+              alignment: Alignment.center,
+              child: FutureBuilder(
+                future: imageUrl,
+                builder: (context, snap) {
+                  if (snap.connectionState != ConnectionState.done) {
+                    return CircularProgressIndicator();
+                  }
+                  return CachedNetworkImage(
+                    fit: BoxFit.fill,
+                    placeholder: (context, url) => CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                    imageUrl: snap.data,
+                  );
                 }
-                return CachedNetworkImage(
-                  fit: BoxFit.fill,
-                  height: 150,
-                  placeholder: (context, url) => CircularProgressIndicator(),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
-                  imageUrl: snap.data,
-                );
-              }
+              ),
             ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Text(carName ?? ''),
-        ),
-        Align(
-          alignment: Alignment.bottomRight,
-          child: Row(
-            children: <Widget>[
-              Icon(Icons.edit),
-              Icon(Icons.delete)
-            ],
-          )
+            BackdropFilter(
+              child: Container(
+                color: Colors.black12.withOpacity(0.1),
+              ),
+              // filter: ImageFilter.blur(sigmaY: .5, sigmaX: .5),
+              filter: ImageFilter.blur(),
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                padding: EdgeInsets.all(5),
+                child: Text(
+                  carName ?? '',
+                  style: Theme.of(context).primaryTextTheme.headline4
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  ButtonTheme.fromButtonThemeData(
+                    data: ButtonThemeData(minWidth: 0),
+                    child: FlatButton(
+                      child: Icon(Icons.edit),
+                      onPressed: onEdit,
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                  ),
+                  ButtonTheme.fromButtonThemeData(
+                    data: ButtonThemeData(minWidth: 0),
+                    child: FlatButton(
+                      child: Icon(Icons.delete),
+                      onPressed: onDelete,
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                  ),
+                ],
+              )
+            ),
+          ],
         )
-      ],
-    )
+      ),
+    ),
   );
 }
 
@@ -226,7 +268,17 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
             (mode == CarDetailsMode.DETAILS || mode == CarDetailsMode.EDIT) ?
                 _HeaderWithImage(
                   carName: widget.car?.name,
-                  imageUrl: widget.car?.getImageDownloadUrl()) :
+                  imageUrl: widget.car?.getImageDownloadUrl(),
+                  onEdit: () {
+                    setState(() {
+                      mode = CarDetailsMode.EDIT;
+                    });
+                  },
+                  onDelete: () {
+                    BlocProvider.of<CarsBloc>(context).add(DeleteCar(widget.car));
+                    Navigator.pop(context);
+                  },
+                ) :
                 _HeaderNoImage(
                   carName: widget.car?.name),
             (mode == CarDetailsMode.ADD || mode == CarDetailsMode.EDIT) ?

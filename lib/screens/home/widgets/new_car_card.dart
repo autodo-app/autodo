@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
 
+import '../../add_edit/barrel.dart';
+
 class NewCarCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) => GestureDetector(
-    onTap: () {}, // TODO: push the car add/edit screen here
+    onTap: () {
+      Navigator.push(context, MaterialPageRoute(
+        builder: (context) => CarAddEditScreen(
+          isEditing: false,
+        )
+      ));
+    }, // TODO: push the car add/edit screen here
     child: Container(
       width: 140,
       height: 205,
