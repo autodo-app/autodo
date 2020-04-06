@@ -74,12 +74,12 @@ class _HeaderNoImage extends StatelessWidget {
     height: 120,
     width: double.infinity,
     padding: EdgeInsets.only(bottom: 5),
-    child: Stack(
+    child: Column(
       children: <Widget>[
-        Align(
-          alignment: Alignment.center,
-          child: GestureDetector(
-            onTap: () {}, // add an upload feature here
+        GestureDetector(
+          onTap: () {}, // add an upload feature here
+          child: Container(
+            padding: EdgeInsets.all(5),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -92,11 +92,18 @@ class _HeaderNoImage extends StatelessWidget {
             ),
           ),
         ),
-        // TODO: make this an editable field
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Text(carName ?? ''),
-        ),
+        Container(
+          width: MediaQuery.of(context).size.width * 0.7,
+          padding: EdgeInsets.all(5),
+          child: TextFormField(
+            decoration: defaultInputDecoration('', 'Name'),
+            initialValue: carName ?? '',
+            style: Theme.of(context).primaryTextTheme.subtitle2,
+            keyboardType: TextInputType.text,
+            validator: requiredValidator,
+            textInputAction: TextInputAction.next,
+          ),
+        )
       ],
     )
   );
@@ -128,8 +135,8 @@ class _TwoPartTextField extends StatelessWidget {
             initialValue: initialValue?.toString() ?? '',
             focusNode: node,
             style: Theme.of(context).primaryTextTheme.subtitle2,
-            keyboardType: TextInputType.number,
-            validator: doubleValidator,
+            keyboardType: TextInputType.number, // change this
+            validator: validator, // change this
             onSaved: onSaved,
             textInputAction: TextInputAction.next,
             onFieldSubmitted: (_) => changeFocus(node, nextNode),
@@ -331,23 +338,29 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
                   fieldName: 'Plate',
                   value: widget.car?.plate
                 ),
-            Divider(),
             Container(
-              padding: EdgeInsets.all(5),
-              child: RaisedButton(
-                child: Text('Save'),
-                onPressed: () {
-                  if (_formKey.currentState.validate()) {
-                    _formKey.currentState.save();
-                    widget.onSave(_odom, _make, _model, _year, _plate, _vin);
-                    Navigator.pop(context);
-                  }
-                },
-              )
-            )
+              height: 200 // provides enough of a buffer to scroll up past fab
+            ),
           ],
         )
       ),
     ), // Todo: Add content here
+    floatingActionButton: (mode == CarDetailsMode.EDIT || mode == CarDetailsMode.ADD) ?
+        FloatingActionButton(
+          tooltip: (mode == CarDetailsMode.EDIT)
+              ? JsonIntl.of(context).get(IntlKeys.saveChanges)
+              // : JsonIntl.of(context).get(IntlKeys.addCar),
+              : 'Add Car',
+          child: Icon(mode == CarDetailsMode.EDIT ? Icons.check : Icons.add),
+          onPressed: () {
+            if (_formKey.currentState.validate()) {
+              _formKey.currentState.save();
+              // widget.onSave(_name, _dueDate, _dueMileage, _car,
+              //     _mileageInterval, _dateInterval);
+              Navigator.pop(context);
+            }
+          },
+        ) :
+        Container(),
   );
 }
