@@ -3,6 +3,7 @@
 
 export 'currency.dart';
 export 'distance.dart';
+export 'efficiency.dart';
 export 'volume.dart';
 
 enum FuelConsumption { volumePerDistance, distancePerVolume }

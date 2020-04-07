@@ -304,7 +304,7 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
             (mode == CarDetailsMode.DETAILS) ?
                 _TwoPartNoEdit(
                   fieldName: 'Fuel Efficiency',
-                  value: widget.car?.averageEfficiency?.toString()
+                  value: ' ${Efficiency.of(context).format(widget.car?.averageEfficiency)} ${Efficiency.of(context).unitString(context, short: true)}'
                 ) :
                 Container(),
             Divider(),
