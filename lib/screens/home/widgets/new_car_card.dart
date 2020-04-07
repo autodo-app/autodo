@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../blocs/blocs.dart';
+import '../../../models/models.dart';
+import '../../../units/units.dart';
 import '../../add_edit/barrel.dart';
 
 class NewCarCard extends StatelessWidget {
@@ -10,9 +14,19 @@ class NewCarCard extends StatelessWidget {
       Navigator.push(context, MaterialPageRoute(
         builder: (context) => CarAddEditScreen(
           isEditing: false,
+          onSave: (odom, make, model, year, plate, vin) {
+            BlocProvider.of<CarsBloc>(context).add(AddCar(Car(
+              mileage: Distance.of(context).unitToInternal(odom),
+              make: make,
+              model: model,
+              year: year,
+              plate: plate,
+              vin: vin
+            )));
+          }
         )
       ));
-    }, // TODO: push the car add/edit screen here
+    },
     child: Container(
       width: 140,
       height: 205,

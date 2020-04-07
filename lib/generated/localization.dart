@@ -9,6 +9,10 @@ class IntlKeys {
   /// strings-fr.json: 'Ajouter'
   static const add = 'add';
 
+  /// strings.json: 'Add a Car'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const addCar = 'add_car';
+
   /// strings.json: 'Add Refueling'
   /// strings-fr.json: 'Ajouter un plein'
   static const addRefueling = 'add_refueling';
@@ -89,6 +93,10 @@ class IntlKeys {
   /// strings-fr.json: 'La suppression de votre compte supprimera définitivement toutes les données associées à votre compte.\n\n Êtes-vous sur de vouloir continuer?'
   static const deleteAccountMessage = 'delete_account_message';
 
+  /// strings.json: 'Details'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const details = 'details';
+
   /// strings.json: 'kilometers'
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const distanceKm = 'distance_km';
@@ -128,6 +136,10 @@ class IntlKeys {
   /// strings.json: 'Due Soon:'
   /// strings-fr.json: 'À venir bientôt :'
   static const dueSoon = 'due_soon';
+
+  /// strings.json: 'Edit Car'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const editCar = 'edit_car';
 
   /// strings.json: 'Edit Car List'
   /// strings-fr.json: 'Modifier la liste des voitures'

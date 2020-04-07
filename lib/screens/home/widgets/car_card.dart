@@ -1,8 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../../models/models.dart';
+import '../../../units/units.dart';
 import '../../add_edit/barrel.dart';
 
 class CarCard extends StatelessWidget {
@@ -53,16 +53,16 @@ class CarCard extends StatelessWidget {
               Padding(padding: EdgeInsets.all(5),),
               Center(
                 child: Text(
-                  '2015 Sonic',
+                  car.name,
                   style: Theme.of(context).primaryTextTheme.headline6),
               ),
               Center(
                 child: Text(
-                  'Plate: 23908u4',
+                  'Plate: ${car.plate}',
                   style: Theme.of(context).primaryTextTheme.bodyText2)
               ),
               Center(
-                child: Text('Odom: safdlkj',
+                child: Text('Odom: ${Distance.of(context).format(car.mileage)}',
                   style: Theme.of(context).primaryTextTheme.bodyText2)
               ),
               // Padding(padding: EdgeInsets.all(5),),

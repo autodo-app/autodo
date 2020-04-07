@@ -10,6 +10,7 @@ import '../../blocs/blocs.dart';
 import '../../generated/localization.dart';
 import '../../models/models.dart';
 import '../../theme.dart';
+import '../../units/units.dart';
 import '../../util.dart';
 
 /// There are three states that this screen can take.
@@ -222,7 +223,6 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
   int _year;
   CarDetailsMode mode;
 
-
   @override
   void initState() {
     _odomNode = FocusNode();
@@ -252,7 +252,11 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
         icon: Icon(Icons.arrow_back),
         onPressed: () => Navigator.pop(context),
       ),
-      // title: Text(JsonIntl.of(context).get(IntlKeys.editCarList)),
+      title: (mode == CarDetailsMode.ADD) ?
+          Text(JsonIntl.of(context).get(IntlKeys.addCar)) :
+          (mode == CarDetailsMode.EDIT) ?
+          Text(JsonIntl.of(context).get(IntlKeys.editCar)) :
+          Text(JsonIntl.of(context).get(IntlKeys.details)),
     ),
     body: Form(
       key: _formKey,
@@ -274,8 +278,7 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
                     Navigator.pop(context);
                   },
                 ) :
-                _HeaderNoImage(
-                  carName: widget.car?.name),
+                _HeaderNoImage(carName: widget.car?.name),
             (mode == CarDetailsMode.ADD || mode == CarDetailsMode.EDIT) ?
                 _TwoPartTextField(
                   initialValue: widget.car?.mileage?.toString(),
@@ -290,12 +293,12 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
                 ) :
                 _TwoPartNoEdit(
                   fieldName: 'Odom',
-                  value: widget.car?.mileage?.toString()
+                  value: '${Distance.of(context).format(widget.car?.mileage)} ${Distance.of(context).unitString(context, short: true)}',
                 ),
             (mode == CarDetailsMode.DETAILS) ?
                 _TwoPartNoEdit(
                   fieldName: 'Driving Rate',
-                  value: widget.car?.distanceRate?.toString()
+                  value: '${Distance.of(context).format(widget.car?.distanceRate)} ${Distance.of(context).unitString(context, short: true)}/day'
                 ) :
                 Container(),
             (mode == CarDetailsMode.DETAILS) ?
@@ -382,8 +385,8 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
                   },
                 ) :
                 _TwoPartNoEdit(
-                  fieldName: 'Plate',
-                  value: widget.car?.plate
+                  fieldName: 'VIN',
+                  value: widget.car?.vin
                 ),
             Container(
               height: 200 // provides enough of a buffer to scroll up past fab
@@ -396,14 +399,12 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
         FloatingActionButton(
           tooltip: (mode == CarDetailsMode.EDIT)
               ? JsonIntl.of(context).get(IntlKeys.saveChanges)
-              // : JsonIntl.of(context).get(IntlKeys.addCar),
-              : 'Add Car',
+              : JsonIntl.of(context).get(IntlKeys.addCar),
           child: Icon(mode == CarDetailsMode.EDIT ? Icons.check : Icons.add),
           onPressed: () {
             if (_formKey.currentState.validate()) {
               _formKey.currentState.save();
-              // widget.onSave(_name, _dueDate, _dueMileage, _car,
-              //     _mileageInterval, _dateInterval);
+              widget.onSave(_odom, _make, _model, _year, _plate, _vin);
               Navigator.pop(context);
             }
           },
