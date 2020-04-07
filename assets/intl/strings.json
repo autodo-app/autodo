@@ -162,5 +162,17 @@
   "find_parts": "Find Parts",
   "add_car": "Add a Car",
   "edit_car": "Edit Car",
-  "details": "Details"
+  "details": "Details",
+  "efficiency_mpusg_short": "mpg",
+  "efficiency_mpusg": "Miles per US Gallons",
+  "efficiency_mpig_short": "mpg",
+  "efficiency_mpig": "Miles per Imperial Gallons",
+  "efficiency_usg100m_short": "G/100 mi",
+  "efficiency_usg100m": "US Gallons per 100 miles",
+  "efficiency_lp100km_short": "L/100 Km",
+  "efficiency_lp100km": "Liters per 100 Km",
+  "efficiency_kmpl_short": "Km/L",
+  "efficiency_kmpl": "Kilometers per Liter",
+  "efficiency_tanakeh_short": "Tanakeh",
+  "efficiency_tanakeh": "Tanakeh"
 }

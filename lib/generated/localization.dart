@@ -157,6 +157,54 @@ class IntlKeys {
   /// strings-fr.json: 'Modifier la tâche'
   static const editTodo = 'edit_todo';
 
+  /// strings.json: 'Kilometers per Liter'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const efficiencyKmpl = 'efficiency_kmpl';
+
+  /// strings.json: 'Km/L'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const efficiencyKmplShort = 'efficiency_kmpl_short';
+
+  /// strings.json: 'Liters per 100 Km'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const efficiencyLp100km = 'efficiency_lp100km';
+
+  /// strings.json: 'L/100 Km'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const efficiencyLp100kmShort = 'efficiency_lp100km_short';
+
+  /// strings.json: 'Miles per Imperial Gallons'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const efficiencyMpig = 'efficiency_mpig';
+
+  /// strings.json: 'mpg'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const efficiencyMpigShort = 'efficiency_mpig_short';
+
+  /// strings.json: 'Miles per US Gallons'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const efficiencyMpusg = 'efficiency_mpusg';
+
+  /// strings.json: 'mpg'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const efficiencyMpusgShort = 'efficiency_mpusg_short';
+
+  /// strings.json: 'Tanakeh'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const efficiencyTanakeh = 'efficiency_tanakeh';
+
+  /// strings.json: 'Tanakeh'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const efficiencyTanakehShort = 'efficiency_tanakeh_short';
+
+  /// strings.json: 'US Gallons per 100 miles'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const efficiencyUsg100m = 'efficiency_usg100m';
+
+  /// strings.json: 'G/100 mi'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const efficiencyUsg100mShort = 'efficiency_usg100m_short';
+
   /// strings.json: 'Email'
   /// strings-fr.json: 'Email'
   static const email = 'email';
