@@ -197,6 +197,10 @@ class IntlKeys {
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const efficiencyTanakehShort = 'efficiency_tanakeh_short';
 
+  /// strings.json: 'Fuel efficiency unit'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const efficiencyUnit = 'efficiency_unit';
+
   /// strings.json: 'US Gallons per 100 miles'
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const efficiencyUsg100m = 'efficiency_usg100m';

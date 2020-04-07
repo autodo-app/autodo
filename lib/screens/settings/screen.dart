@@ -6,6 +6,7 @@ import 'package:preferences/preferences.dart';
 import '../../blocs/blocs.dart';
 import '../../generated/localization.dart';
 import '../../routes.dart';
+import '../../units/efficiency.dart';
 import '../../units/units.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -69,6 +70,22 @@ class SettingsScreenState extends State<SettingsScreen> {
           VolumeUnit.metric.index,
           VolumeUnit.imperial.index,
           VolumeUnit.us.index,
+        ],
+      ),
+      DropdownPreference<int>(
+        JsonIntl.of(context).get(IntlKeys.efficiencyUnit),
+        'efficiency_unit',
+        displayValues: [
+          JsonIntl.of(context).get(IntlKeys.efficiencyMpusg),
+          JsonIntl.of(context).get(IntlKeys.efficiencyMpig),
+          JsonIntl.of(context).get(IntlKeys.efficiencyKmpl),
+          JsonIntl.of(context).get(IntlKeys.efficiencyLp100km),
+        ],
+        values: [
+          EfficiencyUnit.mpusg.index,
+          EfficiencyUnit.mpig.index,
+          EfficiencyUnit.kmpl.index,
+          EfficiencyUnit.lp100km.index,
         ],
       ),
       DropdownPreference<String>(

@@ -163,6 +163,7 @@
   "add_car": "Add a Car",
   "edit_car": "Edit Car",
   "details": "Details",
+  "efficiency_unit": "Fuel efficiency unit",
   "efficiency_mpusg_short": "mpg",
   "efficiency_mpusg": "Miles per US Gallons",
   "efficiency_mpig_short": "mpg",

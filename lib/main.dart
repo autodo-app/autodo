@@ -24,6 +24,7 @@ import 'routes.dart';
 import 'screens/screens.dart';
 import 'screens/settings/screen.dart';
 import 'theme.dart';
+import 'units/efficiency.dart';
 import 'units/units.dart';
 import 'widgets/widgets.dart';
 
@@ -99,6 +100,7 @@ class AppProviderState extends State<AppProvider> {
     await service.setDefaultValues({
       'length_unit': Distance.getDefault(locale).index,
       'volume_unit': Volume.getDefault(locale).index,
+      'efficiency_unit': Efficiency.getDefault(locale).index,
       'currency': Currency.getDefault(locale),
     });
   }
