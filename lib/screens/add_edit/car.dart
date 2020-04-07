@@ -31,14 +31,13 @@ class _HeaderWithImage extends StatelessWidget {
   final Function onEdit, onDelete;
 
   @override
-  Widget build(BuildContext context) => ClipRect(
+  Widget build(BuildContext context) => Hero(
+    tag: carName ?? 'new_car',
     child: Container(
       height: 150,
-      width: double.infinity,
       padding: EdgeInsets.only(bottom: 5),
-      child: Hero(
-        tag: carName ?? 'new_car',
-        child: Stack(
+        child: ClipRect(
+          child: Stack(
           children: <Widget>[
             Align(
               alignment: Alignment.center,
@@ -48,21 +47,17 @@ class _HeaderWithImage extends StatelessWidget {
                   if (snap.connectionState != ConnectionState.done) {
                     return CircularProgressIndicator();
                   }
-                  return CachedNetworkImage(
-                    fit: BoxFit.fill,
-                    placeholder: (context, url) => CircularProgressIndicator(),
-                    errorWidget: (context, url, error) => Icon(Icons.error),
-                    imageUrl: snap.data,
+                  return ColorFiltered(
+                    colorFilter: ColorFilter.mode(Colors.black.withOpacity(.2), BlendMode.srcOver),
+                    child: CachedNetworkImage(
+                      fit: BoxFit.fill,
+                      placeholder: (context, url) => CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                      imageUrl: snap.data,
+                    )
                   );
                 }
               ),
-            ),
-            BackdropFilter(
-              child: Container(
-                color: Colors.black12.withOpacity(0.1),
-              ),
-              // filter: ImageFilter.blur(sigmaY: .5, sigmaX: .5),
-              filter: ImageFilter.blur(),
             ),
             Align(
               alignment: Alignment.bottomCenter,
@@ -102,7 +97,7 @@ class _HeaderWithImage extends StatelessWidget {
           ],
         )
       ),
-    ),
+    )
   );
 }
 
