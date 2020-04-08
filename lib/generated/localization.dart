@@ -9,6 +9,10 @@ class IntlKeys {
   /// strings-fr.json: 'Ajouter'
   static const add = 'add';
 
+  /// strings.json: 'Add a New Car'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const addANewCar = 'add_a_new_car';
+
   /// strings.json: 'Add a Car'
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const addCar = 'add_car';
@@ -116,6 +120,10 @@ class IntlKeys {
   /// strings.json: 'Driving Distance History ({{ unit }} per day)'
   /// strings-fr.json: 'Historique des distances de conduite ({{ unit }} par jour)'
   static const drivingDistanceHistory = 'driving_distance_history';
+
+  /// strings.json: 'Driving Rate'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const drivingRate = 'driving_rate';
 
   /// strings.json: 'Due At'
   /// strings-fr.json: 'Dû à'
@@ -237,6 +245,10 @@ class IntlKeys {
   /// strings-fr.json: 'Mot de passe oublié ?'
   static const forgotYourPassword = 'forgot_your_password';
 
+  /// strings.json: 'Fuel Efficiency'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const fuelEfficiency = 'fuel_efficiency';
+
   /// strings.json: 'Fuel Efficiency History ({{ unit }})'
   /// strings-fr.json: 'Historique de l\'efficacité énergétique ({{ distance }} par {{ volume }})'
   static const fuelEfficiencyHistory = 'fuel_efficiency_history';
@@ -333,6 +345,10 @@ class IntlKeys {
   /// strings-fr.json: 'Erreur d\'authentification'
   static const loginFailure = 'login_failure';
 
+  /// strings.json: 'Make'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const make = 'make';
+
   /// strings.json: 'Mark All Complete'
   /// strings-fr.json: 'Marquer tout comme terminé'
   static const markAllComplete = 'mark_all_complete';
@@ -352,6 +368,10 @@ class IntlKeys {
   /// strings.json: 'Mileage Interval *'
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const mileageIntervalStar = 'mileage_interval_star';
+
+  /// strings.json: 'Model'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const model = 'model';
 
   /// strings.json: 'Month'
   /// strings-fr.json: *** NOT TRANSLATED ***
@@ -385,6 +405,10 @@ class IntlKeys {
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const noDataRefuelings = 'no_data_refuelings';
 
+  /// strings.json: 'Odom'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const odom = 'odom';
+
   /// strings.json: 'Odometer Reading'
   /// strings-fr.json: 'Relevé du compteur kilométrique'
   static const odomReading = 'odom_reading';
@@ -408,6 +432,10 @@ class IntlKeys {
   /// strings.json: 'Past Due:'
   /// strings-fr.json: 'Échéance passeée :'
   static const pastDue = 'past_due';
+
+  /// strings.json: 'Plate'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const plate = 'plate';
 
   /// strings.json: 'Privacy Policy'
   /// strings-fr.json: 'Politique de confidentialité'
@@ -676,6 +704,10 @@ class IntlKeys {
   /// strings.json: 'Version {{ version }}'
   /// strings-fr.json: 'Version {{ version }}'
   static const version = 'version';
+
+  /// strings.json: 'VIN'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const vin = 'vin';
 
   /// strings.json: 'Fuel volume unit'
   /// strings-fr.json: *** NOT TRANSLATED ***

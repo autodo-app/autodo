@@ -297,8 +297,8 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
             (mode == CarDetailsMode.ADD || mode == CarDetailsMode.EDIT) ?
                 _TwoPartTextField(
                   initialValue: widget.car?.mileage?.toString(),
-                  fieldName: 'Odom',
-                  units: 'mi',
+                  fieldName: JsonIntl.of(context).get(IntlKeys.odom),
+                  units: Distance.of(context).unitString(context, short: true),
                   node: _odomNode,
                   nextNode: _makeNode,
                   validator: doubleValidator,
@@ -307,18 +307,18 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
                   },
                 ) :
                 _TwoPartNoEdit(
-                  fieldName: 'Odom',
+                  fieldName: JsonIntl.of(context).get(IntlKeys.odom),
                   value: '${Distance.of(context).format(widget.car?.mileage)} ${Distance.of(context).unitString(context, short: true)}',
                 ),
             (mode == CarDetailsMode.DETAILS) ?
                 _TwoPartNoEdit(
-                  fieldName: 'Driving Rate',
-                  value: '${Distance.of(context).format(widget.car?.distanceRate)} ${Distance.of(context).unitString(context, short: true)}/day'
+                  fieldName: JsonIntl.of(context).get(IntlKeys.drivingRate),
+                  value: '${Distance.of(context).format(widget.car?.distanceRate)} ${Distance.of(context).unitString(context, short: true)}/${JsonIntl.of(context).get(IntlKeys.day)}'
                 ) :
                 Container(),
             (mode == CarDetailsMode.DETAILS) ?
                 _TwoPartNoEdit(
-                  fieldName: 'Fuel Efficiency',
+                  fieldName: JsonIntl.of(context).get(IntlKeys.fuelEfficiency),
                   value: ' ${Efficiency.of(context).format(widget.car?.averageEfficiency)} ${Efficiency.of(context).unitString(context, short: true)}'
                 ) :
                 Container(),
@@ -326,7 +326,7 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
             (mode == CarDetailsMode.ADD || mode == CarDetailsMode.EDIT) ?
                 _TwoPartTextField(
                   initialValue: widget.car?.make,
-                  fieldName: 'Make',
+                  fieldName: JsonIntl.of(context).get(IntlKeys.make),
                   units: '',
                   node: _makeNode,
                   nextNode: _modelNode,
@@ -336,13 +336,13 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
                   },
                 ) :
                 _TwoPartNoEdit(
-                  fieldName: 'Make',
+                  fieldName: JsonIntl.of(context).get(IntlKeys.make),
                   value: widget.car?.make
                 ),
             (mode == CarDetailsMode.ADD || mode == CarDetailsMode.EDIT) ?
                 _TwoPartTextField(
                   initialValue: widget.car?.model,
-                  fieldName: 'Model',
+                  fieldName: JsonIntl.of(context).get(IntlKeys.model),
                   units: '',
                   node: _modelNode,
                   nextNode: _yearNode,
@@ -352,13 +352,13 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
                   },
                 ) :
                 _TwoPartNoEdit(
-                  fieldName: 'Model',
+                  fieldName: JsonIntl.of(context).get(IntlKeys.model),
                   value: widget.car?.model
                 ),
             (mode == CarDetailsMode.ADD || mode == CarDetailsMode.EDIT) ?
                 _TwoPartTextField(
                   initialValue: widget.car?.year?.toString(),
-                  fieldName: 'Year',
+                  fieldName: JsonIntl.of(context).get(IntlKeys.year),
                   units: '',
                   node: _yearNode,
                   nextNode: _plateNode,
@@ -368,14 +368,14 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
                   },
                 ) :
                 _TwoPartNoEdit(
-                  fieldName: 'Year',
+                  fieldName: JsonIntl.of(context).get(IntlKeys.year),
                   value: widget.car?.year?.toString()
                 ),
             Divider(),
             (mode == CarDetailsMode.ADD || mode == CarDetailsMode.EDIT) ?
                 _TwoPartTextField(
                   initialValue: widget.car?.plate,
-                  fieldName: 'Plate',
+                  fieldName: JsonIntl.of(context).get(IntlKeys.plate),
                   units: '',
                   node: _plateNode,
                   nextNode: _vinNode,
@@ -385,13 +385,13 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
                   },
                 ) :
                 _TwoPartNoEdit(
-                  fieldName: 'Plate',
+                  fieldName: JsonIntl.of(context).get(IntlKeys.plate),
                   value: widget.car?.plate
                 ),
             (mode == CarDetailsMode.ADD || mode == CarDetailsMode.EDIT) ?
                 _TwoPartTextField(
                   initialValue: widget.car?.vin,
-                  fieldName: 'VIN',
+                  fieldName: JsonIntl.of(context).get(IntlKeys.vin),
                   units: '',
                   node: _vinNode,
                   validator: requiredValidator,
@@ -400,7 +400,7 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
                   },
                 ) :
                 _TwoPartNoEdit(
-                  fieldName: 'VIN',
+                  fieldName: JsonIntl.of(context).get(IntlKeys.vin),
                   value: widget.car?.vin
                 ),
             Container(

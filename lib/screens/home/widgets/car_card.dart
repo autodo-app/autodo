@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:json_intl/json_intl.dart';
 
 import '../../../blocs/blocs.dart';
+import '../../../generated/localization.dart';
 import '../../../models/models.dart';
 import '../../../units/units.dart';
 import '../../add_edit/barrel.dart';
@@ -71,11 +73,11 @@ class CarCard extends StatelessWidget {
               ),
               Center(
                 child: Text(
-                  'Plate: ${car.plate}',
+                  '${JsonIntl.of(context).get(IntlKeys.plate)}: ${car.plate}',
                   style: Theme.of(context).primaryTextTheme.bodyText2)
               ),
               Center(
-                child: Text('Odom: ${Distance.of(context).format(car.mileage)}',
+                child: Text('${JsonIntl.of(context).get(IntlKeys.odom)}: ${Distance.of(context).format(car.mileage)}',
                   style: Theme.of(context).primaryTextTheme.bodyText2)
               ),
               // Padding(padding: EdgeInsets.all(5),),

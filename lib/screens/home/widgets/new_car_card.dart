@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:json_intl/json_intl.dart';
 
 import '../../../blocs/blocs.dart';
+import '../../../generated/localization.dart';
 import '../../../models/models.dart';
 import '../../../units/units.dart';
 import '../../add_edit/barrel.dart';
@@ -56,7 +58,7 @@ class NewCarCard extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.all(5),
                     child: Text(
-                      'Add a New Car',
+                      JsonIntl.of(context).get(IntlKeys.addANewCar),
                       style: Theme.of(context).primaryTextTheme.subtitle2
                           .copyWith(color: Theme.of(context).buttonTheme.colorScheme.background),
                       textAlign: TextAlign.center,

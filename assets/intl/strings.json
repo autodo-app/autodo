@@ -176,5 +176,13 @@
   "efficiency_kmpl": "Kilometers per Liter",
   "efficiency_tanakeh_short": "Tanakeh",
   "efficiency_tanakeh": "Tanakeh",
-  "garage": "Garage"
+  "garage": "Garage",
+  "odom": "Odom",
+  "driving_rate": "Driving Rate",
+  "fuel_efficiency": "Fuel Efficiency",
+  "make": "Make",
+  "model": "Model",
+  "plate": "Plate",
+  "vin": "VIN",
+  "add_a_new_car": "Add a New Car"
 }
