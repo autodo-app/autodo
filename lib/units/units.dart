@@ -6,6 +6,4 @@ export 'distance.dart';
 export 'efficiency.dart';
 export 'volume.dart';
 
-enum FuelConsumption { volumePerDistance, distancePerVolume }
-
 enum FuelType { gasoline, diesel }

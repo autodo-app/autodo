@@ -41,8 +41,8 @@ class EfficiencyStats {
     List<Refueling> refuelings,
     BuildContext context,
   ) async {
-    final distance = Distance.of(context);
-    final volume = Volume.of(context);
+    final efficiencyUnit = Efficiency.of(context);
+    // final volume = Volume.of(context);
 
     final points = <FuelMileagePoint>[];
     double mileage;
@@ -57,8 +57,7 @@ class EfficiencyStats {
       final dist = refueling.mileage - mileage;
       mileage = refueling.mileage;
       if (dist <= 0) continue;
-      final efficiency = distance.internalToUnit(dist) /
-          volume.internalToUnit(refueling.amount);
+      final efficiency = efficiencyUnit.internalToUnit(dist / refueling.amount);
       points.add(FuelMileagePoint(refueling.date, efficiency));
     }
 

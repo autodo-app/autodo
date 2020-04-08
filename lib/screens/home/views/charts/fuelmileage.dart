@@ -123,8 +123,7 @@ class _FuelMileageHistoryState extends State<FuelMileageHistory> {
           ),
           Text(
               JsonIntl.of(context).get(IntlKeys.fuelEfficiencyHistory, {
-                'distance': Distance.of(context).unitString(context),
-                'volume': Volume.of(context).unitString(context),
+                'unit': Efficiency.of(context).unitString(context, short: true),
               }),
               style: Theme.of(context).primaryTextTheme.subtitle2),
           Container(

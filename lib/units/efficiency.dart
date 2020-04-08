@@ -40,7 +40,7 @@ class Efficiency extends UnitConversion<EfficiencyUnit> {
         EfficiencyUnit.values[Provider.of<BasePrefService>(
           context,
           listen: listen,
-        ).getInt('length_unit')],
+        ).getInt('efficiency_unit')],
         Localizations.localeOf(context),
       );
 

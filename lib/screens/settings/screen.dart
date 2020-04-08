@@ -6,7 +6,6 @@ import 'package:preferences/preferences.dart';
 import '../../blocs/blocs.dart';
 import '../../generated/localization.dart';
 import '../../routes.dart';
-import '../../units/efficiency.dart';
 import '../../units/units.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -76,10 +75,10 @@ class SettingsScreenState extends State<SettingsScreen> {
         JsonIntl.of(context).get(IntlKeys.efficiencyUnit),
         'efficiency_unit',
         displayValues: [
-          JsonIntl.of(context).get(IntlKeys.efficiencyMpusg),
-          JsonIntl.of(context).get(IntlKeys.efficiencyMpig),
-          JsonIntl.of(context).get(IntlKeys.efficiencyKmpl),
-          JsonIntl.of(context).get(IntlKeys.efficiencyLp100km),
+          JsonIntl.of(context).get(IntlKeys.efficiencyMpusgShort),
+          JsonIntl.of(context).get(IntlKeys.efficiencyMpigShort),
+          JsonIntl.of(context).get(IntlKeys.efficiencyKmplShort),
+          JsonIntl.of(context).get(IntlKeys.efficiencyLp100kmShort),
         ],
         values: [
           EfficiencyUnit.mpusg.index,

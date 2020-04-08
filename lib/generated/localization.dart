@@ -177,7 +177,7 @@ class IntlKeys {
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const efficiencyMpig = 'efficiency_mpig';
 
-  /// strings.json: 'mpg'
+  /// strings.json: 'MPG (Imperial)'
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const efficiencyMpigShort = 'efficiency_mpig_short';
 
@@ -185,7 +185,7 @@ class IntlKeys {
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const efficiencyMpusg = 'efficiency_mpusg';
 
-  /// strings.json: 'mpg'
+  /// strings.json: 'MPG (US)'
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const efficiencyMpusgShort = 'efficiency_mpusg_short';
 
@@ -237,7 +237,7 @@ class IntlKeys {
   /// strings-fr.json: 'Mot de passe oublié ?'
   static const forgotYourPassword = 'forgot_your_password';
 
-  /// strings.json: 'Fuel Efficiency History ({{ distance }} per {{ volume }})'
+  /// strings.json: 'Fuel Efficiency History ({{ unit }})'
   /// strings-fr.json: 'Historique de l\'efficacité énergétique ({{ distance }} par {{ volume }})'
   static const fuelEfficiencyHistory = 'fuel_efficiency_history';
 
