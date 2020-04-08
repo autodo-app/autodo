@@ -13,6 +13,16 @@ import '../../theme.dart';
 import '../../units/units.dart';
 import '../../util.dart';
 
+typedef CarAddEditOnSaveCallback = Function(
+  String name,
+  double odom,
+  String make,
+  String model,
+  int year,
+  String plate,
+  String vin
+);
+
 /// There are three states that this screen can take.
 ///
 /// DETAILS is used when an existing car is displaying its contents, but editing
@@ -103,9 +113,10 @@ class _HeaderWithImage extends StatelessWidget {
 }
 
 class _HeaderNoImage extends StatelessWidget {
-  const _HeaderNoImage({this.carName});
+  const _HeaderNoImage({this.carName, @required this.onSaved});
 
   final String carName;
+  final Function onSaved;
 
   @override
   Widget build(BuildContext context) => Container(
@@ -140,6 +151,7 @@ class _HeaderNoImage extends StatelessWidget {
             keyboardType: TextInputType.text,
             validator: requiredValidator,
             textInputAction: TextInputAction.next,
+            onSaved: onSaved,
           ),
         )
       ],
@@ -205,10 +217,10 @@ class _TwoPartNoEdit extends StatelessWidget {
 
 /// Shows Car Details and can be put into edit mode
 class CarAddEditScreen extends StatefulWidget {
-  const CarAddEditScreen({this.car, this.onSave, this.isEditing});
+  const CarAddEditScreen({this.car, @required this.onSave, this.isEditing});
 
   final Car car;
-  final Function onSave;
+  final CarAddEditOnSaveCallback onSave;
   final bool isEditing;
 
   @override
@@ -219,7 +231,7 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   FocusNode _odomNode, _makeNode, _modelNode, _yearNode, _plateNode, _vinNode;
   double _odom;
-  String _make, _model, _plate, _vin;
+  String _name, _make, _model, _plate, _vin;
   int _year;
   CarDetailsMode mode;
 
@@ -278,7 +290,10 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
                     Navigator.pop(context);
                   },
                 ) :
-                _HeaderNoImage(carName: widget.car?.name),
+                _HeaderNoImage(
+                  carName: widget.car?.name,
+                  onSaved: (val) => _name = val
+                ),
             (mode == CarDetailsMode.ADD || mode == CarDetailsMode.EDIT) ?
                 _TwoPartTextField(
                   initialValue: widget.car?.mileage?.toString(),
@@ -404,7 +419,7 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
           onPressed: () {
             if (_formKey.currentState.validate()) {
               _formKey.currentState.save();
-              widget.onSave(_odom, _make, _model, _year, _plate, _vin);
+              widget.onSave(_name, _odom, _make, _model, _year, _plate, _vin);
               Navigator.pop(context);
             }
           },

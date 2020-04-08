@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../blocs/blocs.dart';
 import '../../../models/models.dart';
 import '../../../units/units.dart';
 import '../../add_edit/barrel.dart';
@@ -19,6 +21,17 @@ class CarCard extends StatelessWidget {
           builder: (context) => CarAddEditScreen(
             car: car,
             isEditing: false,
+            onSave: (name, odom, make, model, year, plate, vin) {
+              BlocProvider.of<CarsBloc>(context).add(UpdateCar(car.copyWith(
+                name: name,
+                mileage: odom,
+                make: make,
+                model: model,
+                year: year,
+                plate: plate,
+                vin: vin
+              )));
+            },
           )
         ));
       },

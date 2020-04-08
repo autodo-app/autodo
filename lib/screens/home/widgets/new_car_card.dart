@@ -14,8 +14,9 @@ class NewCarCard extends StatelessWidget {
       Navigator.push(context, MaterialPageRoute(
         builder: (context) => CarAddEditScreen(
           isEditing: false,
-          onSave: (odom, make, model, year, plate, vin) {
+          onSave: (name, odom, make, model, year, plate, vin) {
             BlocProvider.of<CarsBloc>(context).add(AddCar(Car(
+              name: name,
               mileage: Distance.of(context).unitToInternal(odom),
               make: make,
               model: model,

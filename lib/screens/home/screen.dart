@@ -113,9 +113,10 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
             builder: (context) => _ScreenWithBanner(
                     child: CarAddEditScreen(
                   isEditing: false,
-                  onSave: (m, make, model, y, p, v) {
+                  onSave: (name, odom, make, model, y, p, v) {
                     BlocProvider.of<CarsBloc>(context).add(AddCar(Car(
-                      mileage: m,
+                      name: name,
+                      mileage: odom,
                       make: make,
                       model: model,
                       year: y,
