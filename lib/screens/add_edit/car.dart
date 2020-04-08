@@ -217,7 +217,7 @@ class _TwoPartNoEdit extends StatelessWidget {
 
 /// Shows Car Details and can be put into edit mode
 class CarAddEditScreen extends StatefulWidget {
-  const CarAddEditScreen({this.car, @required this.onSave, this.isEditing});
+  const CarAddEditScreen({this.car, @required this.onSave, this.isEditing = false});
 
   final Car car;
   final CarAddEditOnSaveCallback onSave;

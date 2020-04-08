@@ -14,14 +14,14 @@ class TabSelector extends StatelessWidget {
       this.todosTabKey,
       this.refuelingsTabKey,
       this.statsTabKey,
-      this.repeatsTabKey})
+      this.garageTabKey})
       : super(key: key);
 
   final AppTab activeTab;
 
   final Function(AppTab) onTabSelected;
 
-  final Key todosTabKey, refuelingsTabKey, statsTabKey, repeatsTabKey;
+  final Key todosTabKey, refuelingsTabKey, statsTabKey, garageTabKey;
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +42,8 @@ class TabSelector extends StatelessWidget {
           title: Text(JsonIntl.of(context).get(IntlKeys.stats)),
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.repeat, key: repeatsTabKey),
-          title: Text(JsonIntl.of(context).get(IntlKeys.repeats)),
+          icon: Icon(Icons.directions_car, key: garageTabKey),
+          title: Text(JsonIntl.of(context).get(IntlKeys.garage)),
         ),
       ],
     );

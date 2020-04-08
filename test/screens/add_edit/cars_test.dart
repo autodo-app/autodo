@@ -1,5 +1,5 @@
 import 'package:autodo/blocs/blocs.dart';
-import 'package:autodo/screens/add_edit/car.dart';
+import 'package:autodo/screens/add_edit/barrel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -14,27 +14,13 @@ void main() {
         //   providers: [],
         MaterialApp(
           home: Scaffold(
-            body: EditCarListScreen(),
+            body: CarAddEditScreen(onSave: (a, b, c, d, e, f, g) {}),
           ),
         ),
         // ),
       );
       await tester.pump();
-      expect(find.byType(EditCarListScreen), findsOneWidget);
-    });
-    testWidgets('back', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        // MultiBlocProvider(
-        //   providers: [],
-        MaterialApp(
-          home: EditCarListScreen(),
-        ),
-        // ),
-      );
-      await tester.pump();
-      await tester.tap(find.byType(IconButton));
-      await tester.pump();
-      expect(find.byType(EditCarListScreen), findsOneWidget);
+      expect(find.byType(CarAddEditScreen), findsOneWidget);
     });
   });
 }

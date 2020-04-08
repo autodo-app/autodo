@@ -31,7 +31,7 @@ void main() {
     });
   });
 
-  group('RefuelingsScreen', () {
+  group('StatsScreen', () {
     testWidgets('loading', (WidgetTester tester) async {
       final carsBloc = MockCarsBloc();
       final refuelingsBloc = MockRefuelingsBloc();
@@ -85,7 +85,7 @@ void main() {
         ),
       );
       await tester.pump();
-      expect(find.byType(FuelMileageChart), findsOneWidget);
+      expect(find.byType(FuelMileageHistory), findsOneWidget);
       expect(find.byType(DrivingDistanceChart), findsOneWidget);
     });
 
@@ -140,7 +140,7 @@ void main() {
         ),
       );
       await tester.pump();
-      expect(find.byType(FuelMileageChart), findsOneWidget);
+      expect(find.byType(FuelMileageHistory), findsOneWidget);
       expect(find.byType(DrivingDistanceChart), findsOneWidget);
     });
   });

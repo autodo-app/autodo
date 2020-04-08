@@ -10,7 +10,7 @@ void main() {
       final todosTabKey = Key('todosTab');
       final refuelingsTabKey = Key('refuelingsTab');
       final statsTabKey = Key('statsTab');
-      final repeatsTabKey = Key('repeatsTab');
+      final garageTabKey = Key('garageTab');
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -21,7 +21,7 @@ void main() {
               todosTabKey: todosTabKey,
               refuelingsTabKey: refuelingsTabKey,
               statsTabKey: statsTabKey,
-              repeatsTabKey: repeatsTabKey,
+              garageTabKey: garageTabKey,
             ),
           ),
         ),
@@ -30,7 +30,7 @@ void main() {
       expect(find.byKey(todosTabKey), findsOneWidget);
       expect(find.byKey(refuelingsTabKey), findsOneWidget);
       expect(find.byKey(statsTabKey), findsOneWidget);
-      expect(find.byKey(repeatsTabKey), findsOneWidget);
+      expect(find.byKey(garageTabKey), findsOneWidget);
     });
 
     testWidgets('should call onTabSelected with correct index when tab tapped',
@@ -39,7 +39,7 @@ void main() {
       final todosTabKey = Key('todosTab');
       final refuelingsTabKey = Key('refuelingsTab');
       final statsTabKey = Key('statsTab');
-      final repeatsTabKey = Key('repeatsTab');
+      final garageTabKey = Key('garageTab');
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -52,7 +52,7 @@ void main() {
               todosTabKey: todosTabKey,
               refuelingsTabKey: refuelingsTabKey,
               statsTabKey: statsTabKey,
-              repeatsTabKey: repeatsTabKey,
+              garageTabKey: garageTabKey,
             ),
           ),
         ),
@@ -61,7 +61,7 @@ void main() {
       final todoTabFinder = find.byKey(todosTabKey);
       final refuelingTabFinder = find.byKey(refuelingsTabKey);
       final statsTabFinder = find.byKey(statsTabKey);
-      final repeatTabFinder = find.byKey(repeatsTabKey);
+      final garageTabFinder = find.byKey(garageTabKey);
       expect(todoTabFinder, findsOneWidget);
       expect(statsTabFinder, findsOneWidget);
       await tester.tap(todoTabFinder);
@@ -70,8 +70,8 @@ void main() {
       expect(selectedTab, AppTab.refuelings);
       await tester.tap(statsTabFinder);
       expect(selectedTab, AppTab.stats);
-      await tester.tap(repeatTabFinder);
-      expect(selectedTab, AppTab.repeats);
+      await tester.tap(garageTabFinder);
+      expect(selectedTab, AppTab.garage);
     });
   });
 }

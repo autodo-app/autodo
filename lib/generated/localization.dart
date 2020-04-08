@@ -265,6 +265,10 @@ class IntlKeys {
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const fuelLitersShort = 'fuel_liters_short';
 
+  /// strings.json: 'Garage'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const garage = 'garage';
+
   /// strings.json: 'Got It!'
   /// strings-fr.json: 'Je l\'ai !'
   static const gotItBang = 'got_it_bang';
