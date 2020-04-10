@@ -33,16 +33,14 @@ Future<void> _reportError(
   FlutterErrorDetails details, {
   bool forceReport = false,
 }) async {
-  if (kFlavor.useSentry) {
-    try {
-      // Send the Exception and Stacktrace to Sentry
-      await _sentry.captureException(
-        exception: details.exception,
-        stackTrace: details.stack,
-      );
-    } catch (e) {
-      print('Sending report to sentry.io failed: $e');
-    }
+  try {
+    // Send the Exception and Stacktrace to Sentry
+    await _sentry.captureException(
+      exception: details.exception,
+      stackTrace: details.stack,
+    );
+  } catch (e) {
+    print('Sending report to sentry.io failed: $e');
   }
 
   // Use Flutter's pretty error logging to the device's console.
@@ -52,9 +50,9 @@ Future<void> _reportError(
 Future<void> main() async {
   if (kFlavor.useSentry) {
     _sentry = SentryClient(dsn: Keys.sentryDsn);
+    FlutterError.onError = _reportError;
   }
 
-  FlutterError.onError = _reportError;
   runApp(AppProvider(false));
 }
 
