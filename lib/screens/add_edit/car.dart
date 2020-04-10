@@ -5,6 +5,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_intl/json_intl.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
 
 import '../../blocs/blocs.dart';
 import '../../generated/localization.dart';
@@ -113,9 +115,9 @@ class _HeaderWithImage extends StatelessWidget {
 }
 
 class _HeaderNoImage extends StatelessWidget {
-  const _HeaderNoImage({this.carName, @required this.onSaved});
+  const _HeaderNoImage({this.car, @required this.onSaved});
 
-  final String carName;
+  final Car car;
   final Function onSaved;
 
   @override
@@ -126,7 +128,11 @@ class _HeaderNoImage extends StatelessWidget {
     child: Column(
       children: <Widget>[
         GestureDetector(
-          onTap: () {}, // add an upload feature here
+          onTap: () async {
+            final image = await ImagePicker.pickImage(source: ImageSource.gallery);
+            await (BlocProvider.of<DatabaseBloc>(context).state as DbLoaded).storageRepo.storeAsset(image);
+            BlocProvider.of<CarsBloc>(context).add(UpdateCar(car.copyWith(imageName: basename(image.path))));
+          }, // add an upload feature here
           child: Container(
             padding: EdgeInsets.all(5),
             child: Column(
@@ -146,7 +152,7 @@ class _HeaderNoImage extends StatelessWidget {
           padding: EdgeInsets.all(5),
           child: TextFormField(
             decoration: defaultInputDecoration('', 'Name'),
-            initialValue: carName ?? '',
+            initialValue: car?.name ?? '',
             style: Theme.of(context).primaryTextTheme.subtitle2,
             keyboardType: TextInputType.text,
             validator: requiredValidator,
@@ -291,7 +297,7 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
                   },
                 ) :
                 _HeaderNoImage(
-                  carName: widget.car?.name,
+                  car: widget.car,
                   onSaved: (val) => _name = val
                 ),
             (mode == CarDetailsMode.ADD || mode == CarDetailsMode.EDIT) ?

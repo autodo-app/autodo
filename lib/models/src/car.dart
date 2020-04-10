@@ -23,6 +23,7 @@ class Car extends Equatable {
     int year,
     String plate,
     String vin,
+    String imageName,
   }) =>
       Car._(
         id: id ?? '',
@@ -38,7 +39,8 @@ class Car extends Equatable {
         model: model ?? '',
         year: year ?? 0,
         plate: plate ?? '',
-        vin: vin ?? ''
+        vin: vin ?? '',
+        imageName: imageName ?? '',
       );
 
   factory Car.fromSnapshot(DocumentSnapshot snap) {
@@ -66,7 +68,8 @@ class Car extends Equatable {
         model: snap.data['model'] as String,
         year: snap.data['year'] as int,
         plate: snap.data['plate'] as String,
-        vin: snap.data['vin'] as String
+        vin: snap.data['vin'] as String,
+        imageName: snap.data['imageName'] as String,
     );
   }
 
@@ -95,7 +98,8 @@ class Car extends Equatable {
         model: snap.value['model'] as String,
         year: snap.value['year'] as int,
         plate: snap.value['plate'] as String,
-        vin: snap.value['vin'] as String
+        vin: snap.value['vin'] as String,
+        imageName: snap.value['imageName'] as String,
     );
   }
 
@@ -112,7 +116,8 @@ class Car extends Equatable {
     @required this.model,
     @required this.year,
     @required this.plate,
-    @required this.vin
+    @required this.vin,
+    @required this.imageName,
   })  : assert(id != null),
         assert(name != null),
         assert(mileage != null),
@@ -143,7 +148,14 @@ class Car extends Equatable {
 
   final List<DistanceRatePoint> distanceRateHistory;
 
-  final String imageName = 'sonic.jpg';
+  /// The file name for the car's stored image. In theory, this could be generated
+  /// consistently from the car's name, i.e. a car named "car1" would always have
+  /// an image named "car1.jpg". This would require converting all photos to one
+  /// file type though, and would not easily allow for specifying that the user
+  /// has not uploaded a photo of the car.
+  /// In the current implementation, a null value for this field indicates that
+  /// the user has not uploaded a photo of the given car.
+  final String imageName;
 
   final String make;
 
@@ -168,7 +180,8 @@ class Car extends Equatable {
       String model,
       int year,
       String plate,
-      String vin}) {
+      String vin,
+      String imageName}) {
     return Car(
         id: id ?? this.id,
         name: name ?? this.name,
@@ -182,7 +195,8 @@ class Car extends Equatable {
         model: model ?? this.model,
         year: year ?? this.year,
         plate: plate ?? this.plate,
-        vin: vin ?? this.vin);
+        vin: vin ?? this.vin,
+        imageName: imageName ?? this.imageName);
   }
 
   @override
@@ -199,12 +213,13 @@ class Car extends Equatable {
         model,
         year,
         plate,
-        vin
+        vin,
+        imageName,
       ];
 
   @override
   String toString() {
-    return '$runtimeType { id: $id, name: $name, mileage: $mileage, numRefuelings: $numRefuelings, averageEfficiency: $averageEfficiency, distanceRate: $distanceRate, lastMileageUpdate: $lastMileageUpdate, distanceRateHistory: $distanceRateHistory }';
+    return '$runtimeType { id: $id, name: $name, mileage: $mileage, numRefuelings: $numRefuelings, averageEfficiency: $averageEfficiency, distanceRate: $distanceRate, lastMileageUpdate: $lastMileageUpdate, distanceRateHistory: $distanceRateHistory, imageName: $imageName }';
   }
 
   Map<String, Object> toDocument() {
@@ -225,7 +240,8 @@ class Car extends Equatable {
       'model': model,
       'year': year,
       'plate': plate,
-      'vin': vin
+      'vin': vin,
+      'imageName': imageName,
     };
   }
 }

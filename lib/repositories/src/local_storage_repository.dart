@@ -16,6 +16,14 @@ class LocalStorageRepository extends StorageRepository {
     return join(path.path, assetName);
   }
 
+  /// just copying the file to the app docs directory
+  @override
+  Future<void> storeAsset(File asset) async {
+    final path = await pathProvider();
+    final newPath = join(path.path, basename(asset.path));
+    await asset.copy(newPath);
+  }
+
   @override
   List<Object> get props => [];
 }
