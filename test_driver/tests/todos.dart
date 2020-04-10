@@ -2,7 +2,7 @@ import 'package:flutter_driver/flutter_driver.dart';
 import 'package:intl/intl.dart';
 
 /// Creates a new, standalone todo (not connected to a repeat)
-Future<void> newTodo(driver) async {
+Future<void> newTodo(FlutterDriver driver) async {
   // make sure we're on the home screen
   await driver.waitFor(find.byValueKey('__home_screen__'));
   print('home');

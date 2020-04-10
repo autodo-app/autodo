@@ -6,7 +6,7 @@ class ErrorMessage extends StatelessWidget {
   final String msg;
 
   @override
-  Widget build(context) => Padding(
+  Widget build(BuildContext context) => Padding(
         padding: EdgeInsets.fromLTRB(0, 25, 0, 0),
         child: Center(
           child: Text(

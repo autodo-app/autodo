@@ -6,5 +6,5 @@ class DetailsScreen extends StatelessWidget {
   final String id;
 
   @override
-  Widget build(context) => Container();
+  Widget build(BuildContext context) => Container();
 }

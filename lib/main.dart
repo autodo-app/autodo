@@ -201,7 +201,7 @@ class App extends StatelessWidget {
   final FirebaseAnalytics analytics;
 
   @override
-  Widget build(context) {
+  Widget build(BuildContext context) {
     final Widget homeProvider =
         HomeScreenProvider(integrationTest: integrationTest);
     final Widget welcomeProvider = WelcomeScreenProvider();

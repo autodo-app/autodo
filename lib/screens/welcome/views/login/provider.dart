@@ -13,7 +13,7 @@ class LoginScreenProvider extends StatelessWidget {
   final AuthRepository _authRepository;
 
   @override
-  Widget build(context) => BlocProvider<LoginBloc>(
+  Widget build(BuildContext context) => BlocProvider<LoginBloc>(
       create: (context) => LoginBloc(authRepository: _authRepository),
       child: LoginScreen());
 }

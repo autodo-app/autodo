@@ -32,7 +32,7 @@ class _NameForm extends StatelessWidget {
   final Function(String) onSaved;
 
   @override
-  Widget build(context) => TextFormField(
+  Widget build(BuildContext context) => TextFormField(
         decoration: InputDecoration(
           border: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.teal),
@@ -132,7 +132,7 @@ class _DateFormState extends State<_DateForm> {
   }
 
   @override
-  Widget build(context) => Row(children: <Widget>[
+  Widget build(BuildContext context) => Row(children: <Widget>[
         Expanded(
           child: TextFormField(
               decoration: InputDecoration(
@@ -175,7 +175,7 @@ class _MileageForm extends StatelessWidget {
   final Function(String) onSaved;
 
   @override
-  Widget build(context) {
+  Widget build(BuildContext context) {
     final distance = Distance.of(context);
 
     return TextFormField(
@@ -262,7 +262,7 @@ class TodoAddEditScreenState extends State<TodoAddEditScreen> {
   ///
   /// Currently set up to concatenate days, months, years, etc. if there are
   /// more than one kind of interval specified in the case of a custom interval.
-  String repeatIntervalToString(interval) {
+  String repeatIntervalToString(RepeatInterval interval) {
     var out = '${JsonIntl.of(context).get(IntlKeys.every)} ';
     if (interval?.days != null) {
       if (interval.days == 1) {
@@ -297,7 +297,7 @@ class TodoAddEditScreenState extends State<TodoAddEditScreen> {
   }
 
   @override
-  Widget build(context) => Scaffold(
+  Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
           title: Text(
             isEditing

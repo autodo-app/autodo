@@ -18,7 +18,7 @@ class LegalNotice extends StatelessWidget {
   void _termsAndConditions(context) {}
 
   @override
-  Widget build(context) => Container(
+  Widget build(BuildContext context) => Container(
       padding: EdgeInsets.fromLTRB(5, 15, 5, 0),
       child: Center(
           child: RichText(

@@ -7,7 +7,7 @@ import '../../../../theme.dart';
 
 class LoginToSignupButton extends StatelessWidget {
   @override
-  Widget build(context) => Container(
+  Widget build(BuildContext context) => Container(
         padding: EdgeInsets.only(top: 10.0),
         child: FlatButton(
           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,

@@ -42,7 +42,7 @@ class _ScreenWithBanner extends StatelessWidget {
   final bool bannerShown;
 
   @override
-  Widget build(context) => Center(
+  Widget build(BuildContext context) => Center(
           child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
@@ -87,7 +87,7 @@ class HomeScreenState extends State<HomeScreen> with RouteAware {
 
   // this has to be a function so that it returns a different route each time
   // the lifecycle of a MaterialPageRoute requires that it not be reused.
-  List<MaterialPageRoute> Function() fabRoutes(cars) => () => [
+  List<MaterialPageRoute> Function() fabRoutes(List<Car> cars) => () => [
         MaterialPageRoute(
           builder: (context) => _ScreenWithBanner(
             child: RefuelingAddEditScreen(
@@ -240,7 +240,7 @@ class HomeScreenState extends State<HomeScreen> with RouteAware {
   }
 
   @override
-  Widget build(context) {
+  Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider<FilteredRefuelingsBloc>(

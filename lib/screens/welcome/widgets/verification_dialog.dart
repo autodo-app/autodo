@@ -8,7 +8,7 @@ import '../../../routes.dart';
 
 class EmailVerificationDialog extends StatelessWidget {
   @override
-  Widget build(context) => AlertDialog(
+  Widget build(BuildContext context) => AlertDialog(
         title: Text(JsonIntl.of(context).get(IntlKeys.verifyEmail),
             style: Theme.of(context).primaryTextTheme.headline6),
         content: Text(JsonIntl.of(context).get(IntlKeys.verifyBodyText),

@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../blocs/blocs.dart';
+import '../../../models/models.dart';
 import '../../../widgets/widgets.dart';
 import '../widgets/barrel.dart';
 
 class RefuelingsScreen extends StatelessWidget {
   const RefuelingsScreen({Key key}) : super(key: key);
 
-  void onDismissed(direction, context, refueling) {
+  void onDismissed(
+      DismissDirection direction, BuildContext context, Refueling refueling) {
     BlocProvider.of<RefuelingsBloc>(context).add(DeleteRefueling(refueling));
     Scaffold.of(context).showSnackBar(
       DeleteRefuelingSnackBar(
@@ -19,7 +21,7 @@ class RefuelingsScreen extends StatelessWidget {
     );
   }
 
-  Future<void> onTap(context, refueling) async {
+  Future<void> onTap(BuildContext context, Refueling refueling) async {
     // final removedRefueling = await Navigator.of(context).push(
     //   MaterialPageRoute(
     //     builder: (_) => DetailsScreen(id: refueling.id),
@@ -28,7 +30,7 @@ class RefuelingsScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(context) =>
+  Widget build(BuildContext context) =>
       BlocBuilder<FilteredRefuelingsBloc, FilteredRefuelingsState>(
           builder: (context, state) {
         if (state is FilteredRefuelingsLoading) {

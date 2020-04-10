@@ -33,7 +33,7 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   @override
-  Widget build(context) => BlocListener<LoginBloc, LoginState>(
+  Widget build(BuildContext context) => BlocListener<LoginBloc, LoginState>(
         listener: (context, state) {
           if (state is LoginError) {
             Scaffold.of(context)

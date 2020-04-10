@@ -3,13 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../blocs/blocs.dart';
 import '../../../integ_test_keys.dart';
+import '../../../models/models.dart';
 import '../../../widgets/widgets.dart';
 import '../widgets/barrel.dart';
 
 class TodosScreen extends StatelessWidget {
   const TodosScreen({Key key}) : super(key: key);
 
-  void onDismissed(direction, context, todo) {
+  void onDismissed(
+      DismissDirection direction, BuildContext context, Todo todo) {
     BlocProvider.of<TodosBloc>(context).add(DeleteTodo(todo));
     Scaffold.of(context).showSnackBar(DeleteTodoSnackBar(
       context: context,
@@ -18,7 +20,7 @@ class TodosScreen extends StatelessWidget {
     ));
   }
 
-  Future<void> onTap(context, todo) async {
+  Future<void> onTap(BuildContext context, Todo todo) async {
     // final removedTodo = await Navigator.of(context).push(
     //   MaterialPageRoute(
     //     builder: (_) => DetailsScreen(id: todo.id),
@@ -26,14 +28,15 @@ class TodosScreen extends StatelessWidget {
     // );
   }
 
-  void onCheckboxChanged(context, todo) {
+  void onCheckboxChanged(BuildContext context, Todo todo) {
     BlocProvider.of<TodosBloc>(context).add(
       UpdateTodo(todo.copyWith(completed: !todo.completed)),
     );
   }
 
   @override
-  Widget build(context) => BlocBuilder<FilteredTodosBloc, FilteredTodosState>(
+  Widget build(BuildContext context) =>
+      BlocBuilder<FilteredTodosBloc, FilteredTodosState>(
           builder: (context, state) {
         if (state is FilteredTodosLoading) {
           return LoadingIndicator();

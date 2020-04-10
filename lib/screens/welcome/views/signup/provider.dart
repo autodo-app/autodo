@@ -13,7 +13,7 @@ class SignupScreenProvider extends StatelessWidget {
   final AuthRepository _authRepository;
 
   @override
-  Widget build(context) => BlocProvider(
+  Widget build(BuildContext context) => BlocProvider(
       create: (context) => SignupBloc(authRepository: _authRepository),
       child: SignupScreen());
 }

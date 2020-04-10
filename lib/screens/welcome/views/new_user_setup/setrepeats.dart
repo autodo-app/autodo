@@ -24,7 +24,7 @@ class _OilInterval extends StatelessWidget {
   final Todo todo;
 
   @override
-  Widget build(context) {
+  Widget build(BuildContext context) {
     final distance = Distance.of(context);
 
     return TextFormField(
@@ -57,7 +57,7 @@ class _TireRotationInterval extends StatelessWidget {
   final Todo todo;
 
   @override
-  Widget build(context) {
+  Widget build(BuildContext context) {
     final distance = Distance.of(context);
 
     return TextFormField(
@@ -81,7 +81,7 @@ class _TireRotationInterval extends StatelessWidget {
 
 class _HeaderText extends StatelessWidget {
   @override
-  Widget build(context) => Container(
+  Widget build(BuildContext context) => Container(
         padding: EdgeInsets.fromLTRB(0, 0, 0, 30),
         height: 110,
         child: Center(
@@ -120,7 +120,7 @@ class _Card extends StatelessWidget {
   final Function onNext;
 
   @override
-  Widget build(context) => Container(
+  Widget build(BuildContext context) => Container(
         padding: EdgeInsets.all(10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -224,7 +224,7 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen>
   }
 
   @override
-  Widget build(context) {
+  Widget build(BuildContext context) {
     if (pageWillBeVisible) {
       openCtrl.forward();
       pageWillBeVisible = false;

@@ -88,7 +88,7 @@ class _TodoFieldsState extends State<_TodoFields> {
   }
 
   @override
-  Widget build(context) {
+  Widget build(BuildContext context) {
     final name = widget.showName
         ? Text(widget.c.name,
             style: Theme.of(context).primaryTextTheme.headline6)
@@ -260,7 +260,7 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
   }
 
   @override
-  Widget build(context) {
+  Widget build(BuildContext context) {
     if (pageWillBeVisible) {
       openCtrl.forward();
       pageWillBeVisible = false;

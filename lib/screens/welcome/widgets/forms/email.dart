@@ -15,7 +15,7 @@ class EmailForm extends StatelessWidget {
   final bool login;
 
   @override
-  Widget build(context) => TextFormField(
+  Widget build(BuildContext context) => TextFormField(
         keyboardType: TextInputType.emailAddress,
         textInputAction: TextInputAction.next,
         autofocus: true,

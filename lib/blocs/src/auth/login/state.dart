@@ -65,8 +65,12 @@ class LoginCredentialsInvalid extends LoginState {
   /// The current password
   final String password;
 
-  LoginCredentialsInvalid copyWith(
-          {emailError, passwordError, email, password}) =>
+  LoginCredentialsInvalid copyWith({
+    String emailError,
+    String passwordError,
+    String email,
+    String password,
+  }) =>
       LoginCredentialsInvalid(
           emailError: emailError ?? this.emailError,
           passwordError: passwordError ?? this.passwordError,
@@ -84,8 +88,12 @@ class LoginCredentialsValid extends LoginState {
 
   final String email, password;
 
-  LoginCredentialsValid copyWith({email, password}) => LoginCredentialsValid(
-      email: email ?? this.email, password: password ?? this.password);
+  LoginCredentialsValid copyWith({
+    String email,
+    String password,
+  }) =>
+      LoginCredentialsValid(
+          email: email ?? this.email, password: password ?? this.password);
 
   @override
   List<Object> get props => [email, password];

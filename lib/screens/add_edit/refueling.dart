@@ -34,7 +34,7 @@ class _MileageForm extends StatelessWidget {
   final FocusNode node, nextNode;
 
   @override
-  Widget build(context) {
+  Widget build(BuildContext context) {
     final distance = Distance.of(context);
 
     return TextFormField(
@@ -77,7 +77,7 @@ class _AmountForm extends StatelessWidget {
   final FocusNode node, nextNode;
 
   @override
-  Widget build(context) {
+  Widget build(BuildContext context) {
     final volume = Volume.of(context);
 
     return TextFormField(
@@ -120,7 +120,7 @@ class _CostForm extends StatelessWidget {
   final FocusNode node, nextNode;
 
   @override
-  Widget build(context) {
+  Widget build(BuildContext context) {
     final currency = Currency.of(context);
 
     return TextFormField(
@@ -229,7 +229,7 @@ class _DateFormState extends State<_DateForm> {
   }
 
   @override
-  Widget build(context) => Row(children: <Widget>[
+  Widget build(BuildContext context) => Row(children: <Widget>[
         IconButton(
           icon: Icon(Icons.calendar_today),
           tooltip: JsonIntl.of(context).get(IntlKeys.chooseDate),
@@ -321,7 +321,7 @@ class _RefuelingAddEditScreenState extends State<RefuelingAddEditScreen> {
       : List.generate(widget.cars.length, (idx) => (idx == 0) ? true : false);
 
   @override
-  Widget build(context) => Scaffold(
+  Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
           title: Text(
             isEditing

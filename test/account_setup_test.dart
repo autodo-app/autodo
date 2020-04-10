@@ -25,7 +25,7 @@ class MockRepo extends Mock implements DataRepository {}
 // ignore: must_be_immutable
 class MockWriteBatch extends Mock implements WriteBatchWrapper {}
 
-void clearDatabase(name) {
+void clearDatabase(Pattern name) {
   for (var f in Directory('.').listSync()) {
     if (f.path.contains(name)) {
       f.deleteSync();

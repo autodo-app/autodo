@@ -3,7 +3,7 @@ import 'package:flutter_driver/flutter_driver.dart';
 import 'package:intl/intl.dart';
 
 /// Creates a new refueling
-Future<void> newRefueling(driver) async {
+Future<void> newRefueling(FlutterDriver driver) async {
   // make sure we're on the home screen
   await driver.waitFor(find.byValueKey('__home_screen__'));
   print('home');

@@ -271,7 +271,7 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
   }
 
   @override
-  Widget build(context) => Scaffold(
+  Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
           leading: IconButton(
             icon: Icon(Icons.arrow_back),

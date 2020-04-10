@@ -45,7 +45,9 @@ class FirebaseDataRepository extends DataRepository {
   /// check the user's current database version against the expected
   /// version and migrate the data if needed.
   static Future<FirebaseDataRepository> open(
-      {Firestore firestoreInstance, @required String uuid, newUser}) async {
+      {Firestore firestoreInstance,
+      @required String uuid,
+      bool newUser}) async {
     final out = FirebaseDataRepository._(
         firestoreInstance: firestoreInstance, uuid: uuid);
     await out._upgrade(newUser ?? false);
