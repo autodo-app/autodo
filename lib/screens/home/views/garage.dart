@@ -2,11 +2,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_intl/json_intl.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 
 import '../../../blocs/blocs.dart';
+import '../../../flavor.dart';
 import '../../../generated/localization.dart';
+import '../../../routes.dart';
 import '../../../theme.dart';
 import '../../../widgets/widgets.dart';
 import '../widgets/barrel.dart';
@@ -36,8 +36,10 @@ class _Header extends StatelessWidget {
     child: Column(
       children: <Widget>[
         Padding(padding: EdgeInsets.all(25),),
+        // TODO: need to decide if it is worth it to add a name field in the
+        // signup field just for this
         Text(
-          "Jonathan's Garage",
+          JsonIntl.of(context).get(IntlKeys.nameGarage, {'name': 'USER_NAME'}),
           style: Theme.of(context).accentTextTheme.headline4),
         Padding(padding: EdgeInsets.all(5),),
         Row(
@@ -46,15 +48,37 @@ class _Header extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.account_circle),
               color: Theme.of(context).accentTextTheme.button.color,
-              onPressed: () {},
+              onPressed: () {}, // TODO: create some sort of account screen here?
             ),
-            Text(
-              'PRO',
-              style: Theme.of(context).accentTextTheme.button),
+            BlocBuilder<PaidVersionBloc, PaidVersionState>(
+              builder: (context, state) {
+                if (state is PaidVersion) {
+                  return Text(
+                    JsonIntl.of(context).get(IntlKeys.proCaps),
+                    style: Theme.of(context).accentTextTheme.button);
+                } else if (kFlavor.hasPaid) {
+                  return FlatButton(
+                    key: ValueKey('__upgrade_drawer_button__'),
+                    child: Text(JsonIntl.of(context).get(IntlKeys.upgradeCaps),
+                        style: Theme.of(context).accentTextTheme.button),
+                    onPressed: () => showDialog(
+                        context: context,
+                        child: UpgradeDialog(
+                          context: context,
+                          trialUser: BlocProvider.of<AuthenticationBloc>(context).state is LocalAuthenticated,
+                        )),
+                  );
+                } else {
+                  return Container();
+                }
+              }
+            ),
             IconButton(
               icon: Icon(Icons.settings),
               color: Theme.of(context).accentTextTheme.button.color,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, AutodoRoutes.settingsScreen);
+              },
             )
           ],
         ),

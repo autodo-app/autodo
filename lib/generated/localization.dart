@@ -13,6 +13,10 @@ class IntlKeys {
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const addANewCar = 'add_a_new_car';
 
+  /// strings.json: 'Add a Photo'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const addAPhoto = 'add_a_photo';
+
   /// strings.json: 'Add a Car'
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const addCar = 'add_car';
@@ -385,6 +389,14 @@ class IntlKeys {
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const months = 'months';
 
+  /// strings.json: 'Name'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const name = 'name';
+
+  /// strings.json: '{{ name }}\'s Garage'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const nameGarage = 'name_garage';
+
   /// strings.json: 'Never'
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const never = 'never';
@@ -440,6 +452,10 @@ class IntlKeys {
   /// strings.json: 'Privacy Policy'
   /// strings-fr.json: 'Politique de confidentialité'
   static const privacyPolicy = 'privacy_policy';
+
+  /// strings.json: 'PRO'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const proCaps = 'pro_caps';
 
   /// strings.json: 'Purchase'
   /// strings-fr.json: 'achat'
@@ -672,6 +688,10 @@ class IntlKeys {
   /// strings.json: 'UPGRADE'
   /// strings-fr.json: 'METTRE À JOUR'
   static const upgrade = 'upgrade';
+
+  /// strings.json: 'UPGRADE'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const upgradeCaps = 'upgrade_caps';
 
   /// strings.json: 'Upgrade to Paid Version'
   /// strings-fr.json: 'Mettre à niveau vers la version payante'

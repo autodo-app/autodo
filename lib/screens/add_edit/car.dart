@@ -140,7 +140,7 @@ class _HeaderNoImage extends StatelessWidget {
               children: [
                 Icon(Icons.camera_alt),
                 Text(
-                  'Add a Photo',
+                  JsonIntl.of(context).get(IntlKeys.addAPhoto),
                   style: Theme.of(context).primaryTextTheme.subtitle2
                 ),
               ],
@@ -151,7 +151,7 @@ class _HeaderNoImage extends StatelessWidget {
           width: MediaQuery.of(context).size.width * 0.7,
           padding: EdgeInsets.all(5),
           child: TextFormField(
-            decoration: defaultInputDecoration('', 'Name'),
+            decoration: defaultInputDecoration('', JsonIntl.of(context).get(IntlKeys.name)),
             initialValue: car?.name ?? '',
             style: Theme.of(context).primaryTextTheme.subtitle2,
             keyboardType: TextInputType.text,

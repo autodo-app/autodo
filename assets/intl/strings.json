@@ -184,5 +184,10 @@
   "model": "Model",
   "plate": "Plate",
   "vin": "VIN",
-  "add_a_new_car": "Add a New Car"
+  "add_a_new_car": "Add a New Car",
+  "add_a_photo": "Add a Photo",
+  "name": "Name",
+  "name_garage": "{{ name }}'s Garage",
+  "pro_caps": "PRO",
+  "upgrade_caps": "UPGRADE"
 }
