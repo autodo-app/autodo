@@ -57,3 +57,5 @@ class DeletedUser extends AuthenticationEvent {}
 class SignInWithGoogle extends AuthenticationEvent {}
 
 class TrialUserSignedUp extends AuthenticationEvent {}
+
+class TrialUserSignedIn extends AuthenticationEvent {}

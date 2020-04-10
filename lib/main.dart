@@ -136,41 +136,43 @@ class AppProviderState extends State<AppProvider> {
             create: (context) => DatabaseBloc(
               authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
             ),
-            child: MultiBlocProvider(
-              providers: [
-                if (kFlavor.hasPaid)
-                  BlocProvider<PaidVersionBloc>(
-                    create: (context) => PaidVersionBloc(
-                        dbBloc: BlocProvider.of<DatabaseBloc>(context))
-                      ..add(LoadPaidVersion()),
-                  ),
-                BlocProvider<NotificationsBloc>(
-                  create: (context) => NotificationsBloc(
-                    dbBloc: BlocProvider.of<DatabaseBloc>(context),
-                  )..add(LoadNotifications()),
-                ),
-                BlocProvider<RefuelingsBloc>(
-                  create: (context) => RefuelingsBloc(
-                    dbBloc: BlocProvider.of<DatabaseBloc>(context),
-                  ),
-                ),
-              ],
-              child: BlocProvider<CarsBloc>(
-                create: (context) => CarsBloc(
-                  dbBloc: BlocProvider.of<DatabaseBloc>(context),
-                  refuelingsBloc: BlocProvider.of<RefuelingsBloc>(context),
-                ),
-                child: BlocProvider<TodosBloc>(
-                  create: (context) => TodosBloc(
+            child: Builder(
+              builder: (BuildContext context) => MultiBlocProvider(
+                providers: [
+                  if (kFlavor.hasPaid)
+                    BlocProvider<PaidVersionBloc>(
+                      create: (context) => PaidVersionBloc(
+                          dbBloc: BlocProvider.of<DatabaseBloc>(context))
+                        ..add(LoadPaidVersion()),
+                    ),
+                  BlocProvider<NotificationsBloc>(
+                    create: (context) => NotificationsBloc(
                       dbBloc: BlocProvider.of<DatabaseBloc>(context),
-                      notificationsBloc:
-                          BlocProvider.of<NotificationsBloc>(context),
-                      carsBloc: BlocProvider.of<CarsBloc>(context)),
-                  child: App(
-                      theme: theme,
-                      authRepository: authRepository,
-                      integrationTest: widget.integrationTest,
-                      analytics: analytics),
+                    )..add(LoadNotifications()),
+                  ),
+                  BlocProvider<RefuelingsBloc>(
+                    create: (context) => RefuelingsBloc(
+                      dbBloc: BlocProvider.of<DatabaseBloc>(context),
+                    ),
+                  ),
+                ],
+                child: BlocProvider<CarsBloc>(
+                  create: (context) => CarsBloc(
+                    dbBloc: BlocProvider.of<DatabaseBloc>(context),
+                    refuelingsBloc: BlocProvider.of<RefuelingsBloc>(context),
+                  ),
+                  child: BlocProvider<TodosBloc>(
+                    create: (context) => TodosBloc(
+                        dbBloc: BlocProvider.of<DatabaseBloc>(context),
+                        notificationsBloc:
+                            BlocProvider.of<NotificationsBloc>(context),
+                        carsBloc: BlocProvider.of<CarsBloc>(context)),
+                    child: App(
+                        theme: theme,
+                        authRepository: authRepository,
+                        integrationTest: widget.integrationTest,
+                        analytics: analytics),
+                  ),
                 ),
               ),
             ),

@@ -21,7 +21,6 @@ class TrialButton extends StatelessWidget {
         child: RaisedButton(
           elevation: 12.0,
           onPressed: () {
-            BlocProvider.of<DatabaseBloc>(context).add(TrialLogin(true));
             BlocProvider.of<AuthenticationBloc>(context)
                 .add(TrialUserSignedUp());
             Navigator.push(

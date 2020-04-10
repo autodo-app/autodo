@@ -87,6 +87,8 @@ class AuthenticationBloc
       yield* _mapSignedUpToState();
     } else if (event is TrialUserSignedUp) {
       yield* _mapTrialUserSignedUpToState();
+    } else if (event is TrialUserSignedIn) {
+      yield* _mapTrialUserSignedInToState();
     }
   }
 
@@ -185,5 +187,13 @@ class AuthenticationBloc
     await prefs.setBool(newUserKey, true);
 
     yield LocalAuthenticated(true);
+  }
+
+  Stream<AuthenticationState> _mapTrialUserSignedInToState() async* {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(trialUserKey, true);
+    await prefs.setBool(newUserKey, false);
+
+    yield LocalAuthenticated(false);
   }
 }

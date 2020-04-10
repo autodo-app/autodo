@@ -238,8 +238,11 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
                     'Skip',
                     style: Theme.of(context).primaryTextTheme.button,
                   ),
-                  onPressed: () =>
-                      Navigator.popAndPushNamed(context, AutodoRoutes.home),
+                  onPressed: () {
+                    BlocProvider.of<AuthenticationBloc>(context)
+                        .add(TrialUserSignedIn());
+                    Navigator.popAndPushNamed(context, AutodoRoutes.home);
+                  },
                 ),
                 FlatButton(
                   key: IntegrationTestKeys.latestNextButton,
