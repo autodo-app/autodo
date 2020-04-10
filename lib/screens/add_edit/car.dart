@@ -279,7 +279,7 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
             (mode == CarDetailsMode.DETAILS || mode == CarDetailsMode.EDIT) ?
                 _HeaderWithImage(
                   carName: widget.car?.name,
-                  imageUrl: widget.car?.getImageDownloadUrl(),
+                  imageUrl: (BlocProvider.of<DatabaseBloc>(context).state as DbLoaded).storageRepo.getDownloadUrl(widget.car.imageName),
                   onEdit: () {
                     setState(() {
                       mode = CarDetailsMode.EDIT;

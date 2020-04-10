@@ -50,7 +50,8 @@ class CarCard extends StatelessWidget {
               Hero(
                 tag: car.name,
                 child: FutureBuilder(
-                  future: car.getImageDownloadUrl(),
+                  // future: car.getImageDownloadUrl(),
+                  future: (BlocProvider.of<DatabaseBloc>(context).state as DbLoaded).storageRepo.getDownloadUrl(car.imageName),
                   builder: (context, snap) {
                     if (snap.connectionState != ConnectionState.done) {
                       return CircularProgressIndicator();

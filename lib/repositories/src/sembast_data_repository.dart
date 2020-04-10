@@ -5,6 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:semaphore/semaphore.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
+import 'package:path/path.dart';
 
 import '../../generated/pubspec.dart';
 import '../../models/models.dart';
@@ -53,7 +54,7 @@ class SembastDataRepository extends DataRepository {
     pathProvider ??= getApplicationDocumentsDirectory;
 
     final path = await pathProvider();
-    return '${path.path}/$dbPath';
+    return join('${path.path}', dbPath);
   }
 
   static Future<void> deleteDb(String path, [DatabaseFactory dbFactory]) async {

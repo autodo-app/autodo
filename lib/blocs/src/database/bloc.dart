@@ -52,16 +52,17 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
   }
 
   Stream<DatabaseState> _mapUserLoggedInToState(UserLoggedIn event) async* {
-    final repository = await FirebaseDataRepository.open(
+    final dataRepo = await FirebaseDataRepository.open(
         firestoreInstance: _firestoreInstance,
         uuid: event.uuid,
         newUser: event.newUser);
-    yield DbLoaded(repository, event.newUser);
+    final storageRepo = FirebaseStorageRepository(uuid: event.uuid);
+    yield DbLoaded(dataRepo, storageRepo: storageRepo, newUser: event.newUser);
   }
 
   Stream<DatabaseState> _mapUserLoggedOutToState(UserLoggedOut event) async* {
     if (state is DbLoaded) {
-      final repo = (state as DbLoaded).repository;
+      final repo = (state as DbLoaded).dataRepo;
       if (repo is SembastDataRepository) {
         await repo.close();
         // ToDo: We should leave the DB on disk if they logged out by mistake
@@ -74,7 +75,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
   Stream<DatabaseState> _mapTrialLoginToState(TrialLogin event) async* {
     if (state is DbLoaded) {
       // Close the old database, open the new one
-      final repo = (state as DbLoaded).repository;
+      final repo = (state as DbLoaded).dataRepo;
       if (repo is SembastDataRepository) {
         await repo.close();
       }
@@ -91,8 +92,9 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       }
     }
 
-    final repo = await SembastDataRepository.open(pathProvider: pathProvider);
-    yield DbLoaded(repo, newUser);
+    final dataRepo = await SembastDataRepository.open(pathProvider: pathProvider);
+    final storageRepo = LocalStorageRepository();
+    yield DbLoaded(dataRepo, storageRepo: storageRepo, newUser: newUser);
   }
 
   @override

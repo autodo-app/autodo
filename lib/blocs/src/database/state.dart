@@ -12,18 +12,20 @@ abstract class DatabaseState extends Equatable {
 class DbUninitialized extends DatabaseState {}
 
 class DbLoaded extends DatabaseState {
-  const DbLoaded(this.repository, [this.newUser]);
+  const DbLoaded(this.dataRepo, {this.storageRepo, this.newUser});
 
-  final DataRepository repository;
+  final DataRepository dataRepo;
+
+  final StorageRepository storageRepo;
 
   final bool newUser;
 
   @override
-  List<Object> get props => [repository, newUser];
+  List<Object> get props => [dataRepo, storageRepo, newUser];
 
   @override
   String toString() =>
-      'DbLoaded { repository: $repository, newUser: $newUser }';
+      'DbLoaded { dataRepo: $dataRepo, storageRepo: $storageRepo, newUser: $newUser }';
 }
 
 class DbNotLoaded extends DatabaseState {}

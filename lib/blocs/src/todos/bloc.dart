@@ -78,7 +78,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   TodosState get initialState => TodosLoading();
 
   DataRepository get repo => (_dbBloc.state is DbLoaded)
-      ? (_dbBloc.state as DbLoaded).repository
+      ? (_dbBloc.state as DbLoaded).dataRepo
       : null;
 
   @override

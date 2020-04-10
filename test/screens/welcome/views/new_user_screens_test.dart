@@ -54,7 +54,7 @@ void main() {
         authBloc, Stream.fromIterable([RemoteAuthenticated('', '', false)]));
     when(authBloc.state).thenReturn(RemoteAuthenticated('', '', false));
     final dbBloc = MockDatabaseBloc();
-    when(dbBloc.state).thenReturn(DbLoaded(MockRepo(), true));
+    when(dbBloc.state).thenReturn(DbLoaded(MockRepo(), newUser: true));
     testWidgets('mileage', (tester) async {
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(

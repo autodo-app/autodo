@@ -19,6 +19,7 @@ const kFlavor = kReleaseMode
         googleAppIDAndroid: '1:617460744396:android:400cbb86de167047',
         firebaseApiKey: Keys.firebaseTestKey,
         firebaseAppName: 'autodo',
+        firebaseStorageUri: 'gs://autodo-49f21.appspot.com',
       );
 
 /// Default release application settings
@@ -33,7 +34,8 @@ class FlavorData {
       this.googleAppIDiOS = '1:356275435347:ios:4e46f5fa8de51c6faad3a6',
       this.googleAppIDAndroid = '1:356275435347:android:5d33ed5a0494d852aad3a6',
       this.firebaseApiKey = Keys.firebaseProdKey,
-      this.firebaseAppName = 'autodo-prod'});
+      this.firebaseAppName = 'autodo-prod',
+      this.firebaseStorageUri = 'gs://autodo-e93fc.appspot.com'});
 
   /// Enable the Ads banner
   final bool hasAds;
@@ -61,6 +63,9 @@ class FlavorData {
 
   /// Firebase application name
   final String firebaseAppName;
+
+  /// URI for the Firebase Storage bucket
+  final String firebaseStorageUri;
 
   /// Google Application ID
   String get googleAppID =>

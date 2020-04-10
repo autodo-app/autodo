@@ -49,6 +49,8 @@ Future<void> main() async {
       await SembastDataRepository.open(pathProvider: pathProvider);
   final sembastOpen =
       await SembastDataRepository.open(pathProvider: pathProvider);
+  final firebaseStorageRepo = FirebaseStorageRepository(uuid: 'abcd');
+  final localStorageRepo = LocalStorageRepository();
 
   group('DatabaseBloc', () {
     test('Null Auth Bloc', () {
@@ -63,7 +65,7 @@ Future<void> main() async {
           firestoreInstance: mockFirestore, authenticationBloc: authBloc);
     }, act: (bloc) async {
       bloc.add(UserLoggedIn('abcd', false));
-    }, expect: [DbUninitialized(), DbLoaded(repo, false)]);
+    }, expect: [DbUninitialized(), DbLoaded(repo, storageRepo: firebaseStorageRepo, newUser: false)]);
     blocTest('UserLoggedOut', build: () {
       final authBloc = MockAuthenticationBloc();
       whenListen(authBloc, Stream.fromIterable([Unauthenticated()]));
@@ -87,7 +89,7 @@ Future<void> main() async {
       bloc.add(TrialLogin(true));
     }, expect: [
       DbUninitialized(),
-      DbLoaded(sembastCreate, true),
+      DbLoaded(sembastCreate, storageRepo: localStorageRepo, newUser: true),
     ]);
     blocTest('TrialLogin from authBloc', build: () {
       final authBloc = MockAuthenticationBloc();
@@ -100,7 +102,7 @@ Future<void> main() async {
       // bloc.add(TrialLogin(true));
     }, expect: [
       DbUninitialized(),
-      DbLoaded(sembastOpen, false),
+      DbLoaded(sembastOpen, storageRepo: localStorageRepo, newUser: false),
     ]);
   });
 }

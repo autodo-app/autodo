@@ -43,7 +43,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   NotificationsState get initialState => NotificationsLoading();
 
   DataRepository get repo => (_dbBloc.state is DbLoaded)
-      ? (_dbBloc.state as DbLoaded).repository
+      ? (_dbBloc.state as DbLoaded).dataRepo
       : null;
 
   @override
