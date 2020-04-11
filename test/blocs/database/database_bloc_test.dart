@@ -65,7 +65,10 @@ Future<void> main() async {
           firestoreInstance: mockFirestore, authenticationBloc: authBloc);
     }, act: (bloc) async {
       bloc.add(UserLoggedIn('abcd', false));
-    }, expect: [DbUninitialized(), DbLoaded(repo, storageRepo: firebaseStorageRepo, newUser: false)]);
+    }, expect: [
+      DbUninitialized(),
+      DbLoaded(repo, storageRepo: firebaseStorageRepo, newUser: false)
+    ]);
     blocTest('UserLoggedOut', build: () {
       final authBloc = MockAuthenticationBloc();
       whenListen(authBloc, Stream.fromIterable([Unauthenticated()]));

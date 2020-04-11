@@ -63,6 +63,10 @@ class Pubspec {
     'preferences': null,
     'cupertino_icons': null,
     'about': null,
+    'cached_network_image': null,
+    'firebase_storage': null,
+    'image_picker': null,
+    'dotted_border': null,
   };
 
   static const Map<dynamic, dynamic> dependency_overrides = <dynamic, dynamic>{
@@ -89,6 +93,7 @@ class Pubspec {
         'ref': 'rewrite-pref-service',
       },
     },
+    'mockito': '^4.0.0',
   };
 
   static const Map<dynamic, dynamic> dev_dependencies = <dynamic, dynamic>{
@@ -103,6 +108,7 @@ class Pubspec {
     'mockito': null,
     'pedantic': null,
     'pubspec_extract': null,
+    'image_test_utils': null,
   };
 
   static const Map<dynamic, dynamic> flutter = <dynamic, dynamic>{

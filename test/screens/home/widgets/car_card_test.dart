@@ -14,14 +14,16 @@ import 'package:autodo/screens/home/widgets/barrel.dart';
 import 'package:autodo/screens/add_edit/barrel.dart';
 import 'package:autodo/units/units.dart';
 
-class MockPaidVersionBloc extends MockBloc<PaidVersionEvent, PaidVersionState> implements PaidVersionBloc {}
+class MockPaidVersionBloc extends MockBloc<PaidVersionEvent, PaidVersionState>
+    implements PaidVersionBloc {}
 
 class MockCarsBloc extends MockBloc<CarsEvent, CarsState> implements CarsBloc {}
 
 class MockDatabaseBloc extends MockBloc<DatabaseEvent, DatabaseState>
     implements DatabaseBloc {}
 
-class MockStorageRepo extends Mock implements StorageRepository {} // ignore: must_be_immutable
+class MockStorageRepo extends Mock implements StorageRepository {
+} // ignore: must_be_immutable
 
 void main() {
   BasePrefService pref;
@@ -58,10 +60,9 @@ void main() {
               BlocProvider<DatabaseBloc>.value(value: dbBloc),
             ],
             child: MaterialApp(
-              home: Scaffold(
-                body: CarCard(Car(name: 'test')),
-              )
-            ),
+                home: Scaffold(
+              body: CarCard(Car(name: 'test')),
+            )),
           ),
         ),
       );
@@ -81,10 +82,9 @@ void main() {
                 BlocProvider<DatabaseBloc>.value(value: dbBloc),
               ],
               child: MaterialApp(
-                home: Scaffold(
-                  body: CarCard(Car(name: 'test')),
-                )
-              ),
+                  home: Scaffold(
+                body: CarCard(Car(name: 'test')),
+              )),
             ),
           ),
         );

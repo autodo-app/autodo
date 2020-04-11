@@ -45,61 +45,61 @@ class Car extends Equatable {
 
   factory Car.fromSnapshot(DocumentSnapshot snap) {
     return Car(
-        id: snap.documentID,
-        name: snap.data['name'] as String,
-        mileage: (snap.data['mileage'] as num)?.toDouble(),
-        numRefuelings: snap.data['numRefuelings'] as int,
-        averageEfficiency: snap.data['averageEfficiency'] as double,
-        distanceRate: snap.data['distanceRate'] as double,
-        lastMileageUpdate: (snap.data['lastMileageUpdate'] == null)
-            ? null
-            : DateTime.fromMillisecondsSinceEpoch(
-                snap.data['lastMileageUpdate'] as int),
-        distanceRateHistory: snap.data['distanceRateHistory']
-            ?.map((p) => DistanceRatePoint(
-                  (p['date'] == null)
-                      ? null
-                      : DateTime.fromMillisecondsSinceEpoch(p['date']),
-                  p['distanceRate'],
-                ))
-            ?.toList()
-            ?.cast<DistanceRatePoint>(),
-        make: snap.data['make'] as String,
-        model: snap.data['model'] as String,
-        year: snap.data['year'] as int,
-        plate: snap.data['plate'] as String,
-        vin: snap.data['vin'] as String,
-        imageName: snap.data['imageName'] as String,
+      id: snap.documentID,
+      name: snap.data['name'] as String,
+      mileage: (snap.data['mileage'] as num)?.toDouble(),
+      numRefuelings: snap.data['numRefuelings'] as int,
+      averageEfficiency: snap.data['averageEfficiency'] as double,
+      distanceRate: snap.data['distanceRate'] as double,
+      lastMileageUpdate: (snap.data['lastMileageUpdate'] == null)
+          ? null
+          : DateTime.fromMillisecondsSinceEpoch(
+              snap.data['lastMileageUpdate'] as int),
+      distanceRateHistory: snap.data['distanceRateHistory']
+          ?.map((p) => DistanceRatePoint(
+                (p['date'] == null)
+                    ? null
+                    : DateTime.fromMillisecondsSinceEpoch(p['date']),
+                p['distanceRate'],
+              ))
+          ?.toList()
+          ?.cast<DistanceRatePoint>(),
+      make: snap.data['make'] as String,
+      model: snap.data['model'] as String,
+      year: snap.data['year'] as int,
+      plate: snap.data['plate'] as String,
+      vin: snap.data['vin'] as String,
+      imageName: snap.data['imageName'] as String,
     );
   }
 
   factory Car.fromRecord(RecordSnapshot snap) {
     return Car(
-        id: (snap.key is String) ? snap.key : '${snap.key}',
-        name: snap.value['name'] as String,
-        mileage: snap.value['mileage'] as double,
-        numRefuelings: snap.value['numRefuelings'] as int,
-        averageEfficiency: snap.value['averageEfficiency'] as double,
-        distanceRate: snap.value['distanceRate'] as double,
-        lastMileageUpdate: (snap.value['lastMileageUpdate'] == null)
-            ? null
-            : DateTime.fromMillisecondsSinceEpoch(
-                snap.value['lastMileageUpdate'] as int),
-        distanceRateHistory: snap.value['distanceRateHistory']
-            ?.map((p) => DistanceRatePoint(
-                  (p['date'] == null)
-                      ? null
-                      : DateTime.fromMillisecondsSinceEpoch(p['date']),
-                  p['distanceRate'],
-                ))
-            ?.toList()
-            ?.cast<DistanceRatePoint>(),
-        make: snap.value['make'] as String,
-        model: snap.value['model'] as String,
-        year: snap.value['year'] as int,
-        plate: snap.value['plate'] as String,
-        vin: snap.value['vin'] as String,
-        imageName: snap.value['imageName'] as String,
+      id: (snap.key is String) ? snap.key : '${snap.key}',
+      name: snap.value['name'] as String,
+      mileage: snap.value['mileage'] as double,
+      numRefuelings: snap.value['numRefuelings'] as int,
+      averageEfficiency: snap.value['averageEfficiency'] as double,
+      distanceRate: snap.value['distanceRate'] as double,
+      lastMileageUpdate: (snap.value['lastMileageUpdate'] == null)
+          ? null
+          : DateTime.fromMillisecondsSinceEpoch(
+              snap.value['lastMileageUpdate'] as int),
+      distanceRateHistory: snap.value['distanceRateHistory']
+          ?.map((p) => DistanceRatePoint(
+                (p['date'] == null)
+                    ? null
+                    : DateTime.fromMillisecondsSinceEpoch(p['date']),
+                p['distanceRate'],
+              ))
+          ?.toList()
+          ?.cast<DistanceRatePoint>(),
+      make: snap.value['make'] as String,
+      model: snap.value['model'] as String,
+      year: snap.value['year'] as int,
+      plate: snap.value['plate'] as String,
+      vin: snap.value['vin'] as String,
+      imageName: snap.value['imageName'] as String,
     );
   }
 

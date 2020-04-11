@@ -7,7 +7,8 @@ import 'package:path_provider/path_provider.dart';
 import 'storage_repository.dart';
 
 class LocalStorageRepository extends StorageRepository {
-  LocalStorageRepository({this.pathProvider = getApplicationDocumentsDirectory});
+  LocalStorageRepository(
+      {this.pathProvider = getApplicationDocumentsDirectory});
 
   final FutureOr<Directory> Function() pathProvider;
 
