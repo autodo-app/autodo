@@ -51,67 +51,71 @@ class _HeaderWithImage extends StatelessWidget {
       padding: EdgeInsets.only(bottom: 5),
         child: ClipRect(
           child: Stack(
-          children: <Widget>[
-            Align(
-              alignment: Alignment.center,
-              child: FutureBuilder(
-                future: imageUrl,
-                builder: (context, snap) {
-                  if (snap.connectionState != ConnectionState.done) {
-                    return CircularProgressIndicator();
+            children: <Widget>[
+              Align(
+                alignment: Alignment.center,
+                child: FutureBuilder(
+                  future: imageUrl,
+                  builder: (context, snap) {
+                    if (snap.connectionState != ConnectionState.done) {
+                      return CircularProgressIndicator();
+                    }
+                    return ColorFiltered(
+                      colorFilter: ColorFilter.mode(Colors.black.withOpacity(.2), BlendMode.srcOver),
+                      child: CachedNetworkImage(
+                        fit: BoxFit.fill,
+                        placeholder: (context, url) => CircularProgressIndicator(),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                        imageUrl: snap.data,
+                      )
+                    );
                   }
-                  return ColorFiltered(
-                    colorFilter: ColorFilter.mode(Colors.black.withOpacity(.2), BlendMode.srcOver),
-                    child: CachedNetworkImage(
-                      fit: BoxFit.fill,
-                      placeholder: (context, url) => CircularProgressIndicator(),
-                      errorWidget: (context, url, error) => Icon(Icons.error),
-                      imageUrl: snap.data,
-                    )
-                  );
-                }
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                padding: EdgeInsets.all(5),
-                child: Text(
-                  carName ?? '',
-                  style: Theme.of(context).primaryTextTheme.headline4
                 ),
               ),
-            ),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  ButtonTheme.fromButtonThemeData(
-                    data: ButtonThemeData(minWidth: 0),
-                    child: FlatButton(
-                      child: Icon(Icons.edit),
-                      onPressed: onEdit,
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  padding: EdgeInsets.all(5),
+                  child: Text(
+                    carName ?? '',
+                    style: Theme.of(context).primaryTextTheme.headline4
                   ),
-                  ButtonTheme.fromButtonThemeData(
-                    data: ButtonThemeData(minWidth: 0),
-                    child: FlatButton(
-                      child: Icon(Icons.delete),
-                      onPressed: onDelete,
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+              ),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Expanded(
+                      child: ButtonTheme.fromButtonThemeData(
+                        data: ButtonThemeData(minWidth: 0),
+                        child: FlatButton(
+                          child: Icon(Icons.edit),
+                          onPressed: onEdit,
+                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                      ),
                     ),
-                  ),
-                ],
-              )
-            ),
-          ],
-        )
-      ),
-    )
-  );
+                    Expanded(
+                      child: ButtonTheme.fromButtonThemeData(
+                        data: ButtonThemeData(minWidth: 0),
+                        child: FlatButton(
+                          child: Icon(Icons.delete),
+                          onPressed: onDelete,
+                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              ),
+            ],
+          )
+        ),
+      )
+    );
 }
 
 class CarAddEditHeaderNoImage extends StatelessWidget {
