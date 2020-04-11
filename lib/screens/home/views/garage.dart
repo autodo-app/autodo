@@ -18,27 +18,25 @@ class _PaidVersionStatus extends StatelessWidget {
       return Container();
     }
     return BlocBuilder<PaidVersionBloc, PaidVersionState>(
-      builder: (context, state) {
-        if (state is PaidVersion) {
-          return Text(JsonIntl.of(context).get(IntlKeys.proCaps),
-              style: Theme.of(context).accentTextTheme.button);
-        } else {
-          return FlatButton(
-            key: ValueKey('__upgrade_drawer_button__'),
-            child: Text(JsonIntl.of(context).get(IntlKeys.upgradeCaps),
-                style: Theme.of(context).accentTextTheme.button),
-            onPressed: () => showDialog(
+        builder: (context, state) {
+      if (state is PaidVersion) {
+        return Text(JsonIntl.of(context).get(IntlKeys.proCaps),
+            style: Theme.of(context).accentTextTheme.button);
+      } else {
+        return FlatButton(
+          key: ValueKey('__upgrade_drawer_button__'),
+          child: Text(JsonIntl.of(context).get(IntlKeys.upgradeCaps),
+              style: Theme.of(context).accentTextTheme.button),
+          onPressed: () => showDialog(
+              context: context,
+              child: UpgradeDialog(
                 context: context,
-                child: UpgradeDialog(
-                  context: context,
-                  trialUser:
-                      BlocProvider.of<AuthenticationBloc>(context).state
-                          is LocalAuthenticated,
-                )),
-          );
-        }
+                trialUser: BlocProvider.of<AuthenticationBloc>(context).state
+                    is LocalAuthenticated,
+              )),
+        );
       }
-    );
+    });
   }
 }
 
@@ -69,9 +67,8 @@ class _Header extends StatelessWidget {
           Padding(
             padding: EdgeInsets.all(25),
           ),
-          Text(
-            JsonIntl.of(context).get(IntlKeys.myGarage),
-            style: Theme.of(context).accentTextTheme.headline4),
+          Text(JsonIntl.of(context).get(IntlKeys.myGarage),
+              style: Theme.of(context).accentTextTheme.headline4),
           Padding(
             padding: EdgeInsets.all(5),
           ),
