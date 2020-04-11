@@ -59,7 +59,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
     AppTab.todos: TodosScreen(),
     AppTab.refuelings: RefuelingsScreen(),
     AppTab.stats: StatisticsScreen(),
-    AppTab.garage: GarageScreen(), // TODO 275: replace this screen with a cars screen?
+    AppTab.garage:
+        GarageScreen(), // TODO 275: replace this screen with a cars screen?
   };
 
   final Key todosTabKey;
@@ -115,13 +116,13 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                   isEditing: false,
                   onSave: (name, odom, make, model, y, p, v) {
                     BlocProvider.of<CarsBloc>(context).add(AddCar(Car(
-                      name: name,
-                      mileage: odom,
-                      make: make,
-                      model: model,
-                      year: y,
-                      plate: p,
-                      vin: v)));
+                        name: name,
+                        mileage: odom,
+                        make: make,
+                        model: model,
+                        year: y,
+                        plate: p,
+                        vin: v)));
                   },
                 ))),
       ];
@@ -204,10 +205,12 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
 
   Widget buildScreen(BuildContext context, AppTab activeTab) {
     return Scaffold(
-      appBar: (activeTab == AppTab.garage) ? null : AppBar(
-        title: Text(JsonIntl.of(context).get(IntlKeys.appTitle)),
-        actions: [ExtraActions()],
-      ),
+      appBar: (activeTab == AppTab.garage)
+          ? null
+          : AppBar(
+              title: Text(JsonIntl.of(context).get(IntlKeys.appTitle)),
+              actions: [ExtraActions()],
+            ),
       drawer: NavDrawer(),
       body: views[activeTab],
       floatingActionButton: actionButton,

@@ -24,38 +24,43 @@ class _Header extends StatelessWidget {
 
   final BoxDecoration decoration = BoxDecoration(
       borderRadius: BorderRadius.only(
-        bottomLeft: Radius.circular(25),
-        bottomRight: Radius.circular(25),
-        topLeft: Radius.zero,
-        topRight: Radius.zero),
+          bottomLeft: Radius.circular(25),
+          bottomRight: Radius.circular(25),
+          topLeft: Radius.zero,
+          topRight: Radius.zero),
       gradient: LinearGradient.lerp(grad1, grad2, 0.5));
 
   @override
   Widget build(BuildContext context) => Container(
-    decoration: decoration,
-    child: Column(
-      children: <Widget>[
-        Padding(padding: EdgeInsets.all(25),),
-        // TODO: need to decide if it is worth it to add a name field in the
-        // signup field just for this
-        Text(
-          JsonIntl.of(context).get(IntlKeys.nameGarage, {'name': 'USER_NAME'}),
-          style: Theme.of(context).accentTextTheme.headline4),
-        Padding(padding: EdgeInsets.all(5),),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            IconButton(
-              icon: Icon(Icons.account_circle),
-              color: Theme.of(context).accentTextTheme.button.color,
-              onPressed: () {}, // TODO: create some sort of account screen here?
-            ),
-            BlocBuilder<PaidVersionBloc, PaidVersionState>(
-              builder: (context, state) {
+      decoration: decoration,
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.all(25),
+          ),
+          // TODO: need to decide if it is worth it to add a name field in the
+          // signup field just for this
+          Text(
+              JsonIntl.of(context)
+                  .get(IntlKeys.nameGarage, {'name': 'USER_NAME'}),
+              style: Theme.of(context).accentTextTheme.headline4),
+          Padding(
+            padding: EdgeInsets.all(5),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              IconButton(
+                icon: Icon(Icons.account_circle),
+                color: Theme.of(context).accentTextTheme.button.color,
+                onPressed:
+                    () {}, // TODO: create some sort of account screen here?
+              ),
+              BlocBuilder<PaidVersionBloc, PaidVersionState>(
+                  builder: (context, state) {
                 if (state is PaidVersion) {
-                  return Text(
-                    JsonIntl.of(context).get(IntlKeys.proCaps),
-                    style: Theme.of(context).accentTextTheme.button);
+                  return Text(JsonIntl.of(context).get(IntlKeys.proCaps),
+                      style: Theme.of(context).accentTextTheme.button);
                 } else if (kFlavor.hasPaid) {
                   return FlatButton(
                     key: ValueKey('__upgrade_drawer_button__'),
@@ -65,116 +70,113 @@ class _Header extends StatelessWidget {
                         context: context,
                         child: UpgradeDialog(
                           context: context,
-                          trialUser: BlocProvider.of<AuthenticationBloc>(context).state is LocalAuthenticated,
+                          trialUser:
+                              BlocProvider.of<AuthenticationBloc>(context).state
+                                  is LocalAuthenticated,
                         )),
                   );
                 } else {
                   return Container();
                 }
-              }
-            ),
-            IconButton(
-              icon: Icon(Icons.settings),
-              color: Theme.of(context).accentTextTheme.button.color,
-              onPressed: () {
-                Navigator.pushNamed(context, AutodoRoutes.settingsScreen);
-              },
-            )
-          ],
-        ),
-        Padding(padding: EdgeInsets.all(5),),
-      ],
-    )
-  );
+              }),
+              IconButton(
+                icon: Icon(Icons.settings),
+                color: Theme.of(context).accentTextTheme.button.color,
+                onPressed: () {
+                  Navigator.pushNamed(context, AutodoRoutes.settingsScreen);
+                },
+              )
+            ],
+          ),
+          Padding(
+            padding: EdgeInsets.all(5),
+          ),
+        ],
+      ));
 }
 
 class _CarGrid extends StatelessWidget {
   @override
-  Widget build(BuildContext context) => BlocBuilder<CarsBloc, CarsState>(
-    builder: (context, state) {
-      if (!(state is CarsLoaded)) {
-        return LoadingIndicator();
-      }
-      final cars = (state as CarsLoaded).cars;
-      return Container(
-        padding: EdgeInsets.all(5),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: cars.map<Widget>((c) => CarCard(c)).toList()..add(NewCarCard()),
-          )
-        )
-      );
-    }
-  );
+  Widget build(BuildContext context) =>
+      BlocBuilder<CarsBloc, CarsState>(builder: (context, state) {
+        if (!(state is CarsLoaded)) {
+          return LoadingIndicator();
+        }
+        final cars = (state as CarsLoaded).cars;
+        return Container(
+            padding: EdgeInsets.all(5),
+            child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: cars.map<Widget>((c) => CarCard(c)).toList()
+                    ..add(NewCarCard()),
+                )));
+      });
 }
 
 class _MechanicButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
-    padding: EdgeInsets.all(10),
-    child: RaisedButton(
-      elevation: 5.0,
-      shape: Theme.of(context).buttonTheme.shape,
-      color: Theme.of(context).primaryColor,
-      child: ListTile(
-        leading: Icon(
-          Icons.search,
-          color: Theme.of(context).accentTextTheme.button.color,),
-        title: Text(
-          JsonIntl.of(context).get(IntlKeys.findAMechanic),
-          style: Theme.of(context).accentTextTheme.button
+        padding: EdgeInsets.all(10),
+        child: RaisedButton(
+          elevation: 5.0,
+          shape: Theme.of(context).buttonTheme.shape,
+          color: Theme.of(context).primaryColor,
+          child: ListTile(
+            leading: Icon(
+              Icons.search,
+              color: Theme.of(context).accentTextTheme.button.color,
+            ),
+            title: Text(JsonIntl.of(context).get(IntlKeys.findAMechanic),
+                style: Theme.of(context).accentTextTheme.button),
+          ),
+          onPressed: () {},
         ),
-      ),
-      onPressed: () {},
-    ),
-  );
+      );
 }
 
 class _DiyButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
-    padding: EdgeInsets.all(10),
-    child: RaisedButton(
-      elevation: 5.0,
-      shape: Theme.of(context).buttonTheme.shape,
-      color: Theme.of(context).buttonTheme.colorScheme.background,
-      child: ListTile(
-        leading: Icon(
-          Icons.build,
-          color: Theme.of(context).accentTextTheme.button.color,),
-        title: Text(
-          JsonIntl.of(context).get(IntlKeys.learnToDiy),
-          style: Theme.of(context).accentTextTheme.button
+        padding: EdgeInsets.all(10),
+        child: RaisedButton(
+          elevation: 5.0,
+          shape: Theme.of(context).buttonTheme.shape,
+          color: Theme.of(context).buttonTheme.colorScheme.background,
+          child: ListTile(
+            leading: Icon(
+              Icons.build,
+              color: Theme.of(context).accentTextTheme.button.color,
+            ),
+            title: Text(JsonIntl.of(context).get(IntlKeys.learnToDiy),
+                style: Theme.of(context).accentTextTheme.button),
+          ),
+          onPressed: () {},
         ),
-      ),
-      onPressed: () {},
-    ),
-  );
+      );
 }
 
 class _PartsButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
-    padding: EdgeInsets.all(10),
-    child: RaisedButton(
-      elevation: 5.0,
-      shape: Theme.of(context).buttonTheme.shape,
-      color: Theme.of(context).buttonTheme.colorScheme.background,
-      child: ListTile(
-        leading: Icon(
-          Icons.build,
-          color: Theme.of(context).accentTextTheme.button.color,),
-        title: Text(
-          JsonIntl.of(context).get(IntlKeys.findParts),
-          style: Theme.of(context).accentTextTheme.button
+        padding: EdgeInsets.all(10),
+        child: RaisedButton(
+          elevation: 5.0,
+          shape: Theme.of(context).buttonTheme.shape,
+          color: Theme.of(context).buttonTheme.colorScheme.background,
+          child: ListTile(
+            leading: Icon(
+              Icons.build,
+              color: Theme.of(context).accentTextTheme.button.color,
+            ),
+            title: Text(JsonIntl.of(context).get(IntlKeys.findParts),
+                style: Theme.of(context).accentTextTheme.button),
+          ),
+          onPressed: () {},
         ),
-      ),
-      onPressed: () {},
-    ),
-  );
+      );
 }
 
 class GarageScreen extends StatelessWidget {
@@ -184,15 +186,25 @@ class GarageScreen extends StatelessWidget {
       child: Column(
         children: <Widget>[
           _Header(),
-          Padding(padding: EdgeInsets.all(5),),
+          Padding(
+            padding: EdgeInsets.all(5),
+          ),
           _CarGrid(),
-          Padding(padding: EdgeInsets.all(5),),
+          Padding(
+            padding: EdgeInsets.all(5),
+          ),
           _MechanicButton(),
-          Padding(padding: EdgeInsets.all(2),),
+          Padding(
+            padding: EdgeInsets.all(2),
+          ),
           _DiyButton(),
-          Padding(padding: EdgeInsets.all(2),),
+          Padding(
+            padding: EdgeInsets.all(2),
+          ),
           _PartsButton(),
-          Padding(padding: EdgeInsets.all(2),),
+          Padding(
+            padding: EdgeInsets.all(2),
+          ),
         ],
       ),
     );

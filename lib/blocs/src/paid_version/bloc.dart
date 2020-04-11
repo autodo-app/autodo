@@ -61,9 +61,8 @@ class PaidVersionBloc extends Bloc<PaidVersionEvent, PaidVersionState> {
 
   static const platform = MethodChannel('com.autodo.autodo/iap');
 
-  DataRepository get repo => (_dbBloc.state is DbLoaded)
-      ? (_dbBloc.state as DbLoaded).dataRepo
-      : null;
+  DataRepository get repo =>
+      (_dbBloc.state is DbLoaded) ? (_dbBloc.state as DbLoaded).dataRepo : null;
 
   @override
   PaidVersionState get initialState => PaidVersionLoading();

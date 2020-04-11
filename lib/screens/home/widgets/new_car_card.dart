@@ -40,7 +40,7 @@ class NewCarCard extends StatelessWidget {
         // This centering and its child are needed to prevent the edge of the
         // border from being cut off past 1px
         child: SizedBox(
-          width: 130, // smae goes for the sizes here, need to undersize the child to account for the border
+          width: 130, // same goes for the sizes here, need to undersize the child to account for the border
           height: 205,
           child: DottedBorder(
             color: Theme.of(context).buttonTheme.colorScheme.background,
@@ -66,10 +66,10 @@ class NewCarCard extends StatelessWidget {
                   ),
                 ],
               ),
-            )
+            ),
           ),
         ),
-      ),
+      )
     )
   );
 }

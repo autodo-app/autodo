@@ -8,15 +8,17 @@ import '../../flavor.dart';
 import 'storage_repository.dart';
 
 class FirebaseStorageRepository extends StorageRepository {
-  FirebaseStorageRepository({firebaseStorageInstance, @required this.uuid}) :
-    firebaseStorageInstance = firebaseStorageInstance ?? FirebaseStorage.instance;
+  FirebaseStorageRepository({firebaseStorageInstance, @required this.uuid})
+      : firebaseStorageInstance =
+            firebaseStorageInstance ?? FirebaseStorage.instance;
 
   final String uuid;
   final FirebaseStorage firebaseStorageInstance;
 
   @override
   Future<String> getDownloadUrl(String assetName) async {
-    final resourceUrl = joinAll(['${kFlavor.firebaseStorageUri}', uuid, assetName]);
+    final resourceUrl =
+        joinAll(['${kFlavor.firebaseStorageUri}', uuid, assetName]);
     final ref = await firebaseStorageInstance.getReferenceFromUrl(resourceUrl);
     final downloadUrl = await ref.getDownloadURL();
     return downloadUrl;

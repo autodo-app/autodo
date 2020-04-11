@@ -92,7 +92,8 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       }
     }
 
-    final dataRepo = await SembastDataRepository.open(pathProvider: pathProvider);
+    final dataRepo =
+        await SembastDataRepository.open(pathProvider: pathProvider);
     final storageRepo = LocalStorageRepository();
     yield DbLoaded(dataRepo, storageRepo: storageRepo, newUser: newUser);
   }

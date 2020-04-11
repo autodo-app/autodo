@@ -1,6 +1,5 @@
 import 'dart:io';
 
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -22,7 +21,8 @@ class MockDatabaseBloc extends MockBloc<DatabaseEvent, DatabaseState>
 
 class MockCarsBloc extends MockBloc<CarsEvent, CarsState> implements CarsBloc {}
 
-class MockStorageRepo extends Mock implements StorageRepository {} // ignore: must_be_immutable
+class MockStorageRepo extends Mock implements StorageRepository {
+} // ignore: must_be_immutable
 
 void main() {
   group('AddEditCarScreen', () {
@@ -68,7 +68,8 @@ void main() {
             ],
             child: MaterialApp(
               home: Scaffold(
-                body: CarAddEditScreen(car: Car(name: 'test'), onSave: (a, b, c, d, e, f, g) {}),
+                body: CarAddEditScreen(
+                    car: Car(name: 'test'), onSave: (a, b, c, d, e, f, g) {}),
               ),
             ),
           ),
@@ -89,7 +90,10 @@ void main() {
             ],
             child: MaterialApp(
               home: Scaffold(
-                body: CarAddEditScreen(car: Car(name: 'test'), isEditing: true, onSave: (a, b, c, d, e, f, g) {}),
+                body: CarAddEditScreen(
+                    car: Car(name: 'test'),
+                    isEditing: true,
+                    onSave: (a, b, c, d, e, f, g) {}),
               ),
             ),
           ),
@@ -111,7 +115,11 @@ void main() {
               ],
               child: MaterialApp(
                 home: Scaffold(
-                  body: CarAddEditHeaderNoImage(car: Car(name: 'test'), onSaved: (_) {}, imagePicker: ({source}) async => File('test.jpg'),),
+                  body: CarAddEditHeaderNoImage(
+                    car: Car(name: 'test'),
+                    onSaved: (_) {},
+                    imagePicker: ({source}) async => File('test.jpg'),
+                  ),
                 ),
               ),
             ),
@@ -122,7 +130,9 @@ void main() {
       });
       testWidgets('pick image', (WidgetTester tester) async {
         var stored = false;
-        when(storageRepo.storeAsset(any)).thenAnswer((_) async { stored = true; });
+        when(storageRepo.storeAsset(any)).thenAnswer((_) async {
+          stored = true;
+        });
         await tester.pumpWidget(
           ChangeNotifierProvider<BasePrefService>.value(
             value: pref,
@@ -133,7 +143,11 @@ void main() {
               ],
               child: MaterialApp(
                 home: Scaffold(
-                  body: CarAddEditHeaderNoImage(car: Car(name: 'test'), onSaved: (_) {}, imagePicker: ({source}) async => File('test.jpg'),),
+                  body: CarAddEditHeaderNoImage(
+                    car: Car(name: 'test'),
+                    onSaved: (_) {},
+                    imagePicker: ({source}) async => File('test.jpg'),
+                  ),
                 ),
               ),
             ),
@@ -158,7 +172,9 @@ void main() {
                 ],
                 child: MaterialApp(
                   home: Scaffold(
-                    body: CarAddEditScreen(car: Car(name: 'test'), onSave: (a, b, c, d, e, f, g) {}),
+                    body: CarAddEditScreen(
+                        car: Car(name: 'test'),
+                        onSave: (a, b, c, d, e, f, g) {}),
                   ),
                 ),
               ),
@@ -184,7 +200,10 @@ void main() {
                 ],
                 child: MaterialApp(
                   home: Scaffold(
-                    body: CarAddEditScreen(key: key, car: Car(name: 'test'), onSave: (a, b, c, d, e, f, g) {}),
+                    body: CarAddEditScreen(
+                        key: key,
+                        car: Car(name: 'test'),
+                        onSave: (a, b, c, d, e, f, g) {}),
                   ),
                 ),
               ),

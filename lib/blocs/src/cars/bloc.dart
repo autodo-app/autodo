@@ -47,9 +47,8 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
   @override
   CarsState get initialState => CarsLoading();
 
-  DataRepository get repo => (_dbBloc.state is DbLoaded)
-      ? (_dbBloc.state as DbLoaded).dataRepo
-      : null;
+  DataRepository get repo =>
+      (_dbBloc.state is DbLoaded) ? (_dbBloc.state as DbLoaded).dataRepo : null;
 
   @override
   Stream<CarsState> mapEventToState(CarsEvent event) async* {
