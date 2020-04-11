@@ -9,17 +9,31 @@ import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/models/models.dart';
 import 'package:autodo/units/units.dart';
 
-class MockRefuelingsBloc extends MockBloc<RefuelingsEvent, RefuelingsState> implements RefuelingsBloc {}
+class MockRefuelingsBloc extends MockBloc<RefuelingsEvent, RefuelingsState>
+    implements RefuelingsBloc {}
 
 void main() {
   BasePrefService pref;
   final refuelingsBloc = MockRefuelingsBloc();
-  whenListen(refuelingsBloc, Stream.fromIterable([
-    RefuelingsLoading(),
-    RefuelingsLoaded([
-      Refueling(carName: 'test', amount: 10.0, date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 1000, cost: 20.0),
-      Refueling(carName: 'test', amount: 10.0, date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 2000, cost: 20.0)])
-  ]));
+  whenListen(
+      refuelingsBloc,
+      Stream.fromIterable([
+        RefuelingsLoading(),
+        RefuelingsLoaded([
+          Refueling(
+              carName: 'test',
+              amount: 10.0,
+              date: DateTime.fromMillisecondsSinceEpoch(0),
+              mileage: 1000,
+              cost: 20.0),
+          Refueling(
+              carName: 'test',
+              amount: 10.0,
+              date: DateTime.fromMillisecondsSinceEpoch(0),
+              mileage: 2000,
+              cost: 20.0)
+        ])
+      ]));
   when(refuelingsBloc.state).thenReturn(RefuelingsLoading());
 
   group('efficiency stats', () {
@@ -40,27 +54,23 @@ void main() {
 
     testWidgets('fetch', (tester) async {
       final _key = GlobalKey();
-      await tester.pumpWidget(
-        ChangeNotifierProvider<BasePrefService>.value(
+      await tester.pumpWidget(ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
           child: MaterialApp(
-            home: Scaffold(
-              key: _key,
-              body: Container(),
-            )
-          )
-        )
-      );
+              home: Scaffold(
+            key: _key,
+            body: Container(),
+          ))));
       await tester.pump();
 
       try {
-        final data = await EfficiencyStats.fetch(refuelingsBloc, _key.currentContext);
+        final data =
+            await EfficiencyStats.fetch(refuelingsBloc, _key.currentContext);
         print(data);
         expect(data, []);
       } catch (e) {
         print(e);
       }
-
     });
   });
 }
