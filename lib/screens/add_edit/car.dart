@@ -176,11 +176,13 @@ class _TwoPartTextField extends StatelessWidget {
       this.node,
       this.nextNode,
       this.validator,
-      this.onSaved});
+      this.onSaved,
+      this.keyboardType});
 
   final String initialValue, fieldName, units;
   final FocusNode node, nextNode;
   final Function(String) validator, onSaved;
+  final TextInputType keyboardType;
 
   @override
   Widget build(BuildContext context) => Container(
@@ -201,8 +203,8 @@ class _TwoPartTextField extends StatelessWidget {
               initialValue: initialValue?.toString() ?? '',
               focusNode: node,
               style: Theme.of(context).primaryTextTheme.subtitle2,
-              keyboardType: TextInputType.number, // change this
-              validator: validator, // change this
+              keyboardType: keyboardType,
+              validator: validator,
               onSaved: onSaved,
               textInputAction: TextInputAction.next,
               onFieldSubmitted: (_) => changeFocus(node, nextNode),
@@ -322,6 +324,7 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
                           onSaved: (val) {
                             _odom = double.tryParse(val);
                           },
+                          keyboardType: TextInputType.number,
                         )
                       : _TwoPartNoEdit(
                           fieldName: JsonIntl.of(context).get(IntlKeys.odom),
@@ -354,6 +357,7 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
                           onSaved: (val) {
                             _make = val;
                           },
+                          keyboardType: TextInputType.text,
                         )
                       : _TwoPartNoEdit(
                           fieldName: JsonIntl.of(context).get(IntlKeys.make),
@@ -369,6 +373,7 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
                           onSaved: (val) {
                             _model = val;
                           },
+                          keyboardType: TextInputType.text,
                         )
                       : _TwoPartNoEdit(
                           fieldName: JsonIntl.of(context).get(IntlKeys.model),
@@ -384,6 +389,7 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
                           onSaved: (val) {
                             _year = int.tryParse(val);
                           },
+                          keyboardType: TextInputType.number,
                         )
                       : _TwoPartNoEdit(
                           fieldName: JsonIntl.of(context).get(IntlKeys.year),
@@ -400,6 +406,7 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
                           onSaved: (val) {
                             _plate = val;
                           },
+                          keyboardType: TextInputType.text,
                         )
                       : _TwoPartNoEdit(
                           fieldName: JsonIntl.of(context).get(IntlKeys.plate),
@@ -414,6 +421,7 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
                           onSaved: (val) {
                             _vin = val;
                           },
+                          keyboardType: TextInputType.text,
                         )
                       : _TwoPartNoEdit(
                           fieldName: JsonIntl.of(context).get(IntlKeys.vin),
