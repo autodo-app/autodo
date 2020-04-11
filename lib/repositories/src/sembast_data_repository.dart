@@ -19,7 +19,7 @@ class SembastDataRepository extends DataRepository {
 
   final Database db;
 
-  final Semaphore dbLock = LocalSemaphore(255);
+  static final Semaphore dbLock = LocalSemaphore(255);
 
   /// Main constructor for the object.
   ///
@@ -35,6 +35,7 @@ class SembastDataRepository extends DataRepository {
     final path = await getFullPath(dbPath: dbPath, pathProvider: pathProvider);
 
     dbFactory ??= databaseFactoryIo;
+    await dbLock.acquire();
 
     final db = await dbFactory.openDatabase(
       path,
@@ -42,6 +43,7 @@ class SembastDataRepository extends DataRepository {
       version: Pubspec.db_version,
       onVersionChanged: _upgrade,
     );
+    dbLock.release();
 
     return SembastDataRepository._(db);
   }
@@ -317,6 +319,8 @@ class SembastDataRepository extends DataRepository {
     await dbLock.acquire();
     try {
       await db.close();
+    } catch (e) {
+      print(e);
     } finally {
       dbLock.release();
     }

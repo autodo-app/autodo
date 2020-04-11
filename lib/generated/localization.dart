@@ -389,13 +389,13 @@ class IntlKeys {
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const months = 'months';
 
+  /// strings.json: 'My Garage'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const myGarage = 'my_garage';
+
   /// strings.json: 'Name'
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const name = 'name';
-
-  /// strings.json: '{{ name }}\'s Garage'
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  static const nameGarage = 'name_garage';
 
   /// strings.json: 'Never'
   /// strings-fr.json: *** NOT TRANSLATED ***

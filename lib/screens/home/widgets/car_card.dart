@@ -65,8 +65,10 @@ class CarCard extends StatelessWidget {
                             height: 80,
                             placeholder: (context, url) =>
                                 CircularProgressIndicator(),
-                            errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
+                            errorWidget: (context, url, error) => SizedBox(
+                              height: 80,
+                              child: Icon(Icons.directions_car, size: 40),
+                            ),
                             imageUrl: snap.data,
                           );
                         }),

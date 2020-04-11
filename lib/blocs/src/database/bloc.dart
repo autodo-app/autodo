@@ -73,13 +73,14 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
   }
 
   Stream<DatabaseState> _mapTrialLoginToState(TrialLogin event) async* {
-    if (state is DbLoaded) {
-      // Close the old database, open the new one
-      final repo = (state as DbLoaded).dataRepo;
-      if (repo is SembastDataRepository) {
-        await repo.close();
-      }
-    }
+    // if (state is DbLoaded) {
+    //   // Close the old database, open the new one
+    //   final repo = (state as DbLoaded).dataRepo;
+    //   if (repo is SembastDataRepository) {
+    //     await repo.close();
+    //   }
+    // }
+    // TODO: getting two occurrences of this event on local sign-in, why?
 
     var newUser = event.newUser;
 

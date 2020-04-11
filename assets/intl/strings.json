@@ -187,7 +187,7 @@
   "add_a_new_car": "Add a New Car",
   "add_a_photo": "Add a Photo",
   "name": "Name",
-  "name_garage": "{{ name }}'s Garage",
+  "my_garage": "My Garage",
   "pro_caps": "PRO",
   "upgrade_caps": "UPGRADE"
 }

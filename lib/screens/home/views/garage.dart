@@ -11,6 +11,37 @@ import '../../../theme.dart';
 import '../../../widgets/widgets.dart';
 import '../widgets/barrel.dart';
 
+class _PaidVersionStatus extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    if (!kFlavor.hasPaid) {
+      return Container();
+    }
+    return BlocBuilder<PaidVersionBloc, PaidVersionState>(
+      builder: (context, state) {
+        if (state is PaidVersion) {
+          return Text(JsonIntl.of(context).get(IntlKeys.proCaps),
+              style: Theme.of(context).accentTextTheme.button);
+        } else {
+          return FlatButton(
+            key: ValueKey('__upgrade_drawer_button__'),
+            child: Text(JsonIntl.of(context).get(IntlKeys.upgradeCaps),
+                style: Theme.of(context).accentTextTheme.button),
+            onPressed: () => showDialog(
+                context: context,
+                child: UpgradeDialog(
+                  context: context,
+                  trialUser:
+                      BlocProvider.of<AuthenticationBloc>(context).state
+                          is LocalAuthenticated,
+                )),
+          );
+        }
+      }
+    );
+  }
+}
+
 class _Header extends StatelessWidget {
   static final grad1 = LinearGradient(
       begin: Alignment.centerLeft,
@@ -38,12 +69,9 @@ class _Header extends StatelessWidget {
           Padding(
             padding: EdgeInsets.all(25),
           ),
-          // TODO: need to decide if it is worth it to add a name field in the
-          // signup field just for this
           Text(
-              JsonIntl.of(context)
-                  .get(IntlKeys.nameGarage, {'name': 'USER_NAME'}),
-              style: Theme.of(context).accentTextTheme.headline4),
+            JsonIntl.of(context).get(IntlKeys.myGarage),
+            style: Theme.of(context).accentTextTheme.headline4),
           Padding(
             padding: EdgeInsets.all(5),
           ),
@@ -56,29 +84,7 @@ class _Header extends StatelessWidget {
                 onPressed:
                     () {}, // TODO: create some sort of account screen here?
               ),
-              BlocBuilder<PaidVersionBloc, PaidVersionState>(
-                  builder: (context, state) {
-                if (state is PaidVersion) {
-                  return Text(JsonIntl.of(context).get(IntlKeys.proCaps),
-                      style: Theme.of(context).accentTextTheme.button);
-                } else if (kFlavor.hasPaid) {
-                  return FlatButton(
-                    key: ValueKey('__upgrade_drawer_button__'),
-                    child: Text(JsonIntl.of(context).get(IntlKeys.upgradeCaps),
-                        style: Theme.of(context).accentTextTheme.button),
-                    onPressed: () => showDialog(
-                        context: context,
-                        child: UpgradeDialog(
-                          context: context,
-                          trialUser:
-                              BlocProvider.of<AuthenticationBloc>(context).state
-                                  is LocalAuthenticated,
-                        )),
-                  );
-                } else {
-                  return Container();
-                }
-              }),
+              _PaidVersionStatus(),
               IconButton(
                 icon: Icon(Icons.settings),
                 color: Theme.of(context).accentTextTheme.button.color,
