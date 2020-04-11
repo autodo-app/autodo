@@ -41,7 +41,7 @@ class EfficiencyStats {
     List<Refueling> refuelings,
     BuildContext context,
   ) async {
-    final efficiencyUnit = Efficiency.of(context);
+    final efficiencyUnit = Efficiency.of(context, listen: false);
     // final volume = Volume.of(context);
 
     final points = <FuelMileagePoint>[];

@@ -19,7 +19,7 @@ class NewCarCard extends StatelessWidget {
           onSave: (name, odom, make, model, year, plate, vin) {
             BlocProvider.of<CarsBloc>(context).add(AddCar(Car(
               name: name,
-              mileage: Distance.of(context).unitToInternal(odom),
+              mileage: Distance.of(context, listen: false).unitToInternal(odom),
               make: make,
               model: model,
               year: year,
