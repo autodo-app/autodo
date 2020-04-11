@@ -413,6 +413,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.4"
+  image_test_utils:
+    dependency: "direct dev"
+    description:
+      name: image_test_utils
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   in_app_purchase:
     dependency: "direct main"
     description:

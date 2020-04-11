@@ -114,22 +114,28 @@ class _HeaderWithImage extends StatelessWidget {
   );
 }
 
-class _HeaderNoImage extends StatelessWidget {
-  const _HeaderNoImage({this.car, @required this.onSaved});
+class CarAddEditHeaderNoImage extends StatelessWidget {
+  const CarAddEditHeaderNoImage({this.car, @required this.onSaved, imagePicker}) :
+      imagePicker = imagePicker ?? ImagePicker.pickImage;
 
   final Car car;
-  final Function onSaved;
+
+  final Function(String) onSaved;
+
+  /// defaults to using the ImagePicker package, separated so it can be mocked
+  /// in testing
+  final Function({ImageSource source}) imagePicker;
 
   @override
   Widget build(BuildContext context) => Container(
-    height: 120,
-    width: double.infinity,
+    height: 150,
+    width: MediaQuery.of(context).size.width,
     padding: EdgeInsets.only(bottom: 5),
     child: Column(
       children: <Widget>[
         GestureDetector(
           onTap: () async {
-            final image = await ImagePicker.pickImage(source: ImageSource.gallery);
+            final image = await imagePicker(source: ImageSource.gallery);
             await (BlocProvider.of<DatabaseBloc>(context).state as DbLoaded).storageRepo.storeAsset(image);
             BlocProvider.of<CarsBloc>(context).add(UpdateCar(car.copyWith(imageName: basename(image.path))));
           }, // add an upload feature here
@@ -223,7 +229,8 @@ class _TwoPartNoEdit extends StatelessWidget {
 
 /// Shows Car Details and can be put into edit mode
 class CarAddEditScreen extends StatefulWidget {
-  const CarAddEditScreen({this.car, @required this.onSave, this.isEditing = false});
+  const CarAddEditScreen({Key key, this.car, @required this.onSave, this.isEditing = false}) :
+      super(key: key);
 
   final Car car;
   final CarAddEditOnSaveCallback onSave;
@@ -296,7 +303,7 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
                     Navigator.pop(context);
                   },
                 ) :
-                _HeaderNoImage(
+                CarAddEditHeaderNoImage(
                   car: widget.car,
                   onSaved: (val) => _name = val
                 ),
