@@ -15,26 +15,27 @@ class MockRefuelingsBloc extends MockBloc<RefuelingsEvent, RefuelingsState>
 void main() {
   BasePrefService pref;
   final refuelingsBloc = MockRefuelingsBloc();
+  final refuelings = [
+    Refueling(
+        carName: 'test',
+        amount: 10.0,
+        date: DateTime.fromMillisecondsSinceEpoch(0),
+        mileage: 1000,
+        cost: 20.0),
+    Refueling(
+        carName: 'test',
+        amount: 10.0,
+        date: DateTime.fromMillisecondsSinceEpoch(0),
+        mileage: 2000,
+        cost: 20.0)
+  ];
   whenListen(
       refuelingsBloc,
       Stream.fromIterable([
         RefuelingsLoading(),
-        RefuelingsLoaded([
-          Refueling(
-              carName: 'test',
-              amount: 10.0,
-              date: DateTime.fromMillisecondsSinceEpoch(0),
-              mileage: 1000,
-              cost: 20.0),
-          Refueling(
-              carName: 'test',
-              amount: 10.0,
-              date: DateTime.fromMillisecondsSinceEpoch(0),
-              mileage: 2000,
-              cost: 20.0)
-        ])
+        RefuelingsLoaded(refuelings),
       ]));
-  when(refuelingsBloc.state).thenReturn(RefuelingsLoading());
+  when(refuelingsBloc.state).thenReturn(RefuelingsLoaded(refuelings));
 
   group('efficiency stats', () {
     setUp(() async {
@@ -63,14 +64,10 @@ void main() {
           ))));
       await tester.pump();
 
-      try {
-        final data =
-            await EfficiencyStats.fetch(refuelingsBloc, _key.currentContext);
-        print(data);
-        expect(data, []);
-      } catch (e) {
-        print(e);
-      }
+      final data =
+          await EfficiencyStats.fetch(refuelingsBloc, _key.currentContext);
+      print(data);
+      expect(data, []);
     });
   });
 }

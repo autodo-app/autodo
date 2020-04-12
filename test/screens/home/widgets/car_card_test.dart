@@ -22,8 +22,8 @@ class MockCarsBloc extends MockBloc<CarsEvent, CarsState> implements CarsBloc {}
 class MockDatabaseBloc extends MockBloc<DatabaseEvent, DatabaseState>
     implements DatabaseBloc {}
 
-class MockStorageRepo extends Mock implements StorageRepository {
-} // ignore: must_be_immutable
+// ignore: must_be_immutable
+class MockStorageRepo extends Mock implements StorageRepository {}
 
 void main() {
   BasePrefService pref;

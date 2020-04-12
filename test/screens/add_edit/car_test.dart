@@ -21,8 +21,8 @@ class MockDatabaseBloc extends MockBloc<DatabaseEvent, DatabaseState>
 
 class MockCarsBloc extends MockBloc<CarsEvent, CarsState> implements CarsBloc {}
 
-class MockStorageRepo extends Mock implements StorageRepository {
-} // ignore: must_be_immutable
+// ignore: must_be_immutable
+class MockStorageRepo extends Mock implements StorageRepository {}
 
 void main() {
   group('AddEditCarScreen', () {

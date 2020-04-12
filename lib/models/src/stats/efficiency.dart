@@ -31,7 +31,7 @@ class EfficiencyStats {
       return _prepData(state.refuelings, context);
     }
 
-    throw 'Unable to load car';
+    throw 'Unable to load refuelings';
   }
 
   static double _emaFilter(double prev, double current) =>
