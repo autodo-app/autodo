@@ -38,7 +38,6 @@ void main() {
         mileage: 3000,
         cost: 20.0));
 
-
   group('efficiency stats', () {
     setUp(() async {
       pref = JustCachePrefService();
@@ -57,11 +56,11 @@ void main() {
 
     testWidgets('short refuelings', (tester) async {
       whenListen(
-        refuelingsBloc,
-        Stream.fromIterable([
-          RefuelingsLoading(),
-          RefuelingsLoaded(refuelingsShort),
-        ]));
+          refuelingsBloc,
+          Stream.fromIterable([
+            RefuelingsLoading(),
+            RefuelingsLoaded(refuelingsShort),
+          ]));
       when(refuelingsBloc.state).thenReturn(RefuelingsLoaded(refuelingsShort));
 
       final _key = GlobalKey();
@@ -81,11 +80,11 @@ void main() {
 
     testWidgets('long refuelings', (tester) async {
       whenListen(
-        refuelingsBloc,
-        Stream.fromIterable([
-          RefuelingsLoading(),
-          RefuelingsLoaded(refuelingsLong),
-        ]));
+          refuelingsBloc,
+          Stream.fromIterable([
+            RefuelingsLoading(),
+            RefuelingsLoaded(refuelingsLong),
+          ]));
       when(refuelingsBloc.state).thenReturn(RefuelingsLoaded(refuelingsLong));
 
       final _key = GlobalKey();
@@ -101,12 +100,16 @@ void main() {
       final data =
           await EfficiencyStats.fetch(refuelingsBloc, _key.currentContext);
       final expectedRawData = [
-        FuelMileagePoint(DateTime.fromMillisecondsSinceEpoch(0), 235.2145833333333),
-        FuelMileagePoint(DateTime.fromMillisecondsSinceEpoch(0), 235.2145833333333),
+        FuelMileagePoint(
+            DateTime.fromMillisecondsSinceEpoch(0), 235.2145833333333),
+        FuelMileagePoint(
+            DateTime.fromMillisecondsSinceEpoch(0), 235.2145833333333),
       ];
       final expectedEmaData = [
-        FuelMileagePoint(DateTime.fromMillisecondsSinceEpoch(0), 235.2145833333333),
-        FuelMileagePoint(DateTime.fromMillisecondsSinceEpoch(0), 235.2145833333333),
+        FuelMileagePoint(
+            DateTime.fromMillisecondsSinceEpoch(0), 235.2145833333333),
+        FuelMileagePoint(
+            DateTime.fromMillisecondsSinceEpoch(0), 235.2145833333333),
       ];
       expect(data.length, 2);
       expect(data.first.data, expectedRawData);

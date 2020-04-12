@@ -117,10 +117,12 @@ void main() {
                   index / 20.0)));
 
       when(carsBloc.state).thenAnswer((_) => CarsLoaded([car]));
-      whenListen(refuelingsBloc, Stream.fromIterable([
-        RefuelingsLoading(),
-        RefuelingsLoaded(refuelings),
-      ]));
+      whenListen(
+          refuelingsBloc,
+          Stream.fromIterable([
+            RefuelingsLoading(),
+            RefuelingsLoaded(refuelings),
+          ]));
       when(refuelingsBloc.state)
           .thenAnswer((_) => RefuelingsLoaded(refuelings));
 
