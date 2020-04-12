@@ -120,5 +120,9 @@ void main() {
           ).toString(),
           'HSV { h: 0.0, s: 0.0, v: 0.0 }');
     });
+    test('roundToPrecision', () {
+      expect(roundToPrecision(10.111, 2), 10.11);
+      expect(roundToPrecision(10.1, 2), 10.1);
+    });
   });
 }

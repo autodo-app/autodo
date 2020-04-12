@@ -5,6 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:semaphore/semaphore.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
+import 'package:path/path.dart';
 
 import '../../generated/pubspec.dart';
 import '../../models/models.dart';
@@ -18,7 +19,7 @@ class SembastDataRepository extends DataRepository {
 
   final Database db;
 
-  final Semaphore dbLock = LocalSemaphore(255);
+  static final Semaphore dbLock = LocalSemaphore(255);
 
   /// Main constructor for the object.
   ///
@@ -34,6 +35,7 @@ class SembastDataRepository extends DataRepository {
     final path = await getFullPath(dbPath: dbPath, pathProvider: pathProvider);
 
     dbFactory ??= databaseFactoryIo;
+    await dbLock.acquire();
 
     final db = await dbFactory.openDatabase(
       path,
@@ -41,6 +43,7 @@ class SembastDataRepository extends DataRepository {
       version: Pubspec.db_version,
       onVersionChanged: _upgrade,
     );
+    dbLock.release();
 
     return SembastDataRepository._(db);
   }
@@ -53,7 +56,7 @@ class SembastDataRepository extends DataRepository {
     pathProvider ??= getApplicationDocumentsDirectory;
 
     final path = await pathProvider();
-    return '${path.path}/$dbPath';
+    return join('${path.path}', dbPath);
   }
 
   static Future<void> deleteDb(String path, [DatabaseFactory dbFactory]) async {
@@ -316,6 +319,8 @@ class SembastDataRepository extends DataRepository {
     await dbLock.acquire();
     try {
       await db.close();
+    } catch (e) {
+      print(e);
     } finally {
       dbLock.release();
     }

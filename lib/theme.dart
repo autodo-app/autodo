@@ -159,6 +159,12 @@ ThemeData createTheme() {
       fontFamily: 'IBM Plex Sans',
       letterSpacing: 0.2,
     ),
+    headline4: TextStyle(
+      fontSize: 30,
+      fontFamily: 'Ubuntu',
+      fontWeight: FontWeight.w600,
+      color: Colors.black.withAlpha(230),
+    ),
     bodyText1: TextStyle(
       // This is used for the car tags
       color: Colors.black.withAlpha(230),
@@ -192,7 +198,26 @@ ThemeData createTheme() {
     disabledColor: Colors.grey,
     buttonColor: mainPallette.shade100,
     buttonTheme: ButtonThemeData(
-      buttonColor: Colors.white.withAlpha(230),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(15.0),
+        ),
+      ),
+      colorScheme: ColorScheme(
+        primary: mainPallette.shade500,
+        onError: mainPallette.shade500,
+        onBackground: mainPallette.shade500,
+        onPrimary: mainPallette.shade500,
+        onSecondary: mainPallette.shade500,
+        onSurface: mainPallette.shade500,
+        primaryVariant: mainPallette.shade500,
+        brightness: Brightness.dark,
+        surface: mainPallette.shade500,
+        error: mainPallette.shade500,
+        secondary: mainPallette.shade500,
+        secondaryVariant: mainPallette.shade500,
+        background: Colors.grey[600],
+      ),
     ),
     toggleButtonsTheme: ThemeData.fallback().toggleButtonsTheme, // same
     secondaryHeaderColor: mainPallette.shade300,

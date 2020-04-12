@@ -31,7 +31,7 @@ class SembastWriteBatch extends Equatable implements WriteBatchWrapper {
 
   @override
   Future<void> commit() async {
-    await repository.dbLock.acquire();
+    await SembastDataRepository.dbLock.acquire();
     try {
       await repository.db.transaction((transaction) async {
         // a .forEach loop didn't await properly here... not sure why
@@ -41,7 +41,7 @@ class SembastWriteBatch extends Equatable implements WriteBatchWrapper {
       });
       if (streamControllerUpdate != null) await streamControllerUpdate();
     } finally {
-      repository.dbLock.release();
+      SembastDataRepository.dbLock.release();
     }
   }
 

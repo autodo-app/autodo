@@ -99,6 +99,7 @@ class AppProviderState extends State<AppProvider> {
     await service.setDefaultValues({
       'length_unit': Distance.getDefault(locale).index,
       'volume_unit': Volume.getDefault(locale).index,
+      'efficiency_unit': Efficiency.getDefault(locale).index,
       'currency': Currency.getDefault(locale),
     });
   }

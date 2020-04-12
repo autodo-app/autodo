@@ -59,8 +59,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
     AppTab.todos: TodosScreen(),
     AppTab.refuelings: RefuelingsScreen(),
     AppTab.stats: StatisticsScreen(),
-    AppTab.repeats:
-        Container(), // TODO 275: replace this screen with a cars screen?
+    AppTab.garage:
+        GarageScreen(), // TODO 275: replace this screen with a cars screen?
   };
 
   final Key todosTabKey;
@@ -108,6 +108,21 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                         mileageRepeatInterval: mR,
                         dateRepeatInterval: dR,
                         completed: false)));
+                  },
+                ))),
+        MaterialPageRoute(
+            builder: (context) => _ScreenWithBanner(
+                    child: CarAddEditScreen(
+                  isEditing: false,
+                  onSave: (name, odom, make, model, y, p, v) {
+                    BlocProvider.of<CarsBloc>(context).add(AddCar(Car(
+                        name: name,
+                        mileage: odom,
+                        make: make,
+                        model: model,
+                        year: y,
+                        plate: p,
+                        vin: v)));
                   },
                 ))),
       ];
@@ -190,10 +205,12 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
 
   Widget buildScreen(BuildContext context, AppTab activeTab) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(JsonIntl.of(context).get(IntlKeys.appTitle)),
-        actions: [ExtraActions()],
-      ),
+      appBar: (activeTab == AppTab.garage)
+          ? null
+          : AppBar(
+              title: Text(JsonIntl.of(context).get(IntlKeys.appTitle)),
+              actions: [ExtraActions()],
+            ),
       drawer: NavDrawer(),
       body: views[activeTab],
       floatingActionButton: actionButton,
@@ -203,7 +220,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
             BlocProvider.of<TabBloc>(context).add(UpdateTab(tab)),
         todosTabKey: todosTabKey,
         refuelingsTabKey: ValueKey('__refuelings_tab_button__'),
-        repeatsTabKey: ValueKey('__repeats_tab_button__'),
+        garageTabKey: ValueKey('__garage_tab_button__'),
       ),
     );
   }

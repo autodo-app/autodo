@@ -35,9 +35,8 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
   @override
   RefuelingsState get initialState => RefuelingsLoading();
 
-  DataRepository get repo => (_dbBloc.state is DbLoaded)
-      ? (_dbBloc.state as DbLoaded).repository
-      : null;
+  DataRepository get repo =>
+      (_dbBloc.state is DbLoaded) ? (_dbBloc.state as DbLoaded).dataRepo : null;
 
   @override
   Stream<RefuelingsState> mapEventToState(RefuelingsEvent event) async* {

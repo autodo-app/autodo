@@ -10,3 +10,4 @@ export 'src/loading_indicator.dart';
 export 'src/navdrawer.dart';
 export 'src/snackbars.dart';
 export 'src/tab_selector.dart';
+export 'src/upgrade_dialog.dart';

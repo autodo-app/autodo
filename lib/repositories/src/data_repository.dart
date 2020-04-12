@@ -104,10 +104,10 @@ abstract class DataRepository extends Equatable {
       final todos = await getCurrentTodos();
       final batch = await startTodoWriteBatch();
       repeats.forEach((r) {
-        final todo =
-            todos.firstWhere((t) => t.name == r['name'] && !t.completed);
+        final todo = todos
+            .firstWhere((t) => t.name == r['name'] && !(t.completed ?? false));
         final updatedTodo = todo.copyWith(
-            mileageRepeatInterval: r['mileageInterval'],
+            mileageRepeatInterval: r['mileageInterval'].toDouble(),
             dateRepeatInterval: r['dateInterval']);
         batch.updateData(updatedTodo.id, updatedTodo.toDocument());
       });

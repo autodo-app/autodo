@@ -71,6 +71,22 @@ class SettingsScreenState extends State<SettingsScreen> {
           VolumeUnit.us.index,
         ],
       ),
+      DropdownPreference<int>(
+        JsonIntl.of(context).get(IntlKeys.efficiencyUnit),
+        'efficiency_unit',
+        displayValues: [
+          JsonIntl.of(context).get(IntlKeys.efficiencyMpusgShort),
+          JsonIntl.of(context).get(IntlKeys.efficiencyMpigShort),
+          JsonIntl.of(context).get(IntlKeys.efficiencyKmplShort),
+          JsonIntl.of(context).get(IntlKeys.efficiencyLp100kmShort),
+        ],
+        values: [
+          EfficiencyUnit.mpusg.index,
+          EfficiencyUnit.mpig.index,
+          EfficiencyUnit.kmpl.index,
+          EfficiencyUnit.lp100km.index,
+        ],
+      ),
       DropdownPreference<String>(
         JsonIntl.of(context).get(IntlKeys.defaultCurrency),
         'currency',

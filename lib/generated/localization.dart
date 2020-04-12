@@ -9,6 +9,18 @@ class IntlKeys {
   /// strings-fr.json: 'Ajouter'
   static const add = 'add';
 
+  /// strings.json: 'Add a New Car'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const addANewCar = 'add_a_new_car';
+
+  /// strings.json: 'Add a Photo'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const addAPhoto = 'add_a_photo';
+
+  /// strings.json: 'Add a Car'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const addCar = 'add_car';
+
   /// strings.json: 'Add Refueling'
   /// strings-fr.json: 'Ajouter un plein'
   static const addRefueling = 'add_refueling';
@@ -89,6 +101,10 @@ class IntlKeys {
   /// strings-fr.json: 'La suppression de votre compte supprimera définitivement toutes les données associées à votre compte.\n\n Êtes-vous sur de vouloir continuer?'
   static const deleteAccountMessage = 'delete_account_message';
 
+  /// strings.json: 'Details'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const details = 'details';
+
   /// strings.json: 'kilometers'
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const distanceKm = 'distance_km';
@@ -108,6 +124,10 @@ class IntlKeys {
   /// strings.json: 'Driving Distance History ({{ unit }} per day)'
   /// strings-fr.json: 'Historique des distances de conduite ({{ unit }} par jour)'
   static const drivingDistanceHistory = 'driving_distance_history';
+
+  /// strings.json: 'Driving Rate'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const drivingRate = 'driving_rate';
 
   /// strings.json: 'Due At'
   /// strings-fr.json: 'Dû à'
@@ -129,6 +149,10 @@ class IntlKeys {
   /// strings-fr.json: 'À venir bientôt :'
   static const dueSoon = 'due_soon';
 
+  /// strings.json: 'Edit Car'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const editCar = 'edit_car';
+
   /// strings.json: 'Edit Car List'
   /// strings-fr.json: 'Modifier la liste des voitures'
   static const editCarList = 'edit_car_list';
@@ -145,6 +169,58 @@ class IntlKeys {
   /// strings-fr.json: 'Modifier la tâche'
   static const editTodo = 'edit_todo';
 
+  /// strings.json: 'Kilometers per Liter'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const efficiencyKmpl = 'efficiency_kmpl';
+
+  /// strings.json: 'Km/L'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const efficiencyKmplShort = 'efficiency_kmpl_short';
+
+  /// strings.json: 'Liters per 100 Km'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const efficiencyLp100km = 'efficiency_lp100km';
+
+  /// strings.json: 'L/100 Km'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const efficiencyLp100kmShort = 'efficiency_lp100km_short';
+
+  /// strings.json: 'Miles per Imperial Gallons'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const efficiencyMpig = 'efficiency_mpig';
+
+  /// strings.json: 'MPG (Imperial)'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const efficiencyMpigShort = 'efficiency_mpig_short';
+
+  /// strings.json: 'Miles per US Gallons'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const efficiencyMpusg = 'efficiency_mpusg';
+
+  /// strings.json: 'MPG (US)'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const efficiencyMpusgShort = 'efficiency_mpusg_short';
+
+  /// strings.json: 'Tanakeh'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const efficiencyTanakeh = 'efficiency_tanakeh';
+
+  /// strings.json: 'Tanakeh'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const efficiencyTanakehShort = 'efficiency_tanakeh_short';
+
+  /// strings.json: 'Fuel efficiency unit'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const efficiencyUnit = 'efficiency_unit';
+
+  /// strings.json: 'US Gallons per 100 miles'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const efficiencyUsg100m = 'efficiency_usg100m';
+
+  /// strings.json: 'G/100 mi'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const efficiencyUsg100mShort = 'efficiency_usg100m_short';
+
   /// strings.json: 'Email'
   /// strings-fr.json: 'Email'
   static const email = 'email';
@@ -157,6 +233,14 @@ class IntlKeys {
   /// strings-fr.json: 'Filtrer les tâches'
   static const filterTodos = 'filter_todos';
 
+  /// strings.json: 'Find A Mechanic'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const findAMechanic = 'find_a_mechanic';
+
+  /// strings.json: 'Find Parts'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const findParts = 'find_parts';
+
   /// strings.json: 'First Time Doing This Task.'
   /// strings-fr.json: 'Première exécution de cette tâche.'
   static const firstTimeDoingTask = 'first_time_doing_task';
@@ -165,7 +249,11 @@ class IntlKeys {
   /// strings-fr.json: 'Mot de passe oublié ?'
   static const forgotYourPassword = 'forgot_your_password';
 
-  /// strings.json: 'Fuel Efficiency History ({{ distance }} per {{ volume }})'
+  /// strings.json: 'Fuel Efficiency'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const fuelEfficiency = 'fuel_efficiency';
+
+  /// strings.json: 'Fuel Efficiency History ({{ unit }})'
   /// strings-fr.json: 'Historique de l\'efficacité énergétique ({{ distance }} par {{ volume }})'
   static const fuelEfficiencyHistory = 'fuel_efficiency_history';
 
@@ -193,6 +281,10 @@ class IntlKeys {
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const fuelLitersShort = 'fuel_liters_short';
 
+  /// strings.json: 'Garage'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const garage = 'garage';
+
   /// strings.json: 'Got It!'
   /// strings-fr.json: 'Je l\'ai !'
   static const gotItBang = 'got_it_bang';
@@ -212,6 +304,10 @@ class IntlKeys {
   /// strings.json: 'Not a valid date'
   /// strings-fr.json: 'Date invalide'
   static const invalidDate = 'invalid_date';
+
+  /// strings.json: 'Learn to D.I.Y'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const learnToDiy = 'learn_to_diy';
 
   /// strings.json: 'By signing up, you agree to the'
   /// strings-fr.json: 'En vous inscrivant, vous acceptez les'
@@ -253,6 +349,10 @@ class IntlKeys {
   /// strings-fr.json: 'Erreur d\'authentification'
   static const loginFailure = 'login_failure';
 
+  /// strings.json: 'Make'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const make = 'make';
+
   /// strings.json: 'Mark All Complete'
   /// strings-fr.json: 'Marquer tout comme terminé'
   static const markAllComplete = 'mark_all_complete';
@@ -273,6 +373,10 @@ class IntlKeys {
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const mileageIntervalStar = 'mileage_interval_star';
 
+  /// strings.json: 'Model'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const model = 'model';
+
   /// strings.json: 'Month'
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const month = 'month';
@@ -284,6 +388,14 @@ class IntlKeys {
   /// strings.json: 'Months'
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const months = 'months';
+
+  /// strings.json: 'My Garage'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const myGarage = 'my_garage';
+
+  /// strings.json: 'Name'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const name = 'name';
 
   /// strings.json: 'Never'
   /// strings-fr.json: *** NOT TRANSLATED ***
@@ -304,6 +416,10 @@ class IntlKeys {
   /// strings.json: 'Need at least 3 refuelings to see efficiency data.'
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const noDataRefuelings = 'no_data_refuelings';
+
+  /// strings.json: 'Odom'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const odom = 'odom';
 
   /// strings.json: 'Odometer Reading'
   /// strings-fr.json: 'Relevé du compteur kilométrique'
@@ -329,9 +445,17 @@ class IntlKeys {
   /// strings-fr.json: 'Échéance passeée :'
   static const pastDue = 'past_due';
 
+  /// strings.json: 'Plate'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const plate = 'plate';
+
   /// strings.json: 'Privacy Policy'
   /// strings-fr.json: 'Politique de confidentialité'
   static const privacyPolicy = 'privacy_policy';
+
+  /// strings.json: 'PRO'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const proCaps = 'pro_caps';
 
   /// strings.json: 'Purchase'
   /// strings-fr.json: 'achat'
@@ -565,6 +689,10 @@ class IntlKeys {
   /// strings-fr.json: 'METTRE À JOUR'
   static const upgrade = 'upgrade';
 
+  /// strings.json: 'UPGRADE'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const upgradeCaps = 'upgrade_caps';
+
   /// strings.json: 'Upgrade to Paid Version'
   /// strings-fr.json: 'Mettre à niveau vers la version payante'
   static const upgradePaidVersion = 'upgrade_paid_version';
@@ -596,6 +724,10 @@ class IntlKeys {
   /// strings.json: 'Version {{ version }}'
   /// strings-fr.json: 'Version {{ version }}'
   static const version = 'version';
+
+  /// strings.json: 'VIN'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const vin = 'vin';
 
   /// strings.json: 'Fuel volume unit'
   /// strings-fr.json: *** NOT TRANSLATED ***

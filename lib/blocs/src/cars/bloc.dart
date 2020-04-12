@@ -47,9 +47,8 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
   @override
   CarsState get initialState => CarsLoading();
 
-  DataRepository get repo => (_dbBloc.state is DbLoaded)
-      ? (_dbBloc.state as DbLoaded).repository
-      : null;
+  DataRepository get repo =>
+      (_dbBloc.state is DbLoaded) ? (_dbBloc.state as DbLoaded).dataRepo : null;
 
   @override
   Stream<CarsState> mapEventToState(CarsEvent event) async* {
@@ -135,6 +134,9 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
 
       // Historical tracking of the car's number of refuelings
       final numRefuelings = thisCarsRefuelings.length;
+      if (numRefuelings == 0) {
+        continue;
+      }
 
       // Update average efficiency across all refuelings
       double averageEfficiency;
@@ -147,7 +149,6 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
             .map((e) => e.efficiency ?? 0.0)
             .reduce((value, element) => value + element);
         averageEfficiency = sum / numRefuelings;
-        print(averageEfficiency);
       }
 
       // Create a list of the distances and dates from the refuelings, and use

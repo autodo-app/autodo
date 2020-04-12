@@ -41,6 +41,10 @@ dependencies:
   preferences:
   cupertino_icons:
   about:
+  cached_network_image:
+  firebase_storage:
+  image_picker:
+  dotted_border:
 
 dependency_overrides:
   autocomplete_textfield:
@@ -59,6 +63,7 @@ dependency_overrides:
     git:
       url: https://gitlab.com/davbfr/preferences.git
       ref: rewrite-pref-service
+  mockito: ^4.0.0
 
 dev_dependencies:
   flutter_test:
@@ -70,6 +75,7 @@ dev_dependencies:
   mockito:
   pedantic:
   pubspec_extract:
+  image_test_utils:
 
 flutter:
   uses-material-design: true

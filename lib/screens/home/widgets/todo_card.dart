@@ -238,7 +238,7 @@ class _TodoFooter extends StatelessWidget {
 
   @override
   Widget build(context) => Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           Row(
             mainAxisSize: MainAxisSize.min,

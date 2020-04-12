@@ -27,11 +27,12 @@ void main() {
     await pref.setDefaultValues({
       'length_unit': DistanceUnit.imperial.index,
       'volume_unit': VolumeUnit.us.index,
+      'efficiency_unit': EfficiencyUnit.mpusg.index,
       'currency': 'USD',
     });
   });
 
-  group('RefuelingsScreen', () {
+  group('StatsScreen', () {
     testWidgets('loading', (WidgetTester tester) async {
       final carsBloc = MockCarsBloc();
       final refuelingsBloc = MockRefuelingsBloc();
@@ -85,7 +86,7 @@ void main() {
         ),
       );
       await tester.pump();
-      expect(find.byType(FuelMileageChart), findsOneWidget);
+      expect(find.byType(FuelMileageHistory), findsOneWidget);
       expect(find.byType(DrivingDistanceChart), findsOneWidget);
     });
 
@@ -116,6 +117,12 @@ void main() {
                   index / 20.0)));
 
       when(carsBloc.state).thenAnswer((_) => CarsLoaded([car]));
+      whenListen(
+          refuelingsBloc,
+          Stream.fromIterable([
+            RefuelingsLoading(),
+            RefuelingsLoaded(refuelings),
+          ]));
       when(refuelingsBloc.state)
           .thenAnswer((_) => RefuelingsLoaded(refuelings));
 
@@ -140,7 +147,7 @@ void main() {
         ),
       );
       await tester.pump();
-      expect(find.byType(FuelMileageChart), findsOneWidget);
+      expect(find.byType(FuelMileageHistory), findsOneWidget);
       expect(find.byType(DrivingDistanceChart), findsOneWidget);
     });
   });
