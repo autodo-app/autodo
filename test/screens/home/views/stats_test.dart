@@ -27,6 +27,7 @@ void main() {
     await pref.setDefaultValues({
       'length_unit': DistanceUnit.imperial.index,
       'volume_unit': VolumeUnit.us.index,
+      'efficiency_unit': EfficiencyUnit.mpusg.index,
       'currency': 'USD',
     });
   });
@@ -116,6 +117,10 @@ void main() {
                   index / 20.0)));
 
       when(carsBloc.state).thenAnswer((_) => CarsLoaded([car]));
+      whenListen(refuelingsBloc, Stream.fromIterable([
+        RefuelingsLoading(),
+        RefuelingsLoaded(refuelings),
+      ]));
       when(refuelingsBloc.state)
           .thenAnswer((_) => RefuelingsLoaded(refuelings));
 
