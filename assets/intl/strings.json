@@ -191,5 +191,20 @@
   "pro_caps": "PRO",
   "upgrade_caps": "UPGRADE",
   "group_account": "Account",
-  "info": "Info"
+  "info": "Info",
+  "oil": "Oil",
+  "tire_rotation": "Tire Rotation",
+  "engine_filter": "Engine Filter",
+  "wiper_blades": "Wiper Blades",
+  "alignment_check": "Alignment Check",
+  "cabin_filter": "Cabin Filter",
+  "tires": "Tires",
+  "brakes": "Brakes",
+  "spark_plugs": "Spark Plugs",
+  "front_struts": "Front Struts",
+  "rear_struts": "Rear Struts",
+  "battery": "Battery",
+  "serpentine_belt": "Serpentine Belt",
+  "transmission_fluid": "Transmission Fluid",
+  "coolant_change": "Coolant Change"
 }

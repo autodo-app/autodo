@@ -2,16 +2,38 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
+import 'package:json_intl/json_intl.dart';
 
 import '../../../generated/localization.dart';
 import '../../../models/models.dart';
 import '../../../repositories/repositories.dart';
 import '../../../util.dart';
+import '../../blocs.dart';
 import '../cars/barrel.dart';
 import '../database/barrel.dart';
 import '../notifications/barrel.dart';
 import 'event.dart';
 import 'state.dart';
+
+// class TodosDelegate extends LocalizationsDelegate<void> {
+//   const TodosDelegate(this.bloc);
+
+//   final TodosBloc bloc;
+
+//   @override
+//   bool isSupported(Locale locale) {
+//     return true;
+//   }
+
+//   @override
+//   Future<void> load(Locale locale) async {
+//     bloc.add()
+//   }
+
+//   @override
+//   bool shouldReload(TodosDelegate old) => false;
+// }
 
 class TodosBloc extends Bloc<TodosEvent, TodosState> {
   TodosBloc(
@@ -38,6 +60,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
         add(CarsUpdated(state.cars));
       }
     });
+
   }
 
   final DatabaseBloc _dbBloc;
@@ -47,29 +70,28 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   final NotificationsBloc _notificationsBloc;
 
   static final List<Todo> defaults = [
-    // TODO: Translate this
-    Todo(name: 'oil', mileageRepeatInterval: 3500, completed: false),
-    Todo(name: 'tireRotation', mileageRepeatInterval: 7500, completed: false),
-    Todo(name: 'engineFilter', mileageRepeatInterval: 45000, completed: false),
-    Todo(name: 'wiperBlades', mileageRepeatInterval: 30000, completed: false),
+    Todo(name: IntlKeys.oil, mileageRepeatInterval: 3500, completed: false),
+    Todo(name: IntlKeys.tireRotation, mileageRepeatInterval: 7500, completed: false),
+    Todo(name: IntlKeys.engineFilter, mileageRepeatInterval: 45000, completed: false),
+    Todo(name: IntlKeys.wiperBlades, mileageRepeatInterval: 30000, completed: false),
     Todo(
-        name: 'alignmentCheck', mileageRepeatInterval: 40000, completed: false),
-    Todo(name: 'cabinFilter', mileageRepeatInterval: 45000, completed: false),
-    Todo(name: 'tires', mileageRepeatInterval: 50000, completed: false),
-    Todo(name: 'brakes', mileageRepeatInterval: 60000, completed: false),
-    Todo(name: 'sparkPlugs', mileageRepeatInterval: 60000, completed: false),
-    Todo(name: 'frontStruts', mileageRepeatInterval: 75000, completed: false),
-    Todo(name: 'rearStruts', mileageRepeatInterval: 75000, completed: false),
-    Todo(name: 'battery', mileageRepeatInterval: 75000, completed: false),
+        name: IntlKeys.alignmentCheck, mileageRepeatInterval: 40000, completed: false),
+    Todo(name: IntlKeys.cabinFilter, mileageRepeatInterval: 45000, completed: false),
+    Todo(name: IntlKeys.tires, mileageRepeatInterval: 50000, completed: false),
+    Todo(name: IntlKeys.brakes, mileageRepeatInterval: 60000, completed: false),
+    Todo(name: IntlKeys.sparkPlugs, mileageRepeatInterval: 60000, completed: false),
+    Todo(name: IntlKeys.frontStruts, mileageRepeatInterval: 75000, completed: false),
+    Todo(name: IntlKeys.rearStruts, mileageRepeatInterval: 75000, completed: false),
+    Todo(name: IntlKeys.battery, mileageRepeatInterval: 75000, completed: false),
     Todo(
-        name: 'serpentineBelt',
+        name: IntlKeys.serpentineBelt,
         mileageRepeatInterval: 150000,
         completed: false),
     Todo(
-        name: 'transmissionFluid',
+        name: IntlKeys.transmissionFluid,
         mileageRepeatInterval: 100000,
         completed: false),
-    Todo(name: 'coolantChange', mileageRepeatInterval: 100000, completed: false)
+    Todo(name: IntlKeys.coolantChange, mileageRepeatInterval: 100000, completed: false)
   ];
 
   StreamSubscription _dataSubscription, _carsSubscription, _repoSubscription;
@@ -96,6 +118,8 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       yield* _mapCompleteTodoToState(event);
     } else if (event is CarsUpdated) {
       yield* _mapCarsUpdatedToState(event);
+    } else if (event is TranslateDefaults) {
+      yield* _mapTranslateDefaultsToState(event);
     }
   }
 
@@ -105,9 +129,9 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
           .getCurrentTodos()
           .timeout(Duration(seconds: 10), onTimeout: () => []);
       if (todos != null) {
-        yield TodosLoaded(todos);
+        yield TodosLoaded(todos: todos);
       } else {
-        yield TodosLoaded([]);
+        yield TodosLoaded(todos: []);
       }
     } catch (e) {
       print('Error loading todos: $e');
@@ -176,7 +200,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     newCars.removeWhere((c) => c == null);
     if (newCars.isNotEmpty) {
       newCars.forEach((c) {
-        defaults.forEach((t) {
+        (state as TodosLoaded).defaults.forEach((t) {
           final dueMileage = (t.mileageRepeatInterval < c.mileage)
               ? (c.mileage + t.mileageRepeatInterval)
               : t.mileageRepeatInterval;
@@ -202,7 +226,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     // old state
     await batch.commit();
     final updatedTodos = await repo.getCurrentTodos();
-    yield TodosLoaded(updatedTodos);
+    yield TodosLoaded(todos: updatedTodos);
   }
 
   Stream<TodosState> _mapAddTodoToState(AddTodo event) async* {
@@ -212,7 +236,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     }
     final updatedTodos = List<Todo>.from((state as TodosLoaded).todos)
       ..add(event.todo);
-    yield TodosLoaded(updatedTodos);
+    yield TodosLoaded(todos: updatedTodos);
     _scheduleNotification(event.todo);
     await repo.addNewTodo(event.todo);
   }
@@ -229,7 +253,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
         return (r.name == event.updatedTodo.name) ? event.updatedTodo : r;
       }
     }).toList();
-    yield TodosLoaded(updatedTodos);
+    yield TodosLoaded(todos: updatedTodos);
     await repo.updateTodo(event.updatedTodo);
   }
 
@@ -276,11 +300,11 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     // TODO: this yield is important for verifying this output in unit tests
     // but could cause a brief period of time where an edit button is presed
     // on a ToDo that does not yet have an ID value.
-    yield TodosLoaded(updatedTodos);
+    yield TodosLoaded(todos: updatedTodos);
     await batch.commit();
 
     updatedTodos = await repo.getCurrentTodos();
-    yield TodosLoaded(updatedTodos);
+    yield TodosLoaded(todos: updatedTodos);
   }
 
   Stream<TodosState> _mapDeleteTodoToState(DeleteTodo event) async* {
@@ -291,7 +315,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
         return r.name != event.todo.name;
       }
     }).toList();
-    yield TodosLoaded(updatedTodos);
+    yield TodosLoaded(todos: updatedTodos);
     await repo.deleteTodo(event.todo);
   }
 
@@ -302,12 +326,21 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       final updatedTodos = currentState.todos
           .map<Todo>((todo) => todo.copyWith(completed: !allComplete))
           .toList();
-      yield TodosLoaded(updatedTodos);
+      yield TodosLoaded(todos: updatedTodos);
       final batch = await repo.startTodoWriteBatch();
       updatedTodos.forEach((updatedTodo) {
         batch.updateData(updatedTodo.id, updatedTodo.toDocument());
       });
       await batch.commit();
+    }
+  }
+
+  Stream<TodosState> _mapTranslateDefaultsToState(TranslateDefaults event) async* {
+    final translated = defaults.map((t) => t.copyWith(name: JsonIntl.of(event.context).get(t.name))).toList();
+    if (state is TodosLoading) {
+      yield TodosLoading(defaults: translated);
+    } else if (state is TodosLoaded) {
+      yield TodosLoaded(todos: (state as TodosLoaded).todos, defaults: translated);
     }
   }
 

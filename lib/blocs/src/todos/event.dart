@@ -1,4 +1,6 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/widgets.dart';
+
 import '../../../models/models.dart';
 
 abstract class TodosEvent extends Equatable {
@@ -75,4 +77,16 @@ class CompleteTodo extends TodosEvent {
   @override
   String toString() =>
       'CompleteTodo { todo: $todo, completedDate: $completedDate }';
+}
+
+class TranslateDefaults extends TodosEvent {
+  const TranslateDefaults(this.context);
+
+  final BuildContext context;
+
+  @override
+  List<Object> get props => [context];
+
+  @override
+  String toString() => 'Translate Defaults { context: $context }';
 }
