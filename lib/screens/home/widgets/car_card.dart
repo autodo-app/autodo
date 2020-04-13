@@ -51,22 +51,18 @@ class CarCard extends StatelessWidget {
                   Hero(
                     tag: car.name,
                     child: FutureBuilder(
-                        // future: car.getImageDownloadUrl(),
                         future: (BlocProvider.of<DatabaseBloc>(context).state
                                 as DbLoaded)
                             .storageRepo
                             .getDownloadUrl(car.imageName),
                         builder: (context, snap) {
                           if (snap.connectionState != ConnectionState.done) {
-                            // return CircularProgressIndicator();
-                            return Container();
+                            return SizedBox(height: 80);
                           }
                           return CachedNetworkImage(
                             fit: BoxFit.fill,
                             height: 80,
-                            placeholder: (context, url) =>
-                                // CircularProgressIndicator(),
-                                Container(),
+                            placeholder: (context, url) => SizedBox(height: 80),
                             errorWidget: (context, url, error) => SizedBox(
                               height: 80,
                               child: Icon(Icons.directions_car, size: 40),
