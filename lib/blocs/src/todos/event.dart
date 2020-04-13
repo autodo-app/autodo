@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/widgets.dart';
 import 'package:json_intl/json_intl.dart';
 
 import '../../../models/models.dart';
