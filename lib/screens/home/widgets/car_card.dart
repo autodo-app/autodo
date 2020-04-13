@@ -58,13 +58,15 @@ class CarCard extends StatelessWidget {
                             .getDownloadUrl(car.imageName),
                         builder: (context, snap) {
                           if (snap.connectionState != ConnectionState.done) {
-                            return CircularProgressIndicator();
+                            // return CircularProgressIndicator();
+                            return Container();
                           }
                           return CachedNetworkImage(
                             fit: BoxFit.fill,
                             height: 80,
                             placeholder: (context, url) =>
-                                CircularProgressIndicator(),
+                                // CircularProgressIndicator(),
+                                Container(),
                             errorWidget: (context, url, error) => SizedBox(
                               height: 80,
                               child: Icon(Icons.directions_car, size: 40),

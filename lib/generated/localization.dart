@@ -289,6 +289,10 @@ class IntlKeys {
   /// strings-fr.json: 'Je l\'ai !'
   static const gotItBang = 'got_it_bang';
 
+  /// strings.json: 'Account'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const groupAccount = 'group_account';
+
   /// strings.json: 'Misc'
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const groupMisc = 'group_misc';
