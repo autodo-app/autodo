@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:json_intl/json_intl.dart';
 
 import '../../../generated/localization.dart';
 import '../../../models/models.dart';
