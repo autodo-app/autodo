@@ -272,8 +272,6 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
 
   @override
   Widget build(context) => Scaffold(
-        resizeToAvoidBottomPadding:
-            false, // used to avoid overflow when keyboard is viewable
         appBar: AppBar(
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
