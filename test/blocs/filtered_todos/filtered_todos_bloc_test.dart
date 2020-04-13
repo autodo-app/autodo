@@ -26,11 +26,11 @@ void main() {
     blocTest<FilteredTodosBloc, FilteredTodosEvent, FilteredTodosState>(
         'adds TodosUpdated when TodosBloc.state emits TodosLoaded', build: () {
       final todosBloc = MockTodosBloc();
-      when(todosBloc.state).thenReturn(TodosLoaded([todo]));
+      when(todosBloc.state).thenReturn(TodosLoaded(todos: [todo]));
       whenListen(
         todosBloc,
         Stream<TodosState>.fromIterable([
-          TodosLoaded([todo])
+          TodosLoaded(todos: [todo])
         ]),
       );
       return FilteredTodosBloc(todosBloc: todosBloc);
@@ -45,7 +45,7 @@ void main() {
       'should update the VisibilityFilter when filter is active',
       build: () {
         final todosBloc = MockTodosBloc();
-        when(todosBloc.state).thenReturn(TodosLoaded([todo]));
+        when(todosBloc.state).thenReturn(TodosLoaded(todos: [todo]));
         return FilteredTodosBloc(todosBloc: todosBloc);
       },
       act: (FilteredTodosBloc bloc) async =>
@@ -66,7 +66,7 @@ void main() {
       'should update the VisibilityFilter when filter is completed',
       build: () {
         final todosBloc = MockTodosBloc();
-        when(todosBloc.state).thenReturn(TodosLoaded([todo]));
+        when(todosBloc.state).thenReturn(TodosLoaded(todos: [todo]));
         return FilteredTodosBloc(todosBloc: todosBloc);
       },
       act: (FilteredTodosBloc bloc) async =>

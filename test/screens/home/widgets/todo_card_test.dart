@@ -153,7 +153,7 @@ void main() {
       expect(checkboxChanged, true);
     });
     testWidgets('dismiss', (WidgetTester tester) async {
-      when(todosBloc.state).thenAnswer((_) => TodosLoaded([]));
+      when(todosBloc.state).thenAnswer((_) => TodosLoaded(todos: []));
       when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded(
           [Todo(name: '', completed: false)], VisibilityFilter.all));
       final todosKey = Key('todos');
@@ -190,7 +190,7 @@ void main() {
       expect(dismissed, true);
     });
     testWidgets('tap', (WidgetTester tester) async {
-      when(todosBloc.state).thenAnswer((_) => TodosLoaded([]));
+      when(todosBloc.state).thenAnswer((_) => TodosLoaded(todos: []));
       when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded(
           [Todo(name: '', completed: false)], VisibilityFilter.all));
       final todosKey = Key('todos');

@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
+import 'package:json_intl/json_intl.dart';
 
 import '../../../models/models.dart';
 
@@ -80,13 +81,13 @@ class CompleteTodo extends TodosEvent {
 }
 
 class TranslateDefaults extends TodosEvent {
-  const TranslateDefaults(this.context);
+  const TranslateDefaults(this.jsonIntl);
 
-  final BuildContext context;
-
-  @override
-  List<Object> get props => [context];
+  final JsonIntl jsonIntl;
 
   @override
-  String toString() => 'Translate Defaults { context: $context }';
+  List<Object> get props => [jsonIntl];
+
+  @override
+  String toString() => 'Translate Defaults { JsonIntl: $jsonIntl }';
 }

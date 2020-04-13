@@ -33,9 +33,9 @@ class MockRepo extends Mock implements DataRepository {}
 
 void main() {
   BasePrefService pref;
-  final todosLoaded = TodosLoaded([
+  final todosLoaded = TodosLoaded(todos: [
     Todo(name: 'oil', mileageRepeatInterval: 3500),
-    Todo(name: 'tireRotation', mileageRepeatInterval: 7500)
+    Todo(name: 'tire_rotation', mileageRepeatInterval: 7500)
   ]);
 
   setUp(() async {
@@ -70,6 +70,9 @@ void main() {
     testWidgets('Latest complete', (tester) async {
       final carsBloc = MockCarsBloc();
       when(carsBloc.state).thenReturn(CarsLoaded([]));
+      final todosBloc = MockTodosBloc();
+      when(todosBloc.state).thenReturn(
+          TodosLoaded(todos: [Todo(name: 'Oil'), Todo(name: 'Tire Rotation')]));
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
@@ -77,7 +80,11 @@ void main() {
             BlocProvider<AuthenticationBloc>.value(value: authBloc),
             BlocProvider<DatabaseBloc>.value(value: dbBloc),
             BlocProvider<CarsBloc>.value(value: carsBloc),
-          ], child: MaterialApp(home: NewUserScreen())),
+            BlocProvider<TodosBloc>.value(value: todosBloc),
+          ], child: MaterialApp(
+            home: NewUserScreen(),
+            locale: Locale('en'),
+            )),
         ),
       );
       expect(find.byType(NewUserScreen), findsOneWidget);
@@ -103,7 +110,9 @@ void main() {
             BlocProvider<DatabaseBloc>.value(value: dbBloc),
             BlocProvider<CarsBloc>.value(value: carsBloc),
             BlocProvider<TodosBloc>.value(value: todosBloc),
-          ], child: MaterialApp(home: NewUserScreen())),
+          ], child: MaterialApp(
+            home: NewUserScreen(),
+            locale: Locale('en'),)),
         ),
       );
       expect(find.byType(NewUserScreen), findsOneWidget);
@@ -122,7 +131,7 @@ void main() {
     testWidgets('set repeats back', (tester) async {
       final todosBloc = MockTodosBloc();
       when(todosBloc.state).thenReturn(
-          TodosLoaded([Todo(name: 'oil'), Todo(name: 'tireRotation')]));
+          TodosLoaded(todos: [Todo(name: 'oil'), Todo(name: 'tire_rotation')]));
       final carsBloc = MockCarsBloc();
       when(carsBloc.state).thenReturn(CarsLoaded([Car(name: 'test')]));
       await tester.pumpWidget(

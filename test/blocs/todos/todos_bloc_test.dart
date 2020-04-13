@@ -4,6 +4,7 @@ import 'package:autodo/repositories/src/sembast_data_repository.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:bloc_test/bloc_test.dart';
+import 'package:json_intl/json_intl.dart';
 import 'package:mockito/mockito.dart';
 import 'package:equatable/equatable.dart';
 
@@ -97,7 +98,7 @@ Future<void> main() async {
         act: (bloc) async => bloc.add(LoadTodos()),
         expect: [
           TodosLoading(),
-          TodosLoaded([Todo()]),
+          TodosLoaded(todos: [Todo()]),
         ],
       );
       blocTest(
@@ -124,7 +125,7 @@ Future<void> main() async {
         act: (bloc) async => bloc.add(LoadTodos()),
         expect: [
           TodosLoading(),
-          TodosLoaded([]),
+          TodosLoaded(todos: []),
         ],
       );
       blocTest(
@@ -183,8 +184,8 @@ Future<void> main() async {
       },
       expect: [
         TodosLoading(),
-        TodosLoaded([todo1]),
-        TodosLoaded([todo1, todo2]),
+        TodosLoaded(todos: [todo1]),
+        TodosLoaded(todos: [todo1, todo2]),
       ],
     );
     blocTest(
@@ -215,8 +216,8 @@ Future<void> main() async {
       },
       expect: [
         TodosLoading(),
-        TodosLoaded([todo1]),
-        TodosLoaded([todo1.copyWith(dueMileage: 1000)]),
+        TodosLoaded(todos: [todo1]),
+        TodosLoaded(todos: [todo1.copyWith(dueMileage: 1000)]),
       ],
     );
     blocTest(
@@ -247,8 +248,8 @@ Future<void> main() async {
       },
       expect: [
         TodosLoading(),
-        TodosLoaded([todo1]),
-        TodosLoaded([]),
+        TodosLoaded(todos: [todo1]),
+        TodosLoaded(todos: []),
       ],
     );
     blocTest(
@@ -280,8 +281,8 @@ Future<void> main() async {
       },
       expect: [
         TodosLoading(),
-        TodosLoaded([todo1.copyWith(completed: false)]),
-        TodosLoaded([todo1.copyWith(completed: true)]),
+        TodosLoaded(todos: [todo1.copyWith(completed: false)]),
+        TodosLoaded(todos: [todo1.copyWith(completed: true)]),
       ],
     );
     final car1 = Car(
@@ -308,15 +309,9 @@ Future<void> main() async {
                 dateRepeatInterval: RepeatInterval())))
         .values
         .toList();
-    // TODO: figure out how to prompt this event to fire
-    // final defaultsUpdated = defaults.map((t) {
-    //   final distanceToTodo = t.dueMileage - car2.mileage;
-    //   final daysToTodo = (distanceToTodo / car2.distanceRate).round();
-    //   final timeToTodo = Duration(days: daysToTodo);
-    //   final newDueDate =
-    //       roundToDay(car2.lastMileageUpdate.toUtc()).add(timeToTodo).toLocal();
-    //   return t.copyWith(estimatedDueDate: true, dueDate: newDueDate);
-    // }).toList();
+    final defaultsWithDates = List<Todo>.from(defaults)
+      .map((t) => t.copyWith(dueDate: TodosBloc.calcDueDate(car1, t.dueMileage), estimatedDueDate: true))
+      .toList();
     blocTest(
       'CarsUpdated',
       build: () {
@@ -326,6 +321,7 @@ Future<void> main() async {
             Stream.fromIterable([
               CarsLoaded([car1])
             ]));
+        when(carsBloc.state).thenReturn(CarsLoaded([car1]));
         final notificationsBloc = MockNotificationsBloc();
         final dbBloc = MockDbBloc();
         when(dbBloc.state)
@@ -337,11 +333,15 @@ Future<void> main() async {
       },
       act: (bloc) async {
         bloc.add(LoadTodos());
+        bloc.add(TranslateDefaults(JsonIntl.mock));
+        bloc.add(CarsUpdated([car1]));
       },
       expect: [
         TodosLoading(),
-        TodosLoaded([]),
-        TodosLoaded(defaults),
+        TodosLoaded(todos: []),
+        TodosLoaded(todos: [], defaults: TodosBloc.defaults),
+        TodosLoaded(todos: defaults, defaults: []),
+        TodosLoaded(todos: defaultsWithDates, defaults: [])
       ],
     );
     final completedTodos = [todo3];
@@ -385,8 +385,8 @@ Future<void> main() async {
       },
       expect: [
         TodosLoading(),
-        TodosLoaded([todo3]),
-        TodosLoaded([
+        TodosLoaded(todos: [todo3]),
+        TodosLoaded(todos: [
           todo3.copyWith(
               completed: true,
               completedDate: DateTime.fromMillisecondsSinceEpoch(0),
@@ -397,7 +397,7 @@ Future<void> main() async {
                   .add(Duration(days: 1000)),
               estimatedDueDate: true)
         ]),
-        TodosLoaded([
+        TodosLoaded(todos: [
           todo3
         ]), // the database doesn't update properly in unit tests so it will overwrite the correct value
       ],
@@ -425,7 +425,7 @@ Future<void> main() async {
       },
       expect: [
         TodosLoading(),
-        TodosLoaded([Todo()]),
+        TodosLoaded(todos: [Todo()]),
       ],
     );
   });

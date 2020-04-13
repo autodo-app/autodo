@@ -16,25 +16,6 @@ import '../notifications/barrel.dart';
 import 'event.dart';
 import 'state.dart';
 
-// class TodosDelegate extends LocalizationsDelegate<void> {
-//   const TodosDelegate(this.bloc);
-
-//   final TodosBloc bloc;
-
-//   @override
-//   bool isSupported(Locale locale) {
-//     return true;
-//   }
-
-//   @override
-//   Future<void> load(Locale locale) async {
-//     bloc.add()
-//   }
-
-//   @override
-//   bool shouldReload(TodosDelegate old) => false;
-// }
-
 class TodosBloc extends Bloc<TodosEvent, TodosState> {
   TodosBloc(
       {@required DatabaseBloc dbBloc,
@@ -48,7 +29,6 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
         _notificationsBloc = notificationsBloc {
     _dataSubscription = _dbBloc.listen((state) {
       if (state is DbLoaded) {
-        print('loaded $repo   ${repo.todos()}');
         add(LoadTodos());
         _repoSubscription = repo?.todos()?.listen((event) {
           add(LoadTodos());
@@ -146,7 +126,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
         body: ''));
   }
 
-  DateTime _calcDueDate(Car car, double dueMileage) {
+  static DateTime calcDueDate(Car car, double dueMileage) {
     if (car.distanceRate == 0 || car.distanceRate == null) {
       return null;
     }
@@ -163,7 +143,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   }
 
   Todo _updateDueDate(car, todo, batch) {
-    final newDueDate = _calcDueDate(car, todo.dueMileage);
+    final newDueDate = calcDueDate(car, todo.dueMileage);
 
     final Todo out = todo.copyWith(dueDate: newDueDate, estimatedDueDate: true);
     _notificationsBloc.add(ReScheduleNotification(
@@ -285,7 +265,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       final newDueMileage = curTodo.mileageRepeatInterval + car.mileage;
       final newTodo = curTodo.copyWith(
           dueMileage: newDueMileage,
-          dueDate: _calcDueDate(car, newDueMileage),
+          dueDate: calcDueDate(car, newDueMileage),
           estimatedDueDate: true);
       batch.setData(newTodo.toDocument());
       updatedTodos.add(newTodo);
@@ -336,7 +316,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   }
 
   Stream<TodosState> _mapTranslateDefaultsToState(TranslateDefaults event) async* {
-    final translated = defaults.map((t) => t.copyWith(name: JsonIntl.of(event.context).get(t.name))).toList();
+    final translated = defaults.map((t) => t.copyWith(name: event.jsonIntl.get(t.name))).toList();
     if (state is TodosLoading) {
       yield TodosLoading(defaults: translated);
     } else if (state is TodosLoaded) {

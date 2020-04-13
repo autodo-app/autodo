@@ -60,7 +60,7 @@ void main() {
     });
 
     testWidgets('renders correctly', (WidgetTester tester) async {
-      when(todosBloc.state).thenAnswer((_) => TodosLoaded([]));
+      when(todosBloc.state).thenAnswer((_) => TodosLoaded(todos: []));
       when(tabBloc.state).thenAnswer((_) => AppTab.todos);
       final scaffoldKey = Key('scaffold');
       await tester.pumpWidget(
@@ -92,7 +92,7 @@ void main() {
     });
 
     testWidgets('tab switch', (WidgetTester tester) async {
-      when(todosBloc.state).thenAnswer((_) => TodosLoaded([]));
+      when(todosBloc.state).thenAnswer((_) => TodosLoaded(todos: []));
       when(tabBloc.state).thenAnswer((_) => AppTab.todos);
       when(tabBloc.add(UpdateTab(AppTab.todos))).thenAnswer((_) => null);
       final scaffoldKey = Key('scaffold');
@@ -128,7 +128,7 @@ void main() {
     });
     group('fab routes', () {
       testWidgets('refueling', (WidgetTester tester) async {
-        when(todosBloc.state).thenAnswer((_) => TodosLoaded([]));
+        when(todosBloc.state).thenAnswer((_) => TodosLoaded(todos: []));
         when(tabBloc.state).thenAnswer((_) => AppTab.todos);
         final scaffoldKey = Key('scaffold');
         final carsBloc = MockCarsBloc();
@@ -167,7 +167,7 @@ void main() {
         expect(find.byType(RefuelingAddEditScreen), findsOneWidget);
       });
       testWidgets('todo', (WidgetTester tester) async {
-        when(todosBloc.state).thenAnswer((_) => TodosLoaded([]));
+        when(todosBloc.state).thenAnswer((_) => TodosLoaded(todos: []));
         when(tabBloc.state).thenAnswer((_) => AppTab.todos);
         final scaffoldKey = Key('scaffold');
         final carsBloc = MockCarsBloc();
