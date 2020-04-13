@@ -76,15 +76,17 @@ void main() {
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
-          child: MultiBlocProvider(providers: [
-            BlocProvider<AuthenticationBloc>.value(value: authBloc),
-            BlocProvider<DatabaseBloc>.value(value: dbBloc),
-            BlocProvider<CarsBloc>.value(value: carsBloc),
-            BlocProvider<TodosBloc>.value(value: todosBloc),
-          ], child: MaterialApp(
-            home: NewUserScreen(),
-            locale: Locale('en'),
-            )),
+          child: MultiBlocProvider(
+              providers: [
+                BlocProvider<AuthenticationBloc>.value(value: authBloc),
+                BlocProvider<DatabaseBloc>.value(value: dbBloc),
+                BlocProvider<CarsBloc>.value(value: carsBloc),
+                BlocProvider<TodosBloc>.value(value: todosBloc),
+              ],
+              child: MaterialApp(
+                home: NewUserScreen(),
+                locale: Locale('en'),
+              )),
         ),
       );
       expect(find.byType(NewUserScreen), findsOneWidget);
@@ -105,14 +107,17 @@ void main() {
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
-          child: MultiBlocProvider(providers: [
-            BlocProvider<AuthenticationBloc>.value(value: authBloc),
-            BlocProvider<DatabaseBloc>.value(value: dbBloc),
-            BlocProvider<CarsBloc>.value(value: carsBloc),
-            BlocProvider<TodosBloc>.value(value: todosBloc),
-          ], child: MaterialApp(
-            home: NewUserScreen(),
-            locale: Locale('en'),)),
+          child: MultiBlocProvider(
+              providers: [
+                BlocProvider<AuthenticationBloc>.value(value: authBloc),
+                BlocProvider<DatabaseBloc>.value(value: dbBloc),
+                BlocProvider<CarsBloc>.value(value: carsBloc),
+                BlocProvider<TodosBloc>.value(value: todosBloc),
+              ],
+              child: MaterialApp(
+                home: NewUserScreen(),
+                locale: Locale('en'),
+              )),
         ),
       );
       expect(find.byType(NewUserScreen), findsOneWidget);

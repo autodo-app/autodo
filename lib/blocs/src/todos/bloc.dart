@@ -40,7 +40,6 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
         add(CarsUpdated(state.cars));
       }
     });
-
   }
 
   final DatabaseBloc _dbBloc;
@@ -51,18 +50,42 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
 
   static final List<Todo> defaults = [
     Todo(name: IntlKeys.oil, mileageRepeatInterval: 3500, completed: false),
-    Todo(name: IntlKeys.tireRotation, mileageRepeatInterval: 7500, completed: false),
-    Todo(name: IntlKeys.engineFilter, mileageRepeatInterval: 45000, completed: false),
-    Todo(name: IntlKeys.wiperBlades, mileageRepeatInterval: 30000, completed: false),
     Todo(
-        name: IntlKeys.alignmentCheck, mileageRepeatInterval: 40000, completed: false),
-    Todo(name: IntlKeys.cabinFilter, mileageRepeatInterval: 45000, completed: false),
+        name: IntlKeys.tireRotation,
+        mileageRepeatInterval: 7500,
+        completed: false),
+    Todo(
+        name: IntlKeys.engineFilter,
+        mileageRepeatInterval: 45000,
+        completed: false),
+    Todo(
+        name: IntlKeys.wiperBlades,
+        mileageRepeatInterval: 30000,
+        completed: false),
+    Todo(
+        name: IntlKeys.alignmentCheck,
+        mileageRepeatInterval: 40000,
+        completed: false),
+    Todo(
+        name: IntlKeys.cabinFilter,
+        mileageRepeatInterval: 45000,
+        completed: false),
     Todo(name: IntlKeys.tires, mileageRepeatInterval: 50000, completed: false),
     Todo(name: IntlKeys.brakes, mileageRepeatInterval: 60000, completed: false),
-    Todo(name: IntlKeys.sparkPlugs, mileageRepeatInterval: 60000, completed: false),
-    Todo(name: IntlKeys.frontStruts, mileageRepeatInterval: 75000, completed: false),
-    Todo(name: IntlKeys.rearStruts, mileageRepeatInterval: 75000, completed: false),
-    Todo(name: IntlKeys.battery, mileageRepeatInterval: 75000, completed: false),
+    Todo(
+        name: IntlKeys.sparkPlugs,
+        mileageRepeatInterval: 60000,
+        completed: false),
+    Todo(
+        name: IntlKeys.frontStruts,
+        mileageRepeatInterval: 75000,
+        completed: false),
+    Todo(
+        name: IntlKeys.rearStruts,
+        mileageRepeatInterval: 75000,
+        completed: false),
+    Todo(
+        name: IntlKeys.battery, mileageRepeatInterval: 75000, completed: false),
     Todo(
         name: IntlKeys.serpentineBelt,
         mileageRepeatInterval: 150000,
@@ -71,7 +94,10 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
         name: IntlKeys.transmissionFluid,
         mileageRepeatInterval: 100000,
         completed: false),
-    Todo(name: IntlKeys.coolantChange, mileageRepeatInterval: 100000, completed: false)
+    Todo(
+        name: IntlKeys.coolantChange,
+        mileageRepeatInterval: 100000,
+        completed: false)
   ];
 
   StreamSubscription _dataSubscription, _carsSubscription, _repoSubscription;
@@ -315,12 +341,16 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     }
   }
 
-  Stream<TodosState> _mapTranslateDefaultsToState(TranslateDefaults event) async* {
-    final translated = defaults.map((t) => t.copyWith(name: event.jsonIntl.get(t.name))).toList();
+  Stream<TodosState> _mapTranslateDefaultsToState(
+      TranslateDefaults event) async* {
+    final translated = defaults
+        .map((t) => t.copyWith(name: event.jsonIntl.get(t.name)))
+        .toList();
     if (state is TodosLoading) {
       yield TodosLoading(defaults: translated);
     } else if (state is TodosLoaded) {
-      yield TodosLoaded(todos: (state as TodosLoaded).todos, defaults: translated);
+      yield TodosLoaded(
+          todos: (state as TodosLoaded).todos, defaults: translated);
     }
   }
 

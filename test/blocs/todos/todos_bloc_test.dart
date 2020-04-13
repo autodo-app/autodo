@@ -310,8 +310,10 @@ Future<void> main() async {
         .values
         .toList();
     final defaultsWithDates = List<Todo>.from(defaults)
-      .map((t) => t.copyWith(dueDate: TodosBloc.calcDueDate(car1, t.dueMileage), estimatedDueDate: true))
-      .toList();
+        .map((t) => t.copyWith(
+            dueDate: TodosBloc.calcDueDate(car1, t.dueMileage),
+            estimatedDueDate: true))
+        .toList();
     blocTest(
       'CarsUpdated',
       build: () {
