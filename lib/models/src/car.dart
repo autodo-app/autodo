@@ -130,7 +130,8 @@ class Car extends Equatable {
         assert(model != null),
         assert(year != null),
         assert(plate != null),
-        assert(vin != null);
+        assert(vin != null),
+        assert(imageName != null);
 
   final String id;
 
@@ -207,8 +208,8 @@ class Car extends Equatable {
         numRefuelings,
         averageEfficiency,
         distanceRate,
-        lastMileageUpdate?.toUtc(),
-        distanceRateHistory,
+        lastMileageUpdate?.toUtc()?.toIso8601String(),
+        ...distanceRateHistory,
         make,
         model,
         year,
@@ -219,7 +220,7 @@ class Car extends Equatable {
 
   @override
   String toString() {
-    return '$runtimeType { id: $id, name: $name, mileage: $mileage, numRefuelings: $numRefuelings, averageEfficiency: $averageEfficiency, distanceRate: $distanceRate, lastMileageUpdate: $lastMileageUpdate, distanceRateHistory: $distanceRateHistory, imageName: $imageName }';
+    return '$runtimeType { id: $id, name: $name, mileage: $mileage, numRefuelings: $numRefuelings, averageEfficiency: $averageEfficiency, distanceRate: $distanceRate, lastMileageUpdate: ${lastMileageUpdate?.toUtc()?.toIso8601String()}, distanceRateHistory: $distanceRateHistory, make: $make, model: $model, year: $year, plate: $plate, vin: $vin, imageName: $imageName }';
   }
 
   Map<String, Object> toDocument() {

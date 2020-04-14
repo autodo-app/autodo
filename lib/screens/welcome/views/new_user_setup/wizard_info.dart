@@ -36,42 +36,31 @@ class NewUserScreenWizard extends WizardInfo {
 
   @override
   FutureOr<void> didFinish(BuildContext context) {
-    BlocProvider.of<TodosBloc>(context).add(TranslateDefaults(
-        JsonIntl.of(context), Distance.of(context, listen: false).unit));
-
-    for (final car in cars) {
-      final c = Car(name: car.name, mileage: car.mileage);
-      BlocProvider.of<CarsBloc>(context).add(AddCar(c));
-
-      if (car.oilChange != null) {
-        BlocProvider.of<TodosBloc>(context).add(
-          AddTodo(
-            Todo(
-              name: 'oil',
-              carName: car.name,
-              completed: true,
-              completedDate: DateTime.now(),
-              dueMileage: car.oilChange,
-              mileageRepeatInterval: oilRepeatInterval,
-            ),
-          ),
-        );
-
-        if (car.tireRotation != null) {
-          BlocProvider.of<TodosBloc>(context).add(
-            AddTodo(
-              Todo(
-                name: 'tireRotation',
-                carName: car.name,
-                completed: true,
-                completedDate: DateTime.now(),
-                dueMileage: car.tireRotation,
-                mileageRepeatInterval: tireRotationRepeatInterval,
-              ),
-            ),
-          );
-        }
-      }
-    }
+    final newCars = [];
+    final newTodos = [];
+    newCars.addAll(cars.map((c) => Car(name: c.name, mileage: c.mileage)));
+    newTodos.addAll(cars.map((c) =>
+      (c.oilChange != null) ?
+        Todo(
+          name: 'oil',
+          carName: c.name,
+          completed: true,
+          completedDate: DateTime.now(),
+          dueMileage: c.oilChange,
+          mileageRepeatInterval: oilRepeatInterval,
+        ) : null));
+    newTodos.addAll(cars.map((c) =>
+      (c.tireRotation != null) ?
+        Todo(
+          name: 'tireRotation',
+          carName: c.name,
+          completed: true,
+          completedDate: DateTime.now(),
+          dueMileage: c.tireRotation,
+          mileageRepeatInterval: tireRotationRepeatInterval,
+        ) : null));
+    newTodos.removeWhere((t) => t == null);
+    BlocProvider.of<CarsBloc>(context).add(AddMultipleCars(newCars));
+    BlocProvider.of<TodosBloc>(context).add(AddMultipleTodos(newTodos));
   }
 }

@@ -61,6 +61,35 @@ void main() {
     final car1 = Car(name: 'car1', mileage: 10000);
     final car2 = Car(name: 'car2', mileage: 10000);
     final car3 = Car(name: 'car3', mileage: 10000);
+    final car1Defaults = TodosBloc.defaultsImperial
+        .asMap()
+        .map((k, t) => MapEntry(
+            k,
+            t.copyWith(
+                id: '${k + 1}',
+                carName: 'car1',
+                dueMileage: (t.mileageRepeatInterval < car1.mileage) ?
+                    car1.mileage + t.mileageRepeatInterval :
+                    t.mileageRepeatInterval,
+                dateRepeatInterval: RepeatInterval())))
+        .values
+        .toList();
+    final car2Defaults = List<Todo>.from(car1Defaults)
+      ..addAll(
+        TodosBloc.defaultsImperial
+          .asMap()
+          .map((k, t) => MapEntry(
+            k,
+            t.copyWith(
+                id: '${k + 1 + car1Defaults.length}',
+                carName: 'car2',
+                dueMileage: (t.mileageRepeatInterval < car2.mileage) ?
+                    car2.mileage + t.mileageRepeatInterval :
+                    t.mileageRepeatInterval,
+                dateRepeatInterval: RepeatInterval())))
+        .values
+        .toList()
+      );
     // setUp(clearDatabases);
 
     test('1 car, no prev todos', () async {
@@ -98,10 +127,14 @@ void main() {
             CarsLoaded([car1])
           ]));
 
+      // Check that the Default ToDos are loaded properly
+      await expectLater(todosBloc, emitsInOrder([TodosLoaded(todos: []), TodosLoaded(todos: car1Defaults)]));
+
       clearDatabase('cars1.db');
     });
     test('2 cars, no prev todos', () async {
       WidgetsFlutterBinding.ensureInitialized();
+      final expectedState = CarsLoaded([car1, car2]);
       final dbBloc = MockDatabaseBloc();
       final refuelingsBloc = RefuelingsBloc(dbBloc: dbBloc);
       final carsBloc = CarsBloc(dbBloc: dbBloc, refuelingsBloc: refuelingsBloc);
@@ -125,10 +158,10 @@ void main() {
       todosBloc.add(LoadTodos());
 
       // The mileage screen adds cars to the CarsBloc
-      carsBloc.add(AddCar(car1));
-      carsBloc.add(AddCar(car2));
-      expect(carsBloc, mayEmit(CarsLoaded([car1, car2])));
+      carsBloc.add(AddMultipleCars([car1, car2]));
+      await emitsExactly(carsBloc, [CarsLoading(), CarsLoaded([]), expectedState]);
       print('cars loaded');
+      await emitsExactly(todosBloc, [TodosLoaded(todos: []), TodosLoaded(todos: car2Defaults)]);
       // not doing anything for the lastcompleted or repeat interval screens
 
       clearDatabase('cars2.db');

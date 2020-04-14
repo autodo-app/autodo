@@ -72,7 +72,17 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
       yield* _mapDeleteCarToState(event);
     } else if (event is ExternalRefuelingsUpdated) {
       yield* _mapRefuelingsUpdatedToState(event);
+    } else if (event is AddMultipleCars) {
+      yield* _mapAddMultipleCarsToState(event);
     }
+  }
+
+  @override
+  Stream<CarsState> transformEvents(events, transitionFn) {
+    return super.transformEvents(
+      events.distinct(),
+      transitionFn,
+    );
   }
 
   Stream<CarsState> _mapLoadCarsToState() async* {
@@ -80,7 +90,7 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
       print('**   _mapLoadCarsToState');
       final cars = await repo
           .getCurrentCars()
-          .timeout(Duration(seconds: 10), onTimeout: () => []);
+          .timeout(Duration(seconds: 2), onTimeout: () => []);
       print('**   _mapLoadCarsToState cars: $cars');
       if (cars != null) {
         yield CarsLoaded(cars);
@@ -99,6 +109,17 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
         ..add(event.car);
       yield CarsLoaded(updatedCars);
       await repo.addNewCar(event.car);
+    }
+  }
+
+  Stream<CarsState> _mapAddMultipleCarsToState(AddMultipleCars event) async* {
+    if (state is CarsLoaded && repo != null) {
+      final updatedCars = List<Car>.from((state as CarsLoaded).cars)
+        ..addAll(event.cars);
+      yield CarsLoaded(updatedCars);
+      final batch = await repo.startCarWriteBatch();
+      event.cars.forEach((c) => batch.setData(c.toDocument()));
+      await batch.commit();
     }
   }
 

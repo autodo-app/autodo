@@ -16,7 +16,7 @@ class CarsLoaded extends CarsState {
   final List<Car> cars;
 
   @override
-  List<Object> get props => [...cars];
+  List<Object> get props => [...cars.map((c) => c.hashCode)];
 
   @override
   String toString() => 'CarsLoaded { cars: $cars }';

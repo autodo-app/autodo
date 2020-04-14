@@ -190,6 +190,45 @@ Future<void> main() async {
       ],
     );
     blocTest(
+      'AddMultipleTodos',
+      build: () {
+        final carsBloc = MockCarsBloc();
+        whenListen(
+            carsBloc,
+            Stream.fromIterable([
+              CarsLoaded([Car()])
+            ]));
+        final dataRepository = MockDataRepository();
+        when(dataRepository.todos()).thenAnswer((_) => Stream.fromIterable([
+              []
+            ]));
+        when(dataRepository.getCurrentTodos()).thenAnswer((_) async => []);
+        final notificationsBloc = MockNotificationsBloc();
+        final dbBloc = MockDbBloc();
+        when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
+        final writeBatch = MockWriteBatch();
+        when(writeBatch.updateData(any, any)).thenAnswer((invoke) {});
+        when(writeBatch.setData(any)).thenAnswer((invoke) {});
+        when(writeBatch.commit()).thenAnswer((_) async {});
+        when(dataRepository.startTodoWriteBatch())
+            .thenAnswer((_) => writeBatch);
+        return TodosBloc(
+            dbBloc: dbBloc,
+            carsBloc: carsBloc,
+            notificationsBloc: notificationsBloc);
+      },
+      act: (bloc) async {
+        bloc.add(LoadTodos());
+        bloc.add(AddMultipleTodos([todo1, todo2]));
+      },
+      expect: [
+        TodosLoading(),
+        TodosLoaded(todos: []),
+        TodosLoaded(todos: [todo1, todo2]),
+        TodosLoaded(todos: []), // this is just from when the data repo contents are put up again
+      ],
+    );
+    blocTest(
       'UpdateTodo',
       build: () {
         final carsBloc = MockCarsBloc();

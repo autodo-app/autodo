@@ -25,6 +25,18 @@ class AddTodo extends TodosEvent {
   String toString() => 'AddTodo { todo: $todo }';
 }
 
+class AddMultipleTodos extends TodosEvent {
+  const AddMultipleTodos(this.todos);
+
+  final List<Todo> todos;
+
+  @override
+  List<Object> get props => [...todos];
+
+  @override
+  String toString() => 'AddMultipleTodos { todos: $todos }';
+}
+
 class UpdateTodo extends TodosEvent {
   const UpdateTodo(this.updatedTodo);
 

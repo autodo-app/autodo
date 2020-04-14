@@ -199,6 +199,8 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       yield* _mapCarsUpdatedToState(event);
     } else if (event is TranslateDefaults) {
       yield* _mapTranslateDefaultsToState(event);
+    } else if (event is AddMultipleTodos) {
+      yield* _mapAddMultipleTodosToState(event);
     }
   }
 
@@ -318,6 +320,20 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     yield TodosLoaded(todos: updatedTodos);
     _scheduleNotification(event.todo);
     await repo.addNewTodo(event.todo);
+  }
+
+  Stream<TodosState> _mapAddMultipleTodosToState(AddMultipleTodos event) async* {
+    if (repo == null) {
+      print('Error: adding todo to null repo');
+      return;
+    }
+    final updatedTodos = List<Todo>.from((state as TodosLoaded).todos)
+      ..addAll(event.todos);
+    yield TodosLoaded(todos: updatedTodos);
+    event.todos.forEach(_scheduleNotification);
+    final batch = await repo.startTodoWriteBatch();
+    event.todos.forEach((t) {batch.setData(t.toDocument());});
+    await batch.commit();
   }
 
   Stream<TodosState> _mapUpdateTodoToState(UpdateTodo event) async* {
