@@ -298,7 +298,6 @@ class TodoAddEditScreenState extends State<TodoAddEditScreen> {
 
   @override
   Widget build(context) => Scaffold(
-        resizeToAvoidBottomPadding: false,
         appBar: AppBar(
           title: Text(
             isEditing
