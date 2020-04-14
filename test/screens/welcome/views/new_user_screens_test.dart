@@ -1,5 +1,6 @@
 import 'package:autodo/generated/localization.dart';
 import 'package:autodo/repositories/repositories.dart';
+import 'package:autodo/screens/home/screen.dart';
 import 'package:autodo/units/units.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
@@ -178,7 +179,9 @@ void main() {
             BlocProvider<DatabaseBloc>.value(value: dbBloc),
             BlocProvider<CarsBloc>.value(value: carsBloc),
             BlocProvider<TodosBloc>.value(value: todosBloc),
-          ], child: MaterialApp(home: NewUserScreen())),
+          ], child: MaterialApp(
+            home: NewUserScreen(),
+            )),
         ),
       );
       expect(find.byType(NewUserScreen), findsOneWidget);
