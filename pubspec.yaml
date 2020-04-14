@@ -64,6 +64,7 @@ dependency_overrides:
       url: https://gitlab.com/davbfr/preferences.git
       ref: rewrite-pref-service
   mockito: ^4.0.0
+  bloc_test: ^3.1.0
 
 dev_dependencies:
   flutter_test:
