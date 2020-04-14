@@ -361,7 +361,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     final car = (_carsBloc.state as CarsLoaded)
         .cars
         .firstWhere((c) => c.name == curTodo.carName);
-    var updatedTodos = (state as TodosLoaded).todos;
+    var updatedTodos = List<Todo>.from((state as TodosLoaded).todos);
 
     final batch = await repo.startTodoWriteBatch();
     final completedTodo = curTodo.copyWith(
@@ -378,10 +378,17 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     // Add a new todo if applicable
     if (completedTodo.mileageRepeatInterval != null) {
       final newDueMileage = curTodo.mileageRepeatInterval + car.mileage;
-      final newTodo = curTodo.copyWith(
-          dueMileage: newDueMileage,
-          dueDate: calcDueDate(car, newDueMileage),
-          estimatedDueDate: true);
+      // Creating a new one instead of .copyWith() so that null fields are
+      // preserved
+      final newTodo = Todo(
+        name: curTodo.name,
+        carName: curTodo.carName,
+        dueMileage: newDueMileage,
+        mileageRepeatInterval: curTodo.mileageRepeatInterval,
+        estimatedDueDate: true,
+        dueDate: TodosBloc.calcDueDate(car, newDueMileage),
+        completed: false,
+      );
       batch.setData(newTodo.toDocument());
       updatedTodos.add(newTodo);
     } else if (completedTodo.dateRepeatInterval != null) {
@@ -395,7 +402,6 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     // TODO: this yield is important for verifying this output in unit tests
     // but could cause a brief period of time where an edit button is presed
     // on a ToDo that does not yet have an ID value.
-    yield TodosLoaded(todos: updatedTodos);
     await batch.commit();
 
     updatedTodos = await repo.getCurrentTodos();

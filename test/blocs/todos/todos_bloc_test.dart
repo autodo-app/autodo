@@ -397,6 +397,8 @@ Future<void> main() async {
             ]));
         when(dataRepository.getCurrentTodos())
             .thenAnswer((_) async => completedTodos);
+
+        // TODO: intercept the write batch calls to check that things are updated properly
         // when(dataRepository.addNewTodo(todo3)).thenAnswer((_) async {});
         // when(dataRepository.updateTodo(todo3)).thenAnswer((_) async {});
         final writeBatch = MockWriteBatch();
