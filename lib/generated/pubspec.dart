@@ -94,6 +94,7 @@ class Pubspec {
       },
     },
     'mockito': '^4.0.0',
+    'bloc_test': '^3.1.0',
   };
 
   static const Map<dynamic, dynamic> dev_dependencies = <dynamic, dynamic>{

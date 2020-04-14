@@ -96,17 +96,13 @@ class SettingsScreenState extends State<SettingsScreen> {
         values: Currency.currencies.keys.toList(),
       ),
       PreferenceTitle(JsonIntl.of(context).get(IntlKeys.groupAccount)),
-      PreferenceButton(
-        Text(JsonIntl.of(context).get(IntlKeys.signOut)),
-        key: ValueKey('__sign_out_button__'),
-        color: Theme.of(context).buttonTheme.colorScheme.background,
-        onTap: () {
-          BlocProvider.of<AuthenticationBloc>(context)
-              .add(LogOut());
-          Navigator.popAndPushNamed(
-              context, AutodoRoutes.welcome);
-        }
-      ),
+      PreferenceButton(Text(JsonIntl.of(context).get(IntlKeys.signOut)),
+          key: ValueKey('__sign_out_button__'),
+          color: Theme.of(context).buttonTheme.colorScheme.background,
+          onTap: () {
+        BlocProvider.of<AuthenticationBloc>(context).add(LogOut());
+        Navigator.popAndPushNamed(context, AutodoRoutes.welcome);
+      }),
       PreferenceButton(
         Text(JsonIntl.of(context).get(IntlKeys.deleteAccount)),
         key: ValueKey('__delete_account_button__'),
