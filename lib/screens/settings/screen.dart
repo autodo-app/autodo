@@ -7,6 +7,7 @@ import '../../blocs/blocs.dart';
 import '../../generated/localization.dart';
 import '../../routes.dart';
 import '../../units/units.dart';
+import '../about/about.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -111,6 +112,16 @@ class SettingsScreenState extends State<SettingsScreen> {
           context: context,
           builder: (context) => deleteAccountDialog(),
         ),
+      ),
+      PreferenceTitle(JsonIntl.of(context).get(IntlKeys.info)),
+      PreferenceButton(Text(MaterialLocalizations.of(context)
+            .aboutListTileTitle(
+          JsonIntl.of(context).get(IntlKeys.appTitle))),
+        color: Theme.of(context).buttonTheme.colorScheme.background,
+        onTap: () {
+          Navigator.pop(context);
+          about(context);
+        },
       ),
     ]);
   }

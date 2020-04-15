@@ -59,8 +59,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
     AppTab.todos: TodosScreen(),
     AppTab.refuelings: RefuelingsScreen(),
     AppTab.stats: StatisticsScreen(),
-    AppTab.garage:
-        GarageScreen(), // TODO 275: replace this screen with a cars screen?
+    AppTab.garage: GarageScreen(),
   };
 
   final Key todosTabKey;
@@ -211,7 +210,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
               title: Text(JsonIntl.of(context).get(IntlKeys.appTitle)),
               actions: [ExtraActions()],
             ),
-      drawer: NavDrawer(),
       body: views[activeTab],
       floatingActionButton: actionButton,
       bottomNavigationBar: TabSelector(
