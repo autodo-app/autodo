@@ -67,9 +67,16 @@ class Pubspec {
     'firebase_storage': null,
     'image_picker': null,
     'dotted_border': null,
+    'flutter_debug_drawer': null,
   };
 
   static const Map<dynamic, dynamic> dependency_overrides = <dynamic, dynamic>{
+    'flutter_debug_drawer': <dynamic, dynamic>{
+      'git': <dynamic, dynamic>{
+        'url': 'git://github.com/DavBfr/flutter_debug_drawer.git',
+        'ref': 'master',
+      },
+    },
     'autocomplete_textfield': <dynamic, dynamic>{
       'git': <dynamic, dynamic>{
         'url': 'git://github.com/baylessj/flutter-autocomplete-textfield.git',

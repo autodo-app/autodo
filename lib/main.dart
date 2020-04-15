@@ -7,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_debug_drawer/flutter_debug_drawer.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:json_intl/json_intl.dart';
@@ -214,6 +215,7 @@ class App extends StatelessWidget {
         const Locale('en'),
         const Locale('fr'),
       ],
+      builder: DebugDrawerBuilder.buildDefault(),
       home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         // Just here as the splitter between home screen and login screen
         builder: (context, state) {

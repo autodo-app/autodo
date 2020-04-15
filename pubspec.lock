@@ -297,6 +297,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0"
+  flutter_debug_drawer:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: master
+      resolved-ref: "6d5f57825fcdad2950edeb23aa06affff34a58d7"
+      url: "git://github.com/DavBfr/flutter_debug_drawer.git"
+    source: git
+    version: "0.0.2"
   flutter_driver:
     dependency: "direct dev"
     description: flutter

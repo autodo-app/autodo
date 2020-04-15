@@ -45,8 +45,13 @@ dependencies:
   firebase_storage:
   image_picker:
   dotted_border:
+  flutter_debug_drawer:
 
 dependency_overrides:
+  flutter_debug_drawer:
+    git:
+      url: git://github.com/DavBfr/flutter_debug_drawer.git
+      ref: master
   autocomplete_textfield:
     git:
       url: git://github.com/baylessj/flutter-autocomplete-textfield.git
