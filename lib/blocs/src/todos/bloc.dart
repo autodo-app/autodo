@@ -100,28 +100,28 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
         completed: false)
   ];
   static final List<Todo> defaultsMetric = [
-    Todo(name: 'oil', mileageRepeatInterval: 6000, completed: false),
-    Todo(name: 'tireRotation', mileageRepeatInterval: 1200, completed: false),
-    Todo(name: 'engineFilter', mileageRepeatInterval: 75000, completed: false),
-    Todo(name: 'wiperBlades', mileageRepeatInterval: 50000, completed: false),
+    Todo(name: 'oil', mileageRepeatInterval: 6000 * Distance.kilometer, completed: false),
+    Todo(name: 'tireRotation', mileageRepeatInterval: 12000 * Distance.kilometer, completed: false),
+    Todo(name: 'engineFilter', mileageRepeatInterval: 75000 * Distance.kilometer, completed: false),
+    Todo(name: 'wiperBlades', mileageRepeatInterval: 50000 * Distance.kilometer, completed: false),
     Todo(
-        name: 'alignmentCheck', mileageRepeatInterval: 65000, completed: false),
-    Todo(name: 'cabinFilter', mileageRepeatInterval: 75000, completed: false),
-    Todo(name: 'tires', mileageRepeatInterval: 80000, completed: false),
-    Todo(name: 'brakes', mileageRepeatInterval: 100000, completed: false),
-    Todo(name: 'sparkPlugs', mileageRepeatInterval: 100000, completed: false),
-    Todo(name: 'frontStruts', mileageRepeatInterval: 120000, completed: false),
-    Todo(name: 'rearStruts', mileageRepeatInterval: 120000, completed: false),
-    Todo(name: 'battery', mileageRepeatInterval: 120000, completed: false),
+        name: 'alignmentCheck', mileageRepeatInterval: 65000 * Distance.kilometer, completed: false),
+    Todo(name: 'cabinFilter', mileageRepeatInterval: 75000 * Distance.kilometer, completed: false),
+    Todo(name: 'tires', mileageRepeatInterval: 80000 * Distance.kilometer, completed: false),
+    Todo(name: 'brakes', mileageRepeatInterval: 100000 * Distance.kilometer, completed: false),
+    Todo(name: 'sparkPlugs', mileageRepeatInterval: 100000 * Distance.kilometer, completed: false),
+    Todo(name: 'frontStruts', mileageRepeatInterval: 120000 * Distance.kilometer, completed: false),
+    Todo(name: 'rearStruts', mileageRepeatInterval: 120000 * Distance.kilometer, completed: false),
+    Todo(name: 'battery', mileageRepeatInterval: 120000 * Distance.kilometer, completed: false),
     Todo(
         name: 'serpentineBelt',
-        mileageRepeatInterval: 250000,
+        mileageRepeatInterval: 250000 * Distance.kilometer,
         completed: false),
     Todo(
         name: 'transmissionFluid',
-        mileageRepeatInterval: 150000,
+        mileageRepeatInterval: 150000 * Distance.kilometer,
         completed: false),
-    Todo(name: 'coolantChange', mileageRepeatInterval: 150000, completed: false)
+    Todo(name: 'coolantChange', mileageRepeatInterval: 150000 * Distance.kilometer, completed: false)
   ];
 
   StreamSubscription _dataSubscription, _carsSubscription, _repoSubscription;
