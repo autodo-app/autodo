@@ -7,6 +7,7 @@ import 'package:flutter/widgets.dart';
 import '../../../generated/localization.dart';
 import '../../../models/models.dart';
 import '../../../repositories/repositories.dart';
+import '../../../units/units.dart';
 import '../../../util.dart';
 import '../../blocs.dart';
 import '../cars/barrel.dart';
@@ -97,6 +98,30 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
         name: IntlKeys.coolantChange,
         mileageRepeatInterval: 100000,
         completed: false)
+  ];
+  static final List<Todo> kilometerDefaults = [
+    Todo(name: 'oil', mileageRepeatInterval: 5633, completed: false),
+    Todo(name: 'tireRotation', mileageRepeatInterval: 12070, completed: false),
+    Todo(name: 'engineFilter', mileageRepeatInterval: 72420, completed: false),
+    Todo(name: 'wiperBlades', mileageRepeatInterval: 48280, completed: false),
+    Todo(
+        name: 'alignmentCheck', mileageRepeatInterval: 64374, completed: false),
+    Todo(name: 'cabinFilter', mileageRepeatInterval: 72420, completed: false),
+    Todo(name: 'tires', mileageRepeatInterval: 80467, completed: false),
+    Todo(name: 'brakes', mileageRepeatInterval: 96561, completed: false),
+    Todo(name: 'sparkPlugs', mileageRepeatInterval: 96561, completed: false),
+    Todo(name: 'frontStruts', mileageRepeatInterval: 120701, completed: false),
+    Todo(name: 'rearStruts', mileageRepeatInterval: 120701, completed: false),
+    Todo(name: 'battery', mileageRepeatInterval: 120701, completed: false),
+    Todo(
+        name: 'serpentineBelt',
+        mileageRepeatInterval: 241402,
+        completed: false),
+    Todo(
+        name: 'transmissionFluid',
+        mileageRepeatInterval: 160934,
+        completed: false),
+    Todo(name: 'coolantChange', mileageRepeatInterval: 160934, completed: false)
   ];
 
   StreamSubscription _dataSubscription, _carsSubscription, _repoSubscription;
