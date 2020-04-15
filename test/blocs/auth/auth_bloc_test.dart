@@ -46,7 +46,7 @@ void main() {
         act: (bloc) async => bloc.add(AppStarted()),
         expect: <AuthenticationState>[
           Uninitialized(),
-          RemoteAuthenticated(null, null, false)
+          RemoteAuthenticated(null, null)
         ],
       );
       blocTest<AuthenticationBloc, AuthenticationEvent, AuthenticationState>(
@@ -69,7 +69,7 @@ void main() {
       act: (bloc) async => bloc.add(LoggedIn()),
       expect: <AuthenticationState>[
         Uninitialized(),
-        RemoteAuthenticated(null, null, false)
+        RemoteAuthenticated(null, null)
       ],
     );
     blocTest<AuthenticationBloc, AuthenticationEvent, AuthenticationState>(
@@ -102,7 +102,7 @@ void main() {
       act: (bloc) async => bloc.add(SignedUp()),
       expect: <AuthenticationState>[
         Uninitialized(),
-        RemoteAuthenticated('test@test.com', 'test', true)
+        RemoteAuthenticated('test@test.com', 'test')
       ],
     );
     blocTest('AuthRepo SignedUp event', build: () {
@@ -120,10 +120,7 @@ void main() {
       when(authRepository.stream)
           .thenAnswer((_) => Stream.fromIterable([user]));
       return AuthenticationBloc(userRepository: authRepository);
-    }, expect: [
-      Uninitialized(),
-      RemoteAuthenticated('test@test.com', 'test', true)
-    ]);
+    }, expect: [Uninitialized(), RemoteAuthenticated('test@test.com', 'test')]);
     blocTest('AuthRepo LoggedIn event', build: () {
       final metadata = MockMetadata();
       final user = MockUser();
@@ -139,9 +136,6 @@ void main() {
       when(authRepository.stream)
           .thenAnswer((_) => Stream.fromIterable([user]));
       return AuthenticationBloc(userRepository: authRepository);
-    }, expect: [
-      Uninitialized(),
-      RemoteAuthenticated('test@test.com', 'test', false)
-    ]);
+    }, expect: [Uninitialized(), RemoteAuthenticated('test@test.com', 'test')]);
   });
 }

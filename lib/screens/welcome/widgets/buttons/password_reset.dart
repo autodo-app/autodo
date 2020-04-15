@@ -96,13 +96,17 @@ class PasswordResetButton extends StatelessWidget {
         ),
         onPressed: () {
           final bloc = BlocProvider.of<LoginBloc>(context);
+          final state = bloc.state;
           String email;
-          if (bloc.state is LoginCredentialsValid) {
-            email = (bloc.state as LoginCredentialsValid).email;
-          } else {
-            email = (bloc.state as LoginCredentialsInvalid).email;
+
+          if (state is LoginCredentialsValid) {
+            email = state.email;
+          } else if (state is LoginCredentialsInvalid) {
+            email = state.email;
           }
-          if (email == null) return;
+
+          email ??= '';
+
           showDialog(
             context: context,
             builder: (context) =>

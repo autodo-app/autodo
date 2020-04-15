@@ -3,7 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:json_intl/json_intl.dart';
 
 import '../../../../generated/localization.dart';
-import '../../../../routes.dart';
+import '../../../screens.dart';
 
 class LoginButton extends StatelessWidget {
   const LoginButton({Key key, this.buttonPadding}) : super(key: key);
@@ -30,8 +30,15 @@ class LoginButton extends StatelessWidget {
             ),
             FlatButton(
               key: ValueKey('__welcome_login_button__'),
-              onPressed: () =>
-                  Navigator.pushNamed(context, AutodoRoutes.loginScreen),
+              onPressed: () {
+//AutodoRoutes.loginScreen
+                Navigator.of(context)
+                  ..push(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => LoginScreenProvider(),
+                    ),
+                  );
+              },
               textColor: Colors.white,
               padding: const EdgeInsets.all(0.0),
               child: Text(

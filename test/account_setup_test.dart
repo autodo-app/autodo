@@ -78,7 +78,7 @@ void main() {
       // tell the blocs that there was a new user signed up
       final localRepo = await SembastDataRepository.open(
           dbPath: 'cars1.db', pathProvider: () => Directory('.'));
-      when(dbBloc.state).thenReturn(DbLoaded(localRepo, newUser: true));
+      when(dbBloc.state).thenReturn(DbLoaded(localRepo));
 
       // Add a Load call to all blocs to force refresh
       // This would happen automatically if we could write directly to the dbBloc's
@@ -127,7 +127,7 @@ void main() {
       // tell the blocs that there was a new user signed up
       final localRepo = await SembastDataRepository.open(
           dbPath: 'cars2.db', pathProvider: () => Directory('./'));
-      when(dbBloc.state).thenReturn(DbLoaded(localRepo, newUser: true));
+      when(dbBloc.state).thenReturn(DbLoaded(localRepo));
 
       // Add a Load call to all blocs to force refresh
       // This would happen automatically if we could write directly to the dbBloc's

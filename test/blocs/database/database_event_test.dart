@@ -4,11 +4,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('UserLoggedIn', () {
     test('props', () {
-      expect(UserLoggedIn('abcd').props, ['abcd', null]);
+      expect(UserLoggedIn('abcd').props, ['abcd']);
     });
     test('toString', () {
-      expect(UserLoggedIn('abcd').toString(),
-          'UserLoggedIn { uuid: abcd, newUser: null }');
+      expect(UserLoggedIn('abcd').toString(), 'UserLoggedIn { uuid: abcd }');
     });
   });
   group('UserLoggedOut', () {
@@ -18,10 +17,10 @@ void main() {
   });
   group('triallogin', () {
     test('props', () {
-      expect(TrialLogin(false).props, [false]);
+      expect(TrialLogin().props, []);
     });
     test('toString', () {
-      expect(TrialLogin(false).toString(), 'TrialLogin { newUser: false }');
+      expect(TrialLogin().toString(), 'TrialLogin { }');
     });
   });
 }

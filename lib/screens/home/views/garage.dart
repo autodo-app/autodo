@@ -6,7 +6,7 @@ import 'package:json_intl/json_intl.dart';
 import '../../../blocs/blocs.dart';
 import '../../../flavor.dart';
 import '../../../generated/localization.dart';
-import '../../../routes.dart';
+import '../../../screens/settings/screen.dart';
 import '../../../theme.dart';
 import '../../../widgets/widgets.dart';
 import '../widgets/barrel.dart';
@@ -85,9 +85,7 @@ class _Header extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.settings),
                 color: Theme.of(context).accentTextTheme.button.color,
-                onPressed: () {
-                  Navigator.pushNamed(context, AutodoRoutes.settingsScreen);
-                },
+                onPressed: () => SettingsScreen.show(context),
               )
             ],
           ),

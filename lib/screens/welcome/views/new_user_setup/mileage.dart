@@ -1,44 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_intl/json_intl.dart';
 
-import '../../../../blocs/blocs.dart';
 import '../../../../generated/localization.dart';
 import '../../../../integ_test_keys.dart';
-import '../../../../models/models.dart';
 import '../../../../theme.dart';
 import '../../../../units/units.dart';
 import '../../../../util.dart';
 import 'base.dart';
+import 'wizard.dart';
+import 'wizard_info.dart';
 
 class CarEntryField extends StatefulWidget {
-  const CarEntryField(
-      this.next, this.onNameSaved, this.onMileageSaved, this.formKey);
-
-  final Function next;
-
-  final Function onNameSaved, onMileageSaved;
+  const CarEntryField(this.formKey, this.car);
 
   final GlobalKey<FormState> formKey;
 
+  final NewUserCar car;
+
   @override
-  State<CarEntryField> createState() =>
-      CarEntryFieldState(next, onNameSaved, onMileageSaved, formKey);
+  State<CarEntryField> createState() => CarEntryFieldState();
 }
 
 class CarEntryFieldState extends State<CarEntryField> {
-  CarEntryFieldState(
-      this.nextNode, this.onNameSaved, this.onMileageSaved, this.formKey);
+  CarEntryFieldState();
 
   bool firstWritten = false;
 
   FocusNode _nameNode, _mileageNode;
 
   Function nextNode;
-
-  final Function onNameSaved, onMileageSaved;
-
-  final GlobalKey<FormState> formKey;
 
   @override
   void initState() {
@@ -56,15 +46,19 @@ class CarEntryFieldState extends State<CarEntryField> {
 
   @override
   Widget build(BuildContext context) {
+    final distance = Distance.of(context);
+
     TextFormField nameField() => TextFormField(
           key: IntegrationTestKeys.mileageNameField,
           maxLines: 1,
           autofocus: true,
           decoration: defaultInputDecoration(
-              '', JsonIntl.of(context).get(IntlKeys.carName)),
-          validator: requiredValidator,
-          initialValue: '',
-          onSaved: onNameSaved,
+            context,
+            JsonIntl.of(context).get(IntlKeys.carName),
+          ),
+          validator: (v) => formValidator<String>(context, v, required: true),
+          initialValue: widget.car.name,
+          onSaved: (value) => widget.car.name = value,
           focusNode: _nameNode,
           textInputAction: TextInputAction.next,
           onFieldSubmitted: (_) => changeFocus(_nameNode, _mileageNode),
@@ -75,10 +69,16 @@ class CarEntryFieldState extends State<CarEntryField> {
           maxLines: 1,
           autofocus: false,
           decoration: defaultInputDecoration(
-              '', JsonIntl.of(context).get(IntlKeys.mileage)),
-          validator: intValidator,
-          initialValue: '',
-          onSaved: onMileageSaved,
+            context,
+            JsonIntl.of(context).get(IntlKeys.mileage),
+            unit: Distance.of(context).unitString(context, short: true),
+          ),
+          validator: (v) =>
+              formValidator<int>(context, v, min: 0, required: true),
+          keyboardType: TextInputType.number,
+          initialValue: distance.format(widget.car.mileage, textField: true),
+          onSaved: (value) =>
+              widget.car.mileage = distance.unitToInternal(double.parse(value)),
           focusNode: _mileageNode,
           textInputAction: TextInputAction.done,
           onFieldSubmitted: (_) async => await nextNode(),
@@ -87,24 +87,19 @@ class CarEntryFieldState extends State<CarEntryField> {
     return Container(
       padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
       child: Form(
-        key: formKey,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        key: widget.formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Expanded(
-              flex: 2,
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                child: nameField(),
-              ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(5, 0, 5, 10),
+              child: nameField(),
             ),
-            Expanded(
-              flex: 1,
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                child: mileageField(),
-              ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(5, 0, 5, 10),
+              child: mileageField(),
             ),
+            Padding(padding: EdgeInsets.only(bottom: 10)),
           ],
         ),
       ),
@@ -113,53 +108,48 @@ class CarEntryFieldState extends State<CarEntryField> {
 }
 
 class MileageScreen extends StatefulWidget {
-  const MileageScreen(this.mileageEntry, this.mileageKey, this.onNext);
-
-  final String mileageEntry;
-
-  final Key mileageKey;
-
-  final Function() onNext;
+  const MileageScreen();
 
   @override
-  MileageScreenState createState() => MileageScreenState(mileageEntry);
+  MileageScreenState createState() => MileageScreenState();
 }
 
 class MileageScreenState extends State<MileageScreen> {
-  MileageScreenState(this.mileageEntry);
+  MileageScreenState();
 
-  String mileageEntry;
+  // String mileageEntry;
 
   List<GlobalKey<FormState>> formKeys = [GlobalKey<FormState>()];
 
-  List<Car> cars = [Car()];
-
-  Future<void> _next() async {
+  bool _save({bool exceptLast = false}) {
     var allValidated = true;
-    formKeys.forEach((k) {
+    for (final k in formKeys) {
+      if (exceptLast && k == formKeys.last) {
+        break;
+      }
       if (k.currentState.validate()) {
         k.currentState.save();
       } else {
         allValidated = false;
       }
-    });
+    }
+    return allValidated;
+  }
+
+  Future<void> _next() async {
+    final allValidated = _save();
+
     if (allValidated) {
-      BlocProvider.of<TodosBloc>(context).add(TranslateDefaults(
-          JsonIntl.of(context), Distance.of(context, listen: false).unit));
-      cars.forEach((c) {
-        BlocProvider.of<CarsBloc>(context).add(AddCar(c));
-      });
       // hide the keyboard
       FocusScope.of(context).requestFocus(FocusNode());
-      await Future.delayed(Duration(milliseconds: 400));
-      widget.onNext();
+      Wizard.of<NewUserScreenWizard>(context).next();
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final Widget headerText = Container(
-      height: 110,
+      padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
       child: Center(
           child: Column(
         children: <Widget>[
@@ -185,17 +175,14 @@ class MileageScreenState extends State<MileageScreen> {
     );
 
     Widget card() {
-      final distance = Distance.of(context);
       final carFields = <Widget>[];
-      for (var i in Iterable.generate(cars.length)) {
-        carFields
-            .add(CarEntryField((i == cars.length - 1) ? _next : null, (val) {
-          cars[i] = cars[i].copyWith(name: val);
-        },
-                (val) => cars[i] = cars[i].copyWith(
-                      mileage: distance.unitToInternal(double.parse(val)),
-                    ),
-                formKeys[i]));
+      final state = Wizard.of<NewUserScreenWizard>(context);
+      formKeys.clear();
+
+      for (final car in state.cars) {
+        final formKey = GlobalKey<FormState>();
+        formKeys.add(formKey);
+        carFields.add(CarEntryField(formKey, car));
       }
 
       return Container(
@@ -206,47 +193,46 @@ class MileageScreenState extends State<MileageScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             ...carFields,
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      FlatButton.icon(
-                        padding: EdgeInsets.all(0),
-                        icon: Icon(Icons.add),
-                        label: Text(JsonIntl.of(context).get(IntlKeys.add)),
-                        onPressed: () => setState(() {
-                          cars.add(Car());
-                          formKeys.add(GlobalKey<FormState>());
-                        }),
-                      ),
-                      if (cars.length > 1)
-                        FlatButton.icon(
-                          padding: EdgeInsets.all(0),
-                          icon: Icon(Icons.delete),
-                          label:
-                              Text(JsonIntl.of(context).get(IntlKeys.remove)),
-                          onPressed: () {
-                            if (cars.length < 2) return;
-                            setState(() => cars.removeAt(cars.length - 1));
-                          },
-                        ),
-                    ],
-                  ),
-                  FlatButton(
-                    key: IntegrationTestKeys.mileageNextButton,
+            Row(
+              children: <Widget>[
+                FlatButton.icon(
+                  padding: EdgeInsets.all(0),
+                  icon: Icon(Icons.add),
+                  label: Text(JsonIntl.of(context).get(IntlKeys.add)),
+                  onPressed: () {
+                    if (_save()) {
+                      setState(() {
+                        state.cars.add(NewUserCar());
+                        formKeys.add(GlobalKey<FormState>());
+                      });
+                    }
+                  },
+                ),
+                if (state.cars.length > 1)
+                  FlatButton.icon(
                     padding: EdgeInsets.all(0),
-                    materialTapTargetSize: MaterialTapTargetSize.padded,
-                    child: Text(
-                      JsonIntl.of(context).get(IntlKeys.next),
-                      style: Theme.of(context).primaryTextTheme.button,
-                    ),
-                    onPressed: () async => await _next(),
+                    icon: Icon(Icons.delete),
+                    label: Text(JsonIntl.of(context).get(IntlKeys.remove)),
+                    onPressed: () {
+                      if (_save(exceptLast: true)) {
+                        setState(() {
+                          state.cars.removeAt(state.cars.length - 1);
+                        });
+                      }
+                    },
                   ),
-                ],
-              ),
+                Expanded(child: SizedBox()),
+                FlatButton(
+                  key: IntegrationTestKeys.mileageNextButton,
+                  padding: EdgeInsets.all(0),
+                  materialTapTargetSize: MaterialTapTargetSize.padded,
+                  child: Text(
+                    JsonIntl.of(context).get(IntlKeys.next),
+                    style: Theme.of(context).primaryTextTheme.button,
+                  ),
+                  onPressed: () async => await _next(),
+                ),
+              ],
             ),
           ],
         ),
@@ -254,7 +240,10 @@ class MileageScreenState extends State<MileageScreen> {
     }
 
     return Form(
-        key: widget.mileageKey,
-        child: AccountSetupScreen(header: headerText, panel: card()));
+      child: AccountSetupScreen(
+        header: headerText,
+        panel: card(),
+      ),
+    );
   }
 }

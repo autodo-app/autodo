@@ -4,7 +4,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bloc_test/bloc_test.dart';
 
-import 'package:autodo/routes.dart';
 import 'package:autodo/repositories/repositories.dart';
 import 'package:autodo/screens/welcome/views/signup/screen.dart';
 import 'package:autodo/screens/welcome/widgets/barrel.dart';
@@ -43,24 +42,6 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      expect(find.byKey(scaffoldKey), findsOneWidget);
-    });
-    testWidgets('back button', (WidgetTester tester) async {
-      final scaffoldKey = Key('scaffold');
-      await tester.pumpWidget(
-        MultiBlocProvider(
-          providers: [
-            BlocProvider<SignupBloc>.value(
-                value: SignupBloc(authRepository: authRepository)),
-          ],
-          child: MaterialApp(
-              home: SignupScreen(key: scaffoldKey),
-              routes: {AutodoRoutes.welcome: (context) => Container()}),
-        ),
-      );
-      await tester.pumpAndSettle();
-      await tester.tap(find.byType(IconButton));
-      await tester.pump();
       expect(find.byKey(scaffoldKey), findsOneWidget);
     });
     testWidgets('error', (WidgetTester tester) async {

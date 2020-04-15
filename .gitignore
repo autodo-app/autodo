@@ -43,3 +43,4 @@ lib/generated/keys.dart
 
 lib/generated_plugin_registrant.dart
 test/*.db
+ios/Flutter/.last_build_id

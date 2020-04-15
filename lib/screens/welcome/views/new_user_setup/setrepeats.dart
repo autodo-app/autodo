@@ -1,47 +1,50 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_intl/json_intl.dart';
 
-import '../../../../blocs/blocs.dart';
 import '../../../../generated/localization.dart';
 import '../../../../integ_test_keys.dart';
-import '../../../../models/models.dart';
-import '../../../../routes.dart';
 import '../../../../theme.dart';
 import '../../../../units/units.dart';
 import '../../../../util.dart';
-import '../../../../widgets/widgets.dart';
 import 'base.dart';
-import 'new_user_screen_page.dart';
+import 'wizard.dart';
+import 'wizard_info.dart';
 
 const int cardAppearDuration = 200; // in ms
 
 class _OilInterval extends StatelessWidget {
-  const _OilInterval(this.todo, this.node, this.nextNode);
+  const _OilInterval(this.node, this.nextNode);
 
   final FocusNode node, nextNode;
-
-  final Todo todo;
 
   @override
   Widget build(BuildContext context) {
     final distance = Distance.of(context);
+    final wizard = Wizard.of<NewUserScreenWizard>(context);
 
     return TextFormField(
       key: IntegrationTestKeys.setOilInterval,
       maxLines: 1,
       autofocus: false,
+      keyboardType: TextInputType.number,
       initialValue: distance.format(
-        todo.mileageRepeatInterval,
+        wizard.oilRepeatInterval,
         textField: true,
       ),
-      decoration: defaultInputDecoration('(${distance.unitString(context)})',
-          'Oil Change Interval (${distance.unitString(context)})'),
-      validator: intValidator,
-      onSaved: (val) => BlocProvider.of<TodosBloc>(context).add(UpdateTodo(
-          todo.copyWith(
-              mileageRepeatInterval:
-                  distance.unitToInternal(double.parse(val.trim()))))),
+      decoration: defaultInputDecoration(
+        context,
+        JsonIntl.of(context).get(IntlKeys.oilChangeInterval),
+        unit: distance.unitString(context, short: true),
+      ),
+      validator: (v) => formValidator<int>(
+        context,
+        v,
+        min: distance.internalToUnit(Limits.minTodoMileage),
+        max: distance.internalToUnit(Limits.maxTodoMileage),
+        required: true,
+      ),
+      onSaved: (value) => wizard.oilRepeatInterval =
+          value == '' ? null : distance.unitToInternal(double.parse(value)),
       focusNode: node,
       textInputAction: TextInputAction.next,
       onFieldSubmitted: (_) => changeFocus(node, nextNode),
@@ -50,29 +53,36 @@ class _OilInterval extends StatelessWidget {
 }
 
 class _TireRotationInterval extends StatelessWidget {
-  const _TireRotationInterval(this.todo, this.node);
+  const _TireRotationInterval(this.node);
 
   final FocusNode node;
-
-  final Todo todo;
 
   @override
   Widget build(BuildContext context) {
     final distance = Distance.of(context);
+    final wizard = Wizard.of<NewUserScreenWizard>(context);
 
     return TextFormField(
       key: IntegrationTestKeys.setTireRotationInterval,
       maxLines: 1,
       autofocus: false,
+      keyboardType: TextInputType.number,
       initialValue:
-          distance.format(todo.mileageRepeatInterval, textField: true),
-      decoration: defaultInputDecoration('(${distance.unitString(context)})',
-          'Tire Rotation Interval (${distance.unitString(context)})'), // Todo: Translate
-      validator: intValidator,
-      onSaved: (val) => BlocProvider.of<TodosBloc>(context).add(UpdateTodo(
-          todo.copyWith(
-              mileageRepeatInterval:
-                  distance.unitToInternal(double.parse(val.trim()))))),
+          distance.format(wizard.tireRotationRepeatInterval, textField: true),
+      decoration: defaultInputDecoration(
+        context,
+        JsonIntl.of(context).get(IntlKeys.tireRotationInterval),
+        unit: distance.unitString(context, short: true),
+      ), // Todo: Translate
+      validator: (v) => formValidator<int>(
+        context,
+        v,
+        min: distance.internalToUnit(Limits.minTodoMileage),
+        max: distance.internalToUnit(Limits.maxTodoMileage),
+        required: true,
+      ),
+      onSaved: (value) => wizard.tireRotationRepeatInterval =
+          value == '' ? null : distance.unitToInternal(double.parse(value)),
       focusNode: node,
       textInputAction: TextInputAction.done,
     );
@@ -82,15 +92,14 @@ class _TireRotationInterval extends StatelessWidget {
 class _HeaderText extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
-        padding: EdgeInsets.fromLTRB(0, 0, 0, 30),
-        height: 110,
+        padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
         child: Center(
             child: Column(
           children: <Widget>[
             Padding(
               padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
               child: Text(
-                'Before you get started,\n let\'s get some info about your car.',
+                JsonIntl.of(context).get(IntlKeys.carAddTitle),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 20,
@@ -101,7 +110,7 @@ class _HeaderText extends StatelessWidget {
               ),
             ),
             Text(
-              'How often do you want to do these tasks?',
+              JsonIntl.of(context).get(IntlKeys.wizardRepeats),
               style: Theme.of(context).primaryTextTheme.bodyText2,
             ),
           ],
@@ -110,10 +119,9 @@ class _HeaderText extends StatelessWidget {
 }
 
 class _Card extends StatelessWidget {
-  const _Card(this.oilTodo, this.tireRotationTodo, this.oilNode,
-      this.tireRotationNode, this.onNext);
+  const _Card(this.oilNode, this.tireRotationNode, this.onNext);
 
-  final Todo oilTodo, tireRotationTodo;
+  // final Todo oilTodo, tireRotationTodo;
 
   final FocusNode oilNode, tireRotationNode;
 
@@ -129,11 +137,11 @@ class _Card extends StatelessWidget {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-              child: _OilInterval(oilTodo, oilNode, tireRotationNode),
+              child: _OilInterval(oilNode, tireRotationNode),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-              child: _TireRotationInterval(tireRotationTodo, tireRotationNode),
+              child: _TireRotationInterval(tireRotationNode),
             ),
             Container(
               child: Row(
@@ -143,13 +151,11 @@ class _Card extends StatelessWidget {
                     padding: EdgeInsets.all(0),
                     materialTapTargetSize: MaterialTapTargetSize.padded,
                     child: Text(
-                      'Skip',
+                      JsonIntl.of(context).get(IntlKeys.skip),
                       style: Theme.of(context).primaryTextTheme.button,
                     ),
                     onPressed: () {
-                      BlocProvider.of<AuthenticationBloc>(context)
-                          .add(TrialUserSignedIn());
-                      Navigator.popAndPushNamed(context, AutodoRoutes.home);
+                      Wizard.of<NewUserScreenWizard>(context).finish();
                     },
                   ),
                   FlatButton(
@@ -171,43 +177,19 @@ class _Card extends StatelessWidget {
 }
 
 class SetRepeatsScreen extends StatefulWidget {
-  const SetRepeatsScreen(this.repeatKey, this.page);
-
-  final GlobalKey<FormState> repeatKey;
-
-  final NewUserScreenPage page;
+  const SetRepeatsScreen();
 
   @override
-  SetRepeatsScreenState createState() =>
-      SetRepeatsScreenState(page == NewUserScreenPage.REPEATS);
+  SetRepeatsScreenState createState() => SetRepeatsScreenState();
 }
 
-class SetRepeatsScreenState extends State<SetRepeatsScreen>
-    with SingleTickerProviderStateMixin {
-  SetRepeatsScreenState(this.pageWillBeVisible);
+class SetRepeatsScreenState extends State<SetRepeatsScreen> {
+  SetRepeatsScreenState();
 
-  bool pageWillBeVisible;
+  final repeatKey = GlobalKey<FormState>();
 
-  AnimationController openCtrl;
-
-  Animation<double> openCurve;
-
-  FocusNode _oilNode, _tiresNode;
-
-  @override
-  void initState() {
-    openCtrl = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 600),
-    )..addListener(() => setState(() {}));
-    openCurve = Tween(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(parent: openCtrl, curve: Curves.easeOutCubic));
-    _oilNode = FocusNode();
-    _tiresNode = FocusNode();
-    super.initState();
-  }
+  final _oilNode = FocusNode();
+  final _tiresNode = FocusNode();
 
   @override
   void dispose() {
@@ -217,36 +199,21 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen>
   }
 
   Future<void> _next() async {
-    if (widget.repeatKey.currentState.validate()) {
-      widget.repeatKey.currentState.save();
+    if (repeatKey.currentState.validate()) {
+      repeatKey.currentState.save();
       // hide the keyboard
       FocusScope.of(context).requestFocus(FocusNode());
       await Future.delayed(Duration(milliseconds: 400));
-      await Navigator.popAndPushNamed(context, AutodoRoutes.home);
+      Wizard.of<NewUserScreenWizard>(context).next();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (pageWillBeVisible) {
-      openCtrl.forward();
-      pageWillBeVisible = false;
-    }
-
-    return BlocBuilder<TodosBloc, TodosState>(builder: (context, state) {
-      if (!(state is TodosLoaded) || (state as TodosLoaded).todos.isEmpty) {
-        return LoadingIndicator();
-      }
-      final oilTodo = (state as TodosLoaded).todos.firstWhere(
-          (val) => val.name == JsonIntl.of(context).get(IntlKeys.oil));
-      final tireRotationTodo = (state as TodosLoaded).todos.firstWhere(
-          (val) => val.name == JsonIntl.of(context).get(IntlKeys.tireRotation));
-      return Form(
-          key: widget.repeatKey,
-          child: AccountSetupScreen(
-              header: _HeaderText(),
-              panel: _Card(
-                  oilTodo, tireRotationTodo, _oilNode, _tiresNode, _next)));
-    });
+    return Form(
+      key: repeatKey,
+      child: AccountSetupScreen(
+          header: _HeaderText(), panel: _Card(_oilNode, _tiresNode, _next)),
+    );
   }
 }

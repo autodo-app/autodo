@@ -1,6 +1,9 @@
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:flutter/material.dart';
-import '../../../../theme.dart';
+import 'package:json_intl/json_intl.dart';
+
+import '../../../../generated/localization.dart';
+import 'wizard.dart';
+import 'wizard_info.dart';
 
 class AccountSetupScreen extends StatefulWidget {
   const AccountSetupScreen({@required this.header, @required this.panel});
@@ -22,40 +25,26 @@ class AccountSetupScreenState extends State<AccountSetupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints viewportConstraints) {
-        return ConstrainedBox(
-          constraints: BoxConstraints(
-            minHeight: viewportConstraints.maxHeight,
-          ),
-          child: SafeArea(
-            child: SlidingUpPanel(
-              maxHeight: viewportConstraints.maxHeight,
-              minHeight: viewportConstraints.maxHeight - 110,
-              parallaxEnabled: true,
-              parallaxOffset: .5,
-              body: widget.header,
-              color: cardColor,
-              panel: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
-                    child: pullTab,
-                  ),
-                  widget.panel
-                ],
-              ),
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30.0),
-                  topRight: Radius.circular(30.0)),
-              onPanelSlide: (double pos) => setState(() {}),
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: <Widget>[
+          SliverAppBar(
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                Wizard.of<NewUserScreenWizard>(context).previous();
+              },
+            ),
+            expandedHeight: 200,
+            title: Text(JsonIntl.of(context).get(IntlKeys.welcome)),
+            bottom: PreferredSize(
+              preferredSize: Size(double.infinity, 110),
+              child: widget.header,
             ),
           ),
-        );
-      }),
+          SliverToBoxAdapter(child: widget.panel),
+        ],
+      ),
     );
   }
 }

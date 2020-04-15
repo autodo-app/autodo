@@ -32,6 +32,13 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
     });
   }
 
+  @override
+  void onTransition(dynamic transition) {
+    print('*****************************************');
+    print('**   onTransition $transition');
+    print('*****************************************');
+  }
+
   static const double EMA_GAIN = 0.9;
 
   static const double EMA_CUTOFF = 8;
@@ -52,6 +59,9 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
 
   @override
   Stream<CarsState> mapEventToState(CarsEvent event) async* {
+    print('*****************************************');
+    print('**   NEW EVENT $event');
+    print('*****************************************');
     if (event is LoadCars) {
       yield* _mapLoadCarsToState();
     } else if (event is AddCar) {
@@ -67,9 +77,11 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
 
   Stream<CarsState> _mapLoadCarsToState() async* {
     try {
+      print('**   _mapLoadCarsToState');
       final cars = await repo
           .getCurrentCars()
           .timeout(Duration(seconds: 10), onTimeout: () => []);
+      print('**   _mapLoadCarsToState cars: $cars');
       if (cars != null) {
         yield CarsLoaded(cars);
       } else {

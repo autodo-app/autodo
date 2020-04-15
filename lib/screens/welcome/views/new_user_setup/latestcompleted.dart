@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_intl/json_intl.dart';
 
-import '../../../../blocs/blocs.dart';
 import '../../../../generated/localization.dart';
 import '../../../../integ_test_keys.dart';
-import '../../../../models/models.dart';
-import '../../../../routes.dart';
 import '../../../../theme.dart';
 import '../../../../units/units.dart';
 import '../../../../util.dart';
 import 'base.dart';
-import 'new_user_screen_page.dart';
+import 'wizard.dart';
+import 'wizard_info.dart';
 
 class _TodoFields extends StatefulWidget {
-  const _TodoFields(this.c, this.formKey, this.showName);
+  const _TodoFields(this.car, this.formKey, this.showName);
 
-  final Car c;
+  final NewUserCar car;
   final GlobalKey<FormState> formKey;
   final bool showName;
 
@@ -48,17 +45,17 @@ class _TodoFieldsState extends State<_TodoFields> {
       key: IntegrationTestKeys.latestOilChangeField,
       maxLines: 1,
       autofocus: false,
-      decoration: defaultInputDecoration('(miles)', 'Oil Change'),
-      validator: intNoRequire,
-      onSaved: (val) {
-        if (val == null || val == '') return;
-        BlocProvider.of<TodosBloc>(context).add(AddTodo(Todo(
-            name: 'oil',
-            carName: widget.c.name,
-            completed: true,
-            completedDate: DateTime.now(),
-            dueMileage: distance.unitToInternal(double.parse(val.trim())))));
-      },
+      decoration: defaultInputDecoration(
+        context,
+        JsonIntl.of(context).get(IntlKeys.oilChange),
+        unit: Distance.of(context).unitString(context, short: true),
+      ),
+      validator: (v) =>
+          formValidator<int>(context, v, min: 0, max: widget.car.mileage),
+      keyboardType: TextInputType.number,
+      initialValue: distance.format(widget.car.oilChange, textField: true),
+      onSaved: (value) => widget.car.oilChange =
+          value == '' ? null : distance.unitToInternal(double.parse(value)),
       focusNode: _oilNode,
       textInputAction: TextInputAction.next,
       onFieldSubmitted: (_) => changeFocus(_oilNode, _tiresNode),
@@ -71,17 +68,17 @@ class _TodoFieldsState extends State<_TodoFields> {
     return TextFormField(
       key: IntegrationTestKeys.latestTireRotationField,
       maxLines: 1,
-      decoration: defaultInputDecoration('(miles)', 'Tire Rotation'),
-      validator: intNoRequire,
-      onSaved: (val) {
-        if (val == null || val == '') return;
-        BlocProvider.of<TodosBloc>(context).add(AddTodo(Todo(
-            name: 'tireRotation',
-            carName: widget.c.name,
-            completed: true,
-            completedDate: DateTime.now(),
-            dueMileage: distance.unitToInternal(double.parse(val.trim())))));
-      },
+      decoration: defaultInputDecoration(
+        context,
+        JsonIntl.of(context).get(IntlKeys.repeatTireRotation),
+        unit: Distance.of(context).unitString(context, short: true),
+      ),
+      validator: (v) =>
+          formValidator<int>(context, v, min: 0, max: widget.car.mileage),
+      keyboardType: TextInputType.number,
+      initialValue: distance.format(widget.car.tireRotation, textField: true),
+      onSaved: (value) => widget.car.tireRotation =
+          value == '' ? null : distance.unitToInternal(double.parse(value)),
       focusNode: _tiresNode,
       textInputAction: TextInputAction.done,
     );
@@ -90,7 +87,7 @@ class _TodoFieldsState extends State<_TodoFields> {
   @override
   Widget build(BuildContext context) {
     final name = widget.showName
-        ? Text(widget.c.name,
+        ? Text(widget.car.name,
             style: Theme.of(context).primaryTextTheme.headline6)
         : Container();
     final namePadding = widget.showName
@@ -106,24 +103,13 @@ class _TodoFieldsState extends State<_TodoFields> {
               children: <Widget>[
                 name,
                 namePadding,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Expanded(
-                      flex: 1,
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                        child: oilMileage(),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                        child: tireRotationMileage(),
-                      ),
-                    ),
-                  ],
+                Padding(
+                  padding: EdgeInsets.fromLTRB(5, 0, 5, 10),
+                  child: oilMileage(),
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(5, 0, 5, 10),
+                  child: tireRotationMileage(),
                 ),
                 Padding(padding: EdgeInsets.only(bottom: 10)),
               ],
@@ -132,32 +118,25 @@ class _TodoFieldsState extends State<_TodoFields> {
 }
 
 class LatestRepeatsScreen extends StatefulWidget {
-  const LatestRepeatsScreen(this.formKey, this.onNext, this.page);
-
-  final GlobalKey<FormState> formKey;
-
-  final Function() onNext;
-
-  final NewUserScreenPage page;
+  const LatestRepeatsScreen();
 
   @override
-  LatestRepeatsScreenState createState() =>
-      LatestRepeatsScreenState(page == NewUserScreenPage.LATEST);
+  LatestRepeatsScreenState createState() => LatestRepeatsScreenState();
 }
 
-class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
-    with TickerProviderStateMixin {
-  LatestRepeatsScreenState(this.pageWillBeVisible);
-
-  bool pageTransition, pageWillBeVisible;
+class LatestRepeatsScreenState extends State<LatestRepeatsScreen> {
+  LatestRepeatsScreenState();
 
   AnimationController openCtrl;
 
   Animation<double> openCurve;
 
-  FocusNode _oilNode, _tiresNode;
+  final _oilNode = FocusNode();
+  final _tiresNode = FocusNode();
 
   List<GlobalKey<FormState>> carFormKeys = [];
+
+  final formKey = GlobalKey<FormState>();
 
   Future<void> _next() async {
     var allValidated = true;
@@ -168,29 +147,13 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
         allValidated = false;
       }
     });
-    if (allValidated && widget.formKey.currentState.validate()) {
-      widget.formKey.currentState.save();
+    if (allValidated && formKey.currentState.validate()) {
+      formKey.currentState.save();
       // hide the keyboard
       FocusScope.of(context).requestFocus(FocusNode());
-      await Future.delayed(Duration(milliseconds: 400));
-      widget.onNext();
+      // await Future.delayed(Duration(milliseconds: 400));
+      Wizard.of<NewUserScreenWizard>(context).next();
     }
-  }
-
-  @override
-  void initState() {
-    pageTransition = false;
-    openCtrl = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 600),
-    )..addListener(() => setState(() {}));
-    openCurve = Tween(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(parent: openCtrl, curve: Curves.easeOutCubic));
-    _oilNode = FocusNode();
-    _tiresNode = FocusNode();
-    super.initState();
   }
 
   @override
@@ -201,22 +164,14 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
   }
 
   Widget card() {
-    // we're assuming here that the cars bloc doesn't update while this screen
-    // is visible, should be a safe assumption
-    final carsState = BlocProvider.of<CarsBloc>(context).state;
-    if (!(carsState is CarsLoaded)) {
-      return Container();
-    }
-    final cars = (carsState as CarsLoaded).cars;
-    // again relying on this set of cars to be static
-    // I'm fairly confident that there is a better way to do this but idk what it is
+    final cars = Wizard.of<NewUserScreenWizard>(context).cars;
+
     final carFields = [];
-    for (var i in Iterable.generate(cars.length)) {
-      if (carFormKeys.length - 1 < i) {
-        // only insert new keys if the index is empty
-        carFormKeys.add(GlobalKey<FormState>());
-      }
-      carFields.add(_TodoFields(cars[i], carFormKeys[i], cars.length > 1));
+    carFormKeys.clear();
+    for (final car in cars) {
+      final key = GlobalKey<FormState>();
+      carFormKeys.add(key);
+      carFields.add(_TodoFields(car, key, cars.length > 1));
     }
 
     return Container(
@@ -235,13 +190,11 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
                   padding: EdgeInsets.all(0),
                   materialTapTargetSize: MaterialTapTargetSize.padded,
                   child: Text(
-                    'Skip',
+                    JsonIntl.of(context).get(IntlKeys.skip),
                     style: Theme.of(context).primaryTextTheme.button,
                   ),
                   onPressed: () {
-                    BlocProvider.of<AuthenticationBloc>(context)
-                        .add(TrialUserSignedIn());
-                    Navigator.popAndPushNamed(context, AutodoRoutes.home);
+                    Wizard.of<NewUserScreenWizard>(context).finish();
                   },
                 ),
                 FlatButton(
@@ -252,7 +205,7 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
                     JsonIntl.of(context).get(IntlKeys.next),
                     style: Theme.of(context).primaryTextTheme.button,
                   ),
-                  onPressed: () async => await _next(),
+                  onPressed: _next,
                 ),
               ],
             ),
@@ -264,24 +217,15 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
 
   @override
   Widget build(BuildContext context) {
-    if (pageWillBeVisible) {
-      openCtrl.forward();
-      pageWillBeVisible = false;
-    }
-
-    final Widget headerText = AnimatedContainer(
-      duration: Duration(milliseconds: 400),
-      curve: Curves.fastOutSlowIn,
-      height: 110,
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(0, 0, 0, 30),
-        child: Center(
-            child: Column(
+    final Widget headerText = Container(
+      padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+      child: Center(
+        child: Column(
           children: <Widget>[
             Padding(
               padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
               child: Text(
-                'Before you get started,\n let\'s get some info about your car.',
+                JsonIntl.of(context).get(IntlKeys.carAddTitle),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 20,
@@ -292,16 +236,18 @@ class LatestRepeatsScreenState extends State<LatestRepeatsScreen>
               ),
             ),
             Text(
-              'When was the last time you did these tasks?',
+              JsonIntl.of(context).get(IntlKeys.wizardLastCompleted),
+              textAlign: TextAlign.center,
               style: Theme.of(context).primaryTextTheme.bodyText2,
             ),
           ],
-        )),
+        ),
       ),
     );
 
     return Form(
-        key: widget.formKey,
-        child: AccountSetupScreen(header: headerText, panel: card()));
+      key: formKey,
+      child: AccountSetupScreen(header: headerText, panel: card()),
+    );
   }
 }

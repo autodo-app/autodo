@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:json_intl/json_intl.dart';
 
 import '../../../../generated/localization.dart';
-import '../../../../routes.dart';
+import '../../../screens.dart';
 
 class SignupButton extends StatelessWidget {
   const SignupButton({Key key, this.buttonPadding}) : super(key: key);
@@ -21,7 +21,12 @@ class SignupButton extends StatelessWidget {
           child: RaisedButton(
             elevation: 24.0,
             onPressed: () {
-              Navigator.of(context).pushNamed(AutodoRoutes.signupScreen);
+              // AutodoRoutes.signupScreen
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (BuildContext context) => SignupScreenProvider(),
+                ),
+              );
             },
             textColor: Colors.white,
             padding: const EdgeInsets.all(0.0),

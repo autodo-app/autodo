@@ -12,20 +12,18 @@ abstract class DatabaseState extends Equatable {
 class DbUninitialized extends DatabaseState {}
 
 class DbLoaded extends DatabaseState {
-  const DbLoaded(this.dataRepo, {this.storageRepo, this.newUser});
+  const DbLoaded(this.dataRepo, {this.storageRepo});
 
   final DataRepository dataRepo;
 
   final StorageRepository storageRepo;
 
-  final bool newUser;
-
   @override
-  List<Object> get props => [dataRepo, storageRepo, newUser];
+  List<Object> get props => [dataRepo, FirebaseStorageRepository];
 
   @override
   String toString() =>
-      'DbLoaded { dataRepo: $dataRepo, storageRepo: $storageRepo, newUser: $newUser }';
+      'DbLoaded { dataRepo: $dataRepo, storageRepo: $storageRepo }';
 }
 
 class DbNotLoaded extends DatabaseState {}

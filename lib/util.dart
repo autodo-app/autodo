@@ -13,6 +13,76 @@ String titleCase(String input) {
       lowerToUpper, (m) => '${m[1]} ${m[2]}'); // space between words
 }
 
+enum ValidatorResult { valid, typeError, tooSmall, tooBig, empty }
+
+ValidatorResult validator<T>(
+  String val, {
+  num min,
+  num max,
+  bool required = false,
+}) {
+  if (val == null || val == '') {
+    return required ? ValidatorResult.empty : ValidatorResult.valid;
+  }
+
+  if (T == int) {
+    try {
+      final intVal = int.parse(val);
+      if (min != null && intVal < min) return ValidatorResult.tooSmall;
+      if (max != null && intVal > max) return ValidatorResult.tooBig;
+    } catch (e) {
+      return ValidatorResult.typeError;
+    }
+  } else if (T == double || T == num) {
+    try {
+      final doubleVal = double.parse(val);
+      if (min != null && doubleVal < min) return ValidatorResult.tooSmall;
+      if (max != null && doubleVal > max) return ValidatorResult.tooBig;
+    } catch (e) {
+      return ValidatorResult.typeError;
+    }
+  }
+
+  return ValidatorResult.valid;
+}
+
+String formValidator<T>(
+  BuildContext context,
+  String val, {
+  num min,
+  num max,
+  bool required = false,
+  String typeError,
+  String tooSmall,
+  String tooBig,
+  String empty,
+}) {
+  final res = validator<T>(val, min: min, max: max, required: required);
+  switch (res) {
+    case ValidatorResult.valid:
+      return null;
+    case ValidatorResult.typeError:
+      if (typeError != null) {
+        return typeError;
+      }
+      if (T == int) {
+        return 'Integer';
+      } else if (T == double || T == num) {
+        return 'Number';
+      }
+      return 'Type error';
+    case ValidatorResult.tooSmall:
+      if (T == int) min = min.round();
+      return tooSmall ?? 'Value too small min: $min';
+    case ValidatorResult.tooBig:
+      if (T == int) max = max.round();
+      return tooBig ?? 'Value too big max: $max';
+    case ValidatorResult.empty:
+      return empty ?? 'This field is required.';
+  }
+  return null;
+}
+
 String requiredValidator(String val) =>
     (val == null || val == '') ? 'This field is required.' : null;
 

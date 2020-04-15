@@ -61,7 +61,6 @@ class AuthenticationBloc
   final AuthRepository _userRepository;
 
   static const String trialUserKey = 'trialUserLoggedIn';
-  static const String newUserKey = 'isNewUser';
 
   @override
   AuthenticationState get initialState => Uninitialized();
@@ -87,8 +86,6 @@ class AuthenticationBloc
       yield* _mapSignedUpToState();
     } else if (event is TrialUserSignedUp) {
       yield* _mapTrialUserSignedUpToState();
-    } else if (event is TrialUserSignedIn) {
-      yield* _mapTrialUserSignedInToState();
     }
   }
 
@@ -115,10 +112,9 @@ class AuthenticationBloc
         yield RemoteAuthenticated(
           name,
           uuid,
-          prefs.getBool(newUserKey) ?? false,
         );
       } else if (prefs.getBool(trialUserKey)) {
-        yield LocalAuthenticated(prefs.getBool(newUserKey) ?? false);
+        yield LocalAuthenticated();
       } else {
         yield Unauthenticated();
       }
@@ -136,11 +132,10 @@ class AuthenticationBloc
     // make sure that any past trial users are no longer logged in
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(trialUserKey, false);
-    await prefs.setBool(newUserKey, false);
 
     final _email = await _userRepository.getUserEmail();
     final _uuid = await _userRepository.getUserId();
-    yield RemoteAuthenticated(_email, _uuid, false);
+    yield RemoteAuthenticated(_email, _uuid);
   }
 
   /// Responds to a [SignedUp] event with an [Authenticated] state.
@@ -151,11 +146,10 @@ class AuthenticationBloc
     // make sure that any past trial users are no longer logged in
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(trialUserKey, false);
-    await prefs.setBool(newUserKey, true);
 
     final _email = await _userRepository.getUserEmail();
     final _uuid = await _userRepository.getUserId();
-    yield RemoteAuthenticated(_email, _uuid, true);
+    yield RemoteAuthenticated(_email, _uuid);
   }
 
   /// Signs out the currently logged in user and yields [Unauthenticated].
@@ -184,16 +178,7 @@ class AuthenticationBloc
   Stream<AuthenticationState> _mapTrialUserSignedUpToState() async* {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(trialUserKey, true);
-    await prefs.setBool(newUserKey, true);
 
-    yield LocalAuthenticated(true);
-  }
-
-  Stream<AuthenticationState> _mapTrialUserSignedInToState() async* {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(trialUserKey, true);
-    await prefs.setBool(newUserKey, false);
-
-    yield LocalAuthenticated(false);
+    yield LocalAuthenticated();
   }
 }

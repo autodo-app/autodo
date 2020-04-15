@@ -20,9 +20,7 @@ import 'flavor.dart';
 import 'generated/keys.dart';
 import 'generated/localization.dart';
 import 'repositories/repositories.dart';
-import 'routes.dart';
 import 'screens/screens.dart';
-import 'screens/settings/screen.dart';
 import 'theme.dart';
 import 'units/units.dart';
 import 'widgets/widgets.dart';
@@ -72,6 +70,7 @@ class AppProviderState extends State<AppProvider> {
   final analytics = kFlavor.hasAnalytics ? FirebaseAnalytics() : null;
   var _initialized = false;
 
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _initMainWidget();
@@ -122,55 +121,61 @@ class AppProviderState extends State<AppProvider> {
       return Container();
     }
 
-    return PrefService(
-      service: service,
-      child: ChangeNotifierProvider<BasePrefService>.value(
-        value: service,
-        child: BlocProvider<AuthenticationBloc>(
-          create: (context) =>
-              AuthenticationBloc(userRepository: authRepository)
-                ..add(AppStarted(integrationTest: widget.integrationTest)),
-          child: BlocProvider<DatabaseBloc>(
-            create: (context) => DatabaseBloc(
-              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-            ),
-            child: Builder(
-              builder: (BuildContext context) => MultiBlocProvider(
-                providers: [
-                  if (kFlavor.hasPaid)
-                    BlocProvider<PaidVersionBloc>(
-                      create: (context) => PaidVersionBloc(
-                          dbBloc: BlocProvider.of<DatabaseBloc>(context))
-                        ..add(LoadPaidVersion()),
+    return Provider.value(
+      value: authRepository,
+      updateShouldNotify: (previous, current) => false,
+      child: PrefService(
+        service: service,
+        child: ChangeNotifierProvider<BasePrefService>.value(
+          value: service,
+          child: BlocProvider<AuthenticationBloc>(
+            create: (context) =>
+                AuthenticationBloc(userRepository: authRepository)
+                  ..add(AppStarted(integrationTest: widget.integrationTest)),
+            child: BlocProvider<DatabaseBloc>(
+              create: (context) => DatabaseBloc(
+                authenticationBloc:
+                    BlocProvider.of<AuthenticationBloc>(context),
+              ),
+              child: Builder(
+                builder: (BuildContext context) => MultiBlocProvider(
+                  providers: [
+                    if (kFlavor.hasPaid)
+                      BlocProvider<PaidVersionBloc>(
+                        create: (context) => PaidVersionBloc(
+                            dbBloc: BlocProvider.of<DatabaseBloc>(context))
+                          ..add(LoadPaidVersion()),
+                      ),
+                    BlocProvider<NotificationsBloc>(
+                      create: (context) => NotificationsBloc(
+                        dbBloc: BlocProvider.of<DatabaseBloc>(context),
+                      )..add(LoadNotifications()),
                     ),
-                  BlocProvider<NotificationsBloc>(
-                    create: (context) => NotificationsBloc(
-                      dbBloc: BlocProvider.of<DatabaseBloc>(context),
-                    )..add(LoadNotifications()),
-                  ),
-                  BlocProvider<RefuelingsBloc>(
-                    create: (context) => RefuelingsBloc(
-                      dbBloc: BlocProvider.of<DatabaseBloc>(context),
+                    BlocProvider<RefuelingsBloc>(
+                      create: (context) => RefuelingsBloc(
+                        dbBloc: BlocProvider.of<DatabaseBloc>(context),
+                      ),
                     ),
-                  ),
-                ],
-                child: BlocProvider<CarsBloc>(
-                  create: (context) => CarsBloc(
-                    dbBloc: BlocProvider.of<DatabaseBloc>(context),
-                    refuelingsBloc: BlocProvider.of<RefuelingsBloc>(context),
-                  ),
-                  child: BlocProvider<TodosBloc>(
-                    create: (context) => TodosBloc(
+                    BlocProvider<CarsBloc>(
+                      create: (context) => CarsBloc(
+                        dbBloc: BlocProvider.of<DatabaseBloc>(context),
+                        refuelingsBloc:
+                            BlocProvider.of<RefuelingsBloc>(context),
+                      ),
+                    ),
+                    BlocProvider<TodosBloc>(
+                      create: (context) => TodosBloc(
                         dbBloc: BlocProvider.of<DatabaseBloc>(context),
                         notificationsBloc:
                             BlocProvider.of<NotificationsBloc>(context),
-                        carsBloc: BlocProvider.of<CarsBloc>(context)),
-                    child: App(
-                        theme: theme,
-                        authRepository: authRepository,
-                        integrationTest: widget.integrationTest,
-                        analytics: analytics),
-                  ),
+                        carsBloc: BlocProvider.of<CarsBloc>(context),
+                      ),
+                    ),
+                  ],
+                  child: App(
+                      theme: theme,
+                      integrationTest: widget.integrationTest,
+                      analytics: analytics),
                 ),
               ),
             ),
@@ -184,32 +189,19 @@ class AppProviderState extends State<AppProvider> {
 class App extends StatelessWidget {
   const App({
     @required ThemeData theme,
-    @required AuthRepository authRepository,
     this.integrationTest,
     this.analytics,
   })  : assert(theme != null),
-        assert(authRepository != null),
-        _theme = theme,
-        _authRepository = authRepository;
+        _theme = theme;
 
   final ThemeData _theme;
-
-  final AuthRepository _authRepository;
 
   final bool integrationTest;
 
   final FirebaseAnalytics analytics;
 
   @override
-  Widget build(BuildContext context) {
-    final Widget homeProvider =
-        HomeScreenProvider(integrationTest: integrationTest);
-    final Widget welcomeProvider = WelcomeScreenProvider();
-    final Widget signupProvider =
-        SignupScreenProvider(authRepository: _authRepository);
-    final Widget loginProvider = LoginScreenProvider(
-      authRepository: _authRepository,
-    );
+  Widget build(context) {
     return MaterialApp(
       onGenerateTitle: (BuildContext context) =>
           JsonIntl.of(context).get(IntlKeys.appTitle),
@@ -222,26 +214,18 @@ class App extends StatelessWidget {
         const Locale('en'),
         const Locale('fr'),
       ],
-      routes: {
-        '/': (context) => BlocBuilder<AuthenticationBloc, AuthenticationState>(
-              // Just here as the splitter between home screen and login screen
-              builder: (context, state) {
-                if (state is RemoteAuthenticated ||
-                    state is LocalAuthenticated) {
-                  return homeProvider;
-                } else if (state is Unauthenticated) {
-                  return welcomeProvider;
-                } else {
-                  return LoadingIndicator();
-                }
-              },
-            ),
-        AutodoRoutes.home: (context) => homeProvider,
-        AutodoRoutes.welcome: (context) => welcomeProvider,
-        AutodoRoutes.signupScreen: (context) => signupProvider,
-        AutodoRoutes.loginScreen: (context) => loginProvider,
-        AutodoRoutes.settingsScreen: (context) => SettingsScreen(),
-      },
+      home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+        // Just here as the splitter between home screen and login screen
+        builder: (context, state) {
+          if (state is Authenticated) {
+            return HomeScreenProvider(integrationTest: integrationTest);
+          } else if (state is Uninitialized) {
+            return LoadingIndicator();
+          } else {
+            return WelcomeScreenProvider();
+          }
+        },
+      ),
       theme: _theme,
       debugShowCheckedModeBanner: false,
       navigatorObservers: [

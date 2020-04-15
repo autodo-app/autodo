@@ -80,13 +80,13 @@ class FirebaseAuthRepository extends AuthRepository {
   Future<void> deleteCurrentUser() async {
     try {
       final user = _cachedCurrentUser ?? await _firebaseAuth.currentUser();
-      print(user);
+      print('user: $user');
       print('cache $_cachedCurrentUser');
       _cachedCurrentUser = null;
       return user.delete();
     } on PlatformException catch (e) {
       // if exception is thrown because user doesn't exist, ignore it for now
-      print(e);
+      print('deleteCurrentUser: $e');
     }
   }
 

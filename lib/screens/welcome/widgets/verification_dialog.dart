@@ -4,7 +4,6 @@ import 'package:json_intl/json_intl.dart';
 
 import '../../../blocs/blocs.dart';
 import '../../../generated/localization.dart';
-import '../../../routes.dart';
 
 class EmailVerificationDialog extends StatelessWidget {
   @override
@@ -18,8 +17,9 @@ class EmailVerificationDialog extends StatelessWidget {
             if (!(state is UserVerified)) return Container();
             return FlatButton(
               child: Text(JsonIntl.of(context).get(IntlKeys.next)),
-              onPressed: () => Navigator.popAndPushNamed(
-                  context, AutodoRoutes.newUserScreens),
+              onPressed: () {
+//AutodoRoutes.newUserScreens
+              },
             );
           })
         ],

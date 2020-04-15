@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +12,7 @@ import '../../flavor.dart';
 import '../../generated/localization.dart';
 import '../../integ_test_keys.dart';
 import '../../models/models.dart';
+import '../../screens/welcome/views/barrel.dart';
 import '../../units/units.dart';
 import '../../widgets/widgets.dart';
 import '../add_edit/barrel.dart';
@@ -78,6 +81,8 @@ class HomeScreenState extends State<HomeScreen> with RouteAware {
   AppTab _tab;
 
   AppTab get tab => _tab;
+
+  StreamSubscription<CarsState> carsSubscription;
 
   set tab(AppTab tab) {
     setState(() {
@@ -172,6 +177,17 @@ class HomeScreenState extends State<HomeScreen> with RouteAware {
           .observer
           .subscribe(this, ModalRoute.of(context));
     }
+
+    carsSubscription ??= BlocProvider.of<CarsBloc>(context).listen((a) {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    carsSubscription?.cancel();
+    carsSubscription = null;
+    super.dispose();
   }
 
   @override
@@ -241,6 +257,15 @@ class HomeScreenState extends State<HomeScreen> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
+    final cars = BlocProvider.of<CarsBloc>(context).state;
+    if (cars is CarsLoaded) {
+      if (cars.cars.isEmpty) {
+        return NewUserScreen();
+      }
+    } else {
+      return LoadingIndicator();
+    }
+
     return MultiBlocProvider(
       providers: [
         BlocProvider<FilteredRefuelingsBloc>(
