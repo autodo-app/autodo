@@ -301,6 +301,10 @@ class IntlKeys {
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const groupUnits = 'group_units';
 
+  /// strings.json: 'Info'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const info = 'info';
+
   /// strings.json: 'Interval:'
   /// strings-fr.json: 'Intervalle :'
   static const interval = 'interval';
