@@ -114,9 +114,9 @@ class SettingsScreenState extends State<SettingsScreen> {
         ),
       ),
       PreferenceTitle(JsonIntl.of(context).get(IntlKeys.info)),
-      PreferenceButton(Text(MaterialLocalizations.of(context)
-            .aboutListTileTitle(
-          JsonIntl.of(context).get(IntlKeys.appTitle))),
+      PreferenceButton(
+        Text(MaterialLocalizations.of(context)
+            .aboutListTileTitle(JsonIntl.of(context).get(IntlKeys.appTitle))),
         color: Theme.of(context).buttonTheme.colorScheme.background,
         onTap: () {
           Navigator.pop(context);
