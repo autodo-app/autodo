@@ -11,6 +11,7 @@ import 'package:equatable/equatable.dart';
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/repositories/repositories.dart';
 import 'package:autodo/models/models.dart';
+import 'package:autodo/units/units.dart';
 
 // ignore: must_be_immutable
 class MockDataRepository extends Mock
@@ -298,7 +299,7 @@ Future<void> main() async {
         estimatedDueDate: true,
         mileageRepeatInterval: 1000,
         dateRepeatInterval: RepeatInterval());
-    final defaults = TodosBloc.defaults
+    final defaults = TodosBloc.defaultsImperial
         .asMap()
         .map((k, t) => MapEntry(
             k,
@@ -333,13 +334,13 @@ Future<void> main() async {
       },
       act: (bloc) async {
         bloc.add(LoadTodos());
-        bloc.add(TranslateDefaults(JsonIntl.mock));
+        bloc.add(TranslateDefaults(JsonIntl.mock, DistanceUnit.imperial));
         bloc.add(CarsUpdated([car1]));
       },
       expect: [
         TodosLoading(),
         TodosLoaded(todos: []),
-        TodosLoaded(todos: [], defaults: TodosBloc.defaults),
+        TodosLoaded(todos: [], defaults: TodosBloc.defaultsImperial),
         TodosLoaded(todos: defaults, defaults: []),
         // TodosLoaded(todos: defaultsWithDates, defaults: [])
       ],

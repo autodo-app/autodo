@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:json_intl/json_intl.dart';
 
 import '../../../models/models.dart';
+import '../../../units/units.dart';
 
 abstract class TodosEvent extends Equatable {
   const TodosEvent();
@@ -80,9 +81,10 @@ class CompleteTodo extends TodosEvent {
 }
 
 class TranslateDefaults extends TodosEvent {
-  const TranslateDefaults(this.jsonIntl);
+  const TranslateDefaults(this.jsonIntl, this.distanceUnit);
 
   final JsonIntl jsonIntl;
+  final DistanceUnit distanceUnit;
 
   @override
   List<Object> get props => [jsonIntl];
