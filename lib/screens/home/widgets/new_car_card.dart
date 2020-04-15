@@ -20,7 +20,7 @@ class NewCarCard extends StatelessWidget {
                     isEditing: false,
                     onSave: (name, odom, make, model, year, plate, vin) {
                       BlocProvider.of<TodosBloc>(context)
-                          .add(TranslateDefaults(JsonIntl.of(context)));
+                          .add(TranslateDefaults(JsonIntl.of(context), Distance.of(context, listen: false).unit));
                       BlocProvider.of<CarsBloc>(context).add(AddCar(Car(
                           name: name,
                           mileage: Distance.of(context, listen: false)

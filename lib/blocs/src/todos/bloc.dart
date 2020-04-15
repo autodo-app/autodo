@@ -48,80 +48,80 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
 
   final NotificationsBloc _notificationsBloc;
 
-  static final List<Todo> defaults = [
-    Todo(name: IntlKeys.oil, mileageRepeatInterval: 3500, completed: false),
+  static final List<Todo> defaultsImperial = [
+    Todo(name: IntlKeys.oil, mileageRepeatInterval: 3500 * Distance.miles, completed: false),
     Todo(
         name: IntlKeys.tireRotation,
-        mileageRepeatInterval: 7500,
+        mileageRepeatInterval: 7500 * Distance.miles,
         completed: false),
     Todo(
         name: IntlKeys.engineFilter,
-        mileageRepeatInterval: 45000,
+        mileageRepeatInterval: 45000 * Distance.miles,
         completed: false),
     Todo(
         name: IntlKeys.wiperBlades,
-        mileageRepeatInterval: 30000,
+        mileageRepeatInterval: 30000 * Distance.miles,
         completed: false),
     Todo(
         name: IntlKeys.alignmentCheck,
-        mileageRepeatInterval: 40000,
+        mileageRepeatInterval: 40000 * Distance.miles,
         completed: false),
     Todo(
         name: IntlKeys.cabinFilter,
-        mileageRepeatInterval: 45000,
+        mileageRepeatInterval: 45000 * Distance.miles,
         completed: false),
-    Todo(name: IntlKeys.tires, mileageRepeatInterval: 50000, completed: false),
-    Todo(name: IntlKeys.brakes, mileageRepeatInterval: 60000, completed: false),
+    Todo(name: IntlKeys.tires, mileageRepeatInterval: 50000 * Distance.miles, completed: false),
+    Todo(name: IntlKeys.brakes, mileageRepeatInterval: 60000 * Distance.miles, completed: false),
     Todo(
         name: IntlKeys.sparkPlugs,
-        mileageRepeatInterval: 60000,
+        mileageRepeatInterval: 60000 * Distance.miles,
         completed: false),
     Todo(
         name: IntlKeys.frontStruts,
-        mileageRepeatInterval: 75000,
+        mileageRepeatInterval: 75000 * Distance.miles,
         completed: false),
     Todo(
         name: IntlKeys.rearStruts,
-        mileageRepeatInterval: 75000,
+        mileageRepeatInterval: 75000 * Distance.miles,
         completed: false),
     Todo(
-        name: IntlKeys.battery, mileageRepeatInterval: 75000, completed: false),
+        name: IntlKeys.battery, mileageRepeatInterval: 75000 * Distance.miles, completed: false),
     Todo(
         name: IntlKeys.serpentineBelt,
-        mileageRepeatInterval: 150000,
+        mileageRepeatInterval: 150000 * Distance.miles,
         completed: false),
     Todo(
         name: IntlKeys.transmissionFluid,
-        mileageRepeatInterval: 100000,
+        mileageRepeatInterval: 100000 * Distance.miles,
         completed: false),
     Todo(
         name: IntlKeys.coolantChange,
-        mileageRepeatInterval: 100000,
+        mileageRepeatInterval: 100000 * Distance.miles,
         completed: false)
   ];
-  static final List<Todo> kilometerDefaults = [
-    Todo(name: 'oil', mileageRepeatInterval: 5633, completed: false),
-    Todo(name: 'tireRotation', mileageRepeatInterval: 12070, completed: false),
-    Todo(name: 'engineFilter', mileageRepeatInterval: 72420, completed: false),
-    Todo(name: 'wiperBlades', mileageRepeatInterval: 48280, completed: false),
+  static final List<Todo> defaultsMetric = [
+    Todo(name: 'oil', mileageRepeatInterval: 6000, completed: false),
+    Todo(name: 'tireRotation', mileageRepeatInterval: 1200, completed: false),
+    Todo(name: 'engineFilter', mileageRepeatInterval: 75000, completed: false),
+    Todo(name: 'wiperBlades', mileageRepeatInterval: 50000, completed: false),
     Todo(
-        name: 'alignmentCheck', mileageRepeatInterval: 64374, completed: false),
-    Todo(name: 'cabinFilter', mileageRepeatInterval: 72420, completed: false),
-    Todo(name: 'tires', mileageRepeatInterval: 80467, completed: false),
-    Todo(name: 'brakes', mileageRepeatInterval: 96561, completed: false),
-    Todo(name: 'sparkPlugs', mileageRepeatInterval: 96561, completed: false),
-    Todo(name: 'frontStruts', mileageRepeatInterval: 120701, completed: false),
-    Todo(name: 'rearStruts', mileageRepeatInterval: 120701, completed: false),
-    Todo(name: 'battery', mileageRepeatInterval: 120701, completed: false),
+        name: 'alignmentCheck', mileageRepeatInterval: 65000, completed: false),
+    Todo(name: 'cabinFilter', mileageRepeatInterval: 75000, completed: false),
+    Todo(name: 'tires', mileageRepeatInterval: 80000, completed: false),
+    Todo(name: 'brakes', mileageRepeatInterval: 100000, completed: false),
+    Todo(name: 'sparkPlugs', mileageRepeatInterval: 100000, completed: false),
+    Todo(name: 'frontStruts', mileageRepeatInterval: 120000, completed: false),
+    Todo(name: 'rearStruts', mileageRepeatInterval: 120000, completed: false),
+    Todo(name: 'battery', mileageRepeatInterval: 120000, completed: false),
     Todo(
         name: 'serpentineBelt',
-        mileageRepeatInterval: 241402,
+        mileageRepeatInterval: 250000,
         completed: false),
     Todo(
         name: 'transmissionFluid',
-        mileageRepeatInterval: 160934,
+        mileageRepeatInterval: 150000,
         completed: false),
-    Todo(name: 'coolantChange', mileageRepeatInterval: 160934, completed: false)
+    Todo(name: 'coolantChange', mileageRepeatInterval: 150000, completed: false)
   ];
 
   StreamSubscription _dataSubscription, _carsSubscription, _repoSubscription;
@@ -367,7 +367,17 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
 
   Stream<TodosState> _mapTranslateDefaultsToState(
       TranslateDefaults event) async* {
-    final translated = defaults
+    List<Todo> translated;
+
+    // Get the correct set of defaults so the intervals are nice, round numbers
+    if (event.distanceUnit == DistanceUnit.imperial) {
+      translated = List<Todo>.from(defaultsImperial);
+    } else if (event.distanceUnit == DistanceUnit.metric) {
+      translated = List<Todo>.from(defaultsMetric);
+    }
+
+    // Translate the names
+    translated = translated
         .map((t) => t.copyWith(name: event.jsonIntl.get(t.name)))
         .toList();
     if (state is TodosLoading) {
