@@ -234,11 +234,10 @@ class SetRepeatsScreenState extends State<SetRepeatsScreen>
       if (!(state is TodosLoaded) || (state as TodosLoaded).todos.isEmpty) {
         return LoadingIndicator();
       }
-      final oilTodo =
-          (state as TodosLoaded).todos.firstWhere((val) => val.name == 'oil');
-      final tireRotationTodo = (state as TodosLoaded)
-          .todos
-          .firstWhere((val) => val.name == 'tireRotation');
+      final oilTodo = (state as TodosLoaded).todos.firstWhere(
+          (val) => val.name == JsonIntl.of(context).get(IntlKeys.oil));
+      final tireRotationTodo = (state as TodosLoaded).todos.firstWhere(
+          (val) => val.name == JsonIntl.of(context).get(IntlKeys.tireRotation));
       return Form(
           key: widget.repeatKey,
           child: AccountSetupScreen(

@@ -144,6 +144,8 @@ class MileageScreenState extends State<MileageScreen> {
       }
     });
     if (allValidated) {
+      BlocProvider.of<TodosBloc>(context)
+          .add(TranslateDefaults(JsonIntl.of(context)));
       cars.forEach((c) {
         BlocProvider.of<CarsBloc>(context).add(AddCar(c));
       });

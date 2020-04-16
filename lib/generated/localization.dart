@@ -33,6 +33,10 @@ class IntlKeys {
   /// strings-fr.json: 'Ajouter une tâche'
   static const addTodo = 'add_todo';
 
+  /// strings.json: 'Alignment Check'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const alignmentCheck = 'alignment_check';
+
   /// strings.json: 'Already have an account?'
   /// strings-fr.json: 'Vous avez déjà un compte?'
   static const alreadyHaveAccount = 'already_have_account';
@@ -53,6 +57,18 @@ class IntlKeys {
   /// strings-fr.json: 'Retour'
   static const back = 'back';
 
+  /// strings.json: 'Battery'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const battery = 'battery';
+
+  /// strings.json: 'Brakes'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const brakes = 'brakes';
+
+  /// strings.json: 'Cabin Filter'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const cabinFilter = 'cabin_filter';
+
   /// strings.json: 'Before you get started,\n let\'s get some info about your car(s).'
   /// strings-fr.json: 'Avant de commencer,\n obtenons quelques informations sur votre (vos) voiture (s).'
   static const carAddTitle = 'car_add_title';
@@ -72,6 +88,10 @@ class IntlKeys {
   /// strings.json: 'Completed:'
   /// strings-fr.json: 'Terminé :'
   static const completed = 'completed';
+
+  /// strings.json: 'Coolant Change'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const coolantChange = 'coolant_change';
 
   /// strings.json: 'Create an Account'
   /// strings-fr.json: 'Créer un compte'
@@ -225,6 +245,10 @@ class IntlKeys {
   /// strings-fr.json: 'Email'
   static const email = 'email';
 
+  /// strings.json: 'Engine Filter'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const engineFilter = 'engine_filter';
+
   /// strings.json: 'Every'
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const every = 'every';
@@ -248,6 +272,10 @@ class IntlKeys {
   /// strings.json: 'Forgot your password?'
   /// strings-fr.json: 'Mot de passe oublié ?'
   static const forgotYourPassword = 'forgot_your_password';
+
+  /// strings.json: 'Front Struts'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const frontStruts = 'front_struts';
 
   /// strings.json: 'Fuel Efficiency'
   /// strings-fr.json: *** NOT TRANSLATED ***
@@ -433,6 +461,10 @@ class IntlKeys {
   /// strings-fr.json: 'Relevé du compteur kilométrique'
   static const odomReading = 'odom_reading';
 
+  /// strings.json: 'Oil'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const oil = 'oil';
+
   /// strings.json: 'on'
   /// strings-fr.json: 'le'
   static const onLiteral = 'on_literal';
@@ -468,6 +500,10 @@ class IntlKeys {
   /// strings.json: 'Purchase'
   /// strings-fr.json: 'achat'
   static const purchase = 'purchase';
+
+  /// strings.json: 'Rear Struts'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const rearStruts = 'rear_struts';
 
   /// strings.json: 'Refueling'
   /// strings-fr.json: 'plein'
@@ -589,6 +625,10 @@ class IntlKeys {
   /// strings-fr.json: 'Envoyer la réinitialisation du mot de passe'
   static const sendPasswordReset = 'send_password_reset';
 
+  /// strings.json: 'Serpentine Belt'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const serpentineBelt = 'serpentine_belt';
+
   /// strings.json: 'Settings'
   /// strings-fr.json: 'Réglages'
   static const settings = 'settings';
@@ -637,6 +677,10 @@ class IntlKeys {
   /// strings-fr.json: 'Définissez des tâches récurrentes pour ne plus jamais vous soucier d\'oublier une tâche de maintenance.'
   static const simplifyTasksDesc = 'simplify_tasks_desc';
 
+  /// strings.json: 'Spark Plugs'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const sparkPlugs = 'spark_plugs';
+
   /// strings.json: 'Stats'
   /// strings-fr.json: 'Statistiques'
   static const stats = 'stats';
@@ -648,6 +692,14 @@ class IntlKeys {
   /// strings.json: 'Task:'
   /// strings-fr.json: 'Tâche :'
   static const task = 'task';
+
+  /// strings.json: 'Tire Rotation'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const tireRotation = 'tire_rotation';
+
+  /// strings.json: 'Tires'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const tires = 'tires';
 
   /// strings.json: 'ToDo {{ name }} deleted.'
   /// strings-fr.json: 'Tâche {{name}} supprimé.'
@@ -680,6 +732,10 @@ class IntlKeys {
   /// strings.json: 'Create todo items and recurring events that notify you on your terms.'
   /// strings-fr.json: 'Créez des tâches et des événements récurrents qui vous informent sur vos conditions.'
   static const trackMaintenanceDesc = 'track_maintenance_desc';
+
+  /// strings.json: 'Transmission Fluid'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const transmissionFluid = 'transmission_fluid';
 
   /// strings.json: 'TRY WITHOUT AN ACCOUNT'
   /// strings-fr.json: 'ESSAYEZ SANS COMPTE'
@@ -756,6 +812,10 @@ class IntlKeys {
   /// strings.json: 'Car maintenance made simple.'
   /// strings-fr.json: 'L\'entretien des voitures en toute simplicité.'
   static const welcomeDesc = 'welcome_desc';
+
+  /// strings.json: 'Wiper Blades'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const wiperBlades = 'wiper_blades';
 
   /// strings.json: 'Year'
   /// strings-fr.json: *** NOT TRANSLATED ***

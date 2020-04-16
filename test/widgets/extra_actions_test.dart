@@ -51,7 +51,7 @@ void main() {
         'renders PopupMenuButton with mark all done if state is TodosLoaded with incomplete todos',
         (WidgetTester tester) async {
       final todos = [Todo(name: 'test', completed: false)];
-      when(todosBloc.state).thenReturn(TodosLoaded(todos));
+      when(todosBloc.state).thenReturn(TodosLoaded(todos: todos));
       final actions = Key('actions');
       final toggleAll = Key('toggleAll');
       when(filteredTodosBloc.state)
@@ -86,7 +86,7 @@ void main() {
         'renders PopupMenuButton with mark all incomplete if state is TodosLoaded with complete todos',
         (WidgetTester tester) async {
       final todos = [Todo(name: 'test', completed: true)];
-      when(todosBloc.state).thenReturn(TodosLoaded(todos));
+      when(todosBloc.state).thenReturn(TodosLoaded(todos: todos));
       final actions = Key('actions');
       final toggleAll = Key('toggleAll');
       when(filteredTodosBloc.state)
@@ -122,7 +122,7 @@ void main() {
         Todo(name: 'test', completed: false),
         Todo(name: 'test2', completed: true),
       ];
-      when(todosBloc.state).thenReturn(TodosLoaded(todos));
+      when(todosBloc.state).thenReturn(TodosLoaded(todos: todos));
       when(todosBloc.add(ToggleAll())).thenReturn(null);
       final actions = Key('actions');
       final toggleAll = Key('toggleAll');

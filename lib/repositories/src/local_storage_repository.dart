@@ -12,6 +12,7 @@ class LocalStorageRepository extends StorageRepository {
 
   final FutureOr<Directory> Function() pathProvider;
 
+  @override
   Future<String> getDownloadUrl(String assetName) async {
     final path = await pathProvider();
     return join(path.path, assetName);

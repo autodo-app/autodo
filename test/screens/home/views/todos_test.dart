@@ -37,7 +37,7 @@ void main() {
     });
 
     testWidgets('renders loading', (WidgetTester tester) async {
-      when(todosBloc.state).thenAnswer((_) => TodosLoaded([]));
+      when(todosBloc.state).thenAnswer((_) => TodosLoaded(todos: []));
       when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoading());
       final todosKey = Key('todos');
       await tester.pumpWidget(
@@ -63,7 +63,7 @@ void main() {
     });
 
     testWidgets('renders simple todo list', (WidgetTester tester) async {
-      when(todosBloc.state).thenAnswer((_) => TodosLoaded([]));
+      when(todosBloc.state).thenAnswer((_) => TodosLoaded(todos: []));
       when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded(
           [Todo(name: '', completed: true)], VisibilityFilter.all));
       final todosKey = Key('todos');
@@ -89,7 +89,7 @@ void main() {
     });
     testWidgets('renders due date and due mileage',
         (WidgetTester tester) async {
-      when(todosBloc.state).thenAnswer((_) => TodosLoaded([]));
+      when(todosBloc.state).thenAnswer((_) => TodosLoaded(todos: []));
       when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded([
             Todo(
                 name: '',

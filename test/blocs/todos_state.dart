@@ -18,7 +18,7 @@ void main() {
     group('TodosLoaded', () {
       test('toString returns correct value', () {
         expect(
-          TodosLoaded([Todo(name: 'wash car', id: '0')]).toString(),
+          TodosLoaded(todos: [Todo(name: 'wash car', id: '0')]).toString(),
           'TodosLoaded { todos: [${Todo(name: "wash car", id: "0")}] }',
         );
       });
