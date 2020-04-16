@@ -59,15 +59,15 @@ Future<void> main() async {
     });
     blocTest('UserLoggedIn', build: () {
       final authBloc = MockAuthenticationBloc();
-      whenListen(authBloc,
-          Stream.fromIterable([RemoteAuthenticated('test', 'abcd', false)]));
+      whenListen(
+          authBloc, Stream.fromIterable([RemoteAuthenticated('test', 'abcd')]));
       return DatabaseBloc(
           firestoreInstance: mockFirestore, authenticationBloc: authBloc);
     }, act: (bloc) async {
-      bloc.add(UserLoggedIn('abcd', false));
+      bloc.add(UserLoggedIn('abcd'));
     }, expect: [
       DbUninitialized(),
-      DbLoaded(repo, storageRepo: firebaseStorageRepo, newUser: false)
+      DbLoaded(repo, storageRepo: firebaseStorageRepo)
     ]);
     blocTest('UserLoggedOut', build: () {
       final authBloc = MockAuthenticationBloc();
@@ -89,14 +89,14 @@ Future<void> main() async {
           authenticationBloc: authBloc,
           pathProvider: pathProvider);
     }, act: (bloc) async {
-      bloc.add(TrialLogin(true));
+      bloc.add(TrialLogin());
     }, expect: [
       DbUninitialized(),
-      DbLoaded(sembastCreate, storageRepo: localStorageRepo, newUser: true),
+      DbLoaded(sembastCreate, storageRepo: localStorageRepo),
     ]);
     blocTest('TrialLogin from authBloc', build: () {
       final authBloc = MockAuthenticationBloc();
-      whenListen(authBloc, Stream.fromIterable([LocalAuthenticated(false)]));
+      whenListen(authBloc, Stream.fromIterable([LocalAuthenticated()]));
       return DatabaseBloc(
           firestoreInstance: mockFirestore,
           authenticationBloc: authBloc,
@@ -105,7 +105,7 @@ Future<void> main() async {
       // bloc.add(TrialLogin(true));
     }, expect: [
       DbUninitialized(),
-      DbLoaded(sembastOpen, storageRepo: localStorageRepo, newUser: false),
+      DbLoaded(sembastOpen, storageRepo: localStorageRepo),
     ]);
   });
 }

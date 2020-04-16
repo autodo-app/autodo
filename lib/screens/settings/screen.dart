@@ -5,11 +5,20 @@ import 'package:preferences/preferences.dart';
 
 import '../../blocs/blocs.dart';
 import '../../generated/localization.dart';
-import '../../routes.dart';
+
 import '../../units/units.dart';
 import '../about/about.dart';
 
 class SettingsScreen extends StatefulWidget {
+  static Future<void> show(BuildContext context) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SettingsScreen(),
+      ),
+    );
+  }
+
   @override
   SettingsScreenState createState() => SettingsScreenState();
 }
@@ -25,7 +34,8 @@ class SettingsScreenState extends State<SettingsScreen> {
             key: ValueKey('__delete_account_confirm__'),
             onPressed: () {
               BlocProvider.of<AuthenticationBloc>(context).add(DeletedUser());
-              Navigator.popAndPushNamed(context, AutodoRoutes.welcome);
+              // AutodoRoutes.welcome
+              Navigator.pop(context, true);
             },
             child: Text(JsonIntl.of(context).get(IntlKeys.yes),
                 style: Theme.of(context)
@@ -33,7 +43,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                     .button
                     .copyWith(color: Colors.red))),
         FlatButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(context, false),
             child: Text(JsonIntl.of(context).get(IntlKeys.no),
                 style: Theme.of(context)
                     .primaryTextTheme
@@ -102,16 +112,19 @@ class SettingsScreenState extends State<SettingsScreen> {
           color: Theme.of(context).buttonTheme.colorScheme.background,
           onTap: () {
         BlocProvider.of<AuthenticationBloc>(context).add(LogOut());
-        Navigator.popAndPushNamed(context, AutodoRoutes.welcome);
+        Navigator.pop(context);
       }),
       PreferenceButton(
         Text(JsonIntl.of(context).get(IntlKeys.deleteAccount)),
         key: ValueKey('__delete_account_button__'),
         color: Colors.red,
-        onTap: () => showDialog(
-          context: context,
-          builder: (context) => deleteAccountDialog(),
-        ),
+        onTap: () async {
+          if (await showDialog<bool>(
+                context: context,
+                builder: (context) => deleteAccountDialog(),
+              ) ==
+              true) Navigator.pop(context);
+        },
       ),
       PreferenceTitle(JsonIntl.of(context).get(IntlKeys.info)),
       PreferenceButton(
@@ -131,10 +144,6 @@ class SettingsScreenState extends State<SettingsScreen> {
       resizeToAvoidBottomPadding:
           false, // used to avoid overflow when keyboard is viewable
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
         title: Text(JsonIntl.of(context).get(IntlKeys.settings)),
       ),
       body: body(),

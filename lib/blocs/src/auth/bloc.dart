@@ -94,10 +94,10 @@ class AuthenticationBloc
   /// Under normal conditions, this checks the user repository for a logged in
   /// user and collects the necesary information for the user. In an integration
   /// test, however, this is responsible for creating a dummy user.
-  Stream<AuthenticationState> _mapAppStartedToState(event) async* {
+  Stream<AuthenticationState> _mapAppStartedToState(AppStarted event) async* {
     try {
       final repo = FirebaseAuthRepository();
-      if ((event as AppStarted).integrationTest ?? false) {
+      if (event.integrationTest ?? false) {
         await repo.signOut();
         await repo.signInWithCredentials(
             'integration-test@autodo.app', '123456');
@@ -109,9 +109,12 @@ class AuthenticationBloc
       if (isSignedIn) {
         final name = await _userRepository.getUserEmail();
         final uuid = await _userRepository.getUserId();
-        yield RemoteAuthenticated(name, uuid, false);
+        yield RemoteAuthenticated(
+          name,
+          uuid,
+        );
       } else if (prefs.getBool(trialUserKey)) {
-        yield LocalAuthenticated(false);
+        yield LocalAuthenticated();
       } else {
         yield Unauthenticated();
       }
@@ -126,13 +129,13 @@ class AuthenticationBloc
   /// Always yields [Authenticated]. This differs from the [SignedUp] event
   /// handler simply by passing a corresponding flag to the yielded state.
   Stream<AuthenticationState> _mapLoggedInToState() async* {
-    final _email = await _userRepository.getUserEmail();
-    final _uuid = await _userRepository.getUserId();
-    yield RemoteAuthenticated(_email, _uuid, false);
-
     // make sure that any past trial users are no longer logged in
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(trialUserKey, true);
+    await prefs.setBool(trialUserKey, false);
+
+    final _email = await _userRepository.getUserEmail();
+    final _uuid = await _userRepository.getUserId();
+    yield RemoteAuthenticated(_email, _uuid);
   }
 
   /// Responds to a [SignedUp] event with an [Authenticated] state.
@@ -140,13 +143,13 @@ class AuthenticationBloc
   /// Always yields [Authenticated]. This differs from the [LoggedIn] event
   /// handler simply by passing a corresponding flag to the yielded state.
   Stream<AuthenticationState> _mapSignedUpToState() async* {
-    final _email = await _userRepository.getUserEmail();
-    final _uuid = await _userRepository.getUserId();
-    yield RemoteAuthenticated(_email, _uuid, true);
-
     // make sure that any past trial users are no longer logged in
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(trialUserKey, true);
+    await prefs.setBool(trialUserKey, false);
+
+    final _email = await _userRepository.getUserEmail();
+    final _uuid = await _userRepository.getUserId();
+    yield RemoteAuthenticated(_email, _uuid);
   }
 
   /// Signs out the currently logged in user and yields [Unauthenticated].
@@ -155,6 +158,8 @@ class AuthenticationBloc
   /// [LoggedIn] and [SignedUp] events to make the action more easily accessible
   /// to the home screen presentation layer.
   Stream<AuthenticationState> _mapLogOutToState() async* {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(trialUserKey, false);
     yield Unauthenticated();
     await _userRepository.signOut();
   }
@@ -171,8 +176,9 @@ class AuthenticationBloc
   }
 
   Stream<AuthenticationState> _mapTrialUserSignedUpToState() async* {
-    yield LocalAuthenticated(true);
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(trialUserKey, true);
+
+    yield LocalAuthenticated();
   }
 }

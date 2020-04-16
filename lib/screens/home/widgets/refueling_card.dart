@@ -15,13 +15,13 @@ class _RefuelingTitle extends StatelessWidget {
 
   final Refueling refueling;
 
-  TextSpan dateField(context) => TextSpan(
+  TextSpan dateField(BuildContext context) => TextSpan(
       text: // TODO: Can't concat verb and date
           '${JsonIntl.of(context).get(IntlKeys.onLiteral)} ${DateFormat.yMMMd().format(refueling.date)} ',
       style: Theme.of(context).primaryTextTheme.bodyText2);
 
   @override
-  Widget build(context) {
+  Widget build(BuildContext context) {
     final distance = Distance.of(context);
 
     return RichText(
@@ -55,7 +55,7 @@ class _RefuelingCost extends StatelessWidget {
   final Refueling refueling;
 
   @override
-  Widget build(context) {
+  Widget build(BuildContext context) {
     final currency = Currency.of(context);
 
     return RichText(
@@ -80,7 +80,7 @@ class _RefuelingAmount extends StatelessWidget {
   final Refueling refueling;
 
   @override
-  Widget build(context) {
+  Widget build(BuildContext context) {
     final volume = Volume.of(context);
 
     return RichText(
@@ -111,7 +111,7 @@ class _RefuelingBody extends StatelessWidget {
   final Refueling refueling;
 
   @override
-  Widget build(context) => Container(
+  Widget build(BuildContext context) => Container(
       padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -128,7 +128,7 @@ class _RefuelingTags extends StatelessWidget {
   final Refueling refueling;
 
   @override
-  Widget build(context) =>
+  Widget build(BuildContext context) =>
       CarTag(text: refueling.carName, color: refueling.carColor);
 }
 
@@ -139,7 +139,7 @@ class _RefuelingEditButton extends StatelessWidget {
   final Refueling refueling;
 
   @override
-  Widget build(context) => ButtonTheme.fromButtonThemeData(
+  Widget build(BuildContext context) => ButtonTheme.fromButtonThemeData(
         data: ButtonThemeData(
           minWidth: 0,
         ),
@@ -181,7 +181,7 @@ class _RefuelingDeleteButton extends StatelessWidget {
   final Refueling refueling;
 
   @override
-  Widget build(context) => ButtonTheme.fromButtonThemeData(
+  Widget build(BuildContext context) => ButtonTheme.fromButtonThemeData(
         data: ButtonThemeData(
           minWidth: 0,
         ),
@@ -210,7 +210,7 @@ class _RefuelingFooter extends StatelessWidget {
   final Refueling refueling;
 
   @override
-  Widget build(context) => Row(
+  Widget build(BuildContext context) => Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           _RefuelingTags(refueling: refueling),
@@ -239,7 +239,7 @@ class RefuelingCard extends StatelessWidget {
   final GestureTapCallback onTap;
 
   @override
-  Widget build(context) => InkWell(
+  Widget build(BuildContext context) => InkWell(
       onTap: onTap,
       child: Dismissible(
           key: Key('__dismissible__'),

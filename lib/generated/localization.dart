@@ -98,19 +98,19 @@ class IntlKeys {
   static const createAnAccount = 'create_an_account';
 
   /// strings.json: 'Custom'
-  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings-fr.json: 'Sur mesure'
   static const custom = 'custom';
 
   /// strings.json: 'Day'
-  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings-fr.json: 'journée'
   static const day = 'day';
 
   /// strings.json: 'Days'
-  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings-fr.json: 'Journées'
   static const days = 'days';
 
   /// strings.json: 'Default currency'
-  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings-fr.json: 'Monnaie par défaut'
   static const defaultCurrency = 'default_currency';
 
   /// strings.json: 'Delete Account'
@@ -126,19 +126,19 @@ class IntlKeys {
   static const details = 'details';
 
   /// strings.json: 'kilometers'
-  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings-fr.json: 'kilomètres'
   static const distanceKm = 'distance_km';
 
   /// strings.json: 'km'
-  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings-fr.json: 'km'
   static const distanceKmShort = 'distance_km_short';
 
   /// strings.json: 'miles'
-  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings-fr.json: 'miles'
   static const distanceMiles = 'distance_miles';
 
   /// strings.json: 'mi'
-  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings-fr.json: 'mi'
   static const distanceMilesShort = 'distance_miles_short';
 
   /// strings.json: 'Driving Distance History ({{ unit }} per day)'
@@ -250,7 +250,7 @@ class IntlKeys {
   static const engineFilter = 'engine_filter';
 
   /// strings.json: 'Every'
-  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings-fr.json: 'Chaque'
   static const every = 'every';
 
   /// strings.json: 'Filter ToDos'
@@ -286,27 +286,27 @@ class IntlKeys {
   static const fuelEfficiencyHistory = 'fuel_efficiency_history';
 
   /// strings.json: 'gallons'
-  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings-fr.json: 'gallons'
   static const fuelGallonsImperial = 'fuel_gallons_imperial';
 
   /// strings.json: 'gal'
-  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings-fr.json: 'gal'
   static const fuelGallonsImperialShort = 'fuel_gallons_imperial_short';
 
   /// strings.json: 'US gallons'
-  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings-fr.json: 'gallons US'
   static const fuelGallonsUs = 'fuel_gallons_us';
 
   /// strings.json: 'gal'
-  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings-fr.json: 'gal'
   static const fuelGallonsUsShort = 'fuel_gallons_us_short';
 
   /// strings.json: 'liters'
-  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings-fr.json: 'litres'
   static const fuelLiters = 'fuel_liters';
 
   /// strings.json: 'l'
-  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings-fr.json: 'l'
   static const fuelLitersShort = 'fuel_liters_short';
 
   /// strings.json: 'Garage'
@@ -322,11 +322,11 @@ class IntlKeys {
   static const groupAccount = 'group_account';
 
   /// strings.json: 'Misc'
-  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings-fr.json: 'Divers'
   static const groupMisc = 'group_misc';
 
   /// strings.json: 'Units'
-  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings-fr.json: 'Unitées'
   static const groupUnits = 'group_units';
 
   /// strings.json: 'Info'
@@ -366,7 +366,7 @@ class IntlKeys {
   static const legal5 = 'legal5';
 
   /// strings.json: 'Distance unit'
-  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings-fr.json: 'Unitée de distance'
   static const lengthUnit = 'length_unit';
 
   /// strings.json: 'LOG IN'
@@ -406,7 +406,7 @@ class IntlKeys {
   static const mileageInterval = 'mileage_interval';
 
   /// strings.json: 'Mileage Interval *'
-  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings-fr.json: 'Intervalle de kilométrage *'
   static const mileageIntervalStar = 'mileage_interval_star';
 
   /// strings.json: 'Model'
@@ -414,15 +414,15 @@ class IntlKeys {
   static const model = 'model';
 
   /// strings.json: 'Month'
-  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings-fr.json: 'Mois'
   static const month = 'month';
 
   /// strings.json: 'Monthly'
-  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings-fr.json: 'Mensuel'
   static const monthly = 'monthly';
 
   /// strings.json: 'Months'
-  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings-fr.json: 'Mois'
   static const months = 'months';
 
   /// strings.json: 'My Garage'
@@ -434,7 +434,7 @@ class IntlKeys {
   static const name = 'name';
 
   /// strings.json: 'Never'
-  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings-fr.json: 'Jamais'
   static const never = 'never';
 
   /// strings.json: 'Next'
@@ -450,7 +450,7 @@ class IntlKeys {
   static const noData = 'no_data';
 
   /// strings.json: 'Need at least 3 refuelings to see efficiency data.'
-  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings-fr.json: 'Au moins 3 ravitaillements sont nécessaires pour voir les données d\'efficacité.'
   static const noDataRefuelings = 'no_data_refuelings';
 
   /// strings.json: 'Odom'
@@ -464,6 +464,14 @@ class IntlKeys {
   /// strings.json: 'Oil'
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const oil = 'oil';
+
+  /// strings.json: 'Oil Change'
+  /// strings-fr.json: 'Vidange'
+  static const oilChange = 'oil_change';
+
+  /// strings.json: 'Oil Change Interval'
+  /// strings-fr.json: 'Interval de changement d\'huile'
+  static const oilChangeInterval = 'oil_change_interval';
 
   /// strings.json: 'on'
   /// strings-fr.json: 'le'
@@ -530,7 +538,7 @@ class IntlKeys {
   static const remove = 'remove';
 
   /// strings.json: 'Repeat'
-  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings-fr.json: 'Répéter'
   static const repeat = 'repeat';
 
   /// strings.json: 'Alignment Check'
@@ -550,7 +558,7 @@ class IntlKeys {
   static const repeatCabinFilter = 'repeat_cabin_filter';
 
   /// strings.json: 'REPEAT'
-  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings-fr.json: 'RÉPÉTER'
   static const repeatCaps = 'repeat_caps';
 
   /// strings.json: 'Coolant Change'
@@ -677,6 +685,10 @@ class IntlKeys {
   /// strings-fr.json: 'Définissez des tâches récurrentes pour ne plus jamais vous soucier d\'oublier une tâche de maintenance.'
   static const simplifyTasksDesc = 'simplify_tasks_desc';
 
+  /// strings.json: 'Skip'
+  /// strings-fr.json: 'Passer'
+  static const skip = 'skip';
+
   /// strings.json: 'Spark Plugs'
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const sparkPlugs = 'spark_plugs';
@@ -696,6 +708,10 @@ class IntlKeys {
   /// strings.json: 'Tire Rotation'
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const tireRotation = 'tire_rotation';
+
+  /// strings.json: 'Tire Rotation Interval'
+  /// strings-fr.json: 'Interval de rotation des pneus'
+  static const tireRotationInterval = 'tire_rotation_interval';
 
   /// strings.json: 'Tires'
   /// strings-fr.json: *** NOT TRANSLATED ***
@@ -794,15 +810,15 @@ class IntlKeys {
   static const vin = 'vin';
 
   /// strings.json: 'Fuel volume unit'
-  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings-fr.json: 'Unitée de mesure du carburant'
   static const volumeUnit = 'volume_unit';
 
   /// strings.json: 'Week'
-  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings-fr.json: 'Semaine'
   static const week = 'week';
 
   /// strings.json: 'Weekly'
-  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings-fr.json: 'Hebdomadaire'
   static const weekly = 'weekly';
 
   /// strings.json: 'Welcome to auToDo!'
@@ -817,16 +833,24 @@ class IntlKeys {
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const wiperBlades = 'wiper_blades';
 
+  /// strings.json: 'When was the last time you did these tasks?'
+  /// strings-fr.json: 'À quand remonte la dernière fois que vous avez effectué ces tâches?'
+  static const wizardLastCompleted = 'wizard_last_completed';
+
+  /// strings.json: 'How often do you want to do these tasks?'
+  /// strings-fr.json: 'À quelle fréquence voulez-vous effectuer ces tâches?'
+  static const wizardRepeats = 'wizard_repeats';
+
   /// strings.json: 'Year'
-  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings-fr.json: 'Année'
   static const year = 'year';
 
   /// strings.json: 'Yearly'
-  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings-fr.json: 'Annuel'
   static const yearly = 'yearly';
 
   /// strings.json: 'Years'
-  /// strings-fr.json: *** NOT TRANSLATED ***
+  /// strings-fr.json: 'Années'
   static const years = 'years';
 
   /// strings.json: 'Yes'

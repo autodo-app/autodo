@@ -34,7 +34,7 @@ class _MileageForm extends StatelessWidget {
   final FocusNode node, nextNode;
 
   @override
-  Widget build(context) {
+  Widget build(BuildContext context) {
     final distance = Distance.of(context);
 
     return TextFormField(
@@ -77,7 +77,7 @@ class _AmountForm extends StatelessWidget {
   final FocusNode node, nextNode;
 
   @override
-  Widget build(context) {
+  Widget build(BuildContext context) {
     final volume = Volume.of(context);
 
     return TextFormField(
@@ -120,7 +120,7 @@ class _CostForm extends StatelessWidget {
   final FocusNode node, nextNode;
 
   @override
-  Widget build(context) {
+  Widget build(BuildContext context) {
     final currency = Currency.of(context);
 
     return TextFormField(
@@ -229,7 +229,7 @@ class _DateFormState extends State<_DateForm> {
   }
 
   @override
-  Widget build(context) => Row(children: <Widget>[
+  Widget build(BuildContext context) => Row(children: <Widget>[
         IconButton(
           icon: Icon(Icons.calendar_today),
           tooltip: JsonIntl.of(context).get(IntlKeys.chooseDate),
@@ -321,7 +321,7 @@ class _RefuelingAddEditScreenState extends State<RefuelingAddEditScreen> {
       : List.generate(widget.cars.length, (idx) => (idx == 0) ? true : false);
 
   @override
-  Widget build(context) => Scaffold(
+  Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
           title: Text(
             isEditing
@@ -335,24 +335,22 @@ class _RefuelingAddEditScreenState extends State<RefuelingAddEditScreen> {
                 padding: EdgeInsets.all(15),
                 child: ListView(
                   children: <Widget>[
-                    (widget.cars.length <= 1)
-                        ? Container()
-                        : (widget.cars.length < 4)
-                            ? CarToggleForm(
-                                _carsToInitialState(),
-                                widget.cars,
-                                (List<bool> isSelected) => _car = widget
-                                    .cars[isSelected.indexWhere((i) => i)].name,
-                              )
-                            : CarForm(
-                                key: ValueKey('__refueling_car_form__'),
-                                initialValue: widget.refueling?.carName,
-                                onSaved: (val) => _car = val,
-                                node: _carNode,
-                                nextNode: _amountNode),
-                    (widget.cars.length <= 1)
-                        ? Container()
-                        : Padding(padding: EdgeInsets.fromLTRB(0, 16, 0, 16)),
+                    if (widget.cars.length > 1 && widget.cars.length < 4)
+                      CarToggleForm(
+                        _carsToInitialState(),
+                        widget.cars,
+                        (List<bool> isSelected) => _car =
+                            widget.cars[isSelected.indexWhere((i) => i)].name,
+                      ),
+                    if (widget.cars.length >= 4)
+                      CarForm(
+                          key: ValueKey('__refueling_car_form__'),
+                          initialValue: widget.refueling?.carName,
+                          onSaved: (val) => _car = val,
+                          node: _carNode,
+                          nextNode: _amountNode),
+                    if (widget.cars.length > 1)
+                      Padding(padding: EdgeInsets.fromLTRB(0, 16, 0, 16)),
                     _MileageForm(
                         refueling: widget.refueling,
                         onSaved: (val) => _mileage = double.parse(val),
@@ -384,18 +382,20 @@ class _RefuelingAddEditScreenState extends State<RefuelingAddEditScreen> {
               ? JsonIntl.of(context).get(IntlKeys.saveChanges)
               : JsonIntl.of(context).get(IntlKeys.addRefueling),
           child: Icon(isEditing ? Icons.check : Icons.add),
-          onPressed: () {
-            if (_formKey.currentState.validate()) {
-              // Check to see if the mileage/date combo is valid for this
-              // car
+          onPressed: widget.cars.isEmpty
+              ? null
+              : () {
+                  if (_formKey.currentState.validate()) {
+                    // Check to see if the mileage/date combo is valid for this
+                    // car
 
-              _formKey.currentState.save();
+                    _formKey.currentState.save();
 
-              _car ??= widget.cars.first.name;
-              widget.onSave(_mileage, _date, _amount, _cost, _car);
-              Navigator.pop(context);
-            }
-          },
+                    _car ??= widget.cars.first.name;
+                    widget.onSave(_mileage, _date, _amount, _cost, _car);
+                    Navigator.pop(context);
+                  }
+                },
         ),
       );
 }

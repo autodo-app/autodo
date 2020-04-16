@@ -15,9 +15,6 @@ class HomeScreenProvider extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MultiBlocProvider(
         providers: [
-          BlocProvider<TabBloc>(
-            create: (context) => TabBloc(),
-          ),
           BlocProvider<FilteredTodosBloc>(
             create: (context) => FilteredTodosBloc(
               todosBloc: BlocProvider.of<TodosBloc>(context),

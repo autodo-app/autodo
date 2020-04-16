@@ -66,7 +66,7 @@ Future<void> checkForDefaults(FlutterDriver driver) async {
 }
 
 /// Creates a new refueling
-Future<void> newRepeat(driver) async {
+Future<void> newRepeat(FlutterDriver driver) async {
   await driver.waitFor(find.byValueKey('__fab__'));
   print('found button');
   await driver.tap(find.byValueKey('__main_fab__'));

@@ -31,8 +31,8 @@ class Authenticated extends AuthenticationState {
 }
 
 /// Represents an app state where there is a user logged in.
-class RemoteAuthenticated extends AuthenticationState {
-  const RemoteAuthenticated(this.displayName, this.uuid, this.newUser);
+class RemoteAuthenticated extends Authenticated {
+  const RemoteAuthenticated(this.displayName, this.uuid);
 
   /// The email address of the user. Used to represent the user in the GUI.
   final String displayName;
@@ -41,29 +41,22 @@ class RemoteAuthenticated extends AuthenticationState {
   /// for internal purposes.
   final String uuid;
 
-  /// A flag that is raised when this is the first time the app is run with the
-  /// currently authenticated user. This flag is responsible for triggering
-  /// setup routines to prepare the initial set of data for the user's account.
-  final bool newUser;
-
   @override
-  List<Object> get props => [displayName, uuid, newUser];
+  List<Object> get props => [displayName, uuid];
 
   @override
   String toString() =>
-      'RemoteAuthenticated { displayName: $displayName, uuid: $uuid, newUser: $newUser }';
+      '$runtimeType { displayName: $displayName, uuid: $uuid }';
 }
 
 class LocalAuthenticated extends Authenticated {
-  const LocalAuthenticated(this.newUser);
-
-  final bool newUser;
+  const LocalAuthenticated();
 
   @override
-  List<Object> get props => [newUser];
+  List<Object> get props => [];
 
   @override
-  String toString() => 'LocalAuthenticated { newUser: $newUser }';
+  String toString() => '$runtimeType { }';
 }
 
 /// Represents an app state where there is not a user logged in.
@@ -78,5 +71,5 @@ class Unauthenticated extends AuthenticationState {
   List<Object> get props => [errorCode];
 
   @override
-  String toString() => 'Unauthenticated { errorCode: $errorCode }';
+  String toString() => '$runtimeType { errorCode: $errorCode }';
 }

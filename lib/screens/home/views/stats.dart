@@ -6,7 +6,7 @@ class StatisticsScreen extends StatelessWidget {
   const StatisticsScreen({Key key}) : super(key: key);
 
   @override
-  Widget build(context) => ListView(
+  Widget build(BuildContext context) => ListView(
         children: <Widget>[
           FuelMileageHistory(),
           Padding(

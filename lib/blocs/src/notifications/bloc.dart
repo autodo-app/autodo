@@ -22,7 +22,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
 
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
-  static final channelID = 'com.autodo.autodo';
+  static final String channelID = 'com.autodo.autodo';
 
   static final channelName = 'auToDo';
 
@@ -112,7 +112,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   // Future<dynamic> onDidReceiveLocalNotification(
   //     int ign1, String ign2, String ign3, String ign4) async {}
 
-  Future<void> cancel(id) async {
+  Future<void> cancel(int id) async {
     try {
       await flutterLocalNotificationsPlugin.cancel(id);
     } catch (e) {

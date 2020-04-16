@@ -56,8 +56,10 @@ class _MileageRepeatSelector extends StatelessWidget {
   Widget build(BuildContext context) => Container(
         child: TextFormField(
           decoration: defaultInputDecoration(
-              Distance.of(context).unitString(context, short: true),
-              JsonIntl.of(context).get(IntlKeys.mileageInterval)),
+            context,
+            JsonIntl.of(context).get(IntlKeys.mileageInterval),
+            unit: Distance.of(context).unitString(context, short: true),
+          ),
           keyboardType: TextInputType.number,
           initialValue: initial == null ? '' : '$initial',
           validator: doubleNoRequire,

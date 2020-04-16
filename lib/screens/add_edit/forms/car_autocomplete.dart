@@ -50,15 +50,16 @@ class _CarFormState extends State<CarForm> {
   }
 
   @override
-  Widget build(context) {
+  Widget build(BuildContext context) {
     print(_autocompleteController.text);
     // pulled out into the function so that the validator can access it
     autoCompleteField = AutoCompleteTextField<Car>(
       controller: _autocompleteController,
       decoration: defaultInputDecoration(
-              JsonIntl.of(context).get(IntlKeys.requiredLiteral),
-              JsonIntl.of(context).get(IntlKeys.carName))
-          .copyWith(errorText: _carError),
+        context,
+        JsonIntl.of(context).get(IntlKeys.carName),
+        rule: InputRule.required,
+      ).copyWith(errorText: _carError),
       itemSubmitted: (item) => setState(() {
         _autocompleteController.text = item.name;
         selectedCar = item;
@@ -98,9 +99,10 @@ class _CarFormState extends State<CarForm> {
         final res = requiredValidator(txt);
         autoCompleteField.updateDecoration(
           decoration: defaultInputDecoration(
-                  JsonIntl.of(context).get(IntlKeys.requiredLiteral),
-                  JsonIntl.of(context).get(IntlKeys.carName))
-              .copyWith(errorText: res),
+            context,
+            JsonIntl.of(context).get(IntlKeys.carName),
+            rule: InputRule.required,
+          ).copyWith(errorText: res),
         );
         setState(() => _carError = res);
         return _carError;

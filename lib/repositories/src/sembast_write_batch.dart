@@ -22,11 +22,11 @@ class SembastWriteBatch extends Equatable implements WriteBatchWrapper {
   final Function streamControllerUpdate;
 
   @override
-  void updateData(id, data) => transactionList
+  void updateData(dynamic id, dynamic data) => transactionList
       .add((txn) async => await store.record(id).update(txn, data));
 
   @override
-  void setData(data) =>
+  void setData(dynamic data) =>
       transactionList.add((txn) async => await store.add(txn, data));
 
   @override

@@ -5,7 +5,6 @@ import 'package:json_intl/json_intl.dart';
 
 import '../../../../blocs/blocs.dart';
 import '../../../../generated/localization.dart';
-import '../../views/new_user_setup/screen.dart';
 
 class TrialButton extends StatelessWidget {
   const TrialButton({Key key, this.buttonPadding}) : super(key: key);
@@ -21,14 +20,8 @@ class TrialButton extends StatelessWidget {
         child: RaisedButton(
           elevation: 12.0,
           onPressed: () {
-            BlocProvider.of<DatabaseBloc>(context).add(TrialLogin(true));
             BlocProvider.of<AuthenticationBloc>(context)
                 .add(TrialUserSignedUp());
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => NewUserScreen(),
-                ));
           },
           textColor: Colors.white,
           padding: const EdgeInsets.all(0.0),

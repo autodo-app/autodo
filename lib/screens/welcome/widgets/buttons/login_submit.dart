@@ -9,7 +9,7 @@ class LoginSubmitButton extends StatelessWidget {
   final Function onPressed;
 
   @override
-  Widget build(context) => Container(
+  Widget build(BuildContext context) => Container(
         padding: EdgeInsets.fromLTRB(0.0, 25.0, 0.0, 0.0),
         child: SizedBox(
           height: 40.0,

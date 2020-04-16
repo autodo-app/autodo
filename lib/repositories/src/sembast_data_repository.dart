@@ -27,7 +27,7 @@ class SembastDataRepository extends DataRepository {
   /// check the user's current database version against the expected
   /// version and migrate the data if needed.
   static Future<SembastDataRepository> open({
-    @deprecated createDb,
+    @deprecated bool createDb,
     DatabaseFactory dbFactory,
     String dbPath,
     FutureOr<Directory> Function() pathProvider,

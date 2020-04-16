@@ -28,7 +28,7 @@ class WelcomePageScroller extends StatefulWidget {
     return controller;
   }
 
-  void showPage(page) => controller.jumpToPage(page);
+  void showPage(int page) => controller.jumpToPage(page);
 
   @override
   WelcomePageScrollerState createState() => WelcomePageScrollerState();

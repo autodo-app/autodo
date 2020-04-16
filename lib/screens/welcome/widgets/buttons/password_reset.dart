@@ -24,7 +24,7 @@ class _PasswordResetDialogState extends State<_PasswordResetDialog> {
   String _email;
 
   @override
-  Widget build(context) => AlertDialog(
+  Widget build(BuildContext context) => AlertDialog(
           title: Text(JsonIntl.of(context).get(IntlKeys.sendPasswordReset),
               style: Theme.of(context).primaryTextTheme.headline6),
           content: Form(
@@ -88,7 +88,7 @@ class PasswordResetButton extends StatelessWidget {
   final Key dialogKey;
 
   @override
-  Widget build(context) => FlatButton(
+  Widget build(BuildContext context) => FlatButton(
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         child: Text(
           JsonIntl.of(context).get(IntlKeys.forgotYourPassword),
@@ -96,13 +96,17 @@ class PasswordResetButton extends StatelessWidget {
         ),
         onPressed: () {
           final bloc = BlocProvider.of<LoginBloc>(context);
+          final state = bloc.state;
           String email;
-          if (bloc.state is LoginCredentialsValid) {
-            email = (bloc.state as LoginCredentialsValid).email;
-          } else {
-            email = (bloc.state as LoginCredentialsInvalid).email;
+
+          if (state is LoginCredentialsValid) {
+            email = state.email;
+          } else if (state is LoginCredentialsInvalid) {
+            email = state.email;
           }
-          if (email == null) return;
+
+          email ??= '';
+
           showDialog(
             context: context,
             builder: (context) =>

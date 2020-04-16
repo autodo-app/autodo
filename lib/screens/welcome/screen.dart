@@ -16,7 +16,7 @@ class WelcomeScreen extends StatelessWidget {
   final List<Key> dotKeys;
 
   @override
-  Widget build(context) => Scaffold(
+  Widget build(BuildContext context) => Scaffold(
         body: Center(
           child: Container(
             decoration: scaffoldBackgroundGradient(),

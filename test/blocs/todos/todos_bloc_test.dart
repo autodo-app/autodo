@@ -27,7 +27,7 @@ class MockWriteBatch extends Mock implements WriteBatchWrapper {}
 
 class MockDbBloc extends Mock implements DatabaseBloc {}
 
-void clearDatabase(name) {
+void clearDatabase(Pattern name) {
   for (var f in Directory('.').listSync()) {
     if (f.path.contains(name)) {
       f.deleteSync();

@@ -4,7 +4,6 @@ import 'package:json_intl/json_intl.dart';
 
 import '../../../../blocs/blocs.dart';
 import '../../../../generated/localization.dart';
-import '../../../../routes.dart';
 import '../../widgets/barrel.dart';
 
 class LoginForm extends StatefulWidget {
@@ -33,7 +32,7 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   @override
-  Widget build(context) => BlocListener<LoginBloc, LoginState>(
+  Widget build(BuildContext context) => BlocListener<LoginBloc, LoginState>(
         listener: (context, state) {
           if (state is LoginError) {
             Scaffold.of(context)
@@ -75,7 +74,8 @@ class _LoginFormState extends State<LoginForm> {
               );
           } else if (state is LoginSuccess) {
             BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
-            Navigator.pushNamed(context, AutodoRoutes.home);
+            // AutodoRoutes.home
+            Navigator.pop(context);
           }
         },
         child: BlocBuilder<LoginBloc, LoginState>(
@@ -102,7 +102,6 @@ class _LoginFormState extends State<LoginForm> {
                             BlocProvider.of<LoginBloc>(context).add(
                                 LoginWithCredentialsPressed(
                                     email: _email, password: _password));
-                            Navigator.pushNamed(context, AutodoRoutes.home);
                           }
                         }),
                         PasswordResetButton(),

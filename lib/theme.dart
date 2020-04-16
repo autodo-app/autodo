@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:json_intl/json_intl.dart';
+
+import 'generated/localization.dart';
 
 /// Color palette generated from:
 /// https://www.colorbox.io/#steps=9#hue_start=137#hue_end=190#hue_curve=easeInOutQuad#sat_start=5#sat_end=54#sat_curve=easeOutCubic#sat_rate=130#lum_start=100#lum_end=18#lum_curve=linear#minor_steps_map=0
@@ -78,9 +81,24 @@ TextStyle logoStyle = TextStyle(
   letterSpacing: 0.2,
 );
 
-InputDecoration defaultInputDecoration(String hintText, String labelText) {
+enum InputRule { none, required, optional }
+
+InputDecoration defaultInputDecoration(
+  BuildContext context,
+  String label, {
+  String unit,
+  InputRule rule = InputRule.none,
+  IconData icon,
+  Widget button,
+}) {
   return InputDecoration(
-    hintText: hintText,
+    hintText: rule == InputRule.required
+        ? JsonIntl.of(context).get(IntlKeys.requiredLiteral)
+        : rule == InputRule.optional
+            ? JsonIntl.of(context).get(IntlKeys.optional)
+            : null,
+    suffixText: unit,
+    prefix: button,
     hintStyle: TextStyle(
       color: Colors.white.withAlpha(230),
       fontSize: 16,
@@ -90,7 +108,13 @@ InputDecoration defaultInputDecoration(String hintText, String labelText) {
     border: OutlineInputBorder(
       borderSide: BorderSide(color: Colors.teal),
     ),
-    labelText: labelText,
+    labelText: label,
+    icon: icon == null
+        ? null
+        : Icon(
+            icon,
+            color: Colors.grey[300],
+          ),
     labelStyle: TextStyle(
       color: Colors.white.withAlpha(230),
       fontFamily: 'IBM Plex Sans',

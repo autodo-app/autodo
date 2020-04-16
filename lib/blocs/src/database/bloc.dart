@@ -19,10 +19,10 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
         _firestoreInstance = firestoreInstance ?? Firestore.instance {
     _authSubscription = _authenticationBloc.listen((authState) {
       if (authState is RemoteAuthenticated) {
-        add(UserLoggedIn(authState.uuid, authState.newUser));
+        add(UserLoggedIn(authState.uuid));
       } else if (((state is DbNotLoaded) || (state is DbUninitialized)) &&
           authState is LocalAuthenticated) {
-        add(TrialLogin(authState.newUser));
+        add(TrialLogin());
       } else if (authState is Unauthenticated) {
         add(UserLoggedOut());
       }
@@ -53,14 +53,16 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
 
   Stream<DatabaseState> _mapUserLoggedInToState(UserLoggedIn event) async* {
     final dataRepo = await FirebaseDataRepository.open(
-        firestoreInstance: _firestoreInstance,
-        uuid: event.uuid,
-        newUser: event.newUser);
+      firestoreInstance: _firestoreInstance,
+      uuid: event.uuid,
+    );
     final storageRepo = FirebaseStorageRepository(uuid: event.uuid);
-    yield DbLoaded(dataRepo, storageRepo: storageRepo, newUser: event.newUser);
+    yield DbLoaded(dataRepo, storageRepo: storageRepo);
   }
 
   Stream<DatabaseState> _mapUserLoggedOutToState(UserLoggedOut event) async* {
+    yield DbNotLoaded();
+
     if (state is DbLoaded) {
       final repo = (state as DbLoaded).dataRepo;
       if (repo is SembastDataRepository) {
@@ -69,7 +71,6 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
         await SembastDataRepository.deleteDb(repo.db.path);
       }
     }
-    yield DbNotLoaded();
   }
 
   Stream<DatabaseState> _mapTrialLoginToState(TrialLogin event) async* {
@@ -82,21 +83,10 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
     // }
     // TODO: getting two occurrences of this event on local sign-in, why?
 
-    var newUser = event.newUser;
-
-    if (!newUser) {
-      // Check if the DB already exists
-      final file = File(
-          await SembastDataRepository.getFullPath(pathProvider: pathProvider));
-      if (await file.exists()) {
-        newUser = false;
-      }
-    }
-
     final dataRepo =
         await SembastDataRepository.open(pathProvider: pathProvider);
     final storageRepo = LocalStorageRepository();
-    yield DbLoaded(dataRepo, storageRepo: storageRepo, newUser: newUser);
+    yield DbLoaded(dataRepo, storageRepo: storageRepo);
   }
 
   @override

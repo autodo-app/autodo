@@ -41,7 +41,8 @@ class SignupCredentialsInvalid extends SignupState {
 
   final String passwordError;
 
-  SignupCredentialsInvalid copyWith({emailError, passwordError}) =>
+  SignupCredentialsInvalid copyWith(
+          {String emailError, String passwordError}) =>
       SignupCredentialsInvalid(
         emailError: emailError ?? this.emailError,
         passwordError: passwordError ?? this.passwordError,

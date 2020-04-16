@@ -155,7 +155,9 @@ class CarAddEditHeaderNoImage extends StatelessWidget {
             padding: EdgeInsets.all(5),
             child: TextFormField(
               decoration: defaultInputDecoration(
-                  '', JsonIntl.of(context).get(IntlKeys.name)),
+                context,
+                JsonIntl.of(context).get(IntlKeys.name),
+              ),
               initialValue: car?.name ?? '',
               style: Theme.of(context).primaryTextTheme.subtitle2,
               keyboardType: TextInputType.text,
@@ -197,9 +199,8 @@ class _TwoPartTextField extends StatelessWidget {
           Expanded(
             flex: 5,
             child: TextFormField(
-              decoration: (units == null)
-                  ? defaultInputDecoration(units, '$fieldName ($units)')
-                  : defaultInputDecoration(units, '$fieldName'),
+              decoration:
+                  defaultInputDecoration(context, fieldName, unit: units),
               initialValue: initialValue?.toString() ?? '',
               focusNode: node,
               style: Theme.of(context).primaryTextTheme.subtitle2,
@@ -271,7 +272,7 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
   }
 
   @override
-  Widget build(context) => Scaffold(
+  Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
           leading: IconButton(
             icon: Icon(Icons.arrow_back),

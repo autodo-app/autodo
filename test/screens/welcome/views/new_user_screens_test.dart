@@ -9,7 +9,6 @@ import 'package:mockito/mockito.dart';
 
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/models/models.dart';
-import 'package:autodo/routes.dart';
 import 'package:autodo/screens/welcome/views/new_user_setup/screen.dart';
 import 'package:autodo/screens/welcome/views/new_user_setup/latestcompleted.dart';
 import 'package:autodo/screens/welcome/views/new_user_setup/setrepeats.dart';
@@ -50,11 +49,10 @@ void main() {
   group('new user screens', () {
     TestWidgetsFlutterBinding.ensureInitialized();
     final authBloc = MockAuthenticationBloc();
-    whenListen(
-        authBloc, Stream.fromIterable([RemoteAuthenticated('', '', false)]));
-    when(authBloc.state).thenReturn(RemoteAuthenticated('', '', false));
+    whenListen(authBloc, Stream.fromIterable([RemoteAuthenticated('', '')]));
+    when(authBloc.state).thenReturn(RemoteAuthenticated('', ''));
     final dbBloc = MockDatabaseBloc();
-    when(dbBloc.state).thenReturn(DbLoaded(MockRepo(), newUser: true));
+    when(dbBloc.state).thenReturn(DbLoaded(MockRepo()));
     testWidgets('mileage', (tester) async {
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
@@ -172,20 +170,15 @@ void main() {
       when(todosBloc.state).thenReturn(todosLoaded);
       final carsBloc = MockCarsBloc();
       when(carsBloc.state).thenReturn(CarsLoaded([Car(name: 'test')]));
-      final homeKey = GlobalKey();
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
-          child: MultiBlocProvider(
-              providers: [
-                BlocProvider<AuthenticationBloc>.value(value: authBloc),
-                BlocProvider<DatabaseBloc>.value(value: dbBloc),
-                BlocProvider<CarsBloc>.value(value: carsBloc),
-                BlocProvider<TodosBloc>.value(value: todosBloc),
-              ],
-              child: MaterialApp(home: NewUserScreen(), routes: {
-                AutodoRoutes.home: (context) => Container(key: homeKey),
-              })),
+          child: MultiBlocProvider(providers: [
+            BlocProvider<AuthenticationBloc>.value(value: authBloc),
+            BlocProvider<DatabaseBloc>.value(value: dbBloc),
+            BlocProvider<CarsBloc>.value(value: carsBloc),
+            BlocProvider<TodosBloc>.value(value: todosBloc),
+          ], child: MaterialApp(home: NewUserScreen())),
         ),
       );
       expect(find.byType(NewUserScreen), findsOneWidget);
@@ -202,7 +195,6 @@ void main() {
       expect(find.byType(SetRepeatsScreen), findsOneWidget);
       await tester.tap(find.text(IntlKeys.next));
       await tester.pumpAndSettle();
-      expect(find.byKey(homeKey), findsOneWidget);
     });
   });
 }
