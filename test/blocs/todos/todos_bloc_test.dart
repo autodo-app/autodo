@@ -199,9 +199,8 @@ Future<void> main() async {
               CarsLoaded([Car()])
             ]));
         final dataRepository = MockDataRepository();
-        when(dataRepository.todos()).thenAnswer((_) => Stream.fromIterable([
-              []
-            ]));
+        when(dataRepository.todos())
+            .thenAnswer((_) => Stream.fromIterable([[]]));
         when(dataRepository.getCurrentTodos()).thenAnswer((_) async => []);
         final notificationsBloc = MockNotificationsBloc();
         final dbBloc = MockDbBloc();
@@ -457,8 +456,7 @@ Future<void> main() async {
         );
       });
       when(writeBatch.commit()).thenAnswer((_) async {});
-      when(dataRepository.startTodoWriteBatch())
-          .thenAnswer((_) => writeBatch);
+      when(dataRepository.startTodoWriteBatch()).thenAnswer((_) => writeBatch);
       blocTest(
         'CompletedTodo',
         build: () {
@@ -483,7 +481,6 @@ Future<void> main() async {
         ],
       );
     });
-
 
     blocTest(
       'Subscription',
