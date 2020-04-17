@@ -116,4 +116,27 @@ abstract class DataRepository extends Equatable {
 
     return desVer;
   }
+
+  Future<void> copyFrom(DataRepository other) async {
+    // Copy Cars
+    final carWriteBatch = await startCarWriteBatch();
+    for (final car in await other.getCurrentCars()) {
+      carWriteBatch.setData(car.toDocument());
+    }
+    await carWriteBatch.commit();
+
+    // Copy Todos
+    final todoWriteBatch = await startTodoWriteBatch();
+    for (final todo in await other.getCurrentTodos()) {
+      todoWriteBatch.setData(todo.toDocument());
+    }
+    await todoWriteBatch.commit();
+
+    // Copy Refuelings
+    final refuelingWriteBatch = await startRefuelingWriteBatch();
+    for (final refueling in await other.getCurrentRefuelings()) {
+      refuelingWriteBatch.setData(refueling.toDocument());
+    }
+    await refuelingWriteBatch.commit();
+  }
 }

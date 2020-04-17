@@ -14,6 +14,10 @@ class LocalStorageRepository extends StorageRepository {
 
   @override
   Future<String> getDownloadUrl(String assetName) async {
+    if (assetName.startsWith(RegExp(r'https?://'))) {
+      return assetName;
+    }
+
     final path = await pathProvider();
     return join(path.path, assetName);
   }
