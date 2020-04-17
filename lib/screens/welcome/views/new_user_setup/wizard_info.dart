@@ -60,6 +60,7 @@ class NewUserScreenWizard extends WizardInfo {
           mileageRepeatInterval: tireRotationRepeatInterval,
         ) : null));
     newTodos.removeWhere((t) => t == null);
+    BlocProvider.of<TodosBloc>(context).add(TranslateDefaults(JsonIntl.of(context), Distance.of(context).unit));
     BlocProvider.of<CarsBloc>(context).add(AddMultipleCars(newCars));
     BlocProvider.of<TodosBloc>(context).add(AddMultipleTodos(newTodos));
   }
