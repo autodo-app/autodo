@@ -348,8 +348,10 @@ Future<void> main() async {
         .values
         .toList();
     final defaultsWithDates = List<Todo>.from(defaults)
-      .map((t) => t.copyWith(dueDate: TodosBloc.calcDueDate(car1, t.dueMileage), estimatedDueDate: true))
-      .toList();
+        .map((t) => t.copyWith(
+            dueDate: TodosBloc.calcDueDate(car1, t.dueMileage),
+            estimatedDueDate: true))
+        .toList();
     blocTest(
       'CarsUpdated',
       build: () {
@@ -379,7 +381,8 @@ Future<void> main() async {
         TodosLoaded(todos: []),
         TodosLoaded(todos: [], defaults: TodosBloc.defaultsImperial),
         TodosLoaded(todos: defaults, defaults: TodosBloc.defaultsImperial),
-        TodosLoaded(todos: defaultsWithDates, defaults: TodosBloc.defaultsImperial)
+        TodosLoaded(
+            todos: defaultsWithDates, defaults: TodosBloc.defaultsImperial)
       ],
     );
     group('CompletedTodo', () {
