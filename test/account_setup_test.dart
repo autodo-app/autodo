@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:autodo/repositories/src/sembast_data_repository.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:json_intl/json_intl.dart';
 import 'package:mockito/mockito.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:preferences/preferences.dart';
@@ -47,6 +48,7 @@ StreamMatcher ignoreAll(List ign) => emitsThrough(mayEmit(emitsAnyOf(ign)));
 /// account setup will play nicely with the app's business logic.
 void main() {
   BasePrefService pref;
+  final emptyWithDefaults = TodosLoaded(todos: [], defaults: TodosBloc.defaultsImperial);
 
   setUp(() async {
     pref = JustCachePrefService();
@@ -135,6 +137,7 @@ void main() {
       todosBloc.add(LoadTodos());
 
       // The mileage screen adds cars to the CarsBloc
+      todosBloc.add(TranslateDefaults(JsonIntl.mock, DistanceUnit.imperial));
       carsBloc.add(AddCar(car1));
       await expectLater(
           carsBloc,
@@ -142,9 +145,10 @@ void main() {
             ignoreAll([CarsLoaded([])]),
             CarsLoaded([car1])
           ]));
+      print('Cars Loaded');
 
       // Check that the Default ToDos are loaded properly
-      await expectLater(todosBloc, emitsInOrder([TodosLoaded(todos: []), TodosLoaded(todos: car1Defaults)]));
+      await expectLater(todosBloc, emitsInOrder([emptyWithDefaults, TodosLoaded(todos: car1Defaults, defaults: TodosBloc.defaultsImperial)]));
 
       clearDatabase('cars1.db');
     });
@@ -174,10 +178,11 @@ void main() {
       todosBloc.add(LoadTodos());
 
       // The mileage screen adds cars to the CarsBloc
+      todosBloc.add(TranslateDefaults(JsonIntl.mock, DistanceUnit.imperial));
       carsBloc.add(AddMultipleCars([car1, car2]));
       await emitsExactly(carsBloc, [CarsLoading(), CarsLoaded([]), expectedState]);
       print('cars loaded');
-      await emitsExactly(todosBloc, [TodosLoaded(todos: []), TodosLoaded(todos: car2Defaults)]);
+      await emitsExactly(todosBloc, [emptyWithDefaults, TodosLoaded(todos: car2Defaults, defaults: TodosBloc.defaultsImperial)]);
       // not doing anything for the lastcompleted or repeat interval screens
 
       clearDatabase('cars2.db');
@@ -208,10 +213,11 @@ void main() {
       todosBloc.add(LoadTodos());
 
       // The mileage screen adds cars to the CarsBloc
+      todosBloc.add(TranslateDefaults(JsonIntl.mock, DistanceUnit.imperial));
       carsBloc.add(AddMultipleCars([car1, car2, car3]));
       await emitsExactly(carsBloc, [CarsLoading(), CarsLoaded([]), expectedState]);
       print('cars loaded');
-      await emitsExactly(todosBloc, [TodosLoaded(todos: []), TodosLoaded(todos: car3Defaults)]);
+      await emitsExactly(todosBloc, [emptyWithDefaults, TodosLoaded(todos: car3Defaults, defaults: TodosBloc.defaultsImperial)]);
 
       clearDatabase('cars3.db');
     });
@@ -302,6 +308,7 @@ void main() {
       todosBloc.add(LoadTodos());
 
       // The mileage screen adds cars to the CarsBloc
+      todosBloc.add(TranslateDefaults(JsonIntl.mock, DistanceUnit.imperial));
       carsBloc.add(AddCar(car1));
       await expectLater(
           carsBloc,
@@ -311,7 +318,7 @@ void main() {
           ]));
 
       // Check that the Default ToDos are loaded properly
-      await expectLater(todosBloc, emitsInOrder([TodosLoaded(todos: []), TodosLoaded(todos: car1Defaults)]));
+      await expectLater(todosBloc, emitsInOrder([emptyWithDefaults, TodosLoaded(todos: car1Defaults, defaults: TodosBloc.defaultsImperial)]));
 
       clearDatabase('cars1_1000.db');
     });
@@ -343,6 +350,7 @@ void main() {
       todosBloc.add(LoadTodos());
 
       // The mileage screen adds cars to the CarsBloc
+      todosBloc.add(TranslateDefaults(JsonIntl.mock, DistanceUnit.imperial));
       carsBloc.add(AddCar(car2));
       await expectLater(
           carsBloc,
@@ -352,7 +360,7 @@ void main() {
           ]));
 
       // Check that the Default ToDos are loaded properly
-      await expectLater(todosBloc, emitsInOrder([TodosLoaded(todos: []), TodosLoaded(todos: car2Defaults)]));
+      await expectLater(todosBloc, emitsInOrder([emptyWithDefaults, TodosLoaded(todos: car2Defaults, defaults: TodosBloc.defaultsImperial)]));
 
       clearDatabase('cars2_10000.db');
     });
@@ -384,6 +392,7 @@ void main() {
       todosBloc.add(LoadTodos());
 
       // The mileage screen adds cars to the CarsBloc
+      todosBloc.add(TranslateDefaults(JsonIntl.mock, DistanceUnit.imperial));
       carsBloc.add(AddCar(car3));
       await expectLater(
           carsBloc,
@@ -393,7 +402,7 @@ void main() {
           ]));
 
       // Check that the Default ToDos are loaded properly
-      await expectLater(todosBloc, emitsInOrder([TodosLoaded(todos: []), TodosLoaded(todos: car3Defaults)]));
+      await expectLater(todosBloc, emitsInOrder([emptyWithDefaults, TodosLoaded(todos: car3Defaults, defaults: TodosBloc.defaultsImperial)]));
 
       clearDatabase('cars3_100000.db');
     });
@@ -426,6 +435,7 @@ void main() {
       todosBloc.add(LoadTodos());
 
       // The mileage screen adds cars to the CarsBloc
+      todosBloc.add(TranslateDefaults(JsonIntl.mock, DistanceUnit.imperial));
       carsBloc.add(AddCar(car4));
       await expectLater(
           carsBloc,
@@ -435,17 +445,17 @@ void main() {
           ]));
 
       // Check that the Default ToDos are loaded properly
-      await expectLater(todosBloc, emitsInOrder([TodosLoaded(todos: []), TodosLoaded(todos: car4Defaults)]));
+      await expectLater(todosBloc, emitsInOrder([emptyWithDefaults, TodosLoaded(todos: car4Defaults, defaults: TodosBloc.defaultsImperial)]));
 
       clearDatabase('cars4_1000000.db');
     });
   });
   group('last completed todos', () {
-    final car = Car(name: 'car', mileage: 10000);
-    final oilCompleted = Todo(id: '1', name: 'oil', dueMileage: 8000, completed: true, completedDate: DateTime.fromMillisecondsSinceEpoch(0), mileageRepeatInterval: 3000, carName: 'car', completedMileage: car.mileage, dateRepeatInterval: RepeatInterval());
-    final oilUpcoming = Todo(id: '16', name: 'oil', dueMileage: 13000, mileageRepeatInterval: 3000, completed: false, estimatedDueDate: true, carName: 'car', dateRepeatInterval: RepeatInterval());
-    final tiresCompleted = Todo(id: '7', name: 'tires', dueMileage: 8000, completed: true, completedDate: DateTime.fromMillisecondsSinceEpoch(0), mileageRepeatInterval: 7500, carName: 'car', completedMileage: car.mileage, dateRepeatInterval: RepeatInterval());
-    final tiresUpcoming = Todo(id: '17', name: 'tires', dueMileage: 17500, mileageRepeatInterval: 7500, completed: false, estimatedDueDate: true, carName: 'car', dateRepeatInterval: RepeatInterval());
+    final car = Car(name: 'car', mileage: 10000 * Distance.miles);
+    final oilCompleted = Todo(id: '1', name: 'oil', dueMileage: 8000 * Distance.miles, completed: true, completedDate: DateTime.fromMillisecondsSinceEpoch(0), mileageRepeatInterval: 3500 * Distance.miles, carName: 'car', completedMileage: car.mileage, dateRepeatInterval: RepeatInterval());
+    final oilUpcoming = Todo(id: '16', name: 'oil', dueMileage: 13500 * Distance.miles, mileageRepeatInterval: 3500 * Distance.miles, completed: false, estimatedDueDate: true, carName: 'car', dateRepeatInterval: RepeatInterval());
+    final tiresCompleted = Todo(id: '7', name: 'tires', dueMileage: 8000 * Distance.miles, completed: true, completedDate: DateTime.fromMillisecondsSinceEpoch(0), mileageRepeatInterval: 50000 * Distance.miles, carName: 'car', completedMileage: car.mileage, dateRepeatInterval: RepeatInterval());
+    final tiresUpcoming = Todo(id: '17', name: 'tires', dueMileage: 50000 * Distance.miles + 10000 *  Distance.miles, mileageRepeatInterval: 50000 * Distance.miles, completed: false, estimatedDueDate: true, carName: 'car', dateRepeatInterval: RepeatInterval());
 
     final defaults = TodosBloc.defaultsImperial
         .asMap()
@@ -497,10 +507,11 @@ void main() {
       todosBloc.add(LoadTodos());
 
       // The mileage screen adds cars to the CarsBloc
+      todosBloc.add(TranslateDefaults(JsonIntl.mock, DistanceUnit.imperial));
       carsBloc.add(AddCar(car));
       await emitsExactly(carsBloc, [CarsLoading(), CarsLoaded([]), expectedState]);
       todosBloc.add(CompleteTodo(oilCompleted, DateTime.fromMillisecondsSinceEpoch(0)));
-      await emitsExactly(todosBloc, [TodosLoaded(todos: []), TodosLoaded(todos: defaults), TodosLoaded(todos: defaultsWithOilCompleted)]);
+      await emitsExactly(todosBloc, [emptyWithDefaults, TodosLoaded(todos: defaults, defaults: TodosBloc.defaultsImperial), TodosLoaded(todos: defaultsWithOilCompleted, defaults: TodosBloc.defaultsImperial)]);
       print(todosBloc.state);
       // not doing anything for the lastcompleted or repeat interval screens
 
@@ -533,12 +544,13 @@ void main() {
       todosBloc.add(LoadTodos());
 
       // The mileage screen adds cars to the CarsBloc
+      todosBloc.add(TranslateDefaults(JsonIntl.mock, DistanceUnit.imperial));
       carsBloc.add(AddCar(car));
       await emitsExactly(carsBloc, [CarsLoading(), CarsLoaded([]), expectedState]);
       todosBloc.add(CompleteTodo(oilCompleted, DateTime.fromMillisecondsSinceEpoch(0)));
       // await Future.delayed(Duration(milliseconds: 50));
       todosBloc.add(CompleteTodo(tiresCompleted, DateTime.fromMillisecondsSinceEpoch(0)));
-      await emitsExactly(todosBloc, [TodosLoaded(todos: []), TodosLoaded(todos: defaults), TodosLoaded(todos: defaultsWithOilCompleted), TodosLoaded(todos: defaultsWithBothCompleted)]);
+      await emitsExactly(todosBloc, [emptyWithDefaults, TodosLoaded(todos: defaults, defaults: TodosBloc.defaultsImperial), TodosLoaded(todos: defaultsWithOilCompleted, defaults: TodosBloc.defaultsImperial), TodosLoaded(todos: defaultsWithBothCompleted, defaults: TodosBloc.defaultsImperial)]);
       print(todosBloc.state);
       // not doing anything for the lastcompleted or repeat interval screens
 

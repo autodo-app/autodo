@@ -42,6 +42,13 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     });
   }
 
+  @override
+  void onTransition(dynamic transition) {
+    print('*****************************************');
+    print('**   onTransition $transition');
+    print('*****************************************');
+  }
+
   final DatabaseBloc _dbBloc;
 
   final CarsBloc _carsBloc;
@@ -183,6 +190,9 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
 
   @override
   Stream<TodosState> mapEventToState(TodosEvent event) async* {
+    print('*****************************************');
+    print('**   NEW EVENT $event');
+    print('*****************************************');
     if (event is LoadTodos) {
       yield* _mapLoadTodosToState();
     } else if (event is AddTodo) {
@@ -208,7 +218,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     try {
       final todos = await repo
           .getCurrentTodos()
-          .timeout(Duration(seconds: 10), onTimeout: () => []);
+          .timeout(Duration(seconds: 2), onTimeout: () => []);
       if (todos != null) {
         yield TodosLoaded(todos: todos);
       } else {
@@ -269,6 +279,9 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       print(
           'Cannot update in response to cars loaded when state is not TodosLoaded');
       return;
+    } else if ((state as TodosLoaded).defaults?.isEmpty ?? true) {
+      print('Cannot update cars bloc without translating the default ToDos');
+      return;
     }
     final cars = event.cars;
     final curTodos = (state as TodosLoaded).todos;
@@ -307,7 +320,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     // old state
     await batch.commit();
     final updatedTodos = await repo.getCurrentTodos();
-    yield TodosLoaded(todos: updatedTodos);
+    yield (state as TodosLoaded).copyWith(todos: updatedTodos);
   }
 
   Stream<TodosState> _mapAddTodoToState(AddTodo event) async* {
@@ -405,7 +418,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     await batch.commit();
 
     updatedTodos = await repo.getCurrentTodos();
-    yield TodosLoaded(todos: updatedTodos);
+    yield (state as TodosLoaded).copyWith(todos: updatedTodos);
   }
 
   Stream<TodosState> _mapDeleteTodoToState(DeleteTodo event) async* {
