@@ -56,8 +56,8 @@ void main() {
       'currency': 'USD',
     });
   });
-
-  group('number of cars', () {
+  group('account setup tests', () {
+     group('number of cars', () {
     final car1 = Car(name: 'car1', mileage: 10000);
     final car2 = Car(name: 'car2', mileage: 10000);
     final car3 = Car(name: 'car3', mileage: 10000);
@@ -440,7 +440,6 @@ void main() {
       clearDatabase('cars4_1000000.db');
     });
   });
-
   group('last completed todos', () {
     final car = Car(name: 'car', mileage: 10000);
     final oilCompleted = Todo(id: '1', name: 'oil', dueMileage: 8000, completed: true, completedDate: DateTime.fromMillisecondsSinceEpoch(0), mileageRepeatInterval: 3000, carName: 'car', completedMileage: car.mileage, dateRepeatInterval: RepeatInterval());
@@ -545,5 +544,6 @@ void main() {
 
       clearDatabase('oil_tires.db');
     });
+  });
   });
 }
