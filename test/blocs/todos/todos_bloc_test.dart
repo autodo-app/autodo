@@ -225,7 +225,6 @@ Future<void> main() async {
         TodosLoading(),
         TodosLoaded(todos: []),
         TodosLoaded(todos: [todo1, todo2]),
-        TodosLoaded(todos: []), // this is just from when the data repo contents are put up again
       ],
     );
     blocTest(
@@ -349,9 +348,9 @@ Future<void> main() async {
                 dateRepeatInterval: RepeatInterval())))
         .values
         .toList();
-    // final defaultsWithDates = List<Todo>.from(defaults)
-    //   .map((t) => t.copyWith(dueDate: TodosBloc.calcDueDate(car1, t.dueMileage), estimatedDueDate: true))
-    //   .toList();
+    final defaultsWithDates = List<Todo>.from(defaults)
+      .map((t) => t.copyWith(dueDate: TodosBloc.calcDueDate(car1, t.dueMileage), estimatedDueDate: true))
+      .toList();
     blocTest(
       'CarsUpdated',
       build: () {
@@ -380,8 +379,8 @@ Future<void> main() async {
         TodosLoading(),
         TodosLoaded(todos: []),
         TodosLoaded(todos: [], defaults: TodosBloc.defaultsImperial),
-        TodosLoaded(todos: defaults, defaults: []),
-        // TodosLoaded(todos: defaultsWithDates, defaults: [])
+        TodosLoaded(todos: defaults, defaults: TodosBloc.defaultsImperial),
+        TodosLoaded(todos: defaultsWithDates, defaults: TodosBloc.defaultsImperial)
       ],
     );
     group('CompletedTodo', () {
