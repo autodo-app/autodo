@@ -39,28 +39,29 @@ class NewUserScreenWizard extends WizardInfo {
     final newCars = [];
     final newTodos = [];
     newCars.addAll(cars.map((c) => Car(name: c.name, mileage: c.mileage)));
-    newTodos.addAll(cars.map((c) =>
-      (c.oilChange != null) ?
-        Todo(
-          name: 'oil',
-          carName: c.name,
-          completed: true,
-          completedDate: DateTime.now(),
-          dueMileage: c.oilChange,
-          mileageRepeatInterval: oilRepeatInterval,
-        ) : null));
-    newTodos.addAll(cars.map((c) =>
-      (c.tireRotation != null) ?
-        Todo(
-          name: 'tireRotation',
-          carName: c.name,
-          completed: true,
-          completedDate: DateTime.now(),
-          dueMileage: c.tireRotation,
-          mileageRepeatInterval: tireRotationRepeatInterval,
-        ) : null));
+    newTodos.addAll(cars.map((c) => (c.oilChange != null)
+        ? Todo(
+            name: 'oil',
+            carName: c.name,
+            completed: true,
+            completedDate: DateTime.now(),
+            dueMileage: c.oilChange,
+            mileageRepeatInterval: oilRepeatInterval,
+          )
+        : null));
+    newTodos.addAll(cars.map((c) => (c.tireRotation != null)
+        ? Todo(
+            name: 'tireRotation',
+            carName: c.name,
+            completed: true,
+            completedDate: DateTime.now(),
+            dueMileage: c.tireRotation,
+            mileageRepeatInterval: tireRotationRepeatInterval,
+          )
+        : null));
     newTodos.removeWhere((t) => t == null);
-    BlocProvider.of<TodosBloc>(context).add(TranslateDefaults(JsonIntl.of(context), Distance.of(context).unit));
+    BlocProvider.of<TodosBloc>(context).add(
+        TranslateDefaults(JsonIntl.of(context), Distance.of(context).unit));
     BlocProvider.of<CarsBloc>(context).add(AddMultipleCars(newCars));
     BlocProvider.of<TodosBloc>(context).add(AddMultipleTodos(newTodos));
   }

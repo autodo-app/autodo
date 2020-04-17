@@ -335,7 +335,8 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     await repo.addNewTodo(event.todo);
   }
 
-  Stream<TodosState> _mapAddMultipleTodosToState(AddMultipleTodos event) async* {
+  Stream<TodosState> _mapAddMultipleTodosToState(
+      AddMultipleTodos event) async* {
     if (repo == null) {
       print('Error: adding todo to null repo');
       return;
@@ -345,7 +346,9 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     yield TodosLoaded(todos: updatedTodos);
     event.todos.forEach(_scheduleNotification);
     final batch = await repo.startTodoWriteBatch();
-    event.todos.forEach((t) {batch.setData(t.toDocument());});
+    event.todos.forEach((t) {
+      batch.setData(t.toDocument());
+    });
     await batch.commit();
   }
 
