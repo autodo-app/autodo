@@ -52,16 +52,14 @@ class NewUserScreenWizard extends WizardInfo {
         ));
       }
       if (car.tireRotation != null) {
-        newTodos.add(
-          Todo(
-            name: 'tireRotation',
-            carName: c.name,
-            completed: true,
-            completedDate: DateTime.now(),
-            dueMileage: car.tireRotation,
-            mileageRepeatInterval: tireRotationRepeatInterval,
-          )
-        );
+        newTodos.add(Todo(
+          name: 'tireRotation',
+          carName: c.name,
+          completed: true,
+          completedDate: DateTime.now(),
+          dueMileage: car.tireRotation,
+          mileageRepeatInterval: tireRotationRepeatInterval,
+        ));
       }
     }
     BlocProvider.of<TodosBloc>(context).add(
