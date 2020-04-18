@@ -38,28 +38,32 @@ class NewUserScreenWizard extends WizardInfo {
   FutureOr<void> didFinish(BuildContext context) {
     final newCars = [];
     final newTodos = [];
-    newCars.addAll(cars.map((c) => Car(name: c.name, mileage: c.mileage)));
-    newTodos.addAll(cars.map((c) => (c.oilChange != null)
-        ? Todo(
-            name: 'oil',
-            carName: c.name,
-            completed: true,
-            completedDate: DateTime.now(),
-            dueMileage: c.oilChange,
-            mileageRepeatInterval: oilRepeatInterval,
-          )
-        : null));
-    newTodos.addAll(cars.map((c) => (c.tireRotation != null)
-        ? Todo(
+    for (final car in cars) {
+      final c = Car(name: car.name, mileage: car.mileage);
+      newCars.add(c);
+      if (car.oilChange != null) {
+        newTodos.add(Todo(
+          name: 'oil',
+          carName: c.name,
+          completed: true,
+          completedDate: DateTime.now(),
+          dueMileage: car.oilChange,
+          mileageRepeatInterval: oilRepeatInterval,
+        ));
+      }
+      if (car.tireRotation != null) {
+        newTodos.add(
+          Todo(
             name: 'tireRotation',
             carName: c.name,
             completed: true,
             completedDate: DateTime.now(),
-            dueMileage: c.tireRotation,
+            dueMileage: car.tireRotation,
             mileageRepeatInterval: tireRotationRepeatInterval,
           )
-        : null));
-    newTodos.removeWhere((t) => t == null);
+        );
+      }
+    }
     BlocProvider.of<TodosBloc>(context).add(
         TranslateDefaults(JsonIntl.of(context), Distance.of(context).unit));
     BlocProvider.of<CarsBloc>(context).add(AddMultipleCars(newCars));
