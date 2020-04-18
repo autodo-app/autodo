@@ -62,7 +62,8 @@ class HomeScreenState extends State<HomeScreen> with RouteAware {
   HomeScreenState(this.todosTabKey, this.integrationTest);
 
   final Map<AppTab, Widget> views = {
-    AppTab.todos: TodosScreen(),
+    // AppTab.todos: TodosScreen(),
+    AppTab.todos: TodosScreen2(),
     AppTab.refuelings: RefuelingsScreen(),
     AppTab.stats: StatisticsScreen(),
     AppTab.garage: GarageScreen(),
@@ -237,12 +238,12 @@ class HomeScreenState extends State<HomeScreen> with RouteAware {
 
   Widget buildScreen(BuildContext context) {
     return Scaffold(
-      appBar: (_tab == AppTab.garage)
-          ? null
-          : AppBar(
-              title: Text(JsonIntl.of(context).get(IntlKeys.appTitle)),
-              actions: [ExtraActions()],
-            ),
+      // appBar: (_tab == AppTab.garage)
+      //     ? null
+      //     : AppBar(
+      //         title: Text(JsonIntl.of(context).get(IntlKeys.appTitle)),
+      //         actions: [ExtraActions()],
+      //       ),
       body: views[_tab],
       floatingActionButton: actionButton,
       bottomNavigationBar: TabSelector(
