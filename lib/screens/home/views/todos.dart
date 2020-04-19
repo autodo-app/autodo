@@ -1,4 +1,3 @@
-import 'package:autodo/screens/home/views/barrel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_intl/json_intl.dart';
@@ -159,8 +158,25 @@ class TodosPanelState extends State<TodosPanel> {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Icon(Icons.search), // TODO: make this do something
-            Icon(Icons.more_vert), // TODO: make this do something
+            ButtonTheme.fromButtonThemeData(
+              data: ButtonThemeData(
+                minWidth: 0,
+              ),
+              child: FlatButton(
+                child: Icon(Icons.search),
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    child: AlertDialog(
+                      title: Text('To Be Implemented')
+                    )
+                  );
+                },
+              ),
+            ),
+            ExtraActions(),
             SizedBox(width: 10,), // padding
           ],
         ),
