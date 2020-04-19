@@ -1,3 +1,4 @@
+import 'package:autodo/screens/home/views/barrel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_intl/json_intl.dart';
@@ -8,6 +9,8 @@ import '../../../models/models.dart';
 import '../../../theme.dart';
 import '../../../widgets/widgets.dart';
 import '../widgets/barrel.dart';
+
+const TODOS_SECTION_LIMIT = 5;
 
 class TodoListHeader extends StatelessWidget {
   const TodoListHeader(this.dueState);
@@ -43,6 +46,77 @@ class TodoListHeader extends StatelessWidget {
   }
 }
 
+class TodoListSection extends StatefulWidget {
+  const TodoListSection({this.dueState, this.todos, this.cars, this.deleteTodo});
+
+  final TodoDueState dueState;
+  final List<Todo> todos;
+  final List<Car> cars;
+  final Function(BuildContext, Todo) deleteTodo;
+
+  @override
+  TodoListSectionState createState() => TodoListSectionState();
+}
+
+class TodoListSectionState extends State<TodoListSection> {
+  bool expanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.todos?.isEmpty ?? true) {
+      return Container();
+    }
+
+    int listLength;
+    if (expanded) {
+      listLength = widget.todos.length + 1;
+    } else {
+      // Limit the list length to TODOS_SECTION_LIMIT
+      listLength = widget.todos.length < TODOS_SECTION_LIMIT ? widget.todos.length : TODOS_SECTION_LIMIT;
+    }
+    return Column(
+      children: [
+        TodoListHeader(widget.dueState),
+        ...List.generate(
+          listLength,
+          (index) {
+            if (!expanded && index == (TODOS_SECTION_LIMIT - 1)) {
+              return Align(
+                alignment: Alignment.centerLeft,
+                child: FlatButton(
+                  child: Text('Show More'),
+                  onPressed: () {
+                    setState(() {
+                      expanded = true;
+                    });
+                  },
+                ),
+              ); // more button
+            } else if (expanded && index == (listLength - 1)) {
+              return Align(
+                alignment: Alignment.centerLeft,
+                child: FlatButton(
+                  child: Text('Show Less'),
+                  onPressed: () {
+                    setState(() {
+                      expanded = false;
+                    });
+                  },
+                ),
+              ); // more button
+            }
+            return TodoListCard(
+              todo: widget.todos[index],
+              car: widget.cars.firstWhere((c) => c.name == widget.todos[index].carName),
+              onDelete: () { widget.deleteTodo(context, widget.todos[index]); }
+            );
+          },
+        ),
+      ],
+    );
+  }
+}
+
 class TodosPanel extends StatefulWidget {
   const TodosPanel({this.todos, this.cars});
 
@@ -68,7 +142,7 @@ class TodosPanelState extends State<TodosPanel> {
     // removing the todo from our local list for a quicker response than waiting
     // on the Bloc to rebuild
     setState(() {
-      todos.remove(todo);
+      todos[todo.dueState].remove(todo);
     });
   }
 
@@ -91,42 +165,30 @@ class TodosPanelState extends State<TodosPanel> {
           ],
         ),
         // Header above, actual ToDos below
-        if (todos[TodoDueState.PAST_DUE]?.isNotEmpty ?? false)
-          TodoListHeader(TodoDueState.PAST_DUE),
-        if (todos[TodoDueState.PAST_DUE]?.isNotEmpty ?? false)
-          ...List.generate(
-            todos[TodoDueState.PAST_DUE].length,
-            (index) => TodoListCard(
-              todo: todos[TodoDueState.PAST_DUE][index],
-              car: widget.cars.firstWhere((c) => c.name == todos[TodoDueState.PAST_DUE][index].carName),
-              onDelete: () { deleteTodo(context, todos[TodoDueState.PAST_DUE][index]); })),
-        if (todos[TodoDueState.DUE_SOON]?.isNotEmpty ?? false)
-          TodoListHeader(TodoDueState.DUE_SOON),
-        if (todos[TodoDueState.DUE_SOON]?.isNotEmpty ?? false)
-          ...List.generate(
-            todos[TodoDueState.DUE_SOON].length,
-            (index) => TodoListCard(
-              todo: todos[TodoDueState.DUE_SOON][index],
-              car: widget.cars.firstWhere((c) => c.name == todos[TodoDueState.DUE_SOON][index].carName),
-              onDelete: () { deleteTodo(context, todos[TodoDueState.DUE_SOON][index]); })),
-        if (todos[TodoDueState.UPCOMING]?.isNotEmpty ?? false)
-          TodoListHeader(TodoDueState.UPCOMING),
-        if (todos[TodoDueState.UPCOMING]?.isNotEmpty ?? false)
-          ...List.generate(
-            todos[TodoDueState.UPCOMING].length,
-            (index) => TodoListCard(
-              todo: todos[TodoDueState.UPCOMING][index],
-              car: widget.cars.firstWhere((c) => c.name == todos[TodoDueState.UPCOMING][index].carName),
-              onDelete: () { deleteTodo(context, todos[TodoDueState.UPCOMING][index]); })),
-        if (todos[TodoDueState.COMPLETE]?.isNotEmpty ?? false)
-          TodoListHeader(TodoDueState.COMPLETE),
-        if (todos[TodoDueState.COMPLETE]?.isNotEmpty ?? false)
-          ...List.generate(
-            todos[TodoDueState.COMPLETE].length,
-            (index) => TodoListCard(
-              todo: todos[TodoDueState.COMPLETE][index],
-              car: widget.cars.firstWhere((c) => c.name == todos[TodoDueState.COMPLETE][index].carName),
-              onDelete: () { deleteTodo(context, todos[TodoDueState.COMPLETE][index]); })),
+        TodoListSection(
+          todos: todos[TodoDueState.PAST_DUE],
+          cars: widget.cars,
+          dueState: TodoDueState.PAST_DUE,
+          deleteTodo: deleteTodo,
+        ),
+        TodoListSection(
+          todos: todos[TodoDueState.DUE_SOON],
+          cars: widget.cars,
+          dueState: TodoDueState.DUE_SOON,
+          deleteTodo: deleteTodo,
+        ),
+        TodoListSection(
+          todos: todos[TodoDueState.UPCOMING],
+          cars: widget.cars,
+          dueState: TodoDueState.UPCOMING,
+          deleteTodo: deleteTodo,
+        ),
+        TodoListSection(
+          todos: todos[TodoDueState.COMPLETE],
+          cars: widget.cars,
+          dueState: TodoDueState.COMPLETE,
+          deleteTodo: deleteTodo,
+        ),
       ],
     )
   );
