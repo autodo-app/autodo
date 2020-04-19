@@ -83,7 +83,7 @@ class TodoListSectionState extends State<TodoListSection> {
               return Align(
                 alignment: Alignment.centerLeft,
                 child: FlatButton(
-                  child: Text('Show More'),
+                  child: Text(JsonIntl.of(context).get(IntlKeys.showMore)),
                   onPressed: () {
                     setState(() {
                       expanded = true;
@@ -95,7 +95,7 @@ class TodoListSectionState extends State<TodoListSection> {
               return Align(
                 alignment: Alignment.centerLeft,
                 child: FlatButton(
-                  child: Text('Show Less'),
+                  child: Text(JsonIntl.of(context).get(IntlKeys.showLess)),
                   onPressed: () {
                     setState(() {
                       expanded = false;
@@ -170,7 +170,7 @@ class TodosPanelState extends State<TodosPanel> {
                   showDialog(
                     context: context,
                     child: AlertDialog(
-                      title: Text('To Be Implemented')
+                      title: Text(JsonIntl.of(context).get(IntlKeys.toBeImplemented))
                     )
                   );
                 },
@@ -226,7 +226,12 @@ class TodoAlert extends StatelessWidget {
             Icon(
               Icons.priority_high,
               color: Colors.red),
-            Text('1 late ToDo')
+            Text(
+              // TODO: plural
+              (todos[TodoDueState.PAST_DUE].length > 1) ?
+                JsonIntl.of(context).get(IntlKeys.pluralLateTodos, {'num': todos[TodoDueState.PAST_DUE].length}) :
+                JsonIntl.of(context).get(IntlKeys.singularLateTodo, {'num': todos[TodoDueState.PAST_DUE].length})
+            )
           ],
         ), // use JsonIntl here eventually
       );
@@ -239,7 +244,12 @@ class TodoAlert extends StatelessWidget {
             Icon(
               Icons.notifications,
               color: Colors.red),
-            Text('1 late ToDo')
+            Text(
+              // TODO: plural
+              (todos[TodoDueState.DUE_SOON].length > 1) ?
+                JsonIntl.of(context).get(IntlKeys.pluralDueSoonTodos, {'num': todos[TodoDueState.DUE_SOON].length}) :
+                JsonIntl.of(context).get(IntlKeys.singularDueSoonTodo, {'num': todos[TodoDueState.DUE_SOON].length})
+            )
           ],
         ), // // use JsonIntl here eventually
       );
@@ -280,7 +290,7 @@ class TodosScreen extends StatelessWidget {
                   title: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Flexible(fit: FlexFit.loose, child: Text('ToDos')),
+                      Flexible(fit: FlexFit.loose, child: Text(JsonIntl.of(context).get(IntlKeys.todos))),
                       TodoAlert((todosState as FilteredTodosLoaded).filteredTodos),
                     ]
                   ),

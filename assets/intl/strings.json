@@ -212,5 +212,13 @@
   "battery": "Battery",
   "serpentine_belt": "Serpentine Belt",
   "transmission_fluid": "Transmission Fluid",
-  "coolant_change": "Coolant Change"
+  "coolant_change": "Coolant Change",
+  "show_more": "Show More",
+  "show_less": "Show Less",
+  "to_be_implemented": "To Be Implemented",
+  "singular_late_todo": "{{ num }} Late ToDo",
+  "plural_late_todos": "{{ num }} Late ToDos",
+  "singular_due_soon_todo": "{{ num }} ToDo Due Soon",
+  "plural_due_soon_todos": "{{ num }} ToDos Due Soon",
+  "delete_todo": "Delete ToDo"
 }

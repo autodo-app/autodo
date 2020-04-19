@@ -52,7 +52,7 @@ class TodoListCard extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Text('Delete ToDo'),
+          Text(JsonIntl.of(context).get(IntlKeys.deleteTodo)),
           SizedBox(width: 5),
           Icon(Icons.delete),
           SizedBox(width: 10),

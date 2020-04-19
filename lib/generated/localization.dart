@@ -121,6 +121,10 @@ class IntlKeys {
   /// strings-fr.json: 'La suppression de votre compte supprimera définitivement toutes les données associées à votre compte.\n\n Êtes-vous sur de vouloir continuer?'
   static const deleteAccountMessage = 'delete_account_message';
 
+  /// strings.json: 'Delete ToDo'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const deleteTodo = 'delete_todo';
+
   /// strings.json: 'Details'
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const details = 'details';
@@ -497,6 +501,14 @@ class IntlKeys {
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const plate = 'plate';
 
+  /// strings.json: '{{ num }} ToDos Due Soon'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const pluralDueSoonTodos = 'plural_due_soon_todos';
+
+  /// strings.json: '{{ num }} Late ToDos'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const pluralLateTodos = 'plural_late_todos';
+
   /// strings.json: 'Privacy Policy'
   /// strings-fr.json: 'Politique de confidentialité'
   static const privacyPolicy = 'privacy_policy';
@@ -657,6 +669,14 @@ class IntlKeys {
   /// strings-fr.json: 'Afficher les tâches terminées'
   static const showCompleted = 'show_completed';
 
+  /// strings.json: 'Show Less'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const showLess = 'show_less';
+
+  /// strings.json: 'Show More'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const showMore = 'show_more';
+
   /// strings.json: 'Sign In with Google'
   /// strings-fr.json: 'Connectez-vous avec Google'
   static const signInWithGoogle = 'sign_in_with_google';
@@ -684,6 +704,14 @@ class IntlKeys {
   /// strings.json: 'Set recurring tasks to never worry about forgetting a maintenance task again.'
   /// strings-fr.json: 'Définissez des tâches récurrentes pour ne plus jamais vous soucier d\'oublier une tâche de maintenance.'
   static const simplifyTasksDesc = 'simplify_tasks_desc';
+
+  /// strings.json: '{{ num }} ToDo Due Soon'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const singularDueSoonTodo = 'singular_due_soon_todo';
+
+  /// strings.json: '{{ num }} Late ToDo'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const singularLateTodo = 'singular_late_todo';
 
   /// strings.json: 'Skip'
   /// strings-fr.json: 'Passer'
@@ -716,6 +744,10 @@ class IntlKeys {
   /// strings.json: 'Tires'
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const tires = 'tires';
+
+  /// strings.json: 'To Be Implemented'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const toBeImplemented = 'to_be_implemented';
 
   /// strings.json: 'ToDo {{ name }} deleted.'
   /// strings-fr.json: 'Tâche {{name}} supprimé.'
