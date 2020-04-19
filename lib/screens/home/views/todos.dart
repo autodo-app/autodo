@@ -200,34 +200,34 @@ class TodosPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-    height: 10000,
+    padding: EdgeInsets.fromLTRB(5, 15, 5, 15),
     decoration: BoxDecoration(
       borderRadius: BorderRadius.only(topLeft: Radius.circular(25), topRight: Radius.circular(25)),
       color: Theme.of(context).cardColor,
     ),
-    child: ListView.builder(
-      itemCount: todos.length,
-      itemBuilder: (context, index) {
-        final curTodo = todos[index];
-        final curDueState = TodosBloc.calcDueState(cars.firstWhere((c) => c.name == curTodo.carName), curTodo);
-        if (index == 0) {
-          // the first ToDo always needs a label
-          return TodoListCardWithHeader(
-            todo: curTodo,
-            dueState: curDueState,
-          );
-        }
-        final prevTodo = todos[index - 1];
-        final prevDueState = TodosBloc.calcDueState(cars.firstWhere((c) => c.name == prevTodo.carName), prevTodo);
-        if (curDueState != prevDueState) {
-          return TodoListCardWithHeader(
-            todo: curTodo,
-            dueState: curDueState,
-          );
-        }
+    child: Column(
+      children: List.generate(todos.length, (index) {
+          final curTodo = todos[index];
+          final curDueState = TodosBloc.calcDueState(cars.firstWhere((c) => c.name == curTodo.carName), curTodo);
+          if (index == 0) {
+            // the first ToDo always needs a label
+            return TodoListCardWithHeader(
+              todo: curTodo,
+              dueState: curDueState,
+            );
+          }
+          final prevTodo = todos[index - 1];
+          final prevDueState = TodosBloc.calcDueState(cars.firstWhere((c) => c.name == prevTodo.carName), prevTodo);
+          if (curDueState != prevDueState) {
+            return TodoListCardWithHeader(
+              todo: curTodo,
+              dueState: curDueState,
+            );
+          }
 
-        return TodoListCard(curTodo);
-      },
+          return TodoListCard(curTodo);
+        },
+      )
     )
   );
 }
