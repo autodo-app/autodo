@@ -10,8 +10,49 @@ import '../../../theme.dart';
 import '../../../widgets/widgets.dart';
 import '../widgets/barrel.dart';
 
-class TodosScreen extends StatelessWidget {
-  const TodosScreen({Key key}) : super(key: key);
+
+
+class TodoListCardWithHeader extends StatelessWidget {
+  const TodoListCardWithHeader({this.todo, this.dueState});
+
+  final Todo todo;
+  final TodoDueState dueState;
+
+  @override
+  Widget build(BuildContext context) {
+    String headerText;
+    if (dueState == TodoDueState.PAST_DUE) {
+      headerText = JsonIntl.of(context).get(IntlKeys.pastDue);
+    } else if (dueState == TodoDueState.DUE_SOON) {
+      headerText = JsonIntl.of(context).get(IntlKeys.dueSoon);
+    } else if (dueState == TodoDueState.UPCOMING) {
+      headerText = JsonIntl.of(context).get(IntlKeys.upcoming);
+    } else if (dueState == TodoDueState.COMPLETE) {
+      headerText = JsonIntl.of(context).get(IntlKeys.completed);
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: EdgeInsets.only(left: 10, right: 10, top: 5),
+          child: Text(headerText),
+        ),
+        Container(
+          padding: EdgeInsets.only(left: 10, right: 10),
+          child: Divider(),
+        ),
+        TodoListCard(todo),
+      ],
+    );
+  }
+}
+
+class TodosPanel extends StatelessWidget {
+  const TodosPanel({this.todos, this.cars});
+
+  final List<Todo> todos;
+  final List<Car> cars;
 
   void onDismissed(
       DismissDirection direction, BuildContext context, Todo todo) {
@@ -38,167 +79,6 @@ class TodosScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) =>
-      BlocBuilder<FilteredTodosBloc, FilteredTodosState>(
-          builder: (context, state) {
-        if (state is FilteredTodosLoading) {
-          return LoadingIndicator();
-        } else if (state is FilteredTodosLoaded) {
-          final todos = state.filteredTodos;
-          return ListView.builder(
-            key: IntegrationTestKeys.todosScreenScroller,
-            itemCount: todos.length,
-            itemBuilder: (context, index) {
-              final todo = todos[index];
-              return Padding(
-                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  child: TodoCard(
-                    key: UniqueKey(),
-                    todo: todo,
-                    onDismissed: (direction) =>
-                        onDismissed(direction, context, todo),
-                    onTap: () => onTap(context, todo),
-                    onCheckboxChanged: (_) => onCheckboxChanged(context, todo),
-                    emphasized: index == 0,
-                  ));
-            },
-          );
-        } else {
-          return Container();
-        }
-      });
-}
-
-class TodoListCard extends StatelessWidget {
-  const TodoListCard(this.todo);
-
-  final Todo todo;
-
-  // @override
-  // Widget build(BuildContext context) => ListTile(
-  //   leading: Transform.scale(
-  //     scale: 1.5,
-  //     child: Checkbox(
-  //     value: false,
-  //     onChanged: (_) {},
-  //   ),),
-  //   title: Text(todo.name),
-  //   subtitle: Text('Due at ${todo.dueMileage} mi'),
-  //   trailing: IntrinsicWidth(
-  //     child: Column(
-  //     mainAxisSize: MainAxisSize.min,
-  //     children: [
-  //       CarTag(
-  //         text: '2015 Sonic'
-  //       ),
-  //       Expanded(
-  //         child: Row(
-  //           mainAxisSize: MainAxisSize.min,
-  //           children: [
-  //             Expanded(child: Icon(Icons.edit)),
-  //             Expanded(child: Icon(Icons.delete)),
-  //           ],
-  //         )
-  //       )
-  //     ],
-  //   ),)
-  // );
-  @override
-  Widget build(BuildContext context) => Container(
-    padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Container(
-          padding: EdgeInsets.fromLTRB(0, 15, 15, 15),
-          child: SizedBox(
-            height: 28,
-            width: 28,
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(
-                  width: 2,
-                  color: Colors.white
-                ),
-                borderRadius: BorderRadius.circular(5)
-              ),
-              // child: Container(),
-            )
-          )
-        ),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(todo.name, style: TextStyle(fontSize: 24)),
-              SizedBox(height: 10,),
-              Text('Due at ${todo.dueMileage} mi', style: TextStyle(fontSize: 16))
-            ],
-          ),
-        ),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              CarTag(text: '2015 Sonic',),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.edit),
-                  Icon(Icons.delete),
-                ]
-              )
-            ],
-          ),
-        ),
-      ],
-    )
-  );
-}
-
-class TodoListCardWithHeader extends StatelessWidget {
-  const TodoListCardWithHeader({this.todo, this.dueState});
-
-  final Todo todo;
-  final TodoDueState dueState;
-
-  @override
-  Widget build(BuildContext context) {
-    String headerText;
-    if (dueState == TodoDueState.PAST_DUE) {
-      headerText = 'Past Due';
-    } else if (dueState == TodoDueState.DUE_SOON) {
-      headerText = 'Due Soon';
-    } else if (dueState == TodoDueState.UPCOMING) {
-      headerText = 'Upcoming';
-    } else if (dueState == TodoDueState.COMPLETE) {
-      headerText = 'Completed';
-    }
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          padding: EdgeInsets.only(left: 10, right: 10, top: 5),
-          child: Text(headerText),
-        ),
-        Container(
-          padding: EdgeInsets.only(left: 10, right: 10),
-          child: Divider(),
-        ),
-        TodoListCard(todo),
-      ],
-    );
-  }
-}
-
-class TodosPanel extends StatelessWidget {
-  const TodosPanel({this.todos, this.cars});
-
-  final List<Todo> todos;
-  final List<Car> cars;
-
-  @override
   Widget build(BuildContext context) => Container(
     padding: EdgeInsets.fromLTRB(5, 15, 5, 15),
     decoration: BoxDecoration(
@@ -206,28 +86,42 @@ class TodosPanel extends StatelessWidget {
       color: Theme.of(context).cardColor,
     ),
     child: Column(
-      children: List.generate(todos.length, (index) {
-          final curTodo = todos[index];
-          final curDueState = TodosBloc.calcDueState(cars.firstWhere((c) => c.name == curTodo.carName), curTodo);
-          if (index == 0) {
-            // the first ToDo always needs a label
-            return TodoListCardWithHeader(
-              todo: curTodo,
-              dueState: curDueState,
-            );
-          }
-          final prevTodo = todos[index - 1];
-          final prevDueState = TodosBloc.calcDueState(cars.firstWhere((c) => c.name == prevTodo.carName), prevTodo);
-          if (curDueState != prevDueState) {
-            return TodoListCardWithHeader(
-              todo: curTodo,
-              dueState: curDueState,
-            );
-          }
+      children: [
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Icon(Icons.search),
+            Icon(Icons.more_vert),
+            SizedBox(width: 10,), // padding
+          ],
+        ),
+        // Header above, actual ToDos below
+        ...List.generate(
+          todos.length,
+          (index) {
+            final curTodo = todos[index];
+            final curDueState = TodosBloc.calcDueState(cars.firstWhere((c) => c.name == curTodo.carName), curTodo);
+            if (index == 0) {
+              // the first ToDo always needs a label
+              return TodoListCardWithHeader(
+                todo: curTodo,
+                dueState: curDueState,
+              );
+            }
+            final prevTodo = todos[index - 1];
+            final prevDueState = TodosBloc.calcDueState(cars.firstWhere((c) => c.name == prevTodo.carName), prevTodo);
+            if (curDueState != prevDueState) {
+              return TodoListCardWithHeader(
+                todo: curTodo,
+                dueState: curDueState,
+              );
+            }
 
-          return TodoListCard(curTodo);
-        },
-      )
+            return TodoListCard(curTodo);
+          },
+        )
+      ],
     )
   );
 }
@@ -248,9 +142,9 @@ class TodosScreen2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => BlocBuilder<CarsBloc, CarsState>(
-    builder: (context, carsState) => BlocBuilder<TodosBloc, TodosState>(
+    builder: (context, carsState) => BlocBuilder<FilteredTodosBloc, FilteredTodosState>(
       builder: (context, todosState) {
-        if (!(todosState is TodosLoaded) || !(carsState is CarsLoaded)) {
+        if (!(todosState is FilteredTodosLoaded) || !(carsState is CarsLoaded)) {
           return Container();
         }
 
@@ -274,7 +168,7 @@ class TodosScreen2 extends StatelessWidget {
               ),
               SliverToBoxAdapter(
                 child: TodosPanel(
-                  todos: (todosState as TodosLoaded).todos,
+                  todos: (todosState as FilteredTodosLoaded).filteredTodos,
                   cars: (carsState as CarsLoaded).cars
                 ),
               ),

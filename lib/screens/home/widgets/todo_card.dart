@@ -8,7 +8,9 @@ import '../../../generated/localization.dart';
 import '../../../models/models.dart';
 import '../../../theme.dart';
 import '../../../units/units.dart';
+import '../../../widgets/widgets.dart';
 import '../../add_edit/barrel.dart';
+import 'rounded_checkbox.dart';
 import 'todo_delete_button.dart';
 
 const int DUE_SOON_INTERVAL = 100;
@@ -353,4 +355,59 @@ class TodoCard extends StatelessWidget {
           ),
         ),
       );
+}
+
+class TodoListCard extends StatelessWidget {
+  const TodoListCard(this.todo);
+
+  final Todo todo;
+
+  @override
+  Widget build(BuildContext context) => Container(
+    padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Container(
+          padding: EdgeInsets.fromLTRB(0, 15, 15, 15),
+          child: RoundedCheckbox(
+            initialValue: todo.completed,
+            onTap: (completed) {
+              BlocProvider.of<TodosBloc>(context).add(
+                UpdateTodo(
+                  todo.copyWith(
+                    completed: completed,
+                    completedDate: completed ? DateTime.now() : null)));
+            }
+          ),
+        ),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(todo.name, style: TextStyle(fontSize: 24)),
+              SizedBox(height: 10,),
+              Text('Due at ${todo.dueMileage} mi', style: TextStyle(fontSize: 16))
+            ],
+          ),
+        ),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              CarTag(text: '2015 Sonic',),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.edit),
+                  Icon(Icons.delete),
+                ]
+              )
+            ],
+          ),
+        ),
+      ],
+    )
+  );
 }
