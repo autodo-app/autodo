@@ -32,24 +32,16 @@ class _TodoDueDate extends StatelessWidget {
 }
 
 class TodoListCard extends StatelessWidget {
-  const TodoListCard({this.todo, this.car});
+  const TodoListCard({this.todo, this.car, this.onDelete});
 
   final Todo todo;
   final Car car;
+  final VoidCallback onDelete;
 
   @override
   Widget build(BuildContext context) => Dismissible(
     key: ValueKey('__${todo.id}_dismissible_key__'),
-    onDismissed: (_) {
-      BlocProvider.of<TodosBloc>(context).add(DeleteTodo(todo));
-      Scaffold.of(context).showSnackBar(DeleteTodoSnackBar(
-        context: context,
-        todo: todo,
-        onUndo: () => BlocProvider.of<TodosBloc>(context).add(AddTodo(todo)),
-      ));
-      // somehow force this card to be removed?
-      // that may need to be handled by the parent
-    },
+    onDismissed: (_) { onDelete(); },
     dismissThresholds: {
       // must move halfway across the screen
       DismissDirection.horizontal: 0.5
@@ -94,7 +86,7 @@ class TodoListCard extends StatelessWidget {
                 SizedBox(height: 10,),
                 RichText(
                   text: TextSpan(children: [
-                  // Todo: Improve this translation
+                  // TODO: Improve this translation
                   TextSpan(
                       text: '${JsonIntl.of(context).get(IntlKeys.dueAt)} ',
                       style: Theme.of(context).primaryTextTheme.bodyText2),
@@ -122,7 +114,7 @@ class TodoListCard extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     TodoEditButton(todo: todo),
-                    TodoDeleteButton(todo: todo), // also need to remove the card with this?
+                    TodoDeleteButton(todo: todo, onDelete: onDelete),
                   ]
                 )
               ],

@@ -1,3 +1,4 @@
+import 'package:autodo/screens/home/views/barrel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_intl/json_intl.dart';
@@ -12,11 +13,12 @@ import '../widgets/barrel.dart';
 
 
 class TodoListCardWithHeader extends StatelessWidget {
-  const TodoListCardWithHeader({this.todo, this.car, this.dueState});
+  const TodoListCardWithHeader({this.todo, this.car, this.dueState, this.onDelete});
 
   final Todo todo;
   final Car car;
   final TodoDueState dueState;
+  final VoidCallback onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -42,17 +44,40 @@ class TodoListCardWithHeader extends StatelessWidget {
           padding: EdgeInsets.only(left: 10, right: 10),
           child: Divider(),
         ),
-        TodoListCard(todo: todo, car: car),
+        TodoListCard(todo: todo, car: car, onDelete: onDelete),
       ],
     );
   }
 }
 
-class TodosPanel extends StatelessWidget {
+class TodosPanel extends StatefulWidget {
   const TodosPanel({this.todos, this.cars});
 
   final List<Todo> todos;
   final List<Car> cars;
+
+  @override
+  TodosPanelState createState() => TodosPanelState(todos);
+}
+
+class TodosPanelState extends State<TodosPanel> {
+  TodosPanelState(this.todos);
+
+  List<Todo> todos;
+
+  void deleteTodo(context, todo) {
+    BlocProvider.of<TodosBloc>(context).add(DeleteTodo(todo));
+    Scaffold.of(context).showSnackBar(DeleteTodoSnackBar(
+      context: context,
+      todo: todo,
+      onUndo: () => BlocProvider.of<TodosBloc>(context).add(AddTodo(todo)),
+    ));
+    // removing the todo from our local list for a quicker response than waiting
+    // on the Bloc to rebuild
+    setState(() {
+      todos.remove(todo);
+    });
+  }
 
   @override
   Widget build(BuildContext context) => Container(
@@ -77,7 +102,7 @@ class TodosPanel extends StatelessWidget {
           todos.length,
           (index) {
             final curTodo = todos[index];
-            final curCar = cars.firstWhere((c) => c.name == curTodo.carName);
+            final curCar = widget.cars.firstWhere((c) => c.name == curTodo.carName);
             final curDueState = TodosBloc.calcDueState(curCar, curTodo);
             if (index == 0) {
               // the first ToDo always needs a label
@@ -85,19 +110,31 @@ class TodosPanel extends StatelessWidget {
                 todo: curTodo,
                 car: curCar,
                 dueState: curDueState,
+                onDelete: () {
+                  deleteTodo(context, curTodo);
+                },
               );
             }
             final prevTodo = todos[index - 1];
-            final prevDueState = TodosBloc.calcDueState(cars.firstWhere((c) => c.name == prevTodo.carName), prevTodo);
+            final prevDueState = TodosBloc.calcDueState(widget.cars.firstWhere((c) => c.name == prevTodo.carName), prevTodo);
             if (curDueState != prevDueState) {
               return TodoListCardWithHeader(
                 todo: curTodo,
                 car: curCar,
                 dueState: curDueState,
+                onDelete: () {
+                  deleteTodo(context, curTodo);
+                },
               );
             }
 
-            return TodoListCard(todo: curTodo, car: curCar);
+            return TodoListCard(
+              todo: curTodo,
+              car: curCar,
+              onDelete: () {
+                deleteTodo(context, curTodo);
+              },
+            );
           },
         )
       ],
