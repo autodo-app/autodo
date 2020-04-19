@@ -63,7 +63,7 @@ class HomeScreenState extends State<HomeScreen> with RouteAware {
 
   final Map<AppTab, Widget> views = {
     // AppTab.todos: TodosScreen(),
-    AppTab.todos: TodosScreen2(),
+    AppTab.todos: TodosScreen(),
     AppTab.refuelings: RefuelingsScreen(),
     AppTab.stats: StatisticsScreen(),
     AppTab.garage: GarageScreen(),
@@ -275,7 +275,8 @@ class HomeScreenState extends State<HomeScreen> with RouteAware {
                 refuelingsBloc: BlocProvider.of<RefuelingsBloc>(context))),
         BlocProvider<FilteredTodosBloc>(
             create: (context) => FilteredTodosBloc(
-                todosBloc: BlocProvider.of<TodosBloc>(context))),
+                todosBloc: BlocProvider.of<TodosBloc>(context),
+                carsBloc: BlocProvider.of<CarsBloc>(context))),
       ],
       child: kFlavor.hasAds
           ? (kFlavor.hasPaid

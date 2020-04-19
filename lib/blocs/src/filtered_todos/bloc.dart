@@ -2,30 +2,38 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:collection/collection.dart';
 
 import '../../../models/models.dart';
+import '../cars/barrel.dart';
 import '../todos/barrel.dart';
 import 'event.dart';
 import 'state.dart';
 
 class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
-  FilteredTodosBloc({@required this.todosBloc}) {
+  FilteredTodosBloc({@required this.todosBloc, @required this.carsBloc}) {
     todosSubscription = todosBloc.listen((state) {
       if (state is TodosLoaded) {
-        add(UpdateTodos((todosBloc.state as TodosLoaded).todos));
+        add(UpdateTodos(state.todos));
       }
-    }, onError: (_) => print('err'), onDone: () => print('done'));
+    });
+    carsSubscription = carsBloc.listen((state) {
+      if (state is CarsLoaded) {
+        add(UpdateCars(state.cars));
+      }
+    });
   }
 
   final TodosBloc todosBloc;
+  final CarsBloc carsBloc;
 
-  StreamSubscription todosSubscription;
+  StreamSubscription todosSubscription, carsSubscription;
 
   @override
   FilteredTodosState get initialState {
     return todosBloc.state is TodosLoaded
         ? FilteredTodosLoaded(
-            (todosBloc.state as TodosLoaded).todos,
+            sortItems((todosBloc.state as TodosLoaded).todos),
             VisibilityFilter.all,
           )
         : FilteredTodosLoading();
@@ -37,18 +45,25 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
       yield* _mapUpdateFilterToState(event);
     } else if (event is UpdateTodos) {
       yield* _mapTodosUpdatedToState(event);
+    } else if (event is UpdateCars) {
+      yield* _mapCarsUpdatedToState(event);
     }
   }
 
-  static List sortItems(List items) {
-    return items
-      ..sort((a, b) {
-        final aDate = a?.dueDate ?? 0;
-        final bDate = b?.dueDate ?? 0;
+  static Map<TodoDueState, List<Todo>> sortItems(List<Todo> items) {
+    items.sort((a, b) {
+        if (a.completed && !b.completed) {
+          return -1;
+        } else if (b.completed && !a.completed) {
+          return 1;
+        }
+
+        final aDate = a?.dueDate;
+        final bDate = b?.dueDate;
         final aMileage = a?.dueMileage ?? 0;
         final bMileage = b?.dueMileage ?? 0;
 
-        if (aDate == 0 && bDate == 0) {
+        if (aDate == null || bDate == null) {
           // both don't have a date, so only consider the mileages
           if (aMileage > bMileage) {
             return 1;
@@ -58,18 +73,12 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
             return 0;
           }
         } else {
-          // in case one of the two isn't a valid timestamp
-          if (aDate == 0) {
-            return -1;
-          }
-          if (bDate == 0) {
-            return 1;
-          }
           // consider the dates since all todo items should have dates as a result
           // of the distance rate translation function
           return aDate.compareTo(bDate);
         }
       });
+    return groupBy<Todo, TodoDueState>(items, (t) => t.dueState);
   }
 
   Stream<FilteredTodosState> _mapUpdateFilterToState(
@@ -77,7 +86,7 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
   ) async* {
     if (todosBloc.state is TodosLoaded) {
       yield FilteredTodosLoaded(
-        _mapTodosToFilteredTodos(
+        _filterTodos(
           (todosBloc.state as TodosLoaded).todos,
           event.filter,
         ),
@@ -89,21 +98,51 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
   Stream<FilteredTodosState> _mapTodosUpdatedToState(
     UpdateTodos event,
   ) async* {
+    var updatedTodos = event.todos;
+    if (carsBloc.state is CarsLoaded) {
+      updatedTodos = _setDueState(event.todos, (carsBloc.state as CarsLoaded).cars);
+    }
     final visibilityFilter = state is FilteredTodosLoaded
         ? (state as FilteredTodosLoaded).activeFilter
         : VisibilityFilter.all;
     yield FilteredTodosLoaded(
-      _mapTodosToFilteredTodos(
-        (todosBloc.state as TodosLoaded).todos,
+      _filterTodos(
+        updatedTodos,
         visibilityFilter,
       ),
       visibilityFilter,
     );
   }
 
-  List<Todo> _mapTodosToFilteredTodos(
+  Stream<FilteredTodosState> _mapCarsUpdatedToState(UpdateCars event) async* {
+    if (!(state is FilteredTodosLoaded)) {
+      // can't update the dueState for ToDos if we don't have any yet
+      return;
+    }
+    final updatedTodos = _setDueState((todosBloc.state as TodosLoaded).todos, event.cars);
+    print(updatedTodos);
+    final visibilityFilter = state is FilteredTodosLoaded
+        ? (state as FilteredTodosLoaded).activeFilter
+        : VisibilityFilter.all;
+    yield FilteredTodosLoaded(
+      _filterTodos(
+        updatedTodos,
+        visibilityFilter,
+      ),
+      visibilityFilter,
+    );
+  }
+
+  List<Todo> _setDueState(List<Todo> todos, List<Car> cars) {
+    return todos.map((t) {
+      final curCar = cars.firstWhere((c) => c.name == t.carName);
+      return t.copyWith(dueState: TodosBloc.calcDueState(curCar, t));
+    }).toList();
+  }
+
+  Map<TodoDueState, List<Todo>> _filterTodos(
       List<Todo> todos, VisibilityFilter filter) {
-    var out = todos.where((todo) {
+    final filtered = todos.where((todo) {
       if (filter == VisibilityFilter.all) {
         return true;
       } else if (filter == VisibilityFilter.active) {
@@ -112,13 +151,13 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
         return todo.completed;
       }
     }).toList();
-    out = sortItems(out);
-    return out;
+    return sortItems(filtered);
   }
 
   @override
   Future<void> close() {
     todosSubscription?.cancel();
+    carsSubscription?.cancel();
     return super.close();
   }
 }

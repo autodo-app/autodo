@@ -16,7 +16,7 @@ class FilteredTodosLoaded extends FilteredTodosState {
     this.activeFilter,
   );
 
-  final List<Todo> filteredTodos;
+  final Map<TodoDueState, List<Todo>> filteredTodos;
 
   final VisibilityFilter activeFilter;
 
