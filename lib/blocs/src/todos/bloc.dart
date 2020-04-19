@@ -182,6 +182,44 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
 
   StreamSubscription _dataSubscription, _carsSubscription, _repoSubscription;
 
+  /// Calculates the Due Date for a ToDo based on the given car's distanceRate.
+  static DateTime calcDueDate(Car car, double dueMileage) {
+    if (car.distanceRate == 0 || car.distanceRate == null) {
+      return null;
+    }
+
+    final distanceToTodo = dueMileage - car.mileage;
+    var daysToTodo = 0; // TODO: Needs proper fix
+    try {
+      daysToTodo = (distanceToTodo / car.distanceRate).round();
+    } catch (e) {
+      print(e);
+    }
+    final timeToTodo = Duration(days: daysToTodo);
+    return roundToDay(car.lastMileageUpdate.toUtc()).add(timeToTodo).toLocal();
+  }
+
+  /// Returns a TodoDueState enum value describing the proximity to the ToDo's deadline.
+  static TodoDueState calcDueState(Car car, Todo todo) {
+    if (todo.completed ?? false) {
+      return TodoDueState.COMPLETE;
+    } else if (car.mileage - todo.dueMileage > 0) {
+      return TodoDueState.PAST_DUE;
+    } else if (DateTime.now().isAfter(todo.dueDate)) {
+      return TodoDueState.PAST_DUE;
+    }
+
+    final distanceRate = car.distanceRate ?? DEFAULT_DUE_SOON_CUTOFF_DISTANCE_RATE;
+    final daysUntilDueMileage = ((todo.dueMileage - car.mileage) * distanceRate).round();
+    // Truncating rather than rounding here, that should hopefully be fine though
+    final daysUntilDueDate = todo.dueDate.difference(DateTime.now()).inDays;
+
+    if ((daysUntilDueMileage < DUE_SOON_CUTOFF_TIME) || daysUntilDueDate < DUE_SOON_CUTOFF_TIME) {
+      return TodoDueState.DUE_SOON;
+    }
+    return TodoDueState.UPCOMING;
+  }
+
   @override
   TodosState get initialState => TodosLoading();
 
@@ -237,21 +275,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
         body: ''));
   }
 
-  static DateTime calcDueDate(Car car, double dueMileage) {
-    if (car.distanceRate == 0 || car.distanceRate == null) {
-      return null;
-    }
 
-    final distanceToTodo = dueMileage - car.mileage;
-    var daysToTodo = 0; // ToDo: Needs proper fix
-    try {
-      daysToTodo = (distanceToTodo / car.distanceRate).round();
-    } catch (e) {
-      print(e);
-    }
-    final timeToTodo = Duration(days: daysToTodo);
-    return roundToDay(car.lastMileageUpdate.toUtc()).add(timeToTodo).toLocal();
-  }
 
   Todo _updateDueDate(car, todo, batch) {
     final newDueDate = calcDueDate(car, todo.dueMileage);

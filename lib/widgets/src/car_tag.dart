@@ -10,20 +10,21 @@ class CarTag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ButtonTheme.fromButtonThemeData(
-      data: ButtonThemeData(
-        minWidth: 0,
-        padding: EdgeInsets.fromLTRB(5.0, 0, 5.0, 0),
-      ),
-      child: FlatButton(
-        child: Chip(
-          backgroundColor: color,
-          label: Text(
-            text,
-            style: Theme.of(context).accentTextTheme.bodyText1,
-          ),
+    return Container(
+      padding: EdgeInsets.all(5),
+      child: Container(
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
-        onPressed: () {},
+        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+        child: Text(
+          text,
+          // style: Theme.of(context).accentTextTheme.bodyText1,
+          style: TextStyle(
+            fontSize: 12
+          )
+        ),
       ),
     );
   }

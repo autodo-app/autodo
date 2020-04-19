@@ -69,18 +69,166 @@ class TodosScreen extends StatelessWidget {
       });
 }
 
+class TodoListCard extends StatelessWidget {
+  const TodoListCard(this.todo);
+
+  final Todo todo;
+
+  // @override
+  // Widget build(BuildContext context) => ListTile(
+  //   leading: Transform.scale(
+  //     scale: 1.5,
+  //     child: Checkbox(
+  //     value: false,
+  //     onChanged: (_) {},
+  //   ),),
+  //   title: Text(todo.name),
+  //   subtitle: Text('Due at ${todo.dueMileage} mi'),
+  //   trailing: IntrinsicWidth(
+  //     child: Column(
+  //     mainAxisSize: MainAxisSize.min,
+  //     children: [
+  //       CarTag(
+  //         text: '2015 Sonic'
+  //       ),
+  //       Expanded(
+  //         child: Row(
+  //           mainAxisSize: MainAxisSize.min,
+  //           children: [
+  //             Expanded(child: Icon(Icons.edit)),
+  //             Expanded(child: Icon(Icons.delete)),
+  //           ],
+  //         )
+  //       )
+  //     ],
+  //   ),)
+  // );
+  @override
+  Widget build(BuildContext context) => Container(
+    padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Container(
+          padding: EdgeInsets.fromLTRB(0, 15, 15, 15),
+          child: SizedBox(
+            height: 28,
+            width: 28,
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  width: 2,
+                  color: Colors.white
+                ),
+                borderRadius: BorderRadius.circular(5)
+              ),
+              // child: Container(),
+            )
+          )
+        ),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(todo.name, style: TextStyle(fontSize: 24)),
+              SizedBox(height: 10,),
+              Text('Due at ${todo.dueMileage} mi', style: TextStyle(fontSize: 16))
+            ],
+          ),
+        ),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              CarTag(text: '2015 Sonic',),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.edit),
+                  Icon(Icons.delete),
+                ]
+              )
+            ],
+          ),
+        ),
+      ],
+    )
+  );
+}
+
+class TodoListCardWithHeader extends StatelessWidget {
+  const TodoListCardWithHeader({this.todo, this.dueState});
+
+  final Todo todo;
+  final TodoDueState dueState;
+
+  @override
+  Widget build(BuildContext context) {
+    String headerText;
+    if (dueState == TodoDueState.PAST_DUE) {
+      headerText = 'Past Due';
+    } else if (dueState == TodoDueState.DUE_SOON) {
+      headerText = 'Due Soon';
+    } else if (dueState == TodoDueState.UPCOMING) {
+      headerText = 'Upcoming';
+    } else if (dueState == TodoDueState.COMPLETE) {
+      headerText = 'Completed';
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: EdgeInsets.only(left: 10, right: 10, top: 5),
+          child: Text(headerText),
+        ),
+        Container(
+          padding: EdgeInsets.only(left: 10, right: 10),
+          child: Divider(),
+        ),
+        TodoListCard(todo),
+      ],
+    );
+  }
+}
+
 class TodosPanel extends StatelessWidget {
-  const TodosPanel(this.todos);
+  const TodosPanel({this.todos, this.cars});
 
   final List<Todo> todos;
+  final List<Car> cars;
 
   @override
   Widget build(BuildContext context) => Container(
-    height: 1000,
+    height: 10000,
     decoration: BoxDecoration(
       borderRadius: BorderRadius.only(topLeft: Radius.circular(25), topRight: Radius.circular(25)),
       color: Theme.of(context).cardColor,
     ),
+    child: ListView.builder(
+      itemCount: todos.length,
+      itemBuilder: (context, index) {
+        final curTodo = todos[index];
+        final curDueState = TodosBloc.calcDueState(cars.firstWhere((c) => c.name == curTodo.carName), curTodo);
+        if (index == 0) {
+          // the first ToDo always needs a label
+          return TodoListCardWithHeader(
+            todo: curTodo,
+            dueState: curDueState,
+          );
+        }
+        final prevTodo = todos[index - 1];
+        final prevDueState = TodosBloc.calcDueState(cars.firstWhere((c) => c.name == prevTodo.carName), prevTodo);
+        if (curDueState != prevDueState) {
+          return TodoListCardWithHeader(
+            todo: curTodo,
+            dueState: curDueState,
+          );
+        }
+
+        return TodoListCard(curTodo);
+      },
+    )
   );
 }
 
@@ -99,34 +247,41 @@ class TodosScreen2 extends StatelessWidget {
       gradient: LinearGradient.lerp(grad1, grad2, 0.5));
 
   @override
-  Widget build(BuildContext context) => BlocBuilder<TodosBloc, TodosState>(
-    builder: (context, state) {
-      if (!(state is TodosLoaded)) {
-        return Container();
-      }
+  Widget build(BuildContext context) => BlocBuilder<CarsBloc, CarsState>(
+    builder: (context, carsState) => BlocBuilder<TodosBloc, TodosState>(
+      builder: (context, todosState) {
+        if (!(todosState is TodosLoaded) || !(carsState is CarsLoaded)) {
+          return Container();
+        }
 
-      return Container(
-        decoration: upcomingDecoration,
-        child: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              expandedHeight: 130.0,
-              flexibleSpace: FlexibleSpaceBar(
-                title: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Flexible(fit: FlexFit.loose, child: Text('ToDos')),
-                    Flexible(fit: FlexFit.loose, child: Text('1 late ToDo'))
-                  ]
+        return Container(
+          decoration: upcomingDecoration,
+          child: CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                expandedHeight: 130.0,
+                flexibleSpace: FlexibleSpaceBar(
+                  title: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Flexible(fit: FlexFit.loose, child: Text('ToDos')),
+                      Flexible(fit: FlexFit.loose, child: Text('1 late ToDo'))
+                    ]
+                  ),
+                  titlePadding: EdgeInsets.all(15),
+                  centerTitle: true,
                 ),
-                titlePadding: EdgeInsets.all(15),
-                centerTitle: true,
               ),
-            ),
-            SliverToBoxAdapter(child: TodosPanel((state as TodosLoaded).todos)),
-          ],
-        )
-      );
-    }
+              SliverToBoxAdapter(
+                child: TodosPanel(
+                  todos: (todosState as TodosLoaded).todos,
+                  cars: (carsState as CarsLoaded).cars
+                ),
+              ),
+            ],
+          )
+        );
+      }
+    )
   );
 }
