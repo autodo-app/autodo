@@ -220,5 +220,7 @@
   "plural_late_todos": "{{ num }} Late ToDos",
   "singular_due_soon_todo": "{{ num }} ToDo Due Soon",
   "plural_due_soon_todos": "{{ num }} ToDos Due Soon",
-  "delete_todo": "Delete ToDo"
+  "delete_todo": "Delete ToDo",
+  "due_by": "Due by",
+  "or": "or"
 }

@@ -12,25 +12,6 @@ import 'rounded_checkbox.dart';
 import 'todo_delete_button.dart';
 import 'todo_edit_button.dart';
 
-
-// TODO: figure out how to handle ToDos with due dates
-class _TodoDueDate extends StatelessWidget {
-  const _TodoDueDate({Key key, @required this.todo}) : super(key: key);
-
-  final Todo todo;
-
-  @override
-  Widget build(BuildContext context) => Row(
-        children: <Widget>[
-          Icon(Icons.alarm, size: 30),
-          Text(
-              // Todo: Improve this translation
-              '${JsonIntl.of(context).get(IntlKeys.dueOn)} ${DateFormat.yMMMd().format(todo.dueDate)}',
-              style: Theme.of(context).primaryTextTheme.bodyText2),
-        ],
-      );
-}
-
 class TodoListCard extends StatelessWidget {
   const TodoListCard({this.todo, this.car, this.onDelete});
 
@@ -84,22 +65,34 @@ class TodoListCard extends StatelessWidget {
               children: [
                 Text(todo.name, style: TextStyle(fontSize: 24)),
                 SizedBox(height: 10,),
-                RichText(
-                  text: TextSpan(children: [
-                  // TODO: Improve this translation
-                  TextSpan(
-                      text: '${JsonIntl.of(context).get(IntlKeys.dueAt)} ',
-                      style: Theme.of(context).primaryTextTheme.bodyText2),
-                  TextSpan(
-                    text: Distance.of(context).format(todo.dueMileage),
-                    style: Theme.of(context).primaryTextTheme.subtitle2,
-                    children: [TextSpan(text: ' ')],
-                  ),
-                  TextSpan(
-                    text: Distance.of(context).unitString(context, short: true),
-                    style: Theme.of(context).primaryTextTheme.bodyText2,
-                  )
-                ]))
+                if (todo.dueMileage != null && todo.dueDate == null)
+                  RichText(
+                    text: TextSpan(children: [
+                    // TODO: Improve this translation
+                    TextSpan(
+                        text: '${JsonIntl.of(context).get(IntlKeys.dueAt)} ',
+                        style: Theme.of(context).primaryTextTheme.bodyText2),
+                    TextSpan(
+                      text: Distance.of(context).format(todo.dueMileage),
+                      style: Theme.of(context).primaryTextTheme.subtitle2,
+                      children: [TextSpan(text: ' ')],
+                    ),
+                    TextSpan(
+                      text: Distance.of(context).unitString(context, short: true),
+                      style: Theme.of(context).primaryTextTheme.bodyText2,
+                    )
+                  ])),
+                if (todo.dueDate != null && todo.dueMileage == null)
+                  Text(
+                    // Todo: Improve this translation
+                    '${JsonIntl.of(context).get(IntlKeys.dueOn)} ${DateFormat.yMd().format(todo.dueDate)}',
+                    style: Theme.of(context).primaryTextTheme.bodyText2),
+                if (todo.dueDate != null && todo.dueMileage != null)
+                  Text(
+                    // Todo: Improve this translation
+                    '${JsonIntl.of(context).get(IntlKeys.dueBy)} ${DateFormat.yMd().format(todo.dueDate)} ${JsonIntl.of(context).get(IntlKeys.or)} '
+                    '${Distance.of(context).format(todo.dueMileage)} ${Distance.of(context).unitString(context, short: true)}',
+                    style: Theme.of(context).primaryTextTheme.bodyText2),
               ],
             ),
           ),

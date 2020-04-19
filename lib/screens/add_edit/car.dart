@@ -31,15 +31,15 @@ enum CarDetailsMode { DETAILS, ADD, EDIT }
 
 class _HeaderWithImage extends StatelessWidget {
   const _HeaderWithImage(
-      {this.carName, this.imageUrl, this.onEdit, this.onDelete});
+      {@required this.carId, this.carName, this.imageUrl, this.onEdit, this.onDelete});
 
-  final String carName;
+  final String carId, carName;
   final Future<String> imageUrl;
   final Function onEdit, onDelete;
 
   @override
   Widget build(BuildContext context) => Hero(
-      tag: carName ?? 'new_car',
+      tag: carId ?? 'new_car',
       child: Container(
         height: 150,
         padding: EdgeInsets.only(bottom: 5),
@@ -293,6 +293,7 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
                   (mode == CarDetailsMode.DETAILS ||
                           mode == CarDetailsMode.EDIT)
                       ? _HeaderWithImage(
+                          carId: widget.car?.id,
                           carName: widget.car?.name,
                           imageUrl: (BlocProvider.of<DatabaseBloc>(context)
                                   .state as DbLoaded)

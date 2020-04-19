@@ -157,6 +157,10 @@ class IntlKeys {
   /// strings-fr.json: 'Dû à'
   static const dueAt = 'due_at';
 
+  /// strings.json: 'Due by'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const dueBy = 'due_by';
+
   /// strings.json: 'Due Date'
   /// strings-fr.json: 'Date d\'échéance'
   static const dueDate = 'due_date';
@@ -488,6 +492,10 @@ class IntlKeys {
   /// strings.json: 'Optional'
   /// strings-fr.json: 'Optionnel'
   static const optional = 'optional';
+
+  /// strings.json: 'Or'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const or = 'or';
 
   /// strings.json: 'Password'
   /// strings-fr.json: 'Mot de passe'
