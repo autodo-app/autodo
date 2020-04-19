@@ -54,9 +54,7 @@ class TodosPanel extends StatefulWidget {
 }
 
 class TodosPanelState extends State<TodosPanel> {
-  TodosPanelState(this.todos) {
-    print(todos);
-  }
+  TodosPanelState(this.todos);
 
   Map<TodoDueState, List<Todo>> todos;
 
@@ -93,9 +91,6 @@ class TodosPanelState extends State<TodosPanel> {
           ],
         ),
         // Header above, actual ToDos below
-
-        // ToDos are split into separate lists by their due state
-        // generate lists from each of these groups and put the header above it
         if (todos[TodoDueState.PAST_DUE]?.isNotEmpty ?? false)
           TodoListHeader(TodoDueState.PAST_DUE),
         if (todos[TodoDueState.PAST_DUE]?.isNotEmpty ?? false)
@@ -137,6 +132,44 @@ class TodosPanelState extends State<TodosPanel> {
   );
 }
 
+class TodoAlert extends StatelessWidget {
+  const TodoAlert(this.todos);
+
+  final Map<TodoDueState, List<Todo>> todos;
+
+  @override
+  Widget build(BuildContext context) {
+    if (todos[TodoDueState.PAST_DUE]?.isNotEmpty ?? false) {
+      return Flexible(
+        fit: FlexFit.loose,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.priority_high,
+              color: Colors.red),
+            Text('1 late ToDo')
+          ],
+        ), // use JsonIntl here eventually
+      );
+    } else if (todos[TodoDueState.DUE_SOON]?.isNotEmpty ?? false) {
+      return Flexible(
+        fit: FlexFit.loose,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.notifications,
+              color: Colors.red),
+            Text('1 late ToDo')
+          ],
+        ), // // use JsonIntl here eventually
+      );
+    }
+    return Container();
+  }
+}
+
 class TodosScreen extends StatelessWidget {
   static final grad1 = LinearGradient(
       begin: Alignment.centerLeft,
@@ -170,7 +203,7 @@ class TodosScreen extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Flexible(fit: FlexFit.loose, child: Text('ToDos')),
-                      Flexible(fit: FlexFit.loose, child: Text('1 late ToDo'))
+                      TodoAlert((todosState as FilteredTodosLoaded).filteredTodos),
                     ]
                   ),
                   titlePadding: EdgeInsets.all(15),
