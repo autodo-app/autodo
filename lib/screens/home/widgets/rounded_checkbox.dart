@@ -24,7 +24,7 @@ class RoundedCheckboxState extends State<RoundedCheckbox> {
   }
 
   @override
-  Widget build(BuildContext context) => GestureDetector(
+  Widget build(BuildContext context) => InkWell(
     onTap: () {
       final newState = !value;
       widget.onTap(newState);

@@ -6,70 +6,14 @@ import 'package:json_intl/json_intl.dart';
 import '../../../blocs/blocs.dart';
 import '../../../generated/localization.dart';
 import '../../../models/models.dart';
-import '../../../theme.dart';
 import '../../../units/units.dart';
 import '../../../widgets/widgets.dart';
-import '../../add_edit/barrel.dart';
 import 'rounded_checkbox.dart';
 import 'todo_delete_button.dart';
+import 'todo_edit_button.dart';
 
-const int DUE_SOON_INTERVAL = 100;
 
-class _TodoTitle extends StatelessWidget {
-  const _TodoTitle({Key key, @required this.todo}) : super(key: key);
-
-  final Todo todo;
-
-  String preface(BuildContext context) {
-    if (todo.completed) {
-      return JsonIntl.of(context).get(IntlKeys.completed);
-    } else if (todo.dueState == TodoDueState.PAST_DUE) {
-      return JsonIntl.of(context).get(IntlKeys.pastDue);
-    } else if (todo.dueState == TodoDueState.DUE_SOON) {
-      return JsonIntl.of(context).get(IntlKeys.dueSoon);
-    } else {
-      return JsonIntl.of(context).get(IntlKeys.upcoming);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) => RichText(
-          text: TextSpan(children: [
-        TextSpan(
-            // Todo: Improve this translation
-            text: '${preface(context)} ',
-            style: Theme.of(context).primaryTextTheme.subtitle2),
-        TextSpan(
-            text: todo.name,
-            style: Theme.of(context).primaryTextTheme.headline6)
-      ]));
-}
-
-class _TodoCheckbox extends StatelessWidget {
-  const _TodoCheckbox({
-    Key key,
-    @required this.todo,
-    @required this.onCheckboxChanged,
-  }) : super(key: key);
-
-  final Todo todo;
-
-  final ValueChanged<bool> onCheckboxChanged;
-
-  @override
-  Widget build(BuildContext context) => Transform.scale(
-      scale: 1.5,
-      child: Container(
-          key: ValueKey('__todo_checkbox_${todo.name}'),
-          padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-          child: Checkbox(
-            value: todo.completed ?? false,
-            onChanged: onCheckboxChanged,
-            checkColor: Theme.of(context).primaryColor,
-            activeColor: Colors.white,
-          )));
-}
-
+// TODO: figure out how to handle ToDos with due dates
 class _TodoDueDate extends StatelessWidget {
   const _TodoDueDate({Key key, @required this.todo}) : super(key: key);
 
@@ -87,327 +31,105 @@ class _TodoDueDate extends StatelessWidget {
       );
 }
 
-class _TodoDueMileage extends StatelessWidget {
-  const _TodoDueMileage({Key key, @required this.todo}) : super(key: key);
-
-  final Todo todo;
-
-  @override
-  Widget build(BuildContext context) {
-    final distance = Distance.of(context);
-
-    return Row(
-      children: <Widget>[
-        Icon(Icons.pin_drop, size: 30),
-        Padding(padding: EdgeInsets.all(5)),
-        RichText(
-            text: TextSpan(children: [
-          // Todo: Improve this translation
-          TextSpan(
-              text: '${JsonIntl.of(context).get(IntlKeys.dueAt)} ',
-              style: Theme.of(context).primaryTextTheme.bodyText2),
-          TextSpan(
-            text: distance.format(todo.dueMileage),
-            style: Theme.of(context).primaryTextTheme.subtitle2,
-            children: [TextSpan(text: ' ')],
-          ),
-          TextSpan(
-            text: distance.unitString(context),
-            style: Theme.of(context).primaryTextTheme.bodyText2,
-          )
-        ]))
-      ],
-    );
-  }
-}
-
-class _TodoLastCompleted extends StatelessWidget {
-  const _TodoLastCompleted({Key key, @required this.todo}) : super(key: key);
-
-  final Todo todo;
-
-  @override
-  Widget build(BuildContext context) => Row(
-        children: <Widget>[
-          Icon((todo.completed ?? false) ? Icons.alarm : Icons.new_releases,
-              size: 30),
-          Padding(padding: EdgeInsets.all(5)),
-          Text(
-            JsonIntl.of(context).get(IntlKeys
-                .firstTimeDoingTask), // TODO adjust this for past completed
-            style: Theme.of(context)
-                .primaryTextTheme
-                .bodyText2
-                .copyWith(fontSize: 14),
-          ),
-        ],
-      );
-}
-
-class _TodoDueInfo extends StatelessWidget {
-  const _TodoDueInfo({Key key, @required this.todo}) : super(key: key);
-
-  final Todo todo;
-
-  @override
-  Widget build(BuildContext context) => Container(
-        padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            (todo.dueDate != null) ? _TodoDueDate(todo: todo) : Container(),
-            Padding(padding: EdgeInsets.all(5)),
-            (todo.dueMileage != null)
-                ? _TodoDueMileage(todo: todo)
-                : Container(),
-            Padding(padding: EdgeInsets.all(5)),
-            _TodoLastCompleted(todo: todo),
-          ],
-        ),
-      );
-}
-
-class _TodoBody extends StatelessWidget {
-  const _TodoBody(
-      {Key key, @required this.todo, @required this.onCheckboxChanged})
-      : super(key: key);
-
-  final Todo todo;
-
-  final ValueChanged<bool> onCheckboxChanged;
-
-  @override
-  Widget build(BuildContext context) => Container(
-        padding: EdgeInsets.fromLTRB(10, 25, 10, 25),
-        child: Row(
-          children: <Widget>[
-            _TodoCheckbox(todo: todo, onCheckboxChanged: onCheckboxChanged),
-            Container(
-                padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                child: VerticalDivider(color: Colors.white.withAlpha(230))),
-            _TodoDueInfo(todo: todo),
-          ],
-        ),
-      );
-}
-
-class _TodoEditButton extends StatelessWidget {
-  const _TodoEditButton({Key key, @required this.todo}) : super(key: key);
-
-  final Todo todo;
-
-  @override
-  Widget build(BuildContext context) => ButtonTheme.fromButtonThemeData(
-        data: ButtonThemeData(
-          minWidth: 0,
-        ),
-        child: FlatButton(
-          key: ValueKey('__todo_card_edit_${todo.name}'),
-          child: Icon(
-            Icons.edit,
-            color: Theme.of(context).primaryIconTheme.color,
-          ),
-          onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => TodoAddEditScreen(
-                    isEditing: true,
-                    onSave: (name, dueDate, dueMileage, carName,
-                        mileageRepeatInterval, dateRepeatInterval) {
-                      final out = todo.copyWith(
-                          name: name,
-                          dueDate: dueDate,
-                          dueMileage: dueMileage,
-                          carName: carName,
-                          mileageRepeatInterval: mileageRepeatInterval,
-                          dateRepeatInterval: dateRepeatInterval);
-                      BlocProvider.of<TodosBloc>(context).add(UpdateTodo(out));
-                    },
-                    todo: todo,
-                  ),
-                ));
-          },
-        ),
-      );
-}
-
-class _TodoFooter extends StatelessWidget {
-  const _TodoFooter({Key key, @required this.todo}) : super(key: key);
-
-  final Todo todo;
-
-  @override
-  Widget build(BuildContext context) => Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              _TodoEditButton(todo: todo),
-              TodoDeleteButton(todo: todo),
-            ],
-          )
-        ],
-      );
-}
-
-class TodoCard extends StatelessWidget {
-  TodoCard({
-    Key key,
-    @required this.todo,
-    @required this.onDismissed,
-    @required this.onTap,
-    @required this.onCheckboxChanged,
-    @required this.emphasized,
-  }) : super(key: key);
-
-  final Todo todo;
-
-  final DismissDirectionCallback onDismissed;
-
-  final GestureTapCallback onTap;
-
-  final ValueChanged<bool> onCheckboxChanged;
-
-  final bool emphasized;
-
-  static final grad1 = LinearGradient(
-      begin: Alignment.centerLeft,
-      end: Alignment.centerRight,
-      colors: [mainColors[300], mainColors[400]]);
-
-  static final grad2 = LinearGradient(
-      begin: Alignment.topCenter,
-      end: Alignment.bottomCenter,
-      colors: [mainColors[700], mainColors[900]]);
-
-  final BoxDecoration upcomingDecoration = BoxDecoration(
-      borderRadius: BorderRadius.circular(25),
-      gradient: LinearGradient.lerp(grad1, grad2, 0.5));
-
-  static final grad3 = LinearGradient(
-      begin: Alignment.centerLeft,
-      end: Alignment.centerRight,
-      colors: [Colors.yellow.shade700, Colors.yellow.shade800]);
-
-  static final grad4 = LinearGradient(
-      begin: Alignment.topCenter,
-      end: Alignment.bottomCenter,
-      colors: [Colors.yellow.shade800, Colors.orange.shade300]);
-
-  final BoxDecoration duesoonDecoration = BoxDecoration(
-      borderRadius: BorderRadius.circular(25),
-      gradient: LinearGradient.lerp(grad3, grad4, 0.5));
-
-  static final grad5 = LinearGradient(
-      begin: Alignment.centerLeft,
-      end: Alignment.centerRight,
-      colors: [Colors.red.shade300, Colors.red.shade600]);
-
-  static final grad6 = LinearGradient(
-      begin: Alignment.topCenter,
-      end: Alignment.bottomCenter,
-      colors: [Colors.orange.shade800, Colors.red.shade500]);
-
-  final BoxDecoration pastdueDecoration = BoxDecoration(
-      borderRadius: BorderRadius.circular(25),
-      gradient: LinearGradient.lerp(grad5, grad6, 0.4));
-
-  BoxDecoration emphasizedDecoration(Todo todo) {
-    if (todo.dueState == TodoDueState.PAST_DUE) {
-      return pastdueDecoration;
-    } else if (todo.dueState == TodoDueState.DUE_SOON) {
-      return duesoonDecoration;
-    } else {
-      return upcomingDecoration;
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) => InkWell(
-        onTap: onTap,
-        child: Dismissible(
-          key: Key(
-              '__dismissable__'), // TODO: this should be visible to remove the todo from the list
-          onDismissed: onDismissed,
-          dismissThresholds: {
-            DismissDirection.horizontal:
-                0.5 // must move halfway across the screen
-          },
-          child: Card(
-            elevation: emphasized ? 16 : 4,
-            color:
-                emphasized ? Colors.transparent : Theme.of(context).cardColor,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-            child: Container(
-                decoration:
-                    emphasized ? emphasizedDecoration(todo) : BoxDecoration(),
-                child: Column(
-                  children: <Widget>[
-                    _TodoTitle(todo: todo),
-                    _TodoBody(todo: todo, onCheckboxChanged: onCheckboxChanged),
-                    _TodoFooter(todo: todo),
-                  ],
-                )),
-          ),
-        ),
-      );
-}
-
 class TodoListCard extends StatelessWidget {
-  const TodoListCard(this.todo);
+  const TodoListCard({this.todo, this.car});
 
   final Todo todo;
+  final Car car;
 
   @override
-  Widget build(BuildContext context) => Container(
-    padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Container(
-          padding: EdgeInsets.fromLTRB(0, 15, 15, 15),
-          child: RoundedCheckbox(
-            initialValue: todo.completed,
-            onTap: (completed) {
-              BlocProvider.of<TodosBloc>(context).add(
-                UpdateTodo(
-                  todo.copyWith(
-                    completed: completed,
-                    completedDate: completed ? DateTime.now() : null)));
-            }
+  Widget build(BuildContext context) => Dismissible(
+    key: ValueKey('__${todo.id}_dismissible_key__'),
+    onDismissed: (_) {
+      BlocProvider.of<TodosBloc>(context).add(DeleteTodo(todo));
+      Scaffold.of(context).showSnackBar(DeleteTodoSnackBar(
+        context: context,
+        todo: todo,
+        onUndo: () => BlocProvider.of<TodosBloc>(context).add(AddTodo(todo)),
+      ));
+      // somehow force this card to be removed?
+      // that may need to be handled by the parent
+    },
+    dismissThresholds: {
+      // must move halfway across the screen
+      DismissDirection.horizontal: 0.5
+    },
+    direction: DismissDirection.endToStart,
+    background: Container(
+      color: Colors.red,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Text('Delete ToDo'),
+          SizedBox(width: 5),
+          Icon(Icons.delete),
+          SizedBox(width: 10),
+        ],
+      )
+    ),
+    child: Container(
+      padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            padding: EdgeInsets.fromLTRB(0, 15, 15, 15),
+            child: RoundedCheckbox(
+              initialValue: todo.completed,
+              onTap: (completed) {
+                BlocProvider.of<TodosBloc>(context).add(
+                  UpdateTodo(
+                    todo.copyWith(
+                      completed: completed,
+                      completedDate: completed ? DateTime.now() : null)));
+              }
+            ),
           ),
-        ),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(todo.name, style: TextStyle(fontSize: 24)),
-              SizedBox(height: 10,),
-              Text('Due at ${todo.dueMileage} mi', style: TextStyle(fontSize: 16))
-            ],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(todo.name, style: TextStyle(fontSize: 24)),
+                SizedBox(height: 10,),
+                RichText(
+                  text: TextSpan(children: [
+                  // Todo: Improve this translation
+                  TextSpan(
+                      text: '${JsonIntl.of(context).get(IntlKeys.dueAt)} ',
+                      style: Theme.of(context).primaryTextTheme.bodyText2),
+                  TextSpan(
+                    text: Distance.of(context).format(todo.dueMileage),
+                    style: Theme.of(context).primaryTextTheme.subtitle2,
+                    children: [TextSpan(text: ' ')],
+                  ),
+                  TextSpan(
+                    text: Distance.of(context).unitString(context, short: true),
+                    style: Theme.of(context).primaryTextTheme.bodyText2,
+                  )
+                ]))
+              ],
+            ),
           ),
-        ),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              CarTag(text: '2015 Sonic',),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.edit),
-                  Icon(Icons.delete),
-                ]
-              )
-            ],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Container(
+                  padding: EdgeInsets.only(left: 10, right: 10),
+                  child: CarTag(car: car)),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TodoEditButton(todo: todo),
+                    TodoDeleteButton(todo: todo), // also need to remove the card with this?
+                  ]
+                )
+              ],
+            ),
           ),
-        ),
-      ],
-    )
+        ],
+      ),
+    ),
   );
 }

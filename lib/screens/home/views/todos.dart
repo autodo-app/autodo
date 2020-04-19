@@ -4,7 +4,6 @@ import 'package:json_intl/json_intl.dart';
 
 import '../../../blocs/blocs.dart';
 import '../../../generated/localization.dart';
-import '../../../integ_test_keys.dart';
 import '../../../models/models.dart';
 import '../../../theme.dart';
 import '../../../widgets/widgets.dart';
@@ -13,9 +12,10 @@ import '../widgets/barrel.dart';
 
 
 class TodoListCardWithHeader extends StatelessWidget {
-  const TodoListCardWithHeader({this.todo, this.dueState});
+  const TodoListCardWithHeader({this.todo, this.car, this.dueState});
 
   final Todo todo;
+  final Car car;
   final TodoDueState dueState;
 
   @override
@@ -42,7 +42,7 @@ class TodoListCardWithHeader extends StatelessWidget {
           padding: EdgeInsets.only(left: 10, right: 10),
           child: Divider(),
         ),
-        TodoListCard(todo),
+        TodoListCard(todo: todo, car: car),
       ],
     );
   }
@@ -53,30 +53,6 @@ class TodosPanel extends StatelessWidget {
 
   final List<Todo> todos;
   final List<Car> cars;
-
-  void onDismissed(
-      DismissDirection direction, BuildContext context, Todo todo) {
-    BlocProvider.of<TodosBloc>(context).add(DeleteTodo(todo));
-    Scaffold.of(context).showSnackBar(DeleteTodoSnackBar(
-      context: context,
-      todo: todo,
-      onUndo: () => BlocProvider.of<TodosBloc>(context).add(AddTodo(todo)),
-    ));
-  }
-
-  Future<void> onTap(BuildContext context, Todo todo) async {
-    // final removedTodo = await Navigator.of(context).push(
-    //   MaterialPageRoute(
-    //     builder: (_) => DetailsScreen(id: todo.id),
-    //   ),
-    // );
-  }
-
-  void onCheckboxChanged(BuildContext context, Todo todo) {
-    BlocProvider.of<TodosBloc>(context).add(
-      UpdateTodo(todo.copyWith(completed: !todo.completed)),
-    );
-  }
 
   @override
   Widget build(BuildContext context) => Container(
@@ -101,11 +77,13 @@ class TodosPanel extends StatelessWidget {
           todos.length,
           (index) {
             final curTodo = todos[index];
-            final curDueState = TodosBloc.calcDueState(cars.firstWhere((c) => c.name == curTodo.carName), curTodo);
+            final curCar = cars.firstWhere((c) => c.name == curTodo.carName);
+            final curDueState = TodosBloc.calcDueState(curCar, curTodo);
             if (index == 0) {
               // the first ToDo always needs a label
               return TodoListCardWithHeader(
                 todo: curTodo,
+                car: curCar,
                 dueState: curDueState,
               );
             }
@@ -114,11 +92,12 @@ class TodosPanel extends StatelessWidget {
             if (curDueState != prevDueState) {
               return TodoListCardWithHeader(
                 todo: curTodo,
+                car: curCar,
                 dueState: curDueState,
               );
             }
 
-            return TodoListCard(curTodo);
+            return TodoListCard(todo: curTodo, car: curCar);
           },
         )
       ],
