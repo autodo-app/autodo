@@ -33,8 +33,11 @@ class TodoListHeader extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          padding: EdgeInsets.only(left: 10, right: 10, top: 5),
-          child: Text(headerText),
+          padding: EdgeInsets.only(left: 10, right: 10),
+          child: Text(
+            headerText,
+            style: Theme.of(context).primaryTextTheme.subtitle2
+          ),
         ),
         Container(
           padding: EdgeInsets.only(left: 10, right: 10),
@@ -83,7 +86,10 @@ class TodoListSectionState extends State<TodoListSection> {
               return Align(
                 alignment: Alignment.centerLeft,
                 child: FlatButton(
-                  child: Text(JsonIntl.of(context).get(IntlKeys.showMore)),
+                  child: Text(
+                    JsonIntl.of(context).get(IntlKeys.showMore),
+                    style: Theme.of(context).primaryTextTheme.overline
+                  ),
                   onPressed: () {
                     setState(() {
                       expanded = true;
@@ -95,7 +101,10 @@ class TodoListSectionState extends State<TodoListSection> {
               return Align(
                 alignment: Alignment.centerLeft,
                 child: FlatButton(
-                  child: Text(JsonIntl.of(context).get(IntlKeys.showLess)),
+                  child: Text(
+                    JsonIntl.of(context).get(IntlKeys.showLess),
+                    style: Theme.of(context).primaryTextTheme.overline,
+                  ),
                   onPressed: () {
                     setState(() {
                       expanded = false;
@@ -225,12 +234,13 @@ class TodoAlert extends StatelessWidget {
           children: [
             Icon(
               Icons.priority_high,
-              color: Colors.red),
+              color: alertRed),
             Text(
               // TODO: plural
               (todos[TodoDueState.PAST_DUE].length > 1) ?
                 JsonIntl.of(context).get(IntlKeys.pluralLateTodos, {'num': todos[TodoDueState.PAST_DUE].length}) :
-                JsonIntl.of(context).get(IntlKeys.singularLateTodo, {'num': todos[TodoDueState.PAST_DUE].length})
+                JsonIntl.of(context).get(IntlKeys.singularLateTodo, {'num': todos[TodoDueState.PAST_DUE].length}),
+              style: Theme.of(context).primaryTextTheme.headline5.copyWith(color: alertRed),
             )
           ],
         ), // use JsonIntl here eventually
@@ -243,12 +253,13 @@ class TodoAlert extends StatelessWidget {
           children: [
             Icon(
               Icons.notifications,
-              color: Colors.red),
+              color: warningOrange),
             Text(
               // TODO: plural
               (todos[TodoDueState.DUE_SOON].length > 1) ?
                 JsonIntl.of(context).get(IntlKeys.pluralDueSoonTodos, {'num': todos[TodoDueState.DUE_SOON].length}) :
-                JsonIntl.of(context).get(IntlKeys.singularDueSoonTodo, {'num': todos[TodoDueState.DUE_SOON].length})
+                JsonIntl.of(context).get(IntlKeys.singularDueSoonTodo, {'num': todos[TodoDueState.DUE_SOON].length}),
+              style: Theme.of(context).primaryTextTheme.headline5.copyWith(color: warningOrange),
             )
           ],
         ), // // use JsonIntl here eventually
@@ -259,19 +270,6 @@ class TodoAlert extends StatelessWidget {
 }
 
 class TodosScreen extends StatelessWidget {
-  static final grad1 = LinearGradient(
-      begin: Alignment.centerLeft,
-      end: Alignment.centerRight,
-      colors: [mainColors[300], mainColors[400]]);
-
-  static final grad2 = LinearGradient(
-      begin: Alignment.topCenter,
-      end: Alignment.bottomCenter,
-      colors: [mainColors[700], mainColors[900]]);
-
-  final BoxDecoration upcomingDecoration = BoxDecoration(
-      gradient: LinearGradient.lerp(grad1, grad2, 0.5));
-
   @override
   Widget build(BuildContext context) => BlocBuilder<CarsBloc, CarsState>(
     builder: (context, carsState) => BlocBuilder<FilteredTodosBloc, FilteredTodosState>(
@@ -281,7 +279,7 @@ class TodosScreen extends StatelessWidget {
         }
 
         return Container(
-          decoration: upcomingDecoration,
+          decoration: headerDecoration,
           child: CustomScrollView(
             slivers: [
               SliverAppBar(
@@ -290,7 +288,13 @@ class TodosScreen extends StatelessWidget {
                   title: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Flexible(fit: FlexFit.loose, child: Text(JsonIntl.of(context).get(IntlKeys.todos))),
+                      Flexible(
+                        fit: FlexFit.loose,
+                        child: Text(
+                          JsonIntl.of(context).get(IntlKeys.todos),
+                          style: Theme.of(context).accentTextTheme.headline1,
+                        ),
+                      ),
                       TodoAlert((todosState as FilteredTodosLoaded).filteredTodos),
                     ]
                   ),

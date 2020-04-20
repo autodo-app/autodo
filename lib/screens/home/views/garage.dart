@@ -41,34 +41,20 @@ class _PaidVersionStatus extends StatelessWidget {
 }
 
 class _Header extends StatelessWidget {
-  static final grad1 = LinearGradient(
-      begin: Alignment.centerLeft,
-      end: Alignment.centerRight,
-      colors: [mainColors[300], mainColors[400]]);
-
-  static final grad2 = LinearGradient(
-      begin: Alignment.topCenter,
-      end: Alignment.bottomCenter,
-      colors: [mainColors[700], mainColors[900]]);
-
-  final BoxDecoration decoration = BoxDecoration(
-      borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(25),
-          bottomRight: Radius.circular(25),
-          topLeft: Radius.zero,
-          topRight: Radius.zero),
-      gradient: LinearGradient.lerp(grad1, grad2, 0.5));
-
   @override
   Widget build(BuildContext context) => Container(
-      decoration: decoration,
+      decoration: headerDecoration.copyWith(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(25),
+          bottomRight: Radius.circular(25)),
+      ),
       child: Column(
         children: <Widget>[
           Padding(
             padding: EdgeInsets.all(25),
           ),
           Text(JsonIntl.of(context).get(IntlKeys.myGarage),
-              style: Theme.of(context).accentTextTheme.headline4),
+              style: Theme.of(context).accentTextTheme.headline1),
           Padding(
             padding: EdgeInsets.all(5),
           ),
