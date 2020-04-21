@@ -9,7 +9,6 @@ import 'package:json_intl/json_intl.dart';
 
 import '../../blocs/blocs.dart';
 import '../../flavor.dart';
-import '../../generated/localization.dart';
 import '../../integ_test_keys.dart';
 import '../../models/models.dart';
 import '../../screens/welcome/views/barrel.dart';

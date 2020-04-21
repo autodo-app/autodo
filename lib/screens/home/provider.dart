@@ -18,6 +18,7 @@ class HomeScreenProvider extends StatelessWidget {
           BlocProvider<FilteredTodosBloc>(
             create: (context) => FilteredTodosBloc(
               todosBloc: BlocProvider.of<TodosBloc>(context),
+              carsBloc: BlocProvider.of<CarsBloc>(context),
             ),
           ),
           BlocProvider<FilteredRefuelingsBloc>(
