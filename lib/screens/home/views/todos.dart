@@ -270,6 +270,8 @@ class TodoAlert extends StatelessWidget {
 }
 
 class TodosScreen extends StatelessWidget {
+  const TodosScreen({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) => BlocBuilder<CarsBloc, CarsState>(
     builder: (context, carsState) => BlocBuilder<FilteredTodosBloc, FilteredTodosState>(

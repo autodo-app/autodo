@@ -13,7 +13,8 @@ import 'todo_delete_button.dart';
 import 'todo_edit_button.dart';
 
 class TodoListCard extends StatelessWidget {
-  const TodoListCard({this.todo, this.car, this.onDelete});
+  const TodoListCard({Key key, this.todo, this.car, this.onDelete}) :
+      super(key: key);
 
   final Todo todo;
   final Car car;

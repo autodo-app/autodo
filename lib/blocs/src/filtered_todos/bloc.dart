@@ -52,9 +52,9 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
 
   static Map<TodoDueState, List<Todo>> sortItems(List<Todo> items) {
     items.sort((a, b) {
-        if (a.completed && !b.completed) {
+        if ((a.completed ?? false) && (!b.completed ?? false)) {
           return -1;
-        } else if (b.completed && !a.completed) {
+        } else if ((b.completed ?? false) && (!a.completed ?? false)) {
           return 1;
         }
 

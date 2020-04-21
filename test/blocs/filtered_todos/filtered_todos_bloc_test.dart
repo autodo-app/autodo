@@ -10,6 +10,8 @@ import 'package:autodo/models/models.dart';
 class MockTodosBloc extends MockBloc<TodosEvent, TodosState>
     implements TodosBloc {}
 
+class MockCarsBloc extends Mock implements CarsBloc {}
+
 void main() {
   group('FilteredTodosBloc', () {
     final todo = Todo(
@@ -23,6 +25,7 @@ void main() {
         estimatedDueDate: false,
         completedDate: DateTime.now(),
         dueDate: DateTime.now());
+    final carsBloc = MockCarsBloc();
     blocTest<FilteredTodosBloc, FilteredTodosEvent, FilteredTodosState>(
         'adds TodosUpdated when TodosBloc.state emits TodosLoaded', build: () {
       final todosBloc = MockTodosBloc();
@@ -33,10 +36,10 @@ void main() {
           TodosLoaded(todos: [todo])
         ]),
       );
-      return FilteredTodosBloc(todosBloc: todosBloc);
+      return FilteredTodosBloc(todosBloc: todosBloc, carsBloc: carsBloc);
     }, expect: [
       FilteredTodosLoaded(
-        [todo],
+        {TodoDueState.DUE_SOON: [todo]},
         VisibilityFilter.all,
       ),
     ]);
@@ -46,17 +49,17 @@ void main() {
       build: () {
         final todosBloc = MockTodosBloc();
         when(todosBloc.state).thenReturn(TodosLoaded(todos: [todo]));
-        return FilteredTodosBloc(todosBloc: todosBloc);
+        return FilteredTodosBloc(todosBloc: todosBloc, carsBloc: carsBloc);
       },
       act: (FilteredTodosBloc bloc) async =>
           bloc.add(UpdateTodosFilter(VisibilityFilter.active)),
       expect: <FilteredTodosState>[
         FilteredTodosLoaded(
-          [todo],
+          {TodoDueState.DUE_SOON: [todo]},
           VisibilityFilter.all,
         ),
         FilteredTodosLoaded(
-          [todo],
+          {TodoDueState.DUE_SOON: [todo]},
           VisibilityFilter.active,
         ),
       ],
@@ -67,16 +70,16 @@ void main() {
       build: () {
         final todosBloc = MockTodosBloc();
         when(todosBloc.state).thenReturn(TodosLoaded(todos: [todo]));
-        return FilteredTodosBloc(todosBloc: todosBloc);
+        return FilteredTodosBloc(todosBloc: todosBloc, carsBloc: carsBloc);
       },
       act: (FilteredTodosBloc bloc) async =>
           bloc.add(UpdateTodosFilter(VisibilityFilter.completed)),
       expect: <FilteredTodosState>[
         FilteredTodosLoaded(
-          [todo],
+          {TodoDueState.DUE_SOON: [todo]},
           VisibilityFilter.all,
         ),
-        FilteredTodosLoaded([], VisibilityFilter.completed),
+        FilteredTodosLoaded({}, VisibilityFilter.completed),
       ],
     );
 
@@ -84,7 +87,7 @@ void main() {
       final todo1 = Todo(id: '0', dueMileage: 0);
       final todo2 = Todo(id: '0', dueMileage: 1000);
       test('No dates', () {
-        expect(FilteredTodosBloc.sortItems([todo1, todo2]), [todo1, todo2]);
+        expect(FilteredTodosBloc.sortItems([todo1, todo2]), {null: [todo1, todo2]});
       });
       test('Valid Date A', () {
         expect(
@@ -92,10 +95,10 @@ void main() {
               todo1.copyWith(dueDate: DateTime.fromMillisecondsSinceEpoch(0)),
               todo2
             ]),
-            [
-              todo2,
+            {null: [
               todo1.copyWith(dueDate: DateTime.fromMillisecondsSinceEpoch(0)),
-            ]);
+              todo2,
+            ]});
       });
       test('Valid Date B', () {
         expect(
@@ -103,10 +106,10 @@ void main() {
               todo1,
               todo2.copyWith(dueDate: DateTime.fromMillisecondsSinceEpoch(0))
             ]),
-            [
+            {null: [
               todo1,
               todo2.copyWith(dueDate: DateTime.fromMillisecondsSinceEpoch(0))
-            ]);
+            ]});
       });
       test('Both valid dates', () {
         expect(
@@ -114,10 +117,10 @@ void main() {
               todo1.copyWith(dueDate: DateTime.fromMillisecondsSinceEpoch(0)),
               todo2.copyWith(dueDate: DateTime.fromMillisecondsSinceEpoch(100))
             ]),
-            [
+            {null: [
               todo1.copyWith(dueDate: DateTime.fromMillisecondsSinceEpoch(0)),
               todo2.copyWith(dueDate: DateTime.fromMillisecondsSinceEpoch(100))
-            ]);
+            ]});
       });
     });
   });
