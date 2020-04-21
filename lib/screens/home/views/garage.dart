@@ -64,8 +64,15 @@ class _Header extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.account_circle),
                 color: Theme.of(context).accentTextTheme.button.color,
-                onPressed:
-                    () {}, // TODO: create some sort of account screen here?
+                onPressed: () {
+                  // TODO: create some sort of account screen here?
+                  showDialog(
+                    context: context,
+                    child: AlertDialog(
+                      title: Text(JsonIntl.of(context).get(IntlKeys.toBeImplemented))
+                    )
+                  );
+                },
               ),
               _PaidVersionStatus(),
               IconButton(
@@ -119,7 +126,14 @@ class _MechanicButton extends StatelessWidget {
             title: Text(JsonIntl.of(context).get(IntlKeys.findAMechanic),
                 style: Theme.of(context).accentTextTheme.button),
           ),
-          onPressed: () {},
+          onPressed: () {
+            showDialog(
+              context: context,
+              child: AlertDialog(
+                title: Text(JsonIntl.of(context).get(IntlKeys.toBeImplemented))
+              )
+            );
+          },
         ),
       );
 }
@@ -140,7 +154,14 @@ class _DiyButton extends StatelessWidget {
             title: Text(JsonIntl.of(context).get(IntlKeys.learnToDiy),
                 style: Theme.of(context).accentTextTheme.button),
           ),
-          onPressed: () {},
+          onPressed: () {
+            showDialog(
+              context: context,
+              child: AlertDialog(
+                title: Text(JsonIntl.of(context).get(IntlKeys.toBeImplemented))
+              )
+            );
+          },
         ),
       );
 }
@@ -161,7 +182,14 @@ class _PartsButton extends StatelessWidget {
             title: Text(JsonIntl.of(context).get(IntlKeys.findParts),
                 style: Theme.of(context).accentTextTheme.button),
           ),
-          onPressed: () {},
+          onPressed: () {
+            showDialog(
+              context: context,
+              child: AlertDialog(
+                title: Text(JsonIntl.of(context).get(IntlKeys.toBeImplemented))
+              )
+            );
+          },
         ),
       );
 }

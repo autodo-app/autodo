@@ -243,7 +243,7 @@ class TodoAlert extends StatelessWidget {
               style: Theme.of(context).primaryTextTheme.headline5.copyWith(color: alertRed),
             )
           ],
-        ), // use JsonIntl here eventually
+        ),
       );
     } else if (todos[TodoDueState.DUE_SOON]?.isNotEmpty ?? false) {
       return Flexible(
@@ -262,7 +262,7 @@ class TodoAlert extends StatelessWidget {
               style: Theme.of(context).primaryTextTheme.headline5.copyWith(color: warningOrange),
             )
           ],
-        ), // // use JsonIntl here eventually
+        ),
       );
     }
     return Container();

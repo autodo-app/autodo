@@ -50,6 +50,8 @@ const Color buttonGray = Color(0xffaaaaaa);
 const Color textDark = Color(0xff444444);
 const Color textLight = Color(0xffeeeeee);
 
+final Color emphasizedButton = Colors.grey[500];
+
 final Color cardColor =
     Color.lerp(mainPallette.shade900, Colors.grey[800], 0.7);
 final Color bottomControllerColor =
@@ -370,7 +372,7 @@ ThemeData createTheme() {
         error: mainPallette.shade500,
         secondary: mainPallette.shade500,
         secondaryVariant: mainPallette.shade500,
-        background: Colors.grey[600],
+        background: emphasizedButton,
       ),
     ),
     toggleButtonsTheme: ThemeData.fallback().toggleButtonsTheme, // same
