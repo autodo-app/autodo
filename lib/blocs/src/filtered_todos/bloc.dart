@@ -52,32 +52,32 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
 
   static Map<TodoDueState, List<Todo>> sortItems(List<Todo> items) {
     items.sort((a, b) {
-        if ((a.completed ?? false) && (!b.completed ?? false)) {
-          return -1;
-        } else if ((b.completed ?? false) && (!a.completed ?? false)) {
+      if ((a.completed ?? false) && (!b.completed ?? false)) {
+        return -1;
+      } else if ((b.completed ?? false) && (!a.completed ?? false)) {
+        return 1;
+      }
+
+      final aDate = a?.dueDate;
+      final bDate = b?.dueDate;
+      final aMileage = a?.dueMileage ?? 0;
+      final bMileage = b?.dueMileage ?? 0;
+
+      if (aDate == null || bDate == null) {
+        // both don't have a date, so only consider the mileages
+        if (aMileage > bMileage) {
           return 1;
-        }
-
-        final aDate = a?.dueDate;
-        final bDate = b?.dueDate;
-        final aMileage = a?.dueMileage ?? 0;
-        final bMileage = b?.dueMileage ?? 0;
-
-        if (aDate == null || bDate == null) {
-          // both don't have a date, so only consider the mileages
-          if (aMileage > bMileage) {
-            return 1;
-          } else if (aMileage < bMileage) {
-            return -1;
-          } else {
-            return 0;
-          }
+        } else if (aMileage < bMileage) {
+          return -1;
         } else {
-          // consider the dates since all todo items should have dates as a result
-          // of the distance rate translation function
-          return aDate.compareTo(bDate);
+          return 0;
         }
-      });
+      } else {
+        // consider the dates since all todo items should have dates as a result
+        // of the distance rate translation function
+        return aDate.compareTo(bDate);
+      }
+    });
     return groupBy<Todo, TodoDueState>(items, (t) => t.dueState);
   }
 
@@ -100,7 +100,8 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
   ) async* {
     var updatedTodos = event.todos;
     if (carsBloc.state is CarsLoaded) {
-      updatedTodos = _setDueState(event.todos, (carsBloc.state as CarsLoaded).cars);
+      updatedTodos =
+          _setDueState(event.todos, (carsBloc.state as CarsLoaded).cars);
     }
     final visibilityFilter = state is FilteredTodosLoaded
         ? (state as FilteredTodosLoaded).activeFilter
@@ -119,7 +120,8 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
       // can't update the dueState for ToDos if we don't have any yet
       return;
     }
-    final updatedTodos = _setDueState((todosBloc.state as TodosLoaded).todos, event.cars);
+    final updatedTodos =
+        _setDueState((todosBloc.state as TodosLoaded).todos, event.cars);
     print(updatedTodos);
     final visibilityFilter = state is FilteredTodosLoaded
         ? (state as FilteredTodosLoaded).activeFilter

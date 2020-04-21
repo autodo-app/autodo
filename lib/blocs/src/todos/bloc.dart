@@ -209,12 +209,15 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       return TodoDueState.PAST_DUE;
     }
 
-    final distanceRate = car.distanceRate ?? DEFAULT_DUE_SOON_CUTOFF_DISTANCE_RATE;
-    final daysUntilDueMileage = ((todo.dueMileage - car.mileage) * distanceRate).round();
+    final distanceRate =
+        car.distanceRate ?? DEFAULT_DUE_SOON_CUTOFF_DISTANCE_RATE;
+    final daysUntilDueMileage =
+        ((todo.dueMileage - car.mileage) * distanceRate).round();
     // Truncating rather than rounding here, that should hopefully be fine though
     final daysUntilDueDate = todo.dueDate.difference(DateTime.now()).inDays;
 
-    if ((daysUntilDueMileage < DUE_SOON_CUTOFF_TIME) || daysUntilDueDate < DUE_SOON_CUTOFF_TIME) {
+    if ((daysUntilDueMileage < DUE_SOON_CUTOFF_TIME) ||
+        daysUntilDueDate < DUE_SOON_CUTOFF_TIME) {
       return TodoDueState.DUE_SOON;
     }
     return TodoDueState.UPCOMING;
@@ -274,8 +277,6 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
         title: '${IntlKeys.todoDueSoon}: ${todo.name}', // TODO: Translate this
         body: ''));
   }
-
-
 
   Todo _updateDueDate(car, todo, batch) {
     final newDueDate = calcDueDate(car, todo.dueMileage);

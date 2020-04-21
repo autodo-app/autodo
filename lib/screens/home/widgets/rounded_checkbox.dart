@@ -25,29 +25,28 @@ class RoundedCheckboxState extends State<RoundedCheckbox> {
 
   @override
   Widget build(BuildContext context) => InkWell(
-    onTap: () {
-      final newState = !value;
-      widget.onTap(newState);
-      setState(() {
-        value = newState;
-      });
-    },
-    child: SizedBox(
-      height: 28,
-      width: 28,
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            width: 2,
-            color: Colors.white
+        onTap: () {
+          final newState = !value;
+          widget.onTap(newState);
+          setState(() {
+            value = newState;
+          });
+        },
+        child: SizedBox(
+          height: 28,
+          width: 28,
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(width: 2, color: Colors.white),
+              borderRadius: BorderRadius.circular(5),
+            ),
+            child: value
+                ? Container(
+                    padding: EdgeInsets.all(3),
+                    child: Image.asset('img/icon-only.png'),
+                  )
+                : Container(),
           ),
-          borderRadius: BorderRadius.circular(5),
         ),
-        child: value ? Container(
-            padding: EdgeInsets.all(3),
-            child: Image.asset('img/icon-only.png'),
-          ) : Container(),
-      ),
-    ),
-  );
+      );
 }

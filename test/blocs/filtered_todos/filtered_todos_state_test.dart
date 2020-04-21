@@ -29,15 +29,23 @@ void main() {
     group('FilteredTodosLoaded', () {
       test('toString returns correct value', () {
         expect(
-          FilteredTodosLoaded({TodoDueState.DUE_SOON: [todo]}, VisibilityFilter.active).toString(),
+          FilteredTodosLoaded({
+            TodoDueState.DUE_SOON: [todo]
+          }, VisibilityFilter.active)
+              .toString(),
           'FilteredTodosLoaded { filteredTodos: {TodoDueState.DUE_SOON: [$todo]}, activeFilter: VisibilityFilter.active }',
         );
       });
       test('props are correct', () {
         expect(
-          FilteredTodosLoaded({TodoDueState.DUE_SOON: [todo]}, VisibilityFilter.active).props,
+          FilteredTodosLoaded({
+            TodoDueState.DUE_SOON: [todo]
+          }, VisibilityFilter.active)
+              .props,
           [
-            {TodoDueState.DUE_SOON: [todo]},
+            {
+              TodoDueState.DUE_SOON: [todo]
+            },
             VisibilityFilter.active
           ],
         );

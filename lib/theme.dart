@@ -67,44 +67,39 @@ final grad2 = LinearGradient(
     end: Alignment.bottomCenter,
     colors: [mainColors[700], mainColors[900]]);
 
-final BoxDecoration headerDecoration = BoxDecoration(
-    gradient: LinearGradient.lerp(grad1, grad2, 0.5));
+final BoxDecoration headerDecoration =
+    BoxDecoration(gradient: LinearGradient.lerp(grad1, grad2, 0.5));
 
 //------------------------------------------------------------------------------
 // Text Styles
 //------------------------------------------------------------------------------
 
 const TextStyle h1Dark = TextStyle(
-  color: textDark,
-  fontSize: 32,
-  fontWeight: FontWeight.w800,
-  fontFamily: 'Ubuntu',
-  letterSpacing: 0.2
-);
+    color: textDark,
+    fontSize: 32,
+    fontWeight: FontWeight.w800,
+    fontFamily: 'Ubuntu',
+    letterSpacing: 0.2);
 const TextStyle h2Dark = TextStyle(
-  color: textDark,
-  fontSize: 28,
-  fontWeight: FontWeight.w600,
-  fontFamily: 'Ubuntu'
-);
+    color: textDark,
+    fontSize: 28,
+    fontWeight: FontWeight.w600,
+    fontFamily: 'Ubuntu');
 const TextStyle h3Dark = TextStyle(
-  color: textDark,
-  fontSize: 24,
-  fontWeight: FontWeight.w600,
-  fontFamily: 'Ubuntu'
-);
+    color: textDark,
+    fontSize: 24,
+    fontWeight: FontWeight.w600,
+    fontFamily: 'Ubuntu');
 const TextStyle h4Dark = TextStyle(
-  color: textDark,
-  fontSize: 24,
-  fontWeight: FontWeight.w300,
-  fontFamily: 'Ubuntu'
-);
+    color: textDark,
+    fontSize: 24,
+    fontWeight: FontWeight.w300,
+    fontFamily: 'Ubuntu');
 const TextStyle h5Dark = TextStyle(
-  color: textDark,
-  fontSize: 20,
-  fontWeight: FontWeight.w300,
-  fontFamily: 'Ubuntu'
-);
+    color: textDark,
+    fontSize: 20,
+    fontWeight: FontWeight.w300,
+    fontFamily: 'Ubuntu');
 const TextStyle h6Dark = TextStyle(
   color: textDark,
   fontSize: 24,
@@ -113,17 +108,15 @@ const TextStyle h6Dark = TextStyle(
   letterSpacing: 1.0,
 );
 const TextStyle body1Dark = TextStyle(
-  color: textDark,
-  fontSize: 18,
-  fontWeight: FontWeight.w300,
-  fontFamily: 'Ubuntu'
-);
+    color: textDark,
+    fontSize: 18,
+    fontWeight: FontWeight.w300,
+    fontFamily: 'Ubuntu');
 const TextStyle body2Dark = TextStyle(
-  color: textDark,
-  fontSize: 14,
-  fontWeight: FontWeight.w300,
-  fontFamily: 'Ubuntu'
-);
+    color: textDark,
+    fontSize: 14,
+    fontWeight: FontWeight.w300,
+    fontFamily: 'Ubuntu');
 const TextStyle s1Dark = TextStyle(
   color: textDark,
   fontSize: 20,
@@ -144,12 +137,11 @@ const TextStyle buttonDark = TextStyle(
   letterSpacing: 0.2,
 );
 final emphasizedButtonDark = TextStyle(
-  color: mainPallette.shade500,
-  fontSize: 14,
-  fontWeight: FontWeight.w400,
-  fontFamily: 'Ubuntu',
-  letterSpacing: 0.2
-);
+    color: mainPallette.shade500,
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    fontFamily: 'Ubuntu',
+    letterSpacing: 0.2);
 
 const TextStyle h1Light = TextStyle(
   color: textLight,
@@ -159,29 +151,25 @@ const TextStyle h1Light = TextStyle(
   letterSpacing: 0.2,
 );
 const TextStyle h2Light = TextStyle(
-  color: textLight,
-  fontSize: 28,
-  fontWeight: FontWeight.w600,
-  fontFamily: 'Ubuntu'
-);
+    color: textLight,
+    fontSize: 28,
+    fontWeight: FontWeight.w600,
+    fontFamily: 'Ubuntu');
 const TextStyle h3Light = TextStyle(
-  color: textLight,
-  fontSize: 24,
-  fontWeight: FontWeight.w600,
-  fontFamily: 'Ubuntu'
-);
+    color: textLight,
+    fontSize: 24,
+    fontWeight: FontWeight.w600,
+    fontFamily: 'Ubuntu');
 const TextStyle h4Light = TextStyle(
-  color: textLight,
-  fontSize: 24,
-  fontWeight: FontWeight.w400,
-  fontFamily: 'Ubuntu'
-);
+    color: textLight,
+    fontSize: 24,
+    fontWeight: FontWeight.w400,
+    fontFamily: 'Ubuntu');
 const TextStyle h5Light = TextStyle(
-  color: textLight,
-  fontSize: 20,
-  fontWeight: FontWeight.w600,
-  fontFamily: 'Ubuntu'
-);
+    color: textLight,
+    fontSize: 20,
+    fontWeight: FontWeight.w600,
+    fontFamily: 'Ubuntu');
 const TextStyle h6Light = TextStyle(
   color: textLight,
   fontSize: 24,
@@ -190,17 +178,15 @@ const TextStyle h6Light = TextStyle(
   letterSpacing: 1.0,
 );
 const TextStyle body1Light = TextStyle(
-  color: textLight,
-  fontSize: 18,
-  fontWeight: FontWeight.w300,
-  fontFamily: 'Ubuntu'
-);
+    color: textLight,
+    fontSize: 18,
+    fontWeight: FontWeight.w300,
+    fontFamily: 'Ubuntu');
 const TextStyle body2Light = TextStyle(
-  color: textLight,
-  fontSize: 14,
-  fontWeight: FontWeight.w300,
-  fontFamily: 'Ubuntu'
-);
+    color: textLight,
+    fontSize: 14,
+    fontWeight: FontWeight.w300,
+    fontFamily: 'Ubuntu');
 const TextStyle s1Light = TextStyle(
   color: textLight,
   fontSize: 20,
@@ -221,13 +207,11 @@ const TextStyle buttonLight = TextStyle(
   letterSpacing: 0.2,
 );
 final emphasizedButtonLight = TextStyle(
-  color: mainPallette.shade500,
-  fontSize: 14,
-  fontWeight: FontWeight.w400,
-  fontFamily: 'Ubuntu',
-  letterSpacing: 0.2
-);
-
+    color: mainPallette.shade500,
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    fontFamily: 'Ubuntu',
+    letterSpacing: 0.2);
 
 Decoration scaffoldBackgroundGradient() {
   final blueGrey = LinearGradient(
@@ -301,35 +285,33 @@ TextStyle finePrint() {
 
 ThemeData createTheme() {
   final primaryText = TextTheme(
-    bodyText1: body1Light,
-    bodyText2: body2Light,
-    headline1: h1Light,
-    headline2: h2Light,
-    headline3: h3Light,
-    headline4: h4Light,
-    headline5: h5Light,
-    headline6: h6Light,
-    button: buttonLight,
-    subtitle1: s1Light,
-    subtitle2: s2Light,
-    overline: emphasizedButtonLight
-  );
+      bodyText1: body1Light,
+      bodyText2: body2Light,
+      headline1: h1Light,
+      headline2: h2Light,
+      headline3: h3Light,
+      headline4: h4Light,
+      headline5: h5Light,
+      headline6: h6Light,
+      button: buttonLight,
+      subtitle1: s1Light,
+      subtitle2: s2Light,
+      overline: emphasizedButtonLight);
 
   // Like the primary text theme, but dark.
   final accentTextTheme = TextTheme(
-    bodyText1: body1Dark,
-    bodyText2: body2Dark,
-    headline1: h1Dark,
-    headline2: h2Dark,
-    headline3: h3Dark,
-    headline4: h4Dark,
-    headline5: h5Dark,
-    headline6: h6Dark,
-    button: buttonDark,
-    subtitle1: s1Dark,
-    subtitle2: s2Dark,
-    overline: emphasizedButtonDark
-  );
+      bodyText1: body1Dark,
+      bodyText2: body2Dark,
+      headline1: h1Dark,
+      headline2: h2Dark,
+      headline3: h3Dark,
+      headline4: h4Dark,
+      headline5: h5Dark,
+      headline6: h6Dark,
+      button: buttonDark,
+      subtitle1: s1Dark,
+      subtitle2: s2Dark,
+      overline: emphasizedButtonDark);
 
   return ThemeData(
     brightness: Brightness.dark,

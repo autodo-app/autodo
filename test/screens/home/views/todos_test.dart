@@ -15,8 +15,7 @@ import 'package:provider/provider.dart';
 class MockTodosBloc extends MockBloc<TodosEvent, TodosState>
     implements TodosBloc {}
 
-class MockCarsBloc extends MockBloc<CarsEvent, CarsState>
-    implements CarsBloc {}
+class MockCarsBloc extends MockBloc<CarsEvent, CarsState> implements CarsBloc {}
 
 class MockFilteredTodosBloc
     extends MockBloc<FilteredTodosLoaded, FilteredTodosState>
@@ -70,8 +69,9 @@ void main() {
 
     testWidgets('renders simple todo list', (WidgetTester tester) async {
       when(todosBloc.state).thenAnswer((_) => TodosLoaded(todos: []));
-      when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded(
-          {null: [Todo(name: '', completed: true)]}, VisibilityFilter.all));
+      when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded({
+            null: [Todo(name: '', completed: true)]
+          }, VisibilityFilter.all));
       final todosKey = Key('todos');
       await tester.pumpWidget(
         MultiBlocProvider(
@@ -97,13 +97,15 @@ void main() {
     testWidgets('renders due date and due mileage',
         (WidgetTester tester) async {
       when(todosBloc.state).thenAnswer((_) => TodosLoaded(todos: []));
-      when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded({null: [
-            Todo(
-                name: '',
-                dueDate: DateTime.fromMillisecondsSinceEpoch(0),
-                dueMileage: 0,
-                completed: true)
-          ]}, VisibilityFilter.all));
+      when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded({
+            null: [
+              Todo(
+                  name: '',
+                  dueDate: DateTime.fromMillisecondsSinceEpoch(0),
+                  dueMileage: 0,
+                  completed: true)
+            ]
+          }, VisibilityFilter.all));
       final todosKey = Key('todos');
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
@@ -138,10 +140,13 @@ void main() {
           dueState: TodoDueState.UPCOMING,
           completed: false,
           carName: 'car');
-      when(filteredTodosBloc.state)
-          .thenAnswer((_) => FilteredTodosLoaded({TodoDueState.UPCOMING: [todo]}, VisibilityFilter.all));
+      when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded({
+            TodoDueState.UPCOMING: [todo]
+          }, VisibilityFilter.all));
       when(todosBloc.state).thenReturn(TodosLoaded(todos: [todo]));
-      when(todosBloc.add(any)).thenAnswer((_) {updated = true;});
+      when(todosBloc.add(any)).thenAnswer((_) {
+        updated = true;
+      });
       when(carsBloc.state).thenReturn(CarsLoaded([Car(name: 'car')]));
       final todosKey = Key('todos');
       await tester.pumpWidget(
@@ -181,10 +186,13 @@ void main() {
           dueState: TodoDueState.UPCOMING,
           completed: false,
           carName: 'car');
-      when(filteredTodosBloc.state)
-          .thenAnswer((_) => FilteredTodosLoaded({TodoDueState.UPCOMING: [todo]}, VisibilityFilter.all));
+      when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded({
+            TodoDueState.UPCOMING: [todo]
+          }, VisibilityFilter.all));
       when(todosBloc.state).thenReturn(TodosLoaded(todos: [todo]));
-      when(todosBloc.add(any)).thenAnswer((_) {deleted = true;});
+      when(todosBloc.add(any)).thenAnswer((_) {
+        deleted = true;
+      });
       when(carsBloc.state).thenReturn(CarsLoaded([Car(name: 'car')]));
       final todosKey = Key('todos');
       await tester.pumpWidget(

@@ -31,7 +31,11 @@ enum CarDetailsMode { DETAILS, ADD, EDIT }
 
 class _HeaderWithImage extends StatelessWidget {
   const _HeaderWithImage(
-      {@required this.carId, this.carName, this.imageUrl, this.onEdit, this.onDelete});
+      {@required this.carId,
+      this.carName,
+      this.imageUrl,
+      this.onEdit,
+      this.onDelete});
 
   final String carId, carName;
   final Future<String> imageUrl;

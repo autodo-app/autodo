@@ -12,36 +12,36 @@ class TodoEditButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ButtonTheme.fromButtonThemeData(
-    data: ButtonThemeData(
-      minWidth: 0,
-    ),
-    child: FlatButton(
-      key: ValueKey('__todo_card_edit_${todo.name}'),
-      child: Icon(
-        Icons.edit,
-        color: Theme.of(context).primaryIconTheme.color,
-      ),
-      onPressed: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => TodoAddEditScreen(
-                isEditing: true,
-                onSave: (name, dueDate, dueMileage, carName,
-                    mileageRepeatInterval, dateRepeatInterval) {
-                  final out = todo.copyWith(
-                      name: name,
-                      dueDate: dueDate,
-                      dueMileage: dueMileage,
-                      carName: carName,
-                      mileageRepeatInterval: mileageRepeatInterval,
-                      dateRepeatInterval: dateRepeatInterval);
-                  BlocProvider.of<TodosBloc>(context).add(UpdateTodo(out));
-                },
-                todo: todo,
-              ),
-            ));
-      },
-    ),
-  );
+        data: ButtonThemeData(
+          minWidth: 0,
+        ),
+        child: FlatButton(
+          key: ValueKey('__todo_card_edit_${todo.name}'),
+          child: Icon(
+            Icons.edit,
+            color: Theme.of(context).primaryIconTheme.color,
+          ),
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TodoAddEditScreen(
+                    isEditing: true,
+                    onSave: (name, dueDate, dueMileage, carName,
+                        mileageRepeatInterval, dateRepeatInterval) {
+                      final out = todo.copyWith(
+                          name: name,
+                          dueDate: dueDate,
+                          dueMileage: dueMileage,
+                          carName: carName,
+                          mileageRepeatInterval: mileageRepeatInterval,
+                          dateRepeatInterval: dateRepeatInterval);
+                      BlocProvider.of<TodosBloc>(context).add(UpdateTodo(out));
+                    },
+                    todo: todo,
+                  ),
+                ));
+          },
+        ),
+      );
 }

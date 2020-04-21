@@ -22,23 +22,25 @@ class CarTag extends StatelessWidget {
       child: InkWell(
         onTap: () {
           if (car != null) {
-            Navigator.push(context, MaterialPageRoute(
-              builder: (context) => CarAddEditScreen(
-                car: car,
-                isEditing: false,
-                onSave: (name, odom, make, model, year, plate, vin) {
-                  BlocProvider.of<CarsBloc>(context).add(UpdateCar(
-                      car.copyWith(
-                          name: name,
-                          mileage: odom,
-                          make: make,
-                          model: model,
-                          year: year,
-                          plate: plate,
-                          vin: vin)));
-                },
-              ),
-            ));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CarAddEditScreen(
+                    car: car,
+                    isEditing: false,
+                    onSave: (name, odom, make, model, year, plate, vin) {
+                      BlocProvider.of<CarsBloc>(context).add(UpdateCar(
+                          car.copyWith(
+                              name: name,
+                              mileage: odom,
+                              make: make,
+                              model: model,
+                              year: year,
+                              plate: plate,
+                              vin: vin)));
+                    },
+                  ),
+                ));
           }
         },
         child: Container(
@@ -47,13 +49,9 @@ class CarTag extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
           padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-          child: Text(
-            text ?? car.name,
-            // style: Theme.of(context).accentTextTheme.bodyText1,
-            style: TextStyle(
-              fontSize: 12
-            )
-          ),
+          child: Text(text ?? car.name,
+              // style: Theme.of(context).accentTextTheme.bodyText1,
+              style: TextStyle(fontSize: 12)),
         ),
       ),
     );

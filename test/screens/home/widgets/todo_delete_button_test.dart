@@ -53,7 +53,12 @@ void main() {
           ],
           child: MaterialApp(
             home: Scaffold(
-              body: TodoDeleteButton(key: todosKey, todo: Todo(name: 'test'), onDelete: () {pressed=true;}),
+              body: TodoDeleteButton(
+                  key: todosKey,
+                  todo: Todo(name: 'test'),
+                  onDelete: () {
+                    pressed = true;
+                  }),
             ),
           ),
         ),

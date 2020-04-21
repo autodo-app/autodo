@@ -45,8 +45,7 @@ class _Header extends StatelessWidget {
   Widget build(BuildContext context) => Container(
       decoration: headerDecoration.copyWith(
         borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(25),
-          bottomRight: Radius.circular(25)),
+            bottomLeft: Radius.circular(25), bottomRight: Radius.circular(25)),
       ),
       child: Column(
         children: <Widget>[
@@ -67,11 +66,10 @@ class _Header extends StatelessWidget {
                 onPressed: () {
                   // TODO: create some sort of account screen here?
                   showDialog(
-                    context: context,
-                    child: AlertDialog(
-                      title: Text(JsonIntl.of(context).get(IntlKeys.toBeImplemented))
-                    )
-                  );
+                      context: context,
+                      child: AlertDialog(
+                          title: Text(JsonIntl.of(context)
+                              .get(IntlKeys.toBeImplemented))));
                 },
               ),
               _PaidVersionStatus(),
@@ -128,11 +126,10 @@ class _MechanicButton extends StatelessWidget {
           ),
           onPressed: () {
             showDialog(
-              context: context,
-              child: AlertDialog(
-                title: Text(JsonIntl.of(context).get(IntlKeys.toBeImplemented))
-              )
-            );
+                context: context,
+                child: AlertDialog(
+                    title: Text(
+                        JsonIntl.of(context).get(IntlKeys.toBeImplemented))));
           },
         ),
       );
@@ -156,11 +153,10 @@ class _DiyButton extends StatelessWidget {
           ),
           onPressed: () {
             showDialog(
-              context: context,
-              child: AlertDialog(
-                title: Text(JsonIntl.of(context).get(IntlKeys.toBeImplemented))
-              )
-            );
+                context: context,
+                child: AlertDialog(
+                    title: Text(
+                        JsonIntl.of(context).get(IntlKeys.toBeImplemented))));
           },
         ),
       );
@@ -184,11 +180,10 @@ class _PartsButton extends StatelessWidget {
           ),
           onPressed: () {
             showDialog(
-              context: context,
-              child: AlertDialog(
-                title: Text(JsonIntl.of(context).get(IntlKeys.toBeImplemented))
-              )
-            );
+                context: context,
+                child: AlertDialog(
+                    title: Text(
+                        JsonIntl.of(context).get(IntlKeys.toBeImplemented))));
           },
         ),
       );

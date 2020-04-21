@@ -50,7 +50,9 @@ void main() {
     testWidgets(
         'renders PopupMenuButton with mark all done if state is TodosLoaded with incomplete todos',
         (WidgetTester tester) async {
-      final todosList = [Todo(name: 'test', completed: false, dueState: TodoDueState.DUE_SOON)];
+      final todosList = [
+        Todo(name: 'test', completed: false, dueState: TodoDueState.DUE_SOON)
+      ];
       final todos = {TodoDueState.DUE_SOON: todosList};
       when(todosBloc.state).thenReturn(TodosLoaded(todos: todosList));
       final actions = Key('actions');
@@ -91,8 +93,8 @@ void main() {
       when(todosBloc.state).thenReturn(TodosLoaded(todos: todosList));
       final actions = Key('actions');
       final toggleAll = Key('toggleAll');
-      when(filteredTodosBloc.state)
-          .thenAnswer((_) => FilteredTodosLoaded(todosMap, VisibilityFilter.all));
+      when(filteredTodosBloc.state).thenAnswer(
+          (_) => FilteredTodosLoaded(todosMap, VisibilityFilter.all));
       await tester.pumpWidget(MultiBlocProvider(
         providers: [
           BlocProvider<TodosBloc>.value(value: todosBloc),
@@ -129,8 +131,8 @@ void main() {
       when(todosBloc.add(ToggleAll())).thenReturn(null);
       final actions = Key('actions');
       final toggleAll = Key('toggleAll');
-      when(filteredTodosBloc.state)
-          .thenAnswer((_) => FilteredTodosLoaded(todosMap, VisibilityFilter.all));
+      when(filteredTodosBloc.state).thenAnswer(
+          (_) => FilteredTodosLoaded(todosMap, VisibilityFilter.all));
       await tester.pumpWidget(MultiBlocProvider(
         providers: [
           BlocProvider<TodosBloc>.value(value: todosBloc),

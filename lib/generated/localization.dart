@@ -493,7 +493,7 @@ class IntlKeys {
   /// strings-fr.json: 'Optionnel'
   static const optional = 'optional';
 
-  /// strings.json: 'Or'
+  /// strings.json: 'or'
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const or = 'or';
 

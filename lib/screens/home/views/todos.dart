@@ -34,10 +34,8 @@ class TodoListHeader extends StatelessWidget {
       children: [
         Container(
           padding: EdgeInsets.only(left: 10, right: 10),
-          child: Text(
-            headerText,
-            style: Theme.of(context).primaryTextTheme.subtitle2
-          ),
+          child: Text(headerText,
+              style: Theme.of(context).primaryTextTheme.subtitle2),
         ),
         Container(
           padding: EdgeInsets.only(left: 10, right: 10),
@@ -49,7 +47,8 @@ class TodoListHeader extends StatelessWidget {
 }
 
 class TodoListSection extends StatefulWidget {
-  const TodoListSection({this.dueState, this.todos, this.cars, this.deleteTodo});
+  const TodoListSection(
+      {this.dueState, this.todos, this.cars, this.deleteTodo});
 
   final TodoDueState dueState;
   final List<Todo> todos;
@@ -74,7 +73,9 @@ class TodoListSectionState extends State<TodoListSection> {
       listLength = widget.todos.length + 1;
     } else {
       // Limit the list length to TODOS_SECTION_LIMIT
-      listLength = widget.todos.length < TODOS_SECTION_LIMIT ? widget.todos.length : TODOS_SECTION_LIMIT;
+      listLength = widget.todos.length < TODOS_SECTION_LIMIT
+          ? widget.todos.length
+          : TODOS_SECTION_LIMIT;
     }
     return Column(
       children: [
@@ -86,10 +87,8 @@ class TodoListSectionState extends State<TodoListSection> {
               return Align(
                 alignment: Alignment.centerLeft,
                 child: FlatButton(
-                  child: Text(
-                    JsonIntl.of(context).get(IntlKeys.showMore),
-                    style: Theme.of(context).primaryTextTheme.overline
-                  ),
+                  child: Text(JsonIntl.of(context).get(IntlKeys.showMore),
+                      style: Theme.of(context).primaryTextTheme.overline),
                   onPressed: () {
                     setState(() {
                       expanded = true;
@@ -114,10 +113,12 @@ class TodoListSectionState extends State<TodoListSection> {
               ); // more button
             }
             return TodoListCard(
-              todo: widget.todos[index],
-              car: widget.cars.firstWhere((c) => c.name == widget.todos[index].carName),
-              onDelete: () { widget.deleteTodo(context, widget.todos[index]); }
-            );
+                todo: widget.todos[index],
+                car: widget.cars
+                    .firstWhere((c) => c.name == widget.todos[index].carName),
+                onDelete: () {
+                  widget.deleteTodo(context, widget.todos[index]);
+                });
           },
         ),
       ],
@@ -156,67 +157,67 @@ class TodosPanelState extends State<TodosPanel> {
 
   @override
   Widget build(BuildContext context) => Container(
-    padding: EdgeInsets.fromLTRB(5, 15, 5, 15),
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.only(topLeft: Radius.circular(25), topRight: Radius.circular(25)),
-      color: Theme.of(context).cardColor,
-    ),
-    child: Column(
-      children: [
-        Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            ButtonTheme.fromButtonThemeData(
-              data: ButtonThemeData(
-                minWidth: 0,
+      padding: EdgeInsets.fromLTRB(5, 15, 5, 15),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(25), topRight: Radius.circular(25)),
+        color: Theme.of(context).cardColor,
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              ButtonTheme.fromButtonThemeData(
+                data: ButtonThemeData(
+                  minWidth: 0,
+                ),
+                child: FlatButton(
+                  child: Icon(Icons.search),
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        child: AlertDialog(
+                            title: Text(JsonIntl.of(context)
+                                .get(IntlKeys.toBeImplemented))));
+                  },
+                ),
               ),
-              child: FlatButton(
-                child: Icon(Icons.search),
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    child: AlertDialog(
-                      title: Text(JsonIntl.of(context).get(IntlKeys.toBeImplemented))
-                    )
-                  );
-                },
-              ),
-            ),
-            ExtraActions(),
-            SizedBox(width: 10,), // padding
-          ],
-        ),
-        // Header above, actual ToDos below
-        TodoListSection(
-          todos: todos[TodoDueState.PAST_DUE],
-          cars: widget.cars,
-          dueState: TodoDueState.PAST_DUE,
-          deleteTodo: deleteTodo,
-        ),
-        TodoListSection(
-          todos: todos[TodoDueState.DUE_SOON],
-          cars: widget.cars,
-          dueState: TodoDueState.DUE_SOON,
-          deleteTodo: deleteTodo,
-        ),
-        TodoListSection(
-          todos: todos[TodoDueState.UPCOMING],
-          cars: widget.cars,
-          dueState: TodoDueState.UPCOMING,
-          deleteTodo: deleteTodo,
-        ),
-        TodoListSection(
-          todos: todos[TodoDueState.COMPLETE],
-          cars: widget.cars,
-          dueState: TodoDueState.COMPLETE,
-          deleteTodo: deleteTodo,
-        ),
-      ],
-    )
-  );
+              ExtraActions(),
+              SizedBox(
+                width: 10,
+              ), // padding
+            ],
+          ),
+          // Header above, actual ToDos below
+          TodoListSection(
+            todos: todos[TodoDueState.PAST_DUE],
+            cars: widget.cars,
+            dueState: TodoDueState.PAST_DUE,
+            deleteTodo: deleteTodo,
+          ),
+          TodoListSection(
+            todos: todos[TodoDueState.DUE_SOON],
+            cars: widget.cars,
+            dueState: TodoDueState.DUE_SOON,
+            deleteTodo: deleteTodo,
+          ),
+          TodoListSection(
+            todos: todos[TodoDueState.UPCOMING],
+            cars: widget.cars,
+            dueState: TodoDueState.UPCOMING,
+            deleteTodo: deleteTodo,
+          ),
+          TodoListSection(
+            todos: todos[TodoDueState.COMPLETE],
+            cars: widget.cars,
+            dueState: TodoDueState.COMPLETE,
+            deleteTodo: deleteTodo,
+          ),
+        ],
+      ));
 }
 
 class TodoAlert extends StatelessWidget {
@@ -232,15 +233,18 @@ class TodoAlert extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.priority_high,
-              color: alertRed),
+            Icon(Icons.priority_high, color: alertRed),
             Text(
               // TODO: plural
-              (todos[TodoDueState.PAST_DUE].length > 1) ?
-                JsonIntl.of(context).get(IntlKeys.pluralLateTodos, {'num': todos[TodoDueState.PAST_DUE].length}) :
-                JsonIntl.of(context).get(IntlKeys.singularLateTodo, {'num': todos[TodoDueState.PAST_DUE].length}),
-              style: Theme.of(context).primaryTextTheme.headline5.copyWith(color: alertRed),
+              (todos[TodoDueState.PAST_DUE].length > 1)
+                  ? JsonIntl.of(context).get(IntlKeys.pluralLateTodos,
+                      {'num': todos[TodoDueState.PAST_DUE].length})
+                  : JsonIntl.of(context).get(IntlKeys.singularLateTodo,
+                      {'num': todos[TodoDueState.PAST_DUE].length}),
+              style: Theme.of(context)
+                  .primaryTextTheme
+                  .headline5
+                  .copyWith(color: alertRed),
             )
           ],
         ),
@@ -251,15 +255,18 @@ class TodoAlert extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.notifications,
-              color: warningOrange),
+            Icon(Icons.notifications, color: warningOrange),
             Text(
               // TODO: plural
-              (todos[TodoDueState.DUE_SOON].length > 1) ?
-                JsonIntl.of(context).get(IntlKeys.pluralDueSoonTodos, {'num': todos[TodoDueState.DUE_SOON].length}) :
-                JsonIntl.of(context).get(IntlKeys.singularDueSoonTodo, {'num': todos[TodoDueState.DUE_SOON].length}),
-              style: Theme.of(context).primaryTextTheme.headline5.copyWith(color: warningOrange),
+              (todos[TodoDueState.DUE_SOON].length > 1)
+                  ? JsonIntl.of(context).get(IntlKeys.pluralDueSoonTodos,
+                      {'num': todos[TodoDueState.DUE_SOON].length})
+                  : JsonIntl.of(context).get(IntlKeys.singularDueSoonTodo,
+                      {'num': todos[TodoDueState.DUE_SOON].length}),
+              style: Theme.of(context)
+                  .primaryTextTheme
+                  .headline5
+                  .copyWith(color: warningOrange),
             )
           ],
         ),
@@ -274,46 +281,45 @@ class TodosScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => BlocBuilder<CarsBloc, CarsState>(
-    builder: (context, carsState) => BlocBuilder<FilteredTodosBloc, FilteredTodosState>(
-      builder: (context, todosState) {
-        if (!(todosState is FilteredTodosLoaded) || !(carsState is CarsLoaded)) {
-          return Container();
-        }
+      builder: (context, carsState) =>
+          BlocBuilder<FilteredTodosBloc, FilteredTodosState>(
+              builder: (context, todosState) {
+            if (!(todosState is FilteredTodosLoaded) ||
+                !(carsState is CarsLoaded)) {
+              return Container();
+            }
 
-        return Container(
-          decoration: headerDecoration,
-          child: CustomScrollView(
-            slivers: [
-              SliverAppBar(
-                expandedHeight: 130.0,
-                flexibleSpace: FlexibleSpaceBar(
-                  title: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Flexible(
-                        fit: FlexFit.loose,
-                        child: Text(
-                          JsonIntl.of(context).get(IntlKeys.todos),
-                          style: Theme.of(context).accentTextTheme.headline1,
-                        ),
+            return Container(
+                decoration: headerDecoration,
+                child: CustomScrollView(
+                  slivers: [
+                    SliverAppBar(
+                      expandedHeight: 130.0,
+                      flexibleSpace: FlexibleSpaceBar(
+                        title:
+                            Column(mainAxisSize: MainAxisSize.min, children: [
+                          Flexible(
+                            fit: FlexFit.loose,
+                            child: Text(
+                              JsonIntl.of(context).get(IntlKeys.todos),
+                              style:
+                                  Theme.of(context).accentTextTheme.headline1,
+                            ),
+                          ),
+                          TodoAlert((todosState as FilteredTodosLoaded)
+                              .filteredTodos),
+                        ]),
+                        titlePadding: EdgeInsets.all(15),
+                        centerTitle: true,
                       ),
-                      TodoAlert((todosState as FilteredTodosLoaded).filteredTodos),
-                    ]
-                  ),
-                  titlePadding: EdgeInsets.all(15),
-                  centerTitle: true,
-                ),
-              ),
-              SliverToBoxAdapter(
-                child: TodosPanel(
-                  todos: (todosState as FilteredTodosLoaded).filteredTodos,
-                  cars: (carsState as CarsLoaded).cars
-                ),
-              ),
-            ],
-          )
-        );
-      }
-    )
-  );
+                    ),
+                    SliverToBoxAdapter(
+                      child: TodosPanel(
+                          todos:
+                              (todosState as FilteredTodosLoaded).filteredTodos,
+                          cars: (carsState as CarsLoaded).cars),
+                    ),
+                  ],
+                ));
+          }));
 }

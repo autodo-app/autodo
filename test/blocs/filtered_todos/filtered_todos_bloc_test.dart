@@ -39,7 +39,9 @@ void main() {
       return FilteredTodosBloc(todosBloc: todosBloc, carsBloc: carsBloc);
     }, expect: [
       FilteredTodosLoaded(
-        {TodoDueState.DUE_SOON: [todo]},
+        {
+          TodoDueState.DUE_SOON: [todo]
+        },
         VisibilityFilter.all,
       ),
     ]);
@@ -55,11 +57,15 @@ void main() {
           bloc.add(UpdateTodosFilter(VisibilityFilter.active)),
       expect: <FilteredTodosState>[
         FilteredTodosLoaded(
-          {TodoDueState.DUE_SOON: [todo]},
+          {
+            TodoDueState.DUE_SOON: [todo]
+          },
           VisibilityFilter.all,
         ),
         FilteredTodosLoaded(
-          {TodoDueState.DUE_SOON: [todo]},
+          {
+            TodoDueState.DUE_SOON: [todo]
+          },
           VisibilityFilter.active,
         ),
       ],
@@ -76,7 +82,9 @@ void main() {
           bloc.add(UpdateTodosFilter(VisibilityFilter.completed)),
       expect: <FilteredTodosState>[
         FilteredTodosLoaded(
-          {TodoDueState.DUE_SOON: [todo]},
+          {
+            TodoDueState.DUE_SOON: [todo]
+          },
           VisibilityFilter.all,
         ),
         FilteredTodosLoaded({}, VisibilityFilter.completed),
@@ -87,7 +95,9 @@ void main() {
       final todo1 = Todo(id: '0', dueMileage: 0);
       final todo2 = Todo(id: '0', dueMileage: 1000);
       test('No dates', () {
-        expect(FilteredTodosBloc.sortItems([todo1, todo2]), {null: [todo1, todo2]});
+        expect(FilteredTodosBloc.sortItems([todo1, todo2]), {
+          null: [todo1, todo2]
+        });
       });
       test('Valid Date A', () {
         expect(
@@ -95,10 +105,12 @@ void main() {
               todo1.copyWith(dueDate: DateTime.fromMillisecondsSinceEpoch(0)),
               todo2
             ]),
-            {null: [
-              todo1.copyWith(dueDate: DateTime.fromMillisecondsSinceEpoch(0)),
-              todo2,
-            ]});
+            {
+              null: [
+                todo1.copyWith(dueDate: DateTime.fromMillisecondsSinceEpoch(0)),
+                todo2,
+              ]
+            });
       });
       test('Valid Date B', () {
         expect(
@@ -106,10 +118,12 @@ void main() {
               todo1,
               todo2.copyWith(dueDate: DateTime.fromMillisecondsSinceEpoch(0))
             ]),
-            {null: [
-              todo1,
-              todo2.copyWith(dueDate: DateTime.fromMillisecondsSinceEpoch(0))
-            ]});
+            {
+              null: [
+                todo1,
+                todo2.copyWith(dueDate: DateTime.fromMillisecondsSinceEpoch(0))
+              ]
+            });
       });
       test('Both valid dates', () {
         expect(
@@ -117,10 +131,13 @@ void main() {
               todo1.copyWith(dueDate: DateTime.fromMillisecondsSinceEpoch(0)),
               todo2.copyWith(dueDate: DateTime.fromMillisecondsSinceEpoch(100))
             ]),
-            {null: [
-              todo1.copyWith(dueDate: DateTime.fromMillisecondsSinceEpoch(0)),
-              todo2.copyWith(dueDate: DateTime.fromMillisecondsSinceEpoch(100))
-            ]});
+            {
+              null: [
+                todo1.copyWith(dueDate: DateTime.fromMillisecondsSinceEpoch(0)),
+                todo2.copyWith(
+                    dueDate: DateTime.fromMillisecondsSinceEpoch(100))
+              ]
+            });
       });
     });
   });

@@ -73,7 +73,8 @@ void main() {
                 todo: Todo(
                     name: 'test',
                     dueState: TodoDueState.PAST_DUE,
-                    completed: false, carName: 'car'),
+                    completed: false,
+                    carName: 'car'),
                 onDelete: () {},
                 car: car,
               ),
@@ -103,7 +104,8 @@ void main() {
                 todo: Todo(
                     name: 'test',
                     dueState: TodoDueState.DUE_SOON,
-                    completed: false, carName: 'car'),
+                    completed: false,
+                    carName: 'car'),
                 onDelete: () {},
                 car: car,
               ),
@@ -117,7 +119,9 @@ void main() {
     testWidgets('check', (WidgetTester tester) async {
       final todosKey = Key('todos');
       var checkboxChanged = false;
-      when(todosBloc.add(any)).thenAnswer((_) {checkboxChanged = true;});
+      when(todosBloc.add(any)).thenAnswer((_) {
+        checkboxChanged = true;
+      });
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
@@ -147,8 +151,9 @@ void main() {
     });
     testWidgets('dismiss', (WidgetTester tester) async {
       when(todosBloc.state).thenAnswer((_) => TodosLoaded(todos: []));
-      when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded(
-          {null: [Todo(name: '', completed: false)]}, VisibilityFilter.all));
+      when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded({
+            null: [Todo(name: '', completed: false)]
+          }, VisibilityFilter.all));
       final todosKey = Key('todos');
       var dismissed = false;
       await tester.pumpWidget(
@@ -166,7 +171,9 @@ void main() {
               body: TodoListCard(
                 key: todosKey,
                 todo: Todo(name: 'test', completed: false, carName: 'car'),
-                onDelete: () {dismissed = true;},
+                onDelete: () {
+                  dismissed = true;
+                },
                 car: car,
               ),
             ),
