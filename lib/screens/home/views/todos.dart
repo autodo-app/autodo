@@ -10,6 +10,7 @@ import '../../../widgets/widgets.dart';
 import '../widgets/barrel.dart';
 
 const TODOS_SECTION_LIMIT = 5;
+const HEADER_HEIGHT = 130.0;
 
 class TodoListHeader extends StatelessWidget {
   const TodoListHeader(this.dueState);
@@ -158,6 +159,10 @@ class TodosPanelState extends State<TodosPanel> {
   @override
   Widget build(BuildContext context) => Container(
       padding: EdgeInsets.fromLTRB(5, 15, 5, 15),
+      constraints: BoxConstraints(
+        // not sure why 24 works, assuming it's from some padding somewhere
+        minHeight: MediaQuery.of(context).size.height - HEADER_HEIGHT - kBottomNavigationBarHeight - 24
+      ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(25), topRight: Radius.circular(25)),
@@ -290,7 +295,7 @@ class TodosScreen extends StatelessWidget {
                 child: CustomScrollView(
                   slivers: [
                     SliverAppBar(
-                      expandedHeight: 130.0,
+                      expandedHeight: HEADER_HEIGHT,
                       flexibleSpace: FlexibleSpaceBar(
                         title:
                             Column(mainAxisSize: MainAxisSize.min, children: [

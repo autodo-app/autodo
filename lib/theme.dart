@@ -404,7 +404,6 @@ ThemeData createTheme() {
       actionsIconTheme: ThemeData.dark().iconTheme,
       textTheme: primaryText,
     ),
-    // bottomAppBarTheme: ,
     // colorScheme: prefix0.ColorScheme.fromSwatch(primarySwatch: mainPallette, ), // this sets a lot of defaults, avoiding for now
     dialogTheme: DialogTheme(
         backgroundColor: cardColor,

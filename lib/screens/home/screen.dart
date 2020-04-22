@@ -237,12 +237,6 @@ class HomeScreenState extends State<HomeScreen> with RouteAware {
 
   Widget buildScreen(BuildContext context) {
     return Scaffold(
-      // appBar: (_tab == AppTab.garage)
-      //     ? null
-      //     : AppBar(
-      //         title: Text(JsonIntl.of(context).get(IntlKeys.appTitle)),
-      //         actions: [ExtraActions()],
-      //       ),
       body: views[_tab],
       floatingActionButton: actionButton,
       bottomNavigationBar: TabSelector(
