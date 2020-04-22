@@ -235,12 +235,10 @@ class TodoAlert extends StatelessWidget {
           children: [
             Icon(Icons.priority_high, color: alertRed),
             Text(
-              // TODO: plural
-              (todos[TodoDueState.PAST_DUE].length > 1)
-                  ? JsonIntl.of(context).get(IntlKeys.pluralLateTodos,
-                      {'num': todos[TodoDueState.PAST_DUE].length})
-                  : JsonIntl.of(context).get(IntlKeys.singularLateTodo,
-                      {'num': todos[TodoDueState.PAST_DUE].length}),
+              JsonIntl.of(context).count(
+                todos[TodoDueState.PAST_DUE].length,
+                IntlKeys.lateTodo,
+              ),
               style: Theme.of(context)
                   .primaryTextTheme
                   .headline5
@@ -257,12 +255,10 @@ class TodoAlert extends StatelessWidget {
           children: [
             Icon(Icons.notifications, color: warningOrange),
             Text(
-              // TODO: plural
-              (todos[TodoDueState.DUE_SOON].length > 1)
-                  ? JsonIntl.of(context).get(IntlKeys.pluralDueSoonTodos,
-                      {'num': todos[TodoDueState.DUE_SOON].length})
-                  : JsonIntl.of(context).get(IntlKeys.singularDueSoonTodo,
-                      {'num': todos[TodoDueState.DUE_SOON].length}),
+              JsonIntl.of(context).count(
+                todos[TodoDueState.DUE_SOON].length,
+                IntlKeys.dueSoonTodo,
+              ),
               style: Theme.of(context)
                   .primaryTextTheme
                   .headline5

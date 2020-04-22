@@ -490,10 +490,10 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: df139c8ead6ce23ea218a5bf85fec3b25dae2ed6
+      resolved-ref: "076c442d36ee767c3a37ab0b01fa77dee5396d84"
       url: "https://github.com/DavBfr/json_intl"
     source: git
-    version: "0.0.1"
+    version: "0.0.2"
   json_rpc_2:
     dependency: transitive
     description:

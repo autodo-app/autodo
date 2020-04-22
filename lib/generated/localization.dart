@@ -1,5 +1,6 @@
 // This file is generated automatically, do not modify
 
+/// Internationalization constants
 class IntlKeys {
   /// strings.json: 'Action Name *'
   /// strings-fr.json: 'Nom de l\'action *'
@@ -177,6 +178,10 @@ class IntlKeys {
   /// strings-fr.json: 'À venir bientôt :'
   static const dueSoon = 'due_soon';
 
+  /// strings.json: '{{ count }} ToDos Due Soon'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const dueSoonTodo = 'due_soon_todo';
+
   /// strings.json: 'Edit Car'
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const editCar = 'edit_car';
@@ -349,6 +354,10 @@ class IntlKeys {
   /// strings-fr.json: 'Date invalide'
   static const invalidDate = 'invalid_date';
 
+  /// strings.json: '{{ count }} Late ToDos'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const lateTodo = 'late_todo';
+
   /// strings.json: 'Learn to D.I.Y'
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const learnToDiy = 'learn_to_diy';
@@ -508,14 +517,6 @@ class IntlKeys {
   /// strings.json: 'Plate'
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const plate = 'plate';
-
-  /// strings.json: '{{ num }} ToDos Due Soon'
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  static const pluralDueSoonTodos = 'plural_due_soon_todos';
-
-  /// strings.json: '{{ num }} Late ToDos'
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  static const pluralLateTodos = 'plural_late_todos';
 
   /// strings.json: 'Privacy Policy'
   /// strings-fr.json: 'Politique de confidentialité'
@@ -712,14 +713,6 @@ class IntlKeys {
   /// strings.json: 'Set recurring tasks to never worry about forgetting a maintenance task again.'
   /// strings-fr.json: 'Définissez des tâches récurrentes pour ne plus jamais vous soucier d\'oublier une tâche de maintenance.'
   static const simplifyTasksDesc = 'simplify_tasks_desc';
-
-  /// strings.json: '{{ num }} ToDo Due Soon'
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  static const singularDueSoonTodo = 'singular_due_soon_todo';
-
-  /// strings.json: '{{ num }} Late ToDo'
-  /// strings-fr.json: *** NOT TRANSLATED ***
-  static const singularLateTodo = 'singular_late_todo';
 
   /// strings.json: 'Skip'
   /// strings-fr.json: 'Passer'
