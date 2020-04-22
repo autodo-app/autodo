@@ -36,42 +36,35 @@ class NewUserScreenWizard extends WizardInfo {
 
   @override
   FutureOr<void> didFinish(BuildContext context) {
-    BlocProvider.of<TodosBloc>(context).add(TranslateDefaults(
-        JsonIntl.of(context), Distance.of(context, listen: false).unit));
-
+    final newCars = [];
+    final newTodos = [];
     for (final car in cars) {
       final c = Car(name: car.name, mileage: car.mileage);
-      BlocProvider.of<CarsBloc>(context).add(AddCar(c));
-
+      newCars.add(c);
       if (car.oilChange != null) {
-        BlocProvider.of<TodosBloc>(context).add(
-          AddTodo(
-            Todo(
-              name: 'oil',
-              carName: car.name,
-              completed: true,
-              completedDate: DateTime.now(),
-              dueMileage: car.oilChange,
-              mileageRepeatInterval: oilRepeatInterval,
-            ),
-          ),
-        );
-
-        if (car.tireRotation != null) {
-          BlocProvider.of<TodosBloc>(context).add(
-            AddTodo(
-              Todo(
-                name: 'tireRotation',
-                carName: car.name,
-                completed: true,
-                completedDate: DateTime.now(),
-                dueMileage: car.tireRotation,
-                mileageRepeatInterval: tireRotationRepeatInterval,
-              ),
-            ),
-          );
-        }
+        newTodos.add(Todo(
+          name: 'oil',
+          carName: c.name,
+          completed: true,
+          completedDate: DateTime.now(),
+          dueMileage: car.oilChange,
+          mileageRepeatInterval: oilRepeatInterval,
+        ));
+      }
+      if (car.tireRotation != null) {
+        newTodos.add(Todo(
+          name: 'tireRotation',
+          carName: c.name,
+          completed: true,
+          completedDate: DateTime.now(),
+          dueMileage: car.tireRotation,
+          mileageRepeatInterval: tireRotationRepeatInterval,
+        ));
       }
     }
+    BlocProvider.of<TodosBloc>(context).add(
+        TranslateDefaults(JsonIntl.of(context), Distance.of(context).unit));
+    BlocProvider.of<CarsBloc>(context).add(AddMultipleCars(newCars));
+    BlocProvider.of<TodosBloc>(context).add(AddMultipleTodos(newTodos));
   }
 }

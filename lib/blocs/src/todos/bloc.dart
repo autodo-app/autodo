@@ -42,6 +42,13 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     });
   }
 
+  @override
+  void onTransition(dynamic transition) {
+    print('*****************************************');
+    print('**   onTransition $transition');
+    print('*****************************************');
+  }
+
   final DatabaseBloc _dbBloc;
 
   final CarsBloc _carsBloc;
@@ -183,6 +190,9 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
 
   @override
   Stream<TodosState> mapEventToState(TodosEvent event) async* {
+    print('*****************************************');
+    print('**   NEW EVENT $event');
+    print('*****************************************');
     if (event is LoadTodos) {
       yield* _mapLoadTodosToState();
     } else if (event is AddTodo) {
@@ -199,6 +209,8 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       yield* _mapCarsUpdatedToState(event);
     } else if (event is TranslateDefaults) {
       yield* _mapTranslateDefaultsToState(event);
+    } else if (event is AddMultipleTodos) {
+      yield* _mapAddMultipleTodosToState(event);
     }
   }
 
@@ -206,7 +218,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     try {
       final todos = await repo
           .getCurrentTodos()
-          .timeout(Duration(seconds: 10), onTimeout: () => []);
+          .timeout(Duration(seconds: 2), onTimeout: () => []);
       if (todos != null) {
         yield TodosLoaded(todos: todos);
       } else {
@@ -267,6 +279,9 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       print(
           'Cannot update in response to cars loaded when state is not TodosLoaded');
       return;
+    } else if ((state as TodosLoaded).defaults?.isEmpty ?? true) {
+      print('Cannot update cars bloc without translating the default ToDos');
+      return;
     }
     final cars = event.cars;
     final curTodos = (state as TodosLoaded).todos;
@@ -305,7 +320,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     // old state
     await batch.commit();
     final updatedTodos = await repo.getCurrentTodos();
-    yield TodosLoaded(todos: updatedTodos);
+    yield (state as TodosLoaded).copyWith(todos: updatedTodos);
   }
 
   Stream<TodosState> _mapAddTodoToState(AddTodo event) async* {
@@ -318,6 +333,23 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     yield TodosLoaded(todos: updatedTodos);
     _scheduleNotification(event.todo);
     await repo.addNewTodo(event.todo);
+  }
+
+  Stream<TodosState> _mapAddMultipleTodosToState(
+      AddMultipleTodos event) async* {
+    if (repo == null) {
+      print('Error: adding todo to null repo');
+      return;
+    }
+    final updatedTodos = List<Todo>.from((state as TodosLoaded).todos)
+      ..addAll(event.todos);
+    yield TodosLoaded(todos: updatedTodos);
+    event.todos.forEach(_scheduleNotification);
+    final batch = await repo.startTodoWriteBatch();
+    event.todos.forEach((t) {
+      batch.setData(t.toDocument());
+    });
+    await batch.commit();
   }
 
   Stream<TodosState> _mapUpdateTodoToState(UpdateTodo event) async* {
@@ -345,7 +377,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     final car = (_carsBloc.state as CarsLoaded)
         .cars
         .firstWhere((c) => c.name == curTodo.carName);
-    var updatedTodos = (state as TodosLoaded).todos;
+    var updatedTodos = List<Todo>.from((state as TodosLoaded).todos);
 
     final batch = await repo.startTodoWriteBatch();
     final completedTodo = curTodo.copyWith(
@@ -362,10 +394,17 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     // Add a new todo if applicable
     if (completedTodo.mileageRepeatInterval != null) {
       final newDueMileage = curTodo.mileageRepeatInterval + car.mileage;
-      final newTodo = curTodo.copyWith(
-          dueMileage: newDueMileage,
-          dueDate: calcDueDate(car, newDueMileage),
-          estimatedDueDate: true);
+      // Creating a new one instead of .copyWith() so that null fields are
+      // preserved
+      final newTodo = Todo(
+        name: curTodo.name,
+        carName: curTodo.carName,
+        dueMileage: newDueMileage,
+        mileageRepeatInterval: curTodo.mileageRepeatInterval,
+        estimatedDueDate: true,
+        dueDate: TodosBloc.calcDueDate(car, newDueMileage),
+        completed: false,
+      );
       batch.setData(newTodo.toDocument());
       updatedTodos.add(newTodo);
     } else if (completedTodo.dateRepeatInterval != null) {
@@ -379,11 +418,10 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     // TODO: this yield is important for verifying this output in unit tests
     // but could cause a brief period of time where an edit button is presed
     // on a ToDo that does not yet have an ID value.
-    yield TodosLoaded(todos: updatedTodos);
     await batch.commit();
 
     updatedTodos = await repo.getCurrentTodos();
-    yield TodosLoaded(todos: updatedTodos);
+    yield (state as TodosLoaded).copyWith(todos: updatedTodos);
   }
 
   Stream<TodosState> _mapDeleteTodoToState(DeleteTodo event) async* {

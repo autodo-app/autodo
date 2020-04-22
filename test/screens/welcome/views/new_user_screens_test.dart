@@ -173,12 +173,16 @@ void main() {
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
-          child: MultiBlocProvider(providers: [
-            BlocProvider<AuthenticationBloc>.value(value: authBloc),
-            BlocProvider<DatabaseBloc>.value(value: dbBloc),
-            BlocProvider<CarsBloc>.value(value: carsBloc),
-            BlocProvider<TodosBloc>.value(value: todosBloc),
-          ], child: MaterialApp(home: NewUserScreen())),
+          child: MultiBlocProvider(
+              providers: [
+                BlocProvider<AuthenticationBloc>.value(value: authBloc),
+                BlocProvider<DatabaseBloc>.value(value: dbBloc),
+                BlocProvider<CarsBloc>.value(value: carsBloc),
+                BlocProvider<TodosBloc>.value(value: todosBloc),
+              ],
+              child: MaterialApp(
+                home: NewUserScreen(),
+              )),
         ),
       );
       expect(find.byType(NewUserScreen), findsOneWidget);

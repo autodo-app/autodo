@@ -22,6 +22,18 @@ class AddCar extends CarsEvent {
   String toString() => 'AddCar { car: $car }';
 }
 
+class AddMultipleCars extends CarsEvent {
+  const AddMultipleCars(this.cars);
+
+  final List<Car> cars;
+
+  @override
+  List<Object> get props => cars;
+
+  @override
+  String toString() => '$runtimeType { cars: $cars }';
+}
+
 class UpdateCar extends CarsEvent {
   const UpdateCar(this.updatedCar);
 

@@ -26,6 +26,9 @@ class TodosLoaded extends TodosState {
   final List<Todo> todos;
   final List<Todo> defaults;
 
+  TodosLoaded copyWith({List<Todo> todos, List<Todo> defaults}) => TodosLoaded(
+      todos: todos ?? this.todos, defaults: defaults ?? this.defaults);
+
   @override
   List<Object> get props => [...todos, ...defaults];
 
