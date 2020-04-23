@@ -160,9 +160,11 @@ class TodosPanelState extends State<TodosPanel> {
   Widget build(BuildContext context) => Container(
       padding: EdgeInsets.fromLTRB(5, 15, 5, 15),
       constraints: BoxConstraints(
-        // not sure why 24 works, assuming it's from some padding somewhere
-        minHeight: MediaQuery.of(context).size.height - HEADER_HEIGHT - kBottomNavigationBarHeight - 24
-      ),
+          // not sure why 24 works, assuming it's from some padding somewhere
+          minHeight: MediaQuery.of(context).size.height -
+              HEADER_HEIGHT -
+              kBottomNavigationBarHeight -
+              24),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(25), topRight: Radius.circular(25)),
