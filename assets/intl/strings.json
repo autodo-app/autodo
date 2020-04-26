@@ -226,5 +226,12 @@
   },
   "delete_todo": "Delete ToDo",
   "due_by": "Due by",
-  "or": "or"
+  "or": "or",
+  "sun_short": "Sun",
+  "mon_short": "Mon",
+  "tue_short": "Tue",
+  "wed_short": "Wed",
+  "thu_short": "Thu",
+  "fri_short": "Fri",
+  "sat_short": "Sat"
 }

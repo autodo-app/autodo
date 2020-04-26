@@ -8,9 +8,9 @@ import '../../../models/models.dart';
 import '../../../theme.dart';
 import '../../../widgets/widgets.dart';
 import '../widgets/barrel.dart';
+import 'constants.dart';
 
 const TODOS_SECTION_LIMIT = 5;
-const HEADER_HEIGHT = 130.0;
 
 class TodoListHeader extends StatelessWidget {
   const TodoListHeader(this.dueState);
@@ -299,19 +299,20 @@ class TodosScreen extends StatelessWidget {
                     SliverAppBar(
                       expandedHeight: HEADER_HEIGHT,
                       flexibleSpace: FlexibleSpaceBar(
-                        title:
-                            Column(mainAxisSize: MainAxisSize.min, children: [
-                          Flexible(
-                            fit: FlexFit.loose,
-                            child: Text(
-                              JsonIntl.of(context).get(IntlKeys.todos),
-                              style:
-                                  Theme.of(context).accentTextTheme.headline1,
+                        title: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Flexible(
+                              fit: FlexFit.loose,
+                              child: Text(
+                                JsonIntl.of(context).get(IntlKeys.todos),
+                                style:
+                                    Theme.of(context).accentTextTheme.headline1,
+                              ),
                             ),
-                          ),
-                          TodoAlert((todosState as FilteredTodosLoaded)
-                              .filteredTodos),
-                        ]),
+                            TodoAlert((todosState as FilteredTodosLoaded)
+                                .filteredTodos),
+                          ]),
                         titlePadding: EdgeInsets.all(15),
                         centerTitle: true,
                       ),

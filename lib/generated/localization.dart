@@ -286,6 +286,10 @@ class IntlKeys {
   /// strings-fr.json: 'Mot de passe oublié ?'
   static const forgotYourPassword = 'forgot_your_password';
 
+  /// strings.json: 'Fri'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const friShort = 'fri_short';
+
   /// strings.json: 'Front Struts'
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const frontStruts = 'front_struts';
@@ -429,6 +433,10 @@ class IntlKeys {
   /// strings.json: 'Model'
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const model = 'model';
+
+  /// strings.json: 'Mon'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const monShort = 'mon_short';
 
   /// strings.json: 'Month'
   /// strings-fr.json: 'Mois'
@@ -642,6 +650,10 @@ class IntlKeys {
   /// strings-fr.json: 'Obligatoire'
   static const requiredLiteral = 'required_literal';
 
+  /// strings.json: 'Sat'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const satShort = 'sat_short';
+
   /// strings.json: 'Save Changes'
   /// strings-fr.json: 'Sauvegarder les modifications'
   static const saveChanges = 'save_changes';
@@ -726,6 +738,10 @@ class IntlKeys {
   /// strings-fr.json: 'Statistiques'
   static const stats = 'stats';
 
+  /// strings.json: 'Sun'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const sunShort = 'sun_short';
+
   /// strings.json: 'Tap "Add" to configure multiple cars.'
   /// strings-fr.json: 'Appuyez sur "Ajouter" pour configurer plusieurs voitures.'
   static const tapAddCars = 'tap_add_cars';
@@ -733,6 +749,10 @@ class IntlKeys {
   /// strings.json: 'Task:'
   /// strings-fr.json: 'Tâche :'
   static const task = 'task';
+
+  /// strings.json: 'Thu'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const thuShort = 'thu_short';
 
   /// strings.json: 'Tire Rotation'
   /// strings-fr.json: *** NOT TRANSLATED ***
@@ -790,6 +810,10 @@ class IntlKeys {
   /// strings-fr.json: 'ESSAYEZ SANS COMPTE'
   static const tryWithoutAccount = 'try_without_account';
 
+  /// strings.json: 'Tue'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const tueShort = 'tue_short';
+
   /// strings.json: 'Undo'
   /// strings-fr.json: 'annuler'
   static const undo = 'undo';
@@ -845,6 +869,10 @@ class IntlKeys {
   /// strings.json: 'Fuel volume unit'
   /// strings-fr.json: 'Unitée de mesure du carburant'
   static const volumeUnit = 'volume_unit';
+
+  /// strings.json: 'Wed'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const wedShort = 'wed_short';
 
   /// strings.json: 'Week'
   /// strings-fr.json: 'Semaine'

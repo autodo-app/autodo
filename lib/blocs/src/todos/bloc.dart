@@ -259,7 +259,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     try {
       final todos = await repo
           .getCurrentTodos()
-          .timeout(Duration(seconds: 2), onTimeout: () => []);
+          .timeout(Duration(seconds: 1), onTimeout: () => []);
       if (todos != null) {
         yield TodosLoaded(todos: todos);
       } else {

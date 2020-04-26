@@ -54,7 +54,7 @@ class RefuelingsBloc extends Bloc<RefuelingsEvent, RefuelingsState> {
   Future<Refueling> _findLatestRefueling(Refueling refueling) async {
     final refuelings = await repo
         .getCurrentRefuelings()
-        .timeout(Duration(seconds: 10), onTimeout: () => []);
+        .timeout(Duration(seconds: 1), onTimeout: () => []);
 
     var smallestDiff = MAX_MPG;
     Refueling out;
