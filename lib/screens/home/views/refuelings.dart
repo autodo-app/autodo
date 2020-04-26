@@ -215,7 +215,11 @@ class RefuelingsPanelState extends State<RefuelingsPanel> {
         _CalendarView(refuelings: refuelings,),
         ...List.generate( // TODO: making this a column is really bad for performance
           refuelings.length,
-          (index) => RefuelingCard(refueling: refuelings[index],)
+          (index) => RefuelingElement(
+            first: index == 0,
+            last: index == (refuelings.length - 1),
+            refueling: refuelings[index],
+            car: widget.cars.firstWhere((c) => c.name == refuelings[index].carName))
         )
       ],
     )
