@@ -299,20 +299,19 @@ class TodosScreen extends StatelessWidget {
                     SliverAppBar(
                       expandedHeight: HEADER_HEIGHT,
                       flexibleSpace: FlexibleSpaceBar(
-                        title: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Flexible(
-                              fit: FlexFit.loose,
-                              child: Text(
-                                JsonIntl.of(context).get(IntlKeys.todos),
-                                style:
-                                    Theme.of(context).accentTextTheme.headline1,
-                              ),
+                        title:
+                            Column(mainAxisSize: MainAxisSize.min, children: [
+                          Flexible(
+                            fit: FlexFit.loose,
+                            child: Text(
+                              JsonIntl.of(context).get(IntlKeys.todos),
+                              style:
+                                  Theme.of(context).accentTextTheme.headline1,
                             ),
-                            TodoAlert((todosState as FilteredTodosLoaded)
-                                .filteredTodos),
-                          ]),
+                          ),
+                          TodoAlert((todosState as FilteredTodosLoaded)
+                              .filteredTodos),
+                        ]),
                         titlePadding: EdgeInsets.all(15),
                         centerTitle: true,
                       ),

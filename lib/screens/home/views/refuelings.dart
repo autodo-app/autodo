@@ -120,15 +120,26 @@ class _CalendarDay extends StatelessWidget {
   final String name;
   final int number;
 
+  TextStyle _textStyle(BuildContext context) =>
+    (number == DateTime.now().day) ?
+        Theme.of(context).primaryTextTheme.bodyText2.copyWith(color: Theme.of(context).primaryColor) :
+        Theme.of(context).primaryTextTheme.bodyText2;
+
   @override
   Widget build(BuildContext context) => Container(
     padding: EdgeInsets.all(5),
     child: Column(
       children: [
-        Text(JsonIntl.of(context).get(name)),
-        Text(number.toString()),
+        Text(
+          JsonIntl.of(context).get(name),
+          style: _textStyle(context),
+        ),
+        Text(
+          number.toString(),
+          style: _textStyle(context),
+        ),
         if (refuelingToday)
-          _Circle(color: Colors.grey, size: 5.0)
+          _Circle(color: _textStyle(context).color, size: 5.0)
       ],
     )
   );
@@ -149,19 +160,30 @@ class _CalendarView extends StatelessWidget {
 
   final List<Refueling> refuelings;
 
-  bool _refuelingToday(DateTime date) {
-    print(date);
-    return refuelings.any((r) => roundToDay(r.date).isAtSameMomentAs(roundToDay(date)));
-  }
+  bool _refuelingToday(DateTime date) =>
+    refuelings.any((r) => roundToDay(r.date).isAtSameMomentAs(roundToDay(date)));
 
   DateTime _getInterval(int dateDay, int dayRangeVal) =>
     RepeatInterval(days: dayRangeVal - dateDay).addToDate(DateTime.now());
+
+  /// Returns the day value adjusted so that values from the upcoming month
+  /// are correct.
+  ///
+  /// Using the next month with a day value of 0 returns the last day of the
+  /// current month.
+  int _checkRollover(int day) {
+    final lastDay = DateTime(DateTime.now().year, DateTime.now().month + 1, 0).day;
+    if (day > lastDay) {
+      return day - lastDay;
+    }
+    return day;
+  }
 
   @override
   Widget build(BuildContext context) {
     final dayOfWeek = DateTime.now().weekday;
     final dateDay = DateTime.now().day;
-    final dayRange = List.generate(7, (index) => index + dateDay - dayOfWeek);
+    final dayRange = List.generate(7, (index) => _checkRollover(index + dateDay - dayOfWeek));
 
     return Container(
       padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
