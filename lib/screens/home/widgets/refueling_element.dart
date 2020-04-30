@@ -16,6 +16,7 @@ class _TimelinePainter extends CustomPainter {
   final bool firstElement;
   final bool lastElement;
   final BuildContext context;
+  static const VERTICAL_SHIFT = -30.0;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -25,13 +26,13 @@ class _TimelinePainter extends CustomPainter {
       ..strokeWidth = 2
       ..style = PaintingStyle.stroke;
     if (firstElement) {
-      final offsetCenter = size.center(Offset(0.0, -4.0));
+      final offsetCenter = size.center(Offset(0.0, VERTICAL_SHIFT));
       final offsetBottom = size.bottomCenter(Offset(0.0, 0.0));
       final renderOffset = Offset(offsetBottom.dx, offsetBottom.dy);
       canvas.drawLine(offsetCenter, renderOffset, lineStroke);
     } else if (lastElement) {
       final offsetTopCenter = size.topCenter(Offset(0.0, 0.0));
-      final offsetCenter = size.center(Offset(0.0, -4.0));
+      final offsetCenter = size.center(Offset(0.0, VERTICAL_SHIFT));
       final renderOffset = Offset(offsetCenter.dx, offsetCenter.dy);
       canvas.drawLine(offsetTopCenter, renderOffset, lineStroke);
     } else {
@@ -45,20 +46,20 @@ class _TimelinePainter extends CustomPainter {
         ..color = Theme.of(context).primaryColor
         ..style = PaintingStyle.fill;
 
-      canvas.drawCircle(size.center(Offset(0.0, -8.0)), 6.0, circleFill);
+      canvas.drawCircle(size.center(Offset(0.0, VERTICAL_SHIFT)), 6.0, circleFill);
 
       final circleOutline = Paint()
         ..color = Theme.of(context).primaryColor
         ..style = PaintingStyle.stroke
         ..strokeWidth = 2;
 
-      canvas.drawCircle(size.center(Offset(0.0, -8.0)), 10.0, circleOutline);
+      canvas.drawCircle(size.center(Offset(0.0, VERTICAL_SHIFT)), 10.0, circleOutline);
     } else {
       final circleFill = Paint()
         ..color = Colors.grey
         ..style = PaintingStyle.fill;
 
-      canvas.drawCircle(size.center(Offset(0.0, -8.0)), 6.0, circleFill);
+      canvas.drawCircle(size.center(Offset(0.0, VERTICAL_SHIFT)), 6.0, circleFill);
     }
   }
 
