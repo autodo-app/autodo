@@ -151,13 +151,15 @@ class RefuelingElement extends StatelessWidget {
       this.first,
       this.last,
       @required this.refueling,
-      @required this.car})
+      @required this.car,
+      @required this.onDelete})
       : super(key: key);
 
   final bool first;
   final bool last;
   final Refueling refueling;
   final Car car;
+  final VoidCallback onDelete;
 
   @override
   Widget build(BuildContext context) => Container(
@@ -173,7 +175,7 @@ class RefuelingElement extends StatelessWidget {
                     firstElement: first, lastElement: last, context: context),
               ),
             ),
-            _Content(refueling, car, () {}),
+            _Content(refueling, car, onDelete),
           ],
         ),
       );

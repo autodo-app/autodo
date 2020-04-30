@@ -34,7 +34,8 @@ class RefuelingEditButton extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) => RefuelingAddEditScreen(
-                            isEditing: false,
+                            isEditing: true,
+                            refueling: refueling,
                             onSave: (m, d, a, c, n) {
                               BlocProvider.of<RefuelingsBloc>(context)
                                   .add(AddRefueling(Refueling(

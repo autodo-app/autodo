@@ -142,7 +142,7 @@ class TodosPanelState extends State<TodosPanel> {
 
   Map<TodoDueState, List<Todo>> todos;
 
-  void deleteTodo(context, todo) {
+  void _deleteTodo(BuildContext context, Todo todo) {
     BlocProvider.of<TodosBloc>(context).add(DeleteTodo(todo));
     Scaffold.of(context).showSnackBar(DeleteTodoSnackBar(
       context: context,
@@ -203,25 +203,25 @@ class TodosPanelState extends State<TodosPanel> {
             todos: todos[TodoDueState.PAST_DUE],
             cars: widget.cars,
             dueState: TodoDueState.PAST_DUE,
-            deleteTodo: deleteTodo,
+            deleteTodo: _deleteTodo,
           ),
           TodoListSection(
             todos: todos[TodoDueState.DUE_SOON],
             cars: widget.cars,
             dueState: TodoDueState.DUE_SOON,
-            deleteTodo: deleteTodo,
+            deleteTodo: _deleteTodo,
           ),
           TodoListSection(
             todos: todos[TodoDueState.UPCOMING],
             cars: widget.cars,
             dueState: TodoDueState.UPCOMING,
-            deleteTodo: deleteTodo,
+            deleteTodo: _deleteTodo,
           ),
           TodoListSection(
             todos: todos[TodoDueState.COMPLETE],
             cars: widget.cars,
             dueState: TodoDueState.COMPLETE,
-            deleteTodo: deleteTodo,
+            deleteTodo: _deleteTodo,
           ),
         ],
       ));

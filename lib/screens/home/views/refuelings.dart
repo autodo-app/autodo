@@ -217,6 +217,19 @@ class RefuelingsPanelState extends State<RefuelingsPanel> {
 
   List<Refueling> refuelings;
 
+  void _deleteRefueling(BuildContext context, Refueling refueling) {
+    BlocProvider.of<RefuelingsBloc>(context).add(DeleteRefueling(refueling));
+    Scaffold.of(context).showSnackBar(DeleteRefuelingSnackBar(
+      context: context,
+      onUndo: () => BlocProvider.of<RefuelingsBloc>(context).add(AddRefueling(refueling)),
+    ));
+    // removing the todo from our local list for a quicker response than waiting
+    // on the Bloc to rebuild
+    setState(() {
+      refuelings.remove(refueling);
+    });
+  }
+
   @override
   Widget build(BuildContext context) => Container(
     padding: EdgeInsets.fromLTRB(5, 15, 5, 15),
@@ -241,7 +254,8 @@ class RefuelingsPanelState extends State<RefuelingsPanel> {
             first: index == 0,
             last: index == (refuelings.length - 1),
             refueling: refuelings[index],
-            car: widget.cars.firstWhere((c) => c.name == refuelings[index].carName))
+            car: widget.cars.firstWhere((c) => c.name == refuelings[index].carName),
+            onDelete: () => _deleteRefueling(context, refuelings[index]),)
         )
       ],
     )
