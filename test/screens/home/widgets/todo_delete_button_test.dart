@@ -17,10 +17,10 @@ void main() {
       final todosKey = Key('todos');
       await tester.pumpWidget(
         MaterialApp(
-            home: Scaffold(
-              body: DeleteButton(key: todosKey, onDelete: () {}),
-            ),
+          home: Scaffold(
+            body: DeleteButton(key: todosKey, onDelete: () {}),
           ),
+        ),
       );
       await tester.pumpAndSettle();
       expect(find.byKey(todosKey), findsOneWidget);

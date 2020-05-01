@@ -46,20 +46,23 @@ class _TimelinePainter extends CustomPainter {
         ..color = Theme.of(context).primaryColor
         ..style = PaintingStyle.fill;
 
-      canvas.drawCircle(size.center(Offset(0.0, VERTICAL_SHIFT)), 6.0, circleFill);
+      canvas.drawCircle(
+          size.center(Offset(0.0, VERTICAL_SHIFT)), 6.0, circleFill);
 
       final circleOutline = Paint()
         ..color = Theme.of(context).primaryColor
         ..style = PaintingStyle.stroke
         ..strokeWidth = 2;
 
-      canvas.drawCircle(size.center(Offset(0.0, VERTICAL_SHIFT)), 10.0, circleOutline);
+      canvas.drawCircle(
+          size.center(Offset(0.0, VERTICAL_SHIFT)), 10.0, circleOutline);
     } else {
       final circleFill = Paint()
         ..color = Colors.grey
         ..style = PaintingStyle.fill;
 
-      canvas.drawCircle(size.center(Offset(0.0, VERTICAL_SHIFT)), 6.0, circleFill);
+      canvas.drawCircle(
+          size.center(Offset(0.0, VERTICAL_SHIFT)), 6.0, circleFill);
     }
   }
 

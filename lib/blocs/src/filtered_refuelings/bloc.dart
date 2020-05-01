@@ -93,10 +93,8 @@ class FilteredRefuelingsBloc
     } else if (refuelingsBloc.state is RefuelingsLoaded) {
       // this allows the initial state to still be created even if the carsBloc
       // and/or the refuelingsBloc are not loaded when this bloc is created
-      yield _shadeEfficiencyStats(
-          updatedRefuelings,
-          (carsBloc.state as CarsLoaded).cars,
-          VisibilityFilter.all);
+      yield _shadeEfficiencyStats(updatedRefuelings,
+          (carsBloc.state as CarsLoaded).cars, VisibilityFilter.all);
     }
   }
 
@@ -139,7 +137,6 @@ class FilteredRefuelingsBloc
     refuelings.sort((a, b) => a.date.compareTo(b.date));
     return refuelings.reversed.toList();
   }
-
 
   Stream<FilteredRefuelingsState> _mapCarsUpdatedToState(
       FilteredRefuelingsUpdateCars event) async* {

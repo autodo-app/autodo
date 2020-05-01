@@ -73,7 +73,8 @@ void main() {
         date: DateTime.fromMillisecondsSinceEpoch(0),
       );
       when(filteredRefuelingsBloc.state).thenAnswer((_) =>
-          FilteredRefuelingsLoaded([refueling], VisibilityFilter.all, [Car(name: 'test')]));
+          FilteredRefuelingsLoaded(
+              [refueling], VisibilityFilter.all, [Car(name: 'test')]));
       when(carsBloc.state).thenReturn(CarsLoaded([Car(name: 'test')]));
       final refuelingsKey = Key('refuelings');
       await tester.pumpWidget(
