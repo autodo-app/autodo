@@ -11,60 +11,6 @@ import '../../../widgets/widgets.dart';
 import '../widgets/barrel.dart';
 import 'constants.dart';
 
-class RefuelingsScreen extends StatelessWidget {
-  const RefuelingsScreen({Key key}) : super(key: key);
-
-  void onDismissed(
-      DismissDirection direction, BuildContext context, Refueling refueling) {
-    BlocProvider.of<RefuelingsBloc>(context).add(DeleteRefueling(refueling));
-    Scaffold.of(context).showSnackBar(
-      DeleteRefuelingSnackBar(
-        context: context,
-        onUndo: () => BlocProvider.of<RefuelingsBloc>(context)
-            .add(AddRefueling(refueling)),
-      ),
-    );
-  }
-
-  Future<void> onTap(BuildContext context, Refueling refueling) async {
-    // final removedRefueling = await Navigator.of(context).push(
-    //   MaterialPageRoute(
-    //     builder: (_) => DetailsScreen(id: refueling.id),
-    //   ),
-    // );
-  }
-
-  @override
-  Widget build(BuildContext context) =>
-      BlocBuilder<FilteredRefuelingsBloc, FilteredRefuelingsState>(
-          builder: (context, state) {
-        if (state is FilteredRefuelingsLoading) {
-          return LoadingIndicator();
-        } else if (state is FilteredRefuelingsLoaded) {
-          final refuelings = state.filteredRefuelings;
-          return ListView.builder(
-              key: ValueKey('__refuelings_screen_scroller__'),
-              itemCount: refuelings.length,
-              itemBuilder: (context, index) {
-                final refueling = refuelings[index];
-                return Padding(
-                  padding: (index == refuelings.length - 1)
-                      ? EdgeInsets.fromLTRB(10, 5, 10, 100)
-                      : // add extra padding for last card
-                      EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  child: RefuelingCard(
-                      refueling: refueling,
-                      onDismissed: (direction) =>
-                          onDismissed(direction, context, refueling),
-                      onTap: () => onTap(context, refueling)),
-                );
-              });
-        } else {
-          return Container();
-        }
-      });
-}
-
 class _PanelButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Row(
@@ -87,7 +33,7 @@ class _PanelButtons extends StatelessWidget {
           },
         ),
       ),
-      ExtraActions(),
+      // ExtraActions(), // TODO: filter by car or something here?
       SizedBox(
         width: 10,
       ), // padding
@@ -126,21 +72,24 @@ class _CalendarDay extends StatelessWidget {
         Theme.of(context).primaryTextTheme.bodyText2;
 
   @override
-  Widget build(BuildContext context) => Container(
-    padding: EdgeInsets.all(5),
-    child: Column(
-      children: [
-        Text(
-          JsonIntl.of(context).get(name),
-          style: _textStyle(context),
-        ),
-        Text(
-          number.toString(),
-          style: _textStyle(context),
-        ),
-        if (refuelingToday)
-          _Circle(color: _textStyle(context).color, size: 5.0)
-      ],
+  Widget build(BuildContext context) => Flexible(
+    // marked as flexible to prevent renderflex in widget testing
+    child: Container(
+      padding: EdgeInsets.all(5),
+      child: Column(
+        children: [
+          Text(
+            JsonIntl.of(context).get(name),
+            style: _textStyle(context),
+          ),
+          Text(
+            number.toString(),
+            style: _textStyle(context),
+          ),
+          if (refuelingToday)
+            _Circle(color: _textStyle(context).color, size: 5.0)
+        ],
+      )
     )
   );
 }
@@ -185,19 +134,20 @@ class _CalendarView extends StatelessWidget {
     final dateDay = DateTime.now().day;
     final dayRange = List.generate(7, (index) => _checkRollover(index + dateDay - dayOfWeek));
 
-    return Container(
+    return ClipRect(
+      child: Container(
       padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: List.generate(
           7, // days in a week
-          (index) =>_CalendarDay(
+          (index) => _CalendarDay(
               name: weekdays[index],
               number: dayRange[index],
               refuelingToday: _refuelingToday(_getInterval(dateDay, dayRange[index])))
         ),
-      )
+      ))
     );
   }
 }
@@ -250,7 +200,7 @@ class RefuelingsPanelState extends State<RefuelingsPanel> {
         _CalendarView(refuelings: refuelings,),
         ...List.generate( // TODO: making this a column is really bad for performance
           refuelings.length,
-          (index) => RefuelingElement(
+          (index) => RefuelingCard(
             first: index == 0,
             last: index == (refuelings.length - 1),
             refueling: refuelings[index],
@@ -262,8 +212,8 @@ class RefuelingsPanelState extends State<RefuelingsPanel> {
   );
 }
 
-class RefuelingsScreen2 extends StatelessWidget {
-  const RefuelingsScreen2({Key key}) : super(key: key);
+class RefuelingsScreen extends StatelessWidget {
+  const RefuelingsScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => BlocBuilder<CarsBloc, CarsState>(

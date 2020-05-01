@@ -62,7 +62,7 @@ class HomeScreenState extends State<HomeScreen> with RouteAware {
 
   final Map<AppTab, Widget> views = {
     AppTab.todos: TodosScreen(),
-    AppTab.refuelings: RefuelingsScreen2(),
+    AppTab.refuelings: RefuelingsScreen(),
     AppTab.stats: StatisticsScreen(),
     AppTab.garage: GarageScreen(),
   };
