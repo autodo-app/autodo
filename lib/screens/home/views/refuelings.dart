@@ -15,13 +15,13 @@ import 'constants.dart';
 class _PanelButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
-    padding: EdgeInsets.all(10),
-    decoration: BoxDecoration(  
-      borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(25), topRight: Radius.circular(25)),
-      color: Theme.of(context).cardColor,
-    ),
-    child: Row(
+      padding: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(25), topRight: Radius.circular(25)),
+        color: Theme.of(context).cardColor,
+      ),
+      child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -46,8 +46,7 @@ class _PanelButtons extends StatelessWidget {
             width: 10,
           ), // padding
         ],
-      )
-  );
+      ));
 }
 
 class _Circle extends StatelessWidget {
@@ -186,7 +185,7 @@ class RefuelingsScreen extends StatelessWidget {
                 !(carsState is CarsLoaded)) {
               return Container();
             }
-            
+
             final refuelings = (refuelingsState as FilteredRefuelingsLoaded)
                 .filteredRefuelings;
             final cars = (carsState as CarsLoaded).cars;
@@ -205,29 +204,27 @@ class RefuelingsScreen extends StatelessWidget {
                         centerTitle: true,
                       ),
                     ),
-                    SliverList(  
-                      delegate: SliverChildBuilderDelegate(  
-                        (context, index) {
-                          if (index == 0) {
-                            return _PanelButtons();
-                          } else if (index == 1) {
-                            return _CalendarView(
-                              refuelings: refuelings,
-                            );
-                          }
-
-                          final adjustedIndex = index - 2;
-                          return RefuelingCard(
-                            first: adjustedIndex == 0,
-                            last: adjustedIndex == (refuelings.length - 1),
-                            refueling: refuelings[adjustedIndex],
-                            car: cars
-                                .firstWhere((c) => c.name == refuelings[adjustedIndex].carName),
-                            onDelete: () =>
-                                _deleteRefueling(context, refuelings[adjustedIndex]),
+                    SliverList(
+                      delegate: SliverChildBuilderDelegate((context, index) {
+                        if (index == 0) {
+                          return _PanelButtons();
+                        } else if (index == 1) {
+                          return _CalendarView(
+                            refuelings: refuelings,
                           );
                         }
-                      ),
+
+                        final adjustedIndex = index - 2;
+                        return RefuelingCard(
+                          first: adjustedIndex == 0,
+                          last: adjustedIndex == (refuelings.length - 1),
+                          refueling: refuelings[adjustedIndex],
+                          car: cars.firstWhere((c) =>
+                              c.name == refuelings[adjustedIndex].carName),
+                          onDelete: () => _deleteRefueling(
+                              context, refuelings[adjustedIndex]),
+                        );
+                      }),
                     ),
                   ],
                 ));
