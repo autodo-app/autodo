@@ -99,7 +99,9 @@ class _DrivingDistanceHistoryState extends State<DrivingDistanceHistory> {
       return LoadingIndicator();
     }
 
-    return Column(
+    return Container(  
+      color: Theme.of(context).cardColor,
+      child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -121,6 +123,7 @@ class _DrivingDistanceHistoryState extends State<DrivingDistanceHistory> {
             style: Theme.of(context).primaryTextTheme.bodyText2,
             textAlign: TextAlign.center,
           ),
-        ]);
+        ])
+      );
   }
 }

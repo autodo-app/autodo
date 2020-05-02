@@ -114,7 +114,9 @@ class _FuelMileageHistoryState extends State<FuelMileageHistory> {
       return LoadingIndicator();
     }
 
-    return Column(
+    return Container(  
+      color: Theme.of(context).cardColor,
+      child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -136,6 +138,7 @@ class _FuelMileageHistoryState extends State<FuelMileageHistory> {
             style: Theme.of(context).primaryTextTheme.bodyText2,
             textAlign: TextAlign.center,
           ),
-        ]);
+        ])
+      );
   }
 }
