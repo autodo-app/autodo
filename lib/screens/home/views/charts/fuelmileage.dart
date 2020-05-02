@@ -107,11 +107,17 @@ class _FuelMileageHistoryState extends State<FuelMileageHistory> {
   @override
   Widget build(BuildContext context) {
     if (error != null) {
-      return Text(error);
+      return Container(  
+        color: Theme.of(context).cardColor,
+        child: Text(error)
+      );
     }
 
     if (data == null) {
-      return LoadingIndicator();
+      return Container(  
+        color: Theme.of(context).cardColor,
+        child: LoadingIndicator()
+      );
     }
 
     return Container(  
