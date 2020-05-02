@@ -101,7 +101,7 @@ class _CalendarView extends StatelessWidget {
 
   bool _refuelingToday(DateTime date) {
     return refuelings
-      .any((r) => roundToDay(r.date).isAtSameMomentAs(roundToDay(date)));
+        .any((r) => roundToDay(r.date).isAtSameMomentAs(roundToDay(date)));
   }
 
   DateTime _getInterval(int dateDay, int dayRangeVal) =>
@@ -115,7 +115,8 @@ class _CalendarView extends StatelessWidget {
   int _checkRollover(int day) {
     final thisLastDay =
         DateTime(DateTime.now().year, DateTime.now().month + 1, 0).day;
-    final pastLastDay = DateTime(DateTime.now().year, DateTime.now().month, 0).day;
+    final pastLastDay =
+        DateTime(DateTime.now().year, DateTime.now().month, 0).day;
     if (day > thisLastDay) {
       return day - thisLastDay;
     } else if (day < 1) {
@@ -130,7 +131,8 @@ class _CalendarView extends StatelessWidget {
     final dateDay = DateTime.now().day;
     // Raw range is used to calculate the DateTime for each day when searching
     // for matching refuelings
-    final dayRangeRaw = List.generate(7, (index) => index + dateDay - dayOfWeek);
+    final dayRangeRaw =
+        List.generate(7, (index) => index + dateDay - dayOfWeek);
     // The display day range accounts for past and future month rollovers so the
     // dates are correct per the calendar
     final displayDayRange = dayRangeRaw.map(_checkRollover).toList();
@@ -144,9 +146,7 @@ class _CalendarView extends StatelessWidget {
               children: List.generate(
                   7, // days in a week
                   (index) => _CalendarDay(
-                      name: DateFormat
-                          .E()
-                          .format(DateTime.now()
+                      name: DateFormat.E().format(DateTime.now()
                           .subtract(Duration(days: dayOfWeek))
                           .add(Duration(days: index))),
                       number: displayDayRange[index],
