@@ -317,7 +317,9 @@ class _RefuelingAddEditScreenState extends State<RefuelingAddEditScreen> {
   List<bool> _carsToInitialState() => (widget.cars
           .map((c) => c.name)
           .contains(widget.refueling?.carName))
-      ? widget.cars.map<bool>((c) => c.name == widget.refueling?.carName).toList()
+      ? widget.cars
+          .map<bool>((c) => c.name == widget.refueling?.carName)
+          .toList()
       : List.generate(widget.cars.length, (idx) => (idx == 0) ? true : false);
 
   @override
