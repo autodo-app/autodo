@@ -14,7 +14,14 @@ import 'constants.dart';
 
 class _PanelButtons extends StatelessWidget {
   @override
-  Widget build(BuildContext context) => Row(
+  Widget build(BuildContext context) => Container(
+    padding: EdgeInsets.all(10),
+    decoration: BoxDecoration(  
+      borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(25), topRight: Radius.circular(25)),
+      color: Theme.of(context).cardColor,
+    ),
+    child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -39,7 +46,8 @@ class _PanelButtons extends StatelessWidget {
             width: 10,
           ), // padding
         ],
-      );
+      )
+  );
 }
 
 class _Circle extends StatelessWidget {
@@ -139,7 +147,8 @@ class _CalendarView extends StatelessWidget {
 
     return ClipRect(
         child: Container(
-            padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+            padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+            color: Theme.of(context).cardColor,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -156,21 +165,8 @@ class _CalendarView extends StatelessWidget {
   }
 }
 
-class RefuelingsPanel extends StatefulWidget {
-  const RefuelingsPanel({Key key, this.refuelings, this.cars})
-      : super(key: key);
-
-  final List<Refueling> refuelings;
-  final List<Car> cars;
-
-  @override
-  RefuelingsPanelState createState() => RefuelingsPanelState(refuelings);
-}
-
-class RefuelingsPanelState extends State<RefuelingsPanel> {
-  RefuelingsPanelState(this.refuelings);
-
-  List<Refueling> refuelings;
+class RefuelingsScreen extends StatelessWidget {
+  const RefuelingsScreen({Key key}) : super(key: key);
 
   void _deleteRefueling(BuildContext context, Refueling refueling) {
     BlocProvider.of<RefuelingsBloc>(context).add(DeleteRefueling(refueling));
@@ -179,51 +175,7 @@ class RefuelingsPanelState extends State<RefuelingsPanel> {
       onUndo: () =>
           BlocProvider.of<RefuelingsBloc>(context).add(AddRefueling(refueling)),
     ));
-    // removing the todo from our local list for a quicker response than waiting
-    // on the Bloc to rebuild
-    setState(() {
-      refuelings.remove(refueling);
-    });
   }
-
-  @override
-  Widget build(BuildContext context) => Container(
-      padding: EdgeInsets.fromLTRB(5, 15, 5, 15),
-      constraints: BoxConstraints(
-          // not sure why 24 works, assuming it's from some padding somewhere
-          minHeight: MediaQuery.of(context).size.height -
-              HEADER_HEIGHT -
-              kBottomNavigationBarHeight -
-              24),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(25), topRight: Radius.circular(25)),
-        color: Theme.of(context).cardColor,
-      ),
-      child: Column(
-        children: [
-          _PanelButtons(),
-          _CalendarView(
-            refuelings: refuelings,
-          ),
-          ...List.generate(
-              // TODO: making this a column is really bad for performance
-              refuelings.length,
-              (index) => RefuelingCard(
-                    first: index == 0,
-                    last: index == (refuelings.length - 1),
-                    refueling: refuelings[index],
-                    car: widget.cars
-                        .firstWhere((c) => c.name == refuelings[index].carName),
-                    onDelete: () =>
-                        _deleteRefueling(context, refuelings[index]),
-                  ))
-        ],
-      ));
-}
-
-class RefuelingsScreen extends StatelessWidget {
-  const RefuelingsScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => BlocBuilder<CarsBloc, CarsState>(
@@ -234,7 +186,10 @@ class RefuelingsScreen extends StatelessWidget {
                 !(carsState is CarsLoaded)) {
               return Container();
             }
-
+            
+            final refuelings = (refuelingsState as FilteredRefuelingsLoaded)
+                .filteredRefuelings;
+            final cars = (carsState as CarsLoaded).cars;
             return Container(
                 decoration: headerDecoration,
                 child: CustomScrollView(
@@ -250,12 +205,29 @@ class RefuelingsScreen extends StatelessWidget {
                         centerTitle: true,
                       ),
                     ),
-                    SliverToBoxAdapter(
-                      child: RefuelingsPanel(
-                          refuelings:
-                              (refuelingsState as FilteredRefuelingsLoaded)
-                                  .filteredRefuelings,
-                          cars: (carsState as CarsLoaded).cars),
+                    SliverList(  
+                      delegate: SliverChildBuilderDelegate(  
+                        (context, index) {
+                          if (index == 0) {
+                            return _PanelButtons();
+                          } else if (index == 1) {
+                            return _CalendarView(
+                              refuelings: refuelings,
+                            );
+                          }
+
+                          final adjustedIndex = index - 2;
+                          return RefuelingCard(
+                            first: adjustedIndex == 0,
+                            last: adjustedIndex == (refuelings.length - 1),
+                            refueling: refuelings[adjustedIndex],
+                            car: cars
+                                .firstWhere((c) => c.name == refuelings[adjustedIndex].carName),
+                            onDelete: () =>
+                                _deleteRefueling(context, refuelings[adjustedIndex]),
+                          );
+                        }
+                      ),
                     ),
                   ],
                 ));

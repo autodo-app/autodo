@@ -168,6 +168,7 @@ class RefuelingCard extends StatelessWidget {
   Widget build(BuildContext context) => Container(
         height: 110,
         padding: EdgeInsets.symmetric(horizontal: 10),
+        color: Theme.of(context).cardColor,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
