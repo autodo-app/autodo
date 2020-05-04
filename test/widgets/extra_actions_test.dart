@@ -50,8 +50,11 @@ void main() {
     testWidgets(
         'renders PopupMenuButton with mark all done if state is TodosLoaded with incomplete todos',
         (WidgetTester tester) async {
-      final todos = [Todo(name: 'test', completed: false)];
-      when(todosBloc.state).thenReturn(TodosLoaded(todos: todos));
+      final todosList = [
+        Todo(name: 'test', completed: false, dueState: TodoDueState.DUE_SOON)
+      ];
+      final todos = {TodoDueState.DUE_SOON: todosList};
+      when(todosBloc.state).thenReturn(TodosLoaded(todos: todosList));
       final actions = Key('actions');
       final toggleAll = Key('toggleAll');
       when(filteredTodosBloc.state)
@@ -85,12 +88,13 @@ void main() {
     testWidgets(
         'renders PopupMenuButton with mark all incomplete if state is TodosLoaded with complete todos',
         (WidgetTester tester) async {
-      final todos = [Todo(name: 'test', completed: true)];
-      when(todosBloc.state).thenReturn(TodosLoaded(todos: todos));
+      final todosList = [Todo(name: 'test', completed: true)];
+      final todosMap = {TodoDueState.DUE_SOON: todosList};
+      when(todosBloc.state).thenReturn(TodosLoaded(todos: todosList));
       final actions = Key('actions');
       final toggleAll = Key('toggleAll');
-      when(filteredTodosBloc.state)
-          .thenAnswer((_) => FilteredTodosLoaded(todos, VisibilityFilter.all));
+      when(filteredTodosBloc.state).thenAnswer(
+          (_) => FilteredTodosLoaded(todosMap, VisibilityFilter.all));
       await tester.pumpWidget(MultiBlocProvider(
         providers: [
           BlocProvider<TodosBloc>.value(value: todosBloc),
@@ -118,16 +122,17 @@ void main() {
     });
     testWidgets('tapping toggle all adds ToggleAll',
         (WidgetTester tester) async {
-      final todos = [
-        Todo(name: 'test', completed: false),
-        Todo(name: 'test2', completed: true),
+      final todosList = [
+        Todo(name: 'test', completed: false, dueState: TodoDueState.DUE_SOON),
+        Todo(name: 'test2', completed: true, dueState: TodoDueState.DUE_SOON),
       ];
-      when(todosBloc.state).thenReturn(TodosLoaded(todos: todos));
+      final todosMap = {TodoDueState.DUE_SOON: todosList};
+      when(todosBloc.state).thenReturn(TodosLoaded(todos: todosList));
       when(todosBloc.add(ToggleAll())).thenReturn(null);
       final actions = Key('actions');
       final toggleAll = Key('toggleAll');
-      when(filteredTodosBloc.state)
-          .thenAnswer((_) => FilteredTodosLoaded(todos, VisibilityFilter.all));
+      when(filteredTodosBloc.state).thenAnswer(
+          (_) => FilteredTodosLoaded(todosMap, VisibilityFilter.all));
       await tester.pumpWidget(MultiBlocProvider(
         providers: [
           BlocProvider<TodosBloc>.value(value: todosBloc),

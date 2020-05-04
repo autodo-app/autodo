@@ -5,6 +5,7 @@ import 'package:json_intl/json_intl.dart';
 
 import '../../generated/localization.dart';
 import '../../models/models.dart';
+import '../../theme.dart';
 
 class TabSelector extends StatelessWidget {
   const TabSelector(
@@ -25,27 +26,34 @@ class TabSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      currentIndex: AppTab.values.indexOf(activeTab),
-      onTap: (index) => onTabSelected(AppTab.values[index]),
-      items: [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.list, key: todosTabKey),
-          title: Text(JsonIntl.of(context).get(IntlKeys.todos)),
+    return Theme(
+        data: ThemeData(
+          canvasColor:
+              emphasizedGray, // currently no way to override this in the main theme
         ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.local_gas_station, key: refuelingsTabKey),
-          title: Text(JsonIntl.of(context).get(IntlKeys.refuelings)),
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.show_chart, key: statsTabKey),
-          title: Text(JsonIntl.of(context).get(IntlKeys.stats)),
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.directions_car, key: garageTabKey),
-          title: Text(JsonIntl.of(context).get(IntlKeys.garage)),
-        ),
-      ],
-    );
+        child: BottomNavigationBar(
+          currentIndex: AppTab.values.indexOf(activeTab),
+          onTap: (index) => onTabSelected(AppTab.values[index]),
+          unselectedItemColor: Theme.of(context).accentIconTheme.color,
+          selectedItemColor: Theme.of(context).primaryColor,
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.list, key: todosTabKey),
+              title: Text(JsonIntl.of(context).get(IntlKeys.todos)),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.local_gas_station, key: refuelingsTabKey),
+              title: Text(JsonIntl.of(context).get(IntlKeys.refuelings)),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.show_chart, key: statsTabKey),
+              title: Text(JsonIntl.of(context).get(IntlKeys.stats)),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.directions_car, key: garageTabKey),
+              title: Text(JsonIntl.of(context).get(IntlKeys.garage)),
+            ),
+          ],
+        ));
   }
 }

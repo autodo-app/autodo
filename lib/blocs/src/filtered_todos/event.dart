@@ -28,3 +28,15 @@ class UpdateTodos extends FilteredTodosEvent {
   @override
   String toString() => 'UpdateTodos { todos: $todos }';
 }
+
+class UpdateCars extends FilteredTodosEvent {
+  const UpdateCars(this.cars);
+
+  final List<Car> cars;
+
+  @override
+  List<Object> get props => cars;
+
+  @override
+  String toString() => '$runtimeType { cars: $cars }';
+}

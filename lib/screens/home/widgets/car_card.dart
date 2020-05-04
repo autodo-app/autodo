@@ -49,7 +49,7 @@ class CarCard extends StatelessWidget {
               child: Column(
                 children: <Widget>[
                   Hero(
-                    tag: car.name,
+                    tag: car.id,
                     child: FutureBuilder(
                         future: (BlocProvider.of<DatabaseBloc>(context).state
                                 as DbLoaded)

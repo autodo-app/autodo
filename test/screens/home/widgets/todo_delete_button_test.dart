@@ -1,12 +1,10 @@
 import 'package:autodo/blocs/blocs.dart';
-import 'package:autodo/generated/localization.dart';
 import 'package:autodo/models/models.dart';
 import 'package:autodo/screens/home/widgets/todo_delete_button.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
 
 class MockTodosBloc extends MockBloc<TodosEvent, TodosState>
     implements TodosBloc {}
@@ -45,6 +43,7 @@ void main() {
     });
     testWidgets('press', (WidgetTester tester) async {
       final todosKey = Key('todos');
+      var pressed = false;
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
@@ -54,7 +53,12 @@ void main() {
           ],
           child: MaterialApp(
             home: Scaffold(
-              body: TodoDeleteButton(key: todosKey, todo: Todo(name: 'test')),
+              body: TodoDeleteButton(
+                  key: todosKey,
+                  todo: Todo(name: 'test'),
+                  onDelete: () {
+                    pressed = true;
+                  }),
             ),
           ),
         ),
@@ -63,31 +67,7 @@ void main() {
       await tester.tap(find.byKey(todosKey));
       await tester.pump();
 
-      verify(todosBloc.add(DeleteTodo(Todo(name: 'test')))).called(1);
-    });
-    testWidgets('undo', (WidgetTester tester) async {
-      final todosKey = Key('todos');
-      await tester.pumpWidget(
-        MultiBlocProvider(
-          providers: [
-            BlocProvider<TodosBloc>.value(
-              value: todosBloc,
-            ),
-          ],
-          child: MaterialApp(
-            home: Scaffold(
-              body: TodoDeleteButton(key: todosKey, todo: Todo(name: 'test')),
-            ),
-          ),
-        ),
-      );
-      await tester.pumpAndSettle();
-      await tester.tap(find.byKey(todosKey));
-      await tester.pumpAndSettle();
-
-      await tester.tap(find.text(IntlKeys.undo));
-      await tester.pump();
-      verify(todosBloc.add(AddTodo(Todo(name: 'test')))).called(1);
+      expect(pressed, true);
     });
   });
 }

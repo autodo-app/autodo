@@ -9,7 +9,6 @@ import 'package:json_intl/json_intl.dart';
 
 import '../../blocs/blocs.dart';
 import '../../flavor.dart';
-import '../../generated/localization.dart';
 import '../../integ_test_keys.dart';
 import '../../models/models.dart';
 import '../../screens/welcome/views/barrel.dart';
@@ -62,6 +61,7 @@ class HomeScreenState extends State<HomeScreen> with RouteAware {
   HomeScreenState(this.todosTabKey, this.integrationTest);
 
   final Map<AppTab, Widget> views = {
+    // AppTab.todos: TodosScreen(),
     AppTab.todos: TodosScreen(),
     AppTab.refuelings: RefuelingsScreen(),
     AppTab.stats: StatisticsScreen(),
@@ -237,12 +237,6 @@ class HomeScreenState extends State<HomeScreen> with RouteAware {
 
   Widget buildScreen(BuildContext context) {
     return Scaffold(
-      appBar: (_tab == AppTab.garage)
-          ? null
-          : AppBar(
-              title: Text(JsonIntl.of(context).get(IntlKeys.appTitle)),
-              actions: [ExtraActions()],
-            ),
       body: views[_tab],
       floatingActionButton: actionButton,
       bottomNavigationBar: TabSelector(
@@ -274,7 +268,8 @@ class HomeScreenState extends State<HomeScreen> with RouteAware {
                 refuelingsBloc: BlocProvider.of<RefuelingsBloc>(context))),
         BlocProvider<FilteredTodosBloc>(
             create: (context) => FilteredTodosBloc(
-                todosBloc: BlocProvider.of<TodosBloc>(context))),
+                todosBloc: BlocProvider.of<TodosBloc>(context),
+                carsBloc: BlocProvider.of<CarsBloc>(context))),
       ],
       child: kFlavor.hasAds
           ? (kFlavor.hasPaid

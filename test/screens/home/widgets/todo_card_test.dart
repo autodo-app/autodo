@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:autodo/screens/home/widgets/todo_card.dart';
+import 'package:autodo/screens/home/widgets/barrel.dart';
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/models/models.dart';
 
@@ -19,10 +19,12 @@ void main() {
   group('TodosCard', () {
     TodosBloc todosBloc;
     FilteredTodosBloc filteredTodosBloc;
+    Car car;
 
     setUp(() {
       todosBloc = MockTodosBloc();
       filteredTodosBloc = MockFilteredTodosBloc();
+      car = Car(name: 'car');
     });
 
     testWidgets('renders', (WidgetTester tester) async {
@@ -39,13 +41,11 @@ void main() {
           ],
           child: MaterialApp(
             home: Scaffold(
-              body: TodoCard(
+              body: TodoListCard(
                 key: todosKey,
-                todo: Todo(name: 'test', completed: false),
-                onCheckboxChanged: (_) {},
-                onDismissed: (_) {},
-                onTap: () {},
-                emphasized: false,
+                todo: Todo(name: 'test', completed: false, carName: 'car'),
+                onDelete: () {},
+                car: car,
               ),
             ),
           ),
@@ -68,16 +68,15 @@ void main() {
           ],
           child: MaterialApp(
             home: Scaffold(
-              body: TodoCard(
+              body: TodoListCard(
                 key: todosKey,
                 todo: Todo(
                     name: 'test',
                     dueState: TodoDueState.PAST_DUE,
-                    completed: false),
-                onCheckboxChanged: (_) {},
-                onDismissed: (_) {},
-                onTap: () {},
-                emphasized: true,
+                    completed: false,
+                    carName: 'car'),
+                onDelete: () {},
+                car: car,
               ),
             ),
           ),
@@ -100,16 +99,15 @@ void main() {
           ],
           child: MaterialApp(
             home: Scaffold(
-              body: TodoCard(
+              body: TodoListCard(
                 key: todosKey,
                 todo: Todo(
                     name: 'test',
                     dueState: TodoDueState.DUE_SOON,
-                    completed: false),
-                onCheckboxChanged: (_) {},
-                onDismissed: (_) {},
-                onTap: () {},
-                emphasized: true,
+                    completed: false,
+                    carName: 'car'),
+                onDelete: () {},
+                car: car,
               ),
             ),
           ),
@@ -121,6 +119,9 @@ void main() {
     testWidgets('check', (WidgetTester tester) async {
       final todosKey = Key('todos');
       var checkboxChanged = false;
+      when(todosBloc.add(any)).thenAnswer((_) {
+        checkboxChanged = true;
+      });
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
@@ -133,29 +134,26 @@ void main() {
           ],
           child: MaterialApp(
             home: Scaffold(
-              body: TodoCard(
+              body: TodoListCard(
                 key: todosKey,
-                todo: Todo(name: 'test', completed: false),
-                onCheckboxChanged: (_) {
-                  checkboxChanged = true;
-                },
-                onDismissed: (_) {},
-                onTap: () {},
-                emphasized: false,
+                todo: Todo(name: 'test', completed: false, carName: 'car'),
+                onDelete: () {},
+                car: car,
               ),
             ),
           ),
         ),
       );
       await tester.pumpAndSettle();
-      await tester.tap(find.byType(Checkbox));
+      await tester.tap(find.byType(RoundedCheckbox));
       await tester.pump();
       expect(checkboxChanged, true);
     });
     testWidgets('dismiss', (WidgetTester tester) async {
       when(todosBloc.state).thenAnswer((_) => TodosLoaded(todos: []));
-      when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded(
-          [Todo(name: '', completed: false)], VisibilityFilter.all));
+      when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded({
+            null: [Todo(name: '', completed: false)]
+          }, VisibilityFilter.all));
       final todosKey = Key('todos');
       var dismissed = false;
       await tester.pumpWidget(
@@ -170,15 +168,13 @@ void main() {
           ],
           child: MaterialApp(
             home: Scaffold(
-              body: TodoCard(
+              body: TodoListCard(
                 key: todosKey,
-                todo: Todo(name: 'test', completed: false),
-                onCheckboxChanged: (_) {},
-                onDismissed: (_) {
+                todo: Todo(name: 'test', completed: false, carName: 'car'),
+                onDelete: () {
                   dismissed = true;
                 },
-                onTap: () {},
-                emphasized: false,
+                car: car,
               ),
             ),
           ),
@@ -188,43 +184,6 @@ void main() {
       await tester.fling(find.byKey(todosKey), Offset(-300, 0), 10000.0);
       await tester.pumpAndSettle();
       expect(dismissed, true);
-    });
-    testWidgets('tap', (WidgetTester tester) async {
-      when(todosBloc.state).thenAnswer((_) => TodosLoaded(todos: []));
-      when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded(
-          [Todo(name: '', completed: false)], VisibilityFilter.all));
-      final todosKey = Key('todos');
-      var tapped = false;
-      await tester.pumpWidget(
-        MultiBlocProvider(
-          providers: [
-            BlocProvider<TodosBloc>.value(
-              value: todosBloc,
-            ),
-            BlocProvider<FilteredTodosBloc>.value(
-              value: filteredTodosBloc,
-            ),
-          ],
-          child: MaterialApp(
-            home: Scaffold(
-              body: TodoCard(
-                key: todosKey,
-                todo: Todo(name: 'test', completed: false),
-                onCheckboxChanged: (_) {},
-                onDismissed: (_) {},
-                onTap: () {
-                  tapped = true;
-                },
-                emphasized: false,
-              ),
-            ),
-          ),
-        ),
-      );
-      await tester.pumpAndSettle();
-      await tester.tap(find.byKey(todosKey));
-      await tester.pump();
-      expect(tapped, true);
     });
   });
 }

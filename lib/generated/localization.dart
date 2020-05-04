@@ -1,5 +1,6 @@
 // This file is generated automatically, do not modify
 
+/// Internationalization constants
 class IntlKeys {
   /// strings.json: 'Action Name *'
   /// strings-fr.json: 'Nom de l\'action *'
@@ -121,6 +122,10 @@ class IntlKeys {
   /// strings-fr.json: 'La suppression de votre compte supprimera définitivement toutes les données associées à votre compte.\n\n Êtes-vous sur de vouloir continuer?'
   static const deleteAccountMessage = 'delete_account_message';
 
+  /// strings.json: 'Delete ToDo'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const deleteTodo = 'delete_todo';
+
   /// strings.json: 'Details'
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const details = 'details';
@@ -153,6 +158,10 @@ class IntlKeys {
   /// strings-fr.json: 'Dû à'
   static const dueAt = 'due_at';
 
+  /// strings.json: 'Due by'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const dueBy = 'due_by';
+
   /// strings.json: 'Due Date'
   /// strings-fr.json: 'Date d\'échéance'
   static const dueDate = 'due_date';
@@ -168,6 +177,10 @@ class IntlKeys {
   /// strings.json: 'Due Soon:'
   /// strings-fr.json: 'À venir bientôt :'
   static const dueSoon = 'due_soon';
+
+  /// strings.json: '{{ count }} ToDos Due Soon'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const dueSoonTodo = 'due_soon_todo';
 
   /// strings.json: 'Edit Car'
   /// strings-fr.json: *** NOT TRANSLATED ***
@@ -341,6 +354,10 @@ class IntlKeys {
   /// strings-fr.json: 'Date invalide'
   static const invalidDate = 'invalid_date';
 
+  /// strings.json: '{{ count }} Late ToDos'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const lateTodo = 'late_todo';
+
   /// strings.json: 'Learn to D.I.Y'
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const learnToDiy = 'learn_to_diy';
@@ -484,6 +501,10 @@ class IntlKeys {
   /// strings.json: 'Optional'
   /// strings-fr.json: 'Optionnel'
   static const optional = 'optional';
+
+  /// strings.json: 'or'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const or = 'or';
 
   /// strings.json: 'Password'
   /// strings-fr.json: 'Mot de passe'
@@ -657,6 +678,14 @@ class IntlKeys {
   /// strings-fr.json: 'Afficher les tâches terminées'
   static const showCompleted = 'show_completed';
 
+  /// strings.json: 'Show Less'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const showLess = 'show_less';
+
+  /// strings.json: 'Show More'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const showMore = 'show_more';
+
   /// strings.json: 'Sign In with Google'
   /// strings-fr.json: 'Connectez-vous avec Google'
   static const signInWithGoogle = 'sign_in_with_google';
@@ -716,6 +745,10 @@ class IntlKeys {
   /// strings.json: 'Tires'
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const tires = 'tires';
+
+  /// strings.json: 'To Be Implemented'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const toBeImplemented = 'to_be_implemented';
 
   /// strings.json: 'ToDo {{ name }} deleted.'
   /// strings-fr.json: 'Tâche {{name}} supprimé.'

@@ -3,6 +3,8 @@ import 'package:json_intl/json_intl.dart';
 
 import 'generated/localization.dart';
 
+// Colors
+
 /// Color palette generated from:
 /// https://www.colorbox.io/#steps=9#hue_start=137#hue_end=190#hue_curve=easeInOutQuad#sat_start=5#sat_end=54#sat_curve=easeOutCubic#sat_rate=130#lum_start=100#lum_end=18#lum_curve=linear#minor_steps_map=0
 const Map<int, Color> mainColors = {
@@ -39,13 +41,177 @@ const Map<int, Color> tagColors = {
 
 const MaterialColor tagPallette = MaterialColor(500, tagColors);
 
-const Color errorColor = Color(0xffcf6679);
+const Color alertRed = Color(0xffce4c4c);
+const Color warningOrange = Color(0xffdba05d);
+const Color dividerGray = Color(0xbecccccc);
+const Color emphasizedGray = Color(0xff777777);
+const Color buttonGray = Color(0xffaaaaaa);
+
+const Color textDark = Color(0xff444444);
+const Color textLight = Color(0xffeeeeee);
+
+final Color emphasizedButton = Colors.grey[500];
+
 final Color cardColor =
     Color.lerp(mainPallette.shade900, Colors.grey[800], 0.7);
 final Color bottomControllerColor =
     Color.lerp(mainPallette.shade900, Colors.grey[900], 0.7);
 
-const splashColor = Color(0xff454f51);
+final grad1 = LinearGradient(
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+    colors: [mainColors[300], mainColors[400]]);
+
+final grad2 = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [mainColors[700], mainColors[900]]);
+
+final BoxDecoration headerDecoration =
+    BoxDecoration(gradient: LinearGradient.lerp(grad1, grad2, 0.5));
+
+//------------------------------------------------------------------------------
+// Text Styles
+//------------------------------------------------------------------------------
+
+const TextStyle h1Dark = TextStyle(
+    color: textDark,
+    fontSize: 32,
+    fontWeight: FontWeight.w800,
+    fontFamily: 'Ubuntu',
+    letterSpacing: 0.2);
+const TextStyle h2Dark = TextStyle(
+    color: textDark,
+    fontSize: 28,
+    fontWeight: FontWeight.w600,
+    fontFamily: 'Ubuntu');
+const TextStyle h3Dark = TextStyle(
+    color: textDark,
+    fontSize: 24,
+    fontWeight: FontWeight.w600,
+    fontFamily: 'Ubuntu');
+const TextStyle h4Dark = TextStyle(
+    color: textDark,
+    fontSize: 24,
+    fontWeight: FontWeight.w300,
+    fontFamily: 'Ubuntu');
+const TextStyle h5Dark = TextStyle(
+    color: textDark,
+    fontSize: 20,
+    fontWeight: FontWeight.w300,
+    fontFamily: 'Ubuntu');
+const TextStyle h6Dark = TextStyle(
+  color: textDark,
+  fontSize: 24,
+  fontWeight: FontWeight.w500,
+  fontFamily: 'Ubuntu',
+  letterSpacing: 1.0,
+);
+const TextStyle body1Dark = TextStyle(
+    color: textDark,
+    fontSize: 18,
+    fontWeight: FontWeight.w300,
+    fontFamily: 'Ubuntu');
+const TextStyle body2Dark = TextStyle(
+    color: textDark,
+    fontSize: 14,
+    fontWeight: FontWeight.w300,
+    fontFamily: 'Ubuntu');
+const TextStyle s1Dark = TextStyle(
+  color: textDark,
+  fontSize: 20,
+  fontWeight: FontWeight.w400,
+  fontFamily: 'Ubuntu',
+);
+const TextStyle s2Dark = TextStyle(
+  color: textDark,
+  fontSize: 16,
+  fontWeight: FontWeight.w400,
+  fontFamily: 'Ubuntu',
+);
+const TextStyle buttonDark = TextStyle(
+  color: textDark,
+  fontSize: 14,
+  fontWeight: FontWeight.w500,
+  fontFamily: 'Ubuntu',
+  letterSpacing: 0.2,
+);
+final emphasizedButtonDark = TextStyle(
+    color: mainPallette.shade500,
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    fontFamily: 'Ubuntu',
+    letterSpacing: 0.2);
+
+const TextStyle h1Light = TextStyle(
+  color: textLight,
+  fontSize: 32,
+  fontWeight: FontWeight.w800,
+  fontFamily: 'Ubuntu',
+  letterSpacing: 0.2,
+);
+const TextStyle h2Light = TextStyle(
+    color: textLight,
+    fontSize: 28,
+    fontWeight: FontWeight.w600,
+    fontFamily: 'Ubuntu');
+const TextStyle h3Light = TextStyle(
+    color: textLight,
+    fontSize: 24,
+    fontWeight: FontWeight.w600,
+    fontFamily: 'Ubuntu');
+const TextStyle h4Light = TextStyle(
+    color: textLight,
+    fontSize: 24,
+    fontWeight: FontWeight.w400,
+    fontFamily: 'Ubuntu');
+const TextStyle h5Light = TextStyle(
+    color: textLight,
+    fontSize: 20,
+    fontWeight: FontWeight.w600,
+    fontFamily: 'Ubuntu');
+const TextStyle h6Light = TextStyle(
+  color: textLight,
+  fontSize: 24,
+  fontWeight: FontWeight.w500,
+  fontFamily: 'Ubuntu',
+  letterSpacing: 1.0,
+);
+const TextStyle body1Light = TextStyle(
+    color: textLight,
+    fontSize: 18,
+    fontWeight: FontWeight.w300,
+    fontFamily: 'Ubuntu');
+const TextStyle body2Light = TextStyle(
+    color: textLight,
+    fontSize: 14,
+    fontWeight: FontWeight.w300,
+    fontFamily: 'Ubuntu');
+const TextStyle s1Light = TextStyle(
+  color: textLight,
+  fontSize: 20,
+  fontWeight: FontWeight.w400,
+  fontFamily: 'Ubuntu',
+);
+const TextStyle s2Light = TextStyle(
+  color: textLight,
+  fontSize: 16,
+  fontWeight: FontWeight.w400,
+  fontFamily: 'Ubuntu',
+);
+const TextStyle buttonLight = TextStyle(
+  color: textLight,
+  fontSize: 14,
+  fontWeight: FontWeight.w500,
+  fontFamily: 'Ubuntu',
+  letterSpacing: 0.2,
+);
+final emphasizedButtonLight = TextStyle(
+    color: mainPallette.shade500,
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    fontFamily: 'Ubuntu',
+    letterSpacing: 0.2);
 
 Decoration scaffoldBackgroundGradient() {
   final blueGrey = LinearGradient(
@@ -64,22 +230,11 @@ Decoration scaffoldBackgroundGradient() {
     end: Alignment.bottomCenter,
     colors: [Colors.blueGrey[900], Colors.black87, Colors.black],
   );
-  BoxDecoration bgGradient() {
-    return BoxDecoration(
-      gradient: LinearGradient.lerp(blueGrey, darken, 0.7),
-    );
-  }
 
-  return bgGradient();
+  return BoxDecoration(
+    gradient: LinearGradient.lerp(blueGrey, darken, 0.7),
+  );
 }
-
-TextStyle logoStyle = TextStyle(
-  color: Colors.white.withAlpha(230),
-  fontSize: 24,
-  fontWeight: FontWeight.w800,
-  fontFamily: 'Ubuntu',
-  letterSpacing: 0.2,
-);
 
 enum InputRule { none, required, optional }
 
@@ -99,14 +254,9 @@ InputDecoration defaultInputDecoration(
             : null,
     suffixText: unit,
     prefix: button,
-    hintStyle: TextStyle(
-      color: Colors.white.withAlpha(230),
-      fontSize: 16,
-      fontWeight: FontWeight.w300,
-      fontFamily: 'IBM Plex Sans',
-    ),
+    hintStyle: body2Light,
     border: OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.teal),
+      borderSide: BorderSide(color: mainColors[500]),
     ),
     labelText: label,
     icon: icon == null
@@ -115,12 +265,7 @@ InputDecoration defaultInputDecoration(
             icon,
             color: Colors.grey[300],
           ),
-    labelStyle: TextStyle(
-      color: Colors.white.withAlpha(230),
-      fontFamily: 'IBM Plex Sans',
-      fontWeight: FontWeight.w300,
-      fontSize: 18,
-    ),
+    labelStyle: body1Light,
     contentPadding:
         EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
   );
@@ -140,64 +285,33 @@ TextStyle finePrint() {
 
 ThemeData createTheme() {
   final primaryText = TextTheme(
-    bodyText2: TextStyle(
-      color: Colors.white.withAlpha(230),
-      fontSize: 16,
-      fontWeight: FontWeight.w300,
-      fontFamily: 'IBM Plex Sans',
-    ),
-    button: TextStyle(
-      color: Colors.white.withAlpha(230),
-      fontSize: 14,
-      fontWeight: FontWeight.w500,
-      fontFamily: 'IBM Plex Sans',
-      letterSpacing: 0.2,
-    ),
-    headline4: TextStyle(
-      fontSize: 30,
-      fontFamily: 'Ubuntu',
-      fontWeight: FontWeight.w600,
-      color: Colors.white.withAlpha(230),
-    ),
-    headline6: TextStyle(
-      color: Colors.white.withAlpha(230),
-      fontSize: 24,
-      fontWeight: FontWeight.w500,
-      fontFamily: 'IBM Plex Sans',
-      letterSpacing: 1.0,
-    ),
-    subtitle2: TextStyle(
-      color: Colors.white.withAlpha(230),
-      fontSize: 18,
-      fontWeight: FontWeight.w400,
-      fontFamily: 'IBM Plex Sans',
-    ),
-  );
+      bodyText1: body1Light,
+      bodyText2: body2Light,
+      headline1: h1Light,
+      headline2: h2Light,
+      headline3: h3Light,
+      headline4: h4Light,
+      headline5: h5Light,
+      headline6: h6Light,
+      button: buttonLight,
+      subtitle1: s1Light,
+      subtitle2: s2Light,
+      overline: emphasizedButtonLight);
 
   // Like the primary text theme, but dark.
   final accentTextTheme = TextTheme(
-    button: TextStyle(
-      color: Colors.black.withAlpha(230),
-      fontSize: 18,
-      fontWeight: FontWeight.w500,
-      fontFamily: 'IBM Plex Sans',
-      letterSpacing: 0.2,
-    ),
-    headline4: TextStyle(
-      fontSize: 30,
-      fontFamily: 'Ubuntu',
-      fontWeight: FontWeight.w600,
-      color: Colors.black.withAlpha(230),
-    ),
-    bodyText1: TextStyle(
-      // This is used for the car tags
-      color: Colors.black.withAlpha(230),
-      fontSize: 14,
-      fontWeight: FontWeight.w500,
-      fontFamily: 'IBM Plex Sans',
-      letterSpacing: 0.2,
-    ),
-  );
+      bodyText1: body1Dark,
+      bodyText2: body2Dark,
+      headline1: h1Dark,
+      headline2: h2Dark,
+      headline3: h3Dark,
+      headline4: h4Dark,
+      headline5: h5Dark,
+      headline6: h6Dark,
+      button: buttonDark,
+      subtitle1: s1Dark,
+      subtitle2: s2Dark,
+      overline: emphasizedButtonDark);
 
   return ThemeData(
     brightness: Brightness.dark,
@@ -240,7 +354,7 @@ ThemeData createTheme() {
         error: mainPallette.shade500,
         secondary: mainPallette.shade500,
         secondaryVariant: mainPallette.shade500,
-        background: Colors.grey[600],
+        background: emphasizedButton,
       ),
     ),
     toggleButtonsTheme: ThemeData.fallback().toggleButtonsTheme, // same
@@ -252,9 +366,9 @@ ThemeData createTheme() {
     dialogBackgroundColor: cardColor,
     indicatorColor: mainPallette.shade700,
     hintColor: mainPallette.shade800,
-    errorColor: errorColor,
+    errorColor: alertRed,
     toggleableActiveColor: mainPallette.shade300,
-    fontFamily: 'IBM Plex Sans',
+    fontFamily: 'Ubuntu',
     textTheme: primaryText,
     primaryTextTheme: primaryText,
     accentTextTheme: accentTextTheme,
@@ -280,7 +394,6 @@ ThemeData createTheme() {
     // chipTheme: ,
     platform: TargetPlatform.android,
     materialTapTargetSize: ThemeData.fallback().materialTapTargetSize,
-    // applyElevationOverlayColor: true, // used with dark themes to add elevation status, check this
     applyElevationOverlayColor: false,
     // pageTransitionsTheme: ,
     appBarTheme: AppBarTheme(
@@ -291,7 +404,6 @@ ThemeData createTheme() {
       actionsIconTheme: ThemeData.dark().iconTheme,
       textTheme: primaryText,
     ),
-    // bottomAppBarTheme: ,
     // colorScheme: prefix0.ColorScheme.fromSwatch(primarySwatch: mainPallette, ), // this sets a lot of defaults, avoiding for now
     dialogTheme: DialogTheme(
         backgroundColor: cardColor,
