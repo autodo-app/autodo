@@ -82,21 +82,19 @@ class FilteredRefuelingsBloc
     }
   }
 
+  // TODO: clean this up, it's a mess
   Stream<FilteredRefuelingsState> _mapRefuelingsUpdatedToState(
     UpdateRefuelings event,
   ) async* {
-    print('filtered refuelings $state');
+    final updatedRefuelings = _sortRefuelings(event.refuelings);
     if (state is FilteredRefuelingsLoaded) {
       final curState = state as FilteredRefuelingsLoaded;
-      yield _shadeEfficiencyStats(
-          (refuelingsBloc.state as RefuelingsLoaded).refuelings, curState.cars);
-    } else if (carsBloc.state is RefuelingsLoaded) {
+      yield _shadeEfficiencyStats(updatedRefuelings, curState.cars);
+    } else if (refuelingsBloc.state is RefuelingsLoaded) {
       // this allows the initial state to still be created even if the carsBloc
       // and/or the refuelingsBloc are not loaded when this bloc is created
-      yield _shadeEfficiencyStats(
-          (refuelingsBloc.state as RefuelingsLoaded).refuelings,
-          (carsBloc.state as CarsLoaded).cars,
-          VisibilityFilter.all);
+      yield _shadeEfficiencyStats(updatedRefuelings,
+          (carsBloc.state as CarsLoaded).cars, VisibilityFilter.all);
     }
   }
 
@@ -131,7 +129,13 @@ class FilteredRefuelingsBloc
             ? shadedRefuelings.firstWhere((s) => s.id == r.id)
             : r)
         .toList();
-    return FilteredRefuelingsLoaded(updatedRefuelings, curFilter, cars);
+    final sortedRefuelings = _sortRefuelings(updatedRefuelings);
+    return FilteredRefuelingsLoaded(sortedRefuelings, curFilter, cars);
+  }
+
+  List<Refueling> _sortRefuelings(List<Refueling> refuelings) {
+    refuelings.sort((a, b) => a.date.compareTo(b.date));
+    return refuelings.reversed.toList();
   }
 
   Stream<FilteredRefuelingsState> _mapCarsUpdatedToState(

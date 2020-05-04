@@ -8,8 +8,8 @@ import '../../../generated/localization.dart';
 import '../../../models/models.dart';
 import '../../../units/units.dart';
 import '../../../widgets/widgets.dart';
+import 'delete_button.dart';
 import 'rounded_checkbox.dart';
-import 'todo_delete_button.dart';
 import 'todo_edit_button.dart';
 
 class TodoListCard extends StatelessWidget {
@@ -143,7 +143,7 @@ class TodoListCard extends StatelessWidget {
                         child: CarTag(car: car)),
                     Row(mainAxisSize: MainAxisSize.min, children: [
                       TodoEditButton(todo: todo),
-                      TodoDeleteButton(todo: todo, onDelete: onDelete),
+                      DeleteButton(onDelete: onDelete),
                     ])
                   ],
                 ),

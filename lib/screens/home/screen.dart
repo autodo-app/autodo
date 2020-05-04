@@ -61,7 +61,6 @@ class HomeScreenState extends State<HomeScreen> with RouteAware {
   HomeScreenState(this.todosTabKey, this.integrationTest);
 
   final Map<AppTab, Widget> views = {
-    // AppTab.todos: TodosScreen(),
     AppTab.todos: TodosScreen(),
     AppTab.refuelings: RefuelingsScreen(),
     AppTab.stats: StatisticsScreen(),

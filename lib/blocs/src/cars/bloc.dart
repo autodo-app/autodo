@@ -90,7 +90,7 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
       print('**   _mapLoadCarsToState');
       final cars = await repo
           .getCurrentCars()
-          .timeout(Duration(seconds: 2), onTimeout: () => []);
+          .timeout(Duration(seconds: 1), onTimeout: () => []);
       print('**   _mapLoadCarsToState cars: $cars');
       if (cars != null) {
         yield CarsLoaded(cars);

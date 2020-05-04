@@ -1,269 +1,186 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
-import 'package:json_intl/json_intl.dart';
+import 'dart:ui';
 
-import '../../../blocs/blocs.dart';
-import '../../../generated/localization.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
 import '../../../models/models.dart';
 import '../../../units/units.dart';
 import '../../../widgets/widgets.dart';
-import '../../add_edit/barrel.dart';
+import 'delete_button.dart';
+import 'refueling_edit_button.dart';
 
-class _RefuelingTitle extends StatelessWidget {
-  const _RefuelingTitle({Key key, @required this.refueling}) : super(key: key);
+class _TimelinePainter extends CustomPainter {
+  const _TimelinePainter(
+      {this.context, this.firstElement = false, this.lastElement = false});
 
-  final Refueling refueling;
-
-  TextSpan dateField(BuildContext context) => TextSpan(
-      text: // TODO: Can't concat verb and date
-          '${JsonIntl.of(context).get(IntlKeys.onLiteral)} ${DateFormat.yMMMd().format(refueling.date)} ',
-      style: Theme.of(context).primaryTextTheme.bodyText2);
+  final bool firstElement;
+  final bool lastElement;
+  final BuildContext context;
+  static const VERTICAL_SHIFT = -30.0;
 
   @override
-  Widget build(BuildContext context) {
-    final distance = Distance.of(context);
+  void paint(Canvas canvas, Size size) {
+    final lineStroke = Paint()
+      ..color = Colors.grey
+      ..strokeCap = StrokeCap.round
+      ..strokeWidth = 2
+      ..style = PaintingStyle.stroke;
+    if (firstElement) {
+      final offsetCenter = size.center(Offset(0.0, VERTICAL_SHIFT));
+      final offsetBottom = size.bottomCenter(Offset(0.0, 0.0));
+      final renderOffset = Offset(offsetBottom.dx, offsetBottom.dy);
+      canvas.drawLine(offsetCenter, renderOffset, lineStroke);
+    } else if (lastElement) {
+      final offsetTopCenter = size.topCenter(Offset(0.0, 0.0));
+      final offsetCenter = size.center(Offset(0.0, VERTICAL_SHIFT));
+      final renderOffset = Offset(offsetCenter.dx, offsetCenter.dy);
+      canvas.drawLine(offsetTopCenter, renderOffset, lineStroke);
+    } else {
+      final offsetTopCenter = size.topCenter(Offset(0.0, 0.0));
+      final offsetBottom = size.bottomCenter(Offset(0.0, 0.0));
+      canvas.drawLine(offsetTopCenter, offsetBottom, lineStroke);
+    }
 
-    return RichText(
-      text: TextSpan(
-        children: [
-          // Todo: Improve this translation
-          TextSpan(
-              text: '${JsonIntl.of(context).get(IntlKeys.refueling)} ',
-              style: Theme.of(context).primaryTextTheme.bodyText2),
-          dateField(context),
-          TextSpan(
-              text: '${JsonIntl.of(context).get(IntlKeys.at)} ',
-              style: Theme.of(context).primaryTextTheme.bodyText2),
-          TextSpan(
-            text: distance.format(refueling.mileage),
-            style: Theme.of(context).primaryTextTheme.subtitle2,
-            children: [TextSpan(text: ' ')],
-          ),
-          TextSpan(
-              text: distance.unitString(context),
-              style: Theme.of(context).primaryTextTheme.bodyText2)
-        ],
-      ),
-    );
+    if (firstElement) {
+      final circleFill = Paint()
+        ..color = Theme.of(context).primaryColor
+        ..style = PaintingStyle.fill;
+
+      canvas.drawCircle(
+          size.center(Offset(0.0, VERTICAL_SHIFT)), 6.0, circleFill);
+
+      final circleOutline = Paint()
+        ..color = Theme.of(context).primaryColor
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2;
+
+      canvas.drawCircle(
+          size.center(Offset(0.0, VERTICAL_SHIFT)), 10.0, circleOutline);
+    } else {
+      final circleFill = Paint()
+        ..color = Colors.grey
+        ..style = PaintingStyle.fill;
+
+      canvas.drawCircle(
+          size.center(Offset(0.0, VERTICAL_SHIFT)), 6.0, circleFill);
+    }
   }
-}
-
-class _RefuelingCost extends StatelessWidget {
-  const _RefuelingCost({Key key, @required this.refueling}) : super(key: key);
-
-  final Refueling refueling;
 
   @override
-  Widget build(BuildContext context) {
-    final currency = Currency.of(context);
-
-    return RichText(
-      text: TextSpan(
-        children: [
-          TextSpan(
-              // Todo: Improve this translation
-              text: '${JsonIntl.of(context).get(IntlKeys.totalCost)}: ',
-              style: Theme.of(context).primaryTextTheme.bodyText2),
-          TextSpan(
-              text: currency.format(refueling.cost),
-              style: Theme.of(context).primaryTextTheme.subtitle2),
-        ],
-      ),
-    );
-  }
+  bool shouldRepaint(_TimelinePainter oldPainter) => false;
 }
 
-class _RefuelingAmount extends StatelessWidget {
-  const _RefuelingAmount({Key key, @required this.refueling}) : super(key: key);
+class _Content extends StatelessWidget {
+  const _Content(this.refueling, this.car, this.onDelete);
 
   final Refueling refueling;
+  final Car car;
+  final VoidCallback onDelete;
 
   @override
-  Widget build(BuildContext context) {
-    final volume = Volume.of(context);
-
-    return RichText(
-      text: TextSpan(
-        children: [
-          TextSpan(
-              // Todo: Improve this translation
-              text: '${JsonIntl.of(context).get(IntlKeys.totalAmount)}: ',
-              style: Theme.of(context).primaryTextTheme.bodyText2),
-          TextSpan(
-            text: volume.format(refueling.amount),
-            style: Theme.of(context).primaryTextTheme.subtitle2,
-            children: [TextSpan(text: ' ')],
-          ),
-          TextSpan(
-            text: volume.unitString(context),
-            style: Theme.of(context).primaryTextTheme.bodyText2,
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class _RefuelingBody extends StatelessWidget {
-  const _RefuelingBody({Key key, @required this.refueling}) : super(key: key);
-
-  final Refueling refueling;
-
-  @override
-  Widget build(BuildContext context) => Container(
-      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          _RefuelingCost(refueling: refueling),
-          _RefuelingAmount(refueling: refueling),
-        ],
-      ));
-}
-
-class _RefuelingTags extends StatelessWidget {
-  const _RefuelingTags({Key key, @required this.refueling}) : super(key: key);
-
-  final Refueling refueling;
-
-  @override
-  Widget build(BuildContext context) =>
-      CarTag(text: refueling.carName, color: refueling.carColor);
-}
-
-class _RefuelingEditButton extends StatelessWidget {
-  const _RefuelingEditButton({Key key, @required this.refueling})
-      : super(key: key);
-
-  final Refueling refueling;
-
-  @override
-  Widget build(BuildContext context) => ButtonTheme.fromButtonThemeData(
-        data: ButtonThemeData(
-          minWidth: 0,
-        ),
-        child: FlatButton(
-          key: ValueKey(
-              '__refueling_card_edit_${refueling.carName}_${refueling.mileage}'),
-          child: const Icon(Icons.edit),
-          onPressed: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => RefuelingAddEditScreen(
-                // this below is an assumption, not the safest option
-                cars: (BlocProvider.of<CarsBloc>(context).state as CarsLoaded)
-                    .cars,
-                refueling: refueling,
-                isEditing: true,
-                onSave: (m, d, a, c, n) {
-                  BlocProvider.of<RefuelingsBloc>(context)
-                      .add(UpdateRefueling(refueling.copyWith(
-                    mileage:
-                        Distance.of(context, listen: false).unitToInternal(m),
-                    date: d,
-                    amount: Volume.of(context, listen: false).unitToInternal(a),
-                    cost: Currency.of(context, listen: false).unitToInternal(c),
-                    carName: n,
-                  )));
-                },
+  Widget build(BuildContext context) => Expanded(
+        child: Container(
+          padding: EdgeInsets.all(5),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(DateFormat.yMd().format(refueling.date),
+                      style: Theme.of(context).primaryTextTheme.headline5),
+                  Text(
+                      '${Distance.of(context).format(refueling.mileage)} ${Distance.of(context).unitString(context, short: true)}',
+                      style: Theme.of(context)
+                          .primaryTextTheme
+                          .subtitle2
+                          .copyWith(color: Colors.grey))
+                ],
               ),
-            ),
-          ),
-        ),
-      );
-}
-
-class _RefuelingDeleteButton extends StatelessWidget {
-  const _RefuelingDeleteButton({Key key, @required this.refueling})
-      : super(key: key);
-
-  final Refueling refueling;
-
-  @override
-  Widget build(BuildContext context) => ButtonTheme.fromButtonThemeData(
-        data: ButtonThemeData(
-          minWidth: 0,
-        ),
-        child: FlatButton(
-          key: ValueKey(
-              '__refueling_delete_button_${refueling.carName}_${refueling.mileage}'),
-          child: const Icon(Icons.delete),
-          onPressed: () {
-            BlocProvider.of<RefuelingsBloc>(context)
-                .add(DeleteRefueling(refueling));
-            Scaffold.of(context).showSnackBar(
-              DeleteRefuelingSnackBar(
-                context: context,
-                onUndo: () => BlocProvider.of<RefuelingsBloc>(context)
-                    .add(AddRefueling(refueling)),
+              Container(
+                padding: EdgeInsets.only(top: 5.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      Currency.of(context).format(refueling.cost),
+                      style: Theme.of(context).primaryTextTheme.subtitle2,
+                    ),
+                    // bit of a hack since vertical divider was being a pain
+                    Text(
+                      '  |  ',
+                      style: Theme.of(context).primaryTextTheme.bodyText2,
+                    ),
+                    RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: Volume.of(context).format(refueling.amount),
+                            style: Theme.of(context).primaryTextTheme.subtitle2,
+                            children: [TextSpan(text: ' ')],
+                          ),
+                          TextSpan(
+                            text: Volume.of(context)
+                                .unitString(context, short: true),
+                            style: Theme.of(context).primaryTextTheme.bodyText2,
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            );
-          },
-        ),
-      );
-}
-
-class _RefuelingFooter extends StatelessWidget {
-  const _RefuelingFooter({Key key, @required this.refueling}) : super(key: key);
-
-  final Refueling refueling;
-
-  @override
-  Widget build(BuildContext context) => Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          _RefuelingTags(refueling: refueling),
-          Row(
-            children: <Widget>[
-              _RefuelingEditButton(refueling: refueling),
-              _RefuelingDeleteButton(refueling: refueling),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CarTag(car: car),
+                  Row(
+                    children: [
+                      RefuelingEditButton(refueling: refueling),
+                      DeleteButton(onDelete: onDelete),
+                    ],
+                  ),
+                ],
+              ),
             ],
           ),
-        ],
+        ),
       );
 }
 
 class RefuelingCard extends StatelessWidget {
   const RefuelingCard(
       {Key key,
+      this.first,
+      this.last,
       @required this.refueling,
-      @required this.onDismissed,
-      @required this.onTap})
+      @required this.car,
+      @required this.onDelete})
       : super(key: key);
 
+  final bool first;
+  final bool last;
   final Refueling refueling;
-
-  final DismissDirectionCallback onDismissed;
-
-  final GestureTapCallback onTap;
+  final Car car;
+  final VoidCallback onDelete;
 
   @override
-  Widget build(BuildContext context) => InkWell(
-      onTap: onTap,
-      child: Dismissible(
-          key: Key('__dismissible__'),
-          onDismissed: onDismissed,
-          child: Card(
-            elevation: 4,
-            color: Theme.of(context).cardColor,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            child: Column(
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.all(10),
-                      alignment: Alignment.centerLeft,
-                      child: _RefuelingTitle(refueling: refueling),
-                    ),
-                    Divider(),
-                  ],
-                ),
-                _RefuelingBody(refueling: refueling),
-                _RefuelingFooter(refueling: refueling),
-              ],
+  Widget build(BuildContext context) => Container(
+        height: 110,
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        color: Theme.of(context).cardColor,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              width: 40,
+              child: CustomPaint(
+                painter: _TimelinePainter(
+                    firstElement: first, lastElement: last, context: context),
+              ),
             ),
-          )));
+            _Content(refueling, car, onDelete),
+          ],
+        ),
+      );
 }

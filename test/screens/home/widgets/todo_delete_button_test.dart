@@ -1,9 +1,7 @@
 import 'package:autodo/blocs/blocs.dart';
-import 'package:autodo/models/models.dart';
-import 'package:autodo/screens/home/widgets/todo_delete_button.dart';
+import 'package:autodo/screens/home/widgets/delete_button.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class MockTodosBloc extends MockBloc<TodosEvent, TodosState>
@@ -14,27 +12,13 @@ class MockFilteredTodosBloc
     implements FilteredTodosBloc {}
 
 void main() {
-  group('TodosCard', () {
-    TodosBloc todosBloc;
-
-    setUp(() {
-      todosBloc = MockTodosBloc();
-      MockFilteredTodosBloc();
-    });
-
+  group('DeleteButton', () {
     testWidgets('renders', (WidgetTester tester) async {
       final todosKey = Key('todos');
       await tester.pumpWidget(
-        MultiBlocProvider(
-          providers: [
-            BlocProvider<TodosBloc>.value(
-              value: todosBloc,
-            ),
-          ],
-          child: MaterialApp(
-            home: Scaffold(
-              body: TodoDeleteButton(key: todosKey, todo: Todo(name: 'test')),
-            ),
+        MaterialApp(
+          home: Scaffold(
+            body: DeleteButton(key: todosKey, onDelete: () {}),
           ),
         ),
       );
@@ -45,21 +29,13 @@ void main() {
       final todosKey = Key('todos');
       var pressed = false;
       await tester.pumpWidget(
-        MultiBlocProvider(
-          providers: [
-            BlocProvider<TodosBloc>.value(
-              value: todosBloc,
-            ),
-          ],
-          child: MaterialApp(
-            home: Scaffold(
-              body: TodoDeleteButton(
-                  key: todosKey,
-                  todo: Todo(name: 'test'),
-                  onDelete: () {
-                    pressed = true;
-                  }),
-            ),
+        MaterialApp(
+          home: Scaffold(
+            body: DeleteButton(
+                key: todosKey,
+                onDelete: () {
+                  pressed = true;
+                }),
           ),
         ),
       );
