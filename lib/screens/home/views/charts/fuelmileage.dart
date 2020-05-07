@@ -108,45 +108,44 @@ class _FuelMileageHistoryState extends State<FuelMileageHistory> {
   @override
   Widget build(BuildContext context) {
     if (error != null) {
-      return Container(  
-        color: Theme.of(context).cardColor,
-        height: _height,
-        child: Text(error)
-      );
+      return Container(
+          color: Theme.of(context).cardColor,
+          height: _height,
+          child: Text(error));
     }
 
     if (data == null) {
-      return Container(  
+      return Container(
         color: Theme.of(context).cardColor,
         height: _height,
       );
     }
 
-    return Container(  
-      color: Theme.of(context).cardColor,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Padding(
-            padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
-          ),
-          Text(
-              JsonIntl.of(context).get(IntlKeys.fuelEfficiencyHistory, {
-                'unit': Efficiency.of(context).unitString(context, short: true),
-              }),
-              style: Theme.of(context).primaryTextTheme.subtitle2),
-          Container(
-            height: _height,
-            padding: EdgeInsets.all(15),
-            child: FuelMileageChart(data),
-          ),
-          Text(
-            JsonIntl.of(context).get(IntlKeys.refuelingDate),
-            style: Theme.of(context).primaryTextTheme.bodyText2,
-            textAlign: TextAlign.center,
-          ),
-        ])
-      );
+    return Container(
+        color: Theme.of(context).cardColor,
+        child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Padding(
+                padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+              ),
+              Text(
+                  JsonIntl.of(context).get(IntlKeys.fuelEfficiencyHistory, {
+                    'unit':
+                        Efficiency.of(context).unitString(context, short: true),
+                  }),
+                  style: Theme.of(context).primaryTextTheme.subtitle2),
+              Container(
+                height: _height,
+                padding: EdgeInsets.all(15),
+                child: FuelMileageChart(data),
+              ),
+              Text(
+                JsonIntl.of(context).get(IntlKeys.refuelingDate),
+                style: Theme.of(context).primaryTextTheme.bodyText2,
+                textAlign: TextAlign.center,
+              ),
+            ]));
   }
 }
