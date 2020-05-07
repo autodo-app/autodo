@@ -7,7 +7,6 @@ import '../../../../blocs/blocs.dart';
 import '../../../../generated/localization.dart';
 import '../../../../models/models.dart';
 import '../../../../units/units.dart';
-import '../../../../widgets/widgets.dart';
 import 'shared.dart';
 
 class DrivingDistanceChart extends StatelessWidget {
