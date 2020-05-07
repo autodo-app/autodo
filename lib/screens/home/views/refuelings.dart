@@ -224,9 +224,11 @@ class RefuelingsScreen extends StatelessWidget {
                           onDelete: () => _deleteRefueling(
                               context, refuelings[adjustedIndex]),
                         );
-                      }),
+                      },
+                      childCount: refuelings.length + 2,
                     ),
-                  ],
-                ));
+                  ),
+                ],
+              ));
           }));
 }
