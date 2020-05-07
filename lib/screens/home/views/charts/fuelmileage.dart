@@ -87,6 +87,8 @@ class _FuelMileageHistoryState extends State<FuelMileageHistory> {
   List<Series> data;
   String error;
 
+  static const _height = 300.0;
+
   @override
   void didChangeDependencies() {
     final refuelingsBloc = BlocProvider.of<RefuelingsBloc>(context);
@@ -109,6 +111,7 @@ class _FuelMileageHistoryState extends State<FuelMileageHistory> {
     if (error != null) {
       return Container(  
         color: Theme.of(context).cardColor,
+        height: _height,
         child: Text(error)
       );
     }
@@ -116,7 +119,7 @@ class _FuelMileageHistoryState extends State<FuelMileageHistory> {
     if (data == null) {
       return Container(  
         color: Theme.of(context).cardColor,
-        child: LoadingIndicator()
+        height: _height,
       );
     }
 
@@ -135,7 +138,7 @@ class _FuelMileageHistoryState extends State<FuelMileageHistory> {
               }),
               style: Theme.of(context).primaryTextTheme.subtitle2),
           Container(
-            height: 300,
+            height: _height,
             padding: EdgeInsets.all(15),
             child: FuelMileageChart(data),
           ),
