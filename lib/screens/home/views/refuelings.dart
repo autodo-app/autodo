@@ -205,30 +205,31 @@ class RefuelingsScreen extends StatelessWidget {
                       ),
                     ),
                     SliverList(
-                      delegate: SliverChildBuilderDelegate((context, index) {
-                        if (index == 0) {
-                          return _PanelButtons();
-                        } else if (index == 1) {
-                          return _CalendarView(
-                            refuelings: refuelings,
-                          );
-                        }
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          if (index == 0) {
+                            return _PanelButtons();
+                          } else if (index == 1) {
+                            return _CalendarView(
+                              refuelings: refuelings,
+                            );
+                          }
 
-                        final adjustedIndex = index - 2;
-                        return RefuelingCard(
-                          first: adjustedIndex == 0,
-                          last: adjustedIndex == (refuelings.length - 1),
-                          refueling: refuelings[adjustedIndex],
-                          car: cars.firstWhere((c) =>
-                              c.name == refuelings[adjustedIndex].carName),
-                          onDelete: () => _deleteRefueling(
-                              context, refuelings[adjustedIndex]),
-                        );
-                      },
-                      childCount: refuelings.length + 2,
+                          final adjustedIndex = index - 2;
+                          return RefuelingCard(
+                            first: adjustedIndex == 0,
+                            last: adjustedIndex == (refuelings.length - 1),
+                            refueling: refuelings[adjustedIndex],
+                            car: cars.firstWhere((c) =>
+                                c.name == refuelings[adjustedIndex].carName),
+                            onDelete: () => _deleteRefueling(
+                                context, refuelings[adjustedIndex]),
+                          );
+                        },
+                        childCount: refuelings.length + 2,
+                      ),
                     ),
-                  ),
-                ],
-              ));
+                  ],
+                ));
           }));
 }
