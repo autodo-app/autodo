@@ -48,8 +48,11 @@ class TodoListHeader extends StatelessWidget {
 }
 
 class TodoListSection extends StatefulWidget {
-  const TodoListSection(
-      {this.dueState, this.todos, this.cars, this.deleteTodo});
+  const TodoListSection({
+      this.dueState, 
+      this.todos, 
+      this.cars, 
+      this.deleteTodo});
 
   final TodoDueState dueState;
   final List<Todo> todos;
@@ -88,9 +91,12 @@ class TodoListSectionState extends State<TodoListSection> {
               return Align(
                 alignment: Alignment.centerLeft,
                 child: FlatButton(
-                  child: Text(JsonIntl.of(context).get(IntlKeys.showMore),
+                  materialTapTargetSize: MaterialTapTargetSize.padded,
+                  child: Text(
+                    JsonIntl.of(context).get(IntlKeys.showMore),
                       style: Theme.of(context).primaryTextTheme.overline),
                   onPressed: () {
+                    print('here');
                     setState(() {
                       expanded = true;
                     });
