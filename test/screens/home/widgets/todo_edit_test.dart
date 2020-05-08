@@ -20,7 +20,7 @@ void main() {
   setUp(() async {
     carsBloc = MockCarsBloc();
     pref = JustCachePrefService();
-    await pref.setDefaultValues({  
+    await pref.setDefaultValues({
       'length_unit': DistanceUnit.imperial.index,
       'volume_unit': VolumeUnit.us.index,
       'currency': 'USD',
@@ -42,25 +42,24 @@ void main() {
     });
     testWidgets('press', (WidgetTester tester) async {
       final todosKey = Key('todos');
-      await tester.pumpWidget(
-        ChangeNotifierProvider<BasePrefService>.value(
-          value: pref,
-          child: MultiBlocProvider(  
-            providers: [
-              BlocProvider<CarsBloc>.value(value: carsBloc),
-            ],
-            child: MaterialApp(
-              home: Scaffold(
-                body: TodoEditButton(key: todosKey, todo: Todo()),
-              ),
+      await tester.pumpWidget(ChangeNotifierProvider<BasePrefService>.value(
+        value: pref,
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider<CarsBloc>.value(value: carsBloc),
+          ],
+          child: MaterialApp(
+            home: Scaffold(
+              body: TodoEditButton(key: todosKey, todo: Todo()),
             ),
           ),
-        )
-      );
+        ),
+      ));
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(todosKey));
       await tester.pump();
-      await tester.pump(); // pump twice to get the screen to show, it won't settle though
+      await tester
+          .pump(); // pump twice to get the screen to show, it won't settle though
 
       expect(find.byType(TodoAddEditScreen), findsOneWidget);
     });

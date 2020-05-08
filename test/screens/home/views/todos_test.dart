@@ -257,7 +257,8 @@ void main() {
             TodoDueState.DUE_SOON: [dueSoon],
             TodoDueState.COMPLETE: [complete],
           }, VisibilityFilter.all));
-      when(todosBloc.state).thenReturn(TodosLoaded(todos: [upcoming, pastDue, dueSoon, complete]));
+      when(todosBloc.state).thenReturn(
+          TodosLoaded(todos: [upcoming, pastDue, dueSoon, complete]));
       when(carsBloc.state).thenReturn(CarsLoaded([Car(name: 'car')]));
       final todosKey = Key('todos');
       await tester.pumpWidget(
@@ -312,7 +313,8 @@ void main() {
             TodoDueState.DUE_SOON: [dueSoon],
             TodoDueState.COMPLETE: [complete],
           }, VisibilityFilter.all));
-      when(todosBloc.state).thenReturn(TodosLoaded(todos: [upcoming, dueSoon, complete]));
+      when(todosBloc.state)
+          .thenReturn(TodosLoaded(todos: [upcoming, dueSoon, complete]));
       when(carsBloc.state).thenReturn(CarsLoaded([Car(name: 'car')]));
       final todosKey = Key('todos');
       await tester.pumpWidget(
@@ -338,7 +340,8 @@ void main() {
       );
       await tester.pumpAndSettle();
       expect(find.byType(TodoListCard), findsNWidgets(3));
-      expect(find.byIcon(Icons.notifications), findsOneWidget); // alert for due soon
+      expect(find.byIcon(Icons.notifications),
+          findsOneWidget); // alert for due soon
     });
     testWidgets('expanded toggle', (WidgetTester tester) async {
       final todo = Todo(
@@ -372,12 +375,8 @@ void main() {
               home: Scaffold(
                 body: TodosScreen(key: todosKey),
               ),
-              localizationsDelegates: [
-                const JsonIntlDelegate()
-              ],
-              supportedLocales: [
-                const Locale('en')
-              ],
+              localizationsDelegates: [const JsonIntlDelegate()],
+              supportedLocales: [const Locale('en')],
             ),
           ),
         ),
@@ -392,7 +391,8 @@ void main() {
       await tester.pumpAndSettle();
       // There's a bug with taps getting sent through to FlatButtons so we'll
       // manually call the onPressed function to make things happen
-      FlatButton button = find.widgetWithText(FlatButton, 'Show More').evaluate().first.widget;
+      FlatButton button =
+          find.widgetWithText(FlatButton, 'Show More').evaluate().first.widget;
       button.onPressed();
       await tester.pumpAndSettle();
       expect(find.byType(TodoListCard), findsNWidgets(5));
@@ -401,7 +401,8 @@ void main() {
       await tester.ensureVisible(find.widgetWithText(FlatButton, 'Show Less'));
       await tester.tap(find.text('Show Less'));
       await tester.pumpAndSettle();
-      button = find.widgetWithText(FlatButton, 'Show Less').evaluate().first.widget;
+      button =
+          find.widgetWithText(FlatButton, 'Show Less').evaluate().first.widget;
       button.onPressed();
       await tester.pumpAndSettle();
       expect(find.byType(TodoListCard), findsNWidgets(4));

@@ -23,7 +23,7 @@ void main() {
 
   setUp(() async {
     pref = JustCachePrefService();
-    await pref.setDefaultValues({  
+    await pref.setDefaultValues({
       'length_unit': DistanceUnit.imperial.index,
       'volume_unit': VolumeUnit.us.index,
       'currency': 'USD',
