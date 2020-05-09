@@ -92,7 +92,6 @@ class TodoListSectionState extends State<TodoListSection> {
                   child: Text(JsonIntl.of(context).get(IntlKeys.showMore),
                       style: Theme.of(context).primaryTextTheme.overline),
                   onPressed: () {
-                    print('here');
                     setState(() {
                       expanded = true;
                     });
