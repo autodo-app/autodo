@@ -7,7 +7,6 @@ import '../../../../blocs/blocs.dart';
 import '../../../../generated/localization.dart';
 import '../../../../models/models.dart';
 import '../../../../units/units.dart';
-import '../../../../widgets/widgets.dart';
 import 'shared.dart';
 
 class FuelMileageChart extends StatelessWidget {
@@ -87,6 +86,8 @@ class _FuelMileageHistoryState extends State<FuelMileageHistory> {
   List<Series> data;
   String error;
 
+  static const _height = 300.0;
+
   @override
   void didChangeDependencies() {
     final refuelingsBloc = BlocProvider.of<RefuelingsBloc>(context);
@@ -107,35 +108,44 @@ class _FuelMileageHistoryState extends State<FuelMileageHistory> {
   @override
   Widget build(BuildContext context) {
     if (error != null) {
-      return Text(error);
+      return Container(
+          color: Theme.of(context).cardColor,
+          height: _height,
+          child: Text(error));
     }
 
     if (data == null) {
-      return LoadingIndicator();
+      return Container(
+        color: Theme.of(context).cardColor,
+        height: _height,
+      );
     }
 
-    return Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Padding(
-            padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
-          ),
-          Text(
-              JsonIntl.of(context).get(IntlKeys.fuelEfficiencyHistory, {
-                'unit': Efficiency.of(context).unitString(context, short: true),
-              }),
-              style: Theme.of(context).primaryTextTheme.subtitle2),
-          Container(
-            height: 300,
-            padding: EdgeInsets.all(15),
-            child: FuelMileageChart(data),
-          ),
-          Text(
-            JsonIntl.of(context).get(IntlKeys.refuelingDate),
-            style: Theme.of(context).primaryTextTheme.bodyText2,
-            textAlign: TextAlign.center,
-          ),
-        ]);
+    return Container(
+        color: Theme.of(context).cardColor,
+        child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Padding(
+                padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+              ),
+              Text(
+                  JsonIntl.of(context).get(IntlKeys.fuelEfficiencyHistory, {
+                    'unit':
+                        Efficiency.of(context).unitString(context, short: true),
+                  }),
+                  style: Theme.of(context).primaryTextTheme.subtitle2),
+              Container(
+                height: _height,
+                padding: EdgeInsets.all(15),
+                child: FuelMileageChart(data),
+              ),
+              Text(
+                JsonIntl.of(context).get(IntlKeys.refuelingDate),
+                style: Theme.of(context).primaryTextTheme.bodyText2,
+                textAlign: TextAlign.center,
+              ),
+            ]));
   }
 }

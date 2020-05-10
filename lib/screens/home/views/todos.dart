@@ -88,6 +88,7 @@ class TodoListSectionState extends State<TodoListSection> {
               return Align(
                 alignment: Alignment.centerLeft,
                 child: FlatButton(
+                  materialTapTargetSize: MaterialTapTargetSize.padded,
                   child: Text(JsonIntl.of(context).get(IntlKeys.showMore),
                       style: Theme.of(context).primaryTextTheme.overline),
                   onPressed: () {

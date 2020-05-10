@@ -5,7 +5,6 @@ import 'package:autodo/models/models.dart';
 import 'package:autodo/screens/home/views/charts/barrel.dart';
 import 'package:autodo/screens/home/views/stats.dart';
 import 'package:autodo/units/units.dart';
-import 'package:autodo/widgets/widgets.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,31 +32,6 @@ void main() {
   });
 
   group('StatsScreen', () {
-    testWidgets('loading', (WidgetTester tester) async {
-      final carsBloc = MockCarsBloc();
-      final refuelingsBloc = MockRefuelingsBloc();
-
-      await tester.pumpWidget(
-        MultiBlocProvider(
-          providers: [
-            BlocProvider<CarsBloc>.value(
-              value: carsBloc,
-            ),
-            BlocProvider<RefuelingsBloc>.value(
-              value: refuelingsBloc,
-            ),
-          ],
-          child: MaterialApp(
-            home: Scaffold(
-              body: StatisticsScreen(),
-            ),
-          ),
-        ),
-      );
-      await tester.pump();
-      expect(find.byType(LoadingIndicator), findsNWidgets(2));
-    });
-
     testWidgets('no data', (WidgetTester tester) async {
       final carsBloc = MockCarsBloc();
       final refuelingsBloc = MockRefuelingsBloc();
