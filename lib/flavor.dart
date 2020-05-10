@@ -20,7 +20,8 @@ const kFlavor = kReleaseMode
         firebaseApiKey: Keys.firebaseTestKey,
         firebaseAppName: 'autodo',
         firebaseStorageUri: 'gs://autodo-49f21.appspot.com',
-        populateDemoData: true,
+        // populateDemoData: true,
+        populateDemoData: false,
       );
 
 /// Default release application settings

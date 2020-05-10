@@ -33,15 +33,13 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
   FilteredTodosState get initialState {
     return todosBloc.state is TodosLoaded && carsBloc.state is CarsLoaded
         ? FilteredTodosLoaded(
-            sortItems(_setDueState(
-              (todosBloc.state as TodosLoaded).todos, 
-              (carsBloc.state as CarsLoaded).cars)),
+            sortItems(_setDueState((todosBloc.state as TodosLoaded).todos,
+                (carsBloc.state as CarsLoaded).cars)),
             VisibilityFilter.all,
           )
         : FilteredTodosLoading();
   }
 
-  
   @override
   Stream<FilteredTodosState> mapEventToState(FilteredTodosEvent event) async* {
     if (event is UpdateTodosFilter) {
