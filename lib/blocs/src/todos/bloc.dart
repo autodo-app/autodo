@@ -205,16 +205,18 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       return TodoDueState.COMPLETE;
     } else if (car.mileage - todo.dueMileage > 0) {
       return TodoDueState.PAST_DUE;
-    } else if (DateTime.now().isAfter(todo.dueDate)) {
+    } else if (todo.dueDate != null && DateTime.now().isAfter(todo.dueDate)) {
       return TodoDueState.PAST_DUE;
     }
 
-    final distanceRate =
-        car.distanceRate ?? DEFAULT_DUE_SOON_CUTOFF_DISTANCE_RATE;
+    var distanceRate = car.distanceRate;
+    if (car.distanceRate == null || car.distanceRate == 0 || car.distanceRate == double.nan) {
+      distanceRate = DEFAULT_DUE_SOON_CUTOFF_DISTANCE_RATE;
+    }
     final daysUntilDueMileage =
-        ((todo.dueMileage - car.mileage) * distanceRate).round();
+        ((todo.dueMileage - car.mileage) / distanceRate).round();
     // Truncating rather than rounding here, that should hopefully be fine though
-    final daysUntilDueDate = todo.dueDate.difference(DateTime.now()).inDays;
+    final daysUntilDueDate = todo.dueDate?.difference(DateTime.now())?.inDays ?? DUE_SOON_CUTOFF_TIME;
 
     if ((daysUntilDueMileage < DUE_SOON_CUTOFF_TIME) ||
         daysUntilDueDate < DUE_SOON_CUTOFF_TIME) {
@@ -232,7 +234,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   @override
   Stream<TodosState> mapEventToState(TodosEvent event) async* {
     print('*****************************************');
-    print('**   NEW EVENT $event');
+    print('**   NEW TODO EVENT ${event.runtimeType}');
     print('*****************************************');
     if (event is LoadTodos) {
       yield* _mapLoadTodosToState();
@@ -313,8 +315,10 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     final batch = await repo.startTodoWriteBatch();
 
     // Add default todos to any new cars
+    // Ignore completed todos because the past todos setup will add a couple
+    // for the newly created car
     final newCars = cars
-        .map((c) => curTodos.any((r) => r.carName == c.name) ? null : c)
+        .map((c) => curTodos.any((t) => (t.carName == c.name) && (!t.completed ?? false)) ? null : c)
         .toList();
     newCars.removeWhere((c) => c == null);
     if (newCars.isNotEmpty) {
@@ -365,10 +369,13 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     if (repo == null) {
       print('Error: adding todo to null repo');
       return;
+    } else if (!(state is TodosLoaded)) {
+      print('Error: cannot add multiple todos to bloc that is not loaded');
+      return;
     }
     final updatedTodos = List<Todo>.from((state as TodosLoaded).todos)
       ..addAll(event.todos);
-    yield TodosLoaded(todos: updatedTodos);
+    yield (state as TodosLoaded).copyWith(todos: updatedTodos);
     event.todos.forEach(_scheduleNotification);
     final batch = await repo.startTodoWriteBatch();
     event.todos.forEach((t) {
