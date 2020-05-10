@@ -229,14 +229,16 @@ class RefuelingsScreen extends StatelessWidget {
                         childCount: refuelings.length + 2,
                       ),
                     ),
-                    SliverFillRemaining(  
+                    SliverFillRemaining(
                       fillOverscroll: true,
                       hasScrollBody: false,
                       child: Container(
                         color: Theme.of(context).cardColor,
-                        child: (refuelings.isEmpty) ? 
-                            Center(child: Text(JsonIntl.of(context).get(IntlKeys.noRefuelings))) :
-                            Container(),
+                        child: (refuelings.isEmpty)
+                            ? Center(
+                                child: Text(JsonIntl.of(context)
+                                    .get(IntlKeys.noRefuelings)))
+                            : Container(),
                       ),
                     )
                   ],

@@ -62,8 +62,8 @@ class NewUserScreenWizard extends WizardInfo {
         ));
       }
     }
-    BlocProvider.of<TodosBloc>(context).add(
-        TranslateDefaults(JsonIntl.of(context), Distance.of(context, listen: false).unit));
+    BlocProvider.of<TodosBloc>(context).add(TranslateDefaults(
+        JsonIntl.of(context), Distance.of(context, listen: false).unit));
     BlocProvider.of<CarsBloc>(context).add(AddMultipleCars(newCars));
     BlocProvider.of<TodosBloc>(context).add(AddMultipleTodos(newTodos));
   }

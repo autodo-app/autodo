@@ -210,13 +210,16 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     }
 
     var distanceRate = car.distanceRate;
-    if (car.distanceRate == null || car.distanceRate == 0 || car.distanceRate == double.nan) {
+    if (car.distanceRate == null ||
+        car.distanceRate == 0 ||
+        car.distanceRate == double.nan) {
       distanceRate = DEFAULT_DUE_SOON_CUTOFF_DISTANCE_RATE;
     }
     final daysUntilDueMileage =
         ((todo.dueMileage - car.mileage) / distanceRate).round();
     // Truncating rather than rounding here, that should hopefully be fine though
-    final daysUntilDueDate = todo.dueDate?.difference(DateTime.now())?.inDays ?? DUE_SOON_CUTOFF_TIME;
+    final daysUntilDueDate = todo.dueDate?.difference(DateTime.now())?.inDays ??
+        DUE_SOON_CUTOFF_TIME;
 
     if ((daysUntilDueMileage < DUE_SOON_CUTOFF_TIME) ||
         daysUntilDueDate < DUE_SOON_CUTOFF_TIME) {
@@ -318,7 +321,10 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     // Ignore completed todos because the past todos setup will add a couple
     // for the newly created car
     final newCars = cars
-        .map((c) => curTodos.any((t) => (t.carName == c.name) && (!t.completed ?? false)) ? null : c)
+        .map((c) => curTodos
+                .any((t) => (t.carName == c.name) && (!t.completed ?? false))
+            ? null
+            : c)
         .toList();
     newCars.removeWhere((c) => c == null);
     if (newCars.isNotEmpty) {
