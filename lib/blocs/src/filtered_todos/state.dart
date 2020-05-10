@@ -21,7 +21,7 @@ class FilteredTodosLoaded extends FilteredTodosState {
   final VisibilityFilter activeFilter;
 
   @override
-  List<Object> get props => [filteredTodos, activeFilter];
+  List<Object> get props => [...filteredTodos.values.expand((i) => i), activeFilter];
 
   @override
   String toString() {
