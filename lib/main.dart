@@ -171,6 +171,7 @@ class AppProviderState extends State<AppProvider> {
                             BlocProvider.of<NotificationsBloc>(context),
                         carsBloc: BlocProvider.of<CarsBloc>(context),
                       ),
+                      lazy: false,
                     ),
                   ],
                   child: App(
