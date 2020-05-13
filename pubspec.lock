@@ -495,12 +495,10 @@ packages:
   json_intl:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "076c442d36ee767c3a37ab0b01fa77dee5396d84"
-      url: "https://github.com/DavBfr/json_intl"
-    source: git
-    version: "0.0.2"
+      name: json_intl
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   json_rpc_2:
     dependency: transitive
     description:
