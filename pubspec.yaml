@@ -62,8 +62,6 @@ dependency_overrides:
       url: git://github.com/autodo-app/flutterfire.git
       ref: master
       path: packages/firebase_admob/
-  json_intl:
-    git: https://github.com/DavBfr/json_intl
   preferences:
     git:
       url: https://gitlab.com/davbfr/preferences.git

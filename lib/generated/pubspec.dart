@@ -91,9 +91,6 @@ class Pubspec {
         'path': 'packages/firebase_admob/',
       },
     },
-    'json_intl': <dynamic, dynamic>{
-      'git': 'https://github.com/DavBfr/json_intl',
-    },
     'preferences': <dynamic, dynamic>{
       'git': <dynamic, dynamic>{
         'url': 'https://gitlab.com/davbfr/preferences.git',
