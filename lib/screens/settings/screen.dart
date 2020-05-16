@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_intl/json_intl.dart';
-import 'package:preferences/preferences.dart';
+import 'package:pref/pref.dart';
 
 import '../../blocs/blocs.dart';
 import '../../generated/localization.dart';
@@ -54,68 +54,87 @@ class SettingsScreenState extends State<SettingsScreen> {
   }
 
   Widget body() {
-    return PreferencePage([
-      PreferenceTitle(JsonIntl.of(context).get(IntlKeys.groupUnits)),
-      DropdownPreference<int>(
-        JsonIntl.of(context).get(IntlKeys.lengthUnit),
-        'length_unit',
-        displayValues: [
-          JsonIntl.of(context).get(IntlKeys.distanceKm),
-          JsonIntl.of(context).get(IntlKeys.distanceMiles),
-        ],
-        values: [
-          DistanceUnit.metric.index,
-          DistanceUnit.imperial.index,
-        ],
-      ),
-      DropdownPreference<int>(
-        JsonIntl.of(context).get(IntlKeys.volumeUnit),
-        'volume_unit',
-        displayValues: [
-          JsonIntl.of(context).get(IntlKeys.fuelLiters),
-          JsonIntl.of(context).get(IntlKeys.fuelGallonsImperial),
-          JsonIntl.of(context).get(IntlKeys.fuelGallonsUs),
-        ],
-        values: [
-          VolumeUnit.metric.index,
-          VolumeUnit.imperial.index,
-          VolumeUnit.us.index,
+    return PrefPage(children: [
+      PrefTitle(title: Text(JsonIntl.of(context).get(IntlKeys.groupUnits))),
+      PrefDropdown<int>(
+        title: Text(JsonIntl.of(context).get(IntlKeys.lengthUnit)),
+        pref: 'length_unit',
+        items: [
+          DropdownMenuItem(
+            value: DistanceUnit.metric.index,
+            child: Text(JsonIntl.of(context).get(IntlKeys.distanceKm)),
+          ),
+          DropdownMenuItem(
+            value: DistanceUnit.imperial.index,
+            child: Text(JsonIntl.of(context).get(IntlKeys.distanceMiles)),
+          )
         ],
       ),
-      DropdownPreference<int>(
-        JsonIntl.of(context).get(IntlKeys.efficiencyUnit),
-        'efficiency_unit',
-        displayValues: [
-          JsonIntl.of(context).get(IntlKeys.efficiencyMpusgShort),
-          JsonIntl.of(context).get(IntlKeys.efficiencyMpigShort),
-          JsonIntl.of(context).get(IntlKeys.efficiencyKmplShort),
-          JsonIntl.of(context).get(IntlKeys.efficiencyLp100kmShort),
-        ],
-        values: [
-          EfficiencyUnit.mpusg.index,
-          EfficiencyUnit.mpig.index,
-          EfficiencyUnit.kmpl.index,
-          EfficiencyUnit.lp100km.index,
+      PrefDropdown<int>(
+        title: Text(JsonIntl.of(context).get(IntlKeys.volumeUnit)),
+        pref: 'volume_unit',
+        items: [
+          DropdownMenuItem(
+            value: VolumeUnit.metric.index,
+            child: Text(JsonIntl.of(context).get(IntlKeys.fuelLiters)),
+          ),
+          DropdownMenuItem(
+            value: VolumeUnit.imperial.index,
+            child: Text(JsonIntl.of(context).get(IntlKeys.fuelGallonsImperial)),
+          ),
+          DropdownMenuItem(
+            value: VolumeUnit.us.index,
+            child: Text(JsonIntl.of(context).get(IntlKeys.fuelGallonsUs)),
+          ),
         ],
       ),
-      DropdownPreference<String>(
-        JsonIntl.of(context).get(IntlKeys.defaultCurrency),
-        'currency',
-        // displayValues: Currency.currencies.keys
-        //     .map((e) => '${Currency.currencies[e]} ($e)')
-        //     .toList(),
-        values: Currency.currencies.keys.toList(),
+      PrefDropdown<int>(
+        title: Text(JsonIntl.of(context).get(IntlKeys.efficiencyUnit)),
+        pref: 'efficiency_unit',
+        items: [
+          DropdownMenuItem(
+            value: EfficiencyUnit.mpusg.index,
+            child:
+                Text(JsonIntl.of(context).get(IntlKeys.efficiencyMpusgShort)),
+          ),
+          DropdownMenuItem(
+            value: EfficiencyUnit.mpig.index,
+            child: Text(JsonIntl.of(context).get(IntlKeys.efficiencyMpigShort)),
+          ),
+          DropdownMenuItem(
+            value: EfficiencyUnit.kmpl.index,
+            child: Text(JsonIntl.of(context).get(IntlKeys.efficiencyKmplShort)),
+          ),
+          DropdownMenuItem(
+            value: EfficiencyUnit.lp100km.index,
+            child:
+                Text(JsonIntl.of(context).get(IntlKeys.efficiencyLp100kmShort)),
+          ),
+        ],
       ),
-      PreferenceTitle(JsonIntl.of(context).get(IntlKeys.groupAccount)),
-      PreferenceButton(Text(JsonIntl.of(context).get(IntlKeys.signOut)),
+      PrefDropdown<String>(
+        title: Text(JsonIntl.of(context).get(IntlKeys.defaultCurrency)),
+        pref: 'currency',
+        items: Currency.currencies.keys
+            .map<DropdownMenuItem<String>>(
+              (item) => DropdownMenuItem<String>(
+                value: item,
+                child: Text(item),
+              ),
+            )
+            .toList(),
+      ),
+      PrefTitle(title: Text(JsonIntl.of(context).get(IntlKeys.groupAccount))),
+      PrefButton(
+          child: Text(JsonIntl.of(context).get(IntlKeys.signOut)),
           key: ValueKey('__sign_out_button__'),
           color: Theme.of(context).buttonTheme.colorScheme.background,
           onTap: () {
-        BlocProvider.of<AuthenticationBloc>(context).add(LogOut());
-        Navigator.pop(context);
-      }),
-      PreferenceButton(
-        Text(JsonIntl.of(context).get(IntlKeys.deleteAccount)),
+            BlocProvider.of<AuthenticationBloc>(context).add(LogOut());
+            Navigator.pop(context);
+          }),
+      PrefButton(
+        child: Text(JsonIntl.of(context).get(IntlKeys.deleteAccount)),
         key: ValueKey('__delete_account_button__'),
         color: Colors.red,
         onTap: () async {
@@ -126,9 +145,9 @@ class SettingsScreenState extends State<SettingsScreen> {
               true) Navigator.pop(context);
         },
       ),
-      PreferenceTitle(JsonIntl.of(context).get(IntlKeys.info)),
-      PreferenceButton(
-        Text(MaterialLocalizations.of(context)
+      PrefTitle(title: Text(JsonIntl.of(context).get(IntlKeys.info))),
+      PrefButton(
+        child: Text(MaterialLocalizations.of(context)
             .aboutListTileTitle(JsonIntl.of(context).get(IntlKeys.appTitle))),
         color: Theme.of(context).buttonTheme.colorScheme.background,
         onTap: () {

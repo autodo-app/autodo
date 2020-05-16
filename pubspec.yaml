@@ -38,7 +38,7 @@ dependencies:
   in_app_purchase:
   semaphore:
   provider:
-  preferences:
+  pref:
   cupertino_icons:
   about:
   cached_network_image:
@@ -62,10 +62,6 @@ dependency_overrides:
       url: git://github.com/autodo-app/flutterfire.git
       ref: master
       path: packages/firebase_admob/
-  preferences:
-    git:
-      url: https://gitlab.com/davbfr/preferences.git
-      ref: rewrite-pref-service
   mockito: ^4.0.0
   bloc_test: ^3.1.0
 

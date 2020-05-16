@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:json_intl/json_intl.dart';
-import 'package:preferences/preferences.dart';
+import 'package:pref/pref.dart';
 import 'package:provider/provider.dart';
 
 import '../generated/localization.dart';
@@ -18,7 +18,7 @@ class Distance extends UnitConversion<DistanceUnit> {
         DistanceUnit.values[Provider.of<BasePrefService>(
           context,
           listen: listen,
-        ).getInt('length_unit')],
+        ).get<int>('length_unit')],
         Localizations.localeOf(context),
       );
 

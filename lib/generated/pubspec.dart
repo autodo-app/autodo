@@ -60,7 +60,7 @@ class Pubspec {
     'in_app_purchase': null,
     'semaphore': null,
     'provider': null,
-    'preferences': null,
+    'pref': null,
     'cupertino_icons': null,
     'about': null,
     'cached_network_image': null,
@@ -89,12 +89,6 @@ class Pubspec {
         'url': 'git://github.com/autodo-app/flutterfire.git',
         'ref': 'master',
         'path': 'packages/firebase_admob/',
-      },
-    },
-    'preferences': <dynamic, dynamic>{
-      'git': <dynamic, dynamic>{
-        'url': 'https://gitlab.com/davbfr/preferences.git',
-        'ref': 'rewrite-pref-service',
       },
     },
     'mockito': '^4.0.0',

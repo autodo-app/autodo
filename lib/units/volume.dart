@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:json_intl/json_intl.dart';
-import 'package:preferences/preferences.dart';
+import 'package:pref/pref.dart';
 import 'package:provider/provider.dart';
 
 import '../generated/localization.dart';
@@ -18,7 +18,7 @@ class Volume extends UnitConversion<VolumeUnit> {
         VolumeUnit.values[Provider.of<BasePrefService>(
           context,
           listen: listen,
-        ).getInt('volume_unit')],
+        ).get<int>('volume_unit')],
         Localizations.localeOf(context),
       );
 

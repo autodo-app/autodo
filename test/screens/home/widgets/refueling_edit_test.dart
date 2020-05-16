@@ -1,7 +1,7 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:preferences/preferences.dart';
+import 'package:pref/pref.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mockito/mockito.dart';
@@ -33,7 +33,7 @@ void main() {
     when(carsBloc.state)
         .thenReturn(CarsLoaded([Car()])); // need a car in the list to save
     refuelingsBloc = MockRefuelingsBloc();
-    pref = JustCachePrefService();
+    pref = PrefServiceCache();
     await pref.setDefaultValues({
       'length_unit': DistanceUnit.imperial.index,
       'volume_unit': VolumeUnit.us.index,

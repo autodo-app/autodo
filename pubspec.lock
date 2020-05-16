@@ -667,15 +667,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.4.0"
-  preferences:
+  pref:
     dependency: "direct main"
     description:
-      path: "."
-      ref: rewrite-pref-service
-      resolved-ref: "08967917df3362a42a51bf02a0d9cc5b7924e8e3"
-      url: "https://gitlab.com/davbfr/preferences.git"
-    source: git
-    version: "5.2.0"
+      name: pref
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.0"
   process:
     dependency: transitive
     description:

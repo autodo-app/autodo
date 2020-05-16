@@ -10,7 +10,7 @@ import 'package:autodo/screens/home/screen.dart';
 import 'package:autodo/screens/add_edit/barrel.dart';
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/models/models.dart';
-import 'package:preferences/preferences.dart';
+import 'package:pref/pref.dart';
 import 'package:provider/provider.dart';
 
 class MockTodosBloc extends MockBloc<TodosEvent, TodosState>
@@ -46,7 +46,7 @@ void main() {
       when(carsBloc.state).thenReturn(CarsLoaded([Car(name: 'test')]));
       refuelingsBloc = MockRefuelingsBloc();
 
-      pref = JustCachePrefService();
+      pref = PrefServiceCache();
       await pref.setDefaultValues({
         'length_unit': DistanceUnit.imperial.index,
         'volume_unit': VolumeUnit.us.index,

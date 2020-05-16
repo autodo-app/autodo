@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:preferences/preferences.dart';
+import 'package:pref/pref.dart';
 import 'package:provider/provider.dart';
 
 import 'package:autodo/blocs/blocs.dart';
@@ -37,7 +37,7 @@ void main() {
   when(dbBloc.state).thenReturn(dbLoaded);
 
   setUp(() async {
-    pref = JustCachePrefService();
+    pref = PrefServiceCache();
     await pref.setDefaultValues({
       'length_unit': DistanceUnit.imperial.index,
       'volume_unit': VolumeUnit.us.index,
