@@ -142,8 +142,13 @@ class SembastDataRepository extends DataRepository {
     await dbLock.acquire();
     try {
       final list = await _todos.find(db);
-      final out = list.map((snap) => Todo.fromRecord(snap)).toList()
-        ..sort((a, b) => int.parse(a.id) > int.parse(b.id) ? 1 : -1);
+      final out = list
+          .map((snap) => Todo.fromMap(
+                (snap.key is String) ? snap.key : '${snap.key}',
+                snap.value,
+              ))
+          .toList()
+            ..sort((a, b) => int.parse(a.id) > int.parse(b.id) ? 1 : -1);
       return out;
     } finally {
       dbLock.release();

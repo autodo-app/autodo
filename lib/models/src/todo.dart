@@ -1,8 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
-import 'package:sembast/sembast.dart';
 
 import '../models.dart';
 import 'repeat_interval.dart';
@@ -24,61 +22,32 @@ class Todo extends Equatable {
       this.completedMileage,
       this.dueDate});
 
-  factory Todo.fromSnapshot(DocumentSnapshot snap) {
+  factory Todo.fromMap(String id, Map<String, dynamic> value) {
     return Todo(
-      id: snap.documentID,
-      name: snap.data['name'] as String,
-      carName: snap.data['carName'] as String,
-      dueState: (snap.data['dueState'] == null)
+      id: id,
+      name: value['name'] as String,
+      carName: value['carName'] as String,
+      dueState: (value['dueState'] == null)
           ? null
-          : TodoDueState.values[snap.data['dueState']],
-      dueMileage: (snap.data['dueMileage'] as num)?.toDouble(),
+          : TodoDueState.values[value['dueState']],
+      dueMileage: value['dueMileage'] as double,
       mileageRepeatInterval:
-          (snap.data['mileageRepeatInterval'] as num)?.toDouble(),
+          (value['mileageRepeatInterval'] as num)?.toDouble(),
       dateRepeatInterval: RepeatInterval(
-        days: snap.data['dateRepeatIntervalDays'],
-        months: snap.data['dateRepeatIntervalMonths'],
-        years: snap.data['dateRepeatIntervalYears'],
+        days: value['dateRepeatIntervalDays'],
+        months: value['dateRepeatIntervalMonths'],
+        years: value['dateRepeatIntervalYears'],
       ),
-      notificationID: snap.data['notificationID'] as int,
-      completed: snap.data['completed'] as bool,
-      estimatedDueDate: snap.data['estimatedDueDate'] as bool,
-      completedDate: (snap.data['completedDate'] == null)
+      notificationID: value['notificationID'] as int,
+      completed: value['completed'] as bool,
+      estimatedDueDate: value['estimatedDueDate'] as bool,
+      completedDate: (value['completedDate'] == null)
           ? null
-          : DateTime.fromMillisecondsSinceEpoch(snap.data['completedDate']),
-      completedMileage: (snap.data['completedMileage'] as num)?.toDouble(),
-      dueDate: (snap.data['dueDate'] == null)
+          : DateTime.fromMillisecondsSinceEpoch(value['completedDate']),
+      completedMileage: (value['completedMileage'] as num)?.toDouble(),
+      dueDate: (value['dueDate'] == null)
           ? null
-          : DateTime.fromMillisecondsSinceEpoch(snap.data['dueDate']),
-    );
-  }
-
-  factory Todo.fromRecord(RecordSnapshot snap) {
-    return Todo(
-      id: (snap.key is String) ? snap.key : '${snap.key}',
-      name: snap.value['name'] as String,
-      carName: snap.value['carName'] as String,
-      dueState: (snap.value['dueState'] == null)
-          ? null
-          : TodoDueState.values[snap.value['dueState']],
-      dueMileage: snap.value['dueMileage'] as double,
-      mileageRepeatInterval:
-          (snap.value['mileageRepeatInterval'] as num)?.toDouble(),
-      dateRepeatInterval: RepeatInterval(
-        days: snap.value['dateRepeatIntervalDays'],
-        months: snap.value['dateRepeatIntervalMonths'],
-        years: snap.value['dateRepeatIntervalYears'],
-      ),
-      notificationID: snap.value['notificationID'] as int,
-      completed: snap.value['completed'] as bool,
-      estimatedDueDate: snap.value['estimatedDueDate'] as bool,
-      completedDate: (snap.value['completedDate'] == null)
-          ? null
-          : DateTime.fromMillisecondsSinceEpoch(snap.value['completedDate']),
-      completedMileage: (snap.value['completedMileage'] as num)?.toDouble(),
-      dueDate: (snap.value['dueDate'] == null)
-          ? null
-          : DateTime.fromMillisecondsSinceEpoch(snap.value['dueDate']),
+          : DateTime.fromMillisecondsSinceEpoch(value['dueDate']),
     );
   }
 

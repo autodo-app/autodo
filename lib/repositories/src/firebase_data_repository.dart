@@ -80,14 +80,18 @@ class FirebaseDataRepository extends DataRepository {
   @override
   Stream<List<Todo>> todos() {
     return _todos.snapshots().map((snapshot) {
-      return snapshot.documents.map((doc) => Todo.fromSnapshot(doc)).toList();
+      return snapshot.documents
+          .map((doc) => Todo.fromMap(doc.documentID, doc.data))
+          .toList();
     });
   }
 
   @override
   Future<List<Todo>> getCurrentTodos() async {
     final snap = await _todos.getDocuments();
-    return snap.documents.map((doc) => Todo.fromSnapshot(doc)).toList();
+    return snap.documents
+        .map((doc) => Todo.fromMap(doc.documentID, doc.data))
+        .toList();
   }
 
   @override
