@@ -154,14 +154,18 @@ class FirebaseDataRepository extends DataRepository {
   @override
   Stream<List<Car>> cars() {
     return _cars.snapshots().map((snapshot) {
-      return snapshot.documents.map((doc) => Car.fromSnapshot(doc)).toList();
+      return snapshot.documents
+          .map((doc) => Car.fromMap(doc.documentID, doc.data))
+          .toList();
     });
   }
 
   @override
   Future<List<Car>> getCurrentCars() async {
     final snap = await _cars.getDocuments();
-    return snap.documents.map((doc) => Car.fromSnapshot(doc)).toList();
+    return snap.documents
+        .map((doc) => Car.fromMap(doc.documentID, doc.data))
+        .toList();
   }
 
   @override

@@ -1,8 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
-import 'package:sembast/sembast.dart';
 
 import '../../util.dart';
 import 'distanceratepoint.dart';
@@ -43,19 +41,19 @@ class Car extends Equatable {
         imageName: imageName ?? '',
       );
 
-  factory Car.fromSnapshot(DocumentSnapshot snap) {
+  factory Car.fromMap(String id, Map<String, dynamic> value) {
     return Car(
-      id: snap.documentID,
-      name: snap.data['name'] as String,
-      mileage: (snap.data['mileage'] as num)?.toDouble(),
-      numRefuelings: snap.data['numRefuelings'] as int,
-      averageEfficiency: snap.data['averageEfficiency'] as double,
-      distanceRate: snap.data['distanceRate'] as double,
-      lastMileageUpdate: (snap.data['lastMileageUpdate'] == null)
+      id: id,
+      name: value['name'] as String,
+      mileage: value['mileage'] as double,
+      numRefuelings: value['numRefuelings'] as int,
+      averageEfficiency: value['averageEfficiency'] as double,
+      distanceRate: value['distanceRate'] as double,
+      lastMileageUpdate: (value['lastMileageUpdate'] == null)
           ? null
           : DateTime.fromMillisecondsSinceEpoch(
-              snap.data['lastMileageUpdate'] as int),
-      distanceRateHistory: snap.data['distanceRateHistory']
+              value['lastMileageUpdate'] as int),
+      distanceRateHistory: value['distanceRateHistory']
           ?.map((p) => DistanceRatePoint(
                 (p['date'] == null)
                     ? null
@@ -64,42 +62,12 @@ class Car extends Equatable {
               ))
           ?.toList()
           ?.cast<DistanceRatePoint>(),
-      make: snap.data['make'] as String,
-      model: snap.data['model'] as String,
-      year: snap.data['year'] as int,
-      plate: snap.data['plate'] as String,
-      vin: snap.data['vin'] as String,
-      imageName: snap.data['imageName'] as String,
-    );
-  }
-
-  factory Car.fromRecord(RecordSnapshot snap) {
-    return Car(
-      id: (snap.key is String) ? snap.key : '${snap.key}',
-      name: snap.value['name'] as String,
-      mileage: snap.value['mileage'] as double,
-      numRefuelings: snap.value['numRefuelings'] as int,
-      averageEfficiency: snap.value['averageEfficiency'] as double,
-      distanceRate: snap.value['distanceRate'] as double,
-      lastMileageUpdate: (snap.value['lastMileageUpdate'] == null)
-          ? null
-          : DateTime.fromMillisecondsSinceEpoch(
-              snap.value['lastMileageUpdate'] as int),
-      distanceRateHistory: snap.value['distanceRateHistory']
-          ?.map((p) => DistanceRatePoint(
-                (p['date'] == null)
-                    ? null
-                    : DateTime.fromMillisecondsSinceEpoch(p['date']),
-                p['distanceRate'],
-              ))
-          ?.toList()
-          ?.cast<DistanceRatePoint>(),
-      make: snap.value['make'] as String,
-      model: snap.value['model'] as String,
-      year: snap.value['year'] as int,
-      plate: snap.value['plate'] as String,
-      vin: snap.value['vin'] as String,
-      imageName: snap.value['imageName'] as String,
+      make: value['make'] as String,
+      model: value['model'] as String,
+      year: value['year'] as int,
+      plate: value['plate'] as String,
+      vin: value['vin'] as String,
+      imageName: value['imageName'] as String,
     );
   }
 
