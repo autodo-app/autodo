@@ -11,7 +11,7 @@ import 'package:flutter_debug_drawer/flutter_debug_drawer.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:json_intl/json_intl.dart';
-import 'package:preferences/preferences.dart';
+import 'package:pref/pref.dart';
 import 'package:provider/provider.dart';
 import 'package:sentry/sentry.dart';
 
@@ -67,7 +67,7 @@ class AppProvider extends StatefulWidget {
 class AppProviderState extends State<AppProvider> {
   AuthRepository authRepository;
   ThemeData theme;
-  SharedPrefService service;
+  BasePrefService service;
   final analytics = kFlavor.hasAnalytics ? FirebaseAnalytics() : null;
   var _initialized = false;
 
@@ -103,7 +103,7 @@ class AppProviderState extends State<AppProvider> {
     theme = createTheme();
 
     final locale = WidgetsBinding.instance.window.locale ?? Locale('en', 'US');
-    service = await SharedPrefService.init();
+    service = await PrefServiceShared.init();
     await service.setDefaultValues({
       'length_unit': Distance.getDefault(locale).index,
       'volume_unit': Volume.getDefault(locale).index,

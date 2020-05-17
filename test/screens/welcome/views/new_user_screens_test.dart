@@ -12,7 +12,7 @@ import 'package:autodo/models/models.dart';
 import 'package:autodo/screens/welcome/views/new_user_setup/screen.dart';
 import 'package:autodo/screens/welcome/views/new_user_setup/latestcompleted.dart';
 import 'package:autodo/screens/welcome/views/new_user_setup/setrepeats.dart';
-import 'package:preferences/preferences.dart';
+import 'package:pref/pref.dart';
 import 'package:provider/provider.dart';
 
 class MockCarsBloc extends Mock implements CarsBloc {}
@@ -38,7 +38,7 @@ void main() {
   ]);
 
   setUp(() async {
-    pref = JustCachePrefService();
+    pref = PrefServiceCache();
     await pref.setDefaultValues({
       'length_unit': DistanceUnit.imperial.index,
       'volume_unit': VolumeUnit.us.index,

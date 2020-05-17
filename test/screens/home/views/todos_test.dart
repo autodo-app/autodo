@@ -10,7 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:json_intl/json_intl.dart';
 import 'package:mockito/mockito.dart';
-import 'package:preferences/preferences.dart';
+import 'package:pref/pref.dart';
 import 'package:provider/provider.dart';
 
 class MockTodosBloc extends MockBloc<TodosEvent, TodosState>
@@ -33,7 +33,7 @@ void main() {
       todosBloc = MockTodosBloc();
       filteredTodosBloc = MockFilteredTodosBloc();
       carsBloc = MockCarsBloc();
-      pref = JustCachePrefService();
+      pref = PrefServiceCache();
       await pref.setDefaultValues({
         'length_unit': DistanceUnit.imperial.index,
         'volume_unit': VolumeUnit.us.index,

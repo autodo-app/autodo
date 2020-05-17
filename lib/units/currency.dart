@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
-import 'package:preferences/preferences.dart';
+import 'package:pref/pref.dart';
 import 'package:provider/provider.dart';
 
 import 'conversion.dart';
@@ -14,7 +14,7 @@ class Currency extends UnitConversion<String> {
         Provider.of<BasePrefService>(
           context,
           listen: listen,
-        ).getString('currency'),
+        ).get<String>('currency'),
         Localizations.localeOf(context),
       );
 
