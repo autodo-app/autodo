@@ -162,7 +162,12 @@ class SembastDataRepository extends DataRepository {
     try {
       final list = await _refuelings.find(db,
           finder: Finder(sortOrders: [SortOrder('mileage')]));
-      final out = list.map((snap) => Refueling.fromRecord(snap)).toList();
+      final out = list
+          .map((snap) => Refueling.fromMap(
+                (snap.key is String) ? snap.key : '${snap.key}',
+                snap.value,
+              ))
+          .toList();
       return out;
     } finally {
       dbLock.release();

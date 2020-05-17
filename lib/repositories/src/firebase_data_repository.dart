@@ -115,7 +115,7 @@ class FirebaseDataRepository extends DataRepository {
   Stream<List<Refueling>> refuelings([bool forceRefresh]) {
     return _refuelings.snapshots().map((snapshot) {
       return snapshot.documents
-          .map((doc) => Refueling.fromSnapshot(doc))
+          .map((doc) => Refueling.fromMap(doc.documentID, doc.data))
           .toList();
     });
   }
@@ -123,7 +123,9 @@ class FirebaseDataRepository extends DataRepository {
   @override
   Future<List<Refueling>> getCurrentRefuelings() async {
     final snap = await _refuelings.getDocuments();
-    return snap.documents.map((doc) => Refueling.fromSnapshot(doc)).toList();
+    return snap.documents
+        .map((doc) => Refueling.fromMap(doc.documentID, doc.data))
+        .toList();
   }
 
   @override

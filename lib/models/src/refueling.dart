@@ -1,8 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
-import 'package:sembast/sembast.dart';
 
 @immutable
 class Refueling extends Equatable {
@@ -22,43 +20,22 @@ class Refueling extends Equatable {
         assert(amount != null),
         assert(carName != null);
 
-  factory Refueling.fromRecord(RecordSnapshot snap) {
+  factory Refueling.fromMap(String id, Map<String, dynamic> value) {
     return Refueling(
-      id: (snap.key is String) ? snap.key : '${snap.key}',
-      carName: snap.value['carName'],
-      mileage: snap.value['mileage'],
-      date: (snap.value['date'] == null)
+      id: id,
+      carName: value['carName'],
+      mileage: value['mileage'],
+      date: (value['date'] == null)
           ? null
-          : DateTime.fromMillisecondsSinceEpoch(snap.value['date']),
-      amount: snap.value['amount'] as double,
-      cost: snap.value['cost'] as double,
-      carColor: (snap.value['carColor'] == null)
+          : DateTime.fromMillisecondsSinceEpoch(value['date']),
+      amount: value['amount'] as double,
+      cost: value['cost'] as double,
+      carColor:
+          (value['carColor'] == null) ? null : Color(value['carColor'] as int),
+      efficiency: value['efficiency'] as double,
+      efficiencyColor: (value['efficiencyColor'] == null)
           ? null
-          : Color(snap.value['carColor'] as int),
-      efficiency: snap.value['efficiency'] as double,
-      efficiencyColor: (snap.value['efficiencyColor'] == null)
-          ? null
-          : Color(snap.value['efficiencyColor'] as int),
-    );
-  }
-
-  factory Refueling.fromSnapshot(DocumentSnapshot snap) {
-    return Refueling(
-      id: snap.documentID,
-      carName: snap.data['carName'],
-      mileage: snap.data['mileage'].toDouble(),
-      date: (snap.data['date'] == null)
-          ? null
-          : DateTime.fromMillisecondsSinceEpoch(snap.data['date']),
-      amount: snap.data['amount'] as double,
-      cost: snap.data['cost'].toDouble(),
-      carColor: (snap.data['carColor'] == null)
-          ? null
-          : Color(snap.data['carColor'] as int),
-      efficiency: snap.data['efficiency'] as double,
-      efficiencyColor: (snap.data['efficiencyColor'] == null)
-          ? null
-          : Color(snap.data['efficiencyColor'] as int),
+          : Color(value['efficiencyColor'] as int),
     );
   }
 
