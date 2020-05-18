@@ -1,6 +1,6 @@
 name: autodo
 description: Car Maintenance Made Simple.
-version: 0.3.1+15
+version: 0.3.2+16
 db_version: 3
 authors:
   - Jonathan Bayless <baylessjonathan@gmail.com>
