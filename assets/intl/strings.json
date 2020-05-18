@@ -226,5 +226,6 @@
   },
   "delete_todo": "Delete ToDo",
   "due_by": "Due by",
-  "or": "or"
+  "or": "or",
+  "no_refuelings": "No Refuelings Added Yet"
 }

@@ -38,6 +38,7 @@ void main() {
       );
       return FilteredTodosBloc(todosBloc: todosBloc, carsBloc: carsBloc);
     }, expect: [
+      FilteredTodosLoading(),
       FilteredTodosLoaded(
         {
           TodoDueState.DUE_SOON: [todo]
@@ -56,12 +57,13 @@ void main() {
       act: (FilteredTodosBloc bloc) async =>
           bloc.add(UpdateTodosFilter(VisibilityFilter.active)),
       expect: <FilteredTodosState>[
-        FilteredTodosLoaded(
-          {
-            TodoDueState.DUE_SOON: [todo]
-          },
-          VisibilityFilter.all,
-        ),
+        FilteredTodosLoading(),
+        // FilteredTodosLoaded(
+        //   {
+        //     TodoDueState.DUE_SOON: [todo]
+        //   },
+        //   VisibilityFilter.all,
+        // ),
         FilteredTodosLoaded(
           {
             TodoDueState.DUE_SOON: [todo]
@@ -81,12 +83,13 @@ void main() {
       act: (FilteredTodosBloc bloc) async =>
           bloc.add(UpdateTodosFilter(VisibilityFilter.completed)),
       expect: <FilteredTodosState>[
-        FilteredTodosLoaded(
-          {
-            TodoDueState.DUE_SOON: [todo]
-          },
-          VisibilityFilter.all,
-        ),
+        FilteredTodosLoading(),
+        // FilteredTodosLoaded(
+        //   {
+        //     TodoDueState.DUE_SOON: [todo]
+        //   },
+        //   VisibilityFilter.all,
+        // ),
         FilteredTodosLoaded({}, VisibilityFilter.completed),
       ],
     );

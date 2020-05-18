@@ -31,9 +31,10 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
 
   @override
   FilteredTodosState get initialState {
-    return todosBloc.state is TodosLoaded
+    return todosBloc.state is TodosLoaded && carsBloc.state is CarsLoaded
         ? FilteredTodosLoaded(
-            sortItems((todosBloc.state as TodosLoaded).todos),
+            sortItems(_setDueState((todosBloc.state as TodosLoaded).todos,
+                (carsBloc.state as CarsLoaded).cars)),
             VisibilityFilter.all,
           )
         : FilteredTodosLoading();
@@ -122,7 +123,6 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
     }
     final updatedTodos =
         _setDueState((todosBloc.state as TodosLoaded).todos, event.cars);
-    print(updatedTodos);
     final visibilityFilter = state is FilteredTodosLoaded
         ? (state as FilteredTodosLoaded).activeFilter
         : VisibilityFilter.all;
