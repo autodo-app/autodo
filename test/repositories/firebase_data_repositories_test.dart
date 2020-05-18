@@ -82,7 +82,7 @@ Future<void> main() async {
         when(firestore.batch()).thenAnswer((_) => MockWriteBatch());
         expect(
             repository.startTodoWriteBatch(),
-            FirebaseWriteBatch(
+            FirebaseWriteBatch<Todo>(
                 firestoreInstance: firestore, collection: collection));
       });
     });
@@ -149,7 +149,7 @@ Future<void> main() async {
         when(firestore.batch()).thenAnswer((_) => MockWriteBatch());
         expect(
             repository.startRefuelingWriteBatch(),
-            FirebaseWriteBatch(
+            FirebaseWriteBatch<Refueling>(
                 firestoreInstance: firestore, collection: collection));
       });
     });
@@ -185,7 +185,7 @@ Future<void> main() async {
         when(firestore.batch()).thenAnswer((_) => MockWriteBatch());
         expect(
             repository.startCarWriteBatch(),
-            FirebaseWriteBatch(
+            FirebaseWriteBatch<Car>(
                 firestoreInstance: firestore, collection: collection));
       });
     });

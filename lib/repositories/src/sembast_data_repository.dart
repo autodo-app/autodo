@@ -156,8 +156,8 @@ class SembastDataRepository extends DataRepository {
   }
 
   @override
-  FutureOr<WriteBatchWrapper> startTodoWriteBatch() async {
-    return SembastWriteBatch(this, store: _todos);
+  FutureOr<WriteBatchWrapper<Todo>> startTodoWriteBatch() async {
+    return SembastWriteBatch<Todo>(this, store: _todos);
   }
 
   // Refuelings
@@ -223,8 +223,8 @@ class SembastDataRepository extends DataRepository {
   }
 
   @override
-  FutureOr<WriteBatchWrapper> startRefuelingWriteBatch() async {
-    return SembastWriteBatch(
+  FutureOr<WriteBatchWrapper<Refueling>> startRefuelingWriteBatch() async {
+    return SembastWriteBatch<Refueling>(
       this,
       store: _refuelings,
       streamControllerUpdate: refuelingStreamUpdate,
@@ -294,8 +294,8 @@ class SembastDataRepository extends DataRepository {
   }
 
   @override
-  FutureOr<WriteBatchWrapper> startCarWriteBatch() async {
-    return SembastWriteBatch(
+  FutureOr<WriteBatchWrapper<Car>> startCarWriteBatch() async {
+    return SembastWriteBatch<Car>(
       this,
       store: _cars,
       streamControllerUpdate: carStreamUpdate,

@@ -2,11 +2,12 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
+import '../../repositories/src/write_batch_wrapper.dart';
 import '../models.dart';
 import 'repeat_interval.dart';
 
 @immutable
-class Todo extends Equatable {
+class Todo extends Equatable implements WriteBatchDocument {
   const Todo(
       {this.id,
       this.name,
@@ -156,6 +157,7 @@ class Todo extends Equatable {
         'dueDate: ${dueDate?.toUtc()} }';
   }
 
+  @override
   Map<String, Object> toDocument() {
     return {
       'name': name,

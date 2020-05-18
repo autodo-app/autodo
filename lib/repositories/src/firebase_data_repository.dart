@@ -100,8 +100,8 @@ class FirebaseDataRepository extends DataRepository {
   }
 
   @override
-  WriteBatchWrapper startTodoWriteBatch() {
-    return FirebaseWriteBatch(
+  WriteBatchWrapper<Todo> startTodoWriteBatch() {
+    return FirebaseWriteBatch<Todo>(
         firestoreInstance: _firestoreInstance, collection: _todos);
   }
 
@@ -140,8 +140,8 @@ class FirebaseDataRepository extends DataRepository {
   }
 
   @override
-  FutureOr<WriteBatchWrapper> startRefuelingWriteBatch() {
-    return FirebaseWriteBatch(
+  FutureOr<WriteBatchWrapper<Refueling>> startRefuelingWriteBatch() {
+    return FirebaseWriteBatch<Refueling>(
         firestoreInstance: _firestoreInstance, collection: _refuelings);
   }
 
@@ -178,8 +178,8 @@ class FirebaseDataRepository extends DataRepository {
   }
 
   @override
-  WriteBatchWrapper startCarWriteBatch() {
-    return FirebaseWriteBatch(
+  WriteBatchWrapper<Car> startCarWriteBatch() {
+    return FirebaseWriteBatch<Car>(
         firestoreInstance: _firestoreInstance, collection: _cars);
   }
 

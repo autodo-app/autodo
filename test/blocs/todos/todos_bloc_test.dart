@@ -23,7 +23,8 @@ class MockCarsBloc extends Mock implements CarsBloc {}
 class MockNotificationsBloc extends Mock implements NotificationsBloc {}
 
 // ignore: must_be_immutable
-class MockWriteBatch extends Mock implements WriteBatchWrapper {}
+class MockWriteBatch<T extends WriteBatchDocument> extends Mock
+    implements WriteBatchWrapper<T> {}
 
 class MockDbBloc extends Mock implements DatabaseBloc {}
 
@@ -205,7 +206,7 @@ Future<void> main() async {
         final notificationsBloc = MockNotificationsBloc();
         final dbBloc = MockDbBloc();
         when(dbBloc.state).thenAnswer((_) => DbLoaded(dataRepository));
-        final writeBatch = MockWriteBatch();
+        final writeBatch = MockWriteBatch<Todo>();
         when(writeBatch.updateData(any, any)).thenAnswer((invoke) {});
         when(writeBatch.setData(any)).thenAnswer((invoke) {});
         when(writeBatch.commit()).thenAnswer((_) async {});
@@ -395,7 +396,7 @@ Future<void> main() async {
           ]));
       when(dataRepository.getCurrentTodos())
           .thenAnswer((_) async => completedTodos);
-      final writeBatch = MockWriteBatch();
+      final writeBatch = MockWriteBatch<Todo>();
       when(writeBatch.updateData(any, any)).thenAnswer((invoke) {
         print(invoke.positionalArguments[1]);
         final key = invoke.positionalArguments[0];

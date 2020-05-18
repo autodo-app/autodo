@@ -15,7 +15,8 @@ class MockDataRepository extends Mock implements DataRepository {}
 class MockRefuelingsBloc extends Mock implements RefuelingsBloc {}
 
 // ignore: must_be_immutable
-class MockWriteBatch extends Mock implements WriteBatchWrapper {}
+class MockWriteBatch<T extends WriteBatchDocument> extends Mock
+    implements WriteBatchWrapper<T> {}
 
 class MockDbBloc extends Mock implements DatabaseBloc {}
 
@@ -162,7 +163,7 @@ void main() {
       blocTest<CarsBloc, CarsEvent, CarsState>('First New Refueling',
           build: () {
         final dataRepository = MockDataRepository();
-        final writeBatch = MockWriteBatch();
+        final writeBatch = MockWriteBatch<Car>();
         when(dataRepository.getCurrentCars()).thenAnswer(
             (_) async => [Car(id: '0', name: 'abcd', mileage: 10000)]);
         when(dataRepository.startCarWriteBatch()).thenAnswer((_) => writeBatch);
@@ -197,7 +198,7 @@ void main() {
       blocTest<CarsBloc, CarsEvent, CarsState>('Second New Refueling',
           build: () {
         final dataRepository = MockDataRepository();
-        final writeBatch = MockWriteBatch();
+        final writeBatch = MockWriteBatch<Car>();
         when(dataRepository.getCurrentCars()).thenAnswer((_) async =>
             [Car(id: '0', name: 'abcd', mileage: 10000, numRefuelings: 1)]);
         when(dataRepository.startCarWriteBatch()).thenAnswer((_) => writeBatch);

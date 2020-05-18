@@ -44,7 +44,7 @@ Future<void> main() async {
           pathProvider: () => Directory('.'),
         );
         expect(await repository.startTodoWriteBatch(),
-            SembastWriteBatch(repository, store: StoreRef('todos')));
+            SembastWriteBatch<Todo>(repository, store: StoreRef('todos')));
       });
     });
     group('refuelings', () {
@@ -77,8 +77,10 @@ Future<void> main() async {
         repository = await SembastDataRepository.open(
           pathProvider: () => Directory('.'),
         );
-        expect(await repository.startRefuelingWriteBatch(),
-            SembastWriteBatch(repository, store: StoreRef('refuelings')));
+        expect(
+            await repository.startRefuelingWriteBatch(),
+            SembastWriteBatch<Refueling>(repository,
+                store: StoreRef('refuelings')));
       });
     });
     group('cars', () {
@@ -104,7 +106,7 @@ Future<void> main() async {
         repository = await SembastDataRepository.open(
             pathProvider: () => Directory('.'));
         expect(await repository.startCarWriteBatch(),
-            SembastWriteBatch(repository, store: StoreRef('cars')));
+            SembastWriteBatch<Car>(repository, store: StoreRef('cars')));
       });
     });
   });

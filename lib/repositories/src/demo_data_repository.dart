@@ -163,18 +163,18 @@ class DemoDataRepository extends DataRepository {
   }
 
   @override
-  FutureOr<WriteBatchWrapper> startCarWriteBatch() {
-    return DemoWriteBatch();
+  FutureOr<WriteBatchWrapper<Car>> startCarWriteBatch() {
+    return DemoWriteBatch<Car>();
   }
 
   @override
-  FutureOr<WriteBatchWrapper> startRefuelingWriteBatch() {
-    return DemoWriteBatch();
+  FutureOr<WriteBatchWrapper<Refueling>> startRefuelingWriteBatch() {
+    return DemoWriteBatch<Refueling>();
   }
 
   @override
-  FutureOr<WriteBatchWrapper> startTodoWriteBatch() {
-    return DemoWriteBatch();
+  FutureOr<WriteBatchWrapper<Todo>> startTodoWriteBatch() {
+    return DemoWriteBatch<Todo>();
   }
 
   @override
@@ -206,7 +206,8 @@ class DemoDataRepository extends DataRepository {
   }
 }
 
-class DemoWriteBatch extends WriteBatchWrapper {
+class DemoWriteBatch<T extends WriteBatchDocument>
+    extends WriteBatchWrapper<T> {
   DemoWriteBatch();
 
   @override

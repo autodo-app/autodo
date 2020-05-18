@@ -2,8 +2,10 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
+import '../../repositories/src/write_batch_wrapper.dart';
+
 @immutable
-class Refueling extends Equatable {
+class Refueling extends Equatable implements WriteBatchDocument {
   const Refueling({
     @required this.carName,
     @required this.mileage,
@@ -98,6 +100,7 @@ class Refueling extends Equatable {
     return '$runtimeType { carName: $carName, carColor: $carColor, id: $id, mileage: $mileage, date: ${date?.toUtc()}, amount: $amount, cost: $cost, efficiency: $efficiency, efficiencyColor: $efficiencyColor }';
   }
 
+  @override
   Map<String, Object> toDocument() {
     return {
       'carName': carName,

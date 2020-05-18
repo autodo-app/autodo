@@ -5,7 +5,8 @@ import 'package:flutter/services.dart';
 
 import 'write_batch_wrapper.dart';
 
-class FirebaseWriteBatch extends Equatable implements WriteBatchWrapper {
+class FirebaseWriteBatch<T extends WriteBatchDocument> extends Equatable
+    implements WriteBatchWrapper<T> {
   FirebaseWriteBatch({@required firestoreInstance, @required collection})
       : _batch = firestoreInstance?.batch() ?? Firestore.instance.batch(),
         assert(collection != null),
@@ -16,11 +17,12 @@ class FirebaseWriteBatch extends Equatable implements WriteBatchWrapper {
   final WriteBatch _batch;
 
   @override
-  void updateData(String id, dynamic data) =>
-      _batch.updateData(_collection.document(id), data);
+  void updateData(String id, T data) =>
+      _batch.updateData(_collection.document(id), data.toDocument());
 
   @override
-  void setData(dynamic data) => _batch.setData(_collection.document(), data);
+  void setData(T data) =>
+      _batch.setData(_collection.document(), data.toDocument());
 
   @override
   Future<void> commit() async {

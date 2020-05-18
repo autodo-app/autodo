@@ -278,16 +278,16 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
         body: ''));
   }
 
-  Todo _updateDueDate(car, todo, batch) {
+  Todo _updateDueDate(Car car, Todo todo, WriteBatchWrapper<Todo> batch) {
     final newDueDate = calcDueDate(car, todo.dueMileage);
 
-    final Todo out = todo.copyWith(dueDate: newDueDate, estimatedDueDate: true);
+    final out = todo.copyWith(dueDate: newDueDate, estimatedDueDate: true);
     _notificationsBloc.add(ReScheduleNotification(
         id: out.notificationID,
         date: out.dueDate,
         title: '${IntlKeys.todoDueSoon}: ${out.name}', // TODO: Translate this
         body: ''));
-    batch.updateData(out.id, out.toDocument());
+    batch.updateData(out.id, out);
     return out;
   }
 
@@ -324,7 +324,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
               ? (c.mileage + t.mileageRepeatInterval)
               : t.mileageRepeatInterval;
           final newTodo = t.copyWith(carName: c.name, dueMileage: dueMileage);
-          batch.setData(newTodo.toDocument());
+          batch.setData(newTodo);
         });
       });
     }
@@ -371,9 +371,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     yield TodosLoaded(todos: updatedTodos);
     event.todos.forEach(_scheduleNotification);
     final batch = await repo.startTodoWriteBatch();
-    event.todos.forEach((t) {
-      batch.setData(t.toDocument());
-    });
+    event.todos.forEach(batch.setData);
     await batch.commit();
   }
 
@@ -411,7 +409,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
         completedMileage:
             car.mileage // TODO: make this a user-configurable value?
         );
-    batch.updateData(completedTodo.id, completedTodo.toDocument());
+    batch.updateData(completedTodo.id, completedTodo);
     updatedTodos = updatedTodos
         .map((t) => (t.id == completedTodo.id) ? completedTodo : t)
         .toList();
@@ -430,14 +428,14 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
         dueDate: TodosBloc.calcDueDate(car, newDueMileage),
         completed: false,
       );
-      batch.setData(newTodo.toDocument());
+      batch.setData(newTodo);
       updatedTodos.add(newTodo);
     } else if (completedTodo.dateRepeatInterval != null) {
       final newTodo = curTodo.copyWith(
         dueDate: roundToDay(
             curTodo.dateRepeatInterval.addToDate(curTodo.completedDate)),
       );
-      batch.setData(newTodo.toDocument());
+      batch.setData(newTodo);
       updatedTodos.add(newTodo);
     }
     // TODO: this yield is important for verifying this output in unit tests
@@ -471,7 +469,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       yield TodosLoaded(todos: updatedTodos);
       final batch = await repo.startTodoWriteBatch();
       updatedTodos.forEach((updatedTodo) {
-        batch.updateData(updatedTodo.id, updatedTodo.toDocument());
+        batch.updateData(updatedTodo.id, updatedTodo);
       });
       await batch.commit();
     }

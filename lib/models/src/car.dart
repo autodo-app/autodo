@@ -2,11 +2,12 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
+import '../../repositories/src/write_batch_wrapper.dart';
 import '../../util.dart';
 import 'distanceratepoint.dart';
 
 @immutable
-class Car extends Equatable {
+class Car extends Equatable implements WriteBatchDocument {
   factory Car({
     String id,
     String name,
@@ -191,6 +192,7 @@ class Car extends Equatable {
     return '$runtimeType { id: $id, name: $name, mileage: $mileage, numRefuelings: $numRefuelings, averageEfficiency: $averageEfficiency, distanceRate: $distanceRate, lastMileageUpdate: ${lastMileageUpdate?.toUtc()?.toIso8601String()}, distanceRateHistory: $distanceRateHistory, make: $make, model: $model, year: $year, plate: $plate, vin: $vin, imageName: $imageName }';
   }
 
+  @override
   Map<String, Object> toDocument() {
     return {
       'name': name,

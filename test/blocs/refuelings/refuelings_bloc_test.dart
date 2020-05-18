@@ -13,7 +13,8 @@ class MockDataRepository extends Mock
     implements DataRepository {}
 
 // ignore: must_be_immutable
-class MockWriteBatch extends Mock implements WriteBatchWrapper {}
+class MockWriteBatch<T extends WriteBatchDocument> extends Mock
+    implements WriteBatchWrapper<T> {}
 
 class MockDbBloc extends Mock implements DatabaseBloc {}
 
@@ -103,7 +104,7 @@ void main() {
     blocTest(
       'AddRefueling',
       build: () {
-        final writeBatch = MockWriteBatch();
+        final writeBatch = MockWriteBatch<Refueling>();
         final dataRepository = MockDataRepository();
 
         when(dataRepository.refuelings())
@@ -159,7 +160,7 @@ void main() {
     blocTest(
       'UpdateRefueling',
       build: () {
-        final writeBatch = MockWriteBatch();
+        final writeBatch = MockWriteBatch<Refueling>();
         final dataRepository = MockDataRepository();
         when(dataRepository.refuelings())
             .thenAnswer((_) => Stream<List<Refueling>>.fromIterable([
@@ -186,7 +187,7 @@ void main() {
     blocTest(
       'DeleteRefueling',
       build: () {
-        final writeBatch = MockWriteBatch();
+        final writeBatch = MockWriteBatch<Refueling>();
         final dataRepository = MockDataRepository();
         when(dataRepository.refuelings())
             .thenAnswer((_) => Stream<List<Refueling>>.fromIterable([

@@ -5,7 +5,8 @@ import 'package:sembast/sembast.dart';
 import 'sembast_data_repository.dart';
 import 'write_batch_wrapper.dart';
 
-class SembastWriteBatch extends Equatable implements WriteBatchWrapper {
+class SembastWriteBatch<T extends WriteBatchDocument> extends Equatable
+    implements WriteBatchWrapper<T> {
   SembastWriteBatch(
     this.repository, {
     transactionList,
@@ -22,12 +23,12 @@ class SembastWriteBatch extends Equatable implements WriteBatchWrapper {
   final Function streamControllerUpdate;
 
   @override
-  void updateData(dynamic id, dynamic data) => transactionList
-      .add((txn) async => await store.record(int.parse(id)).put(txn, data));
+  void updateData(String id, T data) => transactionList.add((txn) async =>
+      await store.record(int.parse(id)).put(txn, data.toDocument()));
 
   @override
-  void setData(dynamic data) =>
-      transactionList.add((txn) async => await store.add(txn, data));
+  void setData(T data) => transactionList
+      .add((txn) async => await store.add(txn, data.toDocument()));
 
   @override
   Future<void> commit() async {

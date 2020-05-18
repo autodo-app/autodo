@@ -118,7 +118,7 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
         ..addAll(event.cars);
       yield CarsLoaded(updatedCars);
       final batch = await repo.startCarWriteBatch();
-      event.cars.forEach((c) => batch.setData(c.toDocument()));
+      event.cars.forEach(batch.setData);
       await batch.commit();
     }
   }
@@ -210,7 +210,7 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
           mileage: currentMileage,
           numRefuelings: numRefuelings,
           averageEfficiency: averageEfficiency);
-      batch.updateData(updated.id, updated.toDocument());
+      batch.updateData(updated.id, updated);
       updatedCars = updatedCars
           .map((car) => car.id == updated.id ? updated : car)
           .toList();

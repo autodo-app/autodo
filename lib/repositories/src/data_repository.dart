@@ -19,7 +19,7 @@ abstract class DataRepository extends Equatable {
 
   Future<void> updateTodo(Todo todo);
 
-  FutureOr<WriteBatchWrapper> startTodoWriteBatch();
+  FutureOr<WriteBatchWrapper<Todo>> startTodoWriteBatch();
 
   // Refuelings
   Future<void> addNewRefueling(Refueling refueling);
@@ -32,7 +32,7 @@ abstract class DataRepository extends Equatable {
 
   Future<void> updateRefueling(Refueling refueling);
 
-  FutureOr<WriteBatchWrapper> startRefuelingWriteBatch();
+  FutureOr<WriteBatchWrapper<Refueling>> startRefuelingWriteBatch();
 
   // Cars
   Future<void> addNewCar(Car car);
@@ -45,7 +45,7 @@ abstract class DataRepository extends Equatable {
 
   Future<void> updateCar(Car car);
 
-  FutureOr<WriteBatchWrapper> startCarWriteBatch();
+  FutureOr<WriteBatchWrapper<Car>> startCarWriteBatch();
 
   // Notifications
   Stream<int> notificationID();
@@ -67,7 +67,7 @@ abstract class DataRepository extends Equatable {
             t.dueMileage == null ? null : t.dueMileage * Distance.miles;
         return t.copyWith(dueMileage: dueMileage);
       }).forEach((t) {
-        todoWriteBatch.updateData(t.id, t.toDocument());
+        todoWriteBatch.updateData(t.id, t);
       });
       await todoWriteBatch.commit();
 
@@ -81,7 +81,7 @@ abstract class DataRepository extends Equatable {
         // page will handle it, but that could be an issue
         return r.copyWith(mileage: mileage, amount: amount);
       }).forEach((r) {
-        refuelingWriteBatch.updateData(r.id, r.toDocument());
+        refuelingWriteBatch.updateData(r.id, r);
       });
       await refuelingWriteBatch.commit();
 
@@ -93,7 +93,7 @@ abstract class DataRepository extends Equatable {
         // calcs here
         return c.copyWith(mileage: mileage);
       }).forEach((c) {
-        carWriteBatch.updateData(c.id, c.toDocument());
+        carWriteBatch.updateData(c.id, c);
       });
       await carWriteBatch.commit();
     }
@@ -109,7 +109,7 @@ abstract class DataRepository extends Equatable {
         final updatedTodo = todo.copyWith(
             mileageRepeatInterval: r['mileageInterval'].toDouble(),
             dateRepeatInterval: r['dateInterval']);
-        batch.updateData(updatedTodo.id, updatedTodo.toDocument());
+        batch.updateData(updatedTodo.id, updatedTodo);
       });
       await batch.commit();
     }
@@ -120,23 +120,17 @@ abstract class DataRepository extends Equatable {
   Future<void> copyFrom(DataRepository other) async {
     // Copy Cars
     final carWriteBatch = await startCarWriteBatch();
-    for (final car in await other.getCurrentCars()) {
-      carWriteBatch.setData(car.toDocument());
-    }
+    (await other.getCurrentCars()).forEach(carWriteBatch.setData);
     await carWriteBatch.commit();
 
     // Copy Todos
     final todoWriteBatch = await startTodoWriteBatch();
-    for (final todo in await other.getCurrentTodos()) {
-      todoWriteBatch.setData(todo.toDocument());
-    }
+    (await other.getCurrentTodos()).forEach(todoWriteBatch.setData);
     await todoWriteBatch.commit();
 
     // Copy Refuelings
     final refuelingWriteBatch = await startRefuelingWriteBatch();
-    for (final refueling in await other.getCurrentRefuelings()) {
-      refuelingWriteBatch.setData(refueling.toDocument());
-    }
+    (await other.getCurrentRefuelings()).forEach(refuelingWriteBatch.setData);
     await refuelingWriteBatch.commit();
   }
 }

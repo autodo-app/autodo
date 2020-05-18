@@ -1,3 +1,4 @@
+import 'package:autodo/repositories/src/write_batch_wrapper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -10,6 +11,15 @@ class MockCollection extends Mock implements CollectionReference {}
 class MockFirestore extends Mock implements Firestore {}
 
 class MockBatch extends Mock implements WriteBatch {}
+
+class Wrapper implements WriteBatchDocument {
+  Wrapper(this.map);
+
+  final Map<String, Object> map;
+
+  @override
+  Map<String, Object> toDocument() => map;
+}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -32,14 +42,14 @@ void main() {
           .thenAnswer((_) {});
       final wrapper = FirebaseWriteBatch(
           collection: collection, firestoreInstance: firestore);
-      wrapper.updateData('', {'test': ''});
+      wrapper.updateData('', Wrapper({'test': ''}));
     });
     test('set', () {
       when(batch.setData(collection.document(), {'test': ''}))
           .thenAnswer((_) {});
       final wrapper = FirebaseWriteBatch(
           collection: collection, firestoreInstance: firestore);
-      wrapper.setData({'test': ''});
+      wrapper.setData(Wrapper({'test': ''}));
     });
     test('commit', () {
       when(batch.commit()).thenAnswer((_) async {});
