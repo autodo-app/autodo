@@ -5,9 +5,9 @@ class Pubspec {
 
   static const String description = 'Car Maintenance Made Simple.';
 
-  static const String versionFull = '0.3.1+15';
+  static const String versionFull = '0.3.2+16';
 
-  static const String version = '0.3.1';
+  static const String version = '0.3.2';
 
   static const String versionSmall = '0.3';
 
@@ -15,9 +15,9 @@ class Pubspec {
 
   static const int versionMinor = 3;
 
-  static const int versionPatch = 1;
+  static const int versionPatch = 2;
 
-  static const int versionBuild = 15;
+  static const int versionBuild = 16;
 
   static const String versionPreRelease = null;
 

@@ -28,8 +28,6 @@ class CarEntryFieldState extends State<CarEntryField> {
 
   FocusNode _nameNode, _mileageNode;
 
-  Function nextNode;
-
   @override
   void initState() {
     _nameNode = FocusNode();
@@ -81,7 +79,6 @@ class CarEntryFieldState extends State<CarEntryField> {
               widget.car.mileage = distance.unitToInternal(double.parse(value)),
           focusNode: _mileageNode,
           textInputAction: TextInputAction.done,
-          onFieldSubmitted: (_) async => await nextNode(),
         );
 
     return Container(
