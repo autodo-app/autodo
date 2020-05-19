@@ -89,63 +89,6 @@ class HomeScreenState extends State<HomeScreen> with RouteAware {
     });
   }
 
-  // this has to be a function so that it returns a different route each time
-  // the lifecycle of a MaterialPageRoute requires that it not be reused.
-  List<MaterialPageRoute> Function() fabRoutes(List<Car> cars) => () => [
-        MaterialPageRoute(
-          builder: (context) => _ScreenWithBanner(
-            child: RefuelingAddEditScreen(
-              isEditing: false,
-              onSave: (m, d, a, c, n) {
-                BlocProvider.of<RefuelingsBloc>(context)
-                    .add(AddRefueling(Refueling(
-                  mileage:
-                      Distance.of(context, listen: false).unitToInternal(m),
-                  date: d,
-                  amount: Volume.of(context, listen: false).unitToInternal(a),
-                  cost: Currency.of(context, listen: false).unitToInternal(c),
-                  carName: n,
-                )));
-              },
-              cars: cars,
-            ),
-          ),
-        ),
-        MaterialPageRoute(
-            builder: (context) => _ScreenWithBanner(
-                    child: TodoAddEditScreen(
-                  isEditing: false,
-                  onSave: (n, d, m, c, mR, dR) {
-                    BlocProvider.of<TodosBloc>(context).add(AddTodo(Todo(
-                        name: n,
-                        dueDate: d,
-                        dueMileage: m,
-                        carName: c,
-                        mileageRepeatInterval: mR,
-                        dateRepeatInterval: dR,
-                        completed: false)));
-                  },
-                ))),
-        MaterialPageRoute(
-            builder: (context) => _ScreenWithBanner(
-                    child: CarAddEditScreen(
-                  isEditing: false,
-                  onSave: (name, odom, make, model, y, p, v) {
-                    BlocProvider.of<TodosBloc>(context).add(TranslateDefaults(
-                        JsonIntl.of(context),
-                        Distance.of(context, listen: false).unit));
-                    BlocProvider.of<CarsBloc>(context).add(AddCar(Car(
-                        name: name,
-                        mileage: odom,
-                        make: make,
-                        model: model,
-                        year: y,
-                        plate: p,
-                        vin: v)));
-                  },
-                ))),
-      ];
-
   List<Function(BuildContext)> pages(List<Car> cars) => [
         (context) => _ScreenWithBanner(
             child: RefuelingAddEditScreen(
@@ -204,11 +147,10 @@ class HomeScreenState extends State<HomeScreen> with RouteAware {
           return Container();
         } else if (integrationTest) {
           return AutodoActionButton(
-              miniButtonRoutes: fabRoutes((state as CarsLoaded).cars),
+              miniButtonPages: pages((state as CarsLoaded).cars),
               ticker: TestVSync());
         } else {
           return AutodoActionButton(
-              miniButtonRoutes: fabRoutes((state as CarsLoaded).cars),
               miniButtonPages: pages((state as CarsLoaded).cars),);
         }
       });

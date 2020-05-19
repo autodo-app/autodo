@@ -11,7 +11,6 @@ class AutodoActionButton extends StatefulWidget {
     Key key,
     this.mainButtonKey = IntegrationTestKeys.mainFab,
     this.miniButtonKeys = IntegrationTestKeys.fabKeys,
-    this.miniButtonRoutes,
     this.miniButtonPages,
     this.ticker,
   }) : super(key: key ?? IntegrationTestKeys.fabKey);
@@ -20,29 +19,24 @@ class AutodoActionButton extends StatefulWidget {
 
   final List<Key> miniButtonKeys;
 
-  final List<MaterialPageRoute> Function() miniButtonRoutes;
-
   final List<Function(BuildContext)> miniButtonPages;
 
   final TickerProvider ticker;
 
   @override
   _AutodoActionButtonState createState() => _AutodoActionButtonState(
-      mainButtonKey, miniButtonKeys, miniButtonRoutes, ticker);
+      mainButtonKey, miniButtonKeys, ticker);
 }
 
 class _AutodoActionButtonState extends State<AutodoActionButton>
     with SingleTickerProviderStateMixin {
-  _AutodoActionButtonState(this.mainButtonKey, this.miniButtonKeys,
-      this.miniButtonRoutes, this.ticker);
+  _AutodoActionButtonState(this.mainButtonKey, this.miniButtonKeys, this.ticker);
 
   AnimationController _controller;
 
   final Key mainButtonKey;
 
   final List<Key> miniButtonKeys;
-
-  final List<MaterialPageRoute> Function() miniButtonRoutes;
 
   final TickerProvider ticker;
 
