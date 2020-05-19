@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:animations/animations.dart';
 
 import '../../integ_test_keys.dart';
 
@@ -11,6 +12,7 @@ class AutodoActionButton extends StatefulWidget {
     this.mainButtonKey = IntegrationTestKeys.mainFab,
     this.miniButtonKeys = IntegrationTestKeys.fabKeys,
     this.miniButtonRoutes,
+    this.miniButtonPages,
     this.ticker,
   }) : super(key: key ?? IntegrationTestKeys.fabKey);
 
@@ -19,6 +21,8 @@ class AutodoActionButton extends StatefulWidget {
   final List<Key> miniButtonKeys;
 
   final List<MaterialPageRoute> Function() miniButtonRoutes;
+
+  final List<Function(BuildContext)> miniButtonPages;
 
   final TickerProvider ticker;
 
@@ -91,21 +95,41 @@ class _AutodoActionButtonState extends State<AutodoActionButton>
               curve: Interval(0.0, 1.0 - index / icons.length / 2.0,
                   curve: Curves.easeOut),
             ),
-            child: FloatingActionButton(
-              heroTag: null,
-              backgroundColor: backgroundColor,
-              mini: true,
-              child: Icon(icons[index]['data'],
-                  color: foregroundColor,
+            // child: FloatingActionButton(
+            //   heroTag: null,
+            //   backgroundColor: backgroundColor,
+            //   mini: true,
+            //   child: Icon(icons[index]['data'],
+            //       color: foregroundColor,
+            //       semanticLabel: icons[index]['semanticLabel'],
+            //       key: _buttonKey(index)),
+            //   onPressed: () {
+            //     switchState();
+            //     if (miniButtonRoutes != null) {
+            //       Navigator.push(context, miniButtonRoutes()[index]);
+            //     }
+            //   },
+            // ),
+            child: OpenContainer(
+              transitionType: ContainerTransitionType.fade,
+              openBuilder: (BuildContext context, VoidCallback openContainer) {
+                switchState();
+                return widget.miniButtonPages[index](context);
+              },
+              closedShape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(12.0),
+                ),
+              ),
+              closedBuilder: (BuildContext context, VoidCallback openContainer) => Container(  
+                height: 48.0,
+                width: 48.0,
+                color: backgroundColor,
+                child: Icon(icons[index]['data'],
+                  color: foregroundColor, 
                   semanticLabel: icons[index]['semanticLabel'],
                   key: _buttonKey(index)),
-              onPressed: () {
-                switchState();
-                print(index);
-                if (miniButtonRoutes != null) {
-                  Navigator.push(context, miniButtonRoutes()[index]);
-                }
-              },
+              ),
             ),
           ),
         );

@@ -46,6 +46,7 @@ dependencies:
   image_picker:
   dotted_border:
   flutter_debug_drawer:
+  animations:
 
 dependency_overrides:
   flutter_debug_drawer:
