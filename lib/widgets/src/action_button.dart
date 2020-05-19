@@ -55,6 +55,8 @@ class _AutodoActionButtonState extends State<AutodoActionButton>
     {'data': Icons.directions_car, 'semanticLabel': 'Add Car'}
   ];
 
+  static const MINI_BUTTON_SIZE = 40.0;
+
   @override
   void initState() {
     super.initState();
@@ -95,21 +97,6 @@ class _AutodoActionButtonState extends State<AutodoActionButton>
               curve: Interval(0.0, 1.0 - index / icons.length / 2.0,
                   curve: Curves.easeOut),
             ),
-            // child: FloatingActionButton(
-            //   heroTag: null,
-            //   backgroundColor: backgroundColor,
-            //   mini: true,
-            //   child: Icon(icons[index]['data'],
-            //       color: foregroundColor,
-            //       semanticLabel: icons[index]['semanticLabel'],
-            //       key: _buttonKey(index)),
-            //   onPressed: () {
-            //     switchState();
-            //     if (miniButtonRoutes != null) {
-            //       Navigator.push(context, miniButtonRoutes()[index]);
-            //     }
-            //   },
-            // ),
             child: OpenContainer(
               transitionType: ContainerTransitionType.fade,
               openBuilder: (BuildContext context, VoidCallback openContainer) {
@@ -118,12 +105,13 @@ class _AutodoActionButtonState extends State<AutodoActionButton>
               },
               closedShape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
-                  Radius.circular(12.0),
+                  Radius.circular(MINI_BUTTON_SIZE / 2.0),
                 ),
               ),
+              closedElevation: 24.0,
               closedBuilder: (BuildContext context, VoidCallback openContainer) => Container(  
-                height: 48.0,
-                width: 48.0,
+                height: MINI_BUTTON_SIZE,
+                width: MINI_BUTTON_SIZE,
                 color: backgroundColor,
                 child: Icon(icons[index]['data'],
                   color: foregroundColor, 
