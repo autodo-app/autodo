@@ -1,3 +1,13 @@
 from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import *
 
-urlpatterns = []
+router = DefaultRouter()
+router.register(r'cars', CarsListViewSet)
+router.register(r'odomSnapshots', OdomSnapshotsListViewSet)
+router.register(r'refuelings', RefuelingsListViewSet)
+router.register(r'todos', TodosListViewSet)
+
+urlpatterns = [
+    path('', include(router.urls))
+]
