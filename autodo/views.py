@@ -3,29 +3,36 @@ from .models import *
 from .serializers import *
 from .permissions import *
 
+PERMS = [permissions.IsAuthenticated, IsOwner]
+
 class CarsListViewSet(viewsets.ModelViewSet):
-    """Provides a GET handler."""
     queryset = Car.objects.all()
     serializer_class = CarSerializer
+    permission_classes = PERMS
+
+    def get_queryset(self):
+        return self.queryset.filter(owner=self.request.user)
 
 class OdomSnapshotsListViewSet(viewsets.ModelViewSet):
-    """Provides a GET handler."""
     queryset = OdomSnapshot.objects.all()
     serializer_class = OdomSnapshotSerializer
-    permission_classes = [permissions.IsAuthenticated, IsOwner]
-
-    # def perform_create(self, serializer):
-        # serializer.save(owner=self.request.user)
+    permission_classes = PERMS
 
     def get_queryset(self):
         return self.queryset.filter(owner=self.request.user)
 
 class RefuelingsListViewSet(viewsets.ModelViewSet):
-    """Provides a GET handler."""
     queryset = Refueling.objects.all()
     serializer_class = RefuelingSerializer
+    permission_classes = PERMS
+
+    def get_queryset(self):
+        return self.queryset.filter(owner=self.request.user)
 
 class TodosListViewSet(viewsets.ModelViewSet):
-    """Provides a GET handler."""
     queryset = Todo.objects.all()
     serializer_class = TodoSerializer
+    permission_classes = PERMS
+
+    def get_queryset(self):
+        return self.queryset.filter(owner=self.request.user)

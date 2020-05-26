@@ -5,6 +5,7 @@ class Car(models.Model):
     """
     Represents the data for a Car type.
     """
+    owner = models.ForeignKey('auth.User', related_name='car', on_delete=models.CASCADE)
     name = models.CharField(max_length=255, null=False)
     make = models.CharField(max_length=255)
     model = models.CharField(max_length=255)
@@ -30,6 +31,7 @@ class OdomSnapshot(models.Model):
 
 class Refueling(models.Model):
     """Data associated with a car's refueling event."""
+    owner = models.ForeignKey('auth.User', related_name='refueling', on_delete=models.CASCADE)
     odomSnapshot = models.ForeignKey(OdomSnapshot, on_delete=models.CASCADE)
     cost = models.IntegerField() # For USD, scale this up by x100 to get an int
     amount = models.FloatField()
@@ -39,6 +41,7 @@ class Refueling(models.Model):
 
 class Todo(models.Model):
     """A task or action to perform on a car."""
+    owner = models.ForeignKey('auth.User', related_name='todo', on_delete=models.CASCADE)
     car = models.ForeignKey(Car, on_delete=models.CASCADE)
     completionOdomSnapshot = models.ForeignKey(OdomSnapshot, on_delete=models.CASCADE)
     name = models.CharField(max_length=255, null=False)
