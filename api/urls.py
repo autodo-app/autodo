@@ -20,4 +20,5 @@ urlpatterns = [
     path('', include('autodo.urls')),
     path('admin/', admin.site.urls),
     re_path('api/(?P<version>(v1|v2))/', include('autodo.urls')),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]

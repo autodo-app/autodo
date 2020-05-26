@@ -20,6 +20,7 @@ class Car(models.Model):
 class OdomSnapshot(models.Model):
     """The relevant data for an update to a car's odometer reading."""
     car = models.ForeignKey(Car, on_delete=models.CASCADE)
+    owner = models.ForeignKey('auth.User', related_name='odomSnapshot', on_delete=models.CASCADE)
     date = models.DateTimeField()
     mileage = models.FloatField()
 
