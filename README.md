@@ -1,6 +1,11 @@
 # backend
 server-side code for autodo
 
+## Running the Code  
+
+- Install Docker
+- run `docker-compose up`
+
 ## Installation
 
 On MacOS:
