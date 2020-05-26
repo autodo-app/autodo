@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:animations/animations.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -230,7 +231,29 @@ class HomeScreenState extends State<HomeScreen> with RouteAware {
 
   Widget buildScreen(BuildContext context) {
     return Scaffold(
-      body: views[_tab],
+      // body: views[_tab],
+      // TODO: use TabController?
+      body: PageTransitionSwitcher(  
+        transitionBuilder: (child, anim1, anim2) => SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(1.5, 0.0),
+            end: Offset.zero,
+          ).animate(anim1),
+          child: SlideTransition(
+            position: Tween<Offset>(
+              begin: Offset.zero,
+              end: const Offset(1.5, 0.0),
+            ).animate(anim2),
+            child: child,
+          )),
+    // SharedAxisTransition(  
+    //       animation: anim1,
+    //       secondaryAnimation: anim2,
+    //       transitionType: SharedAxisTransitionType.horizontal,
+    //       child: child
+    //     ),
+    //     child: views[_tab],
+      ),
       floatingActionButton: actionButton,
       bottomNavigationBar: TabSelector(
         activeTab: _tab,
