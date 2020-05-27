@@ -18,7 +18,7 @@ from django.urls import path, include, re_path
 from rest_framework.authtoken import views
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from .serializers import CustomJWTSerializer
+from autodo.serializers import CustomJWTSerializer
 
 urlpatterns = [
     path('', include('autodo.urls')),
@@ -28,4 +28,5 @@ urlpatterns = [
     # path('api-token-auth/', views.obtain_auth_token),
     path('api/token/', TokenObtainPairView.as_view(serializer_class=CustomJWTSerializer), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
 ]

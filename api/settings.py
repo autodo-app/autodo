@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    'oauth2_provider',
     'autodo',
 ]
 
@@ -144,6 +145,16 @@ REST_FRAMEWORK = {
         'user': '10000/day',
     },
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
     ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    )
+}
+
+AUTH_USER_MODEL = 'autodo.User'
+
+OAUTH2_PROVIDER = {
+    'SCOPES': {'read': 'Read sccope', 'write': 'Write scope', 'groups': 'Access to your groups'},
 }

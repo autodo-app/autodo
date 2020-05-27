@@ -1,11 +1,16 @@
 """Defines the types of objects created and used by the user."""
 from django.db import models
+from django.contrib.auth.models import AbstractUser
+
+class User(AbstractUser):
+    class Meta:
+        db_table = 'auth_user'
 
 class Car(models.Model):
     """
     Represents the data for a Car type.
     """
-    owner = models.ForeignKey('auth.User', related_name='car', on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, related_name='car', on_delete=models.CASCADE)
     name = models.CharField(max_length=255, null=False)
     make = models.CharField(max_length=255)
     model = models.CharField(max_length=255)
@@ -21,7 +26,7 @@ class Car(models.Model):
 class OdomSnapshot(models.Model):
     """The relevant data for an update to a car's odometer reading."""
     car = models.ForeignKey(Car, on_delete=models.CASCADE)
-    owner = models.ForeignKey('auth.User', related_name='odomSnapshot', on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, related_name='odomSnapshot', on_delete=models.CASCADE)
     date = models.DateTimeField()
     mileage = models.FloatField()
 
@@ -31,7 +36,7 @@ class OdomSnapshot(models.Model):
 
 class Refueling(models.Model):
     """Data associated with a car's refueling event."""
-    owner = models.ForeignKey('auth.User', related_name='refueling', on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, related_name='refueling', on_delete=models.CASCADE)
     odomSnapshot = models.ForeignKey(OdomSnapshot, on_delete=models.CASCADE)
     cost = models.IntegerField() # For USD, scale this up by x100 to get an int
     amount = models.FloatField()
@@ -41,7 +46,7 @@ class Refueling(models.Model):
 
 class Todo(models.Model):
     """A task or action to perform on a car."""
-    owner = models.ForeignKey('auth.User', related_name='todo', on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, related_name='todo', on_delete=models.CASCADE)
     car = models.ForeignKey(Car, on_delete=models.CASCADE)
     completionOdomSnapshot = models.ForeignKey(OdomSnapshot, on_delete=models.CASCADE)
     name = models.CharField(max_length=255, null=False)
