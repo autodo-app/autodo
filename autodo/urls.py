@@ -4,7 +4,7 @@ from .views import *
 
 router = DefaultRouter()
 router.register(r'cars', CarsListViewSet)
-router.register(r'odomSnapshots', OdomSnapshotsListViewSet)
+router.register(r'odomsnapshots', OdomSnapshotsListViewSet, basename='odomsnapshots')
 router.register(r'refuelings', RefuelingsListViewSet)
 router.register(r'todos', TodosListViewSet)
 

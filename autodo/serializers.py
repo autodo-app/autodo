@@ -36,7 +36,7 @@ class OdomSnapshotSerializer(serializers.HyperlinkedModelSerializer):
 
 class RefuelingSerializer(serializers.HyperlinkedModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
-    odomSnapshot = serializers.HyperlinkedIdentityField(view_name='odomSnapshot-detail')
+    odomSnapshot = serializers.HyperlinkedIdentityField(view_name='odomsnapshots-detail')
 
     class Meta:
         model = Refueling
@@ -45,7 +45,7 @@ class RefuelingSerializer(serializers.HyperlinkedModelSerializer):
 class TodoSerializer(serializers.HyperlinkedModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
     car = serializers.HyperlinkedIdentityField(view_name='car-detail')
-    completionOdomSnapshot = serializers.HyperlinkedIdentityField(view_name='odomSnapshot-detail')
+    completionOdomSnapshot = serializers.HyperlinkedIdentityField(view_name='odomsnapshots-detail')
 
     class Meta:
         model = Todo
