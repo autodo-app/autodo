@@ -25,8 +25,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     re_path('api/(?P<version>(v1|v2))/', include('autodo.urls')),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    # path('api-token-auth/', views.obtain_auth_token),
-    path('api/token/', TokenObtainPairView.as_view(serializer_class=CustomJWTSerializer), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+    path('auth/token/', TokenObtainPairView.as_view(serializer_class=CustomJWTSerializer), name='token_obtain_pair'),
+    path('auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]

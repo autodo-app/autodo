@@ -1,6 +1,5 @@
-from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import Car, OdomSnapshot, Refueling, Todo
+from .models import Car, OdomSnapshot, Refueling, Todo, User
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 class CustomJWTSerializer(TokenObtainPairSerializer):
