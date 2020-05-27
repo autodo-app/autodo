@@ -7,18 +7,49 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/models.dart';
+import '../../repositories/repositories.dart';
 import 'data_repository.dart';
 import 'write_batch_wrapper.dart';
 
 class RestDataRepository extends DataRepository {
-  RestDataRepository._(this.token);
+  RestDataRepository._(this.authRepo, this.token);
 
-  final String token;
+  String token;
 
-  static const API_BASE_URL = '*.ngrok.io';
+  final AuthRepository authRepo;
 
-  static Future<RestDataRepository> open({@required String token}) async {
-    return RestDataRepository._(token);
+  static const API_BASE_URL = 'http://ed9aa195.ngrok.io';
+
+  static Future<RestDataRepository> open({@required AuthRepository authRepo, @required String token}) async {
+    return RestDataRepository._(authRepo, token);
+  }
+
+  Future<Map<String, dynamic>> _authenticatedGet(String url) async {
+    var response = await get(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token'
+      }
+    );
+    if (response.statusCode == 401) {
+      // Token has expired, refresh it and try again
+      token = await authRepo.refreshAccessToken();
+      if (token == null) {
+        throw Exception('Could not refresh access token');
+      }
+      response = await get(
+        url,
+        headers: {
+          'Authorization': 'Bearer $token'
+        }
+      );
+    }
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to access API');
+    }
+    final data = await json.decode(response.body);
+    return data;
   }
   
   @override
@@ -50,12 +81,8 @@ class RestDataRepository extends DataRepository {
 
   @override
   Future<List<Todo>> getCurrentTodos() async {
-    final response = await get('$API_BASE_URL/todos/');
-    if (response.statusCode != 200) {
-      throw Exception('Could not load todos');
-    }
-    final data = json.decode(response.body);
-    return data.map((t) => Todo.fromMap(t['id'], t));
+    final data = await _authenticatedGet('$API_BASE_URL/todos/');
+    return data['results']?.map<Todo>((t) => Todo.fromMap('${t['id']}', t))?.toList();
   }
 
   @override
@@ -74,7 +101,10 @@ class RestDataRepository extends DataRepository {
   Stream<List<Refueling>> refuelings([bool forceRefresh]) {}
 
   @override
-  Future<List<Refueling>> getCurrentRefuelings() {}
+  Future<List<Refueling>> getCurrentRefuelings() async {
+    final data = await _authenticatedGet('$API_BASE_URL/refuelings/');
+    return data['results']?.map<Refueling>((r) => Refueling.fromMap('${r['id']}', r))?.toList();
+  }
 
   @override
   Future<void> updateRefueling(Refueling refueling) {}
@@ -93,7 +123,10 @@ class RestDataRepository extends DataRepository {
   Stream<List<Car>> cars() {}
 
   @override
-  Future<List<Car>> getCurrentCars() {}
+  Future<List<Car>> getCurrentCars() async {
+    final data = await _authenticatedGet('$API_BASE_URL/cars/');
+    return data['results']?.map<Car>((c) => Car.fromMap('${c['id']}', c))?.toList();
+  }
 
   @override
   Future<void> updateCar(Car car) {}

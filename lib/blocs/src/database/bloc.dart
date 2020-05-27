@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -56,7 +55,9 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
     //   firestoreInstance: _firestoreInstance,
     //   uuid: event.uuid,
     // );
-    final dataRepo = await RestDataRepository.open(token: event.token);
+    final dataRepo = await RestDataRepository.open(
+      authRepo: _authenticationBloc.repo,
+      token: event.token);
     // final storageRepo = FirebaseStorageRepository(uuid: event.uuid);
     final storageRepo = null;
     yield DbLoaded(dataRepo, storageRepo: storageRepo);

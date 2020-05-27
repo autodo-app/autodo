@@ -43,8 +43,8 @@ class AuthenticationBloc
   /// [AuthenticationState]s.
   AuthenticationBloc({@required AuthRepository userRepository})
       : assert(userRepository != null),
-        _userRepository = userRepository {
-    // _userRepository.stream?.listen((user) {
+        repo = userRepository;
+    // repo.stream?.listen((user) {
     //   if (user != null &&
     //       (!(state is RemoteAuthenticated) ||
     //           (state as RemoteAuthenticated).uuid != user.uid)) {
@@ -56,9 +56,9 @@ class AuthenticationBloc
     //     }
     //   }
     // });
-  }
+  // }
 
-  final AuthRepository _userRepository;
+  final AuthRepository repo;
 
   static const String trialUserKey = 'trialUserLoggedIn';
 
@@ -105,10 +105,10 @@ class AuthenticationBloc
       }
       final prefs = await SharedPreferences.getInstance();
 
-      final isSignedIn = await _userRepository.isLoggedIn();
+      final isSignedIn = await repo.isLoggedIn();
       if (isSignedIn) {
-        final name = await _userRepository.getCurrentUserEmail();
-        final token = await _userRepository.getCurrentUserToken();
+        final name = await repo.getCurrentUserEmail();
+        final token = await repo.getCurrentUserToken();
         yield RemoteAuthenticated(
           name,
           token,
@@ -133,8 +133,8 @@ class AuthenticationBloc
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(trialUserKey, false);
 
-    final _email = await _userRepository.getCurrentUserEmail();
-    final _token = await _userRepository.getCurrentUserToken();
+    final _email = await repo.getCurrentUserEmail();
+    final _token = await repo.getCurrentUserToken();
     yield RemoteAuthenticated(_email, _token);
   }
 
@@ -147,8 +147,8 @@ class AuthenticationBloc
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(trialUserKey, false);
 
-    final _email = await _userRepository.getCurrentUserEmail();
-    final _token = await _userRepository.getCurrentUserToken();
+    final _email = await repo.getCurrentUserEmail();
+    final _token = await repo.getCurrentUserToken();
     yield RemoteAuthenticated(_email, _token);
   }
 
@@ -161,7 +161,7 @@ class AuthenticationBloc
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(trialUserKey, false);
     yield Unauthenticated();
-    await _userRepository.logOut();
+    await repo.logOut();
   }
 
   /// Deletes all data associated with the currently logged in user and yields
@@ -172,7 +172,7 @@ class AuthenticationBloc
   /// to the home screen presentation layer.
   Stream<AuthenticationState> _mapDeletedUserToState() async* {
     yield Unauthenticated();
-    await _userRepository.deleteCurrentUser();
+    await repo.deleteCurrentUser();
   }
 
   Stream<AuthenticationState> _mapTrialUserSignedUpToState() async* {

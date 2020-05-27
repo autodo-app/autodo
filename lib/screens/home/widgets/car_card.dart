@@ -54,7 +54,7 @@ class CarCard extends StatelessWidget {
                         future: (BlocProvider.of<DatabaseBloc>(context).state
                                 as DbLoaded)
                             .storageRepo
-                            .getDownloadUrl(car.imageName),
+                            ?.getDownloadUrl(car.imageName),
                         builder: (context, snap) {
                           if (snap.connectionState != ConnectionState.done) {
                             return SizedBox(height: 80);
