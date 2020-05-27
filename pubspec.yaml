@@ -46,6 +46,8 @@ dependencies:
   image_picker:
   dotted_border:
   flutter_debug_drawer:
+  http:
+  flutter_secure_storage:
 
 dependency_overrides:
   flutter_debug_drawer:

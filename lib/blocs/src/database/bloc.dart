@@ -16,13 +16,12 @@ import 'state.dart';
 
 class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
   DatabaseBloc(
-      {firestoreInstance, @required authenticationBloc, this.pathProvider})
+      {@required authenticationBloc, this.pathProvider})
       : assert(authenticationBloc != null),
-        _authenticationBloc = authenticationBloc,
-        _firestoreInstance = firestoreInstance ?? Firestore.instance {
+        _authenticationBloc = authenticationBloc {
     _authSubscription = _authenticationBloc.listen((authState) {
       if (authState is RemoteAuthenticated) {
-        add(UserLoggedIn(authState.uuid));
+        add(UserLoggedIn(authState.token));
       } else if (((state is DbNotLoaded) || (state is DbUninitialized)) &&
           authState is LocalAuthenticated) {
         add(TrialLogin());
@@ -31,8 +30,6 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       }
     });
   }
-
-  final Firestore _firestoreInstance;
 
   final AuthenticationBloc _authenticationBloc;
 
@@ -55,11 +52,13 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
   }
 
   Stream<DatabaseState> _mapUserLoggedInToState(UserLoggedIn event) async* {
-    final dataRepo = await FirebaseDataRepository.open(
-      firestoreInstance: _firestoreInstance,
-      uuid: event.uuid,
-    );
-    final storageRepo = FirebaseStorageRepository(uuid: event.uuid);
+    // final dataRepo = await FirebaseDataRepository.open(
+    //   firestoreInstance: _firestoreInstance,
+    //   uuid: event.uuid,
+    // );
+    final dataRepo = await RestDataRepository.open(token: event.token);
+    // final storageRepo = FirebaseStorageRepository(uuid: event.uuid);
+    final storageRepo = null;
     yield DbLoaded(dataRepo, storageRepo: storageRepo);
   }
 

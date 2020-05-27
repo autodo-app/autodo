@@ -32,21 +32,20 @@ class Authenticated extends AuthenticationState {
 
 /// Represents an app state where there is a user logged in.
 class RemoteAuthenticated extends Authenticated {
-  const RemoteAuthenticated(this.displayName, this.uuid);
+  const RemoteAuthenticated(this.displayName, this.token);
 
   /// The email address of the user. Used to represent the user in the GUI.
   final String displayName;
 
-  /// A unique string of alphanumeric characters identifying the user. Only used
-  /// for internal purposes.
-  final String uuid;
+  /// The token used to authenticate requests to the server
+  final String token;
 
   @override
-  List<Object> get props => [displayName, uuid];
+  List<Object> get props => [displayName, token];
 
   @override
   String toString() =>
-      '$runtimeType { displayName: $displayName, uuid: $uuid }';
+      '$runtimeType { displayName: $displayName, token: $token }';
 }
 
 class LocalAuthenticated extends Authenticated {

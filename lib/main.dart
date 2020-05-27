@@ -99,7 +99,8 @@ class AppProviderState extends State<AppProvider> {
     InAppPurchaseConnection.enablePendingPurchases();
     BlocSupervisor.delegate = AutodoBlocDelegate();
 
-    authRepository = FirebaseAuthRepository();
+    // authRepository = FirebaseAuthRepository();
+    authRepository = JwtAuthRepository();
     theme = createTheme();
 
     final locale = WidgetsBinding.instance.window.locale ?? Locale('en', 'US');
