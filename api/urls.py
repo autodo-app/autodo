@@ -27,4 +27,10 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('auth/token/', TokenObtainPairView.as_view(serializer_class=CustomJWTSerializer), name='token_obtain_pair'),
     path('auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    # This populates:
+    # - accounts/register to register a new user
+    # - accounts/verify-registration to verify the registration with a signature
+    #
+    # More here: https://django-rest-registration.readthedocs.io/en/latest/detailed_configuration/register.html#api-views
+    path('accounts/', include('rest_registration.api.urls')),
 ]

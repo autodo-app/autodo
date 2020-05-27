@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'oauth2_provider',
     'autodo',
+    'rest_registration',
 ]
 
 MIDDLEWARE = [
@@ -156,4 +157,10 @@ AUTH_USER_MODEL = 'autodo.User'
 
 OAUTH2_PROVIDER = {
     'SCOPES': {'read': 'Read sccope', 'write': 'Write scope', 'groups': 'Access to your groups'},
+}
+
+REST_REGISTRATION = {
+    'REGISTER_VERIFICATION_ENABLED': False,
+    'RESET_PASSWORD_VERIFICATION_ENABLED': False,
+    'REGISTER_EMAIL_VERIFICATION_ENABLED': False,
 }
