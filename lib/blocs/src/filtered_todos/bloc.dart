@@ -136,10 +136,11 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
   }
 
   List<Todo> _setDueState(List<Todo> todos, List<Car> cars) {
-    return todos.map((t) {
-      final curCar = cars.firstWhere((c) => c.name == t.carName);
-      return t.copyWith(dueState: TodosBloc.calcDueState(curCar, t));
-    }).toList();
+    return todos;
+    // return todos.map((t) {
+    //   final curCar = cars.firstWhere((c) => c.id == t.carId);
+    //   return t.copyWith(dueState: TodosBloc.calcDueState(curCar, t));
+    // }).toList();
   }
 
   Map<TodoDueState, List<Todo>> _filterTodos(
