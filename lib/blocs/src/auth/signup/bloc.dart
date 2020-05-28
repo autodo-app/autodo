@@ -151,6 +151,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
         yield SignupSuccess();
       }
     } on PlatformException catch (e) {
+      // Firebase Errors
       var errorString = 'Error communicating to the auToDo servers.';
       if (e.code == 'ERROR_WEAK_PASSWORD') {
         errorString = 'Your password must be longer than 6 characters.';
@@ -161,6 +162,9 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
       } else if (e.code == 'ERROR_WRONG_PASSWORD') {
         errorString = 'Incorrect password, please try again.';
       }
+      yield SignupError(errorString);
+    } on Exception catch(e) {
+      var errorString = e.toString();
       yield SignupError(errorString);
     }
   }

@@ -1,4 +1,3 @@
-
 abstract class AuthRepository {
   // Future<FirebaseUser> signInWithGoogle();
   // Future<FirebaseUser> signInWithCredentials(String email, String password);

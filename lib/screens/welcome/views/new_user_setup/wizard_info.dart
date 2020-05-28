@@ -36,8 +36,8 @@ class NewUserScreenWizard extends WizardInfo {
 
   @override
   FutureOr<void> didFinish(BuildContext context) {
-    final newCars = [];
-    final newTodos = [];
+    final newCars = <Car>[];
+    final newTodos = <Todo>[];
     for (final car in cars) {
       final c = Car(name: car.name, mileage: car.mileage);
       newCars.add(c);
@@ -63,7 +63,7 @@ class NewUserScreenWizard extends WizardInfo {
       }
     }
     BlocProvider.of<TodosBloc>(context).add(
-        TranslateDefaults(JsonIntl.of(context), Distance.of(context).unit));
+        TranslateDefaults(JsonIntl.of(context), Distance.of(context, listen: false).unit));
     BlocProvider.of<CarsBloc>(context).add(AddMultipleCars(newCars));
     BlocProvider.of<TodosBloc>(context).add(AddMultipleTodos(newTodos));
   }

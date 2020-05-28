@@ -215,7 +215,8 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
           .map((car) => car.id == updated.id ? updated : car)
           .toList();
     }
-    await batch?.commit(); // TODO: this should probably throw an exception still
+    await batch
+        ?.commit(); // TODO: this should probably throw an exception still
     yield CarsLoaded(updatedCars);
   }
 

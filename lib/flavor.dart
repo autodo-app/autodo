@@ -20,6 +20,7 @@ const kFlavor = kReleaseMode
         firebaseApiKey: Keys.firebaseTestKey,
         firebaseAppName: 'autodo',
         firebaseStorageUri: 'gs://autodo-49f21.appspot.com',
+        restApiUrl: 'http://d406058d0db1.ngrok.io',
         populateDemoData: true,
       );
 
@@ -37,6 +38,7 @@ class FlavorData {
     this.firebaseApiKey = Keys.firebaseProdKey,
     this.firebaseAppName = 'autodo-prod',
     this.firebaseStorageUri = 'gs://autodo-e93fc.appspot.com',
+    this.restApiUrl: 'http://d406058d0db1.ngrok.io',
     this.populateDemoData = false,
   });
 
@@ -69,6 +71,9 @@ class FlavorData {
 
   /// URI for the Firebase Storage bucket
   final String firebaseStorageUri;
+
+  /// URL for the REST API
+  final String restApiUrl;
 
   /// Google Application ID
   String get googleAppID =>

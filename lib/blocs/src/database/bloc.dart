@@ -14,8 +14,7 @@ import 'event.dart';
 import 'state.dart';
 
 class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
-  DatabaseBloc(
-      {@required authenticationBloc, this.pathProvider})
+  DatabaseBloc({@required authenticationBloc, this.pathProvider})
       : assert(authenticationBloc != null),
         _authenticationBloc = authenticationBloc {
     _authSubscription = _authenticationBloc.listen((authState) {
@@ -56,8 +55,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
     //   uuid: event.uuid,
     // );
     final dataRepo = await RestDataRepository.open(
-      authRepo: _authenticationBloc.repo,
-      token: event.token);
+        authRepo: _authenticationBloc.repo, token: event.token);
     // final storageRepo = FirebaseStorageRepository(uuid: event.uuid);
     final storageRepo = null;
     yield DbLoaded(dataRepo, storageRepo: storageRepo);

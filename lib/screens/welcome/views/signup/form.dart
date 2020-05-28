@@ -5,6 +5,7 @@ import 'package:json_intl/json_intl.dart';
 import '../../../../blocs/blocs.dart';
 import '../../../../generated/localization.dart';
 import '../../widgets/barrel.dart';
+import '../new_user_setup/screen.dart';
 
 class SignupForm extends StatefulWidget {
   @override
@@ -93,11 +94,13 @@ class _SignupFormState extends State<SignupForm> {
             );
           } else if (state is SignupSuccess || state is UserVerified) {
             Scaffold.of(context).hideCurrentSnackBar();
-            // Navigator.push(
-            //     context,
-            //     MaterialPageRoute(
-            //       builder: (context) => NewUserScreen1(),
-            //     ));
+            BlocProvider.of<AuthenticationBloc>(context).add(SignedUp());
+            Navigator.pop(context);
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => NewUserScreen(),
+                ));
           }
         },
         child: BlocBuilder<SignupBloc, SignupState>(

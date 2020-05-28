@@ -1,11 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:http/http.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/material.dart';
 
+import '../../flavor.dart';
 import '../../models/models.dart';
 import '../../repositories/repositories.dart';
 import 'data_repository.dart';
@@ -18,118 +17,189 @@ class RestDataRepository extends DataRepository {
 
   final AuthRepository authRepo;
 
-  static const API_BASE_URL = 'http://ed9aa195.ngrok.io';
+  static const HTTP_200_OK = 200;
+  static const HTTP_201_CREATED = 201;
+  static const HTTP_401_UNAUTHORIZED = 401;
 
-  static Future<RestDataRepository> open({@required AuthRepository authRepo, @required String token}) async {
+  static Future<RestDataRepository> open(
+      {@required AuthRepository authRepo, @required String token}) async {
     return RestDataRepository._(authRepo, token);
   }
 
   Future<Map<String, dynamic>> _authenticatedGet(String url) async {
-    var response = await get(
-      url,
-      headers: {
-        'Authorization': 'Bearer $token'
-      }
-    );
-    if (response.statusCode == 401) {
+    var response = await get(url, headers: {'Authorization': 'Bearer $token'});
+    if (response.statusCode == HTTP_401_UNAUTHORIZED) {
       // Token has expired, refresh it and try again
       token = await authRepo.refreshAccessToken();
       if (token == null) {
         throw Exception('Could not refresh access token');
       }
-      response = await get(
-        url,
-        headers: {
-          'Authorization': 'Bearer $token'
-        }
-      );
+      response = await get(url, headers: {'Authorization': 'Bearer $token'});
     }
 
-    if (response.statusCode != 200) {
+    if (response.statusCode != HTTP_200_OK) {
       throw Exception('Failed to access API');
     }
     final data = await json.decode(response.body);
     return data;
   }
-  
-  @override
-  Future<void> addNewTodo(Todo todo) async {
-    final response = await post(
-      'https://jsonplaceholder.typicode.com/albums',
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        HttpHeaders.authorizationHeader: await FlutterSecureStorage().read(key: 'jwt'),
-      },
-      body: jsonEncode(todo.toDocument()),
-    );
-    if (response.statusCode == 201) {
-      // If the server did return a 201 CREATED response,
-      // then parse the JSON.
-      // return Album.fromJson(json.decode(response.body));
-    } else {
-      // If the server did not return a 201 CREATED response,
-      // then throw an exception.
-      throw Exception('Failed to load album');
+
+  Future<Map<String, dynamic>> _authenticatedPost(String url, Map<String, dynamic> body) async {
+    var response = await post(
+        url, 
+        headers: {'Authorization': 'Bearer $token'},
+        body: body);
+    if (response.statusCode == HTTP_401_UNAUTHORIZED) {
+      // Token has expired, refresh it and try again
+      token = await authRepo.refreshAccessToken();
+      if (token == null) {
+        throw Exception('Could not refresh access token');
+      }
+      response = await post(
+        url, 
+        headers: {'Authorization': 'Bearer $token'},
+        body: body);
     }
+
+    if (response.statusCode != HTTP_201_CREATED) {
+      throw Exception('Failed to access API');
+    }
+    final data = await json.decode(response.body);
+    return data;
+  }
+
+  Future<Map<String, dynamic>> _authenticatedPatch(String url, Map<String, dynamic> body) async {
+    var response = await patch(
+        url, 
+        headers: {'Authorization': 'Bearer $token'},
+        body: body);
+    if (response.statusCode == HTTP_401_UNAUTHORIZED) {
+      // Token has expired, refresh it and try again
+      token = await authRepo.refreshAccessToken();
+      if (token == null) {
+        throw Exception('Could not refresh access token');
+      }
+      response = await patch(
+        url, 
+        headers: {'Authorization': 'Bearer $token'},
+        body: body);
+    }
+
+    if (response.statusCode != HTTP_200_OK) {
+      throw Exception('Failed to access API');
+    }
+    final data = await json.decode(response.body);
+    return data;
+  }
+
+  Future<Map<String, dynamic>> _authenticatedDelete(String url) async {
+    var response = await delete(url, headers: {'Authorization': 'Bearer $token'});
+    if (response.statusCode == HTTP_401_UNAUTHORIZED) {
+      // Token has expired, refresh it and try again
+      token = await authRepo.refreshAccessToken();
+      if (token == null) {
+        throw Exception('Could not refresh access token');
+      }
+      response = await delete(url, headers: {'Authorization': 'Bearer $token'});
+    }
+
+    if (response.statusCode != HTTP_200_OK) {
+      throw Exception('Failed to access API');
+    }
+    final data = await json.decode(response.body);
+    return data;
   }
 
   @override
-  Future<void> deleteTodo(Todo todo) {}
+  Future<void> addNewTodo(Todo todo) async {
+    await _authenticatedPost(
+      '${kFlavor.restApiUrl}/todos/${todo.id}', 
+      todo.toDocument());
+  }
+
+  @override
+  Future<void> deleteTodo(Todo todo) async {
+    await _authenticatedDelete('${kFlavor.restApiUrl}/todos/${todo.id}/');
+  }
+
+  @override
+  Future<List<Todo>> getCurrentTodos() async {
+    final data = await _authenticatedGet('${kFlavor.restApiUrl}/todos/');
+    return data['results']
+        ?.map<Todo>((t) => Todo.fromMap('${t['id']}', t))
+        ?.toList();
+  }
+
+  @override
+  Future<Map<String, dynamic>> updateTodo(Todo todo) async {
+    return _authenticatedPatch('${kFlavor.restApiUrl}/todos/${todo.id}/', todo.toDocument());
+  }
 
   @override
   Stream<List<Todo>> todos() {}
 
   @override
-  Future<List<Todo>> getCurrentTodos() async {
-    final data = await _authenticatedGet('$API_BASE_URL/todos/');
-    return data['results']?.map<Todo>((t) => Todo.fromMap('${t['id']}', t))?.toList();
-  }
-
-  @override
-  Future<void> updateTodo(Todo todo) {}
-
-  @override
   FutureOr<WriteBatchWrapper<Todo>> startTodoWriteBatch() {}
 
   @override
-  Future<void> addNewRefueling(Refueling refueling) {}
-
-  @override
-  Future<void> deleteRefueling(Refueling refueling) {}
-
-  @override
-  Stream<List<Refueling>> refuelings([bool forceRefresh]) {}
-
-  @override
-  Future<List<Refueling>> getCurrentRefuelings() async {
-    final data = await _authenticatedGet('$API_BASE_URL/refuelings/');
-    return data['results']?.map<Refueling>((r) => Refueling.fromMap('${r['id']}', r))?.toList();
+  Future<void> addNewRefueling(Refueling refueling) async {
+    await _authenticatedPost(
+      '${kFlavor.restApiUrl}/refuelings/${refueling.id}/', 
+      refueling.toDocument());
   }
 
   @override
-  Future<void> updateRefueling(Refueling refueling) {}
+  Future<void> deleteRefueling(Refueling refueling) async {
+    await _authenticatedDelete('${kFlavor.restApiUrl}/refuelings/${refueling.id}/');
+  }
+
+  @override
+  Future<List<Refueling>> getCurrentRefuelings() async {
+    final data = await _authenticatedGet('${kFlavor.restApiUrl}/refuelings/');
+    return data['results']
+        ?.map<Refueling>((r) => Refueling.fromMap('${r['id']}', r))
+        ?.toList();
+  }
+
+  @override
+  Future<Map<String, dynamic>> updateRefueling(Refueling refueling) async {
+    return _authenticatedPatch('${kFlavor.restApiUrl}/refuelings/${refueling.id}/', refueling.toDocument());
+  }
+
+  @override
+  Stream<List<Refueling>> refuelings([bool _]) {}
 
   @override
   FutureOr<WriteBatchWrapper<Refueling>> startRefuelingWriteBatch() {}
 
   // Cars
   @override
-  Future<void> addNewCar(Car car) {}
+  Future<void> addNewCar(Car car) async {
+    await _authenticatedPost(
+      '${kFlavor.restApiUrl}/cars/${car.id}/', 
+      car.toDocument());
+  }
 
   @override
-  Future<void> deleteCar(Car car) {}
+  Future<void> deleteCar(Car car) async {
+    await _authenticatedDelete('${kFlavor.restApiUrl}/cars/${car.id}/');
+  }
 
   @override
   Stream<List<Car>> cars() {}
 
   @override
   Future<List<Car>> getCurrentCars() async {
-    final data = await _authenticatedGet('$API_BASE_URL/cars/');
-    return data['results']?.map<Car>((c) => Car.fromMap('${c['id']}', c))?.toList();
+    final data = await _authenticatedGet('${kFlavor.restApiUrl}/cars/');
+    return data['results']
+        ?.map<Car>((c) => Car.fromMap('${c['id']}', c))
+        ?.toList();
   }
 
   @override
-  Future<void> updateCar(Car car) {}
+  Future<Map<String, dynamic>> updateCar(Car car) async {
+    return _authenticatedPatch('${kFlavor.restApiUrl}/cars/${car.id}/', car.toDocument());
+  }
 
   @override
   FutureOr<WriteBatchWrapper<Car>> startCarWriteBatch() {}
@@ -140,10 +210,10 @@ class RestDataRepository extends DataRepository {
   @override
   Future<bool> getPaidStatus() {}
 
-  @override 
+  @override
   @deprecated
   Future<List<Map<String, dynamic>>> getRepeats() {}
 
-  @override 
+  @override
   List<Object> get props => [];
 }

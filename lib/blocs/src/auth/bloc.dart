@@ -44,18 +44,18 @@ class AuthenticationBloc
   AuthenticationBloc({@required AuthRepository userRepository})
       : assert(userRepository != null),
         repo = userRepository;
-    // repo.stream?.listen((user) {
-    //   if (user != null &&
-    //       (!(state is RemoteAuthenticated) ||
-    //           (state as RemoteAuthenticated).uuid != user.uid)) {
-    //     // sign in or sign up
-    //     if (user.metadata.creationTime == user.metadata.lastSignInTime) {
-    //       add(SignedUp());
-    //     } else {
-    //       add(LoggedIn());
-    //     }
-    //   }
-    // });
+  // repo.stream?.listen((user) {
+  //   if (user != null &&
+  //       (!(state is RemoteAuthenticated) ||
+  //           (state as RemoteAuthenticated).uuid != user.uid)) {
+  //     // sign in or sign up
+  //     if (user.metadata.creationTime == user.metadata.lastSignInTime) {
+  //       add(SignedUp());
+  //     } else {
+  //       add(LoggedIn());
+  //     }
+  //   }
+  // });
   // }
 
   final AuthRepository repo;
