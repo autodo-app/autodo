@@ -163,7 +163,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
         errorString = 'Incorrect password, please try again.';
       }
       yield SignupError(errorString);
-    } on Exception catch(e) {
+    } on Exception catch (e) {
       var errorString = e.toString();
       yield SignupError(errorString);
     }

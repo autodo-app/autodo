@@ -250,9 +250,9 @@ class HomeScreenState extends State<HomeScreen> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    final cars = BlocProvider.of<CarsBloc>(context).state;
-    if (cars is CarsLoaded) {
-      if (cars.cars.isEmpty) {
+    final carsState = BlocProvider.of<CarsBloc>(context).state;
+    if (carsState is CarsLoaded) {
+      if (carsState.cars.isEmpty) {
         return NewUserScreen();
       }
     } else {

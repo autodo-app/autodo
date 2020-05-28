@@ -1,35 +1,55 @@
-import 'package:equatable/equatable.dart';
+import 'dart:convert';
 
+import 'package:equatable/equatable.dart';
+import 'package:http/http.dart';
+import 'package:flutter/material.dart';
+
+import 'http_status_codes.dart';
 import 'write_batch_wrapper.dart';
 
 class RestWriteBatch<T extends WriteBatchDocument> extends Equatable
     implements WriteBatchWrapper<T> {
-  @override
-  void updateData(String id, T data) {}
+  RestWriteBatch({@required this.url, @required this.getToken});
+
+  final String url;
+
+  final Future<String> Function() getToken;
+
+  final Map<String, Map<String, dynamic>> updates = {};
+
+  final List<Map<String, dynamic>> puts = [];
 
   @override
-  void setData(T data) {}
+  void updateData(String id, T data) => updates[id] = data.toDocument();
+
+  @override
+  void setData(T data) => puts.add(data.toDocument());
 
   @override
   Future<void> commit() async {
-    // await SembastDataRepository.dbLock.acquire();
-    // try {
-    //   await repository.db.transaction((transaction) async {
-    //     // a .forEach loop didn't await properly here... not sure why
-    //     for (var txn in transactionList) {
-    //       await txn(transaction);
-    //     }
-    //   });
-    //   if (streamControllerUpdate != null) await streamControllerUpdate();
-    // } finally {
-    //   SembastDataRepository.dbLock.release();
-    // }
+    for (var put in puts) {
+      final token = await getToken();
+      final res = await post(url,
+          headers: {'Authorization': 'Bearer $token'}, body: json.encode(put));
+      if (res.statusCode != HTTP_201_CREATED) {
+        print('here');
+        break;
+      }
+    }
+    for (var update in updates.entries) {
+      final token = await getToken();
+      final res = await patch('$url${update.key}/',
+          headers: {'Authorization': 'Bearer $token'}, body: json.encode(update.value));
+      if (res.statusCode != HTTP_200_OK) {
+        print('here');
+        break;
+      }
+    }
   }
 
   @override
   List<Object> get props => [];
 
   @override
-  String toString() =>
-      'RestWriteBatch';
+  String toString() => 'RestWriteBatch';
 }

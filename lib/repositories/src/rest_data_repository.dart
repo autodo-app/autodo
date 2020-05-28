@@ -8,6 +8,7 @@ import '../../flavor.dart';
 import '../../models/models.dart';
 import '../../repositories/repositories.dart';
 import 'data_repository.dart';
+import 'http_status_codes.dart';
 import 'rest_write_batch.dart';
 import 'write_batch_wrapper.dart';
 
@@ -17,10 +18,6 @@ class RestDataRepository extends DataRepository {
   String token;
 
   final AuthRepository authRepo;
-
-  static const HTTP_200_OK = 200;
-  static const HTTP_201_CREATED = 201;
-  static const HTTP_401_UNAUTHORIZED = 401;
 
   static Future<RestDataRepository> open(
       {@required AuthRepository authRepo, @required String token}) async {
@@ -45,21 +42,18 @@ class RestDataRepository extends DataRepository {
     return data;
   }
 
-  Future<Map<String, dynamic>> _authenticatedPost(String url, Map<String, dynamic> body) async {
-    var response = await post(
-        url, 
-        headers: {'Authorization': 'Bearer $token'},
-        body: body);
+  Future<Map<String, dynamic>> _authenticatedPost(
+      String url, Map<String, dynamic> body) async {
+    var response = await post(url,
+        headers: {'Authorization': 'Bearer $token'}, body: body);
     if (response.statusCode == HTTP_401_UNAUTHORIZED) {
       // Token has expired, refresh it and try again
       token = await authRepo.refreshAccessToken();
       if (token == null) {
         throw Exception('Could not refresh access token');
       }
-      response = await post(
-        url, 
-        headers: {'Authorization': 'Bearer $token'},
-        body: body);
+      response = await post(url,
+          headers: {'Authorization': 'Bearer $token'}, body: body);
     }
 
     if (response.statusCode != HTTP_201_CREATED) {
@@ -69,21 +63,18 @@ class RestDataRepository extends DataRepository {
     return data;
   }
 
-  Future<Map<String, dynamic>> _authenticatedPatch(String url, Map<String, dynamic> body) async {
-    var response = await patch(
-        url, 
-        headers: {'Authorization': 'Bearer $token'},
-        body: body);
+  Future<Map<String, dynamic>> _authenticatedPatch(
+      String url, Map<String, dynamic> body) async {
+    var response = await patch(url,
+        headers: {'Authorization': 'Bearer $token'}, body: body);
     if (response.statusCode == HTTP_401_UNAUTHORIZED) {
       // Token has expired, refresh it and try again
       token = await authRepo.refreshAccessToken();
       if (token == null) {
         throw Exception('Could not refresh access token');
       }
-      response = await patch(
-        url, 
-        headers: {'Authorization': 'Bearer $token'},
-        body: body);
+      response = await patch(url,
+          headers: {'Authorization': 'Bearer $token'}, body: body);
     }
 
     if (response.statusCode != HTTP_200_OK) {
@@ -94,7 +85,8 @@ class RestDataRepository extends DataRepository {
   }
 
   Future<Map<String, dynamic>> _authenticatedDelete(String url) async {
-    var response = await delete(url, headers: {'Authorization': 'Bearer $token'});
+    var response =
+        await delete(url, headers: {'Authorization': 'Bearer $token'});
     if (response.statusCode == HTTP_401_UNAUTHORIZED) {
       // Token has expired, refresh it and try again
       token = await authRepo.refreshAccessToken();
@@ -114,8 +106,7 @@ class RestDataRepository extends DataRepository {
   @override
   Future<void> addNewTodo(Todo todo) async {
     await _authenticatedPost(
-      '${kFlavor.restApiUrl}/todos/${todo.id}', 
-      todo.toDocument());
+        '${kFlavor.restApiUrl}/todos/', todo.toDocument());
   }
 
   @override
@@ -133,7 +124,8 @@ class RestDataRepository extends DataRepository {
 
   @override
   Future<Map<String, dynamic>> updateTodo(Todo todo) async {
-    return _authenticatedPatch('${kFlavor.restApiUrl}/todos/${todo.id}/', todo.toDocument());
+    return _authenticatedPatch(
+        '${kFlavor.restApiUrl}/todos/${todo.id}/', todo.toDocument());
   }
 
   @override
@@ -141,19 +133,23 @@ class RestDataRepository extends DataRepository {
 
   @override
   FutureOr<WriteBatchWrapper<Todo>> startTodoWriteBatch() {
-    return RestWriteBatch();
+    return RestWriteBatch(
+      url: '${kFlavor.restApiUrl}/todos/',
+      getToken: authRepo.refreshAccessToken,
+    );
   }
 
   @override
   Future<void> addNewRefueling(Refueling refueling) async {
     await _authenticatedPost(
-      '${kFlavor.restApiUrl}/refuelings/${refueling.id}/', 
-      refueling.toDocument());
+        '${kFlavor.restApiUrl}/refuelings/',
+        refueling.toDocument());
   }
 
   @override
   Future<void> deleteRefueling(Refueling refueling) async {
-    await _authenticatedDelete('${kFlavor.restApiUrl}/refuelings/${refueling.id}/');
+    await _authenticatedDelete(
+        '${kFlavor.restApiUrl}/refuelings/${refueling.id}/');
   }
 
   @override
@@ -166,7 +162,9 @@ class RestDataRepository extends DataRepository {
 
   @override
   Future<Map<String, dynamic>> updateRefueling(Refueling refueling) async {
-    return _authenticatedPatch('${kFlavor.restApiUrl}/refuelings/${refueling.id}/', refueling.toDocument());
+    return _authenticatedPatch(
+        '${kFlavor.restApiUrl}/refuelings/${refueling.id}/',
+        refueling.toDocument());
   }
 
   @override
@@ -174,15 +172,17 @@ class RestDataRepository extends DataRepository {
 
   @override
   FutureOr<WriteBatchWrapper<Refueling>> startRefuelingWriteBatch() {
-    return RestWriteBatch();
+    return RestWriteBatch(
+      url: '${kFlavor.restApiUrl}/refuelings/',
+      getToken: authRepo.refreshAccessToken,
+    );
   }
 
   // Cars
   @override
   Future<void> addNewCar(Car car) async {
     await _authenticatedPost(
-      '${kFlavor.restApiUrl}/cars/${car.id}/', 
-      car.toDocument());
+        '${kFlavor.restApiUrl}/cars/', car.toDocument());
   }
 
   @override
@@ -203,12 +203,16 @@ class RestDataRepository extends DataRepository {
 
   @override
   Future<Map<String, dynamic>> updateCar(Car car) async {
-    return _authenticatedPatch('${kFlavor.restApiUrl}/cars/${car.id}/', car.toDocument());
+    return _authenticatedPatch(
+        '${kFlavor.restApiUrl}/cars/${car.id}/', car.toDocument());
   }
 
   @override
   FutureOr<WriteBatchWrapper<Car>> startCarWriteBatch() {
-    return RestWriteBatch();
+    return RestWriteBatch(
+      url: '${kFlavor.restApiUrl}/cars/',
+      getToken: authRepo.refreshAccessToken,
+    );
   }
 
   @override

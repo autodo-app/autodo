@@ -370,7 +370,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     var defaults = [];
     if (state is TodosLoaded) {
       updatedTodos = List<Todo>.from((state as TodosLoaded).todos)
-          ..addAll(event.todos);
+        ..addAll(event.todos);
       defaults = (state as TodosLoaded).defaults;
     } else if (state is TodosLoading) {
       updatedTodos = event.todos;
