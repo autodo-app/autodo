@@ -8,6 +8,7 @@ import '../../flavor.dart';
 import '../../models/models.dart';
 import '../../repositories/repositories.dart';
 import 'data_repository.dart';
+import 'rest_write_batch.dart';
 import 'write_batch_wrapper.dart';
 
 class RestDataRepository extends DataRepository {
@@ -139,7 +140,9 @@ class RestDataRepository extends DataRepository {
   Stream<List<Todo>> todos() {}
 
   @override
-  FutureOr<WriteBatchWrapper<Todo>> startTodoWriteBatch() {}
+  FutureOr<WriteBatchWrapper<Todo>> startTodoWriteBatch() {
+    return RestWriteBatch();
+  }
 
   @override
   Future<void> addNewRefueling(Refueling refueling) async {
@@ -170,7 +173,9 @@ class RestDataRepository extends DataRepository {
   Stream<List<Refueling>> refuelings([bool _]) {}
 
   @override
-  FutureOr<WriteBatchWrapper<Refueling>> startRefuelingWriteBatch() {}
+  FutureOr<WriteBatchWrapper<Refueling>> startRefuelingWriteBatch() {
+    return RestWriteBatch();
+  }
 
   // Cars
   @override
@@ -202,7 +207,9 @@ class RestDataRepository extends DataRepository {
   }
 
   @override
-  FutureOr<WriteBatchWrapper<Car>> startCarWriteBatch() {}
+  FutureOr<WriteBatchWrapper<Car>> startCarWriteBatch() {
+    return RestWriteBatch();
+  }
 
   @override
   Stream<int> notificationID() {}

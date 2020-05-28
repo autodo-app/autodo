@@ -366,9 +366,17 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       print('Error: adding todo to null repo');
       return;
     }
-    final updatedTodos = List<Todo>.from((state as TodosLoaded).todos)
-      ..addAll(event.todos);
-    yield TodosLoaded(todos: updatedTodos);
+    var updatedTodos = [];
+    var defaults = [];
+    if (state is TodosLoaded) {
+      updatedTodos = List<Todo>.from((state as TodosLoaded).todos)
+          ..addAll(event.todos);
+      defaults = (state as TodosLoaded).defaults;
+    } else if (state is TodosLoading) {
+      updatedTodos = event.todos;
+      defaults = (state as TodosLoading).defaults;
+    }
+    yield TodosLoaded(todos: updatedTodos, defaults: defaults);
     event.todos.forEach(_scheduleNotification);
     final batch = await repo.startTodoWriteBatch();
     event.todos.forEach(batch.setData);
