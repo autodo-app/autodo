@@ -19,6 +19,7 @@ from rest_framework.authtoken import views
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from autodo.serializers import CustomJWTSerializer
+from autodo.views import profile
 
 urlpatterns = [
     path('', include('autodo.urls')),
@@ -32,5 +33,6 @@ urlpatterns = [
     # - accounts/verify-registration to verify the registration with a signature
     #
     # More here: https://django-rest-registration.readthedocs.io/en/latest/detailed_configuration/register.html#api-views
+    path('accounts/profile/', profile, name='account-profile'),
     path('accounts/', include('rest_registration.api.urls')),
 ]
