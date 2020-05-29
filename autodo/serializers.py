@@ -24,7 +24,7 @@ class CarSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Car
-        fields = ['url', 'id', 'owner', 'name', 'make', 'model', 'plate', 'year', 'vin', 'image', 'color']
+        fields = ['url', 'id', 'owner', 'name', 'make', 'model', 'plate', 'year', 'vin', 'imageName', 'color']
 
 class OdomSnapshotSerializer(serializers.HyperlinkedModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')

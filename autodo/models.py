@@ -12,13 +12,13 @@ class Car(models.Model):
     """
     owner = models.ForeignKey(User, related_name='car', on_delete=models.CASCADE)
     name = models.CharField(max_length=255, null=False)
-    make = models.CharField(max_length=255)
-    model = models.CharField(max_length=255)
-    year = models.IntegerField()
-    plate = models.CharField(max_length=10)
-    vin = models.CharField(max_length=10)
-    image = models.CharField(max_length=255) # TODO: Image Field?
-    color = models.IntegerField()
+    make = models.CharField(max_length=255, blank=True, null=True)
+    model = models.CharField(max_length=255, blank=True, null=True)
+    year = models.IntegerField(blank=True, null=True)
+    plate = models.CharField(max_length=10, blank=True, null=True)
+    vin = models.CharField(max_length=10, blank=True, null=True)
+    imageName = models.CharField(max_length=255, blank=True, null=True) # TODO: Image Field?
+    color = models.IntegerField(default=128) # TODO: autodo green to int maybe?
 
     def __str__(self):
         return 'Car named: {}'.format(self.name)
@@ -52,7 +52,8 @@ class Todo(models.Model):
     name = models.CharField(max_length=255, null=False)
     dueMileage = models.FloatField(default=None, blank=True, null=True)
     dueDate = models.DateTimeField(default=None, blank=True, null=True)
-    estimatedDueDate = models.BooleanField(default=False, null=False)
+    # TODO: calculate this on POST
+    estimatedDueDate = models.BooleanField(default=False, blank=True, null=True)
     mileageRepeatInterval = models.FloatField(default=None, blank=True, null=True)
     daysRepeatInterval = models.IntegerField(default=None, blank=True, null=True)
     monthsRepeatInterval = models.IntegerField(default=None, blank=True, null=True)
