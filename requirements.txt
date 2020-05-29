@@ -4,3 +4,4 @@ djangorestframework
 djangorestframework-simplejwt
 django-oauth-toolkit
 django-rest-registration
+drf-yasg

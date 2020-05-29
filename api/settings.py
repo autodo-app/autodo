@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'oauth2_provider',
     'autodo',
     'rest_registration',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
