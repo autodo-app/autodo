@@ -19,6 +19,9 @@ class CarsListViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return self.queryset.filter(owner=self.request.user)
 
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
 class OdomSnapshotsListViewSet(viewsets.ModelViewSet):
     queryset = OdomSnapshot.objects.all()
     serializer_class = OdomSnapshotSerializer
@@ -26,6 +29,9 @@ class OdomSnapshotsListViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return self.queryset.filter(owner=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
 class RefuelingsListViewSet(viewsets.ModelViewSet):
     queryset = Refueling.objects.all()
@@ -35,6 +41,9 @@ class RefuelingsListViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return self.queryset.filter(owner=self.request.user)
 
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
 class TodosListViewSet(viewsets.ModelViewSet):
     queryset = Todo.objects.all()
     serializer_class = TodoSerializer
@@ -42,6 +51,17 @@ class TodosListViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return self.queryset.filter(owner=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+    # TODO: allows for creating many in a batch
+    # def create(self, request, *args, **kwargs):
+        # serializer = self.get_serializer(data=request.data, many=isinstance(request.data,list))
+        # serializer.is_valid(raise_exception=True)
+        # self.perform_create(serializer)
+        # headers = self.get_success_headers(serializer.data)
+        # return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 @api_view_serializer_class_getter(
         lambda: registration_settings.PROFILE_SERIALIZER_CLASS)

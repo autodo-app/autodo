@@ -22,13 +22,17 @@ class CustomJWTSerializer(TokenObtainPairSerializer):
 class CarSerializer(serializers.HyperlinkedModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
 
+    # def save(**kwargs):
+        # kwargs['owner'] = self.context['request'].user
+        # super().save(**kwargs)
+
     class Meta:
         model = Car
         fields = ['url', 'id', 'owner', 'name', 'make', 'model', 'plate', 'year', 'vin', 'imageName', 'color']
 
 class OdomSnapshotSerializer(serializers.HyperlinkedModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
-    car = serializers.HyperlinkedIdentityField(view_name='car-detail')
+    car = serializers.PrimaryKeyRelatedField(queryset=Car.objects.all())
 
     class Meta:
         model = OdomSnapshot
@@ -44,7 +48,7 @@ class RefuelingSerializer(serializers.HyperlinkedModelSerializer):
 
 class TodoSerializer(serializers.HyperlinkedModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
-    car = serializers.HyperlinkedIdentityField(view_name='car-detail')
+    car = serializers.PrimaryKeyRelatedField(queryset=Car.objects.all())
     completionOdomSnapshot = serializers.HyperlinkedIdentityField(view_name='odomsnapshots-detail')
 
     class Meta:
