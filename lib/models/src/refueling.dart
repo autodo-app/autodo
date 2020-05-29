@@ -101,16 +101,16 @@ class Refueling extends Equatable implements WriteBatchDocument {
   }
 
   @override
-  Map<String, Object> toDocument() {
+  Map<String, String> toDocument() {
     return {
       'carName': carName,
-      'mileage': mileage,
-      'date': date?.millisecondsSinceEpoch,
-      'amount': amount,
-      'cost': cost,
-      'carColor': carColor?.value,
-      'efficiency': efficiency,
-      'efficiencyColor': efficiencyColor?.value
+      'mileage': mileage.toString(),
+      'date': date?.millisecondsSinceEpoch.toString(),
+      'amount': amount.toString(),
+      'cost': cost.toString(),
+      'carColor': carColor?.value.toString(),
+      'efficiency': efficiency.toString(),
+      'efficiencyColor': efficiencyColor?.value.toString()
     };
   }
 }

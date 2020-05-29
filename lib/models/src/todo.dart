@@ -48,7 +48,8 @@ class Todo extends Equatable implements WriteBatchDocument {
       completedMileage: (value['completedMileage'] as num)?.toDouble(),
       dueDate: (value['dueDate'] == null)
           ? null
-          : DateTime.fromMillisecondsSinceEpoch(value['dueDate']),
+          // : DateTime.fromMillisecondsSinceEpoch(value['dueDate']),
+          : DateTime.parse(value['dueDate']),
     );
   }
 
@@ -158,22 +159,22 @@ class Todo extends Equatable implements WriteBatchDocument {
   }
 
   @override
-  Map<String, Object> toDocument() {
+  Map<String, String> toDocument() {
     return {
       'name': name,
       'carName': carName,
-      'dueState': dueState?.index,
-      'dueMileage': dueMileage,
-      'mileageRepeatInterval': mileageRepeatInterval,
-      'dateRepeatIntervalDays': dateRepeatInterval?.days,
-      'dateRepeatIntervalMonths': dateRepeatInterval?.months,
-      'dateRepeatIntervalYears': dateRepeatInterval?.years,
-      'notificationID': notificationID,
-      'completed': completed,
-      'estimatedDueDate': estimatedDueDate,
-      'completedDate': completedDate?.millisecondsSinceEpoch,
-      'completedMileage': completedMileage,
-      'dueDate': dueDate?.millisecondsSinceEpoch
+      'dueState': dueState?.index.toString(),
+      'dueMileage': dueMileage.toString(),
+      'mileageRepeatInterval': mileageRepeatInterval.toString(),
+      'dateRepeatIntervalDays': dateRepeatInterval?.days.toString(),
+      'dateRepeatIntervalMonths': dateRepeatInterval?.months.toString(),
+      'dateRepeatIntervalYears': dateRepeatInterval?.years.toString(),
+      'notificationID': notificationID.toString(),
+      'completed': completed.toString(),
+      'estimatedDueDate': estimatedDueDate.toString(),
+      // 'completedDate': completedDate?.millisecondsSinceEpoch.toString(),
+      // 'completedMileage': completedMileage.toString(),
+      'dueDate': dueDate?.toUtc()?.toIso8601String() ?? '',
     };
   }
 }

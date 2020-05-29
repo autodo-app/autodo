@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:equatable/equatable.dart';
 import 'package:http/http.dart';
 import 'package:flutter/material.dart';
@@ -15,9 +13,9 @@ class RestWriteBatch<T extends WriteBatchDocument> extends Equatable
 
   final Future<String> Function() getToken;
 
-  final Map<String, Map<String, dynamic>> updates = {};
+  final Map<String, Map<String, String>> updates = {};
 
-  final List<Map<String, dynamic>> puts = [];
+  final List<Map<String, String>> puts = [];
 
   @override
   void updateData(String id, T data) => updates[id] = data.toDocument();
@@ -30,7 +28,7 @@ class RestWriteBatch<T extends WriteBatchDocument> extends Equatable
     for (var put in puts) {
       final token = await getToken();
       final res = await post(url,
-          headers: {'Authorization': 'Bearer $token'}, body: json.encode(put));
+          headers: {'Authorization': 'Bearer $token'}, body: put);
       if (res.statusCode != HTTP_201_CREATED) {
         print('here');
         break;
@@ -39,7 +37,7 @@ class RestWriteBatch<T extends WriteBatchDocument> extends Equatable
     for (var update in updates.entries) {
       final token = await getToken();
       final res = await patch('$url${update.key}/',
-          headers: {'Authorization': 'Bearer $token'}, body: json.encode(update.value));
+          headers: {'Authorization': 'Bearer $token'}, body: update.value);
       if (res.statusCode != HTTP_200_OK) {
         print('here');
         break;

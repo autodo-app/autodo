@@ -23,6 +23,7 @@ class Car extends Equatable implements WriteBatchDocument {
     String plate,
     String vin,
     String imageName,
+    Color tagColor,
   }) =>
       Car._(
         id: id ?? '',
@@ -40,9 +41,11 @@ class Car extends Equatable implements WriteBatchDocument {
         plate: plate ?? '',
         vin: vin ?? '',
         imageName: imageName ?? '',
+        tagColor: tagColor ?? Color(0),
       );
 
   factory Car.fromMap(String id, Map<String, dynamic> value) {
+    // TODO: parse string values
     return Car(
       id: id,
       name: value['name'] as String,
@@ -69,6 +72,7 @@ class Car extends Equatable implements WriteBatchDocument {
       plate: value['plate'] as String,
       vin: value['vin'] as String,
       imageName: value['imageName'] as String,
+      tagColor: Color(value['color'] as int),
     );
   }
 
@@ -87,6 +91,7 @@ class Car extends Equatable implements WriteBatchDocument {
     @required this.plate,
     @required this.vin,
     @required this.imageName,
+    @required this.tagColor,
   })  : assert(id != null),
         assert(name != null),
         assert(mileage != null),
@@ -100,7 +105,8 @@ class Car extends Equatable implements WriteBatchDocument {
         assert(year != null),
         assert(plate != null),
         assert(vin != null),
-        assert(imageName != null);
+        assert(imageName != null),
+        assert(tagColor != null);
 
   final String id;
 
@@ -137,6 +143,8 @@ class Car extends Equatable implements WriteBatchDocument {
 
   final String vin;
 
+  final Color tagColor;
+
   Car copyWith(
       {String id,
       String name,
@@ -151,7 +159,8 @@ class Car extends Equatable implements WriteBatchDocument {
       int year,
       String plate,
       String vin,
-      String imageName}) {
+      String imageName,
+      Color tagColor,}) {
     return Car(
         id: id ?? this.id,
         name: name ?? this.name,
@@ -166,7 +175,8 @@ class Car extends Equatable implements WriteBatchDocument {
         year: year ?? this.year,
         plate: plate ?? this.plate,
         vin: vin ?? this.vin,
-        imageName: imageName ?? this.imageName);
+        imageName: imageName ?? this.imageName,
+        tagColor: tagColor ?? this.tagColor);
   }
 
   @override
@@ -185,34 +195,36 @@ class Car extends Equatable implements WriteBatchDocument {
         plate,
         vin,
         imageName,
+        tagColor.value,
       ];
 
   @override
   String toString() {
-    return '$runtimeType { id: $id, name: $name, mileage: $mileage, numRefuelings: $numRefuelings, averageEfficiency: $averageEfficiency, distanceRate: $distanceRate, lastMileageUpdate: ${lastMileageUpdate?.toUtc()?.toIso8601String()}, distanceRateHistory: $distanceRateHistory, make: $make, model: $model, year: $year, plate: $plate, vin: $vin, imageName: $imageName }';
+    return '$runtimeType { id: $id, name: $name, mileage: $mileage, numRefuelings: $numRefuelings, averageEfficiency: $averageEfficiency, distanceRate: $distanceRate, lastMileageUpdate: ${lastMileageUpdate?.toUtc()?.toIso8601String()}, distanceRateHistory: $distanceRateHistory, make: $make, model: $model, year: $year, plate: $plate, vin: $vin, imageName: $imageName, tagColor: $tagColor }';
   }
 
   @override
-  Map<String, Object> toDocument() {
+  Map<String, String> toDocument() {
     return {
       'name': name,
-      'mileage': mileage,
-      'numRefuelings': numRefuelings,
-      'averageEfficiency': averageEfficiency,
-      'distanceRate': distanceRate,
-      'lastMileageUpdate': lastMileageUpdate?.millisecondsSinceEpoch,
+      'mileage': mileage.toString(),
+      'numRefuelings': numRefuelings.toString(),
+      'averageEfficiency': averageEfficiency.toString(),
+      'distanceRate': distanceRate.toString(),
+      'lastMileageUpdate': lastMileageUpdate?.millisecondsSinceEpoch.toString(),
       'distanceRateHistory': distanceRateHistory
-          ?.map((p) => <String, dynamic>{}..addAll({
-              'date': p.date.millisecondsSinceEpoch,
-              'distanceRate': p.distanceRate
+          ?.map((p) => <String, String>{}..addAll({
+              'date': p.date.millisecondsSinceEpoch.toString(),
+              'distanceRate': p.distanceRate.toString()
             }))
-          ?.toList(),
+          ?.toList().toString(),
       'make': make,
       'model': model,
-      'year': year,
+      'year': year.toString(),
       'plate': plate,
       'vin': vin,
       'imageName': imageName,
+      'color': tagColor.value.toString(),
     };
   }
 }

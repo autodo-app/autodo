@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 abstract class WriteBatchDocument {
-  Map<String, Object> toDocument();
+  Map<String, String> toDocument();
 }
 
 abstract class WriteBatchWrapper<T extends WriteBatchDocument>

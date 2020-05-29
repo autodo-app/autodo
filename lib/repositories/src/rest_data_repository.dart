@@ -13,7 +13,7 @@ import 'rest_write_batch.dart';
 import 'write_batch_wrapper.dart';
 
 class RestDataRepository extends DataRepository {
-  RestDataRepository._(this.authRepo, this.token);
+  RestDataRepository._(this.authRepo, this.token); 
 
   String token;
 
