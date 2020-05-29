@@ -28,19 +28,19 @@ from drf_yasg import openapi
 
 schema_view = get_schema_view(
    openapi.Info(
-         title="Snippets API",
+         title="auToDo API",
          default_version='v1',
-         description="Test description",
-         terms_of_service="https://www.google.com/policies/terms/",
-         contact=openapi.Contact(email="contact@snippets.local"),
-         license=openapi.License(name="BSD License"),
+         description="API for interacting with your auToDo data.",
+         terms_of_service="https://www.autodo.app/privacy-policy/",
+         license=openapi.License(name="Apache License 2.0"),
       ),
    public=True,
    permission_classes=(permissions.AllowAny,),
 )
 
 urlpatterns = [
-    path('', include('autodo.urls')),
+    # TODO: not sure what to put at the root but there should probably be something
+    # path('', include('autodo.urls')),
     path('admin/', admin.site.urls),
     re_path('api/(?P<version>(v1|v2))/', include('autodo.urls')),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),

@@ -4,6 +4,8 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 class CustomJWTSerializer(TokenObtainPairSerializer):
     """
+    Allows for setting the username _or_ the email field when requesting a token.
+
     Taken from: https://stackoverflow.com/questions/34332074/django-rest-jwt-login-using-username-or-email
     """
     def validate(self, attrs):
@@ -20,17 +22,15 @@ class CustomJWTSerializer(TokenObtainPairSerializer):
         return super().validate(credentials)
 
 class CarSerializer(serializers.HyperlinkedModelSerializer):
+    """Translates the Car data into a view."""
     owner = serializers.ReadOnlyField(source='owner.username')
-
-    # def save(**kwargs):
-        # kwargs['owner'] = self.context['request'].user
-        # super().save(**kwargs)
 
     class Meta:
         model = Car
         fields = ['url', 'id', 'owner', 'name', 'make', 'model', 'plate', 'year', 'vin', 'imageName', 'color']
 
 class OdomSnapshotSerializer(serializers.HyperlinkedModelSerializer):
+    """Translates the Odom Snapshot data into a view."""
     owner = serializers.ReadOnlyField(source='owner.username')
     car = serializers.PrimaryKeyRelatedField(queryset=Car.objects.all())
 
@@ -39,6 +39,7 @@ class OdomSnapshotSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['url', 'id', 'owner', 'car', 'date', 'mileage']
 
 class RefuelingSerializer(serializers.HyperlinkedModelSerializer):
+    """Translates the Refueling data into a view."""
     owner = serializers.ReadOnlyField(source='owner.username')
     odomSnapshot = serializers.HyperlinkedIdentityField(view_name='odomsnapshots-detail')
 
@@ -47,6 +48,7 @@ class RefuelingSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['url', 'id', 'owner', 'odomSnapshot', 'cost', 'amount']
 
 class TodoSerializer(serializers.HyperlinkedModelSerializer):
+    """Translates the Todo data into a view."""
     owner = serializers.ReadOnlyField(source='owner.username')
     car = serializers.PrimaryKeyRelatedField(queryset=Car.objects.all())
     completionOdomSnapshot = serializers.HyperlinkedIdentityField(view_name='odomsnapshots-detail')
