@@ -25,15 +25,16 @@ class FirebaseWriteBatch<T extends WriteBatchDocument> extends Equatable
       _batch.setData(_collection.document(), data.toDocument());
 
   @override
-  Future<void> commit() async {
+  Future<Map<WRITE_OPERATION, dynamic>> commit() async {
     try {
       await _batch.commit();
     } on PlatformException catch (e) {
       print(e);
       if (e.code == 'Error performing commit' &&
           e.message ==
-              'PERMISSION_DENIED: Missing or insufficient permissions.') return;
+              'PERMISSION_DENIED: Missing or insufficient permissions.') return {};
     }
+    return {};
   }
 
   @override

@@ -13,35 +13,40 @@ class RestWriteBatch<T extends WriteBatchDocument> extends Equatable
 
   final Future<String> Function() getToken;
 
-  final Map<String, Map<String, String>> updates = {};
+  final Map<String, Map<String, String>> patches = {};
 
-  final List<Map<String, String>> puts = [];
-
-  @override
-  void updateData(String id, T data) => updates[id] = data.toDocument();
+  final List<Map<String, String>> posts = [];
 
   @override
-  void setData(T data) => puts.add(data.toDocument());
+  void updateData(String id, T data) => patches[id] = data.toDocument();
 
   @override
-  Future<void> commit() async {
-    for (var put in puts) {
+  void setData(T data) => posts.add(data.toDocument());
+
+  @override
+  Future<Map<WRITE_OPERATION, dynamic>> commit() async {
+    final out = <WRITE_OPERATION, dynamic>{
+      WRITE_OPERATION.POST: [],
+      WRITE_OPERATION.PATCH: [],
+    };
+    for (var obj in posts) {
       var token = await getToken();
       var res = await post(url,
-          headers: {'Authorization': 'Bearer $token'}, body: put);
+          headers: {'Authorization': 'Bearer $token'}, body: obj);
       if (res.statusCode == HTTP_401_UNAUTHORIZED) {
         // Token expired, try again
         token = await getToken();
         res = await post(url,
-          headers: {'Authorization': 'Bearer $token'}, body: put);
+          headers: {'Authorization': 'Bearer $token'}, body: obj);
       }
       if (res.statusCode != HTTP_201_CREATED) {
         print('here');
         break;
       }
+      out[WRITE_OPERATION.POST].add(res.body);
       print(res.body);
     }
-    for (var update in updates.entries) {
+    for (var update in patches.entries) {
       final token = await getToken();
       final res = await patch('$url${update.key}/',
           headers: {'Authorization': 'Bearer $token'}, body: update.value);
@@ -49,11 +54,13 @@ class RestWriteBatch<T extends WriteBatchDocument> extends Equatable
         print('here');
         break;
       }
+      out[WRITE_OPERATION.PATCH].add(res.body);
     }
+    return out;
   }
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [url, getToken, posts, patches];
 
   @override
   String toString() => 'RestWriteBatch';

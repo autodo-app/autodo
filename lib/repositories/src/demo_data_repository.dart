@@ -211,7 +211,7 @@ class DemoWriteBatch<T extends WriteBatchDocument>
   DemoWriteBatch();
 
   @override
-  Future<void> commit() async {}
+  Future<Map<WRITE_OPERATION, dynamic>> commit() async => {};
 
   @override
   void setData(data) {}

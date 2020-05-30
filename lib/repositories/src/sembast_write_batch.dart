@@ -31,7 +31,7 @@ class SembastWriteBatch<T extends WriteBatchDocument> extends Equatable
       .add((txn) async => await store.add(txn, data.toDocument()));
 
   @override
-  Future<void> commit() async {
+  Future<Map<WRITE_OPERATION, dynamic>> commit() async {
     await SembastDataRepository.dbLock.acquire();
     try {
       await repository.db.transaction((transaction) async {
