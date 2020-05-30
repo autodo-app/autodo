@@ -26,13 +26,20 @@ class RestWriteBatch<T extends WriteBatchDocument> extends Equatable
   @override
   Future<void> commit() async {
     for (var put in puts) {
-      final token = await getToken();
-      final res = await post(url,
+      var token = await getToken();
+      var res = await post(url,
           headers: {'Authorization': 'Bearer $token'}, body: put);
+      if (res.statusCode == HTTP_401_UNAUTHORIZED) {
+        // Token expired, try again
+        token = await getToken();
+        res = await post(url,
+          headers: {'Authorization': 'Bearer $token'}, body: put);
+      }
       if (res.statusCode != HTTP_201_CREATED) {
         print('here');
         break;
       }
+      print(res.body);
     }
     for (var update in updates.entries) {
       final token = await getToken();

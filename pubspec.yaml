@@ -2,6 +2,7 @@ name: autodo
 description: Car Maintenance Made Simple.
 version: 0.3.1+15
 db_version: 3
+api_version: 1
 authors:
   - Jonathan Bayless <baylessjonathan@gmail.com>
   - David PHAM-VAN <dev.nfet.net@gmail.com>

@@ -64,6 +64,8 @@ class NewUserScreenWizard extends WizardInfo {
     }
     BlocProvider.of<TodosBloc>(context).add(TranslateDefaults(
         JsonIntl.of(context), Distance.of(context, listen: false).unit));
+    // TODO: create the cars first, wait for them to update, and then create todos
+    // cars.create().then((res) {});
     BlocProvider.of<CarsBloc>(context).add(AddMultipleCars(newCars));
     BlocProvider.of<TodosBloc>(context).add(AddMultipleTodos(newTodos));
   }

@@ -20,7 +20,7 @@ const kFlavor = kReleaseMode
         firebaseApiKey: Keys.firebaseTestKey,
         firebaseAppName: 'autodo',
         firebaseStorageUri: 'gs://autodo-49f21.appspot.com',
-        restApiUrl: 'http://d406058d0db1.ngrok.io',
+        restApiUrl: 'http://83d6495f6b44.ngrok.io',
         populateDemoData: true,
       );
 

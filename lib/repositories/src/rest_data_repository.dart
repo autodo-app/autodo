@@ -5,6 +5,7 @@ import 'package:http/http.dart';
 import 'package:flutter/material.dart';
 
 import '../../flavor.dart';
+import '../../generated/pubspec.dart';
 import '../../models/models.dart';
 import '../../repositories/repositories.dart';
 import 'data_repository.dart';
@@ -18,6 +19,8 @@ class RestDataRepository extends DataRepository {
   String token;
 
   final AuthRepository authRepo;
+
+  final API_BASE_URL = '${kFlavor.restApiUrl}/api/v${Pubspec.api_version}';
 
   static Future<RestDataRepository> open(
       {@required AuthRepository authRepo, @required String token}) async {
@@ -106,17 +109,17 @@ class RestDataRepository extends DataRepository {
   @override
   Future<void> addNewTodo(Todo todo) async {
     await _authenticatedPost(
-        '${kFlavor.restApiUrl}/todos/', todo.toDocument());
+        '$API_BASE_URL/todos/', todo.toDocument());
   }
 
   @override
   Future<void> deleteTodo(Todo todo) async {
-    await _authenticatedDelete('${kFlavor.restApiUrl}/todos/${todo.id}/');
+    await _authenticatedDelete('$API_BASE_URL/todos/${todo.id}/');
   }
 
   @override
   Future<List<Todo>> getCurrentTodos() async {
-    final data = await _authenticatedGet('${kFlavor.restApiUrl}/todos/');
+    final data = await _authenticatedGet('$API_BASE_URL/todos/');
     return data['results']
         ?.map<Todo>((t) => Todo.fromMap('${t['id']}', t))
         ?.toList();
@@ -125,7 +128,7 @@ class RestDataRepository extends DataRepository {
   @override
   Future<Map<String, dynamic>> updateTodo(Todo todo) async {
     return _authenticatedPatch(
-        '${kFlavor.restApiUrl}/todos/${todo.id}/', todo.toDocument());
+        '$API_BASE_URL/todos/${todo.id}/', todo.toDocument());
   }
 
   @override
@@ -134,7 +137,7 @@ class RestDataRepository extends DataRepository {
   @override
   FutureOr<WriteBatchWrapper<Todo>> startTodoWriteBatch() {
     return RestWriteBatch(
-      url: '${kFlavor.restApiUrl}/todos/',
+      url: '$API_BASE_URL/todos/',
       getToken: authRepo.refreshAccessToken,
     );
   }
@@ -142,19 +145,19 @@ class RestDataRepository extends DataRepository {
   @override
   Future<void> addNewRefueling(Refueling refueling) async {
     await _authenticatedPost(
-        '${kFlavor.restApiUrl}/refuelings/',
+        '$API_BASE_URL/refuelings/',
         refueling.toDocument());
   }
 
   @override
   Future<void> deleteRefueling(Refueling refueling) async {
     await _authenticatedDelete(
-        '${kFlavor.restApiUrl}/refuelings/${refueling.id}/');
+        '$API_BASE_URL/refuelings/${refueling.id}/');
   }
 
   @override
   Future<List<Refueling>> getCurrentRefuelings() async {
-    final data = await _authenticatedGet('${kFlavor.restApiUrl}/refuelings/');
+    final data = await _authenticatedGet('$API_BASE_URL/refuelings/');
     return data['results']
         ?.map<Refueling>((r) => Refueling.fromMap('${r['id']}', r))
         ?.toList();
@@ -163,7 +166,7 @@ class RestDataRepository extends DataRepository {
   @override
   Future<Map<String, dynamic>> updateRefueling(Refueling refueling) async {
     return _authenticatedPatch(
-        '${kFlavor.restApiUrl}/refuelings/${refueling.id}/',
+        '$API_BASE_URL/refuelings/${refueling.id}/',
         refueling.toDocument());
   }
 
@@ -173,7 +176,7 @@ class RestDataRepository extends DataRepository {
   @override
   FutureOr<WriteBatchWrapper<Refueling>> startRefuelingWriteBatch() {
     return RestWriteBatch(
-      url: '${kFlavor.restApiUrl}/refuelings/',
+      url: '$API_BASE_URL/refuelings/',
       getToken: authRepo.refreshAccessToken,
     );
   }
@@ -182,12 +185,12 @@ class RestDataRepository extends DataRepository {
   @override
   Future<void> addNewCar(Car car) async {
     await _authenticatedPost(
-        '${kFlavor.restApiUrl}/cars/', car.toDocument());
+        '$API_BASE_URL/cars/', car.toDocument());
   }
 
   @override
   Future<void> deleteCar(Car car) async {
-    await _authenticatedDelete('${kFlavor.restApiUrl}/cars/${car.id}/');
+    await _authenticatedDelete('$API_BASE_URL/cars/${car.id}/');
   }
 
   @override
@@ -195,7 +198,7 @@ class RestDataRepository extends DataRepository {
 
   @override
   Future<List<Car>> getCurrentCars() async {
-    final data = await _authenticatedGet('${kFlavor.restApiUrl}/cars/');
+    final data = await _authenticatedGet('$API_BASE_URL/cars/');
     return data['results']
         ?.map<Car>((c) => Car.fromMap('${c['id']}', c))
         ?.toList();
@@ -204,13 +207,13 @@ class RestDataRepository extends DataRepository {
   @override
   Future<Map<String, dynamic>> updateCar(Car car) async {
     return _authenticatedPatch(
-        '${kFlavor.restApiUrl}/cars/${car.id}/', car.toDocument());
+        '$API_BASE_URL/cars/${car.id}/', car.toDocument());
   }
 
   @override
   FutureOr<WriteBatchWrapper<Car>> startCarWriteBatch() {
     return RestWriteBatch(
-      url: '${kFlavor.restApiUrl}/cars/',
+      url: '$API_BASE_URL/cars/',
       getToken: authRepo.refreshAccessToken,
     );
   }

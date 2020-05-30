@@ -25,6 +25,8 @@ class Pubspec {
 
   static const int db_version = 3;
 
+  static const int api_version = 1;
+
   static const Map<dynamic, dynamic> environment = <dynamic, dynamic>{
     'sdk': '>=2.7.0 <3.0.0',
   };
@@ -68,6 +70,8 @@ class Pubspec {
     'image_picker': null,
     'dotted_border': null,
     'flutter_debug_drawer': null,
+    'http': null,
+    'flutter_secure_storage': null,
   };
 
   static const Map<dynamic, dynamic> dependency_overrides = <dynamic, dynamic>{
