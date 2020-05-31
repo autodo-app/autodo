@@ -9,43 +9,48 @@ import 'write_batch_wrapper.dart';
 
 abstract class DataRepository extends Equatable {
   // Todos
-  Future<void> addNewTodo(Todo todo);
+  Future<Todo> addNewTodo(Todo todo);
+
+  Future<Todo> updateTodo(Todo todo);
 
   Future<void> deleteTodo(Todo todo);
 
-  Stream<List<Todo>> todos();
-
   Future<List<Todo>> getCurrentTodos();
-
-  Future<void> updateTodo(Todo todo);
 
   FutureOr<WriteBatchWrapper<Todo>> startTodoWriteBatch();
 
   // Refuelings
-  Future<void> addNewRefueling(Refueling refueling);
+  Future<Refueling> addNewRefueling(Refueling refueling);
+
+  Future<Refueling> updateRefueling(Refueling refueling);
 
   Future<void> deleteRefueling(Refueling refueling);
 
-  Stream<List<Refueling>> refuelings([bool forceRefresh]);
-
   Future<List<Refueling>> getCurrentRefuelings();
-
-  Future<void> updateRefueling(Refueling refueling);
 
   FutureOr<WriteBatchWrapper<Refueling>> startRefuelingWriteBatch();
 
   // Cars
-  Future<void> addNewCar(Car car);
+  Future<Car> addNewCar(Car car);
+
+  Future<Car> updateCar(Car car);
 
   Future<void> deleteCar(Car car);
 
-  Stream<List<Car>> cars();
-
   Future<List<Car>> getCurrentCars();
 
-  Future<void> updateCar(Car car);
-
   FutureOr<WriteBatchWrapper<Car>> startCarWriteBatch();
+
+  // OdomSnapshots
+  Future<OdomSnapshot> addNewOdomSnapshot(OdomSnapshot odomSnapshot);
+
+  Future<OdomSnapshot> updateOdomSnapshot(OdomSnapshot odomSnapshot);
+
+  Future<void> deleteOdomSnapshot(OdomSnapshot odomSnapshot);
+
+  Future<List<OdomSnapshot>> getCurrentOdomSnapshots();
+
+  FutureOr<WriteBatchWrapper<OdomSnapshot>> startOdomSnapshotWriteBatch();
 
   // Notifications
   Stream<int> notificationID();

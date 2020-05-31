@@ -105,7 +105,7 @@ class DemoDataRepository extends DataRepository {
   }
 
   @override
-  Future<void> addNewTodo(Todo todo) {
+  Future<Todo> addNewTodo(Todo todo) {
     throw UnimplementedError();
   }
 

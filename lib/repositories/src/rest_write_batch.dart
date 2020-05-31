@@ -23,6 +23,9 @@ class RestWriteBatch<T extends WriteBatchDocument> extends Equatable
   @override
   void setData(T data) => posts.add(data.toDocument());
 
+  /// Applies the requested operations and returns the results in JSON format.
+  ///
+  /// It is up to the caller to map the response to a model if desired.
   @override
   Future<Map<WRITE_OPERATION, dynamic>> commit() async {
     final out = <WRITE_OPERATION, dynamic>{
@@ -37,7 +40,7 @@ class RestWriteBatch<T extends WriteBatchDocument> extends Equatable
         // Token expired, try again
         token = await getToken();
         res = await post(url,
-          headers: {'Authorization': 'Bearer $token'}, body: obj);
+            headers: {'Authorization': 'Bearer $token'}, body: obj);
       }
       if (res.statusCode != HTTP_201_CREATED) {
         print('here');

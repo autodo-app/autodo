@@ -3,60 +3,39 @@ import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
 import '../../repositories/src/write_batch_wrapper.dart';
-import '../../util.dart';
 import 'distanceratepoint.dart';
+import 'odom_snapshot.dart';
 
 @immutable
 class Car extends Equatable implements WriteBatchDocument {
-  factory Car({
-    String id,
-    String name,
-    double mileage,
-    int numRefuelings,
-    double averageEfficiency,
-    double distanceRate,
-    DateTime lastMileageUpdate,
-    List<DistanceRatePoint> distanceRateHistory,
-    String make,
-    String model,
-    int year,
-    String plate,
-    String vin,
-    String imageName,
-    Color tagColor,
-  }) =>
-      Car._(
-        id: id ?? '',
-        name: name ?? '',
-        mileage: mileage ?? 0,
-        numRefuelings: numRefuelings ?? 0,
-        averageEfficiency: averageEfficiency ?? 0,
-        distanceRate: distanceRate ?? 0,
-        lastMileageUpdate: lastMileageUpdate ??
-            roundToDay(DateTime.fromMillisecondsSinceEpoch(0)),
-        distanceRateHistory: distanceRateHistory ?? const <DistanceRatePoint>[],
-        make: make ?? '',
-        model: model ?? '',
-        year: year ?? 0,
-        plate: plate ?? '',
-        vin: vin ?? '',
-        imageName: imageName ?? '',
-        tagColor: tagColor ?? Color(0),
-      );
+  const Car({
+    @required this.id,
+    @required this.name,
+    @required this.odomSnapshot,
+    this.numRefuelings = 0,
+    this.averageEfficiency = 0.0,
+    this.distanceRate = 0.0,
+    this.distanceRateHistory = const <DistanceRatePoint>[],
+    this.make,
+    this.model,
+    this.year,
+    this.plate,
+    this.vin,
+    this.imageName,
+    this.tagColor = Colors.blue,
+  })  : assert(id != null),
+        assert(name != null),
+        assert(odomSnapshot != null);
 
   factory Car.fromMap(String id, Map<String, dynamic> value) {
-    // TODO: parse string values
     return Car(
       id: id,
       name: value['name'] as String,
-      mileage: value['mileage'] as double,
+      odomSnapshot: OdomSnapshot.fromMap(
+          value['odomSnapshot']['id'], value['odomSnapshot']),
       numRefuelings: value['numRefuelings'] as int,
       averageEfficiency: value['averageEfficiency'] as double,
       distanceRate: value['distanceRate'] as double,
-      lastMileageUpdate: (value['lastMileageUpdate'] == null)
-          ? null
-          : DateTime.fromMillisecondsSinceEpoch(
-              value['lastMileageUpdate'] as int),
       distanceRateHistory: value['distanceRateHistory']
           ?.map((p) => DistanceRatePoint(
                 (p['date'] == null)
@@ -76,51 +55,17 @@ class Car extends Equatable implements WriteBatchDocument {
     );
   }
 
-  const Car._({
-    @required this.id,
-    @required this.name,
-    @required this.mileage,
-    @required this.numRefuelings,
-    @required this.averageEfficiency,
-    @required this.distanceRate,
-    @required this.lastMileageUpdate,
-    @required this.distanceRateHistory,
-    @required this.make,
-    @required this.model,
-    @required this.year,
-    @required this.plate,
-    @required this.vin,
-    @required this.imageName,
-    @required this.tagColor,
-  })  : assert(id != null),
-        assert(name != null),
-        assert(mileage != null),
-        assert(numRefuelings != null),
-        assert(averageEfficiency != null),
-        assert(distanceRate != null),
-        assert(lastMileageUpdate != null),
-        assert(distanceRateHistory != null),
-        assert(make != null),
-        assert(model != null),
-        assert(year != null),
-        assert(plate != null),
-        assert(vin != null),
-        assert(imageName != null),
-        assert(tagColor != null);
-
   final String id;
 
   final String name;
 
-  final double mileage;
+  final OdomSnapshot odomSnapshot;
 
   final int numRefuelings;
 
   final double averageEfficiency;
 
   final double distanceRate;
-
-  final DateTime lastMileageUpdate;
 
   final List<DistanceRatePoint> distanceRateHistory;
 
@@ -145,30 +90,29 @@ class Car extends Equatable implements WriteBatchDocument {
 
   final Color tagColor;
 
-  Car copyWith(
-      {String id,
-      String name,
-      double mileage,
-      int numRefuelings,
-      double averageEfficiency,
-      double distanceRate,
-      DateTime lastMileageUpdate,
-      List<DistanceRatePoint> distanceRateHistory,
-      String make,
-      String model,
-      int year,
-      String plate,
-      String vin,
-      String imageName,
-      Color tagColor,}) {
+  Car copyWith({
+    String id,
+    String name,
+    OdomSnapshot odomSnapshot,
+    int numRefuelings,
+    double averageEfficiency,
+    double distanceRate,
+    List<DistanceRatePoint> distanceRateHistory,
+    String make,
+    String model,
+    int year,
+    String plate,
+    String vin,
+    String imageName,
+    Color tagColor,
+  }) {
     return Car(
         id: id ?? this.id,
         name: name ?? this.name,
-        mileage: mileage ?? this.mileage,
+        odomSnapshot: odomSnapshot ?? this.odomSnapshot,
         numRefuelings: numRefuelings ?? this.numRefuelings,
         averageEfficiency: averageEfficiency ?? this.averageEfficiency,
         distanceRate: distanceRate ?? this.distanceRate,
-        lastMileageUpdate: lastMileageUpdate ?? this.lastMileageUpdate,
         distanceRateHistory: distanceRateHistory ?? this.distanceRateHistory,
         make: make ?? this.make,
         model: model ?? this.model,
@@ -183,11 +127,10 @@ class Car extends Equatable implements WriteBatchDocument {
   List<Object> get props => [
         id,
         name,
-        mileage,
+        odomSnapshot,
         numRefuelings,
         averageEfficiency,
         distanceRate,
-        lastMileageUpdate?.toUtc()?.toIso8601String(),
         ...distanceRateHistory,
         make,
         model,
@@ -200,24 +143,24 @@ class Car extends Equatable implements WriteBatchDocument {
 
   @override
   String toString() {
-    return '$runtimeType { id: $id, name: $name, mileage: $mileage, numRefuelings: $numRefuelings, averageEfficiency: $averageEfficiency, distanceRate: $distanceRate, lastMileageUpdate: ${lastMileageUpdate?.toUtc()?.toIso8601String()}, distanceRateHistory: $distanceRateHistory, make: $make, model: $model, year: $year, plate: $plate, vin: $vin, imageName: $imageName, tagColor: $tagColor }';
+    return '$runtimeType { id: $id, name: $name, odomSnapshot: $odomSnapshot, numRefuelings: $numRefuelings, averageEfficiency: $averageEfficiency, distanceRate: $distanceRate, distanceRateHistory: $distanceRateHistory, make: $make, model: $model, year: $year, plate: $plate, vin: $vin, imageName: $imageName, tagColor: $tagColor }';
   }
 
   @override
   Map<String, String> toDocument() {
     return {
       'name': name,
-      'mileage': mileage.toString(),
+      'odomSnapshot': odomSnapshot.id,
       'numRefuelings': numRefuelings.toString(),
       'averageEfficiency': averageEfficiency.toString(),
       'distanceRate': distanceRate.toString(),
-      'lastMileageUpdate': lastMileageUpdate?.millisecondsSinceEpoch.toString(),
       'distanceRateHistory': distanceRateHistory
           ?.map((p) => <String, String>{}..addAll({
               'date': p.date.millisecondsSinceEpoch.toString(),
               'distanceRate': p.distanceRate.toString()
             }))
-          ?.toList().toString(),
+          ?.toList()
+          .toString(),
       'make': make,
       'model': model,
       'year': year.toString(),

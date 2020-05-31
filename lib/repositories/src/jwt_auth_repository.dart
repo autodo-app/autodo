@@ -74,7 +74,7 @@ class JwtAuthRepository implements AuthRepository {
     if (curTokenIsGood) {
       return true;
     }
-    
+
     try {
       // Use the refresh key to get a new access key
       await refreshAccessToken();

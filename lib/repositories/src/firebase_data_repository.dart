@@ -68,8 +68,9 @@ class FirebaseDataRepository extends DataRepository {
   CollectionReference get _cars => _userDoc.collection('cars');
 
   @override
-  Future<void> addNewTodo(Todo todo) {
-    return _todos.add(todo.toDocument());
+  Future<Todo> addNewTodo(Todo todo) async {
+    await _todos.add(todo.toDocument());
+    return todo;
   }
 
   @override

@@ -14,7 +14,7 @@ import 'rest_write_batch.dart';
 import 'write_batch_wrapper.dart';
 
 class RestDataRepository extends DataRepository {
-  RestDataRepository._(this.authRepo, this.token); 
+  RestDataRepository._(this.authRepo, this.token);
 
   String token;
 
@@ -107,9 +107,17 @@ class RestDataRepository extends DataRepository {
   }
 
   @override
-  Future<void> addNewTodo(Todo todo) async {
-    await _authenticatedPost(
-        '$API_BASE_URL/todos/', todo.toDocument());
+  Future<Todo> addNewTodo(Todo todo) async {
+    final res =
+        await _authenticatedPost('$API_BASE_URL/todos/', todo.toDocument());
+    return Todo.fromMap(res['id'], res);
+  }
+
+  @override
+  Future<Todo> updateTodo(Todo todo) async {
+    final res = await _authenticatedPatch(
+        '$API_BASE_URL/todos/${todo.id}/', todo.toDocument());
+    return Todo.fromMap(res['id'], res);
   }
 
   @override
@@ -126,15 +134,6 @@ class RestDataRepository extends DataRepository {
   }
 
   @override
-  Future<Map<String, dynamic>> updateTodo(Todo todo) async {
-    return _authenticatedPatch(
-        '$API_BASE_URL/todos/${todo.id}/', todo.toDocument());
-  }
-
-  @override
-  Stream<List<Todo>> todos() {}
-
-  @override
   FutureOr<WriteBatchWrapper<Todo>> startTodoWriteBatch() {
     return RestWriteBatch(
       url: '$API_BASE_URL/todos/',
@@ -143,16 +142,22 @@ class RestDataRepository extends DataRepository {
   }
 
   @override
-  Future<void> addNewRefueling(Refueling refueling) async {
-    await _authenticatedPost(
-        '$API_BASE_URL/refuelings/',
-        refueling.toDocument());
+  Future<Refueling> addNewRefueling(Refueling refueling) async {
+    final res = await _authenticatedPost(
+        '$API_BASE_URL/refuelings/', refueling.toDocument());
+    return Refueling.fromMap(res['id'], res);
+  }
+
+  @override
+  Future<Refueling> updateRefueling(Refueling refueling) async {
+    final res = await _authenticatedPatch(
+        '$API_BASE_URL/refuelings/${refueling.id}/', refueling.toDocument());
+    return Refueling.fromMap(res['id'], res);
   }
 
   @override
   Future<void> deleteRefueling(Refueling refueling) async {
-    await _authenticatedDelete(
-        '$API_BASE_URL/refuelings/${refueling.id}/');
+    await _authenticatedDelete('$API_BASE_URL/refuelings/${refueling.id}/');
   }
 
   @override
@@ -164,16 +169,6 @@ class RestDataRepository extends DataRepository {
   }
 
   @override
-  Future<Map<String, dynamic>> updateRefueling(Refueling refueling) async {
-    return _authenticatedPatch(
-        '$API_BASE_URL/refuelings/${refueling.id}/',
-        refueling.toDocument());
-  }
-
-  @override
-  Stream<List<Refueling>> refuelings([bool _]) {}
-
-  @override
   FutureOr<WriteBatchWrapper<Refueling>> startRefuelingWriteBatch() {
     return RestWriteBatch(
       url: '$API_BASE_URL/refuelings/',
@@ -183,18 +178,23 @@ class RestDataRepository extends DataRepository {
 
   // Cars
   @override
-  Future<void> addNewCar(Car car) async {
-    await _authenticatedPost(
-        '$API_BASE_URL/cars/', car.toDocument());
+  Future<Car> addNewCar(Car car) async {
+    final res =
+        await _authenticatedPost('$API_BASE_URL/cars/', car.toDocument());
+    return Car.fromMap(res['id'], res);
+  }
+
+  @override
+  Future<Car> updateCar(Car car) async {
+    final res = await _authenticatedPatch(
+        '$API_BASE_URL/cars/${car.id}/', car.toDocument());
+    return Car.fromMap(res['id'], res);
   }
 
   @override
   Future<void> deleteCar(Car car) async {
     await _authenticatedDelete('$API_BASE_URL/cars/${car.id}/');
   }
-
-  @override
-  Stream<List<Car>> cars() {}
 
   @override
   Future<List<Car>> getCurrentCars() async {
@@ -205,15 +205,45 @@ class RestDataRepository extends DataRepository {
   }
 
   @override
-  Future<Map<String, dynamic>> updateCar(Car car) async {
-    return _authenticatedPatch(
-        '$API_BASE_URL/cars/${car.id}/', car.toDocument());
-  }
-
-  @override
   FutureOr<WriteBatchWrapper<Car>> startCarWriteBatch() {
     return RestWriteBatch(
       url: '$API_BASE_URL/cars/',
+      getToken: authRepo.refreshAccessToken,
+    );
+  }
+
+  // OdomSnapshots
+  @override
+  Future<OdomSnapshot> addNewOdomSnapshot(OdomSnapshot odomSnapshot) async {
+    final res =
+        await _authenticatedPost('$API_BASE_URL/odomSnapshots/', odomSnapshot.toDocument());
+    return OdomSnapshot.fromMap(res['id'], res);
+  }
+
+  @override
+  Future<OdomSnapshot> updateOdomSnapshot(OdomSnapshot odomSnapshot) async {
+    final res = await _authenticatedPatch(
+        '$API_BASE_URL/odomSnapshots/${odomSnapshot.id}/', odomSnapshot.toDocument());
+    return OdomSnapshot.fromMap(res['id'], res);
+  }
+
+  @override
+  Future<void> deleteOdomSnapshot(OdomSnapshot odomSnapshot) async {
+    await _authenticatedDelete('$API_BASE_URL/odomSnapshots/${odomSnapshot.id}/');
+  }
+
+  @override
+  Future<List<OdomSnapshot>> getCurrentOdomSnapshots() async {
+    final data = await _authenticatedGet('$API_BASE_URL/odomSnapshots/');
+    return data['results']
+        ?.map<OdomSnapshot>((c) => OdomSnapshot.fromMap('${c['id']}', c))
+        ?.toList();
+  }
+
+  @override
+  FutureOr<WriteBatchWrapper<OdomSnapshot>> startOdomSnapshotWriteBatch() {
+    return RestWriteBatch(
+      url: '$API_BASE_URL/odomSnapshots/',
       getToken: authRepo.refreshAccessToken,
     );
   }

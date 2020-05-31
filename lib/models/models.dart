@@ -8,6 +8,7 @@ export 'src/distanceratepoint.dart';
 export 'src/distanceratepoint.dart';
 export 'src/extra_action.dart';
 export 'src/fuel_mileage_point.dart';
+export 'src/odom_snapshot.dart';
 export 'src/refueling.dart';
 export 'src/repeat_interval.dart';
 export 'src/stats/driving_distance.dart';

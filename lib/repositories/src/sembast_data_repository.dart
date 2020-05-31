@@ -100,13 +100,14 @@ class SembastDataRepository extends DataRepository {
   final Completer<Database> dbCompleter = Completer<Database>();
 
   @override
-  Future<void> addNewTodo(Todo todo) async {
+  Future<Todo> addNewTodo(Todo todo) async {
     await dbLock.acquire();
     try {
       await _todos.add(db, todo.toDocument());
       _todosStream.add(await getCurrentTodos());
     } finally {
       dbLock.release();
+      return todo;
     }
   }
 
