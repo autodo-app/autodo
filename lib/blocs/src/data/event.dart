@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_intl/json_intl.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../../models/models.dart';
 import '../../../units/units.dart';
@@ -53,18 +54,21 @@ class DeleteTodo extends DataEvent {
 }
 
 class CompleteTodo extends DataEvent {
-  const CompleteTodo(this.todo, this.completedDate);
+  const CompleteTodo({@required this.todo, this.completedDate, this.completedMileage}):
+      assert(todo != null);
 
   final Todo todo;
 
   final DateTime completedDate;
 
+  final double completedMileage;
+
   @override
-  List<Object> get props => [todo, completedDate];
+  List<Object> get props => [todo, completedDate, completedMileage];
 
   @override
   String toString() =>
-      'CompleteTodo { todo: $todo, completedDate: $completedDate }';
+      'CompleteTodo { todo: $todo, completedDate: $completedDate, completedMileage: $completedMileage }';
 }
 
 class TranslateDefaults extends DataEvent {

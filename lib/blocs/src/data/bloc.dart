@@ -171,47 +171,64 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       !(t.completed ?? false);
 
   Stream<DataState> _mapAddTodoToState(AddTodo event) async* {
-    final todo = event.todo;
+    var todo = event.todo;
     final car = (state as DataLoaded).cars.firstWhere((c) => c.id == todo.carId);
 
     if (_shouldEstimateDueDate(todo)) {
       // set an estimated due date for the todo
+      final newDate = calcDueDate(car, todo.dueMileage);
+      todo = todo.copyWith(dueDate: newDate, estimatedDueDate: true);
     }
 
     if (todo.completed ?? false) {
-      // handle the odomSnapshot
+      // The todo has an odom snapshot attached
+      // Write it to the database
+      final updatedOdomSnapshot = await repo.addNewOdomSnapshot(todo.completedOdomSnapshot);
+      todo = todo.copyWith(completedOdomSnapshot: updatedOdomSnapshot);
+
+      // update related models
+      yield* _reactToOdomSnapshotChange(todo.completedOdomSnapshot);
     }
 
     // Schedule a notification
+    // TODO: how to get the ID back from this?   
     notificationsBloc.add(ScheduleNotification(
         date: todo.dueDate,
         title: '${IntlKeys.todoDueSoon}: ${todo.name}', // TODO: Translate this
         body: ''));
 
-    final newTodo = await repo.addNewTodo(event.todo);
+    final newTodo = await repo.addNewTodo(todo);
     final updatedTodos = List.from((state as DataLoaded).todos)..add(newTodo);
     yield (state as DataLoaded).copyWith(todos: updatedTodos);
   }
 
   Stream<DataState> _mapUpdateTodoToState(UpdateTodo event) async* {
-    final todo = event.todo;
+    var todo = event.todo;
     final car = (state as DataLoaded).cars.firstWhere((c) => c.id == todo.carId);
 
     if (_shouldEstimateDueDate(todo)) {
       // set an estimated due date for the todo
+      final newDate = calcDueDate(car, todo.dueMileage);
+      todo = todo.copyWith(dueDate: newDate, estimatedDueDate: true);
     }
 
     if (todo.completed ?? false) {
-      // handle the odomSnapshot
+      // The todo has an odom snapshot attached
+      // Write it to the database
+      final updatedOdomSnapshot = await repo.addNewOdomSnapshot(todo.completedOdomSnapshot);
+      todo = todo.copyWith(completedOdomSnapshot: updatedOdomSnapshot);
+
+      // update related models
+      yield* _reactToOdomSnapshotChange(todo.completedOdomSnapshot);
     }
 
     notificationsBloc.add(ReScheduleNotification(
-        id: out.notificationID,
-        date: out.dueDate,
-        title: '${IntlKeys.todoDueSoon}: ${out.name}', // TODO: Translate this
+        id: todo.notificationID,
+        date: todo.dueDate,
+        title: '${IntlKeys.todoDueSoon}: ${todo.name}', // TODO: Translate this
         body: ''));
 
-    final updatedTodo = await repo.updateTodo(event.todo);
+    final updatedTodo = await repo.updateTodo(todo);
     final updatedTodos = List.from((state as DataLoaded).todos)
       ..map((t) => (t.id == updatedTodo.id) ? updatedTodo : t);
     yield (state as DataLoaded).copyWith(todos: updatedTodos);
@@ -225,8 +242,49 @@ class DataBloc extends Bloc<DataEvent, DataState> {
   }
 
   Stream<DataState> _mapCompleteTodoToState(CompleteTodo event) async* {
-    // update the todo, call _reactTo
-    // create a new todo if needed
+    var todo = event.todo;
+    final car = (state as DataLoaded).cars.firstWhere((c) => c.id == todo.carId);
+    final curCarMileage = event.completedMileage ?? car.odomSnapshot.mileage;
+    
+    // Update the todos' fields
+    todo = todo.copyWith(
+      completed: true,
+      completedOdomSnapshot: OdomSnapshot(
+        car: todo.carId,
+        date: event.completedDate ?? DateTime.now(),
+        mileage: curCarMileage,
+      ),
+    );
+
+    // Assuming that this is the first time that the completedOdomSnapshot is present
+    // Write it to the database
+    final updatedOdomSnapshot = await repo.addNewOdomSnapshot(todo.completedOdomSnapshot);
+    todo = todo.copyWith(completedOdomSnapshot: updatedOdomSnapshot);
+
+    // update related models
+    yield* _reactToOdomSnapshotChange(todo.completedOdomSnapshot);
+
+    // Create the next ToDo if there's a repeating interval specified
+    if (todo.mileageRepeatInterval != null) {
+      final newDueMileage = curCarMileage + todo.mileageRepeatInterval;
+      // Creating a new one instead of .copyWith() so that null fields are
+      // preserved
+      final newTodo = Todo(
+        name: todo.name,
+        carId: todo.carId,
+        dueMileage: newDueMileage,
+        mileageRepeatInterval: todo.mileageRepeatInterval,
+        estimatedDueDate: true,
+        dueDate: calcDueDate(car, newDueMileage),
+        completed: false,
+      );
+      
+      // Write to database
+      final updatedTodo = await repo.addNewTodo(newTodo);
+      final updatedTodoList = List.from((state as DataLoaded).todos)..add(updatedTodo);
+      yield (state as DataLoaded).copyWith(todos: updatedTodoList);
+    }
+
   }
 
   Stream<DataState> _mapAddRefuelingToState(AddRefueling event) async* {

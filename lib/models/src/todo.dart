@@ -11,7 +11,7 @@ class Todo extends Equatable implements WriteBatchDocument {
   const Todo(
       {this.id,
       this.name,
-      this.carName,
+      this.carId,
       this.dueState,
       this.dueMileage,
       this.mileageRepeatInterval,
@@ -19,15 +19,14 @@ class Todo extends Equatable implements WriteBatchDocument {
       this.notificationID,
       this.completed,
       this.estimatedDueDate,
-      this.completedDate,
-      this.completedMileage,
+      this.completedOdomSnapshot,
       this.dueDate});
 
   factory Todo.fromMap(String id, Map<String, dynamic> value) {
     return Todo(
       id: id,
       name: value['name'] as String,
-      carName: value['carName'] as String,
+      carId: value['car'] as String,
       dueState: (value['dueState'] == null)
           ? null
           : TodoDueState.values[value['dueState']],
@@ -42,10 +41,7 @@ class Todo extends Equatable implements WriteBatchDocument {
       notificationID: value['notificationID'] as int,
       completed: value['completed'] as bool,
       estimatedDueDate: value['estimatedDueDate'] as bool,
-      completedDate: (value['completedDate'] == null)
-          ? null
-          : DateTime.fromMillisecondsSinceEpoch(value['completedDate']),
-      completedMileage: (value['completedMileage'] as num)?.toDouble(),
+      completedOdomSnapshot: OdomSnapshot.fromMap(value['odomSnapshot']['id'], value['odomSnapshot']),
       dueDate: (value['dueDate'] == null)
           ? null
           // : DateTime.fromMillisecondsSinceEpoch(value['dueDate']),
@@ -59,8 +55,8 @@ class Todo extends Equatable implements WriteBatchDocument {
   /// The user-facing name for the ToDo action.
   final String name;
 
-  /// The name of the car that this ToDo action will be applied to.
-  final String carName;
+  /// The ID of the car that this ToDo action will be applied to.
+  final String carId;
 
   /// An enumerated value specifying if the ToDo is close to being due or is
   /// overdue.
@@ -69,8 +65,8 @@ class Todo extends Equatable implements WriteBatchDocument {
   /// The car mileage distance when this ToDo action should be done.
   final double dueMileage;
 
-  /// The car mileage distance when this ToDo action was completed.
-  final double completedMileage;
+  /// The date and mileage for the car when this todo was completed.
+  final OdomSnapshot completedOdomSnapshot;
 
   /// The id value for the local notification corresponding to this action.
   final int notificationID;
@@ -83,9 +79,6 @@ class Todo extends Equatable implements WriteBatchDocument {
   /// explicitly when creating the ToDo.
   final bool estimatedDueDate;
 
-  /// The date when the ToDo was actually completed. This can, and often does,
-  /// vary from the due date for the ToDo.
-  final DateTime completedDate;
 
   /// The date when the ToDo should be completed.
   final DateTime dueDate;
@@ -101,7 +94,7 @@ class Todo extends Equatable implements WriteBatchDocument {
   Todo copyWith(
       {String id,
       String name,
-      String carName,
+      String carId,
       TodoDueState dueState,
       double dueMileage,
       double mileageRepeatInterval,
@@ -109,13 +102,12 @@ class Todo extends Equatable implements WriteBatchDocument {
       int notificationID,
       bool completed,
       bool estimatedDueDate,
-      DateTime completedDate,
-      double completedMileage,
+      OdomSnapshot completedOdomSnapshot,
       DateTime dueDate}) {
     return Todo(
         id: id ?? this.id,
         name: name ?? this.name,
-        carName: carName ?? this.carName,
+        carId: carId ?? this.carId,
         dueState: dueState ?? this.dueState,
         dueMileage: dueMileage ?? this.dueMileage,
         mileageRepeatInterval:
@@ -124,8 +116,7 @@ class Todo extends Equatable implements WriteBatchDocument {
         notificationID: notificationID ?? this.notificationID,
         completed: completed ?? this.completed,
         estimatedDueDate: estimatedDueDate ?? this.estimatedDueDate,
-        completedDate: completedDate ?? this.completedDate,
-        completedMileage: completedMileage ?? this.completedMileage,
+        completedOdomSnapshot: completedOdomSnapshot ?? this.completedOdomSnapshot,
         dueDate: dueDate ?? this.dueDate);
   }
 
@@ -133,7 +124,7 @@ class Todo extends Equatable implements WriteBatchDocument {
   List<Object> get props => [
         id,
         name,
-        carName,
+        carId,
         dueState,
         dueMileage,
         mileageRepeatInterval,
@@ -141,20 +132,19 @@ class Todo extends Equatable implements WriteBatchDocument {
         notificationID,
         completed,
         estimatedDueDate,
-        completedDate?.toUtc(),
-        completedMileage,
+        completedOdomSnapshot,
         dueDate?.toUtc()
       ];
 
   @override
   String toString() {
-    return '$runtimeType { id: $id, name: $name, carName: $carName, '
+    return '$runtimeType { id: $id, name: $name, carId: $carId, '
         'dueState: $dueState, dueMileage: $dueMileage, '
         'mileageRepeatInterval: $mileageRepeatInterval, '
         'dateRepeatInterval: $dateRepeatInterval, '
         'notificationID: $notificationID, completed: '
-        '$completed, estimatedDueDate: $estimatedDueDate, completedDate: '
-        '${completedDate?.toUtc()}, completedMileage: $completedMileage, '
+        '$completed, estimatedDueDate: $estimatedDueDate, completedOdomSnapshot:'
+        ' $completedOdomSnapshot'
         'dueDate: ${dueDate?.toUtc()} }';
   }
 
@@ -162,7 +152,7 @@ class Todo extends Equatable implements WriteBatchDocument {
   Map<String, String> toDocument() {
     return {
       'name': name,
-      'carName': carName,
+      'car': carId,
       'dueState': dueState?.index.toString(),
       'dueMileage': dueMileage.toString(),
       'mileageRepeatInterval': mileageRepeatInterval.toString(),
@@ -172,8 +162,7 @@ class Todo extends Equatable implements WriteBatchDocument {
       'notificationID': notificationID.toString(),
       'completed': completed.toString(),
       'estimatedDueDate': estimatedDueDate.toString(),
-      // 'completedDate': completedDate?.millisecondsSinceEpoch.toString(),
-      // 'completedMileage': completedMileage.toString(),
+      'odomSnapshot': completedOdomSnapshot.id,
       'dueDate': dueDate?.toUtc()?.toIso8601String() ?? '',
     };
   }
