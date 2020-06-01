@@ -6,24 +6,17 @@ import 'package:meta/meta.dart';
 
 import '../../../models/models.dart';
 import '../../../util.dart';
-import '../cars/barrel.dart';
-import '../refuelings/barrel.dart';
+import '../data/barrel.dart';
 import 'event.dart';
 import 'state.dart';
 
 class FilteredRefuelingsBloc
     extends Bloc<FilteredRefuelingsEvent, FilteredRefuelingsState> {
   FilteredRefuelingsBloc(
-      {@required this.refuelingsBloc, @required this.carsBloc}) {
-    refuelingsSubscription = refuelingsBloc.listen((state) {
-      if (state is RefuelingsLoaded) {
-        add(UpdateRefuelings(
-            (refuelingsBloc.state as RefuelingsLoaded).refuelings));
-      }
-    });
-    carsSubscription = carsBloc.listen((state) {
-      if (state is CarsLoaded) {
-        add(FilteredRefuelingsUpdateCars(state.cars));
+      {@required this.dataBloc}) {
+    dataBlocSubscription = dataBloc.listen((state) {
+      if (state is DataLoaded) {
+        add(FilteredRefuelingDataUpdated(refuelings: state.refuelings, cars: state.cars));
       }
     });
   }
@@ -35,24 +28,21 @@ class FilteredRefuelingsBloc
 
   static const double HUE_MAX = 360.0;
 
-  final RefuelingsBloc refuelingsBloc;
+  final DataBloc dataBloc;
 
-  final CarsBloc carsBloc;
-
-  StreamSubscription refuelingsSubscription, carsSubscription;
+  StreamSubscription dataBlocSubscription;
 
   @override
   FilteredRefuelingsState get initialState {
-    if (refuelingsBloc.state is RefuelingsLoaded &&
-        carsBloc.state is CarsLoaded) {
+    if (dataBloc.state is DataLoaded) {
       return _shadeEfficiencyStats(
-          (refuelingsBloc.state as RefuelingsLoaded).refuelings,
-          (carsBloc.state as CarsLoaded).cars,
-          VisibilityFilter.all);
-    } else if (refuelingsBloc.state is RefuelingsLoading) {
-      return FilteredRefuelingsLoading();
-    } else {
+        (dataBloc.state as DataLoaded).refuelings,
+        (dataBloc.state as DataLoaded).cars,
+        VisibilityFilter.all);
+    } else if (dataBloc.state is DataNotLoaded) {
       return FilteredRefuelingsNotLoaded();
+    } else {
+      return FilteredRefuelingsLoading();
     }
   }
 
@@ -61,41 +51,33 @@ class FilteredRefuelingsBloc
       FilteredRefuelingsEvent event) async* {
     if (event is UpdateRefuelingsFilter) {
       yield* _mapUpdateFilterToState(event);
-    } else if (event is UpdateRefuelings) {
-      yield* _mapRefuelingsUpdatedToState(event);
-    } else if (event is FilteredRefuelingsUpdateCars) {
-      yield* _mapCarsUpdatedToState(event);
+    } else if (event is FilteredRefuelingDataUpdated) {
+      yield* _mapFilteredRefuelingDataUpdatedToState(event);
     }
   }
 
   Stream<FilteredRefuelingsState> _mapUpdateFilterToState(
     UpdateRefuelingsFilter event,
   ) async* {
-    if (refuelingsBloc.state is RefuelingsLoaded &&
-        state is FilteredRefuelingsLoaded) {
-      final curState = state as FilteredRefuelingsLoaded;
+    if (state is FilteredRefuelingsLoaded) {
       yield FilteredRefuelingsLoaded(
-        curState.filteredRefuelings,
+        (state as FilteredRefuelingsLoaded).filteredRefuelings,
         event.filter,
-        curState.cars,
+        (state as FilteredRefuelingsLoaded).cars,
       );
     }
   }
 
-  // TODO: clean this up, it's a mess
-  Stream<FilteredRefuelingsState> _mapRefuelingsUpdatedToState(
-    UpdateRefuelings event,
+  Stream<FilteredRefuelingsState> _mapFilteredRefuelingDataUpdatedToState(  
+    FilteredRefuelingDataUpdated event
   ) async* {
-    final updatedRefuelings = _sortRefuelings(event.refuelings);
-    if (state is FilteredRefuelingsLoaded) {
-      final curState = state as FilteredRefuelingsLoaded;
-      yield _shadeEfficiencyStats(updatedRefuelings, curState.cars);
-    } else if (refuelingsBloc.state is RefuelingsLoaded) {
-      // this allows the initial state to still be created even if the carsBloc
-      // and/or the refuelingsBloc are not loaded when this bloc is created
-      yield _shadeEfficiencyStats(updatedRefuelings,
-          (carsBloc.state as CarsLoaded).cars, VisibilityFilter.all);
-    }
+    final sortedRefuelings = _sortRefuelings(event.refuelings);
+    final highlightedRefuelings = sortedRefuelings.map((r) {
+      final car = event.cars.firstWhere((c) => c.id == r.odomSnapshot.car);
+      return r.copyWith(efficiencyColor: Color(_hsv(r, car)));
+    });
+    final curFilter = (state as FilteredRefuelingsLoaded).activeFilter;
+    yield _shadeEfficiencyStats(highlightedRefuelings, event.cars, curFilter);
   }
 
   int _hsv(Refueling refueling, Car car) {
@@ -119,10 +101,10 @@ class FilteredRefuelingsBloc
     final curFilter =
         filter ?? (state as FilteredRefuelingsLoaded).activeFilter;
     final shadedRefuelings = refuelings
-        .where((r) => cars.any((c) => c.name == r.carName))
+        .where((r) => cars.any((c) => c.id == r.odomSnapshot.car))
         .map((r) => r.copyWith(
             efficiencyColor:
-                Color(_hsv(r, cars.firstWhere((c) => r.carName == c.name)))))
+                Color(_hsv(r, cars.firstWhere((c) => r.odomSnapshot.car == c.id)))))
         .toList();
     final updatedRefuelings = refuelings
         .map((r) => shadedRefuelings.any((s) => s.id == r.id)
@@ -134,40 +116,13 @@ class FilteredRefuelingsBloc
   }
 
   List<Refueling> _sortRefuelings(List<Refueling> refuelings) {
-    refuelings.sort((a, b) => a.date.compareTo(b.date));
+    refuelings.sort((a, b) => a.odomSnapshot.date.compareTo(b.odomSnapshot.date));
     return refuelings.reversed.toList();
-  }
-
-  Stream<FilteredRefuelingsState> _mapCarsUpdatedToState(
-      FilteredRefuelingsUpdateCars event) async* {
-    if (state is FilteredRefuelingsLoaded) {
-      final curState = state as FilteredRefuelingsLoaded;
-      final curFilter = curState.activeFilter;
-      var updatedRefuelings = curState.filteredRefuelings;
-      for (var c in event.cars) {
-        final toUpdate = curState.filteredRefuelings
-            .where((r) => r.carName == c.name)
-            .toList();
-        for (var r in toUpdate) {
-          final updated = r.copyWith(efficiencyColor: Color(_hsv(r, c)));
-          updatedRefuelings = updatedRefuelings
-              .map((r) => r.id == updated.id ? updated : r)
-              .toList();
-        }
-      }
-      yield FilteredRefuelingsLoaded(updatedRefuelings, curFilter, event.cars);
-    } else if (refuelingsBloc.state is RefuelingsLoaded) {
-      yield _shadeEfficiencyStats(
-          (refuelingsBloc.state as RefuelingsLoaded).refuelings,
-          (carsBloc.state as CarsLoaded).cars,
-          VisibilityFilter.all);
-    }
   }
 
   @override
   Future<void> close() {
-    refuelingsSubscription?.cancel();
-    carsSubscription?.cancel();
+    dataBlocSubscription?.cancel();
     return super.close();
   }
 }

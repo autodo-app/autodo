@@ -17,26 +17,16 @@ class UpdateRefuelingsFilter extends FilteredRefuelingsEvent {
   String toString() => 'UpdateFilter { filter: $filter }';
 }
 
-class UpdateRefuelings extends FilteredRefuelingsEvent {
-  const UpdateRefuelings(this.refuelings);
+class FilteredRefuelingDataUpdated extends FilteredRefuelingsEvent {
+  const FilteredRefuelingDataUpdated({this.refuelings, this.cars});
 
   final List<Refueling> refuelings;
 
-  @override
-  List<Object> get props => [refuelings];
-
-  @override
-  String toString() => 'UpdateRefuelings { refuelings: $refuelings }';
-}
-
-class FilteredRefuelingsUpdateCars extends FilteredRefuelingsEvent {
-  const FilteredRefuelingsUpdateCars(this.cars);
-
   final List<Car> cars;
 
-  @override
-  List<Object> get props => [cars];
+  @override 
+  List<Object> get props => [...refuelings, ...cars];
 
-  @override
-  String toString() => 'FilteredRefuelingsUpdateCars { cars: $cars }';
+  @override 
+  String toString() => '$runtimeType { refuelings $refuelings, cars: $cars }';
 }

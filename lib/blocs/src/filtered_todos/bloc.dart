@@ -5,35 +5,28 @@ import 'package:meta/meta.dart';
 import 'package:collection/collection.dart';
 
 import '../../../models/models.dart';
-import '../cars/barrel.dart';
-import '../todos/barrel.dart';
+import '../data/barrel.dart';
 import 'event.dart';
 import 'state.dart';
 
 class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
-  FilteredTodosBloc({@required this.todosBloc, @required this.carsBloc}) {
-    todosSubscription = todosBloc.listen((state) {
-      if (state is TodosLoaded) {
-        add(UpdateTodos(state.todos));
-      }
-    });
-    carsSubscription = carsBloc.listen((state) {
-      if (state is CarsLoaded) {
-        add(UpdateCars(state.cars));
+  FilteredTodosBloc({@required this.dataBloc}) {
+    dataBlocSubscription = dataBloc.listen((state) {
+      if (state is DataLoaded) {
+        add(FilteredTodoDataUpdated(todos: state.todos, cars: state.cars));
       }
     });
   }
 
-  final TodosBloc todosBloc;
-  final CarsBloc carsBloc;
+  final DataBloc dataBloc;
 
-  StreamSubscription todosSubscription, carsSubscription;
+  StreamSubscription dataBlocSubscription;
 
   @override
   FilteredTodosState get initialState {
-    return todosBloc.state is TodosLoaded
+    return dataBloc.state is DataLoaded
         ? FilteredTodosLoaded(
-            sortItems((todosBloc.state as TodosLoaded).todos),
+            sortItems((dataBloc.state as DataLoaded).todos),
             VisibilityFilter.all,
           )
         : FilteredTodosLoading();
@@ -43,10 +36,8 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
   Stream<FilteredTodosState> mapEventToState(FilteredTodosEvent event) async* {
     if (event is UpdateTodosFilter) {
       yield* _mapUpdateFilterToState(event);
-    } else if (event is UpdateTodos) {
-      yield* _mapTodosUpdatedToState(event);
-    } else if (event is UpdateCars) {
-      yield* _mapCarsUpdatedToState(event);
+    } else if (event is FilteredTodoDataUpdated) {
+      yield* _mapDataUpdatedToState(event);
     }
   }
 
@@ -84,10 +75,10 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
   Stream<FilteredTodosState> _mapUpdateFilterToState(
     UpdateTodosFilter event,
   ) async* {
-    if (todosBloc.state is TodosLoaded) {
+    if (state is FilteredTodosLoaded) {
       yield FilteredTodosLoaded(
         _filterTodos(
-          (todosBloc.state as TodosLoaded).todos,
+          (state as FilteredTodosLoaded).filteredTodos,
           event.filter,
         ),
         event.filter,
