@@ -41,6 +41,7 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
     }
   }
 
+  /// Sorts the ToDos based on their due mileage/date.
   static Map<TodoDueState, List<Todo>> sortItems(List<Todo> items) {
     items.sort((a, b) {
       if ((a.completed ?? false) && (!b.completed ?? false)) {
@@ -72,68 +73,7 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
     return groupBy<Todo, TodoDueState>(items, (t) => t.dueState);
   }
 
-  Stream<FilteredTodosState> _mapUpdateFilterToState(
-    UpdateTodosFilter event,
-  ) async* {
-    if (state is FilteredTodosLoaded) {
-      yield FilteredTodosLoaded(
-        _filterTodos(
-          (state as FilteredTodosLoaded).filteredTodos,
-          event.filter,
-        ),
-        event.filter,
-      );
-    }
-  }
-
-  Stream<FilteredTodosState> _mapTodosUpdatedToState(
-    UpdateTodos event,
-  ) async* {
-    var updatedTodos = event.todos;
-    if (carsBloc.state is CarsLoaded) {
-      updatedTodos =
-          _setDueState(event.todos, (carsBloc.state as CarsLoaded).cars);
-    }
-    final visibilityFilter = state is FilteredTodosLoaded
-        ? (state as FilteredTodosLoaded).activeFilter
-        : VisibilityFilter.all;
-    yield FilteredTodosLoaded(
-      _filterTodos(
-        updatedTodos,
-        visibilityFilter,
-      ),
-      visibilityFilter,
-    );
-  }
-
-  Stream<FilteredTodosState> _mapCarsUpdatedToState(UpdateCars event) async* {
-    if (!(state is FilteredTodosLoaded)) {
-      // can't update the dueState for ToDos if we don't have any yet
-      return;
-    }
-    final updatedTodos =
-        _setDueState((todosBloc.state as TodosLoaded).todos, event.cars);
-    print(updatedTodos);
-    final visibilityFilter = state is FilteredTodosLoaded
-        ? (state as FilteredTodosLoaded).activeFilter
-        : VisibilityFilter.all;
-    yield FilteredTodosLoaded(
-      _filterTodos(
-        updatedTodos,
-        visibilityFilter,
-      ),
-      visibilityFilter,
-    );
-  }
-
-  List<Todo> _setDueState(List<Todo> todos, List<Car> cars) {
-    return todos;
-    // return todos.map((t) {
-    //   final curCar = cars.firstWhere((c) => c.id == t.carId);
-    //   return t.copyWith(dueState: TodosBloc.calcDueState(curCar, t));
-    // }).toList();
-  }
-
+  /// Returns a filtered, organized Map of the ToDos according to their DueState.
   Map<TodoDueState, List<Todo>> _filterTodos(
       List<Todo> todos, VisibilityFilter filter) {
     final filtered = todos.where((todo) {
@@ -148,10 +88,36 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
     return sortItems(filtered);
   }
 
+  Stream<FilteredTodosState> _mapUpdateFilterToState(
+    UpdateTodosFilter event,
+  ) async* {
+    if (state is FilteredTodosLoaded) {
+      yield FilteredTodosLoaded(
+        _filterTodos(
+          (state as FilteredTodosLoaded)
+            .filteredTodos
+            .entries
+            .map((e) => e.value)
+            .expand((e) => e)
+            .toList(),
+          event.filter,
+        ),
+        event.filter,
+      );
+    }
+  }
+
+  Stream<FilteredTodosState> _mapDataUpdatedToState(FilteredTodoDataUpdated event) async* {
+    // Had been handling due states here before, now going to handle that in DataBloc
+    final updatedTodos = _filterTodos(event.todos, (state as FilteredTodosLoaded).activeFilter);
+    yield FilteredTodosLoaded(updatedTodos, (state as FilteredTodosLoaded).activeFilter);
+  }
+
+  
+
   @override
   Future<void> close() {
-    todosSubscription?.cancel();
-    carsSubscription?.cancel();
+    dataBlocSubscription?.cancel();
     return super.close();
   }
 }

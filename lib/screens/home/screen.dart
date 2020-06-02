@@ -81,7 +81,7 @@ class HomeScreenState extends State<HomeScreen> with RouteAware {
 
   AppTab get tab => _tab;
 
-  StreamSubscription<CarsState> carsSubscription;
+  StreamSubscription<DataState> dataSubscription;
 
   set tab(AppTab tab) {
     setState(() {
@@ -97,14 +97,16 @@ class HomeScreenState extends State<HomeScreen> with RouteAware {
             child: RefuelingAddEditScreen(
               isEditing: false,
               onSave: (m, d, a, c, n) {
-                BlocProvider.of<RefuelingsBloc>(context)
+                BlocProvider.of<DataBloc>(context)
                     .add(AddRefueling(Refueling(
-                  mileage:
+                  odomSnapshot: OdomSnapshot(  
+                    car: n, // TODO: return Car ID here
+                    mileage: 
                       Distance.of(context, listen: false).unitToInternal(m),
-                  date: d,
+                    date: d
+                  ),
                   amount: Volume.of(context, listen: false).unitToInternal(a),
                   cost: Currency.of(context, listen: false).unitToInternal(c),
-                  carName: n,
                 )));
               },
               cars: cars,
@@ -116,11 +118,12 @@ class HomeScreenState extends State<HomeScreen> with RouteAware {
                     child: TodoAddEditScreen(
                   isEditing: false,
                   onSave: (n, d, m, c, mR, dR) {
-                    BlocProvider.of<TodosBloc>(context).add(AddTodo(Todo(
+                    // TODO: return Car ID here
+                    BlocProvider.of<DataBloc>(context).add(AddTodo(Todo(
                         name: n,
                         dueDate: d,
                         dueMileage: m,
-                        carName: c,
+                        carId: c,
                         mileageRepeatInterval: mR,
                         dateRepeatInterval: dR,
                         completed: false)));
@@ -131,12 +134,12 @@ class HomeScreenState extends State<HomeScreen> with RouteAware {
                     child: CarAddEditScreen(
                   isEditing: false,
                   onSave: (name, odom, make, model, y, p, v) {
-                    BlocProvider.of<TodosBloc>(context).add(TranslateDefaults(
+                    BlocProvider.of<DataBloc>(context).add(TranslateDefaults(
                         JsonIntl.of(context),
                         Distance.of(context, listen: false).unit));
-                    BlocProvider.of<CarsBloc>(context).add(AddCar(Car(
+                    BlocProvider.of<DataBloc>(context).add(AddCar(Car(
                         name: name,
-                        mileage: odom,
+                        odomSnapshot: OdomSnapshot(mileage: odom, date: DateTime.now()),
                         make: make,
                         model: model,
                         year: y,
@@ -147,17 +150,17 @@ class HomeScreenState extends State<HomeScreen> with RouteAware {
       ];
 
   Widget get actionButton =>
-      BlocBuilder<CarsBloc, CarsState>(builder: (context, state) {
-        if (!(state is CarsLoaded)) {
+      BlocBuilder<DataBloc, DataState>(builder: (context, state) {
+        if (!(state is DataLoaded)) {
           print('Cannot show fab without cars');
           return Container();
         } else if (integrationTest) {
           return AutodoActionButton(
-              miniButtonRoutes: fabRoutes((state as CarsLoaded).cars),
+              miniButtonRoutes: fabRoutes((state as DataLoaded).cars),
               ticker: TestVSync());
         } else {
           return AutodoActionButton(
-              miniButtonRoutes: fabRoutes((state as CarsLoaded).cars));
+              miniButtonRoutes: fabRoutes((state as DataLoaded).cars));
         }
       });
 
@@ -177,15 +180,15 @@ class HomeScreenState extends State<HomeScreen> with RouteAware {
           .subscribe(this, ModalRoute.of(context));
     }
 
-    carsSubscription ??= BlocProvider.of<CarsBloc>(context).listen((a) {
+    dataSubscription ??= BlocProvider.of<DataBloc>(context).listen((a) {
       setState(() {});
     });
   }
 
   @override
   void dispose() {
-    carsSubscription?.cancel();
-    carsSubscription = null;
+    dataSubscription?.cancel();
+    dataSubscription = null;
     super.dispose();
   }
 
@@ -250,9 +253,9 @@ class HomeScreenState extends State<HomeScreen> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    final carsState = BlocProvider.of<CarsBloc>(context).state;
-    if (carsState is CarsLoaded) {
-      if (carsState.cars.isEmpty) {
+    final dataState = BlocProvider.of<DataBloc>(context).state;
+    if (dataState is DataLoaded) {
+      if (dataState.cars.isEmpty) {
         return NewUserScreen();
       }
     } else {
@@ -263,12 +266,10 @@ class HomeScreenState extends State<HomeScreen> with RouteAware {
       providers: [
         BlocProvider<FilteredRefuelingsBloc>(
             create: (context) => FilteredRefuelingsBloc(
-                carsBloc: BlocProvider.of<CarsBloc>(context),
-                refuelingsBloc: BlocProvider.of<RefuelingsBloc>(context))),
+                dataBloc: BlocProvider.of<DataBloc>(context))),
         BlocProvider<FilteredTodosBloc>(
             create: (context) => FilteredTodosBloc(
-                todosBloc: BlocProvider.of<TodosBloc>(context),
-                carsBloc: BlocProvider.of<CarsBloc>(context))),
+                dataBloc: BlocProvider.of<DataBloc>(context))),
       ],
       child: kFlavor.hasAds
           ? (kFlavor.hasPaid

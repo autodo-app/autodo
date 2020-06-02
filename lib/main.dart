@@ -153,25 +153,11 @@ class AppProviderState extends State<AppProvider> {
                         dbBloc: BlocProvider.of<DatabaseBloc>(context),
                       )..add(LoadNotifications()),
                     ),
-                    BlocProvider<RefuelingsBloc>(
-                      create: (context) => RefuelingsBloc(
+                    BlocProvider<DataBloc>(  
+                      create: (context) => DataBloc(  
                         dbBloc: BlocProvider.of<DatabaseBloc>(context),
-                      ),
-                    ),
-                    BlocProvider<CarsBloc>(
-                      create: (context) => CarsBloc(
-                        dbBloc: BlocProvider.of<DatabaseBloc>(context),
-                        refuelingsBloc:
-                            BlocProvider.of<RefuelingsBloc>(context),
-                      ),
-                    ),
-                    BlocProvider<TodosBloc>(
-                      create: (context) => TodosBloc(
-                        dbBloc: BlocProvider.of<DatabaseBloc>(context),
-                        notificationsBloc:
-                            BlocProvider.of<NotificationsBloc>(context),
-                        carsBloc: BlocProvider.of<CarsBloc>(context),
-                      ),
+                        notificationsBloc: BlocProvider.of<NotificationsBloc>(context)
+                      )..add(LoadData()),
                     ),
                   ],
                   child: App(
@@ -221,7 +207,7 @@ class App extends StatelessWidget {
         // Just here as the splitter between home screen and login screen
         builder: (context, state) {
           if (state is Authenticated) {
-            return HomeScreenProvider(integrationTest: integrationTest);
+            return HomeScreen(integrationTest: integrationTest);
           } else if (state is Uninitialized) {
             return LoadingIndicator();
           } else {

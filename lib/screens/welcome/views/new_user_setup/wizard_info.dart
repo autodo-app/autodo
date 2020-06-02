@@ -36,10 +36,13 @@ class NewUserScreenWizard extends WizardInfo {
 
   @override
   FutureOr<void> didFinish(BuildContext context) {
+
+    // TODO: Make this its own addition so that the cars are added first and ID vals are used right
+
     final newCars = <Car>[];
     final newTodos = <Todo>[];
     for (final car in cars) {
-      final c = Car(name: car.name, mileage: car.mileage);
+      final c = Car(name: car.name, odomSnapshot: OdomSnapshot(mileage: car.mileage, date: DateTime.now()));
       newCars.add(c);
       if (car.oilChange != null) {
         newTodos.add(Todo(

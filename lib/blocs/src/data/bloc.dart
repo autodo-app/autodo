@@ -72,6 +72,8 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       yield* _mapDeleteCarToState(event);
     } else if (event is CompleteTodo) {
       yield* _mapCompleteTodoToState(event);
+    } else if (event is ToggleAllTodosComplete) {
+      yield* _mapToggleAllTodosToState(event);
     }
   }
 
@@ -288,6 +290,16 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       final updatedTodo = await repo.addNewTodo(newTodo);
       final updatedTodoList = List.from((state as DataLoaded).todos)..add(updatedTodo);
       yield (state as DataLoaded).copyWith(todos: updatedTodoList);
+    }
+  }
+
+  /// Goes through each of the currently active todos and marks them as complete
+  Stream<DataState> _mapToggleAllTodosToState(ToggleAllTodosComplete event) async* {
+    for (var t in (state as DataLoaded).todos) {
+      if (!t.completed ?? true) {
+        // Complete the todo
+        yield* _mapCompleteTodoToState(CompleteTodo(todo: t));
+      }
     }
   }
 

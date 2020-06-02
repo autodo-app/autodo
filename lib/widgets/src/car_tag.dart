@@ -29,10 +29,10 @@ class CarTag extends StatelessWidget {
                     car: car,
                     isEditing: false,
                     onSave: (name, odom, make, model, year, plate, vin) {
-                      BlocProvider.of<CarsBloc>(context).add(UpdateCar(
+                      BlocProvider.of<DataBloc>(context).add(UpdateCar(
                           car.copyWith(
-                              name: name,
-                              mileage: odom,
+                              name: name, 
+                              odomSnapshot: OdomSnapshot(car: car.id, mileage: odom, date: DateTime.now()),
                               make: make,
                               model: model,
                               year: year,

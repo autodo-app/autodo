@@ -84,6 +84,8 @@ class TranslateDefaults extends DataEvent {
   String toString() => 'Translate Defaults { JsonIntl: $jsonIntl }';
 }
 
+class ToggleAllTodosComplete extends DataEvent {}
+
 // Refuelings
 
 class AddRefueling extends DataEvent {

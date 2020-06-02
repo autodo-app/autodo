@@ -9,7 +9,7 @@ import 'odom_snapshot.dart';
 @immutable
 class Car extends Equatable implements WriteBatchDocument {
   const Car({
-    @required this.id,
+    this.id,
     @required this.name,
     @required this.odomSnapshot,
     this.numRefuelings = 0,
@@ -23,8 +23,7 @@ class Car extends Equatable implements WriteBatchDocument {
     this.vin,
     this.imageName,
     this.tagColor = Colors.blue,
-  })  : assert(id != null),
-        assert(name != null),
+  })  : assert(name != null),
         assert(odomSnapshot != null);
 
   factory Car.fromMap(String id, Map<String, dynamic> value) {

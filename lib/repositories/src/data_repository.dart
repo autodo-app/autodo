@@ -63,44 +63,45 @@ abstract class DataRepository extends Equatable {
 
   @protected
   Future<int> upgrade(int curVer, int desVer) async {
+    // TODO: how should this be handled???
     if (curVer == 1 && desVer >= 2) {
       // Move to SI units internally
-      final todos = await getCurrentTodos();
-      final todoWriteBatch = await startTodoWriteBatch();
-      todos.map((t) {
-        final dueMileage =
-            t.dueMileage == null ? null : t.dueMileage * Distance.miles;
-        return t.copyWith(dueMileage: dueMileage);
-      }).forEach((t) {
-        todoWriteBatch.updateData(t.id, t);
-      });
-      await todoWriteBatch.commit();
+      // final todos = await getCurrentTodos();
+      // final todoWriteBatch = await startTodoWriteBatch();
+      // todos.map((t) {
+      //   final dueMileage =
+      //       t.dueMileage == null ? null : t.dueMileage * Distance.miles;
+      //   return t.copyWith(dueMileage: dueMileage);
+      // }).forEach((t) {
+      //   todoWriteBatch.updateData(t.id, t);
+      // });
+      // await todoWriteBatch.commit();
 
-      final refuelings = await getCurrentRefuelings();
-      final refuelingWriteBatch = await startRefuelingWriteBatch();
-      refuelings.map((r) {
-        final mileage = r.mileage == null ? null : r.mileage * Distance.miles;
-        final amount =
-            r.amount == null ? null : r.amount * Volume.usLiquidGallon;
-        // I don't think that efficiency needs to be updated because the stats
-        // page will handle it, but that could be an issue
-        return r.copyWith(mileage: mileage, amount: amount);
-      }).forEach((r) {
-        refuelingWriteBatch.updateData(r.id, r);
-      });
-      await refuelingWriteBatch.commit();
+      // final refuelings = await getCurrentRefuelings();
+      // final refuelingWriteBatch = await startRefuelingWriteBatch();
+      // refuelings.map((r) {
+      //   final mileage = r.mileage == null ? null : r.mileage * Distance.miles;
+      //   final amount =
+      //       r.amount == null ? null : r.amount * Volume.usLiquidGallon;
+      //   // I don't think that efficiency needs to be updated because the stats
+      //   // page will handle it, but that could be an issue
+      //   return r.copyWith(mileage: mileage, amount: amount);
+      // }).forEach((r) {
+      //   refuelingWriteBatch.updateData(r.id, r);
+      // });
+      // await refuelingWriteBatch.commit();
 
-      final cars = await getCurrentCars();
-      final carWriteBatch = await startCarWriteBatch();
-      cars.map((c) {
-        final mileage = c.mileage == null ? null : c.mileage * Distance.miles;
-        // distance rate and efficiency should similarly be updated by the stats
-        // calcs here
-        return c.copyWith(mileage: mileage);
-      }).forEach((c) {
-        carWriteBatch.updateData(c.id, c);
-      });
-      await carWriteBatch.commit();
+      // final cars = await getCurrentCars();
+      // final carWriteBatch = await startCarWriteBatch();
+      // cars.map((c) {
+      //   final mileage = c.mileage == null ? null : c.mileage * Distance.miles;
+      //   // distance rate and efficiency should similarly be updated by the stats
+      //   // calcs here
+      //   return c.copyWith(mileage: mileage);
+      // }).forEach((c) {
+      //   carWriteBatch.updateData(c.id, c);
+      // });
+      // await carWriteBatch.commit();
     }
     if (curVer < 3 && desVer == 3) {
       // Remove Repeats in favor of new Todo fields

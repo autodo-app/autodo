@@ -8,11 +8,10 @@ import '../../repositories/src/write_batch_wrapper.dart';
 class OdomSnapshot extends Equatable implements WriteBatchDocument {
   const OdomSnapshot({
     this.id,
-    @required this.car,
+    this.car,
     @required this.date,
     @required this.mileage,
-  })  : assert(car != null),
-        assert(date != null),
+  })  : assert(date != null),
         assert(mileage != null);
 
   factory OdomSnapshot.fromMap(String id, Map<String, String> value) =>

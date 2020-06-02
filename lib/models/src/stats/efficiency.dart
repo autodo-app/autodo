@@ -12,22 +12,22 @@ class EfficiencyStats {
   static const EMA_CUTOFF = 8;
 
   static Future<List<Series<FuelMileagePoint, DateTime>>> fetch(
-    RefuelingsBloc refuelingsBloc,
+    DataBloc dataBloc,
     BuildContext context,
   ) async {
-    var state = refuelingsBloc.state;
-    if (state is RefuelingsLoaded) {
+    var state = dataBloc.state;
+    if (state is DataLoaded) {
       return _prepData(state.refuelings, context);
     }
 
-    await for (final _state in refuelingsBloc) {
-      if (_state is RefuelingsLoaded) {
+    await for (final _state in dataBloc) {
+      if (_state is DataLoaded) {
         state = _state;
         break;
       }
     }
 
-    if (state is RefuelingsLoaded) {
+    if (state is DataLoaded) {
       return _prepData(state.refuelings, context);
     }
 
@@ -49,16 +49,16 @@ class EfficiencyStats {
 
     for (final refueling in refuelings) {
       if (mileage == null) {
-        mileage = refueling.mileage;
+        mileage = refueling.odomSnapshot.mileage;
         continue;
       }
 
       if (refueling.amount <= 0) continue;
-      final dist = refueling.mileage - mileage;
-      mileage = refueling.mileage;
+      final dist = refueling.odomSnapshot.mileage - mileage;
+      mileage = refueling.odomSnapshot.mileage;
       if (dist <= 0) continue;
       final efficiency = efficiencyUnit.internalToUnit(dist / refueling.amount);
-      points.add(FuelMileagePoint(refueling.date, efficiency));
+      points.add(FuelMileagePoint(refueling.odomSnapshot.date, efficiency));
     }
 
     final emaData = <FuelMileagePoint>[];

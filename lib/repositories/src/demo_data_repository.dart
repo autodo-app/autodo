@@ -27,10 +27,10 @@ class DemoDataRepository extends DataRepository {
 
     for (final ref in refs) {
       dr.add(DistanceRatePoint(
-        ref.date,
-        ref.mileage - mileage,
+        ref.odomSnapshot.date,
+        ref.odomSnapshot.mileage - mileage,
       ));
-      mileage = ref.mileage;
+      mileage = ref.odomSnapshot.mileage;
     }
 
     return <Car>[
@@ -40,8 +40,7 @@ class DemoDataRepository extends DataRepository {
           averageEfficiency: 2.0,
           distanceRate: 2.0,
           distanceRateHistory: dr,
-          lastMileageUpdate: dr.last.date,
-          mileage: mileage,
+          odomSnapshot: OdomSnapshot(car: 'demo', date: dr.last.date, mileage: mileage),
           numRefuelings: refs.length,
           make: 'Plymouth',
           model: 'Fury',
@@ -82,11 +81,9 @@ class DemoDataRepository extends DataRepository {
 
       refuelings.add(Refueling(
         id: '${refuelings.length}',
-        carName: carName,
+        odomSnapshot: OdomSnapshot(car: 'demo', date: DateTime.fromMillisecondsSinceEpoch(date), mileage: mileage),
         amount: amount,
         cost: cost,
-        mileage: mileage,
-        date: DateTime.fromMillisecondsSinceEpoch(date),
         efficiency: efficiency,
       ));
     }
@@ -95,12 +92,12 @@ class DemoDataRepository extends DataRepository {
   }
 
   @override
-  Future<void> addNewCar(Car car) {
+  Future<Car> addNewCar(Car car) {
     throw UnimplementedError();
   }
 
   @override
-  Future<void> addNewRefueling(Refueling refueling) {
+  Future<Refueling> addNewRefueling(Refueling refueling) {
     throw UnimplementedError();
   }
 
@@ -110,8 +107,8 @@ class DemoDataRepository extends DataRepository {
   }
 
   @override
-  Stream<List<Car>> cars() async* {
-    yield await getCurrentCars();
+  Future<OdomSnapshot> addNewOdomSnapshot(OdomSnapshot snapshot) {
+    throw UnimplementedError();
   }
 
   @override
@@ -130,23 +127,33 @@ class DemoDataRepository extends DataRepository {
   }
 
   @override
+  Future<void> deleteOdomSnapshot(OdomSnapshot snapshot) {
+    throw UnimplementedError();
+  }
+
+  @override
   Future<List<Todo>> getCurrentTodos() async {
     return <Todo>[
       Todo(
         name: 'Oil Change',
-        carName: carName,
+        carId: 'demo',
         completed: false,
         dueMileage: startMileage + 1000 * Distance.kilometer,
         mileageRepeatInterval: 2000 * Distance.kilometer,
       ),
       Todo(
         name: 'Tire Change',
-        carName: carName,
+        carId: 'demo',
         completed: false,
         dueMileage: startMileage + 1500 * Distance.kilometer,
         mileageRepeatInterval: 6000 * Distance.kilometer,
       ),
     ];
+  }
+
+  @override 
+  Future<List<OdomSnapshot>> getCurrentOdomSnapshots() async {
+    return <OdomSnapshot>[];
   }
 
   @override
@@ -156,11 +163,6 @@ class DemoDataRepository extends DataRepository {
 
   @override
   Stream<int> notificationID() async* {}
-
-  @override
-  Stream<List<Refueling>> refuelings([bool forceRefresh]) async* {
-    yield await getCurrentRefuelings();
-  }
 
   @override
   FutureOr<WriteBatchWrapper<Car>> startCarWriteBatch() {
@@ -178,22 +180,28 @@ class DemoDataRepository extends DataRepository {
   }
 
   @override
-  Stream<List<Todo>> todos() async* {
-    yield await getCurrentTodos();
+  FutureOr<WriteBatchWrapper<OdomSnapshot>> startOdomSnapshotWriteBatch() {
+    return DemoWriteBatch<OdomSnapshot>();
   }
 
+
   @override
-  Future<void> updateCar(Car car) {
+  Future<Car> updateCar(Car car) {
     throw UnimplementedError();
   }
 
   @override
-  Future<void> updateRefueling(Refueling refueling) {
+  Future<Refueling> updateRefueling(Refueling refueling) {
     throw UnimplementedError();
   }
 
   @override
-  Future<void> updateTodo(Todo todo) {
+  Future<Todo> updateTodo(Todo todo) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<OdomSnapshot> updateOdomSnapshot(OdomSnapshot snapshot) {
     throw UnimplementedError();
   }
 
