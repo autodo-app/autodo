@@ -108,7 +108,7 @@ class _CalendarView extends StatelessWidget {
 
   bool _refuelingToday(DateTime date) {
     return refuelings
-        .any((r) => roundToDay(r.date).isAtSameMomentAs(roundToDay(date)));
+        .any((r) => roundToDay(r.odomSnapshot.date).isAtSameMomentAs(roundToDay(date)));
   }
 
   DateTime _getInterval(int dateDay, int dayRangeVal) =>
@@ -168,27 +168,27 @@ class RefuelingsScreen extends StatelessWidget {
   const RefuelingsScreen({Key key}) : super(key: key);
 
   void _deleteRefueling(BuildContext context, Refueling refueling) {
-    BlocProvider.of<RefuelingsBloc>(context).add(DeleteRefueling(refueling));
+    BlocProvider.of<DataBloc>(context).add(DeleteRefueling(refueling));
     Scaffold.of(context).showSnackBar(DeleteRefuelingSnackBar(
       context: context,
       onUndo: () =>
-          BlocProvider.of<RefuelingsBloc>(context).add(AddRefueling(refueling)),
+          BlocProvider.of<DataBloc>(context).add(AddRefueling(refueling)),
     ));
   }
 
   @override
-  Widget build(BuildContext context) => BlocBuilder<CarsBloc, CarsState>(
+  Widget build(BuildContext context) => BlocBuilder<DataBloc, DataState>(
       builder: (context, carsState) =>
           BlocBuilder<FilteredRefuelingsBloc, FilteredRefuelingsState>(
               builder: (context, refuelingsState) {
             if (!(refuelingsState is FilteredRefuelingsLoaded) ||
-                !(carsState is CarsLoaded)) {
+                !(carsState is DataLoaded)) {
               return Container();
             }
 
             final refuelings = (refuelingsState as FilteredRefuelingsLoaded)
                 .filteredRefuelings;
-            final cars = (carsState as CarsLoaded).cars;
+            final cars = (carsState as DataLoaded).cars;
             return Container(
                 decoration: headerDecoration,
                 child: CustomScrollView(
@@ -221,7 +221,7 @@ class RefuelingsScreen extends StatelessWidget {
                             last: adjustedIndex == (refuelings.length - 1),
                             refueling: refuelings[adjustedIndex],
                             car: cars.firstWhere((c) =>
-                                c.name == refuelings[adjustedIndex].carName),
+                                c.id == refuelings[adjustedIndex].carId),
                             onDelete: () => _deleteRefueling(
                                 context, refuelings[adjustedIndex]),
                           );

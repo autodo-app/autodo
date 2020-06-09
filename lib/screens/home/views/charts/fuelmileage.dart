@@ -90,9 +90,9 @@ class _FuelMileageHistoryState extends State<FuelMileageHistory> {
 
   @override
   void didChangeDependencies() {
-    final refuelingsBloc = BlocProvider.of<RefuelingsBloc>(context);
+    final dataBloc = BlocProvider.of<DataBloc>(context);
 
-    EfficiencyStats.fetch(refuelingsBloc, context).then((value) {
+    EfficiencyStats.fetch(dataBloc, context).then((value) {
       setState(() {
         data = value;
       });

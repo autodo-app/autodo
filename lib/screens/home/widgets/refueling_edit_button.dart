@@ -14,8 +14,8 @@ class RefuelingEditButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) =>
-      BlocBuilder<CarsBloc, CarsState>(builder: (context, state) {
-        if (!(state is CarsLoaded)) {
+      BlocBuilder<DataBloc, DataState>(builder: (context, state) {
+        if (!(state is DataLoaded)) {
           return Container();
         }
 
@@ -24,7 +24,7 @@ class RefuelingEditButton extends StatelessWidget {
             minWidth: 0,
           ),
           child: FlatButton(
-            key: ValueKey('__refueling_card_edit_${refueling.date}'),
+            key: ValueKey('__refueling_card_edit_${refueling.odomSnapshot.date}'),
             child: Icon(
               Icons.edit,
               color: Theme.of(context).primaryIconTheme.color,
@@ -37,19 +37,21 @@ class RefuelingEditButton extends StatelessWidget {
                             isEditing: true,
                             refueling: refueling,
                             onSave: (m, d, a, c, n) {
-                              BlocProvider.of<RefuelingsBloc>(context)
+                              BlocProvider.of<DataBloc>(context)
                                   .add(AddRefueling(Refueling(
-                                mileage: Distance.of(context, listen: false)
-                                    .unitToInternal(m),
-                                date: d,
-                                amount: Volume.of(context, listen: false)
-                                    .unitToInternal(a),
-                                cost: Currency.of(context, listen: false)
-                                    .unitToInternal(c),
-                                carName: n,
+                                    odomSnapshot: OdomSnapshot(
+                                      car: n,
+                                      mileage: Distance.of(context, listen: false)
+                                        .unitToInternal(m),
+                                      date: d,
+                                    ),
+                                    amount: Volume.of(context, listen: false)
+                                        .unitToInternal(a),
+                                    cost: Currency.of(context, listen: false)
+                                        .unitToInternal(c),
                               )));
                             },
-                            cars: (state as CarsLoaded).cars,
+                            cars: (state as DataLoaded).cars,
                           )));
             },
           ),

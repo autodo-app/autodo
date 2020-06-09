@@ -90,11 +90,11 @@ class _Header extends StatelessWidget {
 class _CarGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
-      BlocBuilder<CarsBloc, CarsState>(builder: (context, state) {
-        if (!(state is CarsLoaded)) {
+      BlocBuilder<DataBloc, DataState>(builder: (context, state) {
+        if (!(state is DataLoaded)) {
           return LoadingIndicator();
         }
-        final cars = (state as CarsLoaded).cars;
+        final cars = (state as DataLoaded).cars;
         return Container(
             padding: EdgeInsets.all(5),
             child: SingleChildScrollView(

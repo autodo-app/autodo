@@ -68,13 +68,13 @@ class _CarFormState extends State<CarForm> {
       focusNode: widget.node,
       textInputAction: TextInputAction.next,
       suggestions:
-          (BlocProvider.of<CarsBloc>(context).state as CarsLoaded).cars,
+          (BlocProvider.of<DataBloc>(context).state as DataLoaded).cars,
       itemBuilder: (context, suggestion) => Padding(
         child: ListTile(
             title: Text(suggestion.name),
             trailing: Text(
               // Todo: Improve this translation
-              '${JsonIntl.of(context).get(IntlKeys.mileage)}: ${suggestion.mileage}',
+              '${JsonIntl.of(context).get(IntlKeys.mileage)}: ${suggestion.odomSnapshot.mileage}',
             )),
         padding: EdgeInsets.all(5.0),
       ),

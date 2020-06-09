@@ -26,10 +26,14 @@ class CarCard extends StatelessWidget {
                           car: car,
                           isEditing: false,
                           onSave: (name, odom, make, model, year, plate, vin) {
-                            BlocProvider.of<CarsBloc>(context).add(UpdateCar(
+                            BlocProvider.of<DataBloc>(context).add(UpdateCar(
                                 car.copyWith(
                                     name: name,
-                                    mileage: odom,
+                                    odomSnapshot: OdomSnapshot(
+                                      car: car.id,
+                                      mileage: Distance.of(context, listen: false).unitToInternal(odom),
+                                      date: DateTime.now()
+                                    ),
                                     make: make,
                                     model: model,
                                     year: year,
@@ -84,7 +88,7 @@ class CarCard extends StatelessWidget {
                           style: Theme.of(context).primaryTextTheme.bodyText2)),
                   Center(
                       child: Text(
-                          '${JsonIntl.of(context).get(IntlKeys.odom)}: ${Distance.of(context).format(car.mileage)}',
+                          '${JsonIntl.of(context).get(IntlKeys.odom)}: ${Distance.of(context).format(car.odomSnapshot.mileage)}',
                           style: Theme.of(context).primaryTextTheme.bodyText2)),
                   // Padding(padding: EdgeInsets.all(5),),
                   Align(

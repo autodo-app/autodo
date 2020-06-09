@@ -86,10 +86,10 @@ class _Content extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(DateFormat.yMd().format(refueling.date),
+                  Text(DateFormat.yMd().format(refueling.odomSnapshot.date),
                       style: Theme.of(context).primaryTextTheme.headline5),
                   Text(
-                      '${Distance.of(context).format(refueling.mileage)} ${Distance.of(context).unitString(context, short: true)}',
+                      '${Distance.of(context).format(refueling.odomSnapshot.mileage)} ${Distance.of(context).unitString(context, short: true)}',
                       style: Theme.of(context)
                           .primaryTextTheme
                           .subtitle2

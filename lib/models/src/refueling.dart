@@ -44,6 +44,8 @@ class Refueling extends Equatable implements WriteBatchDocument {
 
   final Color efficiencyColor;
 
+  String get carId => odomSnapshot?.car;
+
   Refueling copyWith(
       {String id,
       OdomSnapshot odomSnapshot,

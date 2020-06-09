@@ -18,7 +18,7 @@ typedef _OnSaveCallback = Function(
     String name,
     DateTime dueDate,
     double dueMileage,
-    String carName,
+    String carId,
     double mileageRepeatInterval,
     RepeatInterval dateRepeatInterval);
 
@@ -227,7 +227,7 @@ class TodoAddEditScreenState extends State<TodoAddEditScreen> {
   ScrollController scrollCtrl;
   DateTime _dueDate;
   double _dueMileage;
-  String _name, _car;
+  String _name, _carId;
   double _mileageInterval;
   RepeatInterval _dateInterval;
 
@@ -254,8 +254,8 @@ class TodoAddEditScreenState extends State<TodoAddEditScreen> {
   }
 
   List<bool> _carsToInitialState(cars) =>
-      (cars.map((c) => c.name).contains(widget.todo?.carName))
-          ? cars.map((c) => c.name == widget.todo?.carName)
+      (cars.map((c) => c.id).contains(widget.todo?.carId))
+          ? cars.map((c) => c.id == widget.todo?.carId)
           : List.generate(cars.length, (idx) => (idx == 0) ? true : false);
 
   /// Generates a string detailing the chronological repeating interval.
@@ -380,23 +380,24 @@ class TodoAddEditScreenState extends State<TodoAddEditScreen> {
                     Padding(
                       padding: EdgeInsets.only(bottom: 15),
                     ),
-                    BlocBuilder<CarsBloc, CarsState>(
+                    BlocBuilder<DataBloc, DataState>(
                       builder: (context, state) {
-                        if (state is CarsLoaded) {
+                        if (state is DataLoaded) {
                           if (state.cars.length <= 1) {
                             return Container();
                           } else if (state.cars.length < 4) {
                             return CarToggleForm(
                               _carsToInitialState(state.cars),
                               state.cars,
-                              (List<bool> isSelected) => _car = state
-                                  .cars[isSelected.indexWhere((i) => i)].name,
+                              (List<bool> isSelected) => _carId = state
+                                  .cars[isSelected.indexWhere((i) => i)].id,
                             );
                           } else {
                             return CarForm(
                                 key: ValueKey('__refueling_car_form__'),
-                                initialValue: widget.todo?.carName,
-                                onSaved: (val) => _car = val,
+                                // initialValue: widget.todo?.carName,
+                                initialValue: state.cars.firstWhere((c) => c.id == widget.todo?.carId).name,
+                                onSaved: (val) => _carId = state.cars.firstWhere((c) => c.name == val).id,
                                 node: _carNode,
                                 nextNode: null);
                           }
@@ -420,7 +421,7 @@ class TodoAddEditScreenState extends State<TodoAddEditScreen> {
           onPressed: () {
             if (_formKey.currentState.validate()) {
               _formKey.currentState.save();
-              widget.onSave(_name, _dueDate, _dueMileage, _car,
+              widget.onSave(_name, _dueDate, _dueMileage, _carId,
                   _mileageInterval, _dateInterval);
               Navigator.pop(context);
             }

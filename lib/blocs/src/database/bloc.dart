@@ -64,14 +64,14 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
   Stream<DatabaseState> _mapUserLoggedOutToState(UserLoggedOut event) async* {
     yield DbNotLoaded();
 
-    if (state is DbLoaded) {
-      final repo = (state as DbLoaded).dataRepo;
-      if (repo is SembastDataRepository) {
-        await repo.close();
-        // ToDo: We should leave the DB on disk if they logged out by mistake
-        await SembastDataRepository.deleteDb(repo.db.path);
-      }
-    }
+    // if (state is DbLoaded) {
+      // final repo = (state as DbLoaded).dataRepo;
+      // if (repo is SembastDataRepository) {
+      //   await repo.close();
+      //   // ToDo: We should leave the DB on disk if they logged out by mistake
+      //   await SembastDataRepository.deleteDb(repo.db.path);
+      // }
+    // }
   }
 
   Stream<DatabaseState> _mapTrialLoginToState(TrialLogin event) async* {
@@ -84,16 +84,16 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
     // }
     // TODO: getting two occurrences of this event on local sign-in, why?
 
-    final dataRepo =
-        await SembastDataRepository.open(pathProvider: pathProvider);
-    final storageRepo = LocalStorageRepository();
+    // final dataRepo =
+    //     await SembastDataRepository.open(pathProvider: pathProvider);
+    // final storageRepo = LocalStorageRepository();
 
-    if (kFlavor.populateDemoData) {
-      // Load demo data
-      await dataRepo.copyFrom(DemoDataRepository());
-    }
+    // if (kFlavor.populateDemoData) {
+    //   // Load demo data
+    //   await dataRepo.copyFrom(DemoDataRepository());
+    // }
 
-    yield DbLoaded(dataRepo, storageRepo: storageRepo);
+    // yield DbLoaded(dataRepo, storageRepo: storageRepo);
   }
 
   @override
