@@ -71,7 +71,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       //   // ToDo: We should leave the DB on disk if they logged out by mistake
       //   await SembastDataRepository.deleteDb(repo.db.path);
       // }
-    // }
+    // }z
   }
 
   Stream<DatabaseState> _mapTrialLoginToState(TrialLogin event) async* {
