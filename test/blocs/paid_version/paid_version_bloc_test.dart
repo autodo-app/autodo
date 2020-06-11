@@ -14,9 +14,9 @@ class MockDataRepository extends Mock
     implements DataRepository {}
 
 // ignore: must_be_immutable
-class MockSembast extends Mock
-    with EquatableMixin
-    implements SembastDataRepository {}
+// class MockSembast extends Mock
+//     with EquatableMixin
+//     implements SembastDataRepository {}
 
 class MockDbBloc extends Mock implements DatabaseBloc {}
 
@@ -26,7 +26,7 @@ class MockInAppPurchaseConnection extends Mock
 void main() {
   group('PaidVersionBloc', () {
     final DataRepository dataRepo = MockDataRepository();
-    final SembastDataRepository sembast = MockSembast();
+    // final SembastDataRepository sembast = MockSembast();
     final InAppPurchaseConnection conn = MockInAppPurchaseConnection();
     final emptyVerificationData = PurchaseVerificationData(
         localVerificationData: '',
@@ -81,7 +81,7 @@ void main() {
                 QueryPurchaseDetailsResponse(pastPurchases: [emptyDetails]));
 
             final dbBloc = MockDbBloc();
-            when(dbBloc.state).thenReturn(DbLoaded(sembast));
+            // when(dbBloc.state).thenReturn(DbLoaded(sembast));
             return PaidVersionBloc(conn: conn, dbBloc: dbBloc);
           },
           act: (bloc) async => bloc.add(LoadPaidVersion()),
@@ -189,7 +189,7 @@ void main() {
 
         final dbBloc = MockDbBloc();
         when(dbBloc.state).thenReturn(DbLoaded(dataRepo));
-        whenListen(dbBloc, Stream.fromIterable([DbLoaded(sembast)]));
+        // whenListen(dbBloc, Stream.fromIterable([DbLoaded(sembast)]));
         return PaidVersionBloc(conn: conn, dbBloc: dbBloc);
       },
           // act: (bloc) async => bloc.add(LoadPaidVersion()),

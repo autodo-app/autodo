@@ -8,113 +8,79 @@ import 'package:mockito/mockito.dart';
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/models/models.dart';
 
-class MockRefuelingsBloc extends MockBloc<RefuelingsEvent, RefuelingsState>
-    implements RefuelingsBloc {}
+class MockDataBloc extends MockBloc<DataEvent, DataState> implements DataBloc {}
 
-class MockCarsBloc extends MockBloc<CarsEvent, CarsState> implements CarsBloc {}
+final snap = OdomSnapshot( 
+  car: 'test',
+  mileage: 0,
+  date: DateTime.fromMillisecondsSinceEpoch(0),
+);
+
+final refueling = Refueling(
+    id: '0',
+    amount: 0,
+    cost: 0,
+    efficiency: 0.0,
+    efficiencyColor: Color(0),
+    odomSnapshot: snap);
+
+final car = Car(  
+  id: 'test',
+  odomSnapshot: snap,
+  name: 'test',
+);
+
+FilteredRefuelingsBloc buildFunc() {
+  final dataBloc = MockDataBloc();
+  when(dataBloc.state).thenReturn(DataLoaded(refuelings: [refueling], cars: [car]));
+  whenListen(
+    dataBloc,
+    Stream<DataState>.fromIterable([
+      DataLoaded(refuelings: [refueling], cars: [car])
+    ]),
+  );
+  return FilteredRefuelingsBloc(dataBloc: dataBloc);
+}
 
 void main() {
-  group('FilteredRefuelingsBloc', () {
-    final refueling = Refueling(
-        carName: 'test',
-        id: '0',
-        mileage: 0,
-        date: DateTime.fromMillisecondsSinceEpoch(0),
-        amount: 0,
-        cost: 0,
-        carColor: Color(0),
-        efficiency: 0.0,
-        efficiencyColor: Color(0));
+  group('FilteredDataBloc', () {
     blocTest<FilteredRefuelingsBloc, FilteredRefuelingsEvent,
             FilteredRefuelingsState>(
-        'adds RefuelingsUpdated when RefuelingsBloc.state emits RefuelingsLoaded',
-        build: () {
-      final refuelingsBloc = MockRefuelingsBloc();
-      when(refuelingsBloc.state).thenReturn(RefuelingsLoaded([refueling]));
-      whenListen(
-        refuelingsBloc,
-        Stream<RefuelingsState>.fromIterable([
-          RefuelingsLoaded([refueling])
-        ]),
-      );
-      final carsBloc = MockCarsBloc();
-      when(carsBloc.state).thenAnswer((_) => CarsLoaded([Car()]));
-      whenListen(
-          carsBloc,
-          Stream<CarsState>.fromIterable([
-            CarsLoaded([Car()])
-          ]));
-      return FilteredRefuelingsBloc(
-          refuelingsBloc: refuelingsBloc, carsBloc: carsBloc);
-    }, expect: [
-      FilteredRefuelingsLoaded([refueling], VisibilityFilter.all, [Car()]),
+      'adds DataUpdated when DataBloc.state emits DataLoaded',
+      build: buildFunc, 
+      expect: [
+        FilteredRefuelingsLoaded([refueling], VisibilityFilter.all, [car]),
     ]);
 
     blocTest<FilteredRefuelingsBloc, FilteredRefuelingsEvent,
         FilteredRefuelingsState>(
       'should update the VisibilityFilter when filter is active',
-      build: () {
-        final refuelingsBloc = MockRefuelingsBloc();
-        when(refuelingsBloc.state).thenReturn(RefuelingsLoaded([refueling]));
-        final carsBloc = MockCarsBloc();
-        when(carsBloc.state).thenAnswer((_) => CarsLoaded([Car()]));
-        whenListen(
-            carsBloc,
-            Stream<CarsState>.fromIterable([
-              CarsLoaded([Car()])
-            ]));
-        return FilteredRefuelingsBloc(
-            refuelingsBloc: refuelingsBloc, carsBloc: carsBloc);
-      },
+      build: buildFunc,
       act: (FilteredRefuelingsBloc bloc) async =>
           bloc.add(UpdateRefuelingsFilter(VisibilityFilter.active)),
       expect: <FilteredRefuelingsState>[
-        FilteredRefuelingsLoaded([refueling], VisibilityFilter.all, [Car()]),
-        FilteredRefuelingsLoaded([refueling], VisibilityFilter.active, [Car()]),
+        FilteredRefuelingsLoaded([refueling], VisibilityFilter.all, [car]),
+        FilteredRefuelingsLoaded([refueling], VisibilityFilter.active, [car]),
       ],
     );
 
     blocTest<FilteredRefuelingsBloc, FilteredRefuelingsEvent,
         FilteredRefuelingsState>(
       'should update the VisibilityFilter when filter is completed',
-      build: () {
-        final refuelingsBloc = MockRefuelingsBloc();
-        when(refuelingsBloc.state).thenReturn(RefuelingsLoaded([refueling]));
-        final carsBloc = MockCarsBloc();
-        when(carsBloc.state).thenAnswer((_) => CarsLoaded([Car()]));
-        whenListen(
-            carsBloc,
-            Stream<CarsState>.fromIterable([
-              CarsLoaded([Car()])
-            ]));
-        return FilteredRefuelingsBloc(
-            refuelingsBloc: refuelingsBloc, carsBloc: carsBloc);
-      },
+      build: buildFunc,
       act: (FilteredRefuelingsBloc bloc) async =>
           bloc.add(UpdateRefuelingsFilter(VisibilityFilter.completed)),
       expect: <FilteredRefuelingsState>[
-        FilteredRefuelingsLoaded([refueling], VisibilityFilter.all, [Car()]),
+        FilteredRefuelingsLoaded([refueling], VisibilityFilter.all, [car]),
         FilteredRefuelingsLoaded(
-            [refueling], VisibilityFilter.completed, [Car()]),
+            [refueling], VisibilityFilter.completed, [car]),
       ],
     );
 
     blocTest<FilteredRefuelingsBloc, FilteredRefuelingsEvent,
         FilteredRefuelingsState>(
       'loading',
-      build: () {
-        final refuelingsBloc = MockRefuelingsBloc();
-        when(refuelingsBloc.state).thenReturn(RefuelingsLoading());
-        final carsBloc = MockCarsBloc();
-        when(carsBloc.state).thenAnswer((_) => CarsLoaded([Car()]));
-        whenListen(
-            carsBloc,
-            Stream<CarsState>.fromIterable([
-              CarsLoaded([Car()])
-            ]));
-        return FilteredRefuelingsBloc(
-            refuelingsBloc: refuelingsBloc, carsBloc: carsBloc);
-      },
+      build: buildFunc,
       expect: <FilteredRefuelingsState>[
         FilteredRefuelingsLoading(),
       ],
@@ -123,38 +89,17 @@ void main() {
     blocTest<FilteredRefuelingsBloc, FilteredRefuelingsEvent,
         FilteredRefuelingsState>(
       'not loaded',
-      build: () {
-        final refuelingsBloc = MockRefuelingsBloc();
-        when(refuelingsBloc.state).thenReturn(RefuelingsNotLoaded());
-        final carsBloc = MockCarsBloc();
-        when(carsBloc.state).thenAnswer((_) => CarsLoaded([Car()]));
-        whenListen(
-            carsBloc,
-            Stream<CarsState>.fromIterable([
-              CarsLoaded([Car()])
-            ]));
-        return FilteredRefuelingsBloc(
-            refuelingsBloc: refuelingsBloc, carsBloc: carsBloc);
-      },
+      build: buildFunc,
       expect: <FilteredRefuelingsState>[
         FilteredRefuelingsNotLoaded(),
       ],
     );
 
-    final car = Car(name: 'test', averageEfficiency: 1.0);
+    // final car = Car(name: 'test', averageEfficiency: 1.0);
     blocTest<FilteredRefuelingsBloc, FilteredRefuelingsEvent,
         FilteredRefuelingsState>(
       'shade efficiency',
-      build: () {
-        final refuelingsBloc = MockRefuelingsBloc();
-        when(refuelingsBloc.state).thenReturn(RefuelingsLoaded([refueling]));
-        final carsBloc = MockCarsBloc();
-
-        when(carsBloc.state).thenAnswer((_) => CarsLoaded([car]));
-        // whenListen(carsBloc, Stream<CarsState>.fromIterable([CarsLoaded([car])]));
-        return FilteredRefuelingsBloc(
-            refuelingsBloc: refuelingsBloc, carsBloc: carsBloc);
-      },
+      build: buildFunc,
       expect: <FilteredRefuelingsState>[
         FilteredRefuelingsLoaded(
             [refueling.copyWith(efficiencyColor: Color(0xffff0000))],
@@ -165,25 +110,12 @@ void main() {
     blocTest<FilteredRefuelingsBloc, FilteredRefuelingsEvent,
         FilteredRefuelingsState>(
       'cars updated',
-      build: () {
-        final refuelingsBloc = MockRefuelingsBloc();
-        when(refuelingsBloc.state).thenReturn(RefuelingsLoaded([refueling]));
-        final carsBloc = MockCarsBloc();
-
-        when(carsBloc.state).thenAnswer((_) => CarsLoaded([Car()]));
-        whenListen(
-            carsBloc,
-            Stream.fromIterable([
-              CarsLoaded([car])
-            ]));
-        return FilteredRefuelingsBloc(
-            refuelingsBloc: refuelingsBloc, carsBloc: carsBloc);
-      },
+      build: buildFunc,
       expect: <FilteredRefuelingsState>[
         FilteredRefuelingsLoaded(
             [refueling.copyWith(efficiencyColor: Color(0))],
             VisibilityFilter.all,
-            [Car()]),
+            [car]),
         FilteredRefuelingsLoaded(
             [refueling.copyWith(efficiencyColor: Color(0xffff0000))],
             VisibilityFilter.all,

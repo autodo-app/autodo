@@ -5,21 +5,30 @@ import 'package:flutter/material.dart';
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/models/models.dart';
 
-class MockRefuelingsBloc extends MockBloc<RefuelingsEvent, RefuelingsState>
-    implements RefuelingsBloc {}
+class MockDataBloc extends MockBloc<DataEvent, DataState> implements DataBloc {}
 
 void main() {
   group('FilteredRefuelingsState', () {
+    final snap = OdomSnapshot( 
+      car: 'test',
+      mileage: 0,
+      date: DateTime.fromMillisecondsSinceEpoch(0),
+    );
+
     final refueling = Refueling(
-        carName: '',
-        id: '',
-        mileage: 0,
-        date: DateTime.fromMillisecondsSinceEpoch(0),
+        id: '0',
         amount: 0,
         cost: 0,
-        carColor: Color(0),
         efficiency: 0.0,
-        efficiencyColor: Color(0));
+        efficiencyColor: Color(0),
+        odomSnapshot: snap);
+
+    final car = Car(  
+      id: 'test',
+      odomSnapshot: snap,
+      name: 'test',
+    );
+
     test('props are correct', () {
       expect(
         FilteredRefuelingsLoading().props,
@@ -30,20 +39,18 @@ void main() {
       test('toString returns correct value', () {
         expect(
           FilteredRefuelingsLoaded(
-              [refueling], VisibilityFilter.active, [Car()]).toString(),
-          'FilteredRefuelingsLoaded { filteredRefuelings: [$refueling], activeFilter: VisibilityFilter.active, cars: ${[
-            Car()
-          ]} }',
+              [refueling], VisibilityFilter.active, [car]).toString(),
+          'FilteredRefuelingsLoaded { filteredRefuelings: [$refueling], activeFilter: VisibilityFilter.active, cars: ${[car]} }',
         );
       });
       test('props are correct', () {
         expect(
           FilteredRefuelingsLoaded(
-              [refueling], VisibilityFilter.active, [Car()]).props,
+              [refueling], VisibilityFilter.active, [car]).props,
           [
             [refueling],
             VisibilityFilter.active,
-            [Car()]
+            [car]
           ],
         );
       });

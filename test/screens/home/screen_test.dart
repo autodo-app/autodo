@@ -13,20 +13,15 @@ import 'package:autodo/models/models.dart';
 import 'package:pref/pref.dart';
 import 'package:provider/provider.dart';
 
-class MockTodosBloc extends MockBloc<TodosEvent, TodosState>
-    implements TodosBloc {}
-
 class MockFilteredTodosBloc
     extends MockBloc<FilteredTodosLoaded, FilteredTodosState>
     implements FilteredTodosBloc {}
 
-class MockCarsBloc extends MockBloc<CarsEvent, CarsState> implements CarsBloc {}
-
 class MockPaidVersionBloc extends MockBloc<PaidVersionEvent, PaidVersionState>
     implements PaidVersionBloc {}
 
-class MockRefuelingsBloc extends MockBloc<RefuelingsEvent, RefuelingsState>
-    implements RefuelingsBloc {}
+class MockDataBloc extends MockBloc<DataEvent, DataState>
+    implements DataBloc {}
 
 void main() {
   group('HomeScreen', () {
