@@ -13,10 +13,7 @@ import 'package:mockito/mockito.dart';
 import 'package:pref/pref.dart';
 import 'package:provider/provider.dart';
 
-class MockRefuelingsBloc extends MockBloc<RefuelingsEvent, RefuelingsState>
-    implements RefuelingsBloc {}
-
-class MockCarsBloc extends MockBloc<CarsEvent, CarsState> implements CarsBloc {}
+class MockDataBloc extends MockBloc<DataEvent, DataState> implements DataBloc {}
 
 void main() {
   BasePrefService pref;
@@ -33,23 +30,15 @@ void main() {
 
   group('StatsScreen', () {
     testWidgets('no data', (WidgetTester tester) async {
-      final carsBloc = MockCarsBloc();
-      final refuelingsBloc = MockRefuelingsBloc();
-
-      when(carsBloc.state).thenAnswer((_) => CarsLoaded());
-      when(refuelingsBloc.state).thenAnswer((_) => RefuelingsLoaded());
+      final dataBloc = MockDataBloc();
+      when(dataBloc.state).thenReturn(DataLoaded());
 
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
           child: MultiBlocProvider(
             providers: [
-              BlocProvider<CarsBloc>.value(
-                value: carsBloc,
-              ),
-              BlocProvider<RefuelingsBloc>.value(
-                value: refuelingsBloc,
-              ),
+              BlocProvider<DataBloc>.value(value: dataBloc),
             ],
             child: MaterialApp(
               home: Scaffold(
@@ -66,23 +55,26 @@ void main() {
 
     testWidgets('loaded', (WidgetTester tester) async {
       final rnd = Random(1234);
-      final carsBloc = MockCarsBloc();
-      final refuelingsBloc = MockRefuelingsBloc();
+      final dataBloc = MockDataBloc();
+      when(dataBloc.state).thenReturn(DataLoaded());
 
       final refuelings = List<Refueling>.generate(
           100,
           (int index) => Refueling(
               id: '$index',
-              mileage: index * 200.0,
+              odomSnapshot: OdomSnapshot(  
+                mileage: index * 200.0,
+                date: DateTime.fromMillisecondsSinceEpoch(
+                  1546300800000 + index * 864000000),
+                car: 'test'
+              ),
               amount: rnd.nextDouble() * 30 + 10,
               cost: rnd.nextDouble() * 30 + 10,
-              efficiency: 1.0,
-              date: DateTime.fromMillisecondsSinceEpoch(
-                  1546300800000 + index * 864000000),
-              carName: 'test'));
+              efficiency: 1.0,));
 
       final car = Car(
           name: 'test',
+          odomSnapshot: OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0),
           distanceRateHistory: List<DistanceRatePoint>.generate(
               100,
               (int index) => DistanceRatePoint(
@@ -90,27 +82,14 @@ void main() {
                       1546300800000 + index * 864000000),
                   index / 20.0)));
 
-      when(carsBloc.state).thenAnswer((_) => CarsLoaded([car]));
-      whenListen(
-          refuelingsBloc,
-          Stream.fromIterable([
-            RefuelingsLoading(),
-            RefuelingsLoaded(refuelings),
-          ]));
-      when(refuelingsBloc.state)
-          .thenAnswer((_) => RefuelingsLoaded(refuelings));
+      when(dataBloc.state).thenAnswer((_) => DataLoaded(cars: [car], refuelings: refuelings));
 
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
           child: MultiBlocProvider(
             providers: [
-              BlocProvider<CarsBloc>.value(
-                value: carsBloc,
-              ),
-              BlocProvider<RefuelingsBloc>.value(
-                value: refuelingsBloc,
-              ),
+              BlocProvider<DataBloc>.value(value: dataBloc),
             ],
             child: MaterialApp(
               home: Scaffold(

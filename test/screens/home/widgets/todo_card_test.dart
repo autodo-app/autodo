@@ -11,8 +11,7 @@ import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/models/models.dart';
 import 'package:autodo/units/units.dart';
 
-class MockTodosBloc extends MockBloc<TodosEvent, TodosState>
-    implements TodosBloc {}
+class MockDataBloc extends MockBloc<DataEvent, DataState> implements DataBloc {}
 
 class MockFilteredTodosBloc
     extends MockBloc<FilteredTodosLoaded, FilteredTodosState>
@@ -30,14 +29,14 @@ void main() {
     });
   });
   group('TodosCard', () {
-    TodosBloc todosBloc;
+    DataBloc dataBloc;
     FilteredTodosBloc filteredTodosBloc;
     Car car;
 
     setUp(() {
-      todosBloc = MockTodosBloc();
+      dataBloc = MockDataBloc();
       filteredTodosBloc = MockFilteredTodosBloc();
-      car = Car(name: 'car');
+      car = Car(name: 'car', odomSnapshot: OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0));
     });
 
     testWidgets('renders', (WidgetTester tester) async {
@@ -45,9 +44,7 @@ void main() {
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
-            BlocProvider<TodosBloc>.value(
-              value: todosBloc,
-            ),
+            BlocProvider<DataBloc>.value(value: dataBloc),
             BlocProvider<FilteredTodosBloc>.value(
               value: filteredTodosBloc,
             ),
@@ -56,7 +53,7 @@ void main() {
             home: Scaffold(
               body: TodoListCard(
                 key: todosKey,
-                todo: Todo(name: 'test', completed: false, carName: 'car'),
+                todo: Todo(name: 'test', completed: false, carId: 'car'),
                 onDelete: () {},
                 car: car,
               ),
@@ -72,9 +69,7 @@ void main() {
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
-            BlocProvider<TodosBloc>.value(
-              value: todosBloc,
-            ),
+            BlocProvider<DataBloc>.value(value: dataBloc),
             BlocProvider<FilteredTodosBloc>.value(
               value: filteredTodosBloc,
             ),
@@ -87,7 +82,7 @@ void main() {
                     name: 'test',
                     dueState: TodoDueState.PAST_DUE,
                     completed: false,
-                    carName: 'car'),
+                    carId: 'car'),
                 onDelete: () {},
                 car: car,
               ),
@@ -103,9 +98,7 @@ void main() {
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
-            BlocProvider<TodosBloc>.value(
-              value: todosBloc,
-            ),
+            BlocProvider<DataBloc>.value(value: dataBloc),
             BlocProvider<FilteredTodosBloc>.value(
               value: filteredTodosBloc,
             ),
@@ -118,7 +111,7 @@ void main() {
                     name: 'test',
                     dueState: TodoDueState.DUE_SOON,
                     completed: false,
-                    carName: 'car'),
+                    carId: 'car'),
                 onDelete: () {},
                 car: car,
               ),
@@ -132,15 +125,13 @@ void main() {
     testWidgets('check', (WidgetTester tester) async {
       final todosKey = Key('todos');
       var checkboxChanged = false;
-      when(todosBloc.add(any)).thenAnswer((_) {
+      when(dataBloc.add(any)).thenAnswer((_) {
         checkboxChanged = true;
       });
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
-            BlocProvider<TodosBloc>.value(
-              value: todosBloc,
-            ),
+            BlocProvider<DataBloc>.value(value: dataBloc),
             BlocProvider<FilteredTodosBloc>.value(
               value: filteredTodosBloc,
             ),
@@ -149,7 +140,7 @@ void main() {
             home: Scaffold(
               body: TodoListCard(
                 key: todosKey,
-                todo: Todo(name: 'test', completed: false, carName: 'car'),
+                todo: Todo(name: 'test', completed: false, carId: 'car'),
                 onDelete: () {},
                 car: car,
               ),
@@ -163,7 +154,6 @@ void main() {
       expect(checkboxChanged, true);
     });
     testWidgets('dismiss', (WidgetTester tester) async {
-      when(todosBloc.state).thenAnswer((_) => TodosLoaded(todos: []));
       when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded({
             null: [Todo(name: '', completed: false)]
           }, VisibilityFilter.all));
@@ -172,9 +162,7 @@ void main() {
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
-            BlocProvider<TodosBloc>.value(
-              value: todosBloc,
-            ),
+            BlocProvider<DataBloc>.value(value: dataBloc),
             BlocProvider<FilteredTodosBloc>.value(
               value: filteredTodosBloc,
             ),
@@ -183,7 +171,7 @@ void main() {
             home: Scaffold(
               body: TodoListCard(
                 key: todosKey,
-                todo: Todo(name: 'test', completed: false, carName: 'car'),
+                todo: Todo(name: 'test', completed: false, carId: 'car'),
                 onDelete: () {
                   dismissed = true;
                 },
@@ -205,9 +193,7 @@ void main() {
           value: pref,
           child: MultiBlocProvider(
             providers: [
-              BlocProvider<TodosBloc>.value(
-                value: todosBloc,
-              ),
+              BlocProvider<DataBloc>.value(value: dataBloc),
               BlocProvider<FilteredTodosBloc>.value(
                 value: filteredTodosBloc,
               ),
@@ -221,7 +207,7 @@ void main() {
                       dueState: TodoDueState.PAST_DUE,
                       dueMileage: 1000,
                       completed: false,
-                      carName: 'car'),
+                      carId: 'car'),
                   onDelete: () {},
                   car: car,
                 ),
@@ -240,9 +226,7 @@ void main() {
           value: pref,
           child: MultiBlocProvider(
             providers: [
-              BlocProvider<TodosBloc>.value(
-                value: todosBloc,
-              ),
+              BlocProvider<DataBloc>.value(value: dataBloc),
               BlocProvider<FilteredTodosBloc>.value(
                 value: filteredTodosBloc,
               ),
@@ -256,7 +240,7 @@ void main() {
                       dueState: TodoDueState.PAST_DUE,
                       dueDate: DateTime.fromMillisecondsSinceEpoch(0),
                       completed: false,
-                      carName: 'car'),
+                      carId: 'car'),
                   onDelete: () {},
                   car: car,
                 ),

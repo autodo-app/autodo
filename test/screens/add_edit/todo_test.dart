@@ -12,14 +12,14 @@ import 'package:mockito/mockito.dart';
 import 'package:pref/pref.dart';
 import 'package:provider/provider.dart';
 
-class MockCarsBloc extends MockBloc<CarsEvent, CarsState> implements CarsBloc {}
+class MockDataBloc extends MockBloc<DataEvent, DataState> implements DataBloc {}
 
 void main() {
-  CarsBloc carsBloc;
+  DataBloc dataBloc;
   BasePrefService pref;
 
   setUp(() async {
-    carsBloc = MockCarsBloc();
+    dataBloc = MockDataBloc();
     pref = PrefServiceCache();
     await pref.setDefaultValues({
       'length_unit': DistanceUnit.imperial.index,
@@ -36,9 +36,7 @@ void main() {
           value: pref,
           child: MultiBlocProvider(
             providers: [
-              BlocProvider<CarsBloc>.value(
-                value: carsBloc,
-              ),
+              BlocProvider<DataBloc>.value(value: dataBloc),
             ],
             child: MaterialApp(
               home: TodoAddEditScreen(
@@ -55,16 +53,15 @@ void main() {
     });
     testWidgets('render w/car toggle form', (WidgetTester tester) async {
       final key = Key('screen');
-      when(carsBloc.state)
-          .thenReturn(CarsLoaded([Car(name: '1'), Car(name: '2')]));
+      final snap = OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
+      when(dataBloc.state)
+          .thenReturn(DataLoaded(cars: [Car(name: '1', odomSnapshot: snap), Car(name: '2', odomSnapshot: snap)]));
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
           child: MultiBlocProvider(
             providers: [
-              BlocProvider<CarsBloc>.value(
-                value: carsBloc,
-              ),
+              BlocProvider<DataBloc>.value(value: dataBloc),
             ],
             child: MaterialApp(
               home: TodoAddEditScreen(
@@ -82,16 +79,15 @@ void main() {
     });
     testWidgets('render w/car autocomplete form', (WidgetTester tester) async {
       final key = Key('screen');
-      when(carsBloc.state).thenReturn(CarsLoaded(
-          [Car(name: '1'), Car(name: '2'), Car(name: '3'), Car(name: '4')]));
+      final snap = OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
+      when(dataBloc.state)
+          .thenReturn(DataLoaded(cars: [Car(name: '1', odomSnapshot: snap), Car(name: '2', odomSnapshot: snap), Car(name: '3', odomSnapshot: snap), Car(name: '4', odomSnapshot: snap)]));
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
           child: MultiBlocProvider(
             providers: [
-              BlocProvider<CarsBloc>.value(
-                value: carsBloc,
-              ),
+              BlocProvider<DataBloc>.value(value: dataBloc),
             ],
             child: MaterialApp(
               home: TodoAddEditScreen(
@@ -110,15 +106,15 @@ void main() {
     testWidgets('save', (WidgetTester tester) async {
       final key = Key('screen');
       var saved = false;
-      when(carsBloc.state).thenAnswer((_) => CarsLoaded([Car(name: 'test')]));
+      final snap = OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
+      when(dataBloc.state)
+          .thenReturn(DataLoaded(cars: [Car(name: 'test', odomSnapshot: snap),]));
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
           child: MultiBlocProvider(
             providers: [
-              BlocProvider<CarsBloc>.value(
-                value: carsBloc,
-              ),
+              BlocProvider<DataBloc>.value(value: dataBloc),
             ],
             child: MaterialApp(
               home: TodoAddEditScreen(
@@ -146,15 +142,15 @@ void main() {
     });
     testWidgets('date button', (WidgetTester tester) async {
       final key = Key('screen');
-      when(carsBloc.state).thenAnswer((_) => CarsLoaded([]));
+      final snap = OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
+      when(dataBloc.state)
+          .thenReturn(DataLoaded(cars: [Car(name: 'test', odomSnapshot: snap),]));
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
           child: MultiBlocProvider(
             providers: [
-              BlocProvider<CarsBloc>.value(
-                value: carsBloc,
-              ),
+              BlocProvider<DataBloc>.value(value: dataBloc),
             ],
             child: MaterialApp(
               home: TodoAddEditScreen(
@@ -173,15 +169,15 @@ void main() {
     });
     testWidgets('repeat button', (WidgetTester tester) async {
       final key = Key('screen');
-      when(carsBloc.state).thenAnswer((_) => CarsLoaded([]));
+      final snap = OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
+      when(dataBloc.state)
+          .thenReturn(DataLoaded(cars: [Car(name: 'test', odomSnapshot: snap),]));
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
           child: MultiBlocProvider(
             providers: [
-              BlocProvider<CarsBloc>.value(
-                value: carsBloc,
-              ),
+              BlocProvider<DataBloc>.value(value: dataBloc),
             ],
             child: MaterialApp(
               home: TodoAddEditScreen(
@@ -200,7 +196,9 @@ void main() {
     });
     testWidgets('repeatIntervalToString', (WidgetTester tester) async {
       final key = GlobalKey<TodoAddEditScreenState>();
-      when(carsBloc.state).thenAnswer((_) => CarsLoaded([]));
+      final snap = OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
+      when(dataBloc.state)
+          .thenReturn(DataLoaded(cars: [Car(name: 'test', odomSnapshot: snap),]));
       final screen = TodoAddEditScreen(
         key: key,
         isEditing: false,
@@ -211,9 +209,7 @@ void main() {
           value: pref,
           child: MultiBlocProvider(
             providers: [
-              BlocProvider<CarsBloc>.value(
-                value: carsBloc,
-              ),
+              BlocProvider<DataBloc>.value(value: dataBloc),
             ],
             child: MaterialApp(
               home: screen,

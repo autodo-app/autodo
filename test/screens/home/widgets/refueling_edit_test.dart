@@ -12,27 +12,25 @@ import 'package:autodo/screens/home/widgets/refueling_edit_button.dart';
 import 'package:autodo/models/models.dart';
 import 'package:autodo/units/units.dart';
 
-class MockCarsBloc extends MockBloc<CarsEvent, CarsState> implements CarsBloc {}
-
-class MockRefuelingsBloc extends MockBloc<RefuelingsEvent, RefuelingsState>
-    implements RefuelingsBloc {}
+class MockDataBloc extends MockBloc<DataEvent, DataState> implements DataBloc {}
 
 void main() {
   BasePrefService pref;
-  CarsBloc carsBloc;
-  RefuelingsBloc refuelingsBloc;
+  DataBloc dataBloc;
+  final snap = OdomSnapshot(
+        date: DateTime.fromMillisecondsSinceEpoch(0),
+        mileage: 10.0,
+        car: 'test',
+      );
+  final car = Car(name: 'test', odomSnapshot: snap);
   final refueling = Refueling(
       amount: 10.0,
-      date: DateTime.fromMillisecondsSinceEpoch(0),
-      mileage: 10.0,
-      cost: 10.0,
-      carName: 'test');
+      odomSnapshot: snap,
+      cost: 10.0);
 
   setUp(() async {
-    carsBloc = MockCarsBloc();
-    when(carsBloc.state)
-        .thenReturn(CarsLoaded([Car()])); // need a car in the list to save
-    refuelingsBloc = MockRefuelingsBloc();
+    dataBloc = MockDataBloc();
+    when(dataBloc.state).thenReturn(DataLoaded(cars: [car], refuelings: [refueling]));
     pref = PrefServiceCache();
     await pref.setDefaultValues({
       'length_unit': DistanceUnit.imperial.index,
@@ -48,7 +46,7 @@ void main() {
         value: pref,
         child: MultiBlocProvider(
           providers: [
-            BlocProvider<CarsBloc>.value(value: carsBloc),
+            BlocProvider<DataBloc>.value(value: dataBloc),
           ],
           child: MaterialApp(
             home: Scaffold(
@@ -67,7 +65,7 @@ void main() {
         value: pref,
         child: MultiBlocProvider(
           providers: [
-            BlocProvider<CarsBloc>.value(value: carsBloc),
+            BlocProvider<DataBloc>.value(value: dataBloc),
           ],
           child: MaterialApp(
             home: Scaffold(
@@ -85,15 +83,14 @@ void main() {
     testWidgets('press and save', (WidgetTester tester) async {
       final todosKey = Key('todos');
       var _saved = false;
-      when(refuelingsBloc.add(any)).thenAnswer((realInvocation) {
+      when(dataBloc.add(any)).thenAnswer((realInvocation) {
         _saved = true;
       });
       await tester.pumpWidget(ChangeNotifierProvider<BasePrefService>.value(
         value: pref,
         child: MultiBlocProvider(
           providers: [
-            BlocProvider<CarsBloc>.value(value: carsBloc),
-            BlocProvider<RefuelingsBloc>.value(value: refuelingsBloc),
+            BlocProvider<DataBloc>.value(value: dataBloc),
           ],
           child: MaterialApp(
             home: Scaffold(

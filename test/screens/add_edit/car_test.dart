@@ -19,7 +19,7 @@ import 'package:autodo/models/models.dart';
 class MockDatabaseBloc extends MockBloc<DatabaseEvent, DatabaseState>
     implements DatabaseBloc {}
 
-class MockCarsBloc extends MockBloc<CarsEvent, CarsState> implements CarsBloc {}
+class MockDataBloc extends MockBloc<DataEvent, DataState> implements DataBloc {}
 
 // ignore: must_be_immutable
 class MockStorageRepo extends Mock implements StorageRepository {}
@@ -28,7 +28,7 @@ void main() {
   group('AddEditCarScreen', () {
     BasePrefService pref;
     final DatabaseBloc dbBloc = MockDatabaseBloc();
-    final CarsBloc carsBloc = MockCarsBloc();
+    final DataBloc dataBloc = MockDataBloc();
     final StorageRepository storageRepo = MockStorageRepo();
     when(dbBloc.state).thenReturn(DbLoaded(null, storageRepo: storageRepo));
 
@@ -64,7 +64,7 @@ void main() {
           child: MultiBlocProvider(
             providers: [
               BlocProvider<DatabaseBloc>.value(value: dbBloc),
-              BlocProvider<CarsBloc>.value(value: carsBloc),
+              BlocProvider<DataBloc>.value(value: dataBloc),
             ],
             child: MaterialApp(
               home: Scaffold(
@@ -86,7 +86,7 @@ void main() {
           child: MultiBlocProvider(
             providers: [
               BlocProvider<DatabaseBloc>.value(value: dbBloc),
-              BlocProvider<CarsBloc>.value(value: carsBloc),
+              BlocProvider<DataBloc>.value(value: dataBloc),
             ],
             child: MaterialApp(
               home: Scaffold(
@@ -111,7 +111,7 @@ void main() {
             child: MultiBlocProvider(
               providers: [
                 BlocProvider<DatabaseBloc>.value(value: dbBloc),
-                BlocProvider<CarsBloc>.value(value: carsBloc),
+                BlocProvider<DataBloc>.value(value: dataBloc),
               ],
               child: MaterialApp(
                 home: Scaffold(
@@ -139,7 +139,7 @@ void main() {
             child: MultiBlocProvider(
               providers: [
                 BlocProvider<DatabaseBloc>.value(value: dbBloc),
-                BlocProvider<CarsBloc>.value(value: carsBloc),
+                BlocProvider<DataBloc>.value(value: dataBloc),
               ],
               child: MaterialApp(
                 home: Scaffold(
@@ -168,7 +168,7 @@ void main() {
               child: MultiBlocProvider(
                 providers: [
                   BlocProvider<DatabaseBloc>.value(value: dbBloc),
-                  BlocProvider<CarsBloc>.value(value: carsBloc),
+                  BlocProvider<DataBloc>.value(value: dataBloc),
                 ],
                 child: MaterialApp(
                   home: Scaffold(
@@ -196,7 +196,7 @@ void main() {
               child: MultiBlocProvider(
                 providers: [
                   BlocProvider<DatabaseBloc>.value(value: dbBloc),
-                  BlocProvider<CarsBloc>.value(value: carsBloc),
+                  BlocProvider<DataBloc>.value(value: dataBloc),
                 ],
                 child: MaterialApp(
                   home: Scaffold(

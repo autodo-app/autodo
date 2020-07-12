@@ -13,10 +13,7 @@ import 'package:mockito/mockito.dart';
 import 'package:pref/pref.dart';
 import 'package:provider/provider.dart';
 
-class MockTodosBloc extends MockBloc<TodosEvent, TodosState>
-    implements TodosBloc {}
-
-class MockCarsBloc extends MockBloc<CarsEvent, CarsState> implements CarsBloc {}
+class MockDataBloc extends MockBloc<DataEvent, DataState> implements DataBloc {}
 
 class MockFilteredTodosBloc
     extends MockBloc<FilteredTodosLoaded, FilteredTodosState>
@@ -24,15 +21,13 @@ class MockFilteredTodosBloc
 
 void main() {
   group('TodosScreen', () {
-    TodosBloc todosBloc;
     FilteredTodosBloc filteredTodosBloc;
-    CarsBloc carsBloc;
+    DataBloc dataBloc;
     BasePrefService pref;
 
     setUp(() async {
-      todosBloc = MockTodosBloc();
       filteredTodosBloc = MockFilteredTodosBloc();
-      carsBloc = MockCarsBloc();
+      dataBloc = MockDataBloc();
       pref = PrefServiceCache();
       await pref.setDefaultValues({
         'length_unit': DistanceUnit.imperial.index,
@@ -42,16 +37,13 @@ void main() {
     });
 
     testWidgets('renders loading', (WidgetTester tester) async {
-      when(todosBloc.state).thenAnswer((_) => TodosLoaded(todos: []));
+      when(dataBloc.state).thenReturn(DataLoaded());
       when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoading());
       final todosKey = Key('todos');
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
-            BlocProvider<TodosBloc>.value(
-              value: todosBloc,
-            ),
-            BlocProvider<CarsBloc>.value(value: carsBloc),
+            BlocProvider<DataBloc>.value(value: dataBloc),
             BlocProvider<FilteredTodosBloc>.value(
               value: filteredTodosBloc,
             ),
@@ -69,7 +61,7 @@ void main() {
     });
 
     testWidgets('renders simple todo list', (WidgetTester tester) async {
-      when(todosBloc.state).thenAnswer((_) => TodosLoaded(todos: []));
+      when(dataBloc.state).thenReturn(DataLoaded());
       when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded({
             null: [Todo(name: '', completed: true)]
           }, VisibilityFilter.all));
@@ -77,10 +69,7 @@ void main() {
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
-            BlocProvider<TodosBloc>.value(
-              value: todosBloc,
-            ),
-            BlocProvider<CarsBloc>.value(value: carsBloc),
+            BlocProvider<DataBloc>.value(value: dataBloc),
             BlocProvider<FilteredTodosBloc>.value(
               value: filteredTodosBloc,
             ),
@@ -97,7 +86,7 @@ void main() {
     });
     testWidgets('renders due date and due mileage',
         (WidgetTester tester) async {
-      when(todosBloc.state).thenAnswer((_) => TodosLoaded(todos: []));
+      when(dataBloc.state).thenReturn(DataLoaded());
       when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded({
             null: [
               Todo(
@@ -113,10 +102,7 @@ void main() {
           value: pref,
           child: MultiBlocProvider(
             providers: [
-              BlocProvider<TodosBloc>.value(
-                value: todosBloc,
-              ),
-              BlocProvider<CarsBloc>.value(value: carsBloc),
+              BlocProvider<DataBloc>.value(value: dataBloc),
               BlocProvider<FilteredTodosBloc>.value(
                 value: filteredTodosBloc,
               ),
@@ -140,25 +126,23 @@ void main() {
           dueMileage: 0,
           dueState: TodoDueState.UPCOMING,
           completed: false,
-          carName: 'car');
+          carId: 'car');
+      final snap = OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
+      final car = Car(name: 'test', odomSnapshot: snap);
       when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded({
             TodoDueState.UPCOMING: [todo],
           }, VisibilityFilter.all));
-      when(todosBloc.state).thenReturn(TodosLoaded(todos: [todo]));
-      when(todosBloc.add(any)).thenAnswer((_) {
+      when(dataBloc.state).thenReturn(DataLoaded(todos: [todo], cars: [car]));
+      when(dataBloc.add(any)).thenAnswer((_) {
         updated = true;
       });
-      when(carsBloc.state).thenReturn(CarsLoaded([Car(name: 'car')]));
       final todosKey = Key('todos');
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
           child: MultiBlocProvider(
             providers: [
-              BlocProvider<TodosBloc>.value(
-                value: todosBloc,
-              ),
-              BlocProvider<CarsBloc>.value(value: carsBloc),
+              BlocProvider<DataBloc>.value(value: dataBloc),
               BlocProvider<FilteredTodosBloc>.value(
                 value: filteredTodosBloc,
               ),
@@ -186,25 +170,23 @@ void main() {
           dueMileage: 0,
           dueState: TodoDueState.UPCOMING,
           completed: false,
-          carName: 'car');
+          carId: 'car');
+      final snap = OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
+      final car = Car(name: 'test', odomSnapshot: snap);
       when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded({
-            TodoDueState.UPCOMING: [todo]
+            TodoDueState.UPCOMING: [todo],
           }, VisibilityFilter.all));
-      when(todosBloc.state).thenReturn(TodosLoaded(todos: [todo]));
-      when(todosBloc.add(any)).thenAnswer((_) {
+      when(dataBloc.state).thenReturn(DataLoaded(todos: [todo], cars: [car]));
+      when(dataBloc.add(any)).thenAnswer((_) {
         deleted = true;
       });
-      when(carsBloc.state).thenReturn(CarsLoaded([Car(name: 'car')]));
       final todosKey = Key('todos');
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
           child: MultiBlocProvider(
             providers: [
-              BlocProvider<TodosBloc>.value(
-                value: todosBloc,
-              ),
-              BlocProvider<CarsBloc>.value(value: carsBloc),
+              BlocProvider<DataBloc>.value(value: dataBloc),
               BlocProvider<FilteredTodosBloc>.value(
                 value: filteredTodosBloc,
               ),
@@ -229,47 +211,45 @@ void main() {
           dueMileage: 0,
           dueState: TodoDueState.UPCOMING,
           completed: false,
-          carName: 'car');
+          carId: 'car');
       final pastDue = Todo(
           name: '',
           dueDate: DateTime.fromMillisecondsSinceEpoch(0),
           dueMileage: 0,
           dueState: TodoDueState.PAST_DUE,
           completed: false,
-          carName: 'car');
+          carId: 'car');
       final dueSoon = Todo(
           name: '',
           dueDate: DateTime.fromMillisecondsSinceEpoch(0),
           dueMileage: 0,
           dueState: TodoDueState.DUE_SOON,
           completed: false,
-          carName: 'car');
+          carId: 'car');
       final complete = Todo(
           name: '',
           dueDate: DateTime.fromMillisecondsSinceEpoch(0),
           dueMileage: 0,
           dueState: TodoDueState.COMPLETE,
           completed: false,
-          carName: 'car');
+          carId: 'car');
+      final snap = OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
+      final car = Car(name: 'test', odomSnapshot: snap);
       when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded({
             TodoDueState.UPCOMING: [upcoming],
             TodoDueState.PAST_DUE: [pastDue],
             TodoDueState.DUE_SOON: [dueSoon],
             TodoDueState.COMPLETE: [complete],
           }, VisibilityFilter.all));
-      when(todosBloc.state).thenReturn(
-          TodosLoaded(todos: [upcoming, pastDue, dueSoon, complete]));
-      when(carsBloc.state).thenReturn(CarsLoaded([Car(name: 'car')]));
+      when(dataBloc.state).thenReturn(
+          DataLoaded(todos: [upcoming, pastDue, dueSoon, complete], cars: [car]));
       final todosKey = Key('todos');
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
           child: MultiBlocProvider(
             providers: [
-              BlocProvider<TodosBloc>.value(
-                value: todosBloc,
-              ),
-              BlocProvider<CarsBloc>.value(value: carsBloc),
+              BlocProvider<DataBloc>.value(value: dataBloc),
               BlocProvider<FilteredTodosBloc>.value(
                 value: filteredTodosBloc,
               ),
@@ -293,39 +273,37 @@ void main() {
           dueMileage: 0,
           dueState: TodoDueState.UPCOMING,
           completed: false,
-          carName: 'car');
+          carId: 'car');
       final dueSoon = Todo(
           name: '',
           dueDate: DateTime.fromMillisecondsSinceEpoch(0),
           dueMileage: 0,
           dueState: TodoDueState.DUE_SOON,
           completed: false,
-          carName: 'car');
+          carId: 'car');
       final complete = Todo(
           name: '',
           dueDate: DateTime.fromMillisecondsSinceEpoch(0),
           dueMileage: 0,
           dueState: TodoDueState.COMPLETE,
           completed: false,
-          carName: 'car');
+          carId: 'car');
+      final snap = OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
+      final car = Car(name: 'test', odomSnapshot: snap);
       when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded({
             TodoDueState.UPCOMING: [upcoming],
             TodoDueState.DUE_SOON: [dueSoon],
             TodoDueState.COMPLETE: [complete],
           }, VisibilityFilter.all));
-      when(todosBloc.state)
-          .thenReturn(TodosLoaded(todos: [upcoming, dueSoon, complete]));
-      when(carsBloc.state).thenReturn(CarsLoaded([Car(name: 'car')]));
+      when(dataBloc.state)
+          .thenReturn(DataLoaded(todos: [upcoming, dueSoon, complete], cars: [car]));
       final todosKey = Key('todos');
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
           child: MultiBlocProvider(
             providers: [
-              BlocProvider<TodosBloc>.value(
-                value: todosBloc,
-              ),
-              BlocProvider<CarsBloc>.value(value: carsBloc),
+              BlocProvider<DataBloc>.value(value: dataBloc),
               BlocProvider<FilteredTodosBloc>.value(
                 value: filteredTodosBloc,
               ),
@@ -350,23 +328,21 @@ void main() {
           dueMileage: 0,
           dueState: TodoDueState.UPCOMING,
           completed: false,
-          carName: 'car');
-      final todoList = List.filled(5, todo);
+          carId: 'car');
+      final todoList = List.filled(5, todo);  
+      final snap = OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
+      final car = Car(name: 'test', odomSnapshot: snap);
       when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded({
             TodoDueState.UPCOMING: todoList,
           }, VisibilityFilter.all));
-      when(todosBloc.state).thenReturn(TodosLoaded(todos: todoList));
-      when(carsBloc.state).thenReturn(CarsLoaded([Car(name: 'car')]));
+      when(dataBloc.state).thenReturn(DataLoaded(todos: todoList, cars: [car]));
       final todosKey = Key('todos');
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
           child: MultiBlocProvider(
             providers: [
-              BlocProvider<TodosBloc>.value(
-                value: todosBloc,
-              ),
-              BlocProvider<CarsBloc>.value(value: carsBloc),
+              BlocProvider<DataBloc>.value(value: dataBloc),
               BlocProvider<FilteredTodosBloc>.value(
                 value: filteredTodosBloc,
               ),

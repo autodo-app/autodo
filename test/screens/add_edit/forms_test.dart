@@ -10,7 +10,7 @@ import 'package:autodo/models/models.dart';
 import 'package:autodo/screens/add_edit/forms/barrel.dart';
 import 'package:autodo/units/units.dart';
 
-class MockCarsBloc extends Mock implements CarsBloc {}
+class MockDataBloc extends Mock implements DataBloc {}
 
 void main() {
   group('add edit forms', () {
@@ -25,12 +25,13 @@ void main() {
       });
     });
     testWidgets('car autocomplete', (WidgetTester tester) async {
-      final carsBloc = MockCarsBloc();
-      when(carsBloc.state)
-          .thenReturn(CarsLoaded([Car(name: 'test'), Car(name: 'test1')]));
+      final dataBloc = MockDataBloc();
+      final snap = OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
+      when(dataBloc.state)
+          .thenReturn(DataLoaded(cars: [Car(name: 'test', odomSnapshot: snap), Car(name: 'test1', odomSnapshot: snap)]));
       await tester.pumpWidget(
         MultiBlocProvider(
-          providers: [BlocProvider<CarsBloc>.value(value: carsBloc)],
+          providers: [BlocProvider<DataBloc>.value(value: dataBloc),],
           child: MaterialApp(
             home: Card(
               child: CarForm(
@@ -51,12 +52,10 @@ void main() {
     });
     testWidgets('car checkbox', (tester) async {
       await tester.pumpWidget(
-        // MultiBlocProvider(
-        //   providers: [],
         MaterialApp(
           home: Card(
             child: CarsCheckboxForm(
-              cars: [Car(name: 'test')],
+              cars: [Car(name: 'test', odomSnapshot: OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0))],
               onSaved: (_) {},
             ),
           ),
@@ -69,14 +68,15 @@ void main() {
     });
     group('repeat interval', () {
       testWidgets('render', (WidgetTester tester) async {
-        final carsBloc = MockCarsBloc();
-        when(carsBloc.state)
-            .thenReturn(CarsLoaded([Car(name: 'test'), Car(name: 'test1')]));
+        final dataBloc = MockDataBloc();
+      final snap = OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
+      when(dataBloc.state)
+          .thenReturn(DataLoaded(cars: [Car(name: 'test', odomSnapshot: snap), Car(name: 'test1', odomSnapshot: snap)]));
         await tester.pumpWidget(
           ChangeNotifierProvider<BasePrefService>.value(
             value: pref,
             child: MultiBlocProvider(
-              providers: [BlocProvider<CarsBloc>.value(value: carsBloc)],
+              providers: [BlocProvider<DataBloc>.value(value: dataBloc)],
               child:
                   MaterialApp(home: RepeatIntervalSelector(onSaved: (a, b) {})),
             ),
@@ -86,15 +86,16 @@ void main() {
         expect(find.byType(RepeatIntervalSelector), findsOneWidget);
       });
       testWidgets('buttons', (WidgetTester tester) async {
-        final carsBloc = MockCarsBloc();
         final key = GlobalKey<RepeatIntervalSelectorState>();
-        when(carsBloc.state)
-            .thenReturn(CarsLoaded([Car(name: 'test'), Car(name: 'test1')]));
+        final dataBloc = MockDataBloc();
+        final snap = OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
+        when(dataBloc.state)
+            .thenReturn(DataLoaded(cars: [Car(name: 'test', odomSnapshot: snap), Car(name: 'test1', odomSnapshot: snap)]));
         await tester.pumpWidget(
           ChangeNotifierProvider<BasePrefService>.value(
             value: pref,
             child: MultiBlocProvider(
-              providers: [BlocProvider<CarsBloc>.value(value: carsBloc)],
+              providers: [BlocProvider<DataBloc>.value(value: dataBloc)],
               child: MaterialApp(
                   home: RepeatIntervalSelector(key: key, onSaved: (a, b) {})),
             ),
@@ -124,15 +125,16 @@ void main() {
         expect(find.byType(RepeatIntervalSelector), findsOneWidget);
       });
       testWidgets('save', (WidgetTester tester) async {
-        final carsBloc = MockCarsBloc();
-        when(carsBloc.state)
-            .thenReturn(CarsLoaded([Car(name: 'test'), Car(name: 'test1')]));
+        final dataBloc = MockDataBloc();
+        final snap = OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
+        when(dataBloc.state)
+            .thenReturn(DataLoaded(cars: [Car(name: 'test', odomSnapshot: snap), Car(name: 'test1', odomSnapshot: snap)]));
         var saved = false;
         await tester.pumpWidget(
           ChangeNotifierProvider<BasePrefService>.value(
             value: pref,
             child: MultiBlocProvider(
-              providers: [BlocProvider<CarsBloc>.value(value: carsBloc)],
+              providers: [BlocProvider<DataBloc>.value(value: dataBloc)],
               child: MaterialApp(home: RepeatIntervalSelector(onSaved: (a, b) {
                 saved = true;
               })),

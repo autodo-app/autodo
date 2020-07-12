@@ -10,7 +10,7 @@ import 'package:pref/pref.dart';
 import 'package:provider/provider.dart';
 import 'package:autodo/screens/add_edit/forms/barrel.dart';
 
-class MockCarsBloc extends Mock implements CarsBloc {}
+class MockDataBloc extends Mock implements DataBloc {}
 
 void main() {
   BasePrefService pref;
@@ -27,13 +27,14 @@ void main() {
   group('RefuelingsScreen', () {
     testWidgets('render', (WidgetTester tester) async {
       final key = Key('screen');
-      final carsBloc = MockCarsBloc();
-      when(carsBloc.state).thenReturn(CarsLoaded([Car()]));
+      final dataBloc = MockDataBloc();
+      final snap = OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
+      when(dataBloc.state).thenReturn(DataLoaded(cars: [Car(name: 'test', odomSnapshot: snap)]));
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
           child: MultiBlocProvider(
-            providers: [BlocProvider<CarsBloc>.value(value: carsBloc)],
+            providers: [BlocProvider<DataBloc>.value(value: dataBloc),],
             child: MaterialApp(
               home: RefuelingAddEditScreen(
                   key: key,
@@ -49,13 +50,14 @@ void main() {
     });
     testWidgets('render w/toggle', (WidgetTester tester) async {
       final key = Key('screen');
-      final carsBloc = MockCarsBloc();
-      when(carsBloc.state).thenReturn(CarsLoaded([Car()]));
+      final dataBloc = MockDataBloc();
+      final snap = OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
+      when(dataBloc.state).thenReturn(DataLoaded(cars: [Car(name: 'test', odomSnapshot: snap)]));
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
           child: MultiBlocProvider(
-            providers: [BlocProvider<CarsBloc>.value(value: carsBloc)],
+            providers: [BlocProvider<DataBloc>.value(value: dataBloc),],
             child: MaterialApp(
               home: RefuelingAddEditScreen(
                   key: key,
@@ -72,23 +74,24 @@ void main() {
     });
     testWidgets('render w/autocomplete', (WidgetTester tester) async {
       final key = Key('screen');
-      final carsBloc = MockCarsBloc();
-      when(carsBloc.state).thenReturn(CarsLoaded([Car()]));
+      final dataBloc = MockDataBloc();
+      final snap = OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
+      when(dataBloc.state).thenReturn(DataLoaded(cars: [Car(name: 'test', odomSnapshot: snap)]));
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
           child: MultiBlocProvider(
-            providers: [BlocProvider<CarsBloc>.value(value: carsBloc)],
+            providers: [BlocProvider<DataBloc>.value(value: dataBloc),],
             child: MaterialApp(
               home: RefuelingAddEditScreen(
                   key: key,
                   isEditing: false,
                   onSave: (a, b, c, d, e) {},
                   cars: [
-                    Car(name: '1'),
-                    Car(name: '2'),
-                    Car(name: '3'),
-                    Car(name: '4')
+                    Car(name: '1', odomSnapshot: snap),
+                    Car(name: '2', odomSnapshot: snap),
+                    Car(name: '3', odomSnapshot: snap),
+                    Car(name: '4', odomSnapshot: snap),
                   ]),
             ),
           ),
@@ -101,13 +104,14 @@ void main() {
     testWidgets('save', (WidgetTester tester) async {
       final key = Key('screen');
       var saved = false;
-      final carsBloc = MockCarsBloc();
-      when(carsBloc.state).thenReturn(CarsLoaded([Car()]));
+      final dataBloc = MockDataBloc();
+      final snap = OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
+      when(dataBloc.state).thenReturn(DataLoaded(cars: [Car(name: 'test', odomSnapshot: snap)]));
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
           child: MultiBlocProvider(
-            providers: [BlocProvider<CarsBloc>.value(value: carsBloc)],
+            providers: [BlocProvider<DataBloc>.value(value: dataBloc),],
             child: MaterialApp(
               home: RefuelingAddEditScreen(
                   key: key,
@@ -115,7 +119,7 @@ void main() {
                   onSave: (a, b, c, d, e) {
                     saved = true;
                   },
-                  cars: [Car(name: 'test')]),
+                  cars: [Car(name: 'test', odomSnapshot: snap)]),
             ),
           ),
         ),
@@ -134,13 +138,14 @@ void main() {
     });
     testWidgets('date button', (WidgetTester tester) async {
       final key = Key('screen');
-      final carsBloc = MockCarsBloc();
-      when(carsBloc.state).thenReturn(CarsLoaded([Car()]));
+      final dataBloc = MockDataBloc();
+      final snap = OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
+      when(dataBloc.state).thenReturn(DataLoaded(cars: [Car(name: 'test', odomSnapshot: snap)]));
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
           child: MultiBlocProvider(
-            providers: [BlocProvider<CarsBloc>.value(value: carsBloc)],
+            providers: [BlocProvider<DataBloc>.value(value: dataBloc),],
             child: MaterialApp(
               home: RefuelingAddEditScreen(
                   key: key,
