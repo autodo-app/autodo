@@ -8,7 +8,8 @@ axios.interceptors.request.use(
   config => {
     const { origin } = new URL(config.url);
     const allowedOrigins = [apiUrl];
-    const token = localStorage.getItem('token');    if (allowedOrigins.includes(origin)) {
+    const token = localStorage.getItem('token');    
+    if (allowedOrigins.includes(origin)) {
       config.headers.authorization = `Bearer ${token}`;
     }
     return config;
@@ -25,15 +26,17 @@ function App() {
   const [fetchError, setFetchError] = useState(null);
 
   const getJwt = async () => {
-    const { data } = await axios.get(`${apiUrl}/auth/token/`);
-    localStorage.setItem('token', data.token);
-    setJwt(data.token);
+    const { data } = await axios.post(`${apiUrl}/auth/token/`, {'username': 'root', 'password': 'root1234'});
+    console.log(data);
+    localStorage.setItem('token', data.access);
+    setJwt(data.access);
   };
   
   const getFoods = async () => {
     try {
-      const { data } = await axios.get(`${apiUrl}/foods`);
-      setFoods(data);
+      const { data } = await axios.get(`${apiUrl}/api/v1/todos/`);
+      console.log(data);
+      setFoods(data.results);
       setFetchError(null);
     } catch (err) {
       setFetchError(err.message);
