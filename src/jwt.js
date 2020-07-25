@@ -1,6 +1,7 @@
 // App.js
 import React, { useState } from 'react';
 import axios from 'axios';
+import LoginForm from './login_form';
 // import './App.css';
 const apiUrl = 'http://localhost:8000';
 
@@ -25,8 +26,9 @@ function App() {
   const [foods, setFoods] = useState([]);
   const [fetchError, setFetchError] = useState(null);
 
-  const getJwt = async () => {
-    const { data } = await axios.post(`${apiUrl}/auth/token/`, {'username': 'root', 'password': 'root1234'});
+  const getJwt = async (user, pass) => {
+    // const { data } = await axios.post(`${apiUrl}/auth/token/`, {'username': 'root', 'password': 'root1234'});
+    const { data } = await axios.post(`${apiUrl}/auth/token/`, {'username': user, 'password': pass});
     console.log(data);
     localStorage.setItem('token', data.access);
     setJwt(data.access);
@@ -42,9 +44,16 @@ function App() {
       setFetchError(err.message);
     }
   };
+
+  const handle_login = async (e, data) => {
+    e.preventDefault();
+    console.log(data);
+    await getJwt(data.username, data.password);
+  }
   
   return (
     <>
+      <LoginForm handle_login={(e, data) => handle_login(e, data)} />
       <section style={{ marginBottom: '10px' }}>
         <button onClick={() => getJwt()}>Get JWT</button>
         {jwt && (
