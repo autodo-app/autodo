@@ -20,10 +20,11 @@ export const TodosList = () => {
   if (todoStatus === 'loading') {
     content = <div className="loader">Loading...</div>
   } else if (todoStatus === 'succeeded') {
-    content = todos.map(t => (
-      // <TodoExcerpt key={t.id} todo={t} />
-      <div key={t.id}>{t}</div>
-    ))
+    content = <div>hello</div>
+    // content = todos.map(t => (
+    //   // <TodoExcerpt key={t.id} todo={t} />
+    //   <div key={t.id}>{t}</div>
+    // ));
   } else if (todoStatus === 'error') {
     content = <div>{error}</div>
   }
