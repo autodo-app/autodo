@@ -8,6 +8,7 @@ import './App.css';
 import { history } from './_helpers';
 import { LoginPage } from './login';
 import { alertClear } from './_slices';
+import { DataPage } from './home';
 
 function App() {
   const dispatch = useDispatch();
@@ -23,6 +24,7 @@ function App() {
       <div>
         <Route exact path="/" component={homePage} />
         <Route path="/login" component={LoginPage} />
+        <Route path="/data" component={DataPage} />
       </div>
     </Router>
   );
