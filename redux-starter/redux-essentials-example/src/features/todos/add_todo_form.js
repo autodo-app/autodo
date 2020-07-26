@@ -1,30 +1,38 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { nanoid } from '@reduxjs/toolkit'
+import { unwrapResult } from '@reduxjs/toolkit'
 
-import { todoAdded } from './todos_slice'
+import { addNewTodo } from './todos_slice'
 
 export const AddTodoForm = () => {
   const [name, setName] = useState('');
   const [content, setContent] = useState('');
+  const [addRequestStatus, setAddRequestStatus] = useState('idle');
 
   const dispatch = useDispatch();
 
   const onNameChanged = e => setName(e.target.value);
   const onContentChanged = e => setContent(e.target.value);
 
-  const onSaveTodoClicked = () => {
-    if (name && content) {
-        dispatch(  
-            todoAdded({
-                id: nanoid(),
-                name,
-                content
-            })
-        )
+  const canSave =
+    [name, content].every(Boolean) && addRequestStatus === 'idle'
 
+  const onSaveTodoClicked = async () => {
+    if (canSave) {
+      try {
+        setAddRequestStatus('pending')
+        const resultAction = await dispatch(
+          addNewTodo({ name, content })
+        )
+        unwrapResult(resultAction)
         setName('')
         setContent('')
+        // setUserId('')
+      } catch (err) {
+        console.error('Failed to save the post: ', err)
+      } finally {
+        setAddRequestStatus('idle')
+      }
     }
   }
 

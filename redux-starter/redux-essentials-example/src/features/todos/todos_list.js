@@ -1,24 +1,37 @@
-import React from 'react'
-import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+// import { Link } from 'react-router-dom';
+import { selectAllTodos, fetchTodos } from './todos_slice';
 
 export const TodosList = () => {
-  const todos = useSelector(state => state.todos);
+  const dispatch = useDispatch();
+  const todos = useSelector(selectAllTodos);
 
-  const renderedTodos = todos.map(todo => (
-    <article className="post-excerpt" key={todo.name}>
-      <h3>{todo.name}</h3>
-      <p>{todo.content.substring(0, 100)}</p>
-      <Link to={`/todos/${todo.id}`} className="button muted-button">
-          View Todo
-      </Link>
-    </article>
-  ))
+  const todoStatus = useSelector(state => state.todos.status);
+  const error = useSelector(state => state.todos.error);
+
+  useEffect(() => {
+    if (todoStatus === 'idle') {
+      dispatch(fetchTodos());
+    }
+  }, [todoStatus, dispatch]);
+
+  let content;
+  if (todoStatus === 'loading') {
+    content = <div className="loader">Loading...</div>
+  } else if (todoStatus === 'succeeded') {
+    content = todos.map(t => (
+      // <TodoExcerpt key={t.id} todo={t} />
+      <div key={t.id}>{t}</div>
+    ))
+  } else if (todoStatus === 'error') {
+    content = <div>{error}</div>
+  }
 
   return (
     <section>
       <h2>Todos</h2>
-      {renderedTodos}
+      {content}
     </section>
   )
 }

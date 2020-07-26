@@ -2,14 +2,12 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 
-import { todoUpdated } from './todos_slice'
+import { todoUpdated, selectTodoById } from './todos_slice'
 
 export const EditTodoForm = ({ match }) => {
   const { todoId } = match.params;
 
-  const todo = useSelector(state => 
-    state.todos.find(todo => todo.id === todoId)
-  );
+  const todo = useSelector(selectTodoById);
 
   const [name, setName] = useState(todo.name);
   const [content, setContent] = useState(todo.content);
