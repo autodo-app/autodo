@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchTodos, fetchRefuelings, fetchCars } from '../_services';
+import { fetchTodos, fetchRefuelings, fetchCars, postTodo } from '../_services';
 
 const initialState = {
   todos: [],
@@ -21,10 +21,13 @@ export const fetchData = createAsyncThunk('data/fetchData', async () => {
   };
 });
 
-export const addNewTodo = createAsyncThunk('data/addNewTodo', async (initialTodo) => {
-  // const response = await client.post('fakeApi/todos', { todo: initialTodo });
-  // return response.todo;
-});
+export const addNewTodo = createAsyncThunk(
+  'data/addNewTodo',
+  async (initialTodo) => {
+    const response = await postTodo(initialTodo);
+    return response;
+  },
+);
 
 const dataSlice = createSlice({
   name: 'data',

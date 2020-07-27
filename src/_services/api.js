@@ -35,23 +35,49 @@ const _authenticatedGet = async (url) => {
   return data;
 };
 
+const _authenticatedPost = async (url, body) => {
+  const { data, status } = await axios.post(
+    `${apiUrl}${apiVersion}/${url}`,
+    body,
+  );
+  console.log(data);
+  console.log(status);
+  if (status === 401) {
+    // Token has expired, need to refresh it
+    await _refreshUserToken();
+  }
+
+  if (status !== 201) {
+    // throw an error
+  }
+  return data;
+};
+
 export const fetchUserToken = async (user, pass) => {
-  const { data } = await axios.post(`${apiUrl}/auth/token/`, { username: user, password: pass });
+  const { data } = await axios.post(`${apiUrl}/auth/token/`, {
+    username: user,
+    password: pass,
+  });
   localStorage.setItem('token', data.access);
   return data.access;
 };
 
 export const fetchTodos = async () => {
   const response = await _authenticatedGet('todos/');
+  return response.results;
+};
+
+export const postTodo = async (todo) => {
+  const response = await _authenticatedPost('todos/', todo);
   return response;
 };
 
 export const fetchRefuelings = async () => {
   const response = await _authenticatedGet('refuelings/');
-  return response;
+  return response.results;
 };
 
 export const fetchCars = async () => {
   const response = await _authenticatedGet('cars/');
-  return response;
+  return response.results;
 };
