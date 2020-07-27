@@ -1,11 +1,11 @@
 /**
- * Manages app state for alerts/toasts. 
+ * Manages app state for alerts/toasts.
  */
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {};
 
-const alertsSlice = createSlice({ 
+const alertsSlice = createSlice({
   name: 'alerts',
   initialState,
   reducers: {
@@ -18,14 +18,10 @@ const alertsSlice = createSlice({
       state.message = action.message;
     },
     alertClear(state, action) {
-      state = {}
-    }
-  }
+      state = {};
+    },
+  },
 });
 
 export default alertsSlice.reducer;
-export const {
-  alertSuccess, 
-  alertError, 
-  alertClear 
-} = alertsSlice.actions;
+export const { alertSuccess, alertError, alertClear } = alertsSlice.actions;

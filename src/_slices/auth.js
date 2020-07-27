@@ -10,15 +10,12 @@ const initialState = {
   token: token,
   status: token ? 'loggedIn' : 'loggedOut',
   error: null,
-}
+};
 
-export const logInAsync = createAsyncThunk(
-  'auth/logInAsync', 
-  async (request) => {
-    const token = await fetchUserToken(request.username, request.password);
-    return token;
-  }
-);
+export const logInAsync = createAsyncThunk('auth/logInAsync', async (request) => {
+  const token = await fetchUserToken(request.username, request.password);
+  return token;
+});
 
 export const authSlice = createSlice({
   name: 'auth',
@@ -26,7 +23,7 @@ export const authSlice = createSlice({
   reducers: {
     logIn(state, action) {
       state.token = action.payload;
-    }
+    },
   },
   extraReducers: {
     [logInAsync.pending]: (state, action) => {
@@ -35,12 +32,12 @@ export const authSlice = createSlice({
     [logInAsync.fulfilled]: (state, action) => {
       state.status = 'loggedIn';
       state.token = action.payload;
-    }, 
+    },
     [logInAsync.rejected]: (state, action) => {
       state.status = 'failed';
       state.error = action.payload;
-    }
-  }
+    },
+  },
 });
 
 export default authSlice.reducer;

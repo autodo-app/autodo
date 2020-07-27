@@ -14,10 +14,6 @@ export function DataPage() {
       });
     }
   });
-  
-  return (
-    <p>
-      {todos}
-    </p>
-  );
+
+  return <p>{todos}</p>;
 }

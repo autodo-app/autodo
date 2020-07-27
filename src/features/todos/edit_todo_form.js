@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useHistory } from 'react-router-dom'
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
-import { todoUpdated, selectTodoById } from './todos_slice'
+import { todoUpdated, selectTodoById } from './todos_slice';
 
 export const EditTodoForm = ({ match }) => {
   const { todoId } = match.params;
@@ -15,15 +15,15 @@ export const EditTodoForm = ({ match }) => {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const onNameChanged = e => setName(e.target.value);
-  const onContentChanged = e => setContent(e.target.value);
+  const onNameChanged = (e) => setName(e.target.value);
+  const onContentChanged = (e) => setContent(e.target.value);
 
   const onSaveTodoClicked = () => {
     if (name && content) {
       dispatch(todoUpdated({ id: todoId, name, content }));
       history.push(`/todos/${todoId}`);
     }
-  }
+  };
 
   return (
     <section>
@@ -39,16 +39,11 @@ export const EditTodoForm = ({ match }) => {
           onChange={onNameChanged}
         />
         <label htmlFor="todoContent">Content:</label>
-        <textarea
-          id="todoContent"
-          name="todoContent"
-          value={content}
-          onChange={onContentChanged}
-        />
+        <textarea id="todoContent" name="todoContent" value={content} onChange={onContentChanged} />
       </form>
       <button type="button" onClick={onSaveTodoClicked}>
         Save Todo
       </button>
     </section>
-  )
-}
+  );
+};

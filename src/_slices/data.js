@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { fetchTodos, fetchRefuelings, fetchCars } from '../_services';
 
 const initialState = {
@@ -8,7 +8,7 @@ const initialState = {
   defaultTodos: [],
   status: 'idle',
   error: null,
-}
+};
 
 export const fetchData = createAsyncThunk('data/fetchData', async () => {
   const todos = await fetchTodos();
@@ -17,36 +17,33 @@ export const fetchData = createAsyncThunk('data/fetchData', async () => {
   return {
     todos: todos,
     refuelings: refuelings,
-    cars: cars
+    cars: cars,
   };
-})
+});
 
-export const addNewTodo = createAsyncThunk(
-  'data/addNewTodo', 
-  async initialTodo => {
-    // const response = await client.post('fakeApi/todos', { todo: initialTodo });
-    // return response.todo;
-  }
-);
+export const addNewTodo = createAsyncThunk('data/addNewTodo', async (initialTodo) => {
+  // const response = await client.post('fakeApi/todos', { todo: initialTodo });
+  // return response.todo;
+});
 
 const dataSlice = createSlice({
   name: 'data',
   initialState,
   reducers: {
-      todoAdded(state, action) {
-        state.todos.push(action.payload);
-      },
-      todoUpdated(state, action) {
-        const { id, name, content } = action.payload
-        const existingTodo = state.todos.find(todo => todo.id === id)
-        if (existingTodo) {
-          existingTodo.name = name
-          existingTodo.content = content
-        }
+    todoAdded(state, action) {
+      state.todos.push(action.payload);
+    },
+    todoUpdated(state, action) {
+      const { id, name, content } = action.payload;
+      const existingTodo = state.todos.find((todo) => todo.id === id);
+      if (existingTodo) {
+        existingTodo.name = name;
+        existingTodo.content = content;
       }
+    },
   },
   extraReducers: {
-    [fetchData.pending]: state => {
+    [fetchData.pending]: (state) => {
       state.status = 'loading';
     },
     [fetchData.fulfilled]: (state, action) => {
@@ -61,14 +58,14 @@ const dataSlice = createSlice({
     },
     [addNewTodo.fulfilled]: (state, action) => {
       state.todos.push(action.payload);
-    }
-  }
-})
+    },
+  },
+});
 
 export default dataSlice.reducer;
 export const { todoAdded, todoUpdated } = dataSlice.actions;
 
-export const selectAllTodos = state => state.data.todos
+export const selectAllTodos = (state) => state.data.todos;
 
 export const selectTodoById = (state, todoId) =>
-  state.data.todos.find(todo => todo.id === todoId)
+  state.data.todos.find((todo) => todo.id === todoId);

@@ -4,9 +4,7 @@ import { Link } from 'react-router-dom';
 
 export const SingleTodoPage = ({ match }) => {
   const { todoId } = match.params;
-  const todo = useSelector(state => 
-    state.todos.find(todo => todo.id === todoId)
-  );
+  const todo = useSelector((state) => state.todos.find((todo) => todo.id === todoId));
 
   if (!todo) {
     return (
@@ -15,7 +13,7 @@ export const SingleTodoPage = ({ match }) => {
       </section>
     );
   }
-  return (  
+  return (
     <section>
       <article className="todo">
         <h2>{todo.name}</h2>
@@ -25,4 +23,4 @@ export const SingleTodoPage = ({ match }) => {
       </article>
     </section>
   );
-}
+};
