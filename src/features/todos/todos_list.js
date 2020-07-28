@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 // import { Link } from 'react-router-dom';
 import { selectAllTodos, fetchData } from '../../_slices';
+import { SingleTodoPage } from './todo';
 
 export const TodosList = () => {
   const dispatch = useDispatch();
@@ -20,12 +21,7 @@ export const TodosList = () => {
   if (todoStatus === 'loading') {
     content = <div className="loader">Loading...</div>;
   } else if (todoStatus === 'succeeded') {
-    content = todos.map((t) => (
-      // <TodoExcerpt key={t.id} todo={t} />
-      <div key={t.id}>
-        {t.name}/{t.car}
-      </div>
-    ));
+    content = todos.map((t) => <SingleTodoPage key={t.id} todoId={t.id} />);
   } else if (todoStatus === 'error') {
     content = <div>{error}</div>;
   }

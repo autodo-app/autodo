@@ -11,6 +11,7 @@ import { alertClear } from './_slices';
 import { DataPage } from './home';
 import { TodosList } from './features/todos/todos_list';
 import { AddTodoForm } from './features/todos/add_todo_form';
+import { EditTodoForm } from './features/todos/edit_todo_form';
 
 function App() {
   const dispatch = useDispatch();
@@ -23,13 +24,11 @@ function App() {
 
   return (
     <Router history={history}>
-      <div>
-        {/* <Route exact path="/" component={homePage} /> */}
-        <Route exact path="/" component={TodosList} />
-        <Route exact path="/todos/new" component={AddTodoForm} />
-        <Route path="/login" component={LoginPage} />
-        <Route path="/data" component={DataPage} />
-      </div>
+      <Route exact path="/" component={TodosList} />
+      <Route exact path="/todos/new" component={AddTodoForm} />
+      <Route exact path="/editTodo/:todoId" component={EditTodoForm} />
+      <Route exact path="/login" component={LoginPage} />
+      <Route exact path="/data" component={DataPage} />
     </Router>
   );
 }

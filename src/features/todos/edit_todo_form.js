@@ -1,29 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 
-import { todoUpdated, selectTodoById } from './todos_slice';
+import { fetchData, todoUpdated, selectTodoById } from '../../_slices';
 
 export const EditTodoForm = ({ match }) => {
   const { todoId } = match.params;
 
-  const todo = useSelector(selectTodoById);
+  let todo = useSelector((state) => {
+    console.log(state);
+    return selectTodoById(state, todoId);
+  });
+  if (!todo) {
+    todo = {};
+  }
+
+  console.log(todo);
 
   const [name, setName] = useState(todo.name);
-  const [content, setContent] = useState(todo.content);
-
-  const history = useHistory();
-  const dispatch = useDispatch();
+  // const [content, setContent] = useState(todo.content);
 
   const onNameChanged = (e) => setName(e.target.value);
-  const onContentChanged = (e) => setContent(e.target.value);
+  // const onContentChanged = (e) => setContent(e.target.value);
 
-  const onSaveTodoClicked = () => {
-    if (name && content) {
-      dispatch(todoUpdated({ id: todoId, name, content }));
-      history.push(`/todos/${todoId}`);
-    }
-  };
+  // const onSaveTodoClicked = () => {
+  //   if (name && content) {
+  //     dispatch(todoUpdated({ id: todoId, name, content }));
+  //     history.push(`/todos/${todoId}`);
+  //   }
+  // };
 
   return (
     <section>
@@ -38,12 +42,17 @@ export const EditTodoForm = ({ match }) => {
           value={name}
           onChange={onNameChanged}
         />
-        <label htmlFor="todoContent">Content:</label>
-        <textarea id="todoContent" name="todoContent" value={content} onChange={onContentChanged} />
+        {/* <label htmlFor="todoContent">Content:</label>
+        <textarea
+          id="todoContent"
+          name="todoContent"
+          value={content}
+          onChange={onContentChanged}
+        /> */}
       </form>
-      <button type="button" onClick={onSaveTodoClicked}>
+      {/* <button type="button" onClick={onSaveTodoClicked}>
         Save Todo
-      </button>
+      </button> */}
     </section>
   );
 };

@@ -1,10 +1,10 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { selectTodoById } from '../../_slices';
 
-export const SingleTodoPage = ({ match }) => {
-  const { todoId } = match.params;
-  const todo = useSelector((state) => state.todos.find((todo) => todo.id === todoId));
+export const SingleTodoPage = ({ todoId }) => {
+  const todo = useSelector((state) => selectTodoById(state, todoId));
 
   if (!todo) {
     return (
