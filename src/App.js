@@ -1,35 +1,26 @@
-import React, { useEffect } from 'react';
-import { Router, Route } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import React from 'react';
+import { Route, BrowserRouter } from 'react-router-dom';
 
 import logo from './logo.svg';
 import { Counter } from './features/counter/Counter';
 import './App.css';
-import { history } from './_helpers';
 import { LoginPage } from './login';
-import { alertClear } from './_slices';
 import { DataPage } from './home';
 import { TodosList } from './features/todos/todos_list';
 import { AddTodoForm } from './features/todos/add_todo_form';
 import { EditTodoForm } from './features/todos/edit_todo_form';
+import { RouteListener } from './_helpers/alert_container';
 
 function App() {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    history.listen((location, action) => {
-      dispatch(alertClear());
-    });
-  });
-
   return (
-    <Router history={history}>
+    <BrowserRouter>
+      <RouteListener />
       <Route exact path="/" component={TodosList} />
       <Route exact path="/todos/new" component={AddTodoForm} />
       <Route exact path="/editTodo/:todoId" component={EditTodoForm} />
       <Route exact path="/login" component={LoginPage} />
       <Route exact path="/data" component={DataPage} />
-    </Router>
+    </BrowserRouter>
   );
 }
 
