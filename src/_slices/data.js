@@ -1,5 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchTodos, fetchRefuelings, fetchCars, postTodo } from '../_services';
+import {
+  fetchTodos,
+  fetchRefuelings,
+  fetchCars,
+  postTodo,
+  patchTodo,
+} from '../_services';
 
 const initialState = {
   todos: [],
@@ -29,22 +35,18 @@ export const addNewTodo = createAsyncThunk(
   },
 );
 
+export const updateTodo = createAsyncThunk(
+  'data/updateTodo',
+  async (initialTodo) => {
+    const response = await patchTodo(initialTodo);
+    return response;
+  },
+);
+
 const dataSlice = createSlice({
   name: 'data',
   initialState,
-  reducers: {
-    todoAdded(state, action) {
-      state.todos.push(action.payload);
-    },
-    todoUpdated(state, action) {
-      const { id, name, content } = action.payload;
-      const existingTodo = state.todos.find((todo) => todo.id === id);
-      if (existingTodo) {
-        existingTodo.name = name;
-        existingTodo.content = content;
-      }
-    },
-  },
+  reducers: {},
   extraReducers: {
     [fetchData.pending]: (state) => {
       state.status = 'loading';
@@ -62,6 +64,11 @@ const dataSlice = createSlice({
     [addNewTodo.fulfilled]: (state, action) => {
       state.todos.push(action.payload);
     },
+    [updateTodo.fulfilled]: (state, action) => {
+      const todoId = action.payload.id;
+      const idx = state.todos.findIndex((t) => Number(t.id) === Number(todoId));
+      state.todos[idx] = action.payload;
+    },
   },
 });
 
@@ -71,4 +78,4 @@ export const { todoAdded, todoUpdated } = dataSlice.actions;
 export const selectAllTodos = (state) => state.data.todos;
 
 export const selectTodoById = (state, todoId) =>
-  state.data.todos.find((todo) => todo.id === todoId);
+  state.data.todos.find((todo) => Number(todo.id) === Number(todoId));

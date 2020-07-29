@@ -53,6 +53,24 @@ const _authenticatedPost = async (url, body) => {
   return data;
 };
 
+const _authenticatedPatch = async (url, body) => {
+  const { data, status } = await axios.patch(
+    `${apiUrl}${apiVersion}/${url}`,
+    body,
+  );
+  console.log(data);
+  console.log(status);
+  if (status === 401) {
+    // Token has expired, need to refresh it
+    await _refreshUserToken();
+  }
+
+  if (status !== 201) {
+    // throw an error
+  }
+  return data;
+};
+
 export const fetchUserToken = async (user, pass) => {
   const { data } = await axios.post(`${apiUrl}/auth/token/`, {
     username: user,
@@ -69,6 +87,11 @@ export const fetchTodos = async () => {
 
 export const postTodo = async (todo) => {
   const response = await _authenticatedPost('todos/', todo);
+  return response;
+};
+
+export const patchTodo = async (todo) => {
+  const response = await _authenticatedPatch(`todos/${todo.id}/`, todo);
   return response;
 };
 

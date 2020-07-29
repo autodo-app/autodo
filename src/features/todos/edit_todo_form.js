@@ -1,33 +1,40 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { fetchData, todoUpdated, selectTodoById } from '../../_slices';
+import { updateTodo, selectTodoById } from '../../_slices';
+import { useHistory } from 'react-router-dom';
 
 export const EditTodoForm = ({ match }) => {
   const { todoId } = match.params;
+  const dispatch = useDispatch();
+  const history = useHistory();
 
-  let todo = useSelector((state) => {
-    console.log(state);
-    return selectTodoById(state, todoId);
-  });
+  let todo = useSelector((state) => selectTodoById(state, todoId));
   if (!todo) {
     todo = {};
   }
 
-  console.log(todo);
-
   const [name, setName] = useState(todo.name);
-  // const [content, setContent] = useState(todo.content);
+  const [car, setCar] = useState(todo.car);
+  const [dueMileage, setDueMileage] = useState(todo.dueMileage ?? '');
 
   const onNameChanged = (e) => setName(e.target.value);
-  // const onContentChanged = (e) => setContent(e.target.value);
+  const onCarChanged = (e) => setCar(e.target.value);
+  const onDueMileageChanged = (e) => setDueMileage(e.target.value);
 
-  // const onSaveTodoClicked = () => {
-  //   if (name && content) {
-  //     dispatch(todoUpdated({ id: todoId, name, content }));
-  //     history.push(`/todos/${todoId}`);
-  //   }
-  // };
+  const onSaveTodoClicked = () => {
+    if (name && car) {
+      dispatch(
+        updateTodo({
+          id: todoId,
+          name: name,
+          carId: car,
+          dueMileage: Number(dueMileage),
+        }),
+      );
+      history.push(`/`);
+    }
+  };
 
   return (
     <section>
@@ -38,21 +45,29 @@ export const EditTodoForm = ({ match }) => {
           type="text"
           id="todoName"
           name="todoName"
-          placeholder="What's on your mind?"
           value={name}
           onChange={onNameChanged}
         />
-        {/* <label htmlFor="todoContent">Content:</label>
-        <textarea
-          id="todoContent"
-          name="todoContent"
-          value={content}
-          onChange={onContentChanged}
-        /> */}
+        <label htmlFor="todoName">Car ID:</label>
+        <input
+          type="number"
+          id="carId"
+          name="carId"
+          value={car}
+          onChange={onCarChanged}
+        />
+        <label htmlFor="todoName">Due Mileage:</label>
+        <input
+          type="number"
+          id="dueMileage"
+          name="dueMileage"
+          value={dueMileage}
+          onChange={onDueMileageChanged}
+        />
       </form>
-      {/* <button type="button" onClick={onSaveTodoClicked}>
+      <button type="button" onClick={onSaveTodoClicked}>
         Save Todo
-      </button> */}
+      </button>
     </section>
   );
 };
