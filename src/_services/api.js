@@ -40,8 +40,6 @@ const _authenticatedPost = async (url, body) => {
     `${apiUrl}${apiVersion}/${url}`,
     body,
   );
-  console.log(data);
-  console.log(status);
   if (status === 401) {
     // Token has expired, need to refresh it
     await _refreshUserToken();
@@ -58,8 +56,22 @@ const _authenticatedPatch = async (url, body) => {
     `${apiUrl}${apiVersion}/${url}`,
     body,
   );
-  console.log(data);
-  console.log(status);
+  if (status === 401) {
+    // Token has expired, need to refresh it
+    await _refreshUserToken();
+  }
+
+  if (status !== 201) {
+    // throw an error
+  }
+  return data;
+};
+
+const _authenticatedDelete = async (url, body) => {
+  const { data, status } = await axios.delete(
+    `${apiUrl}${apiVersion}/${url}`,
+    body,
+  );
   if (status === 401) {
     // Token has expired, need to refresh it
     await _refreshUserToken();
@@ -85,14 +97,19 @@ export const fetchTodos = async () => {
   return response.results;
 };
 
-export const postTodo = async (todo) => {
+export const apiPostTodo = async (todo) => {
   const response = await _authenticatedPost('todos/', todo);
   return response;
 };
 
-export const patchTodo = async (todo) => {
+export const apiPatchTodo = async (todo) => {
   const response = await _authenticatedPatch(`todos/${todo.id}/`, todo);
   return response;
+};
+
+export const apiDeleteTodo = async (todo) => {
+  await _authenticatedDelete(`todos/${todo.id}/`, todo);
+  return todo;
 };
 
 export const fetchRefuelings = async () => {

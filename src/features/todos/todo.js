@@ -1,10 +1,15 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { selectTodoById } from '../../_slices';
+import { selectTodoById, deleteTodo } from '../../_slices';
 
 export const SingleTodoPage = ({ todoId }) => {
   const todo = useSelector((state) => selectTodoById(state, todoId));
+  const dispatch = useDispatch();
+
+  const onDeleteClicked = () => {
+    dispatch(deleteTodo(todo));
+  };
 
   if (!todo) {
     return (
@@ -20,6 +25,9 @@ export const SingleTodoPage = ({ todoId }) => {
         <Link to={`/editTodo/${todo.id}`} className="button">
           Edit Todo
         </Link>
+        <button type="button" onClick={onDeleteClicked}>
+          Delete
+        </button>
       </article>
     </section>
   );

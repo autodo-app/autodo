@@ -3,8 +3,9 @@ import {
   fetchTodos,
   fetchRefuelings,
   fetchCars,
-  postTodo,
-  patchTodo,
+  apiPostTodo,
+  apiPatchTodo,
+  apiDeleteTodo,
 } from '../_services';
 
 const initialState = {
@@ -30,7 +31,7 @@ export const fetchData = createAsyncThunk('data/fetchData', async () => {
 export const addNewTodo = createAsyncThunk(
   'data/addNewTodo',
   async (initialTodo) => {
-    const response = await postTodo(initialTodo);
+    const response = await apiPostTodo(initialTodo);
     return response;
   },
 );
@@ -38,10 +39,15 @@ export const addNewTodo = createAsyncThunk(
 export const updateTodo = createAsyncThunk(
   'data/updateTodo',
   async (initialTodo) => {
-    const response = await patchTodo(initialTodo);
+    const response = await apiPatchTodo(initialTodo);
     return response;
   },
 );
+
+export const deleteTodo = createAsyncThunk('data/deleteTodo', async (todo) => {
+  const response = await apiDeleteTodo(todo);
+  return response;
+});
 
 const dataSlice = createSlice({
   name: 'data',
@@ -68,6 +74,13 @@ const dataSlice = createSlice({
       const todoId = action.payload.id;
       const idx = state.todos.findIndex((t) => Number(t.id) === Number(todoId));
       state.todos[idx] = action.payload;
+    },
+    [deleteTodo.fulfilled]: (state, action) => {
+      const todoId = action.payload.id;
+      const idx = state.todos.findIndex((t) => Number(t.id) === Number(todoId));
+      if (idx > -1) {
+        state.todos.splice(idx, 1); // remove todo at position
+      }
     },
   },
 });
