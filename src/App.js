@@ -10,12 +10,14 @@ import { TodosList } from './features/todos/todos_list';
 import { AddTodoForm } from './features/todos/add_todo_form';
 import { EditTodoForm } from './features/todos/edit_todo_form';
 import { RouteListener } from './_helpers/alert_container';
+import Dashboard from './home/dashboard';
 
 function App() {
   return (
     <BrowserRouter>
       <RouteListener />
-      <Route exact path="/" component={TodosList} />
+      {/* <Route exact path="/" component={TodosList} /> */}
+      <Route exact path="/" component={Dashboard} />
       <Route exact path="/todos/new" component={AddTodoForm} />
       <Route exact path="/editTodo/:todoId" component={EditTodoForm} />
       <Route exact path="/login" component={LoginPage} />
