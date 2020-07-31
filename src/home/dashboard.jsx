@@ -2,24 +2,21 @@ import React from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Drawer from '@material-ui/core/Drawer';
 import Box from '@material-ui/core/Box';
-import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
-import Button from '@material-ui/core/Button';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
 
 import Chart from './chart';
 import Deposits from './deposits';
 import Orders from './orders';
-import { AUTODO_GREEN, BACKGROUND_LIGHT } from '../theme';
+import { BACKGROUND_LIGHT } from '../theme';
 import SearchBar from './searchbar';
 import SideBar from './sidebar';
+import TodoItem from './todoItem';
+import { Divider } from '@material-ui/core';
 
 function Copyright() {
   return (
@@ -91,7 +88,9 @@ export default function Dashboard() {
       <main className={classes.content}>
         <Container maxWidth="lg" className={classes.container}>
           <SearchBar />
-          <div className={classes.appBarSpacer} />
+          <h2>Dashboard</h2>
+          <Divider />
+          <TodoItem />
           <Grid container spacing={3}>
             {/* Chart */}
             <Grid item xs={12} md={8} lg={9}>

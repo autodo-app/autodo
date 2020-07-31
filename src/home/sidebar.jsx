@@ -17,7 +17,6 @@ import Settings from '@material-ui/icons/Settings';
 import ExitToApp from '@material-ui/icons/ExitToApp';
 
 import { AUTODO_GREEN, BACKGROUND_LIGHT } from '../theme';
-import { mainListItems, secondaryListItems } from './listItems';
 import { deepOrange } from '@material-ui/core/colors';
 
 export const drawerWidth = 240;
@@ -79,7 +78,7 @@ const UserIcon = () => {
 };
 
 const Tabs = () => {
-  const classes = useStyles();
+  // const classes = useStyles();
 
   return (
     <div>
@@ -112,7 +111,7 @@ const Tabs = () => {
 };
 
 const Footer = () => {
-  const classes = useStyles();
+  // const classes = useStyles();
 
   return (
     <div>
