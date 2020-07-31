@@ -12,11 +12,13 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
 import Button from '@material-ui/core/Button';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
 import { mainListItems, secondaryListItems } from './listItems';
 import Chart from './chart';
 import Deposits from './deposits';
 import Orders from './orders';
 import { AUTODO_GREEN, BACKGROUND_LIGHT } from '../theme';
+import SearchBar from './searchbar';
 
 function Copyright() {
   return (
@@ -128,8 +130,9 @@ export default function Dashboard() {
         <List>{secondaryListItems}</List>
       </Drawer>
       <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
+          <SearchBar />
+          <div className={classes.appBarSpacer} />
           <Grid container spacing={3}>
             {/* Chart */}
             <Grid item xs={12} md={8} lg={9}>
