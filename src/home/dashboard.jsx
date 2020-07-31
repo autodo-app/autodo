@@ -78,12 +78,6 @@ const useStyles = makeStyles((theme) => ({
   fixedHeight: {
     height: 240,
   },
-  titleButton: {
-    color: AUTODO_GREEN,
-    textTransform: 'none',
-    fontSize: '1.75rem',
-    fontWeight: '800',
-  },
 }));
 
 export default function Dashboard() {
