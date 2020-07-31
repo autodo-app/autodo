@@ -8,6 +8,8 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
 
 import Chart from './chart';
 import Deposits from './deposits';
@@ -75,6 +77,14 @@ const useStyles = makeStyles((theme) => ({
   fixedHeight: {
     height: 240,
   },
+  fab: {
+    margin: 0,
+    top: 'auto',
+    right: theme.spacing(6),
+    bottom: theme.spacing(4),
+    left: 'auto',
+    position: 'fixed',
+  },
 }));
 
 export default function Dashboard() {
@@ -85,6 +95,9 @@ export default function Dashboard() {
     <div className={classes.root}>
       <CssBaseline />
       <SideBar />
+      <Fab color="primary" aria-label="add" className={classes.fab}>
+        <AddIcon />
+      </Fab>
       <main className={classes.content}>
         <Container maxWidth="lg" className={classes.container}>
           <SearchBar />
