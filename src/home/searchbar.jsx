@@ -2,15 +2,23 @@ import React, { useState } from 'react';
 // import OutlinedInput from '@material-ui/core/OutlinedInput';
 import ClearIcon from '@material-ui/icons/Clear';
 import SearchIcon from '@material-ui/icons/Search';
+import MoreVert from '@material-ui/icons/MoreVert';
+import Button from '@material-ui/core/Button';
+
 import { makeStyles, Paper, Input, IconButton } from '@material-ui/core';
 import { grey } from '@material-ui/core/colors';
 import classNames from 'classnames';
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    display: 'flex',
+  },
+  paper: {
     height: 48,
+    width: '100%',
     display: 'flex',
     justifyContent: 'space-between',
+    marginRight: 'auto',
   },
   iconButton: {
     opacity: 0.54,
@@ -88,41 +96,47 @@ export const SearchBar = () => {
   };
 
   return (
-    <Paper className={classes.root}>
-      <div className={classes.searchContainer}>
-        <Input
-          placeholder="Looking for..."
-          onBlur={handleBlur}
-          value={value}
-          onChange={handleInput}
-          onKeyUp={handleKeyUp}
-          onFocus={handleFocus}
-          fullWidth
-          disableUnderline
-          className={classes.input}
-        />
-      </div>
-      <IconButton
-        onClick={handleRequestSearch}
-        classes={{
-          root: classNames(classes.iconButton, classes.searchIconButton, {
-            [classes.iconButtonShifted]: value !== '',
-          }),
-        }}
-      >
-        <SearchIcon style={{ color: grey[500] }} classes={classes.icon} />
+    <div className={classes.root}>
+      <Paper className={classes.paper}>
+        <div className={classes.searchContainer}>
+          <Input
+            placeholder="Looking for..."
+            onBlur={handleBlur}
+            value={value}
+            onChange={handleInput}
+            onKeyUp={handleKeyUp}
+            onFocus={handleFocus}
+            fullWidth
+            disableUnderline
+            className={classes.input}
+          />
+        </div>
+        <IconButton
+          onClick={handleRequestSearch}
+          classes={{
+            root: classNames(classes.iconButton, classes.searchIconButton, {
+              [classes.iconButtonShifted]: value !== '',
+            }),
+          }}
+        >
+          <SearchIcon style={{ color: grey[500] }} classes={classes.icon} />
+        </IconButton>
+        <IconButton
+          onClick={handleCancel}
+          classes={{
+            root: classNames(classes.iconButton, {
+              [classes.iconButtonHidden]: value === '',
+            }),
+          }}
+        >
+          <ClearIcon style={{ color: grey[500] }} classes={classes.icon} />
+        </IconButton>
+      </Paper>
+      <IconButton>
+        <MoreVert />
       </IconButton>
-      <IconButton
-        onClick={handleCancel}
-        classes={{
-          root: classNames(classes.iconButton, {
-            [classes.iconButtonHidden]: value === '',
-          }),
-        }}
-      >
-        <ClearIcon style={{ color: grey[500] }} classes={classes.icon} />
-      </IconButton>
-    </Paper>
+      <Button color="primary">Upgrade!</Button>
+    </div>
   );
 };
 

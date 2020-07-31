@@ -60,6 +60,7 @@ const useStyles = makeStyles((theme) => ({
   bottomListItems: {
     position: 'fixed',
     bottom: 0,
+    width: 'inherit',
   },
 }));
 

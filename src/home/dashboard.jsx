@@ -85,6 +85,22 @@ const useStyles = makeStyles((theme) => ({
     left: 'auto',
     position: 'fixed',
   },
+  header: {
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+  dashboard: {
+    marginTop: '1.5rem',
+    marginBottom: '.25rem',
+  },
+  date: {
+    marginTop: '1.5rem',
+    marginBottom: '.25rem',
+    fontWeight: '400',
+  },
+  dateNumber: {
+    fontWeight: '600',
+  },
 }));
 
 export default function Dashboard() {
@@ -101,29 +117,36 @@ export default function Dashboard() {
       <main className={classes.content}>
         <Container maxWidth="lg" className={classes.container}>
           <SearchBar />
-          <h2>Dashboard</h2>
+          <div className={classes.header}>
+            <h2 className={classes.dashboard}>Dashboard</h2>
+            <h4 className={classes.date}>
+              Wednesday, <span className={classes.dateNumber}>July 29th</span>
+            </h4>
+          </div>
           <Divider />
           <TodoItem />
-          <Grid container spacing={3}>
-            {/* Chart */}
+          <TodoItem />
+          <TodoItem />
+          <TodoItem />
+          <TodoItem />
+          <TodoItem />
+          {/* <Grid container spacing={3}>
             <Grid item xs={12} md={8} lg={9}>
               <Paper className={fixedHeightPaper}>
                 <Chart />
               </Paper>
             </Grid>
-            {/* Recent Deposits */}
             <Grid item xs={12} md={4} lg={3}>
               <Paper className={fixedHeightPaper}>
                 <Deposits />
               </Paper>
             </Grid>
-            {/* Recent Orders */}
             <Grid item xs={12}>
               <Paper className={classes.paper}>
                 <Orders />
               </Paper>
             </Grid>
-          </Grid>
+          </Grid> */}
           <Box pt={4}>
             <Copyright />
           </Box>
