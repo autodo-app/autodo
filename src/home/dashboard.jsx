@@ -20,7 +20,7 @@ function Copyright() {
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+        auToDo
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -92,14 +92,37 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '1.5rem',
     marginBottom: '.25rem',
     fontWeight: '400',
+    letterSpacing: 0.8,
   },
   dateNumber: {
     fontWeight: '600',
+    letterSpacing: 0.8,
+  },
+  upcoming: {
+    fontWeight: '400',
+    letterSpacing: 0.8,
+    marginBottom: '.25rem',
   },
 }));
 
 export default function Dashboard() {
   const classes = useStyles();
+
+  const highPriorityTodos = (
+    <>
+      <TodoItem dueState="late" />
+      <TodoItem dueState="dueSoon" />
+    </>
+  );
+
+  const upcomingTodos = (
+    <>
+      <TodoItem />
+      <TodoItem />
+      <TodoItem />
+      <TodoItem />
+    </>
+  );
 
   return (
     <div className={classes.root}>
@@ -118,12 +141,14 @@ export default function Dashboard() {
             </h4>
           </div>
           <Divider />
-          <TodoItem dueState="late" />
-          <TodoItem dueState="dueSoon" />
-          <TodoItem />
-          <TodoItem />
-          <TodoItem />
-          <TodoItem />
+
+          {highPriorityTodos}
+
+          <h3 className={classes.upcoming}>Upcoming</h3>
+          <Divider />
+
+          {upcomingTodos}
+
           <Box pt={4}>
             <Copyright />
           </Box>
