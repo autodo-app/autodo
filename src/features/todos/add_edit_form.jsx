@@ -21,7 +21,19 @@ const useStyles = makeStyles((theme) => ({
   closeButton: {
     color: grey[400],
   },
+  dateRepeatSpacer: {
+    height: '1rem',
+  },
+  errorText: {
+    color: theme.palette.error.light,
+    marginBottom: 0,
+  },
+  errorHelpText: {
+    color: theme.palette.error.light,
+  },
 }));
+
+const margin = 'normal';
 
 const cars = [
   {
@@ -36,7 +48,9 @@ const cars = [
 
 export default function TodoAddEditForm({ todo, open, handleClose }) {
   const [name, setName] = useState(todo?.name || '');
+  const [nameError, setNameError] = useState(false);
   const [car, setCar] = useState(todo?.car || 0);
+  const [carError, setCarError] = useState(false);
   const [dueMileage, setDueMileage] = useState(todo?.dueMileage || 0);
   const [dueDate, setDueDate] = useState(todo?.dueDate || '');
   const [mileageRepeatInterval, setMileageRepeatInterval] = useState(
@@ -46,6 +60,7 @@ export default function TodoAddEditForm({ todo, open, handleClose }) {
     todo?.dateRepeatInterval || 'never',
   );
   const [addRequestStatus, setAddRequestStatus] = useState('idle');
+  const [generalError, setGeneralError] = useState('');
 
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -59,7 +74,10 @@ export default function TodoAddEditForm({ todo, open, handleClose }) {
   const onDateRepeatIntervalChanged = (e) =>
     setDateRepeatInterval(e.target.value);
 
-  const canSave = [name, car].every(Boolean) && addRequestStatus === 'idle';
+  const canSave =
+    [name, car].every(Boolean) &&
+    (dueDate || dueMileage) &&
+    addRequestStatus === 'idle';
 
   const onSaveTodoClicked = async () => {
     if (canSave) {
@@ -82,7 +100,26 @@ export default function TodoAddEditForm({ todo, open, handleClose }) {
         setAddRequestStatus('idle');
       }
       handleClose();
+    } else {
+      if (!name) {
+        setNameError(true);
+      }
+      if (!car) {
+        setCarError(true);
+      }
+      if (!(dueDate || dueMileage)) {
+        setGeneralError(
+          'Either a Due Mileage or Due Date needs to be specified.',
+        );
+      }
     }
+  };
+
+  const onClose = () => {
+    setNameError(false);
+    setCarError(false);
+    setGeneralError('');
+    handleClose();
   };
 
   let title = 'Create New Todo';
@@ -90,6 +127,11 @@ export default function TodoAddEditForm({ todo, open, handleClose }) {
   if (todo) {
     title = 'Edit Todo';
     actionText = 'Save';
+  }
+
+  let errorText = <></>;
+  if (generalError) {
+    errorText = <h4 className={classes.errorText}>{generalError}</h4>;
   }
 
   return (
@@ -106,22 +148,26 @@ export default function TodoAddEditForm({ todo, open, handleClose }) {
           </DialogContentText>
           <TextField
             autoFocus
-            margin="dense"
+            margin={margin}
             id="name"
             label="Todo Name *"
             type="text"
             fullWidth
             value={name}
+            error={nameError ? true : undefined}
+            helperText={nameError ? 'This field is required.' : undefined}
             onChange={onNameChanged}
           />
           <TextField
             select
-            margin="dense"
+            margin={margin}
             id="car"
             label="Car *"
             type="text"
             fullWidth
             value={car}
+            error={carError ? true : undefined}
+            helperText={carError ? 'This field is required.' : undefined}
             onChange={onCarChanged}
           >
             {cars.map((c) => (
@@ -131,25 +177,27 @@ export default function TodoAddEditForm({ todo, open, handleClose }) {
             ))}
           </TextField>
           <TextField
-            margin="dense"
+            margin={margin}
             id="dueMileage"
             label="Due Mileage"
             type="number"
             fullWidth
-            defaultValue={dueMileage}
+            value={dueMileage}
+            error={generalError ? true : undefined}
             onChange={onDueMileageChanged}
           />
           <TextField
-            margin="dense"
+            margin={margin}
             id="dueDate"
             label="Due Date"
             type="date"
             fullWidth
             InputLabelProps={{ shrink: true }}
+            error={generalError ? true : undefined}
             onChange={onDueDateChanged}
           />
           <TextField
-            margin="dense"
+            margin={margin}
             id="mileageRepeatInterval"
             label="Mileage Repeat Interval"
             type="number"
@@ -157,34 +205,40 @@ export default function TodoAddEditForm({ todo, open, handleClose }) {
             defaultValue={mileageRepeatInterval}
             onChange={onMileageRepeatIntervalChanged}
           />
+          <div className={classes.dateRepeatSpacer} />
           <FormLabel component="legend">Date Repeat Interval</FormLabel>
           <RadioGroup
             aria-label="Date Repeat Interval"
             name="dateRepeatInterval"
-            margin="dense"
+            margin={margin}
             value={dateRepeatInterval}
             onChange={onDateRepeatIntervalChanged}
           >
-            <FormControlLabel value="never" control={<Radio />} label="Never" />
+            <FormControlLabel
+              value="never"
+              control={<Radio size="small" />}
+              label="Never"
+            />
             <FormControlLabel
               value="weekly"
-              control={<Radio />}
+              control={<Radio size="small" />}
               label="Weekly"
             />
             <FormControlLabel
               value="monthly"
-              control={<Radio />}
+              control={<Radio size="small" />}
               label="Monthly"
             />
             <FormControlLabel
               value="yearly"
-              control={<Radio />}
+              control={<Radio size="small" />}
               label="Yearly"
             />
           </RadioGroup>
+          {errorText}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} className={classes.closeButton}>
+          <Button onClick={onClose} className={classes.closeButton}>
             Cancel
           </Button>
           <Button onClick={onSaveTodoClicked} color="primary">

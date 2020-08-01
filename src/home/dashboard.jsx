@@ -15,6 +15,7 @@ import SideBar from './sidebar';
 import TodoItem from '../features/todos/todoItem';
 import { Divider } from '@material-ui/core';
 import { selectAllTodos, fetchData } from '../_slices';
+import TodoAddEditForm from '../features/todos/add_edit_form';
 
 function Copyright() {
   return (
@@ -165,12 +166,26 @@ const TodoList = () => {
 
 export default function Dashboard() {
   const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <div className={classes.root}>
       <CssBaseline />
       <SideBar />
-      <Fab color="primary" aria-label="add" className={classes.fab}>
+      <Fab
+        color="primary"
+        aria-label="add"
+        className={classes.fab}
+        onClick={handleClickOpen}
+      >
         <AddIcon />
       </Fab>
       <main className={classes.content}>
@@ -182,6 +197,7 @@ export default function Dashboard() {
           </Box>
         </Container>
       </main>
+      <TodoAddEditForm open={open} handleClose={handleClose} />
     </div>
   );
 }

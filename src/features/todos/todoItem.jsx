@@ -50,7 +50,6 @@ const CarTag = () => {
 export default function TodoItem({ todo, dueState }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-  const thisTodo = todo;
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -83,11 +82,7 @@ export default function TodoItem({ todo, dueState }) {
         <IconButton>
           <DeleteOutline />
         </IconButton>
-        <TodoAddEditForm
-          todo={thisTodo}
-          open={open}
-          handleClose={handleClose}
-        />
+        <TodoAddEditForm todo={todo} open={open} handleClose={handleClose} />
       </div>
     </div>
   );
