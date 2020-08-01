@@ -16,10 +16,10 @@ import DirectionsCar from '@material-ui/icons/DirectionsCar';
 import Settings from '@material-ui/icons/Settings';
 import ExitToApp from '@material-ui/icons/ExitToApp';
 
-import { AUTODO_GREEN, BACKGROUND_LIGHT } from '../theme';
+import { AUTODO_GREEN, AUTODO_GREEN_DARK, BACKGROUND_LIGHT } from '../theme';
 import { deepOrange } from '@material-ui/core/colors';
 
-export const drawerWidth = 240;
+export const drawerWidth = 220;
 
 const useStyles = makeStyles((theme) => ({
   drawerPaper: {
@@ -37,6 +37,19 @@ const useStyles = makeStyles((theme) => ({
     textTransform: 'none',
     fontSize: '2.25rem',
     fontWeight: '800',
+  },
+  highlightedButtonContainer: {
+    justifyContent: 'flex-start',
+    padding: theme.spacing(1),
+  },
+  highlightedButton: {
+    justifyContent: 'flex-start',
+    backgroundColor: '#89d8d3',
+    backgroundImage: `linear-gradient(45deg, ${AUTODO_GREEN} 0%, #03c8a8 74%)`,
+    borderRadius: 5,
+  },
+  highlightedButtonText: {
+    color: theme.palette.getContrastText(AUTODO_GREEN),
   },
   iconButton: {
     justifyContent: 'flex-start',
@@ -79,16 +92,21 @@ const UserIcon = () => {
 };
 
 const Tabs = () => {
-  // const classes = useStyles();
+  const classes = useStyles();
 
   return (
     <div>
-      <ListItem button>
-        <ListItemIcon>
-          <HomeIcon />
-        </ListItemIcon>
-        <ListItemText primary="Home" />
-      </ListItem>
+      <div className={classes.highlightedButtonContainer}>
+        <ListItem button className={classes.highlightedButton}>
+          <ListItemIcon>
+            <HomeIcon className={classes.highlightedButtonText} />
+          </ListItemIcon>
+          <ListItemText
+            primary="Home"
+            className={classes.highlightedButtonText}
+          />
+        </ListItem>
+      </div>
       <ListItem button>
         <ListItemIcon>
           <LocalGasStation />

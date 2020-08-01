@@ -2,6 +2,7 @@ import { red } from '@material-ui/core/colors';
 import { createMuiTheme } from '@material-ui/core/styles';
 
 export const AUTODO_GREEN = '#4cc8a7';
+export const AUTODO_GREEN_DARK = '#4fad9a';
 export const BACKGROUND_DARK = '#222';
 export const BACKGROUND_LIGHT = '#444';
 
