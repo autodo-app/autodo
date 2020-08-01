@@ -5,16 +5,12 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Create from '@material-ui/icons/Create';
 import DeleteOutline from '@material-ui/icons/DeleteOutline';
 import { red } from '@material-ui/core/colors';
+import { LateChip } from './status-chips';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     padding: theme.spacing(1),
-  },
-  statusContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    width: '100px',
   },
   status: {
     backgroundColor: red[400],
@@ -56,9 +52,7 @@ export default function TodoItem() {
   return (
     <div className={classes.root}>
       <Checkbox />
-      <div className={classes.statusContainer}>
-        <Chip label="Late" className={classes.status} />
-      </div>
+      <LateChip />
       <div className={classes.todoDescription}>
         <span className={classes.todoName}>Oil Change</span> Due at{' '}
         <span className={classes.dueMileage}>63502</span> mi

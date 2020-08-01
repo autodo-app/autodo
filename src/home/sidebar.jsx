@@ -16,7 +16,7 @@ import DirectionsCar from '@material-ui/icons/DirectionsCar';
 import Settings from '@material-ui/icons/Settings';
 import ExitToApp from '@material-ui/icons/ExitToApp';
 
-import { AUTODO_GREEN, AUTODO_GREEN_DARK, BACKGROUND_LIGHT } from '../theme';
+import { AUTODO_GREEN, BACKGROUND_LIGHT } from '../theme';
 import { deepOrange } from '@material-ui/core/colors';
 
 export const drawerWidth = 220;
