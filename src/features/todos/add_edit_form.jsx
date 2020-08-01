@@ -34,13 +34,17 @@ const cars = [
   },
 ];
 
-export default function TodoAddEditForm({ open, handleClose }) {
-  const [name, setName] = useState('');
-  const [car, setCar] = useState(0);
-  const [dueMileage, setDueMileage] = useState(0);
-  const [dueDate, setDueDate] = useState(0);
-  const [mileageRepeatInterval, setMileageRepeatInterval] = useState(0);
-  const [dateRepeatInterval, setDateRepeatInterval] = useState('never');
+export default function TodoAddEditForm({ todo, open, handleClose }) {
+  const [name, setName] = useState(todo?.name || '');
+  const [car, setCar] = useState(todo?.car || 0);
+  const [dueMileage, setDueMileage] = useState(todo?.dueMileage || 0);
+  const [dueDate, setDueDate] = useState(todo?.dueDate || '');
+  const [mileageRepeatInterval, setMileageRepeatInterval] = useState(
+    todo?.mileageRepeatInterval || 0,
+  );
+  const [dateRepeatInterval, setDateRepeatInterval] = useState(
+    todo?.dateRepeatInterval || 'never',
+  );
   const [addRequestStatus, setAddRequestStatus] = useState('idle');
 
   const dispatch = useDispatch();
@@ -81,6 +85,13 @@ export default function TodoAddEditForm({ open, handleClose }) {
     }
   };
 
+  let title = 'Create New Todo';
+  let actionText = 'Create';
+  if (todo) {
+    title = 'Edit Todo';
+    actionText = 'Save';
+  }
+
   return (
     <div>
       <Dialog
@@ -88,7 +99,7 @@ export default function TodoAddEditForm({ open, handleClose }) {
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">Create New Todo</DialogTitle>
+        <DialogTitle id="form-dialog-title">{title}</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Add the information about the Todo item here.
@@ -100,7 +111,7 @@ export default function TodoAddEditForm({ open, handleClose }) {
             label="Todo Name *"
             type="text"
             fullWidth
-            defaultValue={name}
+            value={name}
             onChange={onNameChanged}
           />
           <TextField
@@ -110,6 +121,7 @@ export default function TodoAddEditForm({ open, handleClose }) {
             label="Car *"
             type="text"
             fullWidth
+            value={car}
             onChange={onCarChanged}
           >
             {cars.map((c) => (
@@ -176,7 +188,7 @@ export default function TodoAddEditForm({ open, handleClose }) {
             Cancel
           </Button>
           <Button onClick={onSaveTodoClicked} color="primary">
-            Create
+            {actionText}
           </Button>
         </DialogActions>
       </Dialog>
