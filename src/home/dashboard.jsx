@@ -5,15 +5,10 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 
-import Chart from './chart';
-import Deposits from './deposits';
-import Orders from './orders';
 import { BACKGROUND_LIGHT } from '../theme';
 import SearchBar from './searchbar';
 import SideBar from './sidebar';
@@ -25,7 +20,7 @@ function Copyright() {
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+        auToDo
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -97,15 +92,37 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '1.5rem',
     marginBottom: '.25rem',
     fontWeight: '400',
+    letterSpacing: 0.8,
   },
   dateNumber: {
     fontWeight: '600',
+    letterSpacing: 0.8,
+  },
+  upcoming: {
+    fontWeight: '400',
+    letterSpacing: 0.8,
+    marginBottom: '.25rem',
   },
 }));
 
 export default function Dashboard() {
   const classes = useStyles();
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+
+  const highPriorityTodos = (
+    <>
+      <TodoItem dueState="late" />
+      <TodoItem dueState="dueSoon" />
+    </>
+  );
+
+  const upcomingTodos = (
+    <>
+      <TodoItem />
+      <TodoItem />
+      <TodoItem />
+      <TodoItem />
+    </>
+  );
 
   return (
     <div className={classes.root}>
@@ -124,29 +141,14 @@ export default function Dashboard() {
             </h4>
           </div>
           <Divider />
-          <TodoItem />
-          <TodoItem />
-          <TodoItem />
-          <TodoItem />
-          <TodoItem />
-          <TodoItem />
-          {/* <Grid container spacing={3}>
-            <Grid item xs={12} md={8} lg={9}>
-              <Paper className={fixedHeightPaper}>
-                <Chart />
-              </Paper>
-            </Grid>
-            <Grid item xs={12} md={4} lg={3}>
-              <Paper className={fixedHeightPaper}>
-                <Deposits />
-              </Paper>
-            </Grid>
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>
-                <Orders />
-              </Paper>
-            </Grid>
-          </Grid> */}
+
+          {highPriorityTodos}
+
+          <h3 className={classes.upcoming}>Upcoming</h3>
+          <Divider />
+
+          {upcomingTodos}
+
           <Box pt={4}>
             <Copyright />
           </Box>

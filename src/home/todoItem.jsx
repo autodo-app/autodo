@@ -5,7 +5,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Create from '@material-ui/icons/Create';
 import DeleteOutline from '@material-ui/icons/DeleteOutline';
 import { red } from '@material-ui/core/colors';
-import { LateChip } from './status-chips';
+import { LateChip, DueSoonChip } from './status-chips';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,13 +46,20 @@ const CarTag = () => {
   );
 };
 
-export default function TodoItem() {
+export default function TodoItem({ dueState }) {
   const classes = useStyles();
+
+  let chip = <div />;
+  if (dueState === 'late') {
+    chip = <LateChip />;
+  } else if (dueState === 'dueSoon') {
+    chip = <DueSoonChip />;
+  }
 
   return (
     <div className={classes.root}>
       <Checkbox />
-      <LateChip />
+      {chip}
       <div className={classes.todoDescription}>
         <span className={classes.todoName}>Oil Change</span> Due at{' '}
         <span className={classes.dueMileage}>63502</span> mi

@@ -46,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-start',
     backgroundColor: '#89d8d3',
     backgroundImage: `linear-gradient(45deg, ${AUTODO_GREEN} 0%, #03c8a8 74%)`,
+    boxShadow: '0 3px 5px 2px rgba(5, 5, 5, .3)',
     borderRadius: 5,
   },
   highlightedButtonText: {
