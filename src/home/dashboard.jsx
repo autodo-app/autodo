@@ -2,21 +2,23 @@ import React from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Drawer from '@material-ui/core/Drawer';
 import Box from '@material-ui/core/Box';
-import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
-import Button from '@material-ui/core/Button';
-import { mainListItems, secondaryListItems } from './listItems';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+
 import Chart from './chart';
 import Deposits from './deposits';
 import Orders from './orders';
-import { AUTODO_GREEN, BACKGROUND_LIGHT } from '../theme';
+import { BACKGROUND_LIGHT } from '../theme';
+import SearchBar from './searchbar';
+import SideBar from './sidebar';
+import TodoItem from './todoItem';
+import { Divider } from '@material-ui/core';
 
 function Copyright() {
   return (
@@ -30,8 +32,6 @@ function Copyright() {
     </Typography>
   );
 }
-
-const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -47,21 +47,6 @@ const useStyles = makeStyles((theme) => ({
     padding: '0 8px',
     ...theme.mixins.toolbar,
   },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
   menuButton: {
     marginRight: 36,
   },
@@ -71,16 +56,7 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
   },
-  drawerPaper: {
-    position: 'relative',
-    whiteSpace: 'nowrap',
-    width: drawerWidth,
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    background: BACKGROUND_LIGHT,
-  },
+
   appBarSpacer: theme.mixins.toolbar,
   content: {
     flexGrow: 1,
@@ -101,11 +77,29 @@ const useStyles = makeStyles((theme) => ({
   fixedHeight: {
     height: 240,
   },
-  titleButton: {
-    color: AUTODO_GREEN,
-    textTransform: 'none',
-    fontSize: '1.75rem',
-    fontWeight: '800',
+  fab: {
+    margin: 0,
+    top: 'auto',
+    right: theme.spacing(6),
+    bottom: theme.spacing(4),
+    left: 'auto',
+    position: 'fixed',
+  },
+  header: {
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+  dashboard: {
+    marginTop: '1.5rem',
+    marginBottom: '.25rem',
+  },
+  date: {
+    marginTop: '1.5rem',
+    marginBottom: '.25rem',
+    fontWeight: '400',
+  },
+  dateNumber: {
+    fontWeight: '600',
   },
 }));
 
@@ -116,40 +110,43 @@ export default function Dashboard() {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <Drawer
-        variant="permanent"
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-      >
-        <Button className={classes.titleButton}>auToDo</Button>
-        <List>{mainListItems}</List>
-        <Divider />
-        <List>{secondaryListItems}</List>
-      </Drawer>
+      <SideBar />
+      <Fab color="primary" aria-label="add" className={classes.fab}>
+        <AddIcon />
+      </Fab>
       <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3}>
-            {/* Chart */}
+          <SearchBar />
+          <div className={classes.header}>
+            <h2 className={classes.dashboard}>Dashboard</h2>
+            <h4 className={classes.date}>
+              Wednesday, <span className={classes.dateNumber}>July 29th</span>
+            </h4>
+          </div>
+          <Divider />
+          <TodoItem />
+          <TodoItem />
+          <TodoItem />
+          <TodoItem />
+          <TodoItem />
+          <TodoItem />
+          {/* <Grid container spacing={3}>
             <Grid item xs={12} md={8} lg={9}>
               <Paper className={fixedHeightPaper}>
                 <Chart />
               </Paper>
             </Grid>
-            {/* Recent Deposits */}
             <Grid item xs={12} md={4} lg={3}>
               <Paper className={fixedHeightPaper}>
                 <Deposits />
               </Paper>
             </Grid>
-            {/* Recent Orders */}
             <Grid item xs={12}>
               <Paper className={classes.paper}>
                 <Orders />
               </Paper>
             </Grid>
-          </Grid>
+          </Grid> */}
           <Box pt={4}>
             <Copyright />
           </Box>
