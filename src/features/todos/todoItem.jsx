@@ -5,7 +5,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Create from '@material-ui/icons/Create';
 import DeleteOutline from '@material-ui/icons/DeleteOutline';
 import { red } from '@material-ui/core/colors';
-import { LateChip, DueSoonChip } from './status-chips';
+import { LateChip, DueSoonChip } from '../../home/status-chips';
 
 const useStyles = makeStyles((theme) => ({
   root: {

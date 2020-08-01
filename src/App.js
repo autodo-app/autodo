@@ -6,7 +6,6 @@ import { Counter } from './features/counter/Counter';
 import './App.css';
 import { LoginPage } from './login';
 import { DataPage } from './home';
-import { TodosList } from './features/todos/todos_list';
 import { AddTodoForm } from './features/todos/add_todo_form';
 import { EditTodoForm } from './features/todos/edit_todo_form';
 import { RouteListener } from './_helpers/alert_container';

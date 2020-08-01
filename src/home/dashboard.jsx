@@ -1,5 +1,4 @@
-import React from 'react';
-import clsx from 'clsx';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Box from '@material-ui/core/Box';
@@ -8,12 +7,14 @@ import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { BACKGROUND_LIGHT } from '../theme';
 import SearchBar from './searchbar';
 import SideBar from './sidebar';
-import TodoItem from './todoItem';
+import TodoItem from '../features/todos/todoItem';
 import { Divider } from '@material-ui/core';
+import { selectAllTodos, fetchData } from '../_slices';
 
 function Copyright() {
   return (
@@ -103,17 +104,29 @@ const useStyles = makeStyles((theme) => ({
     letterSpacing: 0.8,
     marginBottom: '.25rem',
   },
+  statusMessage: {
+    display: 'flex',
+    margin: theme.spacing(2),
+    alignContent: 'center',
+    justifyContent: 'center',
+  },
 }));
 
-export default function Dashboard() {
+const TodoList = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
-  const highPriorityTodos = (
-    <>
-      <TodoItem dueState="late" />
-      <TodoItem dueState="dueSoon" />
-    </>
-  );
+  const todos = useSelector(selectAllTodos);
+  const todoStatus = useSelector((state) => state.data.status);
+  const error = useSelector((state) => state.data.error);
+
+  useEffect(() => {
+    if (todoStatus === 'idle') {
+      dispatch(fetchData());
+    }
+  }, [todoStatus, dispatch]);
+
+  const highPriorityTodos = todos.map((t) => <TodoItem />);
 
   const upcomingTodos = (
     <>
@@ -123,6 +136,35 @@ export default function Dashboard() {
       <TodoItem />
     </>
   );
+
+  if (todoStatus === 'loading') {
+    return <div className={classes.statusMessage}>Loading...</div>;
+  } else if (todoStatus === 'error') {
+    return <div className={classes.statusMessage}>{error}</div>;
+  }
+
+  return (
+    <>
+      <div className={classes.header}>
+        <h2 className={classes.dashboard}>Dashboard</h2>
+        <h4 className={classes.date}>
+          Wednesday, <span className={classes.dateNumber}>July 29th</span>
+        </h4>
+      </div>
+      <Divider />
+
+      {highPriorityTodos}
+
+      <h3 className={classes.upcoming}>Upcoming</h3>
+      <Divider />
+
+      {upcomingTodos}
+    </>
+  );
+};
+
+export default function Dashboard() {
+  const classes = useStyles();
 
   return (
     <div className={classes.root}>
@@ -134,21 +176,7 @@ export default function Dashboard() {
       <main className={classes.content}>
         <Container maxWidth="lg" className={classes.container}>
           <SearchBar />
-          <div className={classes.header}>
-            <h2 className={classes.dashboard}>Dashboard</h2>
-            <h4 className={classes.date}>
-              Wednesday, <span className={classes.dateNumber}>July 29th</span>
-            </h4>
-          </div>
-          <Divider />
-
-          {highPriorityTodos}
-
-          <h3 className={classes.upcoming}>Upcoming</h3>
-          <Divider />
-
-          {upcomingTodos}
-
+          <TodoList />
           <Box pt={4}>
             <Copyright />
           </Box>
