@@ -6,6 +6,7 @@ import Create from '@material-ui/icons/Create';
 import DeleteOutline from '@material-ui/icons/DeleteOutline';
 import { red } from '@material-ui/core/colors';
 import { LateChip, DueSoonChip } from '../../home/status-chips';
+import TodoAddEditForm from './add_edit_form';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,6 +49,15 @@ const CarTag = () => {
 
 export default function TodoItem({ dueState }) {
   const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   let chip = <div />;
   if (dueState === 'late') {
@@ -66,12 +76,13 @@ export default function TodoItem({ dueState }) {
       </div>
       <div className={classes.buttons}>
         <CarTag />
-        <IconButton>
+        <IconButton onClick={handleClickOpen}>
           <Create />
         </IconButton>
         <IconButton>
           <DeleteOutline />
         </IconButton>
+        <TodoAddEditForm open={open} handleClose={handleClose} />
       </div>
     </div>
   );

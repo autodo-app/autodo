@@ -126,7 +126,7 @@ const TodoList = () => {
     }
   }, [todoStatus, dispatch]);
 
-  const highPriorityTodos = todos.map((t) => <TodoItem />);
+  const highPriorityTodos = todos.map((t) => <TodoItem key={t.id} />);
 
   const upcomingTodos = (
     <>
