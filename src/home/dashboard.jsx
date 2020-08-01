@@ -5,15 +5,10 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 
-import Chart from './chart';
-import Deposits from './deposits';
-import Orders from './orders';
 import { BACKGROUND_LIGHT } from '../theme';
 import SearchBar from './searchbar';
 import SideBar from './sidebar';
@@ -105,7 +100,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Dashboard() {
   const classes = useStyles();
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
     <div className={classes.root}>
@@ -124,29 +118,12 @@ export default function Dashboard() {
             </h4>
           </div>
           <Divider />
+          <TodoItem dueState="late" />
+          <TodoItem dueState="dueSoon" />
           <TodoItem />
           <TodoItem />
           <TodoItem />
           <TodoItem />
-          <TodoItem />
-          <TodoItem />
-          {/* <Grid container spacing={3}>
-            <Grid item xs={12} md={8} lg={9}>
-              <Paper className={fixedHeightPaper}>
-                <Chart />
-              </Paper>
-            </Grid>
-            <Grid item xs={12} md={4} lg={3}>
-              <Paper className={fixedHeightPaper}>
-                <Deposits />
-              </Paper>
-            </Grid>
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>
-                <Orders />
-              </Paper>
-            </Grid>
-          </Grid> */}
           <Box pt={4}>
             <Copyright />
           </Box>
