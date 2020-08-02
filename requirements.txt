@@ -5,4 +5,5 @@ djangorestframework-simplejwt
 django-oauth-toolkit
 django-rest-registration
 django-cors-headers
+django-filter
 drf-yasg

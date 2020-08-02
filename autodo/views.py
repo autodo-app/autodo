@@ -66,7 +66,7 @@ class TodosListViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         """Only returns objects that are owned by the user making the request."""
-        return self.queryset.filter(owner=self.request.user)
+        return self.queryset.filter(owner=self.request.user).order_by('dueDate', 'dueMileage')
 
     def perform_create(self, serializer):
         """Save the data from the serializer."""
