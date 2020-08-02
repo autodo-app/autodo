@@ -76,7 +76,7 @@ const DueText = ({ todo }) => {
   }
 };
 
-export default function TodoItem({ todo, dueState }) {
+export default function TodoItem({ todo }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
@@ -98,9 +98,9 @@ export default function TodoItem({ todo, dueState }) {
   };
 
   let chip = <div />;
-  if (dueState === 'late') {
+  if (todo.dueState === 'late') {
     chip = <LateChip />;
-  } else if (dueState === 'dueSoon') {
+  } else if (todo.dueState === 'dueSoon') {
     chip = <DueSoonChip />;
   }
 

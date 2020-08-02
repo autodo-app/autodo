@@ -127,21 +127,40 @@ const TodoList = () => {
     }
   }, [todoStatus, dispatch]);
 
-  const highPriorityTodos = todos.map((t) => <TodoItem key={t.id} todo={t} />);
-
-  const upcomingTodos = (
-    <>
-      <TodoItem />
-      <TodoItem />
-      <TodoItem />
-      <TodoItem />
-    </>
-  );
+  const highPriorityTodos = todos
+    .filter((t) => t.dueState === 'late' || t.dueState === 'dueSoon')
+    .map((t) => <TodoItem key={t.id} todo={t} />);
+  const upcomingTodos = todos
+    .filter((t) => t.dueState === 'upcoming')
+    .map((t) => <TodoItem key={t.id} todo={t} />);
+  const completedTodos = todos
+    .filter((t) => t.dueState === 'completed')
+    .map((t) => <TodoItem key={t.id} todo={t} />);
 
   if (todoStatus === 'loading') {
     return <div className={classes.statusMessage}>Loading...</div>;
   } else if (todoStatus === 'error') {
     return <div className={classes.statusMessage}>{error}</div>;
+  }
+
+  let upcomingHeader = <></>;
+  if (highPriorityTodos?.length && upcomingTodos?.length) {
+    upcomingHeader = (
+      <>
+        <h3 className={classes.upcoming}>Upcoming</h3>
+        <Divider />
+      </>
+    );
+  }
+
+  let completedHeader = <></>;
+  if (completedTodos?.length && upcomingTodos?.length) {
+    upcomingHeader = (
+      <>
+        <h3 className={classes.upcoming}>Completed</h3>
+        <Divider />
+      </>
+    );
   }
 
   return (
@@ -155,11 +174,10 @@ const TodoList = () => {
       <Divider />
 
       {highPriorityTodos}
-
-      <h3 className={classes.upcoming}>Upcoming</h3>
-      <Divider />
-
+      {upcomingHeader}
       {upcomingTodos}
+      {completedHeader}
+      {completedTodos}
     </>
   );
 };
