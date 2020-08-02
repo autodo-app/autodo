@@ -15,7 +15,7 @@ import Radio from '@material-ui/core/Radio';
 import FormLabel from '@material-ui/core/FormLabel';
 import { grey } from '@material-ui/core/colors';
 
-import { addNewTodo } from '../../_slices';
+import { addNewTodo, updateTodo } from '../../_slices';
 
 const useStyles = makeStyles((theme) => ({
   closeButton: {
@@ -83,17 +83,34 @@ export default function TodoAddEditForm({ todo, open, handleClose }) {
     if (canSave) {
       try {
         setAddRequestStatus('pending');
-        const resultAction = await dispatch(
-          addNewTodo({
-            name: name,
-            car: car,
-            dueMileage: dueMileage,
-          }),
-        );
+        let resultAction;
+        if (todo) {
+          resultAction = await dispatch(
+            updateTodo({
+              id: Number(todo.id),
+              name: name,
+              car: car,
+              dueMileage: Number(dueMileage),
+              dueDate: new Date(dueDate).toJSON(),
+              mileageRepeatInterval: mileageRepeatInterval,
+              // TODO: below
+              dateRepeatIntervalDays: 0,
+              dateRepeatIntervalMonths: 0,
+              dateRepeatIntervalYears: 0,
+            }),
+          );
+        } else {
+          resultAction = await dispatch(
+            addNewTodo({
+              name: name,
+              car: car,
+              dueMileage: dueMileage,
+              dueDate: new Date(dueDate).toJSON(),
+              mileageRepeatInterval: mileageRepeatInterval,
+            }),
+          );
+        }
         unwrapResult(resultAction);
-        setName('');
-        setCar(0);
-        setDueMileage(0);
       } catch (err) {
         console.error('Failed to save the post: ', err);
       } finally {

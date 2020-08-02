@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles, IconButton, ButtonBase } from '@material-ui/core';
 import Chip from '@material-ui/core/Chip';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -49,7 +49,11 @@ const CarTag = () => {
 
 export default function TodoItem({ todo, dueState }) {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+
+  if (!todo) {
+    todo = {}; // TODO: hack, use prop types or something
+  }
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -66,13 +70,35 @@ export default function TodoItem({ todo, dueState }) {
     chip = <DueSoonChip />;
   }
 
+  let dueText = <div />;
+  if (todo.dueMileage && !todo.dueDate) {
+    dueText = (
+      <>
+        Due at <span className={classes.dueMileage}>{todo.dueMileage}</span> mi
+      </>
+    );
+  } else if (todo.dueDate && !todo.dueMileage) {
+    dueText = (
+      <>
+        Due on <span className={classes.dueMileage}>{todo.dueDate}</span>
+      </>
+    );
+  } else {
+    dueText = (
+      <>
+        Due at <span className={classes.dueMileage}>{todo.dueMileage}</span> mi
+        or on
+        <span className={classes.dueMileage}>{todo.dueDate}</span>
+      </>
+    );
+  }
+
   return (
     <div className={classes.root}>
       <Checkbox />
       {chip}
       <div className={classes.todoDescription}>
-        <span className={classes.todoName}>Oil Change</span> Due at{' '}
-        <span className={classes.dueMileage}>63502</span> mi
+        <span className={classes.todoName}>{todo.name}</span> {dueText}
       </div>
       <div className={classes.buttons}>
         <CarTag />

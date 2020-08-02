@@ -52,19 +52,23 @@ const _authenticatedPost = async (url, body) => {
 };
 
 const _authenticatedPatch = async (url, body) => {
-  const { data, status } = await axios.patch(
-    `${apiUrl}${apiVersion}/${url}`,
-    body,
-  );
-  if (status === 401) {
-    // Token has expired, need to refresh it
-    await _refreshUserToken();
-  }
+  try {
+    const { data, status } = await axios.patch(
+      `${apiUrl}${apiVersion}/${url}`,
+      body,
+    );
+    if (status === 401) {
+      // Token has expired, need to refresh it
+      await _refreshUserToken();
+    }
 
-  if (status !== 201) {
-    // throw an error
+    if (status !== 201) {
+      // throw an error
+    }
+    return data;
+  } catch (e) {
+    console.log(e.response);
   }
-  return data;
 };
 
 const _authenticatedDelete = async (url, body) => {
