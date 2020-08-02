@@ -9,7 +9,7 @@ import { red } from '@material-ui/core/colors';
 
 import { LateChip, DueSoonChip } from '../../home/status-chips';
 import TodoAddEditForm from './add_edit_form';
-import { deleteTodo, completeTodo } from '../../_slices';
+import { deleteTodo, completeTodo, undoCompleteTodo } from '../../_slices';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -100,6 +100,8 @@ export default function TodoItem({ todo }) {
   const onComplete = (event) => {
     if (event.target.checked) {
       dispatch(completeTodo(todo));
+    } else {
+      dispatch(undoCompleteTodo(todo));
     }
   };
 

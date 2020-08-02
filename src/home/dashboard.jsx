@@ -143,9 +143,6 @@ const TodoList = () => {
     return <div className={classes.statusMessage}>{error}</div>;
   }
 
-  console.log(highPriorityTodos);
-  console.log(completedTodos);
-
   let upcomingHeader = <></>;
   if (highPriorityTodos?.length && upcomingTodos?.length) {
     upcomingHeader = (

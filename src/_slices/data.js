@@ -7,6 +7,7 @@ import {
   apiPatchTodo,
   apiDeleteTodo,
   apiPostOdomSnapshot,
+  apiDeleteOdomSnapshot,
 } from '../_services';
 
 const initialState = {
@@ -69,8 +70,16 @@ export const completeTodo = createAsyncThunk(
       ...initialTodo,
       completionOdomSnapshot: odomSnapshot.id,
     };
-    // updatedTodo.completionOdomSnapshot = odomSnapshot.id;
     const response = await apiPatchTodo(updatedTodo);
+    return response;
+  },
+);
+
+export const undoCompleteTodo = createAsyncThunk(
+  'data/undoCompleteTodo',
+  async (initialTodo) => {
+    await apiDeleteOdomSnapshot(initialTodo.completionOdomSnapshot);
+    const response = await fetchTodos();
     return response;
   },
 );
@@ -112,6 +121,9 @@ const dataSlice = createSlice({
       const todoId = action.payload.id;
       const idx = state.todos.findIndex((t) => Number(t.id) === Number(todoId));
       state.todos[idx] = action.payload;
+    },
+    [undoCompleteTodo.fulfilled]: (state, action) => {
+      state.todos = action.payload;
     },
   },
 });

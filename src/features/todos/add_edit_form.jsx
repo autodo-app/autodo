@@ -98,6 +98,7 @@ export default function TodoAddEditForm({ todo, open, handleClose }) {
               dueMileage: dueMileage,
               dueDate: new Date(dueDate).toJSON(),
               mileageRepeatInterval: mileageRepeatInterval,
+              completionOdomSnapshot: null, // we get an error if this isn't present
             }),
           );
         }

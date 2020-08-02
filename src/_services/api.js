@@ -51,7 +51,6 @@ const _authenticatedPost = async (url, body) => {
     }
     return data;
   } catch (e) {
-    // console.log(url);
     console.log(e.response);
   }
 };
@@ -133,3 +132,6 @@ export const fetchCars = async () => {
 
 export const apiPostOdomSnapshot = async (snap) =>
   await _authenticatedPost('odomsnapshots/', snap);
+
+export const apiDeleteOdomSnapshot = async (snapId) =>
+  await _authenticatedDelete(`odomsnapshots/${snapId}/`, snapId);
