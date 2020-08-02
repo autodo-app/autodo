@@ -9,7 +9,7 @@ import { red } from '@material-ui/core/colors';
 
 import { LateChip, DueSoonChip } from '../../home/status-chips';
 import TodoAddEditForm from './add_edit_form';
-import { deleteTodo } from '../../_slices';
+import { deleteTodo, completeTodo } from '../../_slices';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -97,6 +97,12 @@ export default function TodoItem({ todo }) {
     dispatch(deleteTodo(todo));
   };
 
+  const onComplete = (event) => {
+    if (event.target.checked) {
+      dispatch(completeTodo(todo));
+    }
+  };
+
   let chip = <div />;
   if (todo.dueState === 'late') {
     chip = <LateChip />;
@@ -104,9 +110,11 @@ export default function TodoItem({ todo }) {
     chip = <DueSoonChip />;
   }
 
+  const completed = Boolean(todo.completionOdomSnapshot);
+
   return (
     <div className={classes.root}>
-      <Checkbox />
+      <Checkbox onChange={onComplete} checked={completed} />
       {chip}
       <div className={classes.todoDescription}>
         <span className={classes.todoName}>{todo.name}</span>{' '}

@@ -36,19 +36,24 @@ const _authenticatedGet = async (url) => {
 };
 
 const _authenticatedPost = async (url, body) => {
-  const { data, status } = await axios.post(
-    `${apiUrl}${apiVersion}/${url}`,
-    body,
-  );
-  if (status === 401) {
-    // Token has expired, need to refresh it
-    await _refreshUserToken();
-  }
+  try {
+    const { data, status } = await axios.post(
+      `${apiUrl}${apiVersion}/${url}`,
+      body,
+    );
+    if (status === 401) {
+      // Token has expired, need to refresh it
+      await _refreshUserToken();
+    }
 
-  if (status !== 201) {
-    // throw an error
+    if (status !== 201) {
+      // throw an error
+    }
+    return data;
+  } catch (e) {
+    // console.log(url);
+    console.log(e.response);
   }
-  return data;
 };
 
 const _authenticatedPatch = async (url, body) => {
@@ -125,3 +130,6 @@ export const fetchCars = async () => {
   const response = await _authenticatedGet('cars/');
   return response.results;
 };
+
+export const apiPostOdomSnapshot = async (snap) =>
+  await _authenticatedPost('odomsnapshots/', snap);

@@ -14,7 +14,7 @@ import SearchBar from './searchbar';
 import SideBar from './sidebar';
 import TodoItem from '../features/todos/todoItem';
 import { Divider } from '@material-ui/core';
-import { selectAllTodos, fetchData } from '../_slices';
+import { selectAllTodos, fetchData, completeTodo } from '../_slices';
 import TodoAddEditForm from '../features/todos/add_edit_form';
 
 function Copyright() {
@@ -129,7 +129,7 @@ const TodoList = () => {
 
   const highPriorityTodos = todos
     .filter((t) => t.dueState === 'late' || t.dueState === 'dueSoon')
-    .map((t) => <TodoItem key={t.id} todo={t} />);
+    .map((t) => <TodoItem key={t?.id} todo={t} />);
   const upcomingTodos = todos
     .filter((t) => t.dueState === 'upcoming')
     .map((t) => <TodoItem key={t.id} todo={t} />);
@@ -143,6 +143,9 @@ const TodoList = () => {
     return <div className={classes.statusMessage}>{error}</div>;
   }
 
+  console.log(highPriorityTodos);
+  console.log(completedTodos);
+
   let upcomingHeader = <></>;
   if (highPriorityTodos?.length && upcomingTodos?.length) {
     upcomingHeader = (
@@ -154,7 +157,10 @@ const TodoList = () => {
   }
 
   let completedHeader = <></>;
-  if (completedTodos?.length && upcomingTodos?.length) {
+  if (
+    completedTodos?.length &&
+    (upcomingTodos?.length || highPriorityTodos?.length)
+  ) {
     upcomingHeader = (
       <>
         <h3 className={classes.upcoming}>Completed</h3>

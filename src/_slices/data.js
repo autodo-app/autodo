@@ -6,6 +6,7 @@ import {
   apiPostTodo,
   apiPatchTodo,
   apiDeleteTodo,
+  apiPostOdomSnapshot,
 } from '../_services';
 
 const initialState = {
@@ -51,6 +52,29 @@ export const deleteTodo = createAsyncThunk('data/deleteTodo', async (todo) => {
   return response;
 });
 
+export const completeTodo = createAsyncThunk(
+  'data/completeTodo',
+  async (initialTodo, thunkApi) => {
+    const car = thunkApi
+      .getState()
+      .data.cars.find((c) => Number(c.id) === Number(initialTodo.car));
+    const curMileage = car.odom;
+    const initialSnapshot = {
+      car: initialTodo.car,
+      date: new Date(),
+      mileage: curMileage,
+    };
+    const odomSnapshot = await apiPostOdomSnapshot(initialSnapshot);
+    const updatedTodo = {
+      ...initialTodo,
+      completionOdomSnapshot: odomSnapshot.id,
+    };
+    // updatedTodo.completionOdomSnapshot = odomSnapshot.id;
+    const response = await apiPatchTodo(updatedTodo);
+    return response;
+  },
+);
+
 const dataSlice = createSlice({
   name: 'data',
   initialState,
@@ -83,6 +107,11 @@ const dataSlice = createSlice({
       if (idx > -1) {
         state.todos.splice(idx, 1); // remove todo at position
       }
+    },
+    [completeTodo.fulfilled]: (state, action) => {
+      const todoId = action.payload.id;
+      const idx = state.todos.findIndex((t) => Number(t.id) === Number(todoId));
+      state.todos[idx] = action.payload;
     },
   },
 });
