@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { makeStyles, MenuItem } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { unwrapResult } from '@reduxjs/toolkit';
 import Dialog from '@material-ui/core/Dialog';
 import Button from '@material-ui/core/Button';
@@ -15,7 +15,7 @@ import Radio from '@material-ui/core/Radio';
 import FormLabel from '@material-ui/core/FormLabel';
 import { grey } from '@material-ui/core/colors';
 
-import { addNewTodo, updateTodo } from '../../_slices';
+import { addNewTodo, updateTodo, selectAllCars } from '../../_slices';
 
 const useStyles = makeStyles((theme) => ({
   closeButton: {
@@ -35,17 +35,6 @@ const useStyles = makeStyles((theme) => ({
 
 const margin = 'normal';
 
-const cars = [
-  {
-    value: '1',
-    label: 'car1',
-  },
-  {
-    value: '2',
-    label: 'car2',
-  },
-];
-
 export default function TodoAddEditForm({ todo, open, handleClose }) {
   const [name, setName] = useState(todo?.name || '');
   const [nameError, setNameError] = useState(false);
@@ -64,6 +53,8 @@ export default function TodoAddEditForm({ todo, open, handleClose }) {
 
   const dispatch = useDispatch();
   const classes = useStyles();
+
+  const cars = useSelector(selectAllCars);
 
   const onNameChanged = (e) => setName(e.target.value);
   const onDueMileageChanged = (e) => setDueMileage(e.target.value);
@@ -188,8 +179,8 @@ export default function TodoAddEditForm({ todo, open, handleClose }) {
             onChange={onCarChanged}
           >
             {cars.map((c) => (
-              <MenuItem key={c.value} value={c.value}>
-                {c.label}
+              <MenuItem key={c.id} value={c.id}>
+                {c.name}
               </MenuItem>
             ))}
           </TextField>

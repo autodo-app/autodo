@@ -18,9 +18,11 @@ const initialState = {
 };
 
 export const fetchData = createAsyncThunk('data/fetchData', async () => {
-  const todos = await fetchTodos();
-  const refuelings = await fetchRefuelings();
-  const cars = await fetchCars();
+  const [todos, refuelings, cars] = await Promise.all([
+    fetchTodos(),
+    fetchRefuelings(),
+    fetchCars(),
+  ]);
   return {
     todos: todos,
     refuelings: refuelings,
@@ -89,6 +91,8 @@ export default dataSlice.reducer;
 export const { todoAdded, todoUpdated } = dataSlice.actions;
 
 export const selectAllTodos = (state) => state.data.todos;
+
+export const selectAllCars = (state) => state.data.cars;
 
 export const selectTodoById = (state, todoId) =>
   state.data.todos.find((todo) => Number(todo.id) === Number(todoId));
