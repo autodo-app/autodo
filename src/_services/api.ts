@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import { Car, OdomSnapshot, Refueling, Todo } from '../_slices/types';
+
 const apiUrl = 'http://localhost:8000';
 const apiVersion = '/api/v1';
 
@@ -100,7 +102,7 @@ export const fetchUserToken = async (user, pass) => {
   return data.access;
 };
 
-export const fetchTodos = async () => {
+export const fetchTodos = async (): Promise<Todo[]> => {
   const response = await _authenticatedGet('todos/');
   return response.results;
 };
