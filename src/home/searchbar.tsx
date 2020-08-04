@@ -1,71 +1,87 @@
-import React, { useState } from 'react';
-// import OutlinedInput from '@material-ui/core/OutlinedInput';
+import * as React from 'react';
+import { useState } from 'react';
+import { Theme, makeStyles, Paper, Input, IconButton } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear';
 import SearchIcon from '@material-ui/icons/Search';
 import MoreVert from '@material-ui/icons/MoreVert';
 import Button from '@material-ui/core/Button';
 
-import { makeStyles, Paper, Input, IconButton } from '@material-ui/core';
 import { grey } from '@material-ui/core/colors';
 import classNames from 'classnames';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-  },
-  paper: {
-    height: 48,
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'space-between',
-    marginRight: 'auto',
-  },
-  iconButton: {
-    opacity: 0.54,
-    transform: 'scale(1, 1)',
-    transition: 'transform 200ms cubic-bezier(0.4, 0.0, 0.2, 1)',
-  },
-  iconButtonHidden: {
-    transform: 'scale(0, 0)',
-    '& > $icon': {
-      opacity: 0,
-    },
-  },
-  iconButtonShifted: {
-    transform: 'translateX(-36px)',
-    transition: 'transform 200ms cubic-bezier(0.4, 0.0, 0.2, 1)',
-  },
-  iconButtonDisabled: {
-    opacity: 0.38,
-  },
-  searchIconButton: {
-    marginRight: -48,
-  },
-  icon: {
-    opacity: 0.54,
-    transition: 'opacity 200ms cubic-bezier(0.4, 0.0, 0.2, 1)',
-  },
-  input: {
-    width: '100%',
-  },
-  searchContainer: {
-    margin: 'auto 16px',
-    width: 'calc(100% - 48px - 32px)', // 48px button + 32px margin
-  },
-}));
+interface StyleProps {
+  root: React.CSSProperties;
+  paper: React.CSSProperties;
+  iconButton: React.CSSProperties;
+  iconButtonHidden: React.CSSProperties;
+  iconButtonShifted: React.CSSProperties;
+  iconButtonDisabled: React.CSSProperties;
+  searchIconButton: React.CSSProperties;
+  icon: React.CSSProperties;
+  input: React.CSSProperties;
+  searchContainer: React.CSSProperties;
+}
 
-export const SearchBar = () => {
-  const classes = useStyles();
+type StyleClasses = Record<keyof StyleProps, string>;
+
+const useStyles = makeStyles<Theme, StyleProps>(
+  (theme: Theme) =>
+    ({
+      root: {
+        display: 'flex',
+      },
+      paper: {
+        height: 48,
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'space-between',
+        marginRight: 'auto',
+      },
+      iconButton: {
+        opacity: 0.54,
+        transform: 'scale(1, 1)',
+        transition: 'transform 200ms cubic-bezier(0.4, 0.0, 0.2, 1)',
+      },
+      iconButtonHidden: {
+        transform: 'scale(0, 0)',
+        '& > $icon': {
+          opacity: 0,
+        },
+      },
+      iconButtonShifted: {
+        transform: 'translateX(-36px)',
+        transition: 'transform 200ms cubic-bezier(0.4, 0.0, 0.2, 1)',
+      },
+      iconButtonDisabled: {
+        opacity: 0.38,
+      },
+      searchIconButton: {
+        marginRight: -48,
+      },
+      icon: {
+        opacity: 0.54,
+        transition: 'opacity 200ms cubic-bezier(0.4, 0.0, 0.2, 1)',
+      },
+      input: {
+        width: '100%',
+      },
+      searchContainer: {
+        margin: 'auto 16px',
+        width: 'calc(100% - 48px - 32px)', // 48px button + 32px margin
+      },
+    } as any),
+);
+
+export const SearchBar: React.FC<{}> = (): JSX.Element => {
+  const classes: StyleClasses = useStyles({} as StyleProps);
   const [value, setValue] = useState('');
-  const [focus, setFocus] = useState(false);
-  const [active, setActive] = useState(false);
 
   const handleFocus = (e) => {
-    setFocus(true);
+    // setFocus(true);
   };
 
   const handleBlur = (e) => {
-    setFocus(false);
+    // setFocus(false);
     if (value.trim().length === 0) {
       setValue('');
     }
@@ -77,7 +93,7 @@ export const SearchBar = () => {
   };
 
   const handleCancel = () => {
-    setActive(false);
+    // setActive(false);
     setValue('');
   };
 
@@ -119,7 +135,7 @@ export const SearchBar = () => {
             }),
           }}
         >
-          <SearchIcon style={{ color: grey[500] }} classes={classes.icon} />
+          <SearchIcon style={{ color: grey[500] }} className={classes.icon} />
         </IconButton>
         <IconButton
           onClick={handleCancel}
@@ -129,7 +145,7 @@ export const SearchBar = () => {
             }),
           }}
         >
-          <ClearIcon style={{ color: grey[500] }} classes={classes.icon} />
+          <ClearIcon style={{ color: grey[500] }} className={classes.icon} />
         </IconButton>
       </Paper>
       <IconButton>

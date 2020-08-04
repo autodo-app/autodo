@@ -4,7 +4,7 @@ import authReducer from '../_slices/auth';
 import alertsReducer from '../_slices/alerts';
 import dataReducer from '../_slices/data';
 
-export default configureStore({
+const store = configureStore({
   reducer: {
     auth: authReducer,
     alerts: alertsReducer,
@@ -12,3 +12,7 @@ export default configureStore({
   },
   middleware: getDefaultMiddleware().concat(logger),
 });
+
+export default store;
+
+export type RootState = ReturnType<typeof store.getState>;

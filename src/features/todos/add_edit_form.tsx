@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { makeStyles, MenuItem } from '@material-ui/core';
+import * as React from 'react';
+import { useState } from 'react';
+import { Theme, makeStyles, MenuItem } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { unwrapResult } from '@reduxjs/toolkit';
 import Dialog from '@material-ui/core/Dialog';
@@ -15,23 +16,36 @@ import Radio from '@material-ui/core/Radio';
 import FormLabel from '@material-ui/core/FormLabel';
 import { grey } from '@material-ui/core/colors';
 
-import { addNewTodo, updateTodo, selectAllCars } from '../../_slices';
+import { selectAllCars } from '../../_slices';
+import { createTodo, updateTodo } from '../../_store/data';
 
-const useStyles = makeStyles((theme) => ({
-  closeButton: {
-    color: grey[400],
-  },
-  dateRepeatSpacer: {
-    height: '1rem',
-  },
-  errorText: {
-    color: theme.palette.error.light,
-    marginBottom: 0,
-  },
-  errorHelpText: {
-    color: theme.palette.error.light,
-  },
-}));
+interface StyleProps {
+  closeButton: React.CSSProperties;
+  dateRepeatSpacer: React.CSSProperties;
+  errorText: React.CSSProperties;
+  errorHelpText: React.CSSProperties;
+}
+
+type StyleClasses = Record<keyof StyleProps, string>;
+
+const useStyles = makeStyles<Theme, StyleProps>(
+  (theme: Theme) =>
+    ({
+      closeButton: {
+        color: grey[400],
+      },
+      dateRepeatSpacer: {
+        height: '1rem',
+      },
+      errorText: {
+        color: theme.palette.error.light,
+        marginBottom: 0,
+      },
+      errorHelpText: {
+        color: theme.palette.error.light,
+      },
+    } as any),
+);
 
 const margin = 'normal';
 
@@ -52,7 +66,7 @@ export default function TodoAddEditForm({ todo, open, handleClose }) {
   const [generalError, setGeneralError] = useState('');
 
   const dispatch = useDispatch();
-  const classes = useStyles();
+  const classes: StyleClasses = useStyles({} as StyleProps);
 
   const cars = useSelector(selectAllCars);
 
@@ -84,6 +98,7 @@ export default function TodoAddEditForm({ todo, open, handleClose }) {
               dueMileage: Number(dueMileage),
               dueDate: new Date(dueDate).toJSON(),
               mileageRepeatInterval: mileageRepeatInterval,
+              completionOdomSnapshot: todo.completionOdomSnapshot,
               // TODO: below
               dateRepeatIntervalDays: 0,
               dateRepeatIntervalMonths: 0,
@@ -92,13 +107,16 @@ export default function TodoAddEditForm({ todo, open, handleClose }) {
           );
         } else {
           resultAction = await dispatch(
-            addNewTodo({
+            createTodo({
               name: name,
               car: car,
               dueMileage: dueMileage,
               dueDate: new Date(dueDate).toJSON(),
               mileageRepeatInterval: mileageRepeatInterval,
               completionOdomSnapshot: null, // we get an error if this isn't present
+              dateRepeatIntervalDays: 0,
+              dateRepeatIntervalMonths: 0,
+              dateRepeatIntervalYears: 0,
             }),
           );
         }
@@ -219,7 +237,6 @@ export default function TodoAddEditForm({ todo, open, handleClose }) {
           <RadioGroup
             aria-label="Date Repeat Interval"
             name="dateRepeatInterval"
-            margin={margin}
             value={dateRepeatInterval}
             onChange={onDateRepeatIntervalChanged}
           >

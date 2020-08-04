@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import * as React from 'react';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { makeStyles, IconButton, ButtonBase } from '@material-ui/core';
+import { makeStyles, IconButton, ButtonBase, Theme } from '@material-ui/core';
 import Chip from '@material-ui/core/Chip';
 import Checkbox from '@material-ui/core/Checkbox';
 import Create from '@material-ui/icons/Create';
@@ -9,40 +10,60 @@ import { red } from '@material-ui/core/colors';
 
 import { LateChip, DueSoonChip } from '../../home/status-chips';
 import TodoAddEditForm from './add_edit_form';
-import { deleteTodo, completeTodo, undoCompleteTodo } from '../../_slices';
+import {
+  Todo,
+  // deleteTodo,
+  // completeTodo,
+  // undoCompleteTodo,
+} from '../../_slices';
+import { deleteTodo, completeTodo, undoCompleteTodo } from '../../_store/data';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-    padding: theme.spacing(1),
-  },
-  status: {
-    backgroundColor: red[400],
-    marginTop: 'auto',
-    marginBottom: 'auto',
-  },
-  todoDescription: {
-    marginTop: 'auto',
-    marginBottom: 'auto',
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-  },
-  todoName: {
-    fontSize: '1.25rem',
-    fontWeight: '500',
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-  },
-  dueMileage: {
-    fontSize: '1.1rem',
-    fontWeight: '500',
-  },
-  buttons: {
-    marginLeft: 'auto',
-  },
-}));
+interface StyleProps {
+  root: React.CSSProperties;
+  status: React.CSSProperties;
+  todoDescription: React.CSSProperties;
+  todoName: React.CSSProperties;
+  dueMileage: React.CSSProperties;
+  buttons: React.CSSProperties;
+}
 
-const CarTag = () => {
+type StyleClasses = Record<keyof StyleProps, string>;
+
+const useStyles = makeStyles<Theme, StyleProps>(
+  (theme: Theme) =>
+    ({
+      root: {
+        display: 'flex',
+        padding: theme.spacing(1),
+      },
+      status: {
+        backgroundColor: red[400],
+        marginTop: 'auto',
+        marginBottom: 'auto',
+      },
+      todoDescription: {
+        marginTop: 'auto',
+        marginBottom: 'auto',
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1),
+      },
+      todoName: {
+        fontSize: '1.25rem',
+        fontWeight: '500',
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1),
+      },
+      dueMileage: {
+        fontSize: '1.1rem',
+        fontWeight: '500',
+      },
+      buttons: {
+        marginLeft: 'auto',
+      },
+    } as any),
+);
+
+const CarTag: React.FC<{}> = (): JSX.Element => {
   return (
     <ButtonBase>
       <Chip color="primary" label="2009 Passat" />
@@ -50,8 +71,13 @@ const CarTag = () => {
   );
 };
 
-const DueText = ({ todo }) => {
-  const classes = useStyles();
+type Props = {
+  todo: Todo;
+};
+
+const DueText: React.FC<Props> = (props): JSX.Element => {
+  const { todo } = props;
+  const classes: StyleClasses = useStyles({} as StyleProps);
 
   if (todo.dueMileage && !todo.dueDate) {
     return (
@@ -76,14 +102,11 @@ const DueText = ({ todo }) => {
   }
 };
 
-export default function TodoItem({ todo }) {
-  const classes = useStyles();
+export default function TodoItem(props): JSX.Element {
+  const { todo } = props;
+  const classes: StyleClasses = useStyles({} as StyleProps);
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
-
-  if (!todo) {
-    todo = {}; // TODO: hack, use prop types or something
-  }
 
   const handleClickOpen = () => {
     setOpen(true);

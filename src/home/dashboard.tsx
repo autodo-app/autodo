@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import * as React from 'react';
+import { useEffect } from 'react';
+import { Theme, makeStyles } from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
@@ -14,7 +15,7 @@ import SearchBar from './searchbar';
 import SideBar from './sidebar';
 import TodoItem from '../features/todos/todoItem';
 import { Divider } from '@material-ui/core';
-import { selectAllTodos, fetchData, completeTodo } from '../_slices';
+import { selectAllTodos, fetchData } from '../_slices';
 import TodoAddEditForm from '../features/todos/add_edit_form';
 
 function Copyright() {
@@ -30,91 +31,116 @@ function Copyright() {
   );
 }
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-  },
-  toolbar: {
-    paddingRight: 24, // keep right padding when drawer closed
-  },
-  toolbarIcon: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: '0 8px',
-    ...theme.mixins.toolbar,
-  },
-  menuButton: {
-    marginRight: 36,
-  },
-  menuButtonHidden: {
-    display: 'none',
-  },
-  title: {
-    flexGrow: 1,
-  },
+interface StyleProps {
+  root: React.CSSProperties;
+  toolbar: React.CSSProperties;
+  toolbarIcon: React.CSSProperties;
+  menuButton: React.CSSProperties;
+  menuButtonHidden: React.CSSProperties;
+  title: React.CSSProperties;
+  appBarSpacer: React.CSSProperties;
+  content: React.CSSProperties;
+  container: React.CSSProperties;
+  paper: React.CSSProperties;
+  fixedHeight: React.CSSProperties;
+  fab: React.CSSProperties;
+  header: React.CSSProperties;
+  dashboard: React.CSSProperties;
+  date: React.CSSProperties;
+  dateNumber: React.CSSProperties;
+  upcoming: React.CSSProperties;
+  statusMessage: React.CSSProperties;
+}
 
-  appBarSpacer: theme.mixins.toolbar,
-  content: {
-    flexGrow: 1,
-    height: '100vh',
-    overflow: 'auto',
-  },
-  container: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
-  },
-  paper: {
-    padding: theme.spacing(2),
-    display: 'flex',
-    overflow: 'auto',
-    flexDirection: 'column',
-    background: BACKGROUND_LIGHT,
-  },
-  fixedHeight: {
-    height: 240,
-  },
-  fab: {
-    margin: 0,
-    top: 'auto',
-    right: theme.spacing(6),
-    bottom: theme.spacing(4),
-    left: 'auto',
-    position: 'fixed',
-  },
-  header: {
-    display: 'flex',
-    justifyContent: 'space-between',
-  },
-  dashboard: {
-    marginTop: '1.5rem',
-    marginBottom: '.25rem',
-  },
-  date: {
-    marginTop: '1.5rem',
-    marginBottom: '.25rem',
-    fontWeight: '400',
-    letterSpacing: 0.8,
-  },
-  dateNumber: {
-    fontWeight: '600',
-    letterSpacing: 0.8,
-  },
-  upcoming: {
-    fontWeight: '400',
-    letterSpacing: 0.8,
-    marginBottom: '.25rem',
-  },
-  statusMessage: {
-    display: 'flex',
-    margin: theme.spacing(2),
-    alignContent: 'center',
-    justifyContent: 'center',
-  },
-}));
+type StyleClasses = Record<keyof StyleProps, string>;
 
-const TodoList = () => {
-  const classes = useStyles();
+const useStyles = makeStyles<Theme, StyleProps>(
+  (theme: Theme) =>
+    ({
+      root: {
+        display: 'flex',
+      },
+      toolbar: {
+        paddingRight: 24, // keep right padding when drawer closed
+      },
+      toolbarIcon: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        padding: '0 8px',
+        ...theme.mixins.toolbar,
+      },
+      menuButton: {
+        marginRight: 36,
+      },
+      menuButtonHidden: {
+        display: 'none',
+      },
+      title: {
+        flexGrow: 1,
+      },
+      appBarSpacer: theme.mixins.toolbar,
+      content: {
+        flexGrow: 1,
+        height: '100vh',
+        overflow: 'auto',
+      },
+      container: {
+        paddingTop: theme.spacing(4),
+        paddingBottom: theme.spacing(4),
+      },
+      paper: {
+        padding: theme.spacing(2),
+        display: 'flex',
+        overflow: 'auto',
+        flexDirection: 'column',
+        background: BACKGROUND_LIGHT,
+      },
+      fixedHeight: {
+        height: 240,
+      },
+      fab: {
+        margin: 0,
+        top: 'auto',
+        right: theme.spacing(6),
+        bottom: theme.spacing(4),
+        left: 'auto',
+        position: 'fixed',
+      },
+      header: {
+        display: 'flex',
+        justifyContent: 'space-between',
+      },
+      dashboard: {
+        marginTop: '1.5rem',
+        marginBottom: '.25rem',
+      },
+      date: {
+        marginTop: '1.5rem',
+        marginBottom: '.25rem',
+        fontWeight: '400',
+        letterSpacing: 0.8,
+      },
+      dateNumber: {
+        fontWeight: '600',
+        letterSpacing: 0.8,
+      },
+      upcoming: {
+        fontWeight: '400',
+        letterSpacing: 0.8,
+        marginBottom: '.25rem',
+      },
+      statusMessage: {
+        display: 'flex',
+        margin: theme.spacing(2),
+        alignContent: 'center',
+        justifyContent: 'center',
+      },
+    } as any),
+);
+
+const TodoList: React.FC<{}> = (): JSX.Element => {
+  const classes: StyleClasses = useStyles({} as StyleProps);
   const dispatch = useDispatch();
 
   const todos = useSelector(selectAllTodos);
@@ -185,8 +211,8 @@ const TodoList = () => {
   );
 };
 
-export default function Dashboard() {
-  const classes = useStyles();
+export default function Dashboard(): JSX.Element {
+  const classes: StyleClasses = useStyles({} as StyleProps);
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {

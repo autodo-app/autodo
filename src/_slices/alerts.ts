@@ -17,7 +17,7 @@ const alertsSlice = createSlice({
       state.type = 'alert-error';
       state.message = action.message;
     },
-    alertClear(state, action) {
+    alertClear(state?: any, action?: any) {
       state = {};
     },
   },

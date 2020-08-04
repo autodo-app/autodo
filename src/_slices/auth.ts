@@ -12,10 +12,13 @@ const initialState = {
   error: null,
 };
 
-export const logInAsync = createAsyncThunk('auth/logInAsync', async (request) => {
-  const token = await fetchUserToken(request.username, request.password);
-  return token;
-});
+export const logInAsync = createAsyncThunk(
+  'auth/logInAsync',
+  async (request: any) => {
+    const token = await fetchUserToken(request.username, request.password);
+    return token;
+  },
+);
 
 export const authSlice = createSlice({
   name: 'auth',

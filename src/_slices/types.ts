@@ -22,14 +22,15 @@ export interface Refueling {
 }
 
 export interface Todo {
+  id?: number;
   car: number;
   completionOdomSnapshot: OdomSnapshot;
   name: string;
   dueMileage: number;
-  dueDate: Date;
-  estimatedDueDate: boolean;
-  mileageRepeatInterval: number;
-  daysRepeatInterval: number;
-  monthsRepeatInterval: number;
-  yearsRepeatInterval: number;
+  dueDate: string;
+  estimatedDueDate?: boolean;
+  mileageRepeatInterval?: number;
+  dateRepeatIntervalDays?: number;
+  dateRepeatIntervalMonths?: number;
+  dateRepeatIntervalYears?: number;
 }

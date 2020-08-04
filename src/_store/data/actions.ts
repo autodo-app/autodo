@@ -5,6 +5,7 @@ import {
   UPDATE_TODO,
   DELETE_TODO,
   COMPLETE_TODO,
+  UNCOMPLETE_TODO,
   DataActionTypes,
 } from './types';
 import {
@@ -18,6 +19,8 @@ import {
   apiDeleteOdomSnapshot,
 } from '../../_services';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+
+import { RootState } from '../../app/store';
 
 export const fetchData = createAsyncThunk(
   FETCH_DATA,
@@ -69,6 +72,43 @@ export const deleteTodo = createAsyncThunk(
     const response = await apiDeleteTodo(todo);
     return {
       type: UPDATE_TODO,
+      payload: response,
+    };
+  },
+);
+
+export const completeTodo = createAsyncThunk(
+  COMPLETE_TODO,
+  async (initialTodo: Todo, thunkApi): Promise<DataActionTypes> => {
+    const car = (thunkApi.getState() as RootState).data.cars.find(
+      (c) => Number(c.id) === Number(initialTodo.car),
+    );
+    const curMileage = car.odom;
+    const initialSnapshot = {
+      car: initialTodo.car,
+      date: new Date(),
+      mileage: curMileage,
+    };
+    const odomSnapshot = await apiPostOdomSnapshot(initialSnapshot);
+    const updatedTodo = {
+      ...initialTodo,
+      completionOdomSnapshot: odomSnapshot.id,
+    };
+    const response = await apiPatchTodo(updatedTodo);
+    return {
+      type: UNCOMPLETE_TODO,
+      payload: response,
+    };
+  },
+);
+
+export const undoCompleteTodo = createAsyncThunk(
+  UNCOMPLETE_TODO,
+  async (initialTodo: Todo): Promise<DataActionTypes> => {
+    await apiDeleteOdomSnapshot(initialTodo.completionOdomSnapshot);
+    const response = await fetchTodos();
+    return {
+      type: UNCOMPLETE_TODO,
       payload: response,
     };
   },

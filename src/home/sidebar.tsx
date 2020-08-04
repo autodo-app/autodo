@@ -1,5 +1,5 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core';
+import * as React from 'react';
+import { Theme, makeStyles } from '@material-ui/core';
 import Drawer from '@material-ui/core/Drawer';
 import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
@@ -21,65 +21,83 @@ import { deepOrange } from '@material-ui/core/colors';
 
 export const drawerWidth = 220;
 
-const useStyles = makeStyles((theme) => ({
-  drawerPaper: {
-    position: 'relative',
-    whiteSpace: 'nowrap',
-    width: drawerWidth,
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    background: BACKGROUND_LIGHT,
-  },
-  titleButton: {
-    color: AUTODO_GREEN,
-    textTransform: 'none',
-    fontSize: '2.25rem',
-    fontWeight: '800',
-  },
-  highlightedButtonContainer: {
-    justifyContent: 'flex-start',
-    padding: theme.spacing(1),
-  },
-  highlightedButton: {
-    justifyContent: 'flex-start',
-    backgroundColor: '#89d8d3',
-    backgroundImage: `linear-gradient(45deg, ${AUTODO_GREEN} 0%, #03c8a8 74%)`,
-    boxShadow: '0 3px 5px 2px rgba(5, 5, 5, .3)',
-    borderRadius: 5,
-  },
-  highlightedButtonText: {
-    color: theme.palette.getContrastText(AUTODO_GREEN),
-  },
-  iconButton: {
-    justifyContent: 'flex-start',
-  },
-  userIconRoot: {
-    display: 'flex',
-    overflow: 'auto',
-    justifyContent: 'flex-start',
-  },
-  avatarSpacer: {
-    height: '1rem',
-  },
-  orange: {
-    color: theme.palette.getContrastText(deepOrange[500]),
-    backgroundColor: deepOrange[500],
-    marginLeft: theme.spacing(2),
-    marginRight: theme.spacing(2),
-    marginTop: 'auto',
-    marginBottom: 'auto',
-  },
-  bottomListItems: {
-    position: 'fixed',
-    bottom: 0,
-    width: 'inherit',
-  },
-}));
+interface StyleProps {
+  drawerPaper: React.CSSProperties;
+  titleButton: React.CSSProperties;
+  highlightedButtonContainer: React.CSSProperties;
+  highlightedButton: React.CSSProperties;
+  highlightedButtonText: React.CSSProperties;
+  iconButton: React.CSSProperties;
+  userIconRoot: React.CSSProperties;
+  avatarSpacer: React.CSSProperties;
+  orange: React.CSSProperties;
+  bottomListItems: React.CSSProperties;
+}
 
-const UserIcon = () => {
-  const classes = useStyles();
+type StyleClasses = Record<keyof StyleProps, string>;
+
+const useStyles = makeStyles<Theme, StyleProps>(
+  (theme: Theme) =>
+    ({
+      drawerPaper: {
+        position: 'relative',
+        whiteSpace: 'nowrap',
+        width: drawerWidth,
+        transition: theme.transitions.create('width', {
+          easing: theme.transitions.easing.sharp,
+          duration: theme.transitions.duration.enteringScreen,
+        }),
+        background: BACKGROUND_LIGHT,
+      },
+      titleButton: {
+        color: AUTODO_GREEN,
+        textTransform: 'none',
+        fontSize: '2.25rem',
+        fontWeight: '800',
+      },
+      highlightedButtonContainer: {
+        justifyContent: 'flex-start',
+        padding: theme.spacing(1),
+      },
+      highlightedButton: {
+        justifyContent: 'flex-start',
+        backgroundColor: '#89d8d3',
+        backgroundImage: `linear-gradient(45deg, ${AUTODO_GREEN} 0%, #03c8a8 74%)`,
+        boxShadow: '0 3px 5px 2px rgba(5, 5, 5, .3)',
+        borderRadius: 5,
+      },
+      highlightedButtonText: {
+        color: theme.palette.getContrastText(AUTODO_GREEN),
+      },
+      iconButton: {
+        justifyContent: 'flex-start',
+      },
+      userIconRoot: {
+        display: 'flex',
+        overflow: 'auto',
+        justifyContent: 'flex-start',
+      },
+      avatarSpacer: {
+        height: '1rem',
+      },
+      orange: {
+        color: theme.palette.getContrastText(deepOrange[500]),
+        backgroundColor: deepOrange[500],
+        marginLeft: theme.spacing(2),
+        marginRight: theme.spacing(2),
+        marginTop: 'auto',
+        marginBottom: 'auto',
+      },
+      bottomListItems: {
+        position: 'fixed',
+        bottom: 0,
+        width: 'inherit',
+      },
+    } as any),
+);
+
+const UserIcon: React.FC<{}> = (): JSX.Element => {
+  const classes: StyleClasses = useStyles({} as StyleProps);
 
   return (
     // TODO: implement the onClick function
@@ -92,8 +110,8 @@ const UserIcon = () => {
   );
 };
 
-const Tabs = () => {
-  const classes = useStyles();
+const Tabs: React.FC<{}> = (): JSX.Element => {
+  const classes: StyleClasses = useStyles({} as StyleProps);
 
   return (
     <div>
@@ -130,9 +148,7 @@ const Tabs = () => {
   );
 };
 
-const Footer = () => {
-  // const classes = useStyles();
-
+const Footer: React.FC<{}> = (): JSX.Element => {
   return (
     <div>
       <ListItem button>
@@ -151,8 +167,8 @@ const Footer = () => {
   );
 };
 
-export default function SideBar() {
-  const classes = useStyles();
+export default function SideBar(): JSX.Element {
+  const classes: StyleClasses = useStyles({} as StyleProps);
 
   return (
     <Drawer
