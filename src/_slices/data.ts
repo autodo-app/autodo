@@ -9,6 +9,7 @@ import {
   apiPostOdomSnapshot,
   apiDeleteOdomSnapshot,
 } from '../_services';
+import { RootState } from '../app/store';
 
 const initialState = {
   todos: [],
@@ -56,9 +57,9 @@ export const deleteTodo = createAsyncThunk('data/deleteTodo', async (todo) => {
 export const completeTodo = createAsyncThunk(
   'data/completeTodo',
   async (initialTodo, thunkApi) => {
-    const car = thunkApi
-      .getState()
-      .data.cars.find((c) => Number(c.id) === Number(initialTodo.car));
+    const car = (thunkApi.getState() as RootState).data.cars.find(
+      (c) => Number(c.id) === Number(initialTodo.car),
+    );
     const curMileage = car.odom;
     const initialSnapshot = {
       car: initialTodo.car,

@@ -8,32 +8,32 @@ export const DELETE_TODO = 'DELETE_TODO';
 export const COMPLETE_TODO = 'COMPLETE_TODO';
 export const UNCOMPLETE_TODO = 'UNCOMPLETE_TODO';
 
-interface FetchDataAction {
+export interface FetchDataAction {
   type: typeof FETCH_DATA;
   payload: DataState;
 }
 
-interface CreateTodoAction {
+export interface CreateTodoAction {
   type: typeof CREATE_TODO;
   payload: Todo;
 }
 
-interface UpdateTodoAction {
+export interface UpdateTodoAction {
   type: typeof UPDATE_TODO;
   payload: Todo;
 }
 
-interface DeleteTodoAction {
+export interface DeleteTodoAction {
   type: typeof DELETE_TODO;
   payload: Todo;
 }
 
-interface CompleteTodoAction {
+export interface CompleteTodoAction {
   type: typeof COMPLETE_TODO;
   payload: Todo;
 }
 
-interface UnCompleteTodoAction {
+export interface UnCompleteTodoAction {
   type: typeof UNCOMPLETE_TODO;
   payload: Todo[];
 }

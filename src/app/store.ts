@@ -3,6 +3,9 @@ import logger from 'redux-logger';
 import authReducer from '../_slices/auth';
 import alertsReducer from '../_slices/alerts';
 import dataReducer from '../_slices/data';
+import { AuthState } from '../_store/auth/state';
+import { AlertsState } from '../_store/alerts/state';
+import { DataState } from '../_store/data/state';
 
 const store = configureStore({
   reducer: {
@@ -15,4 +18,8 @@ const store = configureStore({
 
 export default store;
 
-export type RootState = ReturnType<typeof store.getState>;
+export type RootState = {
+  auth: AuthState;
+  alerts: AlertsState;
+  data: DataState;
+};

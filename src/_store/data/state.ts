@@ -6,5 +6,5 @@ export interface DataState {
   cars: Car[];
   defaultTodos: Todo[];
   status: string;
-  error: string;
+  error: string | null;
 }

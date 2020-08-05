@@ -1,4 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
+
+import { Todo } from '../../_slices';
 import {
   fetchData,
   createTodo,
@@ -7,8 +9,10 @@ import {
   completeTodo,
   undoCompleteTodo,
 } from './actions';
+import { DataState } from './state';
+import { RootState } from '../../app/store';
 
-const initialState = {
+const initialState: DataState = {
   todos: [],
   refuelings: [],
   cars: [],
@@ -19,35 +23,35 @@ const initialState = {
 
 const dataSlice = createSlice({
   name: 'data',
-  initialState,
+  initialState: initialState,
   reducers: {},
   extraReducers: (builder) =>
     builder
-      .addCase(fetchData.pending, (state) => {
+      .addCase(fetchData.pending, (state: DataState) => {
         state.status = 'loading';
       })
-      .addCase(fetchData.fulfilled, (state, action) => {
+      .addCase(fetchData.fulfilled, (state: DataState, { payload }) => {
         state.status = 'succeeded';
-        state.todos = action.payload.todos;
-        state.refuelings = action.payload.refuelings;
-        state.cars = action.payload.cars;
+        state.todos = payload.payload.todos;
+        state.refuelings = payload.payload.refuelings;
+        state.cars = payload.payload.cars;
       })
-      .addCase(fetchData.rejected, (state, action) => {
+      .addCase(fetchData.rejected, (state: DataState, action) => {
         state.status = 'failed';
-        state.error = action.payload;
+        state.error = action.error as string;
       })
-      .addCase(createTodo.fulfilled, (state, action) => {
-        state.todos.push(action.payload);
+      .addCase(createTodo.fulfilled, (state: DataState, { payload }) => {
+        state.todos.push(payload.payload);
       })
-      .addCase(updateTodo.fulfilled, (state, action) => {
-        const todoId = action.payload.id;
+      .addCase(updateTodo.fulfilled, (state: DataState, { payload }) => {
+        const todoId = payload.payload.id;
         const idx = state.todos.findIndex(
           (t) => Number(t.id) === Number(todoId),
         );
-        state.todos[idx] = action.payload;
+        state.todos[idx] = payload.payload as Todo;
       })
-      .addCase(deleteTodo.fulfilled, (state, action) => {
-        const todoId = action.payload.id;
+      .addCase(deleteTodo.fulfilled, (state: DataState, { payload }) => {
+        const todoId = payload.payload.id;
         const idx = state.todos.findIndex(
           (t) => Number(t.id) === Number(todoId),
         );
@@ -55,23 +59,23 @@ const dataSlice = createSlice({
           state.todos.splice(idx, 1); // remove todo at position
         }
       })
-      .addCase(completeTodo.fulfilled, (state, action) => {
-        const todoId = action.payload.id;
+      .addCase(completeTodo.fulfilled, (state: DataState, { payload }) => {
+        const todoId = payload.payload.id;
         const idx = state.todos.findIndex(
           (t) => Number(t.id) === Number(todoId),
         );
-        state.todos[idx] = action.payload;
+        state.todos[idx] = payload.payload;
       })
-      .addCase(undoCompleteTodo.fulfilled, (state, action) => {
-        state.todos = action.payload;
+      .addCase(undoCompleteTodo.fulfilled, (state: DataState, { payload }) => {
+        state.todos = payload.payload;
       }),
 });
 
 export default dataSlice.reducer;
 
-export const selectAllTodos = (state) => state.data.todos;
+export const selectAllTodos = (state: RootState) => state.data.todos;
 
-export const selectAllCars = (state) => state.data.cars;
+export const selectAllCars = (state: RootState) => state.data.cars;
 
-export const selectTodoById = (state, todoId) =>
-  state.data.todos.find((todo) => Number(todo.id) === Number(todoId));
+export const selectTodoById = (state: RootState, todoId: Number) =>
+  state.data.todos.find((todo) => Number(todo.id) === todoId);

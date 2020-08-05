@@ -16,7 +16,7 @@ import Radio from '@material-ui/core/Radio';
 import FormLabel from '@material-ui/core/FormLabel';
 import { grey } from '@material-ui/core/colors';
 
-import { selectAllCars } from '../../_slices';
+import { selectAllCars, Car } from '../../_slices';
 import { createTodo, updateTodo } from '../../_store/data';
 
 interface StyleProps {
@@ -197,7 +197,7 @@ export default function TodoAddEditForm({ todo, open, handleClose }) {
             helperText={carError ? 'This field is required.' : undefined}
             onChange={onCarChanged}
           >
-            {cars.map((c) => (
+            {cars.map((c: Car) => (
               <MenuItem key={c.id} value={c.id}>
                 {c.name}
               </MenuItem>

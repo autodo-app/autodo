@@ -1,4 +1,5 @@
 export interface Car {
+  id: number;
   name: string;
   make: string;
   model: string;
@@ -7,6 +8,7 @@ export interface Car {
   vin: string;
   imageName: string;
   color: number;
+  odom: number;
 }
 
 export interface OdomSnapshot {
@@ -24,7 +26,7 @@ export interface Refueling {
 export interface Todo {
   id?: number;
   car: number;
-  completionOdomSnapshot: OdomSnapshot;
+  completionOdomSnapshot: OdomSnapshot | null;
   name: string;
   dueMileage: number;
   dueDate: string;
