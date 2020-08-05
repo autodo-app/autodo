@@ -47,10 +47,11 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'oauth2_provider',
-    'autodo',
     'rest_registration',
     'drf_yasg',
     'corsheaders',
+    'haystack',
+    'autodo',
 ]
 
 MIDDLEWARE = [
@@ -186,3 +187,11 @@ CORS_ORIGIN_WHITELIST = (
     'http://localhost:8000',
     'http://localhost:3000',
 )
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.elasticsearch2_backend.Elasticsearch2SearchEngine',
+        'URL': 'http://127.0.0.1:9200/',
+        'INDEX_NAME': 'haystack',
+    },
+}

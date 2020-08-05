@@ -7,3 +7,5 @@ django-rest-registration
 django-cors-headers
 django-filter
 drf-yasg
+haystack
+elasticsearch>=5,<6
