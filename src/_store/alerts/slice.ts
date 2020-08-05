@@ -2,22 +2,23 @@
  * Manages app state for alerts/toasts.
  */
 import { createSlice } from '@reduxjs/toolkit';
+import { AlertsState } from './state';
 
-const initialState = {};
+const initialState: AlertsState = {};
 
 const alertsSlice = createSlice({
   name: 'alerts',
   initialState,
   reducers: {
-    alertSuccess(state, action) {
+    alertSuccess(state: AlertsState, action) {
       state.type = 'alert-success';
-      state.message = action.message;
+      state.message = action.payload;
     },
-    alertError(state, action) {
+    alertError(state: AlertsState, action) {
       state.type = 'alert-error';
-      state.message = action.message;
+      state.message = action.payload;
     },
-    alertClear(state?: any, action?: any) {
+    alertClear(state?: AlertsState) {
       state = {};
     },
   },

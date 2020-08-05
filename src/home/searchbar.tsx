@@ -76,11 +76,11 @@ export const SearchBar: React.FC<{}> = (): JSX.Element => {
   const classes: StyleClasses = useStyles({} as StyleProps);
   const [value, setValue] = useState('');
 
-  const handleFocus = (e) => {
+  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
     // setFocus(true);
   };
 
-  const handleBlur = (e) => {
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     // setFocus(false);
     if (value.trim().length === 0) {
       setValue('');
@@ -88,7 +88,7 @@ export const SearchBar: React.FC<{}> = (): JSX.Element => {
     // any specific blurring logic here
   };
 
-  const handleInput = (e) => {
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
   };
 
@@ -97,7 +97,7 @@ export const SearchBar: React.FC<{}> = (): JSX.Element => {
     setValue('');
   };
 
-  const handleKeyUp = (e) => {
+  const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.charCode === 13 || e.key === 'Enter') {
       handleRequestSearch();
     } else if (e.charCode === 27 || e.key === 'Escape') {

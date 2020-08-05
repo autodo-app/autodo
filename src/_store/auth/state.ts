@@ -1,5 +1,5 @@
 export interface AuthState {
-  token: string;
-  status: 'loggedIn' | 'loggedOut';
+  token: string | null;
+  status: 'loading' | 'loggedIn' | 'loggedOut' | 'failed';
   error: string | null;
 }

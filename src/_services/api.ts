@@ -1,13 +1,13 @@
 import axios from 'axios';
 
-import { Car, OdomSnapshot, Refueling, Todo } from '../_slices/types';
+import { Car, OdomSnapshot, Refueling, Todo } from '../_models/data';
 
 const apiUrl = 'http://localhost:8000';
 const apiVersion = '/api/v1';
 
 axios.interceptors.request.use(
   (config) => {
-    const { origin } = new URL(config.url);
+    const { origin } = new URL(config.url ?? '');
     const allowedOrigins = [apiUrl];
     const token = localStorage.getItem('token');
     if (allowedOrigins.includes(origin)) {
@@ -24,7 +24,7 @@ const _refreshUserToken = async () => {
   // TODO: use the refresh token to get a new access token
 };
 
-const _authenticatedGet = async (url) => {
+const _authenticatedGet = async (url: string) => {
   const { data, status } = await axios.get(`${apiUrl}${apiVersion}/${url}`);
   if (status === 401) {
     // Token has expired, need to refresh it
@@ -37,7 +37,7 @@ const _authenticatedGet = async (url) => {
   return data;
 };
 
-const _authenticatedPost = async (url, body) => {
+const _authenticatedPost = async (url: string, body: any): Promise<any> => {
   try {
     const { data, status } = await axios.post(
       `${apiUrl}${apiVersion}/${url}`,
@@ -57,7 +57,7 @@ const _authenticatedPost = async (url, body) => {
   }
 };
 
-const _authenticatedPatch = async (url, body) => {
+const _authenticatedPatch = async (url: string, body: any): Promise<any> => {
   try {
     const { data, status } = await axios.patch(
       `${apiUrl}${apiVersion}/${url}`,
@@ -77,7 +77,7 @@ const _authenticatedPatch = async (url, body) => {
   }
 };
 
-const _authenticatedDelete = async (url, body) => {
+const _authenticatedDelete = async (url: string, body: any): Promise<any> => {
   const { data, status } = await axios.delete(
     `${apiUrl}${apiVersion}/${url}`,
     body,
@@ -93,7 +93,7 @@ const _authenticatedDelete = async (url, body) => {
   return data;
 };
 
-export const fetchUserToken = async (user, pass) => {
+export const fetchUserToken = async (user: string, pass: string) => {
   const { data } = await axios.post(`${apiUrl}/auth/token/`, {
     username: user,
     password: pass,
@@ -107,33 +107,36 @@ export const fetchTodos = async (): Promise<Todo[]> => {
   return response.results;
 };
 
-export const apiPostTodo = async (todo) => {
+export const apiPostTodo = async (todo: Todo): Promise<Todo> => {
   const response = await _authenticatedPost('todos/', todo);
   return response;
 };
 
-export const apiPatchTodo = async (todo) => {
+export const apiPatchTodo = async (todo: Todo): Promise<Todo> => {
   const response = await _authenticatedPatch(`todos/${todo.id}/`, todo);
   return response;
 };
 
-export const apiDeleteTodo = async (todo) => {
+export const apiDeleteTodo = async (todo: Todo): Promise<Todo> => {
   await _authenticatedDelete(`todos/${todo.id}/`, todo);
   return todo;
 };
 
-export const fetchRefuelings = async () => {
+export const fetchRefuelings = async (): Promise<Refueling[]> => {
   const response = await _authenticatedGet('refuelings/');
   return response.results;
 };
 
-export const fetchCars = async () => {
+export const fetchCars = async (): Promise<Car[]> => {
   const response = await _authenticatedGet('cars/');
   return response.results;
 };
 
-export const apiPostOdomSnapshot = async (snap) =>
-  await _authenticatedPost('odomsnapshots/', snap);
+export const apiPostOdomSnapshot = async (
+  snap: OdomSnapshot,
+): Promise<OdomSnapshot> => await _authenticatedPost('odomsnapshots/', snap);
 
-export const apiDeleteOdomSnapshot = async (snapId) =>
+export const apiDeleteOdomSnapshot = async (
+  snapId: number,
+): Promise<OdomSnapshot> =>
   await _authenticatedDelete(`odomsnapshots/${snapId}/`, snapId);

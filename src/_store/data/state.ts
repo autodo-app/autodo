@@ -1,4 +1,4 @@
-import { Car, Refueling, Todo } from '../../_slices';
+import { Car, Refueling, Todo } from '../../_models';
 
 export interface DataState {
   todos: Todo[];

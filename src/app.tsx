@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Route, BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
+// @ts-ignore
 import * as serviceWorker from './serviceWorker';
 import { ThemeProvider, CssBaseline } from '@material-ui/core';
 

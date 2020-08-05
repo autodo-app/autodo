@@ -2,7 +2,6 @@ import * as React from 'react';
 import { useState } from 'react';
 import { Theme, makeStyles, MenuItem } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
-import { unwrapResult } from '@reduxjs/toolkit';
 import Dialog from '@material-ui/core/Dialog';
 import Button from '@material-ui/core/Button';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -16,7 +15,8 @@ import Radio from '@material-ui/core/Radio';
 import FormLabel from '@material-ui/core/FormLabel';
 import { grey } from '@material-ui/core/colors';
 
-import { selectAllCars, Car } from '../../_slices';
+import { selectAllCars } from '../../_store';
+import { Car, Todo } from '../../_models';
 import { createTodo, updateTodo } from '../../_store/data';
 
 interface StyleProps {
@@ -49,7 +49,13 @@ const useStyles = makeStyles<Theme, StyleProps>(
 
 const margin = 'normal';
 
-export default function TodoAddEditForm({ todo, open, handleClose }) {
+export interface TodoAddEditFormProps {
+  todo?: Todo;
+  open: boolean;
+  handleClose: () => void;
+}
+export default function TodoAddEditForm(props: TodoAddEditFormProps) {
+  const { todo, open, handleClose } = props;
   const [name, setName] = useState(todo?.name || '');
   const [nameError, setNameError] = useState(false);
   const [car, setCar] = useState(todo?.car || 0);
@@ -59,9 +65,8 @@ export default function TodoAddEditForm({ todo, open, handleClose }) {
   const [mileageRepeatInterval, setMileageRepeatInterval] = useState(
     todo?.mileageRepeatInterval || 0,
   );
-  const [dateRepeatInterval, setDateRepeatInterval] = useState(
-    todo?.dateRepeatInterval || 'never',
-  );
+  // TODO: translate data values to enum values here
+  const [dateRepeatInterval, setDateRepeatInterval] = useState('never');
   const [addRequestStatus, setAddRequestStatus] = useState('idle');
   const [generalError, setGeneralError] = useState('');
 
@@ -70,14 +75,20 @@ export default function TodoAddEditForm({ todo, open, handleClose }) {
 
   const cars = useSelector(selectAllCars);
 
-  const onNameChanged = (e) => setName(e.target.value);
-  const onDueMileageChanged = (e) => setDueMileage(e.target.value);
-  const onCarChanged = (e) => setCar(e.target.value);
-  const onDueDateChanged = (e) => setDueDate(e.target.value);
-  const onMileageRepeatIntervalChanged = (e) =>
-    setMileageRepeatInterval(e.target.value);
-  const onDateRepeatIntervalChanged = (e) =>
-    setDateRepeatInterval(e.target.value);
+  const onNameChanged = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setName(e.target.value);
+  const onDueMileageChanged = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setDueMileage(Number(e.target.value));
+  const onCarChanged = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setCar(Number(e.target.value));
+  const onDueDateChanged = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setDueDate(e.target.value);
+  const onMileageRepeatIntervalChanged = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => setMileageRepeatInterval(Number(e.target.value));
+  const onDateRepeatIntervalChanged = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => setDateRepeatInterval(e.target.value);
 
   const canSave =
     [name, car].every(Boolean) &&
@@ -88,9 +99,8 @@ export default function TodoAddEditForm({ todo, open, handleClose }) {
     if (canSave) {
       try {
         setAddRequestStatus('pending');
-        let resultAction;
         if (todo) {
-          resultAction = await dispatch(
+          await dispatch(
             updateTodo({
               id: Number(todo.id),
               name: name,
@@ -106,7 +116,7 @@ export default function TodoAddEditForm({ todo, open, handleClose }) {
             }),
           );
         } else {
-          resultAction = await dispatch(
+          await dispatch(
             createTodo({
               name: name,
               car: car,
@@ -120,7 +130,6 @@ export default function TodoAddEditForm({ todo, open, handleClose }) {
             }),
           );
         }
-        unwrapResult(resultAction);
       } catch (err) {
         console.error('Failed to save the post: ', err);
       } finally {

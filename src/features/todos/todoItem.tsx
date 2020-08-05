@@ -10,12 +10,7 @@ import { red } from '@material-ui/core/colors';
 
 import { LateChip, DueSoonChip } from '../../home/status-chips';
 import TodoAddEditForm from './add_edit_form';
-import {
-  Todo,
-  // deleteTodo,
-  // completeTodo,
-  // undoCompleteTodo,
-} from '../../_slices';
+import { Todo } from '../../_models';
 import { deleteTodo, completeTodo, undoCompleteTodo } from '../../_store/data';
 
 interface StyleProps {
@@ -102,7 +97,11 @@ const DueText: React.FC<Props> = (props): JSX.Element => {
   }
 };
 
-export default function TodoItem(props): JSX.Element {
+export interface TodoItemProps {
+  todo: Todo;
+}
+
+export default function TodoItem(props: TodoItemProps): JSX.Element {
   const { todo } = props;
   const classes: StyleClasses = useStyles({} as StyleProps);
   const dispatch = useDispatch();
@@ -120,7 +119,7 @@ export default function TodoItem(props): JSX.Element {
     dispatch(deleteTodo(todo));
   };
 
-  const onComplete = (event) => {
+  const onComplete = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
       dispatch(completeTodo(todo));
     } else {

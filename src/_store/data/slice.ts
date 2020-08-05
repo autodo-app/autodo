@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { Todo } from '../../_slices';
+import { Todo } from '../../_models';
 import {
   fetchData,
   createTodo,

@@ -15,8 +15,10 @@ export const LoginForm: React.FC<Props> = (props) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const onUsernameChanged = (e) => setUsername(e.target.value);
-  const onPasswordChanged = (e) => setPassword(e.target.value);
+  const onUsernameChanged = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setUsername(e.target.value);
+  const onPasswordChanged = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setPassword(e.target.value);
 
   return (
     <form

@@ -1,5 +1,5 @@
 import { DataState } from './state';
-import { Todo } from '../../_slices';
+import { Todo } from '../../_models';
 
 export const FETCH_DATA = 'FETCH_DATA';
 export const CREATE_TODO = 'CREATE_TODO';

@@ -15,7 +15,8 @@ import SearchBar from './searchbar';
 import SideBar from './sidebar';
 import TodoItem from '../features/todos/todoItem';
 import { Divider } from '@material-ui/core';
-import { selectAllTodos, fetchData } from '../_slices';
+import { selectAllTodos, fetchData } from '../_store';
+import { RootState } from '../app/store';
 import TodoAddEditForm from '../features/todos/add_edit_form';
 
 function Copyright() {
@@ -144,8 +145,8 @@ const TodoList: React.FC<{}> = (): JSX.Element => {
   const dispatch = useDispatch();
 
   const todos = useSelector(selectAllTodos);
-  const todoStatus = useSelector((state) => state.data.status);
-  const error = useSelector((state) => state.data.error);
+  const todoStatus = useSelector((state: RootState) => state.data.status);
+  const error = useSelector((state: RootState) => state.data.error);
 
   useEffect(() => {
     if (todoStatus === 'idle') {

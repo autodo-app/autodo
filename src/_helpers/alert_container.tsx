@@ -6,7 +6,7 @@ import * as React from 'react';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { alertClear } from '../_slices';
+import { alertClear } from '../_store/alerts';
 
 export function RouteListener() {
   const location = useLocation();

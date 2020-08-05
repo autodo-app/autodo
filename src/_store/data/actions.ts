@@ -1,4 +1,4 @@
-import { Todo } from '../../_slices';
+import { Todo } from '../../_models';
 import {
   FETCH_DATA,
   CREATE_TODO,
@@ -90,7 +90,12 @@ export const completeTodo = createAsyncThunk<
   const car = thunkApi
     .getState()
     .data.cars.find((c) => Number(c.id) === Number(initialTodo.car));
-  const curMileage = car?.odom;
+  if (!car) {
+    return {
+      type: COMPLETE_TODO,
+    } as CompleteTodoAction;
+  }
+  const curMileage = car.odom;
   const initialSnapshot = {
     car: initialTodo.car,
     date: new Date(),
@@ -99,7 +104,7 @@ export const completeTodo = createAsyncThunk<
   const odomSnapshot = await apiPostOdomSnapshot(initialSnapshot);
   const updatedTodo = {
     ...initialTodo,
-    completionOdomSnapshot: odomSnapshot.id,
+    completionOdomSnapshot: odomSnapshot,
   };
   const response = await apiPatchTodo(updatedTodo);
   return {
@@ -111,7 +116,13 @@ export const completeTodo = createAsyncThunk<
 export const undoCompleteTodo = createAsyncThunk<UnCompleteTodoAction, Todo>(
   UNCOMPLETE_TODO,
   async (initialTodo) => {
-    await apiDeleteOdomSnapshot(initialTodo.completionOdomSnapshot);
+    if (!initialTodo.completionOdomSnapshot?.id) {
+      // there is not a valid odomSnapshot on the todo to undo
+      return {
+        type: UNCOMPLETE_TODO,
+      } as UnCompleteTodoAction;
+    }
+    await apiDeleteOdomSnapshot(initialTodo.completionOdomSnapshot.id);
     const response = await fetchTodos();
     return {
       type: UNCOMPLETE_TODO,
