@@ -26,27 +26,46 @@ services:
     links:
       - db:db
   # Elasticsearch Docker Images: https://www.docker.elastic.co/
+  # elasticsearch:
+  #   image: docker.elastic.co/elasticsearch/elasticsearch:7.4.0
+  #   container_name: elasticsearch
+  #   environment:
+  #     - xpack.security.enabled=false
+  #     - discovery.type=single-node
+  #     - fielddata=true
+  #   ulimits:
+  #     memlock:
+  #       soft: -1
+  #       hard: -1
+  #     nofile:
+  #       soft: 65536
+  #       hard: 65536
+  #   cap_add:
+  #     - IPC_LOCK
+  #   volumes:
+  #     - elasticsearch-data:/usr/share/elasticsearch/data
+  #   ports:
+  #     - "9200:9200"
+  #     - "9300:9300"
+
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.4.0
-    container_name: elasticsearch
-    environment:
-      - xpack.security.enabled=false
-      - discovery.type=single-node
-      - fielddata=true
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-      nofile:
-        soft: 65536
-        hard: 65536
-    cap_add:
-      - IPC_LOCK
+    container_name: django_elasticsearch_dsl_drf_elasticsearch
+    build:
+      context: .
+      dockerfile: ./docker/elasticsearch/Dockerfile
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.5.1
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
     ports:
       - "9200:9200"
       - "9300:9300"
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - cluster.routing.allocation.disk.watermark.low=97%
+      - cluster.routing.allocation.disk.watermark.high=98%
+      - cluster.routing.allocation.disk.watermark.flood_stage=99%
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
 
   kibana:
     container_name: kibana

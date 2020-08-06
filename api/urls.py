@@ -20,6 +20,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from autodo.serializers import CustomJWTSerializer
 from autodo.views import profile
+from autodo.urls import searchRouter
 
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
@@ -43,6 +44,7 @@ urlpatterns = [
     # path('', include('autodo.urls')),
     path('admin/', admin.site.urls),
     re_path('api/(?P<version>(v1|v2))/', include('autodo.urls')),
+    path('search/', include(searchRouter.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('auth/token/', TokenObtainPairView.as_view(serializer_class=CustomJWTSerializer), name='token_obtain_pair'),
     path('auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),

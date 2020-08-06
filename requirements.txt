@@ -7,5 +7,6 @@ django-rest-registration
 django-cors-headers
 django-filter
 drf-yasg
-django_elasticsearch_dsl
+elasticsearch-dsl>=7.0.0,<8.0.0
+django_elasticsearch_dsl>=7.0.0,<8.0.0
 django_elasticsearch_dsl_drf

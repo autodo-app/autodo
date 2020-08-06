@@ -126,7 +126,10 @@ class TodoSerializer(serializers.HyperlinkedModelSerializer):
         model = Todo
         fields = ['url', 'id', 'owner', 'car', 'name', 'dueMileage', 'completionOdomSnapshot', 'estimatedDueDate', 'dueDate', 'mileageRepeatInterval', 'daysRepeatInterval', 'monthsRepeatInterval', 'yearsRepeatInterval', 'dueState']
 
-class CarDocumentSerializer(DocumentSerializer):
+class CarDocumentSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    name = serializers.CharField(read_only=True)
+
     class Meta:
         document = CarDocument
-        fields = ('id', 'name', 'make', 'model',)
+        fields = ('id', 'name',)

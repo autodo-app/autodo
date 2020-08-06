@@ -4,7 +4,6 @@ from .views import *
 
 router = DefaultRouter()
 router.register(r'cars', CarsListViewSet)
-router.register(r'carsearch', CarDocumentViewSet, basename='cardocument')
 router.register(r'odomsnapshots', OdomSnapshotsListViewSet)
 router.register(r'refuelings', RefuelingsListViewSet)
 router.register(r'todos', TodosListViewSet)
@@ -12,3 +11,6 @@ router.register(r'todos', TodosListViewSet)
 urlpatterns = [
     path('', include(router.urls))
 ]
+
+searchRouter = DefaultRouter()
+searchRouter.register(r'cars', CarDocumentViewSet, basename='cardocument')
