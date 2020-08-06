@@ -32,6 +32,7 @@ services:
     environment:
       - xpack.security.enabled=false
       - discovery.type=single-node
+      - fielddata=true
     ulimits:
       memlock:
         soft: -1

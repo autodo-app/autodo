@@ -2,7 +2,9 @@ from datetime import date
 
 from rest_framework import serializers
 from .models import Car, OdomSnapshot, Refueling, Todo, User
+from .documents import CarDocument
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from django_elasticsearch_dsl_drf.serializers import DocumentSerializer
 
 DUE_SOON_CUTOFF_DAYS = 14
 DUE_SOON_DEFAULT_DISTANCE_RATE = 10
@@ -123,3 +125,8 @@ class TodoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Todo
         fields = ['url', 'id', 'owner', 'car', 'name', 'dueMileage', 'completionOdomSnapshot', 'estimatedDueDate', 'dueDate', 'mileageRepeatInterval', 'daysRepeatInterval', 'monthsRepeatInterval', 'yearsRepeatInterval', 'dueState']
+
+class CarDocumentSerializer(DocumentSerializer):
+    class Meta:
+        document = CarDocument
+        fields = ('id', 'name', 'make', 'model',)

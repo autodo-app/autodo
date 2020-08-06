@@ -5,9 +5,27 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_registration.decorators import api_view_serializer_class_getter
 from rest_registration.settings import registration_settings
+from django_elasticsearch_dsl_drf.constants import (
+    LOOKUP_FILTER_RANGE,
+    LOOKUP_QUERY_GT,
+    LOOKUP_QUERY_GTE,
+    LOOKUP_QUERY_IN,
+    LOOKUP_QUERY_LT,
+    LOOKUP_QUERY_LTE,
+    SUGGESTER_COMPLETION,
+)
+from django_elasticsearch_dsl_drf.filter_backends import (
+    DefaultOrderingFilterBackend,
+    FilteringFilterBackend,
+    SearchFilterBackend,
+    OrderingFilterBackend,
+    IdsFilterBackend
+)
+from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 
 from .models import Car, OdomSnapshot, Refueling, Todo
-from .serializers import CarSerializer, OdomSnapshotSerializer, RefuelingSerializer, TodoSerializer
+from .documents import CarDocument
+from .serializers import CarSerializer, OdomSnapshotSerializer, RefuelingSerializer, TodoSerializer, CarDocumentSerializer
 from .permissions import IsOwner
 
 PERMS = [permissions.IsAuthenticated, IsOwner]
@@ -110,3 +128,38 @@ def profile(request):
         )
 
     return Response(serializer.data)
+
+class CarDocumentViewSet(DocumentViewSet):
+    document = CarDocument
+    serializer_class = CarDocumentSerializer
+    lookup_field = 'id'
+
+    filter_backends = [
+        FilteringFilterBackend,
+        IdsFilterBackend,
+        OrderingFilterBackend,
+        DefaultOrderingFilterBackend,
+        SearchFilterBackend,
+    ]
+
+    search_fields = ('id', 'name', 'make', 'model',)
+
+    filter_fields = {
+        'id': {
+            'field': 'id',
+            'lookups': [
+                LOOKUP_FILTER_RANGE,
+                LOOKUP_QUERY_IN,
+                LOOKUP_QUERY_GT,
+                LOOKUP_QUERY_GTE,
+                LOOKUP_QUERY_LT,
+                LOOKUP_QUERY_LTE
+            ]
+        },
+        'name': 'name.raw'
+    }
+
+    ordering_fields = {
+        'id': 'id'
+    }
+    ordering = ('id',)

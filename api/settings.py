@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     'rest_registration',
     'drf_yasg',
     'corsheaders',
-    'haystack',
+    'django_elasticsearch_dsl',
+    'django_elasticsearch_dsl_drf',
     'autodo',
 ]
 
@@ -188,10 +189,8 @@ CORS_ORIGIN_WHITELIST = (
     'http://localhost:3000',
 )
 
-HAYSTACK_CONNECTIONS = {
+ELASTICSEARCH_DSL = {
     'default': {
-        'ENGINE': 'haystack.backends.elasticsearch2_backend.Elasticsearch2SearchEngine',
-        'URL': 'http://127.0.0.1:9200/',
-        'INDEX_NAME': 'haystack',
-    },
+        'hosts': 'elasticsearch:9200'
+    }
 }
