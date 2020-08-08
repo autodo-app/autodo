@@ -76,7 +76,7 @@ export const completeTodo = createAsyncThunk<
   const curMileage = car.odom ?? 0;
   const initialSnapshot = {
     car: initialTodo.car,
-    date: new Date(),
+    date: new Date().toJSON(),
     mileage: curMileage,
   };
   const odomSnapshot = await api.postOdomSnapshot(initialSnapshot);
@@ -111,9 +111,11 @@ export const undoCompleteTodo = createAsyncThunk<
 
 export const createRefueling = createAsyncThunk<
   types.CreateRefuelingAction,
-  Refueling
->(types.CREATE_REFUELING, async (initialRefueling) => {
-  const response = await api.postRefueling(initialRefueling);
+  { refueling: Refueling; snap: OdomSnapshot }
+>(types.CREATE_REFUELING, async ({ refueling, snap }) => {
+  const odomSnapshot = await api.postOdomSnapshot(snap);
+  refueling.odomSnapshot = odomSnapshot;
+  const response = await api.postRefueling(refueling);
   return {
     type: types.CREATE_REFUELING,
     payload: response,
@@ -122,9 +124,11 @@ export const createRefueling = createAsyncThunk<
 
 export const updateRefueling = createAsyncThunk<
   types.UpdateRefuelingAction,
-  Refueling
->(types.UPDATE_REFUELING, async (initialRefueling) => {
-  const response = await api.patchRefueling(initialRefueling);
+  { refueling: Refueling; snap: OdomSnapshot }
+>(types.UPDATE_REFUELING, async ({ refueling, snap }) => {
+  const odomSnapshot = await api.patchOdomSnapshot(snap);
+  refueling.odomSnapshot = odomSnapshot;
+  const response = await api.patchRefueling(refueling);
   return {
     type: types.UPDATE_REFUELING,
     payload: response,

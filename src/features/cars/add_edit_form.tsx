@@ -85,7 +85,7 @@ export default function CarAddEditForm(props: CarAddEditFormProps) {
 
   const canSave = [name].every(Boolean) && addRequestStatus === 'idle';
 
-  const onSaveTodoClicked = async () => {
+  const onSaveCarClicked = async () => {
     if (canSave) {
       try {
         setAddRequestStatus('pending');
@@ -247,7 +247,7 @@ export default function CarAddEditForm(props: CarAddEditFormProps) {
           <Button onClick={onClose} className={classes.closeButton}>
             Cancel
           </Button>
-          <Button onClick={onSaveTodoClicked} color="primary">
+          <Button onClick={onSaveCarClicked} color="primary">
             {actionText}
           </Button>
         </DialogActions>

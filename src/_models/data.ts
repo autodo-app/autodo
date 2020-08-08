@@ -14,13 +14,13 @@ export interface Car {
 export interface OdomSnapshot {
   id?: number;
   car?: number;
-  date: Date;
+  date: string;
   mileage: number;
 }
 
 export interface Refueling {
   id?: number;
-  odomSnapshot: OdomSnapshot;
+  odomSnapshot?: OdomSnapshot;
   amount: number;
   cost: number;
 }
