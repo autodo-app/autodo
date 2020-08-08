@@ -1,19 +1,19 @@
 export interface Car {
   id?: number;
   name: string;
-  make: string;
-  model: string;
-  year: string;
-  plate: string;
-  vin: string;
-  imageName: string;
-  color: number;
-  odom: number;
+  make?: string;
+  model?: string;
+  year?: string;
+  plate?: string;
+  vin?: string;
+  imageName?: string;
+  color: number | null;
+  readonly odom?: number;
 }
 
 export interface OdomSnapshot {
   id?: number;
-  car: number;
+  car?: number;
   date: Date;
   mileage: number;
 }

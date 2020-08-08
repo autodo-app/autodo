@@ -1,4 +1,4 @@
-import { Todo, Refueling, Car } from '../../_models';
+import { Todo, Refueling, Car, OdomSnapshot } from '../../_models';
 import * as types from './types';
 import * as api from '../../_services';
 import { createAsyncThunk } from '@reduxjs/toolkit';
@@ -73,7 +73,7 @@ export const completeTodo = createAsyncThunk<
       type: types.COMPLETE_TODO,
     } as types.CompleteTodoAction;
   }
-  const curMileage = car.odom;
+  const curMileage = car.odom ?? 0;
   const initialSnapshot = {
     car: initialTodo.car,
     date: new Date(),
@@ -142,16 +142,22 @@ export const deleteRefueling = createAsyncThunk<
   } as types.DeleteRefuelingAction;
 });
 
-export const createCar = createAsyncThunk<types.CreateCarAction, Car>(
-  types.CREATE_CAR,
-  async (initialCar) => {
-    const response = await api.postCar(initialCar);
-    return {
-      type: types.CREATE_CAR,
-      payload: response,
-    } as types.CreateCarAction;
-  },
-);
+export const createCar = createAsyncThunk<
+  types.CreateCarAction,
+  { car: Car; snap: OdomSnapshot }
+>(types.CREATE_CAR, async ({ car, snap }) => {
+  const response = await api.postCar(car);
+  if (response.id) {
+    snap.car = response.id;
+    await api.postOdomSnapshot(snap);
+  } else {
+    // TODO: throw an error of some sort?
+  }
+  return {
+    type: types.CREATE_CAR,
+    payload: response,
+  } as types.CreateCarAction;
+});
 
 export const updateCar = createAsyncThunk<types.UpdateCarAction, Car>(
   types.UPDATE_CAR,
@@ -174,3 +180,25 @@ export const deleteCar = createAsyncThunk<types.DeleteCarAction, Car>(
     } as types.DeleteCarAction;
   },
 );
+
+export const createOdomSnapshot = createAsyncThunk<
+  types.CreateOdomSnapshotAction,
+  OdomSnapshot
+>(types.CREATE_ODOM_SNAPSHOT, async (initialOdomSnapshot) => {
+  const response = await api.postOdomSnapshot(initialOdomSnapshot);
+  return {
+    type: types.CREATE_ODOM_SNAPSHOT,
+    payload: response,
+  } as types.CreateOdomSnapshotAction;
+});
+
+export const updateOdomSnapshot = createAsyncThunk<
+  types.UpdateOdomSnapshotAction,
+  OdomSnapshot
+>(types.UPDATE_ODOM_SNAPSHOT, async (initialOdomSnapshot) => {
+  const response = await api.patchOdomSnapshot(initialOdomSnapshot);
+  return {
+    type: types.UPDATE_ODOM_SNAPSHOT,
+    payload: response,
+  } as types.UpdateOdomSnapshotAction;
+});

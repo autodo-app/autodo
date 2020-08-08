@@ -1,5 +1,5 @@
 import { DataState } from './state';
-import { Todo, Refueling, Car } from '../../_models';
+import { Todo, Refueling, Car, OdomSnapshot } from '../../_models';
 
 export const FETCH_DATA = 'FETCH_DATA';
 export const CREATE_TODO = 'CREATE_TODO';
@@ -13,6 +13,8 @@ export const DELETE_REFUELING = 'DELETE_REFUELING';
 export const CREATE_CAR = 'CREATE_CAR';
 export const UPDATE_CAR = 'UPDATE_CAR';
 export const DELETE_CAR = 'DELETE_CAR';
+export const CREATE_ODOM_SNAPSHOT = 'CREATE_ODOM_SNAPSHOT';
+export const UPDATE_ODOM_SNAPSHOT = 'UPDATE_ODOM_SNAPSHOT';
 
 export interface FetchDataAction {
   type: typeof FETCH_DATA;
@@ -72,6 +74,16 @@ export interface UpdateCarAction {
 export interface DeleteCarAction {
   type: typeof DELETE_CAR;
   payload: Car;
+}
+
+export interface CreateOdomSnapshotAction {
+  type: typeof CREATE_ODOM_SNAPSHOT;
+  payload: OdomSnapshot;
+}
+
+export interface UpdateOdomSnapshotAction {
+  type: typeof UPDATE_ODOM_SNAPSHOT;
+  payload: OdomSnapshot;
 }
 
 export type DataActionTypes =
