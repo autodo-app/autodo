@@ -13,7 +13,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { BACKGROUND_LIGHT } from '../theme';
 import SearchBar from './searchbar';
 import SideBar from './sidebar';
-import TodoItem from '../features/todos/todoItem';
+import TodoItem from '../features/todos/todo_item';
 import { Divider } from '@material-ui/core';
 import { selectAllTodos, fetchData } from '../_store';
 import { RootState } from '../app/store';

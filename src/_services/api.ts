@@ -107,17 +107,17 @@ export const fetchTodos = async (): Promise<Todo[]> => {
   return response.results;
 };
 
-export const apiPostTodo = async (todo: Todo): Promise<Todo> => {
+export const postTodo = async (todo: Todo): Promise<Todo> => {
   const response = await _authenticatedPost('todos/', todo);
   return response;
 };
 
-export const apiPatchTodo = async (todo: Todo): Promise<Todo> => {
+export const patchTodo = async (todo: Todo): Promise<Todo> => {
   const response = await _authenticatedPatch(`todos/${todo.id}/`, todo);
   return response;
 };
 
-export const apiDeleteTodo = async (todo: Todo): Promise<Todo> => {
+export const deleteTodo = async (todo: Todo): Promise<Todo> => {
   await _authenticatedDelete(`todos/${todo.id}/`, todo);
   return todo;
 };
@@ -127,16 +127,60 @@ export const fetchRefuelings = async (): Promise<Refueling[]> => {
   return response.results;
 };
 
+export const postRefueling = async (
+  refueling: Refueling,
+): Promise<Refueling> => {
+  const response = await _authenticatedPost('refuelings/', refueling);
+  return response;
+};
+
+export const patchRefueling = async (
+  refueling: Refueling,
+): Promise<Refueling> => {
+  const response = await _authenticatedPatch(
+    `refuelings/${refueling.id}/`,
+    refueling,
+  );
+  return response;
+};
+
+export const deleteRefueling = async (
+  refueling: Refueling,
+): Promise<Refueling> => {
+  await _authenticatedDelete(`refuelings/${refueling.id}/`, refueling);
+  return refueling;
+};
+
 export const fetchCars = async (): Promise<Car[]> => {
   const response = await _authenticatedGet('cars/');
   return response.results;
 };
 
-export const apiPostOdomSnapshot = async (
+export const postCar = async (car: Car): Promise<Car> => {
+  const response = await _authenticatedPost('cars/', car);
+  return response;
+};
+
+export const patchCar = async (car: Car): Promise<Car> => {
+  const response = await _authenticatedPatch(`cars/${car.id}/`, car);
+  return response;
+};
+
+export const deleteCar = async (car: Car): Promise<Car> => {
+  await _authenticatedDelete(`cars/${car.id}/`, car);
+  return car;
+};
+
+export const postOdomSnapshot = async (
   snap: OdomSnapshot,
 ): Promise<OdomSnapshot> => await _authenticatedPost('odomsnapshots/', snap);
 
-export const apiDeleteOdomSnapshot = async (
+export const patchOdomSnapshot = async (
+  snap: OdomSnapshot,
+): Promise<OdomSnapshot> =>
+  await _authenticatedPatch(`odomsnapshots/${snap.id}`, snap);
+
+export const deleteOdomSnapshot = async (
   snapId: number,
 ): Promise<OdomSnapshot> =>
   await _authenticatedDelete(`odomsnapshots/${snapId}/`, snapId);
