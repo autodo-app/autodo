@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import RefuelingItem from './item';
 import { selectAllRefuelings, fetchData } from '../../_store';
 import { RootState } from '../../app/store';
+import { GRAY } from '../../theme';
 
 interface StyleProps {
   header: React.CSSProperties;
@@ -15,6 +16,9 @@ interface StyleProps {
   dateNumber: React.CSSProperties;
   upcoming: React.CSSProperties;
   statusMessage: React.CSSProperties;
+  separator: React.CSSProperties;
+  separatorContainer: React.CSSProperties;
+  spacer: React.CSSProperties;
 }
 
 type StyleClasses = Record<keyof StyleProps, string>;
@@ -51,6 +55,24 @@ const useStyles = makeStyles<Theme, StyleProps>(
         alignContent: 'center',
         justifyContent: 'center',
       },
+      separatorContainer: {
+        display: 'flex',
+        width: `calc(1.5rem + ${theme.spacing(2)}px)`,
+        paddingLeft: theme.spacing(1),
+        paddingRight: theme.spacing(1),
+      },
+      separator: {
+        width: '5px',
+        height: '1.25rem',
+        borderRadius: '3px',
+        backgroundColor: GRAY,
+        margin: 'auto',
+        alignSelf: 'center',
+        justifyContent: 'center',
+      },
+      spacer: {
+        height: theme.spacing(1),
+      },
     } as any),
 );
 
@@ -74,7 +96,24 @@ export const RefuelingList: React.FC<{}> = (): JSX.Element => {
     return <div className={classes.statusMessage}>{error}</div>;
   }
 
-  const refuelingItems = refuelings.map((r) => <RefuelingItem refueling={r} />);
+  const refuelingItems = refuelings.map((r, idx) => {
+    const separator =
+      idx === refuelings.length - 1 ? (
+        <div />
+      ) : (
+        <>
+          <div className={classes.separatorContainer}>
+            <div className={classes.separator} />
+          </div>
+        </>
+      );
+    return (
+      <>
+        <RefuelingItem first={idx === 0} refueling={r} />
+        {separator}
+      </>
+    );
+  });
 
   return (
     <>
@@ -85,7 +124,7 @@ export const RefuelingList: React.FC<{}> = (): JSX.Element => {
         </h4>
       </div>
       <Divider />
-
+      <div className={classes.spacer} />
       {refuelingItems}
     </>
   );

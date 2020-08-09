@@ -10,6 +10,7 @@ import { red } from '@material-ui/core/colors';
 import RefuelingAddEditForm from './add_edit_form';
 import { Refueling } from '../../_models';
 import { deleteRefueling } from '../../_store/data';
+import { AUTODO_GREEN, BACKGROUND_DARK, GRAY } from '../../theme';
 
 interface StyleProps {
   root: React.CSSProperties;
@@ -19,6 +20,9 @@ interface StyleProps {
   refuelingMileage: React.CSSProperties;
   refuelingData: React.CSSProperties;
   buttons: React.CSSProperties;
+  dot: React.CSSProperties;
+  dotFirst: React.CSSProperties;
+  dotContainer: React.CSSProperties;
 }
 
 type StyleClasses = Record<keyof StyleProps, string>;
@@ -28,7 +32,10 @@ const useStyles = makeStyles<Theme, StyleProps>(
     ({
       root: {
         display: 'flex',
-        padding: theme.spacing(1),
+        paddingLeft: theme.spacing(1),
+        paddingRight: theme.spacing(1),
+        paddingBottom: 0,
+        paddingTop: 0,
       },
       status: {
         backgroundColor: red[400],
@@ -58,6 +65,38 @@ const useStyles = makeStyles<Theme, StyleProps>(
       buttons: {
         margin: 0,
       },
+      dot: {
+        height: '1rem',
+        width: '1rem',
+        backgroundColor: GRAY,
+        borderRadius: '50%',
+        margin: 'auto',
+      },
+      dotFirst: {
+        marginTop: 'auto',
+        marginBottom: 'auto',
+        backgroundColor: AUTODO_GREEN,
+        width: '1.5rem',
+        height: '1.5rem',
+        borderRadius: '50%',
+        boxShadow: `inset 0 0 0 4px ${AUTODO_GREEN}, inset 0 0 0 9px ${BACKGROUND_DARK}`,
+        '&::after': {
+          content: '""',
+          width: '6px',
+          backgroundColor: 'white',
+          top: 0,
+          bottom: 0,
+          marginLeft: '-3px',
+        },
+      },
+      dotContainer: {
+        display: 'flex',
+        alignItems: 'center',
+        marginTop: 'auto',
+        marginBottom: 'auto',
+        width: '1.5rem',
+        height: '1.5rem',
+      },
     } as any),
 );
 
@@ -70,11 +109,12 @@ const CarTag: React.FC<{}> = (): JSX.Element => {
 };
 
 export interface RefuelingItemProps {
+  first: boolean;
   refueling: Refueling;
 }
 
 export default function RefuelingItem(props: RefuelingItemProps): JSX.Element {
-  const { refueling } = props;
+  const { first, refueling } = props;
   const classes: StyleClasses = useStyles({} as StyleProps);
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
@@ -91,8 +131,13 @@ export default function RefuelingItem(props: RefuelingItemProps): JSX.Element {
     dispatch(deleteRefueling(refueling));
   };
 
+  const dotClass = first ? classes.dotFirst : classes.dot;
+
   return (
     <div className={classes.root}>
+      <div className={classes.dotContainer}>
+        <div className={dotClass}></div>
+      </div>
       <div className={classes.refuelingDescription}>
         <span className={classes.refuelingDate}>
           {new Date(refueling?.odomSnapshot?.date ?? '').toLocaleDateString()}
