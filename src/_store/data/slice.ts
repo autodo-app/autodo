@@ -128,6 +128,8 @@ export default dataSlice.reducer;
 
 export const selectAllTodos = (state: RootState) => state.data.todos;
 
+export const selectAllRefuelings = (state: RootState) => state.data.refuelings;
+
 export const selectAllCars = (state: RootState) => state.data.cars;
 
 export const selectTodoById = (state: RootState, todoId: Number) =>

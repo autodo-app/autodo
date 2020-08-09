@@ -18,6 +18,7 @@ import ExitToApp from '@material-ui/icons/ExitToApp';
 
 import { AUTODO_GREEN, BACKGROUND_LIGHT } from '../theme';
 import { deepOrange } from '@material-ui/core/colors';
+import { TabState } from './types';
 
 export const drawerWidth = 220;
 
@@ -110,40 +111,84 @@ const UserIcon: React.FC<{}> = (): JSX.Element => {
   );
 };
 
-const Tabs: React.FC<{}> = (): JSX.Element => {
+interface TabProps {
+  tab: string;
+  onHomeClick: () => void;
+  onRefuelingsClick: () => void;
+  onStatsClick: () => void;
+  onGarageClick: () => void;
+}
+
+const Tabs: React.FC<TabProps> = (props): JSX.Element => {
+  const {
+    tab,
+    onHomeClick,
+    onRefuelingsClick,
+    onStatsClick,
+    onGarageClick,
+  } = props;
   const classes: StyleClasses = useStyles({} as StyleProps);
+
+  const homeButtonContainerClass =
+    tab === 'home' ? classes.highlightedButtonContainer : '';
+  const homeItemClass = tab === 'home' ? classes.highlightedButton : '';
+  const homeTextClass = tab === 'home' ? classes.highlightedButtonText : '';
+
+  const refuelingsButtonContainerClass =
+    tab === 'refuelings' ? classes.highlightedButtonContainer : '';
+  const refuelingsItemClass =
+    tab === 'refuelings' ? classes.highlightedButton : '';
+  const refuelingsTextClass =
+    tab === 'refuelings' ? classes.highlightedButtonText : '';
+
+  const statsButtonContainerClass =
+    tab === 'stats' ? classes.highlightedButtonContainer : '';
+  const statsItemClass = tab === 'stats' ? classes.highlightedButton : '';
+  const statsTextClass = tab === 'stats' ? classes.highlightedButtonText : '';
+
+  const garageButtonContainerClass =
+    tab === 'garage' ? classes.highlightedButtonContainer : '';
+  const garageItemClass = tab === 'garage' ? classes.highlightedButton : '';
+  const garageTextClass = tab === 'garage' ? classes.highlightedButtonText : '';
 
   return (
     <div>
-      <div className={classes.highlightedButtonContainer}>
-        <ListItem button className={classes.highlightedButton}>
+      <div className={homeButtonContainerClass}>
+        <ListItem button onClick={onHomeClick} className={homeItemClass}>
           <ListItemIcon>
-            <HomeIcon className={classes.highlightedButtonText} />
+            <HomeIcon className={homeTextClass} />
           </ListItemIcon>
-          <ListItemText
-            primary="Home"
-            className={classes.highlightedButtonText}
-          />
+          <ListItemText primary="Home" className={homeTextClass} />
         </ListItem>
       </div>
-      <ListItem button>
-        <ListItemIcon>
-          <LocalGasStation />
-        </ListItemIcon>
-        <ListItemText primary="Refuelings" />
-      </ListItem>
-      <ListItem button>
-        <ListItemIcon>
-          <ShowChart />
-        </ListItemIcon>
-        <ListItemText primary="Stats" />
-      </ListItem>
-      <ListItem button>
-        <ListItemIcon>
-          <DirectionsCar />
-        </ListItemIcon>
-        <ListItemText primary="Garage" />
-      </ListItem>
+      <div className={refuelingsButtonContainerClass}>
+        <ListItem
+          button
+          onClick={onRefuelingsClick}
+          className={refuelingsItemClass}
+        >
+          <ListItemIcon>
+            <LocalGasStation className={refuelingsTextClass} />
+          </ListItemIcon>
+          <ListItemText primary="Refuelings" className={refuelingsTextClass} />
+        </ListItem>
+      </div>
+      <div className={statsButtonContainerClass}>
+        <ListItem button onClick={onStatsClick} className={statsItemClass}>
+          <ListItemIcon className={statsTextClass}>
+            <ShowChart />
+          </ListItemIcon>
+          <ListItemText primary="Stats" className={statsTextClass} />
+        </ListItem>
+      </div>
+      <div className={garageButtonContainerClass}>
+        <ListItem button onClick={onGarageClick} className={garageItemClass}>
+          <ListItemIcon className={garageTextClass}>
+            <DirectionsCar />
+          </ListItemIcon>
+          <ListItemText primary="Garage" className={garageTextClass} />
+        </ListItem>
+      </div>
     </div>
   );
 };
@@ -167,8 +212,19 @@ const Footer: React.FC<{}> = (): JSX.Element => {
   );
 };
 
-export default function SideBar(): JSX.Element {
+export interface SideBarProps {
+  tab: string;
+  setTab: React.Dispatch<React.SetStateAction<TabState>>;
+}
+
+export default function SideBar(props: SideBarProps): JSX.Element {
+  const { tab, setTab } = props;
   const classes: StyleClasses = useStyles({} as StyleProps);
+
+  const onHomeClick = () => setTab('home');
+  const onRefuelingsClick = () => setTab('refuelings');
+  const onStatsClick = () => setTab('stats');
+  const onGarageClick = () => setTab('garage');
 
   return (
     <Drawer
@@ -182,7 +238,13 @@ export default function SideBar(): JSX.Element {
       <div className={classes.avatarSpacer} />
       <Divider />
       <List>
-        <Tabs />
+        <Tabs
+          tab={tab}
+          onHomeClick={onHomeClick}
+          onRefuelingsClick={onRefuelingsClick}
+          onStatsClick={onStatsClick}
+          onGarageClick={onGarageClick}
+        />
       </List>
       <List className={classes.bottomListItems}>
         <Footer />

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 import { Theme, makeStyles } from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Box from '@material-ui/core/Box';
@@ -11,8 +12,8 @@ import AddIcon from '@material-ui/icons/Add';
 import { BACKGROUND_LIGHT } from '../theme';
 import SearchBar from './searchbar';
 import SideBar from './sidebar';
-import { TodoList } from '../features/todos';
-
+import { TodoList, RefuelingList } from '../features';
+import { TabState } from './types';
 import TodoAddEditForm from '../features/todos/add_edit_form';
 
 function Copyright() {
@@ -103,7 +104,8 @@ const useStyles = makeStyles<Theme, StyleProps>(
 
 export default function Dashboard(): JSX.Element {
   const classes: StyleClasses = useStyles({} as StyleProps);
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [tab, setTab] = useState<TabState>('home');
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -113,10 +115,17 @@ export default function Dashboard(): JSX.Element {
     setOpen(false);
   };
 
+  let tabContent;
+  if (tab === 'home') {
+    tabContent = <TodoList />;
+  } else if (tab === 'refuelings') {
+    tabContent = <RefuelingList />;
+  }
+
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <SideBar />
+      <SideBar tab={tab} setTab={setTab} />
       <Fab
         color="primary"
         aria-label="add"
@@ -128,7 +137,8 @@ export default function Dashboard(): JSX.Element {
       <main className={classes.content}>
         <Container maxWidth="lg" className={classes.container}>
           <SearchBar />
-          <TodoList />
+          {/* <TodoList /> */}
+          {tabContent}
           <Box pt={4}>
             <Copyright />
           </Box>

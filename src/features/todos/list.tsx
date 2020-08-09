@@ -4,7 +4,7 @@ import { Theme, makeStyles } from '@material-ui/core';
 import { Divider } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 
-import TodoItem from './todo_item';
+import TodoItem from './item';
 import { selectAllTodos, fetchData } from '../../_store';
 import { RootState } from '../../app/store';
 
