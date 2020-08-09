@@ -17,6 +17,7 @@ interface StyleProps {
   refuelingDescription: React.CSSProperties;
   refuelingDate: React.CSSProperties;
   refuelingMileage: React.CSSProperties;
+  refuelingData: React.CSSProperties;
   buttons: React.CSSProperties;
 }
 
@@ -46,12 +47,16 @@ const useStyles = makeStyles<Theme, StyleProps>(
         marginLeft: theme.spacing(1),
         marginRight: theme.spacing(1),
       },
+      refuelingData: {
+        justifyContent: 'center',
+        margin: 'auto',
+      },
       refuelingMileage: {
         fontSize: '1.1rem',
-        fontWeight: '500',
+        fontWeight: '300',
       },
       buttons: {
-        marginLeft: 'auto',
+        margin: 0,
       },
     } as any),
 );
@@ -90,8 +95,16 @@ export default function RefuelingItem(props: RefuelingItemProps): JSX.Element {
     <div className={classes.root}>
       <div className={classes.refuelingDescription}>
         <span className={classes.refuelingDate}>
-          {refueling?.odomSnapshot?.date ?? ''}
+          {new Date(refueling?.odomSnapshot?.date ?? '').toLocaleDateString()}
         </span>{' '}
+        <span className={classes.refuelingMileage}>
+          {`${refueling?.odomSnapshot?.mileage} mi`}
+        </span>
+      </div>
+      <div className={classes.refuelingData}>
+        <span className={classes.refuelingMileage}>{`$${refueling.cost.toFixed(
+          2,
+        )} | ${refueling.amount} gal`}</span>
       </div>
       <div className={classes.buttons}>
         <CarTag />
