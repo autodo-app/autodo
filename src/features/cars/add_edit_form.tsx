@@ -109,7 +109,7 @@ export default function CarAddEditForm(props: CarAddEditFormProps) {
           if (odom !== car.odom) {
             dispatch(
               createOdomSnapshot({
-                date: new Date(),
+                date: new Date().toJSON(),
                 mileage: odom,
                 car: Number(car.id),
               }),
@@ -129,7 +129,7 @@ export default function CarAddEditForm(props: CarAddEditFormProps) {
                 color: color,
               },
               snap: {
-                date: new Date(),
+                date: new Date().toJSON(),
                 mileage: odom,
               },
             }),
