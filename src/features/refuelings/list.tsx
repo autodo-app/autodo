@@ -8,6 +8,7 @@ import RefuelingItem from './item';
 import { selectAllRefuelings, fetchData } from '../../_store';
 import { RootState } from '../../app/store';
 import { GRAY } from '../../theme';
+import { WeekCalendar } from './week_calendar';
 
 interface StyleProps {
   header: React.CSSProperties;
@@ -124,6 +125,7 @@ export const RefuelingList: React.FC<{}> = (): JSX.Element => {
         </h4>
       </div>
       <Divider />
+      <WeekCalendar refuelings={refuelings} />
       <div className={classes.spacer} />
       {refuelingItems}
     </>
