@@ -8,7 +8,7 @@ services:
   db:
     image: postgres
     volumes:
-      - static_volume:/home/app/web/static
+      - postgres_data:/var/lib/postgresql/data/
     ports: 
        - '5432'
     environment:
@@ -52,6 +52,8 @@ services:
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
   nginx:
     build: ./docker/nginx
+    volumes:
+      - static_volume:/home/app/web/static
     ports:
       - 1337:80
     depends_on:
