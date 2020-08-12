@@ -195,3 +195,5 @@ ELASTICSEARCH_DSL = {
         'hosts': 'elasticsearch:9200'
     }
 }
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
