@@ -7,6 +7,8 @@ volumes:
 services:
   db:
     image: postgres
+    volumes:
+      - static_volume:/home/app/web/static
     ports: 
        - '5432'
     environment:
@@ -15,18 +17,21 @@ services:
       - POSTGRES_PASSWORD=postgres
   web:
     restart: always
-    build: .
-    # command: python manage.py runserver 0.0.0.0:8000
-    # command: gunicorn -w 3 api.wsgi --bind autodo.app:8001
-    command: gunicorn -w 3 api.wsgi
+    build:
+      context: ./app
+      dockerfile: Dockerfile.prod
+    #command: python manage.py runserver 0.0.0.0:8000
+    command: gunicorn -w 3 api.wsgi:application --bind 0.0.0.0:8000
     volumes:
-      - .:/code
-    ports:
-      - "8000:8000"
+      - static_volume:/home/app/web/static
+    expose:
+      - 8000
+        #ports:
+        #- 8000:8000
     depends_on:
       - db
-    links:
-      - db:db
+        #links:
+        #- db:db
   elasticsearch:
     container_name: django_elasticsearch_dsl_drf_elasticsearch
     build:
@@ -45,6 +50,17 @@ services:
       - cluster.routing.allocation.disk.watermark.high=98%
       - cluster.routing.allocation.disk.watermark.flood_stage=99%
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+  nginx:
+    build: ./docker/nginx
+    ports:
+      - 1337:80
+    depends_on:
+      - web
+
+volumes:
+  postgres_data:
+  static_volume:
+  elasticsearch-data:
 
         #kibana:
         #container_name: kibana
