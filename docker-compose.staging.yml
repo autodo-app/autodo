@@ -3,7 +3,7 @@ version: '3.7'
 services:
   web:
     build:
-      context: ./app
+      context: ./backend
       dockerfile: Dockerfile.prod
     command: gunicorn api.wsgi:application --bind 0.0.0.0:8000
     volumes:
@@ -48,6 +48,17 @@ services:
       - vhost:/etc/nginx/vhost.d
     depends_on:
       - nginx-proxy
+  frontend:
+    build: ./frontend
+    command: npm start 
+    volumes:
+      - ./frontend/:/usr/src/frontend/
+    ports: 
+      - 3000:3000 
+    env_file:
+      - ./.env.dev 
+    depends_on:
+      - web 
 
 volumes:
   postgres_data:
