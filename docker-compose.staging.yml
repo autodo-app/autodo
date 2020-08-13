@@ -54,7 +54,7 @@ services:
     volumes:
       - ./frontend/:/usr/src/frontend/
     ports: 
-      - 3000:3000 
+      - 8080:8080
     env_file:
       - ./.env.dev 
     depends_on:
