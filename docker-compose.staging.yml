@@ -12,7 +12,7 @@ services:
     expose:
       - 8000
     env_file:
-      - .env.staging
+      - .env.staging.api
     depends_on:
       - db
   db:
@@ -21,6 +21,17 @@ services:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
       - .env.staging.db
+  frontend:
+    build: ./frontend
+    command: npm start 
+    volumes:
+      - ./frontend/:/usr/src/frontend/
+    ports: 
+      - 8080:8080
+    env_file:
+      - .env.staging
+    depends_on:
+      - web
   nginx-proxy:
     container_name: nginx-proxy
     build: ./docker/nginx
@@ -48,17 +59,6 @@ services:
       - vhost:/etc/nginx/vhost.d
     depends_on:
       - nginx-proxy
-  frontend:
-    build: ./frontend
-    command: npm start 
-    volumes:
-      - ./frontend/:/usr/src/frontend/
-    ports: 
-      - 8080:8080
-    env_file:
-      - ./.env.dev 
-    depends_on:
-      - web 
 
 volumes:
   postgres_data:
