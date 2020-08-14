@@ -14,7 +14,20 @@ ENV PYTHONUNBUFFERED 1
 
 # install psycopg2 dependencies
 RUN apk update \
-    && apk add postgresql-dev gcc python3-dev musl-dev
+    && apk add postgresql-dev \
+    gcc \
+    python3-dev \
+    musl-dev \
+	jpeg-dev \
+	zlib-dev \
+	freetype-dev \
+	lcms2-dev \
+	openjpeg-dev \
+	tiff-dev \
+	tk-dev \
+	tcl-dev \
+	harfbuzz-dev \
+	fribidi-dev
 
 # lint
 #RUN pip install --upgrade pip
@@ -52,9 +65,6 @@ RUN apk update && apk add libpq
 COPY --from=builder /usr/src/app/wheels /wheels
 COPY --from=builder /usr/src/app/requirements.txt .
 RUN pip install --no-cache /wheels/*
-
-# Collect static files
-RUN python manage.py collectstatic
 
 # copy entrypoint-prod.sh
 COPY ./entrypoint.prod.sh $APP_HOME
