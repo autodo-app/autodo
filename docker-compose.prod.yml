@@ -3,7 +3,7 @@ version: '3.7'
 services:
   web:
     build:
-      context: ./app
+      context: ./backend
       dockerfile: Dockerfile.prod
     command: gunicorn api.wsgi:application --bind 0.0.0.0:8000
     volumes:
@@ -12,7 +12,7 @@ services:
     expose:
       - 8000
     env_file:
-      - .env.prod
+      - .env.prod.api
     depends_on:
       - db
   db:
@@ -21,6 +21,19 @@ services:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
       - .env.prod.db
+  frontend:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+    command: serve -s ./public
+    volumes:
+      - ./frontend/:/usr/src/frontend/
+    expose: 
+      - 5000
+    env_file:
+      - .env.prod.frontend
+    depends_on:
+      - web
   nginx-proxy:
     container_name: nginx-proxy
     build: ./docker/nginx
