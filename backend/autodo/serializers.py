@@ -67,7 +67,7 @@ class CarSerializer(serializers.HyperlinkedModelSerializer):
             mileage = odomSnaps[0].mileage
             return mileage
         except:
-            return null
+            return None
 
     def find_distance_rate(self, obj):
         return calc_distance_rate(obj.id)
