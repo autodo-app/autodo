@@ -35,10 +35,7 @@ class Car(models.Model):
         max_length=10,
         blank=True,
         null=True)
-    imageName = models.CharField(
-        max_length=32,
-        blank=True,
-        null=True) # TODO: Image Field?
+    image = models.ImageField(upload_to='cars', null=True)
     color = models.IntegerField(
         default=128) # TODO: autodo green to int maybe?
 
