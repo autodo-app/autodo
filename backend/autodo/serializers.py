@@ -63,14 +63,18 @@ class CarSerializer(serializers.HyperlinkedModelSerializer):
 
     def find_odom(self, obj):
         odomSnaps = sortedOdomSnaps(obj.id)
-        return odomSnaps[0].mileage
+        try:
+            mileage = odomSnaps[0].mileage
+            return mileage
+        except:
+            return null
 
     def find_distance_rate(self, obj):
         return calc_distance_rate(obj.id)
 
     class Meta:
         model = Car
-        fields = ['url', 'id', 'owner', 'name', 'make', 'model', 'plate', 'year', 'vin', 'imageName', 'color', 'odom', 'distanceRate']
+        fields = ['url', 'id', 'owner', 'name', 'make', 'model', 'plate', 'year', 'vin', 'image', 'color', 'odom', 'distanceRate']
 
 class OdomSnapshotSerializer(serializers.HyperlinkedModelSerializer):
     """Translates the Odom Snapshot data into a view."""
