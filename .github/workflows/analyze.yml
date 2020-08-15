@@ -4,6 +4,9 @@ jobs:
   test:
     name: Static Analysis
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./mobile
     steps:
     - uses: actions/checkout@v1
       with:
