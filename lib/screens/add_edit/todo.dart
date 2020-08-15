@@ -396,8 +396,13 @@ class TodoAddEditScreenState extends State<TodoAddEditScreen> {
                             return CarForm(
                                 key: ValueKey('__refueling_car_form__'),
                                 // initialValue: widget.todo?.carName,
-                                initialValue: state.cars.firstWhere((c) => c.id == widget.todo?.carId).name,
-                                onSaved: (val) => _carId = state.cars.firstWhere((c) => c.name == val).id,
+                                initialValue: state.cars
+                                    .firstWhere(
+                                        (c) => c.id == widget.todo?.carId)
+                                    .name,
+                                onSaved: (val) => _carId = state.cars
+                                    .firstWhere((c) => c.name == val)
+                                    .id,
                                 node: _carNode,
                                 nextNode: null);
                           }

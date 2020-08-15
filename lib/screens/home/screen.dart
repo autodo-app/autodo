@@ -97,14 +97,12 @@ class HomeScreenState extends State<HomeScreen> with RouteAware {
             child: RefuelingAddEditScreen(
               isEditing: false,
               onSave: (m, d, a, c, n) {
-                BlocProvider.of<DataBloc>(context)
-                    .add(AddRefueling(Refueling(
-                  odomSnapshot: OdomSnapshot(  
-                    car: n, // TODO: return Car ID here
-                    mileage: 
-                      Distance.of(context, listen: false).unitToInternal(m),
-                    date: d
-                  ),
+                BlocProvider.of<DataBloc>(context).add(AddRefueling(Refueling(
+                  odomSnapshot: OdomSnapshot(
+                      car: n, // TODO: return Car ID here
+                      mileage:
+                          Distance.of(context, listen: false).unitToInternal(m),
+                      date: d),
                   amount: Volume.of(context, listen: false).unitToInternal(a),
                   cost: Currency.of(context, listen: false).unitToInternal(c),
                 )));
@@ -139,7 +137,8 @@ class HomeScreenState extends State<HomeScreen> with RouteAware {
                         Distance.of(context, listen: false).unit));
                     BlocProvider.of<DataBloc>(context).add(AddCar(Car(
                         name: name,
-                        odomSnapshot: OdomSnapshot(mileage: odom, date: DateTime.now()),
+                        odomSnapshot:
+                            OdomSnapshot(mileage: odom, date: DateTime.now()),
                         make: make,
                         model: model,
                         year: y,

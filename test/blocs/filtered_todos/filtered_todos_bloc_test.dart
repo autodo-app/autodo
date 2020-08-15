@@ -9,15 +9,15 @@ void main() {
   group('FilteredTodosBloc', () {
     blocTest<FilteredTodosBloc, FilteredTodosEvent, FilteredTodosState>(
         'adds TodosUpdated when TodosBloc.state emits TodosLoaded',
-      build: buildFunc, 
-      expect: [
-      FilteredTodosLoaded(
-        {
-          TodoDueState.DUE_SOON: [todo]
-        },
-        VisibilityFilter.all,
-      ),
-    ]);
+        build: buildFunc,
+        expect: [
+          FilteredTodosLoaded(
+            {
+              TodoDueState.DUE_SOON: [todo]
+            },
+            VisibilityFilter.all,
+          ),
+        ]);
 
     blocTest<FilteredTodosBloc, FilteredTodosEvent, FilteredTodosState>(
       'should update the VisibilityFilter when filter is active',

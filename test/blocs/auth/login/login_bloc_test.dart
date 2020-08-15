@@ -167,8 +167,7 @@ void main() {
       blocTest<LoginBloc, LoginEvent, LoginState>('Successful login',
           build: () {
         final authRepository = MockAuthRepository();
-        when(authRepository.logIn('', ''))
-            .thenAnswer((_) async => null);
+        when(authRepository.logIn('', '')).thenAnswer((_) async => null);
         return LoginBloc(authRepository: authRepository);
       }, act: (bloc) async {
         bloc.add(LoginWithCredentialsPressed(email: '', password: ''));

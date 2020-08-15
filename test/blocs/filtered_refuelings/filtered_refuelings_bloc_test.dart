@@ -10,7 +10,7 @@ import 'package:autodo/models/models.dart';
 
 class MockDataBloc extends MockBloc<DataEvent, DataState> implements DataBloc {}
 
-final snap = OdomSnapshot( 
+final snap = OdomSnapshot(
   car: 'test',
   mileage: 0,
   date: DateTime.fromMillisecondsSinceEpoch(0),
@@ -24,7 +24,7 @@ final refueling = Refueling(
     efficiencyColor: Color(0),
     odomSnapshot: snap);
 
-final car = Car(  
+final car = Car(
   id: 'test',
   odomSnapshot: snap,
   name: 'test',
@@ -32,7 +32,8 @@ final car = Car(
 
 FilteredRefuelingsBloc buildFunc() {
   final dataBloc = MockDataBloc();
-  when(dataBloc.state).thenReturn(DataLoaded(refuelings: [refueling], cars: [car]));
+  when(dataBloc.state)
+      .thenReturn(DataLoaded(refuelings: [refueling], cars: [car]));
   whenListen(
     dataBloc,
     Stream<DataState>.fromIterable([
@@ -46,11 +47,11 @@ void main() {
   group('FilteredDataBloc', () {
     blocTest<FilteredRefuelingsBloc, FilteredRefuelingsEvent,
             FilteredRefuelingsState>(
-      'adds DataUpdated when DataBloc.state emits DataLoaded',
-      build: buildFunc, 
-      expect: [
-        FilteredRefuelingsLoaded([refueling], VisibilityFilter.all, [car]),
-    ]);
+        'adds DataUpdated when DataBloc.state emits DataLoaded',
+        build: buildFunc,
+        expect: [
+          FilteredRefuelingsLoaded([refueling], VisibilityFilter.all, [car]),
+        ]);
 
     blocTest<FilteredRefuelingsBloc, FilteredRefuelingsEvent,
         FilteredRefuelingsState>(

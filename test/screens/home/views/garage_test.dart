@@ -29,7 +29,12 @@ void main() {
   whenListen(paidVersionBloc, Stream.fromIterable([PaidVersion()]));
 
   final dataBloc = MockDataBloc();
-  final dataState = DataLoaded(cars: [Car(name: 'test', odomSnapshot: OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0))]);
+  final dataState = DataLoaded(cars: [
+    Car(
+        name: 'test',
+        odomSnapshot: OdomSnapshot(
+            date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0))
+  ]);
   when(dataBloc.state).thenReturn(dataState);
 
   final DatabaseBloc dbBloc = MockDatabaseBloc();

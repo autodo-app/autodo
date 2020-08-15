@@ -5,11 +5,8 @@ import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/models/models.dart';
 import '../mocks.dart';
 
-final completedSnap = OdomSnapshot(  
-  date: DateTime.now(),
-  mileage: 1000,
-  car: 'test'
-);
+final completedSnap =
+    OdomSnapshot(date: DateTime.now(), mileage: 1000, car: 'test');
 final todo = Todo(
     name: 'Oil',
     id: '0',

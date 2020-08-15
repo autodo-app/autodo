@@ -153,11 +153,12 @@ class AppProviderState extends State<AppProvider> {
                         dbBloc: BlocProvider.of<DatabaseBloc>(context),
                       )..add(LoadNotifications()),
                     ),
-                    BlocProvider<DataBloc>(  
-                      create: (context) => DataBloc(  
-                        dbBloc: BlocProvider.of<DatabaseBloc>(context),
-                        notificationsBloc: BlocProvider.of<NotificationsBloc>(context)
-                      )..add(LoadData()),
+                    BlocProvider<DataBloc>(
+                      create: (context) => DataBloc(
+                          dbBloc: BlocProvider.of<DatabaseBloc>(context),
+                          notificationsBloc:
+                              BlocProvider.of<NotificationsBloc>(context))
+                        ..add(LoadData()),
                     ),
                   ],
                   child: App(

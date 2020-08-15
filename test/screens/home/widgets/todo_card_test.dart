@@ -36,7 +36,10 @@ void main() {
     setUp(() {
       dataBloc = MockDataBloc();
       filteredTodosBloc = MockFilteredTodosBloc();
-      car = Car(name: 'car', odomSnapshot: OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0));
+      car = Car(
+          name: 'car',
+          odomSnapshot: OdomSnapshot(
+              date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0));
     });
 
     testWidgets('renders', (WidgetTester tester) async {

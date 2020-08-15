@@ -24,7 +24,8 @@ class RefuelingEditButton extends StatelessWidget {
             minWidth: 0,
           ),
           child: FlatButton(
-            key: ValueKey('__refueling_card_edit_${refueling.odomSnapshot.date}'),
+            key: ValueKey(
+                '__refueling_card_edit_${refueling.odomSnapshot.date}'),
             child: Icon(
               Icons.edit,
               color: Theme.of(context).primaryIconTheme.color,
@@ -39,16 +40,16 @@ class RefuelingEditButton extends StatelessWidget {
                             onSave: (m, d, a, c, n) {
                               BlocProvider.of<DataBloc>(context)
                                   .add(AddRefueling(Refueling(
-                                    odomSnapshot: OdomSnapshot(
-                                      car: n,
-                                      mileage: Distance.of(context, listen: false)
-                                        .unitToInternal(m),
-                                      date: d,
-                                    ),
-                                    amount: Volume.of(context, listen: false)
-                                        .unitToInternal(a),
-                                    cost: Currency.of(context, listen: false)
-                                        .unitToInternal(c),
+                                odomSnapshot: OdomSnapshot(
+                                  car: n,
+                                  mileage: Distance.of(context, listen: false)
+                                      .unitToInternal(m),
+                                  date: d,
+                                ),
+                                amount: Volume.of(context, listen: false)
+                                    .unitToInternal(a),
+                                cost: Currency.of(context, listen: false)
+                                    .unitToInternal(c),
                               )));
                             },
                             cars: (state as DataLoaded).cars,

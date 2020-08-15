@@ -318,7 +318,8 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
                           car: widget.car, onSaved: (val) => _name = val),
                   (mode == CarDetailsMode.ADD || mode == CarDetailsMode.EDIT)
                       ? _TwoPartTextField(
-                          initialValue: widget.car?.odomSnapshot?.mileage?.toString(),
+                          initialValue:
+                              widget.car?.odomSnapshot?.mileage?.toString(),
                           fieldName: JsonIntl.of(context).get(IntlKeys.odom),
                           units: Distance.of(context)
                               .unitString(context, short: true),

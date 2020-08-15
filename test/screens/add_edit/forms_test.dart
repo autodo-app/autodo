@@ -26,12 +26,17 @@ void main() {
     });
     testWidgets('car autocomplete', (WidgetTester tester) async {
       final dataBloc = MockDataBloc();
-      final snap = OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
-      when(dataBloc.state)
-          .thenReturn(DataLoaded(cars: [Car(name: 'test', odomSnapshot: snap), Car(name: 'test1', odomSnapshot: snap)]));
+      final snap = OdomSnapshot(
+          date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
+      when(dataBloc.state).thenReturn(DataLoaded(cars: [
+        Car(name: 'test', odomSnapshot: snap),
+        Car(name: 'test1', odomSnapshot: snap)
+      ]));
       await tester.pumpWidget(
         MultiBlocProvider(
-          providers: [BlocProvider<DataBloc>.value(value: dataBloc),],
+          providers: [
+            BlocProvider<DataBloc>.value(value: dataBloc),
+          ],
           child: MaterialApp(
             home: Card(
               child: CarForm(
@@ -55,7 +60,13 @@ void main() {
         MaterialApp(
           home: Card(
             child: CarsCheckboxForm(
-              cars: [Car(name: 'test', odomSnapshot: OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0))],
+              cars: [
+                Car(
+                    name: 'test',
+                    odomSnapshot: OdomSnapshot(
+                        date: DateTime.fromMillisecondsSinceEpoch(0),
+                        mileage: 0))
+              ],
               onSaved: (_) {},
             ),
           ),
@@ -69,9 +80,12 @@ void main() {
     group('repeat interval', () {
       testWidgets('render', (WidgetTester tester) async {
         final dataBloc = MockDataBloc();
-      final snap = OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
-      when(dataBloc.state)
-          .thenReturn(DataLoaded(cars: [Car(name: 'test', odomSnapshot: snap), Car(name: 'test1', odomSnapshot: snap)]));
+        final snap = OdomSnapshot(
+            date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
+        when(dataBloc.state).thenReturn(DataLoaded(cars: [
+          Car(name: 'test', odomSnapshot: snap),
+          Car(name: 'test1', odomSnapshot: snap)
+        ]));
         await tester.pumpWidget(
           ChangeNotifierProvider<BasePrefService>.value(
             value: pref,
@@ -88,9 +102,12 @@ void main() {
       testWidgets('buttons', (WidgetTester tester) async {
         final key = GlobalKey<RepeatIntervalSelectorState>();
         final dataBloc = MockDataBloc();
-        final snap = OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
-        when(dataBloc.state)
-            .thenReturn(DataLoaded(cars: [Car(name: 'test', odomSnapshot: snap), Car(name: 'test1', odomSnapshot: snap)]));
+        final snap = OdomSnapshot(
+            date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
+        when(dataBloc.state).thenReturn(DataLoaded(cars: [
+          Car(name: 'test', odomSnapshot: snap),
+          Car(name: 'test1', odomSnapshot: snap)
+        ]));
         await tester.pumpWidget(
           ChangeNotifierProvider<BasePrefService>.value(
             value: pref,
@@ -126,9 +143,12 @@ void main() {
       });
       testWidgets('save', (WidgetTester tester) async {
         final dataBloc = MockDataBloc();
-        final snap = OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
-        when(dataBloc.state)
-            .thenReturn(DataLoaded(cars: [Car(name: 'test', odomSnapshot: snap), Car(name: 'test1', odomSnapshot: snap)]));
+        final snap = OdomSnapshot(
+            date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
+        when(dataBloc.state).thenReturn(DataLoaded(cars: [
+          Car(name: 'test', odomSnapshot: snap),
+          Car(name: 'test1', odomSnapshot: snap)
+        ]));
         var saved = false;
         await tester.pumpWidget(
           ChangeNotifierProvider<BasePrefService>.value(

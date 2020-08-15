@@ -31,7 +31,8 @@ class ExtraActions extends StatelessWidget {
             onSelected: (action) {
               switch (action) {
                 case ExtraAction.toggleAllComplete:
-                  BlocProvider.of<DataBloc>(context).add(ToggleAllTodosComplete());
+                  BlocProvider.of<DataBloc>(context)
+                      .add(ToggleAllTodosComplete());
                   break;
                 case ExtraAction.toggleFilter:
                   final nextFilter = (filterState == VisibilityFilter.all)

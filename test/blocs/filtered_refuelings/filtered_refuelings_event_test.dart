@@ -9,7 +9,7 @@ class MockDataBloc extends MockBloc<DataEvent, DataState> implements DataBloc {}
 
 void main() {
   group('FilteredRefuelingsEvent', () {
-    final snap = OdomSnapshot( 
+    final snap = OdomSnapshot(
       car: 'test',
       mileage: 0,
       date: DateTime.fromMillisecondsSinceEpoch(0),
@@ -23,7 +23,7 @@ void main() {
         efficiencyColor: Color(0),
         odomSnapshot: snap);
 
-    final car = Car(  
+    final car = Car(
       id: 'test',
       odomSnapshot: snap,
       name: 'test',
@@ -70,7 +70,9 @@ void main() {
       test('props are correct', () {
         expect(
           FilteredRefuelingDataUpdated(cars: [car]).props,
-          [[car]],
+          [
+            [car]
+          ],
         );
       });
     });

@@ -30,10 +30,11 @@ class CarCard extends StatelessWidget {
                                 car.copyWith(
                                     name: name,
                                     odomSnapshot: OdomSnapshot(
-                                      car: car.id,
-                                      mileage: Distance.of(context, listen: false).unitToInternal(odom),
-                                      date: DateTime.now()
-                                    ),
+                                        car: car.id,
+                                        mileage:
+                                            Distance.of(context, listen: false)
+                                                .unitToInternal(odom),
+                                        date: DateTime.now()),
                                     make: make,
                                     model: model,
                                     year: year,

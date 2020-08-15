@@ -18,19 +18,17 @@ void main() {
   BasePrefService pref;
   DataBloc dataBloc;
   final snap = OdomSnapshot(
-        date: DateTime.fromMillisecondsSinceEpoch(0),
-        mileage: 10.0,
-        car: 'test',
-      );
+    date: DateTime.fromMillisecondsSinceEpoch(0),
+    mileage: 10.0,
+    car: 'test',
+  );
   final car = Car(name: 'test', odomSnapshot: snap);
-  final refueling = Refueling(
-      amount: 10.0,
-      odomSnapshot: snap,
-      cost: 10.0);
+  final refueling = Refueling(amount: 10.0, odomSnapshot: snap, cost: 10.0);
 
   setUp(() async {
     dataBloc = MockDataBloc();
-    when(dataBloc.state).thenReturn(DataLoaded(cars: [car], refuelings: [refueling]));
+    when(dataBloc.state)
+        .thenReturn(DataLoaded(cars: [car], refuelings: [refueling]));
     pref = PrefServiceCache();
     await pref.setDefaultValues({
       'length_unit': DistanceUnit.imperial.index,

@@ -36,20 +36,22 @@ class NewUserScreenWizard extends WizardInfo {
 
   @override
   FutureOr<void> didFinish(BuildContext context) {
-
     // TODO: Make this its own addition so that the cars are added first and ID vals are used right
 
     final newCars = <Car>[];
     final newTodos = <String, Todo>{};
     for (final car in cars) {
-      final c = Car(name: car.name, odomSnapshot: OdomSnapshot(mileage: car.mileage, date: DateTime.now()));
+      final c = Car(
+          name: car.name,
+          odomSnapshot:
+              OdomSnapshot(mileage: car.mileage, date: DateTime.now()));
       newCars.add(c);
       if (car.oilChange != null) {
         newTodos[c.name] = Todo(
           name: 'Oil',
           completed: true,
           completedOdomSnapshot: OdomSnapshot(
-            mileage: car.mileage,  
+            mileage: car.mileage,
             date: DateTime.now(),
           ),
           dueMileage: car.oilChange,
@@ -61,7 +63,7 @@ class NewUserScreenWizard extends WizardInfo {
           name: 'Tire Rotation',
           completed: true,
           completedOdomSnapshot: OdomSnapshot(
-            mileage: car.mileage,  
+            mileage: car.mileage,
             date: DateTime.now(),
           ),
           dueMileage: car.tireRotation,
@@ -71,9 +73,7 @@ class NewUserScreenWizard extends WizardInfo {
     }
     BlocProvider.of<DataBloc>(context).add(TranslateDefaults(
         JsonIntl.of(context), Distance.of(context, listen: false).unit));
-    BlocProvider.of<DataBloc>(context).add(SetNewUserData(  
-      cars: newCars,
-      todos: newTodos
-    ));
+    BlocProvider.of<DataBloc>(context)
+        .add(SetNewUserData(cars: newCars, todos: newTodos));
   }
 }

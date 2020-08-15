@@ -57,20 +57,20 @@ void main() {
       expect(find.byKey(refuelingsKey), findsOneWidget);
     });
     testWidgets('load', (WidgetTester tester) async {
-      final snap = OdomSnapshot(  
-        car: 'test',
-        mileage: 1000,
-        date: DateTime.fromMillisecondsSinceEpoch(0)
-      );
+      final snap = OdomSnapshot(
+          car: 'test',
+          mileage: 1000,
+          date: DateTime.fromMillisecondsSinceEpoch(0));
       final refueling = Refueling(
         amount: 10.0,
         cost: 10.0,
         odomSnapshot: snap,
       );
       when(filteredRefuelingsBloc.state).thenAnswer((_) =>
-          FilteredRefuelingsLoaded(
-              [refueling], VisibilityFilter.all, [Car(name: 'test', odomSnapshot: snap)]));
-      when(dataBloc.state).thenReturn(DataLoaded(cars: [Car(name: 'test', odomSnapshot: snap)]));
+          FilteredRefuelingsLoaded([refueling], VisibilityFilter.all,
+              [Car(name: 'test', odomSnapshot: snap)]));
+      when(dataBloc.state).thenReturn(
+          DataLoaded(cars: [Car(name: 'test', odomSnapshot: snap)]));
       final refuelingsKey = Key('refuelings');
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(

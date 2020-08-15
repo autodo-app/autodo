@@ -20,8 +20,7 @@ class MockFilteredTodosBloc
 class MockPaidVersionBloc extends MockBloc<PaidVersionEvent, PaidVersionState>
     implements PaidVersionBloc {}
 
-class MockDataBloc extends MockBloc<DataEvent, DataState>
-    implements DataBloc {}
+class MockDataBloc extends MockBloc<DataEvent, DataState> implements DataBloc {}
 
 void main() {
   group('HomeScreen', () {
@@ -29,7 +28,8 @@ void main() {
     PaidVersionBloc paidBloc;
     DataBloc dataBloc;
     BasePrefService pref;
-    final snap = OdomSnapshot(mileage: 0, date: DateTime.fromMillisecondsSinceEpoch(0));
+    final snap =
+        OdomSnapshot(mileage: 0, date: DateTime.fromMillisecondsSinceEpoch(0));
     final cars = [Car(name: 'test', odomSnapshot: snap)];
     final todos = <Todo>[];
 

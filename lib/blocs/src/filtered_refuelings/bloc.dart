@@ -12,11 +12,11 @@ import 'state.dart';
 
 class FilteredRefuelingsBloc
     extends Bloc<FilteredRefuelingsEvent, FilteredRefuelingsState> {
-  FilteredRefuelingsBloc(
-      {@required this.dataBloc}) {
+  FilteredRefuelingsBloc({@required this.dataBloc}) {
     dataBlocSubscription = dataBloc.listen((state) {
       if (state is DataLoaded) {
-        add(FilteredRefuelingDataUpdated(refuelings: state.refuelings, cars: state.cars));
+        add(FilteredRefuelingDataUpdated(
+            refuelings: state.refuelings, cars: state.cars));
       }
     });
   }
@@ -35,10 +35,8 @@ class FilteredRefuelingsBloc
   @override
   FilteredRefuelingsState get initialState {
     if (dataBloc.state is DataLoaded) {
-      return _shadeEfficiencyStats(
-        (dataBloc.state as DataLoaded).refuelings,
-        (dataBloc.state as DataLoaded).cars,
-        VisibilityFilter.all);
+      return _shadeEfficiencyStats((dataBloc.state as DataLoaded).refuelings,
+          (dataBloc.state as DataLoaded).cars, VisibilityFilter.all);
     } else if (dataBloc.state is DataNotLoaded) {
       return FilteredRefuelingsNotLoaded();
     } else {
@@ -68,9 +66,8 @@ class FilteredRefuelingsBloc
     }
   }
 
-  Stream<FilteredRefuelingsState> _mapFilteredRefuelingDataUpdatedToState(  
-    FilteredRefuelingDataUpdated event
-  ) async* {
+  Stream<FilteredRefuelingsState> _mapFilteredRefuelingDataUpdatedToState(
+      FilteredRefuelingDataUpdated event) async* {
     final sortedRefuelings = _sortRefuelings(event.refuelings);
     final highlightedRefuelings = sortedRefuelings.map((r) {
       final car = event.cars.firstWhere((c) => c.id == r.odomSnapshot.car);
@@ -103,8 +100,8 @@ class FilteredRefuelingsBloc
     final shadedRefuelings = refuelings
         .where((r) => cars.any((c) => c.id == r.odomSnapshot.car))
         .map((r) => r.copyWith(
-            efficiencyColor:
-                Color(_hsv(r, cars.firstWhere((c) => r.odomSnapshot.car == c.id)))))
+            efficiencyColor: Color(
+                _hsv(r, cars.firstWhere((c) => r.odomSnapshot.car == c.id)))))
         .toList();
     final updatedRefuelings = refuelings
         .map((r) => shadedRefuelings.any((s) => s.id == r.id)
@@ -116,7 +113,8 @@ class FilteredRefuelingsBloc
   }
 
   List<Refueling> _sortRefuelings(List<Refueling> refuelings) {
-    refuelings.sort((a, b) => a.odomSnapshot.date.compareTo(b.odomSnapshot.date));
+    refuelings
+        .sort((a, b) => a.odomSnapshot.date.compareTo(b.odomSnapshot.date));
     return refuelings.reversed.toList();
   }
 

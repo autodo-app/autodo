@@ -215,21 +215,23 @@ class RestDataRepository extends DataRepository {
   // OdomSnapshots
   @override
   Future<OdomSnapshot> addNewOdomSnapshot(OdomSnapshot odomSnapshot) async {
-    final res =
-        await _authenticatedPost('$API_BASE_URL/odomSnapshots/', odomSnapshot.toDocument());
+    final res = await _authenticatedPost(
+        '$API_BASE_URL/odomSnapshots/', odomSnapshot.toDocument());
     return OdomSnapshot.fromMap(res['id'], res);
   }
 
   @override
   Future<OdomSnapshot> updateOdomSnapshot(OdomSnapshot odomSnapshot) async {
     final res = await _authenticatedPatch(
-        '$API_BASE_URL/odomSnapshots/${odomSnapshot.id}/', odomSnapshot.toDocument());
+        '$API_BASE_URL/odomSnapshots/${odomSnapshot.id}/',
+        odomSnapshot.toDocument());
     return OdomSnapshot.fromMap(res['id'], res);
   }
 
   @override
   Future<void> deleteOdomSnapshot(OdomSnapshot odomSnapshot) async {
-    await _authenticatedDelete('$API_BASE_URL/odomSnapshots/${odomSnapshot.id}/');
+    await _authenticatedDelete(
+        '$API_BASE_URL/odomSnapshots/${odomSnapshot.id}/');
   }
 
   @override

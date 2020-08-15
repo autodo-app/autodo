@@ -65,12 +65,12 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
     yield DbNotLoaded();
 
     // if (state is DbLoaded) {
-      // final repo = (state as DbLoaded).dataRepo;
-      // if (repo is SembastDataRepository) {
-      //   await repo.close();
-      //   // ToDo: We should leave the DB on disk if they logged out by mistake
-      //   await SembastDataRepository.deleteDb(repo.db.path);
-      // }
+    // final repo = (state as DbLoaded).dataRepo;
+    // if (repo is SembastDataRepository) {
+    //   await repo.close();
+    //   // ToDo: We should leave the DB on disk if they logged out by mistake
+    //   await SembastDataRepository.deleteDb(repo.db.path);
+    // }
     // }z
   }
 

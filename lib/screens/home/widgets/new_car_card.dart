@@ -25,9 +25,9 @@ class NewCarCard extends StatelessWidget {
                       BlocProvider.of<DataBloc>(context).add(AddCar(Car(
                           name: name,
                           odomSnapshot: OdomSnapshot(
-                                      mileage: Distance.of(context, listen: false).unitToInternal(odom),
-                                      date: DateTime.now()
-                                    ),
+                              mileage: Distance.of(context, listen: false)
+                                  .unitToInternal(odom),
+                              date: DateTime.now()),
                           make: make,
                           model: model,
                           year: year,

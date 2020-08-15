@@ -95,11 +95,11 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
       yield FilteredTodosLoaded(
         _filterTodos(
           (state as FilteredTodosLoaded)
-            .filteredTodos
-            .entries
-            .map((e) => e.value)
-            .expand((e) => e)
-            .toList(),
+              .filteredTodos
+              .entries
+              .map((e) => e.value)
+              .expand((e) => e)
+              .toList(),
           event.filter,
         ),
         event.filter,
@@ -107,13 +107,14 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
     }
   }
 
-  Stream<FilteredTodosState> _mapDataUpdatedToState(FilteredTodoDataUpdated event) async* {
+  Stream<FilteredTodosState> _mapDataUpdatedToState(
+      FilteredTodoDataUpdated event) async* {
     // Had been handling due states here before, now going to handle that in DataBloc
-    final updatedTodos = _filterTodos(event.todos, (state as FilteredTodosLoaded).activeFilter);
-    yield FilteredTodosLoaded(updatedTodos, (state as FilteredTodosLoaded).activeFilter);
+    final updatedTodos =
+        _filterTodos(event.todos, (state as FilteredTodosLoaded).activeFilter);
+    yield FilteredTodosLoaded(
+        updatedTodos, (state as FilteredTodosLoaded).activeFilter);
   }
-
-  
 
   @override
   Future<void> close() {

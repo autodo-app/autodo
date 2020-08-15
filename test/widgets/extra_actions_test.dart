@@ -8,8 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
-class MockDataBloc extends MockBloc<DataEvent, DataState>
-    implements DataBloc {}
+class MockDataBloc extends MockBloc<DataEvent, DataState> implements DataBloc {}
 
 class MockFilteredTodosBloc
     extends MockBloc<FilteredTodosEvent, FilteredTodosState>

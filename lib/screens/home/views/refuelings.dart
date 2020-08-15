@@ -107,8 +107,8 @@ class _CalendarView extends StatelessWidget {
   final List<Refueling> refuelings;
 
   bool _refuelingToday(DateTime date) {
-    return refuelings
-        .any((r) => roundToDay(r.odomSnapshot.date).isAtSameMomentAs(roundToDay(date)));
+    return refuelings.any((r) =>
+        roundToDay(r.odomSnapshot.date).isAtSameMomentAs(roundToDay(date)));
   }
 
   DateTime _getInterval(int dateDay, int dayRangeVal) =>
@@ -220,8 +220,8 @@ class RefuelingsScreen extends StatelessWidget {
                             first: adjustedIndex == 0,
                             last: adjustedIndex == (refuelings.length - 1),
                             refueling: refuelings[adjustedIndex],
-                            car: cars.firstWhere((c) =>
-                                c.id == refuelings[adjustedIndex].carId),
+                            car: cars.firstWhere(
+                                (c) => c.id == refuelings[adjustedIndex].carId),
                             onDelete: () => _deleteRefueling(
                                 context, refuelings[adjustedIndex]),
                           );

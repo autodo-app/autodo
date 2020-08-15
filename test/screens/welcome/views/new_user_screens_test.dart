@@ -22,8 +22,7 @@ class MockAuthenticationBloc
 class MockDatabaseBloc extends MockBloc<DatabaseEvent, DatabaseState>
     implements DatabaseBloc {}
 
-class MockDataBloc extends MockBloc<DataEvent, DataState>
-    implements DataBloc {}
+class MockDataBloc extends MockBloc<DataEvent, DataState> implements DataBloc {}
 
 // ignore: must_be_immutable
 class MockRepo extends Mock implements DataRepository {}
@@ -33,7 +32,9 @@ void main() {
   final dataLoaded = DataLoaded(todos: [
     Todo(name: 'oil', mileageRepeatInterval: 3500),
     Todo(name: 'tire_rotation', mileageRepeatInterval: 7500)
-  ], cars: [Car(name: 'test')]);
+  ], cars: [
+    Car(name: 'test')
+  ]);
 
   setUp(() async {
     pref = PrefServiceCache();
@@ -125,8 +126,9 @@ void main() {
     });
     testWidgets('set repeats back', (tester) async {
       final dataBloc = MockDataBloc();
-      when(dataBloc.state).thenReturn(
-          DataLoaded(todos: [Todo(name: 'oil'), Todo(name: 'tire_rotation')], cars: [Car(name: 'test')]));
+      when(dataBloc.state).thenReturn(DataLoaded(
+          todos: [Todo(name: 'oil'), Todo(name: 'tire_rotation')],
+          cars: [Car(name: 'test')]));
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,

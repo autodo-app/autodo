@@ -127,7 +127,8 @@ void main() {
           dueState: TodoDueState.UPCOMING,
           completed: false,
           carId: 'car');
-      final snap = OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
+      final snap = OdomSnapshot(
+          date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
       final car = Car(name: 'test', odomSnapshot: snap);
       when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded({
             TodoDueState.UPCOMING: [todo],
@@ -171,7 +172,8 @@ void main() {
           dueState: TodoDueState.UPCOMING,
           completed: false,
           carId: 'car');
-      final snap = OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
+      final snap = OdomSnapshot(
+          date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
       final car = Car(name: 'test', odomSnapshot: snap);
       when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded({
             TodoDueState.UPCOMING: [todo],
@@ -233,7 +235,8 @@ void main() {
           dueState: TodoDueState.COMPLETE,
           completed: false,
           carId: 'car');
-      final snap = OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
+      final snap = OdomSnapshot(
+          date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
       final car = Car(name: 'test', odomSnapshot: snap);
       when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded({
             TodoDueState.UPCOMING: [upcoming],
@@ -241,8 +244,8 @@ void main() {
             TodoDueState.DUE_SOON: [dueSoon],
             TodoDueState.COMPLETE: [complete],
           }, VisibilityFilter.all));
-      when(dataBloc.state).thenReturn(
-          DataLoaded(todos: [upcoming, pastDue, dueSoon, complete], cars: [car]));
+      when(dataBloc.state).thenReturn(DataLoaded(
+          todos: [upcoming, pastDue, dueSoon, complete], cars: [car]));
       final todosKey = Key('todos');
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
@@ -288,15 +291,16 @@ void main() {
           dueState: TodoDueState.COMPLETE,
           completed: false,
           carId: 'car');
-      final snap = OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
+      final snap = OdomSnapshot(
+          date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
       final car = Car(name: 'test', odomSnapshot: snap);
       when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded({
             TodoDueState.UPCOMING: [upcoming],
             TodoDueState.DUE_SOON: [dueSoon],
             TodoDueState.COMPLETE: [complete],
           }, VisibilityFilter.all));
-      when(dataBloc.state)
-          .thenReturn(DataLoaded(todos: [upcoming, dueSoon, complete], cars: [car]));
+      when(dataBloc.state).thenReturn(
+          DataLoaded(todos: [upcoming, dueSoon, complete], cars: [car]));
       final todosKey = Key('todos');
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
@@ -329,8 +333,9 @@ void main() {
           dueState: TodoDueState.UPCOMING,
           completed: false,
           carId: 'car');
-      final todoList = List.filled(5, todo);  
-      final snap = OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
+      final todoList = List.filled(5, todo);
+      final snap = OdomSnapshot(
+          date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
       final car = Car(name: 'test', odomSnapshot: snap);
       when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoaded({
             TodoDueState.UPCOMING: todoList,

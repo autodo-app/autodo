@@ -54,8 +54,9 @@ class DeleteTodo extends DataEvent {
 }
 
 class CompleteTodo extends DataEvent {
-  const CompleteTodo({@required this.todo, this.completedDate, this.completedMileage}):
-      assert(todo != null);
+  const CompleteTodo(
+      {@required this.todo, this.completedDate, this.completedMileage})
+      : assert(todo != null);
 
   final Todo todo;
 
@@ -172,9 +173,9 @@ class SetNewUserData extends DataEvent {
 
   final Map<String, Todo> todos;
 
-  @override 
+  @override
   List<Object> get props => [...cars, ...todos.entries];
 
-  @override 
+  @override
   String toString() => '$runtimeType: { cars: $cars, todos: $todos }';
 }

@@ -30,11 +30,12 @@ void main() {
   final paidVersionBloc = MockPaidVersionBloc();
   whenListen(paidVersionBloc, Stream.fromIterable([PaidVersion()]));
 
-  final snap = OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
+  final snap =
+      OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
   final dataBloc = MockDataBloc();
   final car = Car(name: 'test', odomSnapshot: snap);
   when(dataBloc.state).thenReturn(DataLoaded(cars: [car]));
-  
+
   final DatabaseBloc dbBloc = MockDatabaseBloc();
   final StorageRepository storageRepo = MockStorageRepo();
   final dbLoaded = DbLoaded(null, storageRepo: storageRepo);

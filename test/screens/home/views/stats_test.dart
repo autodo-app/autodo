@@ -61,20 +61,21 @@ void main() {
       final refuelings = List<Refueling>.generate(
           100,
           (int index) => Refueling(
-              id: '$index',
-              odomSnapshot: OdomSnapshot(  
-                mileage: index * 200.0,
-                date: DateTime.fromMillisecondsSinceEpoch(
-                  1546300800000 + index * 864000000),
-                car: 'test'
-              ),
-              amount: rnd.nextDouble() * 30 + 10,
-              cost: rnd.nextDouble() * 30 + 10,
-              efficiency: 1.0,));
+                id: '$index',
+                odomSnapshot: OdomSnapshot(
+                    mileage: index * 200.0,
+                    date: DateTime.fromMillisecondsSinceEpoch(
+                        1546300800000 + index * 864000000),
+                    car: 'test'),
+                amount: rnd.nextDouble() * 30 + 10,
+                cost: rnd.nextDouble() * 30 + 10,
+                efficiency: 1.0,
+              ));
 
       final car = Car(
           name: 'test',
-          odomSnapshot: OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0),
+          odomSnapshot: OdomSnapshot(
+              date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0),
           distanceRateHistory: List<DistanceRatePoint>.generate(
               100,
               (int index) => DistanceRatePoint(
@@ -82,7 +83,8 @@ void main() {
                       1546300800000 + index * 864000000),
                   index / 20.0)));
 
-      when(dataBloc.state).thenAnswer((_) => DataLoaded(cars: [car], refuelings: refuelings));
+      when(dataBloc.state)
+          .thenAnswer((_) => DataLoaded(cars: [car], refuelings: refuelings));
 
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(

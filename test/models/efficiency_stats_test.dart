@@ -14,36 +14,27 @@ import '../blocs/mocks.dart';
 void main() {
   BasePrefService pref;
   final dataBloc = MockDataBloc();
-  final snap1 = OdomSnapshot(  
+  final snap1 = OdomSnapshot(
     mileage: 1000,
     car: 'test',
     date: DateTime.fromMillisecondsSinceEpoch(0),
   );
-  final snap2 = OdomSnapshot(  
+  final snap2 = OdomSnapshot(
     mileage: 2000,
     car: 'test',
     date: DateTime.fromMillisecondsSinceEpoch(0),
   );
-  final snap3 = OdomSnapshot(  
+  final snap3 = OdomSnapshot(
     mileage: 3000,
     car: 'test',
     date: DateTime.fromMillisecondsSinceEpoch(0),
   );
   final refuelingsShort = [
-    Refueling(
-        odomSnapshot: snap1,
-        amount: 10.0,
-        cost: 20.0),
-    Refueling(
-        odomSnapshot: snap2,
-        amount: 10.0,
-        cost: 20.0),
+    Refueling(odomSnapshot: snap1, amount: 10.0, cost: 20.0),
+    Refueling(odomSnapshot: snap2, amount: 10.0, cost: 20.0),
   ];
   final refuelingsLong = List<Refueling>.from(refuelingsShort)
-    ..add(Refueling(
-        odomSnapshot: snap3,
-        amount: 10.0,
-        cost: 20.0));
+    ..add(Refueling(odomSnapshot: snap3, amount: 10.0, cost: 20.0));
 
   group('efficiency stats', () {
     setUp(() async {
@@ -80,8 +71,7 @@ void main() {
           ))));
       await tester.pump();
 
-      final data =
-          await EfficiencyStats.fetch(dataBloc, _key.currentContext);
+      final data = await EfficiencyStats.fetch(dataBloc, _key.currentContext);
       expect(data, []);
     });
 
@@ -104,8 +94,7 @@ void main() {
           ))));
       await tester.pump();
 
-      final data =
-          await EfficiencyStats.fetch(dataBloc, _key.currentContext);
+      final data = await EfficiencyStats.fetch(dataBloc, _key.currentContext);
       final expectedRawData = [
         FuelMileagePoint(
             DateTime.fromMillisecondsSinceEpoch(0), 235.2145833333333),

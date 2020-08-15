@@ -40,7 +40,8 @@ class DemoDataRepository extends DataRepository {
           averageEfficiency: 2.0,
           distanceRate: 2.0,
           distanceRateHistory: dr,
-          odomSnapshot: OdomSnapshot(car: 'demo', date: dr.last.date, mileage: mileage),
+          odomSnapshot:
+              OdomSnapshot(car: 'demo', date: dr.last.date, mileage: mileage),
           numRefuelings: refs.length,
           make: 'Plymouth',
           model: 'Fury',
@@ -81,7 +82,10 @@ class DemoDataRepository extends DataRepository {
 
       refuelings.add(Refueling(
         id: '${refuelings.length}',
-        odomSnapshot: OdomSnapshot(car: 'demo', date: DateTime.fromMillisecondsSinceEpoch(date), mileage: mileage),
+        odomSnapshot: OdomSnapshot(
+            car: 'demo',
+            date: DateTime.fromMillisecondsSinceEpoch(date),
+            mileage: mileage),
         amount: amount,
         cost: cost,
         efficiency: efficiency,
@@ -151,7 +155,7 @@ class DemoDataRepository extends DataRepository {
     ];
   }
 
-  @override 
+  @override
   Future<List<OdomSnapshot>> getCurrentOdomSnapshots() async {
     return <OdomSnapshot>[];
   }
@@ -183,7 +187,6 @@ class DemoDataRepository extends DataRepository {
   FutureOr<WriteBatchWrapper<OdomSnapshot>> startOdomSnapshotWriteBatch() {
     return DemoWriteBatch<OdomSnapshot>();
   }
-
 
   @override
   Future<Car> updateCar(Car car) {

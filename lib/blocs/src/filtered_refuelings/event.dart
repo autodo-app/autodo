@@ -24,9 +24,9 @@ class FilteredRefuelingDataUpdated extends FilteredRefuelingsEvent {
 
   final List<Car> cars;
 
-  @override 
+  @override
   List<Object> get props => [...refuelings, ...cars];
 
-  @override 
+  @override
   String toString() => '$runtimeType { refuelings $refuelings, cars: $cars }';
 }

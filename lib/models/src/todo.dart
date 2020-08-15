@@ -41,7 +41,8 @@ class Todo extends Equatable implements WriteBatchDocument {
       notificationID: value['notificationID'] as int,
       completed: value['completed'] as bool,
       estimatedDueDate: value['estimatedDueDate'] as bool,
-      completedOdomSnapshot: OdomSnapshot.fromMap(value['odomSnapshot']['id'], value['odomSnapshot']),
+      completedOdomSnapshot: OdomSnapshot.fromMap(
+          value['odomSnapshot']['id'], value['odomSnapshot']),
       dueDate: (value['dueDate'] == null)
           ? null
           // : DateTime.fromMillisecondsSinceEpoch(value['dueDate']),
@@ -79,7 +80,6 @@ class Todo extends Equatable implements WriteBatchDocument {
   /// explicitly when creating the ToDo.
   final bool estimatedDueDate;
 
-
   /// The date when the ToDo should be completed.
   final DateTime dueDate;
 
@@ -116,7 +116,8 @@ class Todo extends Equatable implements WriteBatchDocument {
         notificationID: notificationID ?? this.notificationID,
         completed: completed ?? this.completed,
         estimatedDueDate: estimatedDueDate ?? this.estimatedDueDate,
-        completedOdomSnapshot: completedOdomSnapshot ?? this.completedOdomSnapshot,
+        completedOdomSnapshot:
+            completedOdomSnapshot ?? this.completedOdomSnapshot,
         dueDate: dueDate ?? this.dueDate);
   }
 

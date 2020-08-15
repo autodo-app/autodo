@@ -53,9 +53,12 @@ void main() {
     });
     testWidgets('render w/car toggle form', (WidgetTester tester) async {
       final key = Key('screen');
-      final snap = OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
-      when(dataBloc.state)
-          .thenReturn(DataLoaded(cars: [Car(name: '1', odomSnapshot: snap), Car(name: '2', odomSnapshot: snap)]));
+      final snap = OdomSnapshot(
+          date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
+      when(dataBloc.state).thenReturn(DataLoaded(cars: [
+        Car(name: '1', odomSnapshot: snap),
+        Car(name: '2', odomSnapshot: snap)
+      ]));
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
@@ -79,9 +82,14 @@ void main() {
     });
     testWidgets('render w/car autocomplete form', (WidgetTester tester) async {
       final key = Key('screen');
-      final snap = OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
-      when(dataBloc.state)
-          .thenReturn(DataLoaded(cars: [Car(name: '1', odomSnapshot: snap), Car(name: '2', odomSnapshot: snap), Car(name: '3', odomSnapshot: snap), Car(name: '4', odomSnapshot: snap)]));
+      final snap = OdomSnapshot(
+          date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
+      when(dataBloc.state).thenReturn(DataLoaded(cars: [
+        Car(name: '1', odomSnapshot: snap),
+        Car(name: '2', odomSnapshot: snap),
+        Car(name: '3', odomSnapshot: snap),
+        Car(name: '4', odomSnapshot: snap)
+      ]));
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
@@ -106,9 +114,11 @@ void main() {
     testWidgets('save', (WidgetTester tester) async {
       final key = Key('screen');
       var saved = false;
-      final snap = OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
-      when(dataBloc.state)
-          .thenReturn(DataLoaded(cars: [Car(name: 'test', odomSnapshot: snap),]));
+      final snap = OdomSnapshot(
+          date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
+      when(dataBloc.state).thenReturn(DataLoaded(cars: [
+        Car(name: 'test', odomSnapshot: snap),
+      ]));
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
@@ -142,9 +152,11 @@ void main() {
     });
     testWidgets('date button', (WidgetTester tester) async {
       final key = Key('screen');
-      final snap = OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
-      when(dataBloc.state)
-          .thenReturn(DataLoaded(cars: [Car(name: 'test', odomSnapshot: snap),]));
+      final snap = OdomSnapshot(
+          date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
+      when(dataBloc.state).thenReturn(DataLoaded(cars: [
+        Car(name: 'test', odomSnapshot: snap),
+      ]));
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
@@ -169,9 +181,11 @@ void main() {
     });
     testWidgets('repeat button', (WidgetTester tester) async {
       final key = Key('screen');
-      final snap = OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
-      when(dataBloc.state)
-          .thenReturn(DataLoaded(cars: [Car(name: 'test', odomSnapshot: snap),]));
+      final snap = OdomSnapshot(
+          date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
+      when(dataBloc.state).thenReturn(DataLoaded(cars: [
+        Car(name: 'test', odomSnapshot: snap),
+      ]));
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
@@ -196,9 +210,11 @@ void main() {
     });
     testWidgets('repeatIntervalToString', (WidgetTester tester) async {
       final key = GlobalKey<TodoAddEditScreenState>();
-      final snap = OdomSnapshot(date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
-      when(dataBloc.state)
-          .thenReturn(DataLoaded(cars: [Car(name: 'test', odomSnapshot: snap),]));
+      final snap = OdomSnapshot(
+          date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0);
+      when(dataBloc.state).thenReturn(DataLoaded(cars: [
+        Car(name: 'test', odomSnapshot: snap),
+      ]));
       final screen = TodoAddEditScreen(
         key: key,
         isEditing: false,

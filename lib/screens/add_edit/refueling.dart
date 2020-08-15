@@ -50,7 +50,8 @@ class _MileageForm extends StatelessWidget {
             EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
       ),
       autofocus: true,
-      initialValue: distance.format(refueling?.odomSnapshot?.mileage, textField: true),
+      initialValue:
+          distance.format(refueling?.odomSnapshot?.mileage, textField: true),
       keyboardType: TextInputType.numberWithOptions(decimal: false),
       validator: intValidator,
       onSaved: onSaved,
@@ -163,8 +164,8 @@ class _DateForm extends StatefulWidget {
   final FocusNode node, nextNode;
 
   @override
-  _DateFormState createState() =>
-      _DateFormState(node: node, nextNode: nextNode, initial: refueling?.odomSnapshot?.date);
+  _DateFormState createState() => _DateFormState(
+      node: node, nextNode: nextNode, initial: refueling?.odomSnapshot?.date);
 }
 
 class _DateFormState extends State<_DateForm> {
@@ -317,9 +318,7 @@ class _RefuelingAddEditScreenState extends State<RefuelingAddEditScreen> {
   List<bool> _carsToInitialState() => (widget.cars
           .map((c) => c.id)
           .contains(widget.refueling?.carId))
-      ? widget.cars
-          .map<bool>((c) => c.id == widget.refueling?.carId)
-          .toList()
+      ? widget.cars.map<bool>((c) => c.id == widget.refueling?.carId).toList()
       : List.generate(widget.cars.length, (idx) => (idx == 0) ? true : false);
 
   @override
@@ -347,8 +346,11 @@ class _RefuelingAddEditScreenState extends State<RefuelingAddEditScreen> {
                     if (widget.cars.length >= 4)
                       CarForm(
                           key: ValueKey('__refueling_car_form__'),
-                          initialValue: widget.cars.firstWhere((c) => c.id == widget.refueling.carId).name,
-                          onSaved: (val) => _carId = widget.cars.firstWhere((c) => c.name == val).id,
+                          initialValue: widget.cars
+                              .firstWhere((c) => c.id == widget.refueling.carId)
+                              .name,
+                          onSaved: (val) => _carId =
+                              widget.cars.firstWhere((c) => c.name == val).id,
                           node: _carNode,
                           nextNode: _amountNode),
                     if (widget.cars.length > 1)
