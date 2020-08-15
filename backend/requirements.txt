@@ -1,0 +1,14 @@
+Django>=2.0,<3.0
+psycopg2>=2.7,<3.0
+djangorestframework
+djangorestframework-simplejwt
+django-oauth-toolkit
+django-rest-registration
+django-cors-headers
+django-filter
+drf-yasg
+elasticsearch-dsl>=7.0.0,<8.0.0
+django_elasticsearch_dsl>=7.0.0,<8.0.0
+django_elasticsearch_dsl_drf
+gunicorn
+Pillow
