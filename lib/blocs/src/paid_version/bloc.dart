@@ -86,12 +86,12 @@ class PaidVersionBloc extends Bloc<PaidVersionEvent, PaidVersionState> {
   /// Currently just checking the respective app store, store this on the server
   /// in the future? Would help for transitioning to web app
   Stream<PaidVersionState> _mapLoadPaidVersionToState(event) async* {
-    final trialUser = repo is SembastDataRepository;
-    if (trialUser) {
-      print('trial user');
-      yield BasicVersion();
-      return;
-    }
+    // final trialUser = repo is SembastDataRepository;
+    // if (trialUser) {
+    //   print('trial user');
+    //   yield BasicVersion();
+    //   return;
+    // }
 
     // See if we have any pending transactions
     // await SKPaymentQueueWrapper()..restoreTransactions();

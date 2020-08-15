@@ -15,7 +15,7 @@ typedef _OnSaveCallback = Function(
   DateTime date,
   double amount,
   double cost,
-  String car,
+  String carId,
 );
 
 class _MileageForm extends StatelessWidget {
@@ -50,7 +50,8 @@ class _MileageForm extends StatelessWidget {
             EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
       ),
       autofocus: true,
-      initialValue: distance.format(refueling?.mileage, textField: true),
+      initialValue:
+          distance.format(refueling?.odomSnapshot?.mileage, textField: true),
       keyboardType: TextInputType.numberWithOptions(decimal: false),
       validator: intValidator,
       onSaved: onSaved,
@@ -163,8 +164,8 @@ class _DateForm extends StatefulWidget {
   final FocusNode node, nextNode;
 
   @override
-  _DateFormState createState() =>
-      _DateFormState(node: node, nextNode: nextNode, initial: refueling?.date);
+  _DateFormState createState() => _DateFormState(
+      node: node, nextNode: nextNode, initial: refueling?.odomSnapshot?.date);
 }
 
 class _DateFormState extends State<_DateForm> {
@@ -288,7 +289,7 @@ class _RefuelingAddEditScreenState extends State<RefuelingAddEditScreen> {
   double _mileage;
   DateTime _date;
   double _amount, _cost;
-  String _car;
+  String _carId;
 
   FocusNode _mileageNode, _carNode, _dateNode, _amountNode, _costNode;
 
@@ -315,11 +316,9 @@ class _RefuelingAddEditScreenState extends State<RefuelingAddEditScreen> {
   }
 
   List<bool> _carsToInitialState() => (widget.cars
-          .map((c) => c.name)
-          .contains(widget.refueling?.carName))
-      ? widget.cars
-          .map<bool>((c) => c.name == widget.refueling?.carName)
-          .toList()
+          .map((c) => c.id)
+          .contains(widget.refueling?.carId))
+      ? widget.cars.map<bool>((c) => c.id == widget.refueling?.carId).toList()
       : List.generate(widget.cars.length, (idx) => (idx == 0) ? true : false);
 
   @override
@@ -341,14 +340,17 @@ class _RefuelingAddEditScreenState extends State<RefuelingAddEditScreen> {
                       CarToggleForm(
                         _carsToInitialState(),
                         widget.cars,
-                        (List<bool> isSelected) => _car =
-                            widget.cars[isSelected.indexWhere((i) => i)].name,
+                        (List<bool> isSelected) => _carId =
+                            widget.cars[isSelected.indexWhere((i) => i)].id,
                       ),
                     if (widget.cars.length >= 4)
                       CarForm(
                           key: ValueKey('__refueling_car_form__'),
-                          initialValue: widget.refueling?.carName,
-                          onSaved: (val) => _car = val,
+                          initialValue: widget.cars
+                              .firstWhere((c) => c.id == widget.refueling.carId)
+                              .name,
+                          onSaved: (val) => _carId =
+                              widget.cars.firstWhere((c) => c.name == val).id,
                           node: _carNode,
                           nextNode: _amountNode),
                     if (widget.cars.length > 1)
@@ -393,8 +395,8 @@ class _RefuelingAddEditScreenState extends State<RefuelingAddEditScreen> {
 
                     _formKey.currentState.save();
 
-                    _car ??= widget.cars.first.name;
-                    widget.onSave(_mileage, _date, _amount, _cost, _car);
+                    _carId ??= widget.cars.first.id;
+                    widget.onSave(_mileage, _date, _amount, _cost, _carId);
                     Navigator.pop(context);
                   }
                 },

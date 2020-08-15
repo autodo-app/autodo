@@ -11,25 +11,20 @@ import 'package:mockito/mockito.dart';
 import 'package:pref/pref.dart';
 import 'package:provider/provider.dart';
 
-class MockRefuelingsBloc extends MockBloc<RefuelingsEvent, RefuelingsState>
-    implements RefuelingsBloc {}
+class MockDataBloc extends MockBloc<DataEvent, DataState> implements DataBloc {}
 
 class MockFilteredRefuelingsBloc
     extends MockBloc<FilteredRefuelingsLoaded, FilteredRefuelingsState>
     implements FilteredRefuelingsBloc {}
 
-class MockCarsBloc extends MockBloc<CarsEvent, CarsState> implements CarsBloc {}
-
 void main() {
-  RefuelingsBloc refuelingsBloc;
   FilteredRefuelingsBloc filteredRefuelingsBloc;
-  CarsBloc carsBloc;
+  DataBloc dataBloc;
   BasePrefService pref;
 
   setUp(() async {
-    refuelingsBloc = MockRefuelingsBloc();
     filteredRefuelingsBloc = MockFilteredRefuelingsBloc();
-    carsBloc = MockCarsBloc();
+    dataBloc = MockDataBloc();
     pref = PrefServiceCache();
     await pref.setDefaultValues({
       'length_unit': DistanceUnit.imperial.index,
@@ -46,13 +41,10 @@ void main() {
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
-            BlocProvider<RefuelingsBloc>.value(
-              value: refuelingsBloc,
-            ),
+            BlocProvider<DataBloc>.value(value: dataBloc),
             BlocProvider<FilteredRefuelingsBloc>.value(
               value: filteredRefuelingsBloc,
             ),
-            BlocProvider<CarsBloc>.value(value: carsBloc),
           ],
           child: MaterialApp(
             home: Scaffold(
@@ -65,30 +57,30 @@ void main() {
       expect(find.byKey(refuelingsKey), findsOneWidget);
     });
     testWidgets('load', (WidgetTester tester) async {
+      final snap = OdomSnapshot(
+          car: 'test',
+          mileage: 1000,
+          date: DateTime.fromMillisecondsSinceEpoch(0));
       final refueling = Refueling(
-        carName: 'test',
         amount: 10.0,
         cost: 10.0,
-        mileage: 1000,
-        date: DateTime.fromMillisecondsSinceEpoch(0),
+        odomSnapshot: snap,
       );
       when(filteredRefuelingsBloc.state).thenAnswer((_) =>
-          FilteredRefuelingsLoaded(
-              [refueling], VisibilityFilter.all, [Car(name: 'test')]));
-      when(carsBloc.state).thenReturn(CarsLoaded([Car(name: 'test')]));
+          FilteredRefuelingsLoaded([refueling], VisibilityFilter.all,
+              [Car(name: 'test', odomSnapshot: snap)]));
+      when(dataBloc.state).thenReturn(
+          DataLoaded(cars: [Car(name: 'test', odomSnapshot: snap)]));
       final refuelingsKey = Key('refuelings');
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
           child: MultiBlocProvider(
             providers: [
-              BlocProvider<RefuelingsBloc>.value(
-                value: refuelingsBloc,
-              ),
+              BlocProvider<DataBloc>.value(value: dataBloc),
               BlocProvider<FilteredRefuelingsBloc>.value(
                 value: filteredRefuelingsBloc,
               ),
-              BlocProvider<CarsBloc>.value(value: carsBloc),
             ],
             child: MaterialApp(
               home: Scaffold(

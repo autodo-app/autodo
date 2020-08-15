@@ -43,22 +43,22 @@ class AuthenticationBloc
   /// [AuthenticationState]s.
   AuthenticationBloc({@required AuthRepository userRepository})
       : assert(userRepository != null),
-        _userRepository = userRepository {
-    _userRepository.stream?.listen((user) {
-      if (user != null &&
-          (!(state is RemoteAuthenticated) ||
-              (state as RemoteAuthenticated).uuid != user.uid)) {
-        // sign in or sign up
-        if (user.metadata.creationTime == user.metadata.lastSignInTime) {
-          add(SignedUp());
-        } else {
-          add(LoggedIn());
-        }
-      }
-    });
-  }
+        repo = userRepository;
+  // repo.stream?.listen((user) {
+  //   if (user != null &&
+  //       (!(state is RemoteAuthenticated) ||
+  //           (state as RemoteAuthenticated).uuid != user.uid)) {
+  //     // sign in or sign up
+  //     if (user.metadata.creationTime == user.metadata.lastSignInTime) {
+  //       add(SignedUp());
+  //     } else {
+  //       add(LoggedIn());
+  //     }
+  //   }
+  // });
+  // }
 
-  final AuthRepository _userRepository;
+  final AuthRepository repo;
 
   static const String trialUserKey = 'trialUserLoggedIn';
 
@@ -96,22 +96,22 @@ class AuthenticationBloc
   /// test, however, this is responsible for creating a dummy user.
   Stream<AuthenticationState> _mapAppStartedToState(AppStarted event) async* {
     try {
-      final repo = FirebaseAuthRepository();
       if (event.integrationTest ?? false) {
-        await repo.signOut();
-        await repo.signInWithCredentials(
-            'integration-test@autodo.app', '123456');
-        await repo.deleteCurrentUser();
+        // final repo = FirebaseAuthRepository();
+        // await repo.signOut();
+        // await repo.signInWithCredentials(
+        //     'integration-test@autodo.app', '123456');
+        // await repo.deleteCurrentUser();
       }
       final prefs = await SharedPreferences.getInstance();
 
-      final isSignedIn = await _userRepository.isSignedIn();
+      final isSignedIn = await repo.isLoggedIn();
       if (isSignedIn) {
-        final name = await _userRepository.getUserEmail();
-        final uuid = await _userRepository.getUserId();
+        final name = await repo.getCurrentUserEmail();
+        final token = await repo.getCurrentUserToken();
         yield RemoteAuthenticated(
           name,
-          uuid,
+          token,
         );
       } else if (prefs.getBool(trialUserKey)) {
         yield LocalAuthenticated();
@@ -133,9 +133,9 @@ class AuthenticationBloc
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(trialUserKey, false);
 
-    final _email = await _userRepository.getUserEmail();
-    final _uuid = await _userRepository.getUserId();
-    yield RemoteAuthenticated(_email, _uuid);
+    final _email = await repo.getCurrentUserEmail();
+    final _token = await repo.getCurrentUserToken();
+    yield RemoteAuthenticated(_email, _token);
   }
 
   /// Responds to a [SignedUp] event with an [Authenticated] state.
@@ -147,9 +147,9 @@ class AuthenticationBloc
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(trialUserKey, false);
 
-    final _email = await _userRepository.getUserEmail();
-    final _uuid = await _userRepository.getUserId();
-    yield RemoteAuthenticated(_email, _uuid);
+    final _email = await repo.getCurrentUserEmail();
+    final _token = await repo.getCurrentUserToken();
+    yield RemoteAuthenticated(_email, _token);
   }
 
   /// Signs out the currently logged in user and yields [Unauthenticated].
@@ -161,7 +161,7 @@ class AuthenticationBloc
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(trialUserKey, false);
     yield Unauthenticated();
-    await _userRepository.signOut();
+    await repo.logOut();
   }
 
   /// Deletes all data associated with the currently logged in user and yields
@@ -172,7 +172,7 @@ class AuthenticationBloc
   /// to the home screen presentation layer.
   Stream<AuthenticationState> _mapDeletedUserToState() async* {
     yield Unauthenticated();
-    await _userRepository.deleteCurrentUser();
+    await repo.deleteCurrentUser();
   }
 
   Stream<AuthenticationState> _mapTrialUserSignedUpToState() async* {

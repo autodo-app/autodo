@@ -1,9 +1,16 @@
 import 'package:equatable/equatable.dart';
 
-abstract class WriteBatchWrapper extends Equatable {
-  void updateData(String id, dynamic data);
+abstract class WriteBatchDocument {
+  Map<String, String> toDocument();
+}
 
-  void setData(dynamic data);
+enum WRITE_OPERATION { POST, PATCH }
 
-  Future<void> commit();
+abstract class WriteBatchWrapper<T extends WriteBatchDocument>
+    extends Equatable {
+  void updateData(String id, T data);
+
+  void setData(T data);
+
+  Future<Map<WRITE_OPERATION, dynamic>> commit();
 }

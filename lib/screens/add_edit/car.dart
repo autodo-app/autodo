@@ -139,7 +139,7 @@ class CarAddEditHeaderNoImage extends StatelessWidget {
               await (BlocProvider.of<DatabaseBloc>(context).state as DbLoaded)
                   .storageRepo
                   .storeAsset(image);
-              BlocProvider.of<CarsBloc>(context).add(
+              BlocProvider.of<DataBloc>(context).add(
                   UpdateCar(car.copyWith(imageName: basename(image.path))));
             }, // add an upload feature here
             child: Container(
@@ -309,7 +309,7 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
                             });
                           },
                           onDelete: () {
-                            BlocProvider.of<CarsBloc>(context)
+                            BlocProvider.of<DataBloc>(context)
                                 .add(DeleteCar(widget.car));
                             Navigator.pop(context);
                           },
@@ -318,7 +318,8 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
                           car: widget.car, onSaved: (val) => _name = val),
                   (mode == CarDetailsMode.ADD || mode == CarDetailsMode.EDIT)
                       ? _TwoPartTextField(
-                          initialValue: widget.car?.mileage?.toString(),
+                          initialValue:
+                              widget.car?.odomSnapshot?.mileage?.toString(),
                           fieldName: JsonIntl.of(context).get(IntlKeys.odom),
                           units: Distance.of(context)
                               .unitString(context, short: true),
@@ -333,7 +334,7 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
                       : _TwoPartNoEdit(
                           fieldName: JsonIntl.of(context).get(IntlKeys.odom),
                           value:
-                              '${Distance.of(context).format(widget.car?.mileage)} ${Distance.of(context).unitString(context, short: true)}',
+                              '${Distance.of(context).format(widget.car?.odomSnapshot?.mileage)} ${Distance.of(context).unitString(context, short: true)}',
                         ),
                   (mode == CarDetailsMode.DETAILS)
                       ? _TwoPartNoEdit(

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -15,14 +14,12 @@ import 'event.dart';
 import 'state.dart';
 
 class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
-  DatabaseBloc(
-      {firestoreInstance, @required authenticationBloc, this.pathProvider})
+  DatabaseBloc({@required authenticationBloc, this.pathProvider})
       : assert(authenticationBloc != null),
-        _authenticationBloc = authenticationBloc,
-        _firestoreInstance = firestoreInstance ?? Firestore.instance {
+        _authenticationBloc = authenticationBloc {
     _authSubscription = _authenticationBloc.listen((authState) {
       if (authState is RemoteAuthenticated) {
-        add(UserLoggedIn(authState.uuid));
+        add(UserLoggedIn(authState.token));
       } else if (((state is DbNotLoaded) || (state is DbUninitialized)) &&
           authState is LocalAuthenticated) {
         add(TrialLogin());
@@ -31,8 +28,6 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       }
     });
   }
-
-  final Firestore _firestoreInstance;
 
   final AuthenticationBloc _authenticationBloc;
 
@@ -55,25 +50,28 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
   }
 
   Stream<DatabaseState> _mapUserLoggedInToState(UserLoggedIn event) async* {
-    final dataRepo = await FirebaseDataRepository.open(
-      firestoreInstance: _firestoreInstance,
-      uuid: event.uuid,
-    );
-    final storageRepo = FirebaseStorageRepository(uuid: event.uuid);
+    // final dataRepo = await FirebaseDataRepository.open(
+    //   firestoreInstance: _firestoreInstance,
+    //   uuid: event.uuid,
+    // );
+    final dataRepo = await RestDataRepository.open(
+        authRepo: _authenticationBloc.repo, token: event.token);
+    // final storageRepo = FirebaseStorageRepository(uuid: event.uuid);
+    final storageRepo = null;
     yield DbLoaded(dataRepo, storageRepo: storageRepo);
   }
 
   Stream<DatabaseState> _mapUserLoggedOutToState(UserLoggedOut event) async* {
     yield DbNotLoaded();
 
-    if (state is DbLoaded) {
-      final repo = (state as DbLoaded).dataRepo;
-      if (repo is SembastDataRepository) {
-        await repo.close();
-        // ToDo: We should leave the DB on disk if they logged out by mistake
-        await SembastDataRepository.deleteDb(repo.db.path);
-      }
-    }
+    // if (state is DbLoaded) {
+    // final repo = (state as DbLoaded).dataRepo;
+    // if (repo is SembastDataRepository) {
+    //   await repo.close();
+    //   // ToDo: We should leave the DB on disk if they logged out by mistake
+    //   await SembastDataRepository.deleteDb(repo.db.path);
+    // }
+    // }z
   }
 
   Stream<DatabaseState> _mapTrialLoginToState(TrialLogin event) async* {
@@ -86,16 +84,16 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
     // }
     // TODO: getting two occurrences of this event on local sign-in, why?
 
-    final dataRepo =
-        await SembastDataRepository.open(pathProvider: pathProvider);
-    final storageRepo = LocalStorageRepository();
+    // final dataRepo =
+    //     await SembastDataRepository.open(pathProvider: pathProvider);
+    // final storageRepo = LocalStorageRepository();
 
-    if (kFlavor.populateDemoData) {
-      // Load demo data
-      await dataRepo.copyFrom(DemoDataRepository());
-    }
+    // if (kFlavor.populateDemoData) {
+    //   // Load demo data
+    //   await dataRepo.copyFrom(DemoDataRepository());
+    // }
 
-    yield DbLoaded(dataRepo, storageRepo: storageRepo);
+    // yield DbLoaded(dataRepo, storageRepo: storageRepo);
   }
 
   @override

@@ -8,15 +8,15 @@ abstract class DatabaseEvent extends Equatable {
 }
 
 class UserLoggedIn extends DatabaseEvent {
-  const UserLoggedIn(this.uuid);
+  const UserLoggedIn(this.token);
 
-  final String uuid;
-
-  @override
-  List<Object> get props => [uuid];
+  final String token;
 
   @override
-  String toString() => '$runtimeType { uuid: $uuid }';
+  List<Object> get props => [token];
+
+  @override
+  String toString() => '$runtimeType { token: $token }';
 }
 
 class UserLoggedOut extends DatabaseEvent {}

@@ -15,7 +15,7 @@ import 'package:autodo/units/units.dart';
 class MockPaidVersionBloc extends MockBloc<PaidVersionEvent, PaidVersionState>
     implements PaidVersionBloc {}
 
-class MockCarsBloc extends MockBloc<CarsEvent, CarsState> implements CarsBloc {}
+class MockDataBloc extends MockBloc<DataEvent, DataState> implements DataBloc {}
 
 class MockDatabaseBloc extends MockBloc<DatabaseEvent, DatabaseState>
     implements DatabaseBloc {}
@@ -27,10 +27,16 @@ void main() {
   BasePrefService pref;
   final paidVersionBloc = MockPaidVersionBloc();
   whenListen(paidVersionBloc, Stream.fromIterable([PaidVersion()]));
-  final carsBloc = MockCarsBloc();
-  final carsState = CarsLoaded([Car(name: 'test')]);
-  whenListen(carsBloc, Stream.fromIterable([carsState]));
-  when(carsBloc.state).thenReturn(carsState);
+
+  final dataBloc = MockDataBloc();
+  final dataState = DataLoaded(cars: [
+    Car(
+        name: 'test',
+        odomSnapshot: OdomSnapshot(
+            date: DateTime.fromMillisecondsSinceEpoch(0), mileage: 0))
+  ]);
+  when(dataBloc.state).thenReturn(dataState);
+
   final DatabaseBloc dbBloc = MockDatabaseBloc();
   final StorageRepository storageRepo = MockStorageRepo();
   final dbLoaded = DbLoaded(null, storageRepo: storageRepo);
@@ -55,7 +61,7 @@ void main() {
             child: MultiBlocProvider(
               providers: [
                 BlocProvider<PaidVersionBloc>.value(value: paidVersionBloc),
-                BlocProvider<CarsBloc>.value(value: carsBloc),
+                BlocProvider<DataBloc>.value(value: dataBloc),
                 BlocProvider<DatabaseBloc>.value(value: dbBloc),
               ],
               child: MaterialApp(
@@ -77,7 +83,7 @@ void main() {
             child: MultiBlocProvider(
               providers: [
                 BlocProvider<PaidVersionBloc>.value(value: paidVersionBloc),
-                BlocProvider<CarsBloc>.value(value: carsBloc),
+                BlocProvider<DataBloc>.value(value: dataBloc),
                 BlocProvider<DatabaseBloc>.value(value: dbBloc),
               ],
               child: MaterialApp(
@@ -99,7 +105,7 @@ void main() {
             child: MultiBlocProvider(
               providers: [
                 BlocProvider<PaidVersionBloc>.value(value: paidVersionBloc),
-                BlocProvider<CarsBloc>.value(value: carsBloc),
+                BlocProvider<DataBloc>.value(value: dataBloc),
                 BlocProvider<DatabaseBloc>.value(value: dbBloc),
               ],
               child: MaterialApp(

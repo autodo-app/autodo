@@ -4,9 +4,6 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class MockTodosBloc extends MockBloc<TodosEvent, TodosState>
-    implements TodosBloc {}
-
 class MockFilteredTodosBloc
     extends MockBloc<FilteredTodosLoaded, FilteredTodosState>
     implements FilteredTodosBloc {}

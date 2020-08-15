@@ -5,21 +5,30 @@ import 'package:flutter/material.dart';
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/models/models.dart';
 
-class MockRefuelingsBloc extends MockBloc<RefuelingsEvent, RefuelingsState>
-    implements RefuelingsBloc {}
+class MockDataBloc extends MockBloc<DataEvent, DataState> implements DataBloc {}
 
 void main() {
   group('FilteredRefuelingsEvent', () {
+    final snap = OdomSnapshot(
+      car: 'test',
+      mileage: 0,
+      date: DateTime.fromMillisecondsSinceEpoch(0),
+    );
+
     final refueling = Refueling(
-        carName: '',
-        id: '',
-        mileage: 0,
-        date: DateTime.fromMillisecondsSinceEpoch(0),
+        id: '0',
         amount: 0,
         cost: 0,
-        carColor: Color(0),
         efficiency: 0.0,
-        efficiencyColor: Color(0));
+        efficiencyColor: Color(0),
+        odomSnapshot: snap);
+
+    final car = Car(
+      id: 'test',
+      odomSnapshot: snap,
+      name: 'test',
+    );
+
     group('UpdateFilter', () {
       test('toString returns correct value', () {
         expect(
@@ -38,13 +47,13 @@ void main() {
     group('UpdateRefuelings', () {
       test('toString returns correct value', () {
         expect(
-          UpdateRefuelings([refueling]).toString(),
+          FilteredRefuelingDataUpdated(refuelings: [refueling]).toString(),
           'UpdateRefuelings { refuelings: [$refueling] }',
         );
       });
       test('props are correct', () {
         expect(
-          UpdateRefuelings([refueling]).props,
+          FilteredRefuelingDataUpdated(refuelings: [refueling]).props,
           [
             [refueling]
           ],
@@ -54,15 +63,15 @@ void main() {
     group('UpdateCars', () {
       test('toString returns correct value', () {
         expect(
-          FilteredRefuelingsUpdateCars([Car()]).toString(),
-          'FilteredRefuelingsUpdateCars { cars: ${[Car()]} }',
+          FilteredRefuelingDataUpdated(cars: [car]).toString(),
+          'FilteredRefuelingsUpdateCars { cars: ${[car]} }',
         );
       });
       test('props are correct', () {
         expect(
-          FilteredRefuelingsUpdateCars([Car()]).props,
+          FilteredRefuelingDataUpdated(cars: [car]).props,
           [
-            [Car()]
+            [car]
           ],
         );
       });

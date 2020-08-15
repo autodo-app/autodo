@@ -15,8 +15,6 @@ import 'package:autodo/screens/welcome/views/new_user_setup/setrepeats.dart';
 import 'package:pref/pref.dart';
 import 'package:provider/provider.dart';
 
-class MockCarsBloc extends Mock implements CarsBloc {}
-
 class MockAuthenticationBloc
     extends MockBloc<AuthenticationEvent, AuthenticationState>
     implements AuthenticationBloc {}
@@ -24,17 +22,18 @@ class MockAuthenticationBloc
 class MockDatabaseBloc extends MockBloc<DatabaseEvent, DatabaseState>
     implements DatabaseBloc {}
 
-class MockTodosBloc extends MockBloc<TodosEvent, TodosState>
-    implements TodosBloc {}
+class MockDataBloc extends MockBloc<DataEvent, DataState> implements DataBloc {}
 
 // ignore: must_be_immutable
 class MockRepo extends Mock implements DataRepository {}
 
 void main() {
   BasePrefService pref;
-  final todosLoaded = TodosLoaded(todos: [
+  final dataLoaded = DataLoaded(todos: [
     Todo(name: 'oil', mileageRepeatInterval: 3500),
     Todo(name: 'tire_rotation', mileageRepeatInterval: 7500)
+  ], cars: [
+    Car(name: 'test')
   ]);
 
   setUp(() async {
@@ -66,11 +65,9 @@ void main() {
       expect(find.byType(NewUserScreen), findsOneWidget);
     });
     testWidgets('Latest complete', (tester) async {
-      final carsBloc = MockCarsBloc();
-      when(carsBloc.state).thenReturn(CarsLoaded([]));
-      final todosBloc = MockTodosBloc();
-      when(todosBloc.state).thenReturn(
-          TodosLoaded(todos: [Todo(name: 'Oil'), Todo(name: 'Tire Rotation')]));
+      final dataBloc = MockDataBloc();
+      when(dataBloc.state).thenReturn(
+          DataLoaded(todos: [Todo(name: 'Oil'), Todo(name: 'Tire Rotation')]));
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
@@ -78,8 +75,7 @@ void main() {
               providers: [
                 BlocProvider<AuthenticationBloc>.value(value: authBloc),
                 BlocProvider<DatabaseBloc>.value(value: dbBloc),
-                BlocProvider<CarsBloc>.value(value: carsBloc),
-                BlocProvider<TodosBloc>.value(value: todosBloc),
+                BlocProvider<DataBloc>.value(value: dataBloc),
               ],
               child: MaterialApp(
                 home: NewUserScreen(),
@@ -98,10 +94,8 @@ void main() {
       expect(find.byType(LatestRepeatsScreen), findsOneWidget);
     });
     testWidgets('set repeats', (tester) async {
-      final todosBloc = MockTodosBloc();
-      when(todosBloc.state).thenReturn(todosLoaded);
-      final carsBloc = MockCarsBloc();
-      when(carsBloc.state).thenReturn(CarsLoaded([Car(name: 'test')]));
+      final dataBloc = MockDataBloc();
+      when(dataBloc.state).thenReturn(DataLoaded(cars: [Car(name: 'test')]));
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
@@ -109,8 +103,7 @@ void main() {
               providers: [
                 BlocProvider<AuthenticationBloc>.value(value: authBloc),
                 BlocProvider<DatabaseBloc>.value(value: dbBloc),
-                BlocProvider<CarsBloc>.value(value: carsBloc),
-                BlocProvider<TodosBloc>.value(value: todosBloc),
+                BlocProvider<DataBloc>.value(value: dataBloc),
               ],
               child: MaterialApp(
                 home: NewUserScreen(),
@@ -132,19 +125,17 @@ void main() {
       expect(find.byType(SetRepeatsScreen), findsOneWidget);
     });
     testWidgets('set repeats back', (tester) async {
-      final todosBloc = MockTodosBloc();
-      when(todosBloc.state).thenReturn(
-          TodosLoaded(todos: [Todo(name: 'oil'), Todo(name: 'tire_rotation')]));
-      final carsBloc = MockCarsBloc();
-      when(carsBloc.state).thenReturn(CarsLoaded([Car(name: 'test')]));
+      final dataBloc = MockDataBloc();
+      when(dataBloc.state).thenReturn(DataLoaded(
+          todos: [Todo(name: 'oil'), Todo(name: 'tire_rotation')],
+          cars: [Car(name: 'test')]));
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
           child: MultiBlocProvider(providers: [
             BlocProvider<AuthenticationBloc>.value(value: authBloc),
             BlocProvider<DatabaseBloc>.value(value: dbBloc),
-            BlocProvider<CarsBloc>.value(value: carsBloc),
-            BlocProvider<TodosBloc>.value(value: todosBloc),
+            BlocProvider<DataBloc>.value(value: dataBloc),
           ], child: MaterialApp(home: NewUserScreen())),
         ),
       );
@@ -165,11 +156,9 @@ void main() {
       expect(find.byType(LatestRepeatsScreen), findsOneWidget);
     });
     testWidgets('set repeats next', (tester) async {
-      final todosBloc = MockTodosBloc();
-      whenListen(todosBloc, Stream.fromIterable([todosLoaded]));
-      when(todosBloc.state).thenReturn(todosLoaded);
-      final carsBloc = MockCarsBloc();
-      when(carsBloc.state).thenReturn(CarsLoaded([Car(name: 'test')]));
+      final dataBloc = MockDataBloc();
+      whenListen(dataBloc, Stream.fromIterable([dataLoaded]));
+      when(dataBloc.state).thenReturn(dataLoaded);
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
@@ -177,8 +166,7 @@ void main() {
               providers: [
                 BlocProvider<AuthenticationBloc>.value(value: authBloc),
                 BlocProvider<DatabaseBloc>.value(value: dbBloc),
-                BlocProvider<CarsBloc>.value(value: carsBloc),
-                BlocProvider<TodosBloc>.value(value: todosBloc),
+                BlocProvider<DataBloc>.value(value: dataBloc),
               ],
               child: MaterialApp(
                 home: NewUserScreen(),

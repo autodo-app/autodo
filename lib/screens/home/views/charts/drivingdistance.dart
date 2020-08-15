@@ -75,9 +75,9 @@ class _DrivingDistanceHistoryState extends State<DrivingDistanceHistory> {
 
   @override
   void didChangeDependencies() {
-    final carsBloc = BlocProvider.of<CarsBloc>(context);
+    final dataBloc = BlocProvider.of<DataBloc>(context);
 
-    DrivingDistanceStats.fetch(carsBloc, context).then((value) {
+    DrivingDistanceStats.fetch(dataBloc, context).then((value) {
       setState(() {
         data = value;
       });

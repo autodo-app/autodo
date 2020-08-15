@@ -53,11 +53,16 @@ class TodoListCard extends StatelessWidget {
                 child: RoundedCheckbox(
                     initialValue: todo.completed,
                     onTap: (completed) {
-                      BlocProvider.of<TodosBloc>(context).add(UpdateTodo(
-                          todo.copyWith(
-                              completed: completed,
-                              completedDate:
-                                  completed ? DateTime.now() : null)));
+                      BlocProvider.of<DataBloc>(context)
+                          .add(UpdateTodo(todo.copyWith(
+                        completed: completed,
+                        completedOdomSnapshot: completed
+                            ? OdomSnapshot(
+                                date: DateTime.now(),
+                                mileage: car.odomSnapshot.mileage,
+                              )
+                            : null,
+                      )));
                     }),
               ),
               Expanded(

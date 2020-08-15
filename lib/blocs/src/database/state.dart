@@ -19,7 +19,7 @@ class DbLoaded extends DatabaseState {
   final StorageRepository storageRepo;
 
   @override
-  List<Object> get props => [dataRepo, FirebaseStorageRepository];
+  List<Object> get props => [dataRepo, storageRepo];
 
   @override
   String toString() =>

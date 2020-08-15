@@ -72,8 +72,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       yield* _mapEmailChangedToState(event.email);
     } else if (event is LoginPasswordChanged) {
       yield* _mapPasswordChangedToState(event.password);
-    } else if (event is LoginWithGooglePressed) {
-      yield* _mapLoginWithGooglePressedToState();
+      // } else if (event is LoginWithGooglePressed) {
+      //   yield* _mapLoginWithGooglePressedToState();
     } else if (event is LoginWithCredentialsPressed) {
       yield* _mapLoginWithCredentialsPressedToState(
         email: event.email,
@@ -145,10 +145,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }
   }
 
-  Stream<LoginState> _mapLoginWithGooglePressedToState() async* {
-    await authRepository.signInWithGoogle();
-    yield LoginEmpty();
-  }
+  // Stream<LoginState> _mapLoginWithGooglePressedToState() async* {
+  //   await authRepository.signInWithGoogle();
+  //   yield LoginEmpty();
+  // }
 
   Stream<LoginState> _mapLoginWithCredentialsPressedToState({
     String email,
@@ -156,7 +156,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }) async* {
     yield LoginLoading();
     try {
-      await authRepository.signInWithCredentials(email, password);
+      await authRepository.logIn(email, password);
       yield LoginSuccess();
     } on PlatformException catch (e) {
       var errorString = 'Error communicating to the auToDo servers.';

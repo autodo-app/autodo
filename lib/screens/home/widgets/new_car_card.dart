@@ -19,13 +19,15 @@ class NewCarCard extends StatelessWidget {
                 builder: (context) => CarAddEditScreen(
                     isEditing: false,
                     onSave: (name, odom, make, model, year, plate, vin) {
-                      BlocProvider.of<TodosBloc>(context).add(TranslateDefaults(
+                      BlocProvider.of<DataBloc>(context).add(TranslateDefaults(
                           JsonIntl.of(context),
                           Distance.of(context, listen: false).unit));
-                      BlocProvider.of<CarsBloc>(context).add(AddCar(Car(
+                      BlocProvider.of<DataBloc>(context).add(AddCar(Car(
                           name: name,
-                          mileage: Distance.of(context, listen: false)
-                              .unitToInternal(odom),
+                          odomSnapshot: OdomSnapshot(
+                              mileage: Distance.of(context, listen: false)
+                                  .unitToInternal(odom),
+                              date: DateTime.now()),
                           make: make,
                           model: model,
                           year: year,

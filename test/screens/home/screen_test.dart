@@ -13,38 +13,32 @@ import 'package:autodo/models/models.dart';
 import 'package:pref/pref.dart';
 import 'package:provider/provider.dart';
 
-class MockTodosBloc extends MockBloc<TodosEvent, TodosState>
-    implements TodosBloc {}
-
 class MockFilteredTodosBloc
     extends MockBloc<FilteredTodosLoaded, FilteredTodosState>
     implements FilteredTodosBloc {}
 
-class MockCarsBloc extends MockBloc<CarsEvent, CarsState> implements CarsBloc {}
-
 class MockPaidVersionBloc extends MockBloc<PaidVersionEvent, PaidVersionState>
     implements PaidVersionBloc {}
 
-class MockRefuelingsBloc extends MockBloc<RefuelingsEvent, RefuelingsState>
-    implements RefuelingsBloc {}
+class MockDataBloc extends MockBloc<DataEvent, DataState> implements DataBloc {}
 
 void main() {
   group('HomeScreen', () {
-    TodosBloc todosBloc;
     FilteredTodosBloc filteredTodosBloc;
     PaidVersionBloc paidBloc;
-    CarsBloc carsBloc;
-    RefuelingsBloc refuelingsBloc;
+    DataBloc dataBloc;
     BasePrefService pref;
+    final snap =
+        OdomSnapshot(mileage: 0, date: DateTime.fromMillisecondsSinceEpoch(0));
+    final cars = [Car(name: 'test', odomSnapshot: snap)];
+    final todos = <Todo>[];
 
     setUp(() async {
-      todosBloc = MockTodosBloc();
       filteredTodosBloc = MockFilteredTodosBloc();
       paidBloc = MockPaidVersionBloc();
       when(paidBloc.observer).thenReturn(RouteObserver());
-      carsBloc = MockCarsBloc();
-      when(carsBloc.state).thenReturn(CarsLoaded([Car(name: 'test')]));
-      refuelingsBloc = MockRefuelingsBloc();
+      dataBloc = MockDataBloc();
+      when(dataBloc.state).thenReturn(DataLoaded(cars: cars, todos: todos));
 
       pref = PrefServiceCache();
       await pref.setDefaultValues({
@@ -55,20 +49,15 @@ void main() {
     });
 
     testWidgets('renders correctly', (WidgetTester tester) async {
-      when(todosBloc.state).thenAnswer((_) => TodosLoaded(todos: []));
       final scaffoldKey = Key('scaffold');
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
-            BlocProvider<TodosBloc>.value(
-              value: todosBloc,
-            ),
+            BlocProvider<DataBloc>.value(value: dataBloc),
             BlocProvider<FilteredTodosBloc>.value(
               value: filteredTodosBloc,
             ),
             BlocProvider<PaidVersionBloc>.value(value: paidBloc),
-            BlocProvider<CarsBloc>.value(value: carsBloc),
-            BlocProvider<RefuelingsBloc>.value(value: refuelingsBloc),
           ],
           child: MaterialApp(
             home: Scaffold(
@@ -82,21 +71,16 @@ void main() {
     });
 
     testWidgets('tab switch', (WidgetTester tester) async {
-      when(todosBloc.state).thenAnswer((_) => TodosLoaded(todos: []));
       final scaffoldKey = GlobalKey<HomeScreenState>();
       final todosTabKey = Key('tab');
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
-            BlocProvider<TodosBloc>.value(
-              value: todosBloc,
-            ),
+            BlocProvider<DataBloc>.value(value: dataBloc),
             BlocProvider<FilteredTodosBloc>.value(
               value: filteredTodosBloc,
             ),
             BlocProvider<PaidVersionBloc>.value(value: paidBloc),
-            BlocProvider<CarsBloc>.value(value: carsBloc),
-            BlocProvider<RefuelingsBloc>.value(value: refuelingsBloc),
           ],
           child: MaterialApp(
             home: Scaffold(
@@ -117,24 +101,17 @@ void main() {
     });
     group('fab routes', () {
       testWidgets('refueling', (WidgetTester tester) async {
-        when(todosBloc.state).thenAnswer((_) => TodosLoaded(todos: []));
         final scaffoldKey = Key('scaffold');
-        final carsBloc = MockCarsBloc();
-        when(carsBloc.state).thenReturn(CarsLoaded([Car()]));
         await tester.pumpWidget(
           ChangeNotifierProvider<BasePrefService>.value(
             value: pref,
             child: MultiBlocProvider(
               providers: [
-                BlocProvider<TodosBloc>.value(
-                  value: todosBloc,
-                ),
+                BlocProvider<DataBloc>.value(value: dataBloc),
                 BlocProvider<FilteredTodosBloc>.value(
                   value: filteredTodosBloc,
                 ),
-                BlocProvider<CarsBloc>.value(value: carsBloc),
                 BlocProvider<PaidVersionBloc>.value(value: paidBloc),
-                BlocProvider<RefuelingsBloc>.value(value: refuelingsBloc),
               ],
               child: MaterialApp(
                 home: Scaffold(
@@ -152,30 +129,18 @@ void main() {
         expect(find.byType(RefuelingAddEditScreen), findsOneWidget);
       });
       testWidgets('todo', (WidgetTester tester) async {
-        when(todosBloc.state).thenAnswer((_) => TodosLoaded(todos: []));
         final scaffoldKey = Key('scaffold');
-        final carsBloc = MockCarsBloc();
-        whenListen(
-            carsBloc,
-            Stream.fromIterable([
-              CarsLoaded([Car()])
-            ]));
-        when(carsBloc.state).thenReturn(CarsLoaded([Car()]));
 
         await tester.pumpWidget(
           ChangeNotifierProvider<BasePrefService>.value(
             value: pref,
             child: MultiBlocProvider(
               providers: [
-                BlocProvider<TodosBloc>.value(
-                  value: todosBloc,
-                ),
+                BlocProvider<DataBloc>.value(value: dataBloc),
                 BlocProvider<FilteredTodosBloc>.value(
                   value: filteredTodosBloc,
                 ),
-                BlocProvider<CarsBloc>.value(value: carsBloc),
                 BlocProvider<PaidVersionBloc>.value(value: paidBloc),
-                BlocProvider<RefuelingsBloc>.value(value: refuelingsBloc),
               ],
               child: MaterialApp(
                 home: Scaffold(

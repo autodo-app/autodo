@@ -99,7 +99,8 @@ class AppProviderState extends State<AppProvider> {
     InAppPurchaseConnection.enablePendingPurchases();
     BlocSupervisor.delegate = AutodoBlocDelegate();
 
-    authRepository = FirebaseAuthRepository();
+    // authRepository = FirebaseAuthRepository();
+    authRepository = JwtAuthRepository();
     theme = createTheme();
 
     final locale = WidgetsBinding.instance.window.locale ?? Locale('en', 'US');
@@ -152,26 +153,12 @@ class AppProviderState extends State<AppProvider> {
                         dbBloc: BlocProvider.of<DatabaseBloc>(context),
                       )..add(LoadNotifications()),
                     ),
-                    BlocProvider<RefuelingsBloc>(
-                      create: (context) => RefuelingsBloc(
-                        dbBloc: BlocProvider.of<DatabaseBloc>(context),
-                      ),
-                    ),
-                    BlocProvider<CarsBloc>(
-                      create: (context) => CarsBloc(
-                        dbBloc: BlocProvider.of<DatabaseBloc>(context),
-                        refuelingsBloc:
-                            BlocProvider.of<RefuelingsBloc>(context),
-                      ),
-                    ),
-                    BlocProvider<TodosBloc>(
-                      create: (context) => TodosBloc(
-                        dbBloc: BlocProvider.of<DatabaseBloc>(context),
-                        notificationsBloc:
-                            BlocProvider.of<NotificationsBloc>(context),
-                        carsBloc: BlocProvider.of<CarsBloc>(context),
-                      ),
-                      lazy: false,
+                    BlocProvider<DataBloc>(
+                      create: (context) => DataBloc(
+                          dbBloc: BlocProvider.of<DatabaseBloc>(context),
+                          notificationsBloc:
+                              BlocProvider.of<NotificationsBloc>(context))
+                        ..add(LoadData()),
                     ),
                   ],
                   child: App(
@@ -221,7 +208,7 @@ class App extends StatelessWidget {
         // Just here as the splitter between home screen and login screen
         builder: (context, state) {
           if (state is Authenticated) {
-            return HomeScreenProvider(integrationTest: integrationTest);
+            return HomeScreen(integrationTest: integrationTest);
           } else if (state is Uninitialized) {
             return LoadingIndicator();
           } else {

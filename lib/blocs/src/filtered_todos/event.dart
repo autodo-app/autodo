@@ -17,26 +17,16 @@ class UpdateTodosFilter extends FilteredTodosEvent {
   String toString() => 'UpdateFilter { filter: $filter }';
 }
 
-class UpdateTodos extends FilteredTodosEvent {
-  const UpdateTodos(this.todos);
+class FilteredTodoDataUpdated extends FilteredTodosEvent {
+  const FilteredTodoDataUpdated({this.todos, this.cars});
 
   final List<Todo> todos;
-
-  @override
-  List<Object> get props => [todos];
-
-  @override
-  String toString() => 'UpdateTodos { todos: $todos }';
-}
-
-class UpdateCars extends FilteredTodosEvent {
-  const UpdateCars(this.cars);
 
   final List<Car> cars;
 
   @override
-  List<Object> get props => cars;
+  List<Object> get props => [];
 
   @override
-  String toString() => '$runtimeType { cars: $cars }';
+  String toString() => 'FilteredTodoDataUpdated {}';
 }

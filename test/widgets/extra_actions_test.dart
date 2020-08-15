@@ -8,8 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
-class MockTodosBloc extends MockBloc<TodosEvent, TodosState>
-    implements TodosBloc {}
+class MockDataBloc extends MockBloc<DataEvent, DataState> implements DataBloc {}
 
 class MockFilteredTodosBloc
     extends MockBloc<FilteredTodosEvent, FilteredTodosState>
@@ -17,22 +16,22 @@ class MockFilteredTodosBloc
 
 void main() {
   group('ExtraActions', () {
-    TodosBloc todosBloc;
+    DataBloc todosBloc;
     FilteredTodosBloc filteredTodosBloc;
 
     setUp(() {
-      todosBloc = MockTodosBloc();
+      todosBloc = MockDataBloc();
       filteredTodosBloc = MockFilteredTodosBloc();
     });
 
     testWidgets('renders an empty Container if state is not TodosLoaded',
         (WidgetTester tester) async {
-      when(todosBloc.state).thenReturn(TodosLoading());
+      when(todosBloc.state).thenReturn(DataLoading());
       when(filteredTodosBloc.state).thenAnswer((_) => FilteredTodosLoading());
       final key = Key('test');
       await tester.pumpWidget(MultiBlocProvider(
         providers: [
-          BlocProvider<TodosBloc>.value(value: todosBloc),
+          BlocProvider<DataBloc>.value(value: todosBloc),
           BlocProvider<FilteredTodosBloc>.value(value: filteredTodosBloc)
         ],
         child: MaterialApp(
@@ -54,14 +53,14 @@ void main() {
         Todo(name: 'test', completed: false, dueState: TodoDueState.DUE_SOON)
       ];
       final todos = {TodoDueState.DUE_SOON: todosList};
-      when(todosBloc.state).thenReturn(TodosLoaded(todos: todosList));
+      when(todosBloc.state).thenReturn(DataLoaded(todos: todosList));
       final actions = Key('actions');
       final toggleAll = Key('toggleAll');
       when(filteredTodosBloc.state)
           .thenAnswer((_) => FilteredTodosLoaded(todos, VisibilityFilter.all));
       await tester.pumpWidget(MultiBlocProvider(
         providers: [
-          BlocProvider<TodosBloc>.value(value: todosBloc),
+          BlocProvider<DataBloc>.value(value: todosBloc),
           BlocProvider<FilteredTodosBloc>.value(value: filteredTodosBloc)
         ],
         child: MaterialApp(
@@ -90,14 +89,14 @@ void main() {
         (WidgetTester tester) async {
       final todosList = [Todo(name: 'test', completed: true)];
       final todosMap = {TodoDueState.DUE_SOON: todosList};
-      when(todosBloc.state).thenReturn(TodosLoaded(todos: todosList));
+      when(todosBloc.state).thenReturn(DataLoaded(todos: todosList));
       final actions = Key('actions');
       final toggleAll = Key('toggleAll');
       when(filteredTodosBloc.state).thenAnswer(
           (_) => FilteredTodosLoaded(todosMap, VisibilityFilter.all));
       await tester.pumpWidget(MultiBlocProvider(
         providers: [
-          BlocProvider<TodosBloc>.value(value: todosBloc),
+          BlocProvider<DataBloc>.value(value: todosBloc),
           BlocProvider<FilteredTodosBloc>.value(value: filteredTodosBloc)
         ],
         child: MaterialApp(
@@ -127,15 +126,15 @@ void main() {
         Todo(name: 'test2', completed: true, dueState: TodoDueState.DUE_SOON),
       ];
       final todosMap = {TodoDueState.DUE_SOON: todosList};
-      when(todosBloc.state).thenReturn(TodosLoaded(todos: todosList));
-      when(todosBloc.add(ToggleAll())).thenReturn(null);
+      when(todosBloc.state).thenReturn(DataLoaded(todos: todosList));
+      when(todosBloc.add(ToggleAllTodosComplete())).thenReturn(null);
       final actions = Key('actions');
       final toggleAll = Key('toggleAll');
       when(filteredTodosBloc.state).thenAnswer(
           (_) => FilteredTodosLoaded(todosMap, VisibilityFilter.all));
       await tester.pumpWidget(MultiBlocProvider(
         providers: [
-          BlocProvider<TodosBloc>.value(value: todosBloc),
+          BlocProvider<DataBloc>.value(value: todosBloc),
           BlocProvider<FilteredTodosBloc>.value(value: filteredTodosBloc)
         ],
         child: MaterialApp(
@@ -158,7 +157,7 @@ void main() {
       expect(find.byKey(toggleAll), findsOneWidget);
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(toggleAll));
-      verify(todosBloc.add(ToggleAll())).called(1);
+      verify(todosBloc.add(ToggleAllTodosComplete())).called(1);
     });
   });
 }

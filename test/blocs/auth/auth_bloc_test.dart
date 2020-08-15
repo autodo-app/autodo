@@ -39,7 +39,7 @@ void main() {
         'Signed In in AppStarted',
         build: () {
           final authRepository = MockAuthRepository();
-          when(authRepository.isSignedIn()).thenAnswer((_) async => true);
+          when(authRepository.isLoggedIn()).thenAnswer((_) async => true);
           SharedPreferences.setMockInitialValues({'trialUserLoggedIn': false});
           return AuthenticationBloc(userRepository: authRepository);
         },
@@ -53,7 +53,7 @@ void main() {
         'Not Signed In in AppStarted',
         build: () {
           final authRepository = MockAuthRepository();
-          when(authRepository.isSignedIn()).thenAnswer((_) async => false);
+          when(authRepository.isLoggedIn()).thenAnswer((_) async => false);
           return AuthenticationBloc(userRepository: authRepository);
         },
         act: (bloc) async => bloc.add(AppStarted()),
@@ -94,9 +94,9 @@ void main() {
       'User Signed Up',
       build: () {
         final authRepository = MockAuthRepository();
-        when(authRepository.getUserEmail())
+        when(authRepository.getCurrentUserEmail())
             .thenAnswer((_) async => 'test@test.com');
-        when(authRepository.getUserId()).thenAnswer((_) async => 'test');
+        // when(authRepository.getUserId()).thenAnswer((_) async => 'test');
         return AuthenticationBloc(userRepository: authRepository);
       },
       act: (bloc) async => bloc.add(SignedUp()),
@@ -114,11 +114,11 @@ void main() {
       when(metadata.lastSignInTime)
           .thenReturn(DateTime.fromMillisecondsSinceEpoch(0));
       final authRepository = MockAuthRepository();
-      when(authRepository.getUserEmail())
+      when(authRepository.getCurrentUserEmail())
           .thenAnswer((_) async => 'test@test.com');
-      when(authRepository.getUserId()).thenAnswer((_) async => 'test');
-      when(authRepository.stream)
-          .thenAnswer((_) => Stream.fromIterable([user]));
+      // when(authRepository.getUserId()).thenAnswer((_) async => 'test');
+      // when(authRepository.stream)
+      //     .thenAnswer((_) => Stream.fromIterable([user]));
       return AuthenticationBloc(userRepository: authRepository);
     }, expect: [Uninitialized(), RemoteAuthenticated('test@test.com', 'test')]);
     blocTest('AuthRepo LoggedIn event', build: () {
@@ -130,11 +130,11 @@ void main() {
       when(metadata.lastSignInTime)
           .thenReturn(DateTime.fromMillisecondsSinceEpoch(1));
       final authRepository = MockAuthRepository();
-      when(authRepository.getUserEmail())
+      when(authRepository.getCurrentUserEmail())
           .thenAnswer((_) async => 'test@test.com');
-      when(authRepository.getUserId()).thenAnswer((_) async => 'test');
-      when(authRepository.stream)
-          .thenAnswer((_) => Stream.fromIterable([user]));
+      // when(authRepository.getUserId()).thenAnswer((_) async => 'test');
+      // when(authRepository.stream)
+      //     .thenAnswer((_) => Stream.fromIterable([user]));
       return AuthenticationBloc(userRepository: authRepository);
     }, expect: [Uninitialized(), RemoteAuthenticated('test@test.com', 'test')]);
   });

@@ -9,34 +9,32 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:autodo/blocs/blocs.dart';
 import 'package:autodo/models/models.dart';
 import 'package:autodo/units/units.dart';
-
-class MockRefuelingsBloc extends MockBloc<RefuelingsEvent, RefuelingsState>
-    implements RefuelingsBloc {}
+import '../blocs/mocks.dart';
 
 void main() {
   BasePrefService pref;
-  final refuelingsBloc = MockRefuelingsBloc();
+  final dataBloc = MockDataBloc();
+  final snap1 = OdomSnapshot(
+    mileage: 1000,
+    car: 'test',
+    date: DateTime.fromMillisecondsSinceEpoch(0),
+  );
+  final snap2 = OdomSnapshot(
+    mileage: 2000,
+    car: 'test',
+    date: DateTime.fromMillisecondsSinceEpoch(0),
+  );
+  final snap3 = OdomSnapshot(
+    mileage: 3000,
+    car: 'test',
+    date: DateTime.fromMillisecondsSinceEpoch(0),
+  );
   final refuelingsShort = [
-    Refueling(
-        carName: 'test',
-        amount: 10.0,
-        date: DateTime.fromMillisecondsSinceEpoch(0),
-        mileage: 1000,
-        cost: 20.0),
-    Refueling(
-        carName: 'test',
-        amount: 10.0,
-        date: DateTime.fromMillisecondsSinceEpoch(0),
-        mileage: 2000,
-        cost: 20.0),
+    Refueling(odomSnapshot: snap1, amount: 10.0, cost: 20.0),
+    Refueling(odomSnapshot: snap2, amount: 10.0, cost: 20.0),
   ];
   final refuelingsLong = List<Refueling>.from(refuelingsShort)
-    ..add(Refueling(
-        carName: 'test',
-        amount: 10.0,
-        date: DateTime.fromMillisecondsSinceEpoch(0),
-        mileage: 3000,
-        cost: 20.0));
+    ..add(Refueling(odomSnapshot: snap3, amount: 10.0, cost: 20.0));
 
   group('efficiency stats', () {
     setUp(() async {
@@ -56,12 +54,12 @@ void main() {
 
     testWidgets('short refuelings', (tester) async {
       whenListen(
-          refuelingsBloc,
+          dataBloc,
           Stream.fromIterable([
-            RefuelingsLoading(),
-            RefuelingsLoaded(refuelingsShort),
+            DataLoading(),
+            DataLoaded(refuelings: refuelingsShort),
           ]));
-      when(refuelingsBloc.state).thenReturn(RefuelingsLoaded(refuelingsShort));
+      when(dataBloc.state).thenReturn(DataLoaded(refuelings: refuelingsShort));
 
       final _key = GlobalKey();
       await tester.pumpWidget(ChangeNotifierProvider<BasePrefService>.value(
@@ -73,19 +71,18 @@ void main() {
           ))));
       await tester.pump();
 
-      final data =
-          await EfficiencyStats.fetch(refuelingsBloc, _key.currentContext);
+      final data = await EfficiencyStats.fetch(dataBloc, _key.currentContext);
       expect(data, []);
     });
 
     testWidgets('long refuelings', (tester) async {
       whenListen(
-          refuelingsBloc,
+          dataBloc,
           Stream.fromIterable([
-            RefuelingsLoading(),
-            RefuelingsLoaded(refuelingsLong),
+            DataLoading(),
+            DataLoaded(refuelings: refuelingsLong),
           ]));
-      when(refuelingsBloc.state).thenReturn(RefuelingsLoaded(refuelingsLong));
+      when(dataBloc.state).thenReturn(DataLoaded(refuelings: refuelingsLong));
 
       final _key = GlobalKey();
       await tester.pumpWidget(ChangeNotifierProvider<BasePrefService>.value(
@@ -97,8 +94,7 @@ void main() {
           ))));
       await tester.pump();
 
-      final data =
-          await EfficiencyStats.fetch(refuelingsBloc, _key.currentContext);
+      final data = await EfficiencyStats.fetch(dataBloc, _key.currentContext);
       final expectedRawData = [
         FuelMileagePoint(
             DateTime.fromMillisecondsSinceEpoch(0), 235.2145833333333),

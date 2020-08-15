@@ -117,7 +117,7 @@ class TodoListSectionState extends State<TodoListSection> {
             return TodoListCard(
                 todo: widget.todos[index],
                 car: widget.cars
-                    .firstWhere((c) => c.name == widget.todos[index].carName),
+                    .firstWhere((c) => c.id == widget.todos[index].carId),
                 onDelete: () {
                   widget.deleteTodo(context, widget.todos[index]);
                 });
@@ -144,11 +144,11 @@ class TodosPanelState extends State<TodosPanel> {
   Map<TodoDueState, List<Todo>> todos;
 
   void _deleteTodo(BuildContext context, Todo todo) {
-    BlocProvider.of<TodosBloc>(context).add(DeleteTodo(todo));
+    BlocProvider.of<DataBloc>(context).add(DeleteTodo(todo));
     Scaffold.of(context).showSnackBar(DeleteTodoSnackBar(
       context: context,
       todo: todo,
-      onUndo: () => BlocProvider.of<TodosBloc>(context).add(AddTodo(todo)),
+      onUndo: () => BlocProvider.of<DataBloc>(context).add(AddTodo(todo)),
     ));
     // removing the todo from our local list for a quicker response than waiting
     // on the Bloc to rebuild
@@ -284,12 +284,12 @@ class TodosScreen extends StatelessWidget {
   const TodosScreen({Key key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => BlocBuilder<CarsBloc, CarsState>(
+  Widget build(BuildContext context) => BlocBuilder<DataBloc, DataState>(
       builder: (context, carsState) =>
           BlocBuilder<FilteredTodosBloc, FilteredTodosState>(
               builder: (context, todosState) {
             if (!(todosState is FilteredTodosLoaded) ||
-                !(carsState is CarsLoaded)) {
+                !(carsState is DataLoaded)) {
               return Container();
             }
 
@@ -321,7 +321,7 @@ class TodosScreen extends StatelessWidget {
                       child: TodosPanel(
                           todos:
                               (todosState as FilteredTodosLoaded).filteredTodos,
-                          cars: (carsState as CarsLoaded).cars),
+                          cars: (carsState as DataLoaded).cars),
                     ),
                   ],
                 ));

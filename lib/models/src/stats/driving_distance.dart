@@ -8,22 +8,22 @@ import '../distanceratepoint.dart';
 
 class DrivingDistanceStats {
   static Future<List<Series<DistanceRatePoint, DateTime>>> fetch(
-    CarsBloc carsBloc,
+    DataBloc dataBloc,
     BuildContext context,
   ) async {
-    var state = carsBloc.state;
-    if (state is CarsLoaded) {
+    var state = dataBloc.state;
+    if (state is DataLoaded) {
       return _prepData(state.cars, context);
     }
 
-    await for (final _state in carsBloc) {
-      if (_state is CarsLoaded) {
+    await for (final _state in dataBloc) {
+      if (_state is DataLoaded) {
         state = _state;
         break;
       }
     }
 
-    if (state is CarsLoaded) {
+    if (state is DataLoaded) {
       return _prepData(state.cars, context);
     }
 

@@ -36,35 +36,44 @@ class NewUserScreenWizard extends WizardInfo {
 
   @override
   FutureOr<void> didFinish(BuildContext context) {
+    // TODO: Make this its own addition so that the cars are added first and ID vals are used right
+
     final newCars = <Car>[];
-    final newTodos = <Todo>[];
+    final newTodos = <String, Todo>{};
     for (final car in cars) {
-      final c = Car(name: car.name, mileage: car.mileage);
+      final c = Car(
+          name: car.name,
+          odomSnapshot:
+              OdomSnapshot(mileage: car.mileage, date: DateTime.now()));
       newCars.add(c);
       if (car.oilChange != null) {
-        newTodos.add(Todo(
-          name: 'oil',
-          carName: c.name,
+        newTodos[c.name] = Todo(
+          name: 'Oil',
           completed: true,
-          completedDate: DateTime.now(),
+          completedOdomSnapshot: OdomSnapshot(
+            mileage: car.mileage,
+            date: DateTime.now(),
+          ),
           dueMileage: car.oilChange,
           mileageRepeatInterval: oilRepeatInterval,
-        ));
+        );
       }
       if (car.tireRotation != null) {
-        newTodos.add(Todo(
-          name: 'tireRotation',
-          carName: c.name,
+        newTodos[c.name] = Todo(
+          name: 'Tire Rotation',
           completed: true,
-          completedDate: DateTime.now(),
+          completedOdomSnapshot: OdomSnapshot(
+            mileage: car.mileage,
+            date: DateTime.now(),
+          ),
           dueMileage: car.tireRotation,
           mileageRepeatInterval: tireRotationRepeatInterval,
-        ));
+        );
       }
     }
-    BlocProvider.of<TodosBloc>(context).add(TranslateDefaults(
+    BlocProvider.of<DataBloc>(context).add(TranslateDefaults(
         JsonIntl.of(context), Distance.of(context, listen: false).unit));
-    BlocProvider.of<CarsBloc>(context).add(AddMultipleCars(newCars));
-    BlocProvider.of<TodosBloc>(context).add(AddMultipleTodos(newTodos));
+    BlocProvider.of<DataBloc>(context)
+        .add(SetNewUserData(cars: newCars, todos: newTodos));
   }
 }

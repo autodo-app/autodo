@@ -2,6 +2,7 @@ name: autodo
 description: Car Maintenance Made Simple.
 version: 0.3.2+16
 db_version: 3
+api_version: 1
 authors:
   - Jonathan Bayless <baylessjonathan@gmail.com>
   - David PHAM-VAN <dev.nfet.net@gmail.com>
@@ -46,6 +47,8 @@ dependencies:
   image_picker:
   dotted_border:
   flutter_debug_drawer:
+  http:
+  flutter_secure_storage:
 
 dependency_overrides:
   flutter_debug_drawer:

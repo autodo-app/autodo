@@ -11,14 +11,14 @@ import 'package:autodo/screens/home/widgets/todo_edit_button.dart';
 import 'package:autodo/models/models.dart';
 import 'package:autodo/units/units.dart';
 
-class MockCarsBloc extends MockBloc<CarsEvent, CarsState> implements CarsBloc {}
+class MockDataBloc extends MockBloc<DataEvent, DataState> implements DataBloc {}
 
 void main() {
   BasePrefService pref;
-  CarsBloc carsBloc;
+  DataBloc dataBloc;
 
   setUp(() async {
-    carsBloc = MockCarsBloc();
+    dataBloc = MockDataBloc();
     pref = PrefServiceCache();
     await pref.setDefaultValues({
       'length_unit': DistanceUnit.imperial.index,
@@ -46,7 +46,7 @@ void main() {
         value: pref,
         child: MultiBlocProvider(
           providers: [
-            BlocProvider<CarsBloc>.value(value: carsBloc),
+            BlocProvider<DataBloc>.value(value: dataBloc),
           ],
           child: MaterialApp(
             home: Scaffold(

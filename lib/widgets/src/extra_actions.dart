@@ -21,7 +21,7 @@ class ExtraActions extends StatelessWidget {
       builder: (context, state) {
         if (state is FilteredTodosLoaded) {
           final allComplete =
-              (BlocProvider.of<TodosBloc>(context).state as TodosLoaded)
+              (BlocProvider.of<DataBloc>(context).state as DataLoaded)
                   .todos
                   .every((todo) => todo.completed);
           final filterState = (BlocProvider.of<FilteredTodosBloc>(context).state
@@ -31,7 +31,8 @@ class ExtraActions extends StatelessWidget {
             onSelected: (action) {
               switch (action) {
                 case ExtraAction.toggleAllComplete:
-                  BlocProvider.of<TodosBloc>(context).add(ToggleAll());
+                  BlocProvider.of<DataBloc>(context)
+                      .add(ToggleAllTodosComplete());
                   break;
                 case ExtraAction.toggleFilter:
                   final nextFilter = (filterState == VisibilityFilter.all)
