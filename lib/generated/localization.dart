@@ -470,6 +470,10 @@ class IntlKeys {
   /// strings-fr.json: 'Au moins 3 ravitaillements sont nécessaires pour voir les données d\'efficacité.'
   static const noDataRefuelings = 'no_data_refuelings';
 
+  /// strings.json: 'No Refuelings Added Yet'
+  /// strings-fr.json: *** NOT TRANSLATED ***
+  static const noRefuelings = 'no_refuelings';
+
   /// strings.json: 'Odom'
   /// strings-fr.json: *** NOT TRANSLATED ***
   static const odom = 'odom';

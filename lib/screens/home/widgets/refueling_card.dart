@@ -25,17 +25,17 @@ class _TimelinePainter extends CustomPainter {
       ..strokeCap = StrokeCap.round
       ..strokeWidth = 2
       ..style = PaintingStyle.stroke;
-    if (firstElement) {
+    if (firstElement && !lastElement) {
       final offsetCenter = size.center(Offset(0.0, VERTICAL_SHIFT));
       final offsetBottom = size.bottomCenter(Offset(0.0, 0.0));
       final renderOffset = Offset(offsetBottom.dx, offsetBottom.dy);
       canvas.drawLine(offsetCenter, renderOffset, lineStroke);
-    } else if (lastElement) {
+    } else if (lastElement && !firstElement) {
       final offsetTopCenter = size.topCenter(Offset(0.0, 0.0));
       final offsetCenter = size.center(Offset(0.0, VERTICAL_SHIFT));
       final renderOffset = Offset(offsetCenter.dx, offsetCenter.dy);
       canvas.drawLine(offsetTopCenter, renderOffset, lineStroke);
-    } else {
+    } else if (!firstElement && !lastElement) {
       final offsetTopCenter = size.topCenter(Offset(0.0, 0.0));
       final offsetBottom = size.bottomCenter(Offset(0.0, 0.0));
       canvas.drawLine(offsetTopCenter, offsetBottom, lineStroke);
