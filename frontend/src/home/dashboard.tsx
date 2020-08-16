@@ -12,7 +12,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { BACKGROUND_LIGHT } from '../theme';
 import SearchBar from './searchbar';
 import SideBar from './sidebar';
-import { TodoList, RefuelingList } from '../features';
+import { TodoList, RefuelingList, StatsPage } from '../features';
 import { TabState } from './types';
 import TodoAddEditForm from '../features/todos/add_edit_form';
 
@@ -120,6 +120,8 @@ export default function Dashboard(): JSX.Element {
     tabContent = <TodoList />;
   } else if (tab === 'refuelings') {
     tabContent = <RefuelingList />;
+  } else if (tab === 'stats') {
+    tabContent = <StatsPage />;
   }
 
   return (
@@ -137,7 +139,6 @@ export default function Dashboard(): JSX.Element {
       <main className={classes.content}>
         <Container maxWidth="lg" className={classes.container}>
           <SearchBar />
-          {/* <TodoList /> */}
           {tabContent}
           <Box pt={4}>
             <Copyright />
