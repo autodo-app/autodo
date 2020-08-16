@@ -143,7 +143,7 @@ const FuelEfficiencyChart = (): JSX.Element => {
             <XAxis dataKey="time" stroke={theme.palette.text.secondary} />
             <YAxis stroke={theme.palette.text.secondary}>
               <Label angle={270} position="left" className={classes.labelText}>
-                Sales ($)
+                MPG
               </Label>
             </YAxis>
             <Line
@@ -282,7 +282,9 @@ const renderActiveShape = (props: RenderActiveShapeProps) => {
         y={ey}
         textAnchor={textAnchor}
         fill={theme.palette.text.primary}
-      >{`PV ${value}`}</text>
+      >
+        {value}
+      </text>
     </g>
   );
 };
@@ -339,7 +341,7 @@ const DrivingRateChart = (): JSX.Element => {
             <XAxis dataKey="time" stroke={theme.palette.text.secondary} />
             <YAxis stroke={theme.palette.text.secondary}>
               <Label angle={270} position="left" className={classes.labelText}>
-                Sales ($)
+                Miles per Day
               </Label>
             </YAxis>
             <Line
@@ -371,7 +373,7 @@ const FuelUsageChart = (): JSX.Element => {
             <XAxis dataKey="time" stroke={theme.palette.text.secondary} />
             <YAxis stroke={theme.palette.text.secondary}>
               <Label angle={270} position="left" className={classes.labelText}>
-                Sales ($)
+                Gallons
               </Label>
             </YAxis>
             <Line
