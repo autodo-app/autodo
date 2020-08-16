@@ -17,7 +17,7 @@ import {
   Sector,
   Cell,
 } from 'recharts';
-import theme, { AUTODO_GREEN } from '../../theme';
+import theme, { AUTODO_GREEN, BACKGROUND_DARK } from '../../theme';
 import { Typography } from '@material-ui/core';
 
 interface StyleProps {
@@ -25,6 +25,7 @@ interface StyleProps {
   container: React.CSSProperties;
   fixedHeight: React.CSSProperties;
   paper: React.CSSProperties;
+  labelText: React.CSSProperties;
   textHeight: React.CSSProperties;
   textStatContainer: React.CSSProperties;
   textStatText: React.CSSProperties;
@@ -59,6 +60,10 @@ const useStyles = makeStyles<Theme, StyleProps>(
       },
       fixedHeight: {
         height: 344, // 80 + 240 + theme.spacing(3)
+      },
+      labelText: {
+        fill: theme.palette.text.primary,
+        textAnchor: 'middle',
       },
       textHeight: {
         height: 80,
@@ -110,16 +115,36 @@ const Title = (props: TitleProps): JSX.Element => (
 );
 
 const data = [
-  { time: '00:00', amount: 0 },
-  { time: '03:00', amount: 300 },
-  { time: '06:00', amount: 600 },
-  { time: '09:00', amount: 800 },
-  { time: '12:00', amount: 1500 },
-  { time: '15:00', amount: 2000 },
-  { time: '18:00', amount: 2400 },
-  { time: '21:00', amount: 2400 },
-  { time: '24:00', amount: undefined },
+  { time: '00:00', amount: 0, average: 0 },
+  { time: '03:00', amount: 300, average: 250 },
+  { time: '06:00', amount: 600, average: 630 },
+  { time: '09:00', amount: 800, average: 900 },
+  { time: '12:00', amount: 1500, average: 1230 },
+  { time: '15:00', amount: 2000, average: 1900 },
+  { time: '18:00', amount: 2400, average: 2560 },
+  { time: '21:00', amount: 2400, average: 2300 },
+  { time: '24:00', amount: undefined, average: undefined },
 ];
+
+const EfficiencyDot = (props: any): JSX.Element => {
+  const { cx, cy, stroke, payload, value } = props;
+  const RADIUS = 5;
+
+  if (!value) {
+    return <></>;
+  } else if (value > 1000) {
+    return (
+      <svg fill="green">
+        <circle cx={cx} cy={cy} stroke={stroke} r={RADIUS} />
+      </svg>
+    );
+  }
+  return (
+    <svg fill="red">
+      <circle cx={cx} cy={cy} stroke={stroke} r={RADIUS} />
+    </svg>
+  );
+};
 
 const FuelEfficiencyChart = (): JSX.Element => {
   const classes: StyleClasses = useStyles({} as StyleProps);
@@ -136,14 +161,7 @@ const FuelEfficiencyChart = (): JSX.Element => {
           >
             <XAxis dataKey="time" stroke={theme.palette.text.secondary} />
             <YAxis stroke={theme.palette.text.secondary}>
-              <Label
-                angle={270}
-                position="left"
-                style={{
-                  textAnchor: 'middle',
-                  file: theme.palette.text.primary,
-                }}
-              >
+              <Label angle={270} position="left" className={classes.labelText}>
                 Sales ($)
               </Label>
             </YAxis>
@@ -152,6 +170,12 @@ const FuelEfficiencyChart = (): JSX.Element => {
               dataKey="amount"
               stroke={theme.palette.primary.main}
               dot={false}
+            />
+            <Line
+              type="monotone"
+              dataKey="average"
+              stroke="rgba(0,0,0,0)"
+              dot={<EfficiencyDot />}
             />
           </LineChart>
         </ResponsiveContainer>
@@ -333,14 +357,7 @@ const DrivingRateChart = (): JSX.Element => {
           >
             <XAxis dataKey="time" stroke={theme.palette.text.secondary} />
             <YAxis stroke={theme.palette.text.secondary}>
-              <Label
-                angle={270}
-                position="left"
-                style={{
-                  textAnchor: 'middle',
-                  file: theme.palette.text.primary,
-                }}
-              >
+              <Label angle={270} position="left" className={classes.labelText}>
                 Sales ($)
               </Label>
             </YAxis>
@@ -372,14 +389,7 @@ const FuelUsageChart = (): JSX.Element => {
           >
             <XAxis dataKey="time" stroke={theme.palette.text.secondary} />
             <YAxis stroke={theme.palette.text.secondary}>
-              <Label
-                angle={270}
-                position="left"
-                style={{
-                  textAnchor: 'middle',
-                  file: theme.palette.text.primary,
-                }}
-              >
+              <Label angle={270} position="left" className={classes.labelText}>
                 Sales ($)
               </Label>
             </YAxis>
