@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useState } from 'react';
 import { Theme, makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
+import { Typography } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Container from '@material-ui/core/Container';
@@ -18,7 +19,7 @@ import {
   Cell,
 } from 'recharts';
 import theme, { AUTODO_GREEN, BACKGROUND_DARK } from '../../theme';
-import { Typography } from '@material-ui/core';
+import { EfficiencyDot } from './efficiencydot';
 
 interface StyleProps {
   root: React.CSSProperties;
@@ -126,26 +127,6 @@ const data = [
   { time: '24:00', amount: undefined, average: undefined },
 ];
 
-const EfficiencyDot = (props: any): JSX.Element => {
-  const { cx, cy, stroke, payload, value } = props;
-  const RADIUS = 5;
-
-  if (!value) {
-    return <></>;
-  } else if (value > 1000) {
-    return (
-      <svg fill="green">
-        <circle cx={cx} cy={cy} stroke={stroke} r={RADIUS} />
-      </svg>
-    );
-  }
-  return (
-    <svg fill="red">
-      <circle cx={cx} cy={cy} stroke={stroke} r={RADIUS} />
-    </svg>
-  );
-};
-
 const FuelEfficiencyChart = (): JSX.Element => {
   const classes: StyleClasses = useStyles({} as StyleProps);
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
@@ -175,7 +156,7 @@ const FuelEfficiencyChart = (): JSX.Element => {
               type="monotone"
               dataKey="average"
               stroke="rgba(0,0,0,0)"
-              dot={<EfficiencyDot />}
+              dot={<EfficiencyDot data={data} />}
             />
           </LineChart>
         </ResponsiveContainer>
