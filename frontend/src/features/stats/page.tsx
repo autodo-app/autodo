@@ -17,7 +17,7 @@ import {
   Sector,
   Cell,
 } from 'recharts';
-import theme from '../../theme';
+import theme, { AUTODO_GREEN } from '../../theme';
 import { Typography } from '@material-ui/core';
 
 interface StyleProps {
@@ -26,6 +26,9 @@ interface StyleProps {
   fixedHeight: React.CSSProperties;
   paper: React.CSSProperties;
   textHeight: React.CSSProperties;
+  textStatContainer: React.CSSProperties;
+  textStatText: React.CSSProperties;
+  textStatNumber: React.CSSProperties;
   fuelUsageHeight: React.CSSProperties;
   fuelUsageContainer: React.CSSProperties;
   fuelUsageChart: React.CSSProperties;
@@ -59,6 +62,21 @@ const useStyles = makeStyles<Theme, StyleProps>(
       },
       textHeight: {
         height: 80,
+      },
+      textStatContainer: {
+        height: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+      textStatText: {
+        padding: theme.spacing(1),
+      },
+      textStatNumber: {
+        fontSize: 36,
+        fontWeight: 800,
+        color: AUTODO_GREEN,
+        paddingLeft: theme.spacing(1),
       },
       fuelUsageHeight: {
         height: 240,
@@ -149,9 +167,10 @@ const CompletedTodos = (): JSX.Element => {
   return (
     <Grid item xs={12} md={6} lg={6}>
       <Paper className={fixedHeightPaper}>
-        <p>
-          Total ToDos Completed: <span>24</span>
-        </p>
+        <div className={classes.textStatContainer}>
+          <div className={classes.textStatText}>Total ToDos Completed:</div>
+          <div className={classes.textStatNumber}>24</div>
+        </div>
       </Paper>
     </Grid>
   );
@@ -164,9 +183,10 @@ const LoggedRefuelings = (): JSX.Element => {
   return (
     <Grid item xs={12} md={6} lg={6}>
       <Paper className={fixedHeightPaper}>
-        <p>
-          Total Refuelings Logged: <span>24</span>
-        </p>
+        <div className={classes.textStatContainer}>
+          <div className={classes.textStatText}>Total Refuelings Logged:</div>
+          <div className={classes.textStatNumber}>24</div>
+        </div>
       </Paper>
     </Grid>
   );
