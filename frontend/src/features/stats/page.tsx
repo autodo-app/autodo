@@ -4,23 +4,14 @@ import clsx from 'clsx';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Container from '@material-ui/core/Container';
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  Label,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Sector,
-  Cell,
-} from 'recharts';
-import theme, { AUTODO_GREEN } from '../../theme';
+import { useSelector, useDispatch } from 'react-redux';
+
+import { AUTODO_GREEN } from '../../theme';
 import { FuelEfficiencyChart } from './fuelefficiencygraph';
 import { FuelUsageByCar } from './fuelusagebycar';
 import { DrivingRateChart } from './drivingrate';
 import { FuelUsageChart } from './fuelusagebymonth';
+import { selectAllCompletedTodos, selectAllRefuelings } from '../../_store';
 
 interface StyleProps {
   root: React.CSSProperties;
@@ -87,13 +78,14 @@ const useStyles = makeStyles<Theme, StyleProps>(
 const CompletedTodos = (): JSX.Element => {
   const classes: StyleClasses = useStyles({} as StyleProps);
   const fixedHeightPaper = clsx(classes.paper, classes.textHeight);
+  const todos = useSelector(selectAllCompletedTodos);
 
   return (
     <Grid item xs={12} md={6} lg={6}>
       <Paper className={fixedHeightPaper}>
         <div className={classes.textStatContainer}>
           <div className={classes.textStatText}>Total ToDos Completed:</div>
-          <div className={classes.textStatNumber}>24</div>
+          <div className={classes.textStatNumber}>{todos.length}</div>
         </div>
       </Paper>
     </Grid>
@@ -103,13 +95,14 @@ const CompletedTodos = (): JSX.Element => {
 const LoggedRefuelings = (): JSX.Element => {
   const classes: StyleClasses = useStyles({} as StyleProps);
   const fixedHeightPaper = clsx(classes.paper, classes.textHeight);
+  const refuelings = useSelector(selectAllRefuelings);
 
   return (
     <Grid item xs={12} md={6} lg={6}>
       <Paper className={fixedHeightPaper}>
         <div className={classes.textStatContainer}>
           <div className={classes.textStatText}>Total Refuelings Logged:</div>
-          <div className={classes.textStatNumber}>24</div>
+          <div className={classes.textStatNumber}>{refuelings.length}</div>
         </div>
       </Paper>
     </Grid>
@@ -118,6 +111,7 @@ const LoggedRefuelings = (): JSX.Element => {
 
 export const StatsPage = (): JSX.Element => {
   const classes: StyleClasses = useStyles({} as StyleProps);
+  // TODO: implement fuel efficiency, fuel usage, and driving rate on server side
 
   return (
     <div className={classes.root}>

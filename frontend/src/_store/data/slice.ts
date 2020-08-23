@@ -135,6 +135,9 @@ export const selectAllCars = (state: RootState) => state.data.cars;
 export const selectTodoById = (state: RootState, todoId: Number) =>
   state.data.todos.find((todo) => Number(todo.id) === todoId);
 
+export const selectAllCompletedTodos = (state: RootState) =>
+  state.data.todos.filter((t) => t.completionOdomSnapshot);
+
 export const selectRefuelingById = (state: RootState, refuelingId: Number) =>
   state.data.refuelings.find((r) => Number(r.id) === refuelingId);
 
