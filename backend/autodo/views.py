@@ -1,6 +1,6 @@
 """CRUD endpoints for the models."""
 from django.contrib.auth import get_user_model
-from rest_framework import generics, viewsets, permissions
+from rest_framework import generics, viewsets, permissions, mixins, views
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_registration.decorators import api_view_serializer_class_getter
@@ -31,7 +31,14 @@ from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 
 from .models import Car, OdomSnapshot, Refueling, Todo
 from .documents import CarDocument
-from .serializers import CarSerializer, OdomSnapshotSerializer, RefuelingSerializer, TodoSerializer, CarDocumentSerializer
+from .serializers import (
+    CarSerializer,
+    OdomSnapshotSerializer,
+    RefuelingSerializer,
+    TodoSerializer,
+    CarDocumentSerializer,
+    FuelEfficiencySerializer,
+)
 from .permissions import IsOwner
 
 PERMS = [permissions.IsAuthenticated, IsOwner]
@@ -184,3 +191,21 @@ class CarDocumentViewSet(DocumentViewSet):
     }
 
     ordering = ('name.raw', 'id',)
+
+
+class FuelEfficiencyViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    permission_classes = PERMS
+    serializer_class = FuelEfficiencySerializer
+
+    def get_queryset(self):
+        return Car.objects.filter(owner=self.request.user)
+
+    def get(self, request):
+        """Only returns objects that are owned by the user making the request."""
+        return fetchFuelEfficiencyStats(owner=request.owner)
+
+class FuelEfficiencyView(views.APIView):
+    def get(self, request, *args, **kwargs):
+        count = Car.objects.filter(owner=request.user).count()
+        return Response({"data": count})
+

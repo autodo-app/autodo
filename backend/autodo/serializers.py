@@ -137,3 +137,16 @@ class CarDocumentSerializer(serializers.Serializer):
     class Meta:
         document = CarDocument
         fields = ('id', 'name',)
+
+class FuelEfficiencySerializer(serializers.Serializer):
+    date = serializers.SerializerMethodField('date')
+    efficiency = serializers.SerializerMethodField('efficiency')
+
+    def date(self, obj):
+        return ''
+
+    def efficiency(self, obj):
+        return 0.0
+
+    class Meta:
+        fields = ['date', 'efficiency']

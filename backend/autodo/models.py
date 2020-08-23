@@ -123,3 +123,4 @@ class Todo(models.Model):
         blank=True,
         null=True)
 
+

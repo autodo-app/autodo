@@ -9,7 +9,8 @@ router.register(r'refuelings', RefuelingsListViewSet)
 router.register(r'todos', TodosListViewSet)
 
 urlpatterns = [
-    path('', include(router.urls))
+    path('', include(router.urls)),
+    path('fuelefficiencystats/', FuelEfficiencyView.as_view())
 ]
 
 searchRouter = DefaultRouter()
