@@ -1,6 +1,7 @@
 """CRUD endpoints for the models."""
 from collections import defaultdict
 from statistics import mean
+from functools import reduce
 
 from django.contrib.auth import get_user_model
 from rest_framework import generics, viewsets, permissions, mixins, views
@@ -230,7 +231,15 @@ class FuelEfficiencyView(views.APIView):
 
 class FuelUsageByCarView(views.APIView):
     def get(self, request, *args, **kwargs):
-        return Response({})
+        cars = Car.objects.filter(owner=request.user)
+        gas_used = {}
+        for c in cars:
+            refuelings = Refueling.objects.filter(odomSnapshot__car=c.id)
+            if len(refuelings) == 0:
+                gas_used[c.id] = 0
+            else:
+                gas_used[c.id] = reduce(lambda i, j: i + j, map(lambda x: x.amount, Refueling.objects.filter(odomSnapshot__car=c.id)))
+        return Response(gas_used)
 
 class DrivingRateView(views.APIView):
     def get(self, request, *args, **kwargs):
