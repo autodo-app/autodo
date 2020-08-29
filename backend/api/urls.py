@@ -30,35 +30,49 @@ from drf_yasg import openapi
 
 
 schema_view = get_schema_view(
-   openapi.Info(
-         title="auToDo API",
-         default_version='v1',
-         description="API for interacting with your auToDo data.",
-         terms_of_service="https://www.autodo.app/privacy-policy/",
-         license=openapi.License(name="Apache License 2.0"),
-      ),
-   public=True,
-   permission_classes=(permissions.AllowAny,),
+    openapi.Info(
+        title="auToDo API",
+        default_version="v1",
+        description="API for interacting with your auToDo data.",
+        terms_of_service="https://www.autodo.app/privacy-policy/",
+        license=openapi.License(name="Apache License 2.0"),
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
 )
 
 urlpatterns = [
     # TODO: not sure what to put at the root but there should probably be something
     # path('', include('autodo.urls')),
-    path('admin/', admin.site.urls),
-    re_path('api/(?P<version>(v1|v2))/', include('autodo.urls')),
-    path('search/', include(searchRouter.urls)),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    path('auth/token/', TokenObtainPairView.as_view(serializer_class=CustomJWTSerializer), name='token_obtain_pair'),
-    path('auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path("admin/", admin.site.urls),
+    re_path("api/(?P<version>(v1|v2))/", include("autodo.urls")),
+    path("search/", include(searchRouter.urls)),
+    path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
+    path(
+        "auth/token/",
+        TokenObtainPairView.as_view(serializer_class=CustomJWTSerializer),
+        name="token_obtain_pair",
+    ),
+    path("auth/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     # This populates:
     # - accounts/register to register a new user
     # - accounts/verify-registration to verify the registration with a signature
     #
     # More here: https://django-rest-registration.readthedocs.io/en/latest/detailed_configuration/register.html#api-views
-    path('accounts/profile/', profile, name='account-profile'),
-    path('accounts/', include('rest_registration.api.urls')),
-    re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
-    re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    path("accounts/profile/", profile, name="account-profile"),
+    path("accounts/", include("rest_registration.api.urls")),
+    re_path(
+        r"^swagger(?P<format>\.json|\.yaml)$",
+        schema_view.without_ui(cache_timeout=0),
+        name="schema-json",
+    ),
+    re_path(
+        r"^swagger/$",
+        schema_view.with_ui("swagger", cache_timeout=0),
+        name="schema-swagger-ui",
+    ),
+    re_path(
+        r"^redoc/$", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"
+    ),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
