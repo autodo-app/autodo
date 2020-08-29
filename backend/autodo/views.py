@@ -1,4 +1,7 @@
 """CRUD endpoints for the models."""
+from collections import defaultdict
+from statistics import mean
+
 from django.contrib.auth import get_user_model
 from rest_framework import generics, viewsets, permissions, mixins, views
 from rest_framework.decorators import api_view, permission_classes
@@ -193,19 +196,47 @@ class CarDocumentViewSet(DocumentViewSet):
     ordering = ('name.raw', 'id',)
 
 
-class FuelEfficiencyViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
-    permission_classes = PERMS
-    serializer_class = FuelEfficiencySerializer
-
-    def get_queryset(self):
-        return Car.objects.filter(owner=self.request.user)
-
-    def get(self, request):
-        """Only returns objects that are owned by the user making the request."""
-        return fetchFuelEfficiencyStats(owner=request.owner)
-
+ALPHA = 0.3
+EMA_CUTOFF = 3 # EMA works best with some averages in the history
 class FuelEfficiencyView(views.APIView):
+    def single_efficiency(self, i: Refueling, j: Refueling) -> float:
+        dist_diff = j.odomSnapshot.mileage - i.odomSnapshot.mileage
+        return dist_diff / j.amount
+
+    def ema(self, data: list) -> list:
+        ema = []
+        for i, v in enumerate(data):
+            if i == 0:
+                ema.append(v)
+            elif i < EMA_CUTOFF:
+                cur_aves = ema.copy()
+                cur_aves.append(v)
+                ema.append(mean(cur_aves))
+            else:
+                prev = ema[-1]
+                ema.append(ALPHA * v + (1 - ALPHA) * prev)
+        return ema
+
     def get(self, request, *args, **kwargs):
-        count = Car.objects.filter(owner=request.user).count()
-        return Response({"data": count})
+        data = defaultdict(dict)
+        cars = Car.objects.filter(owner=request.user)
+        for c in cars:
+            refuelings = Refueling.objects.filter(odomSnapshot__car=c.id).order_by('odomSnapshot__mileage')
+            mpgs = [self.single_efficiency(s, t) for s, t in zip(refuelings, refuelings[1:])]
+            data[c.id]['raw'] = mpgs
+            data[c.id]['averages'] = self.ema(mpgs)
+
+        return Response(data)
+
+class FuelUsageByCarView(views.APIView):
+    def get(self, request, *args, **kwargs):
+        return Response({})
+
+class DrivingRateView(views.APIView):
+    def get(self, request, *args, **kwargs):
+        return Response({})
+
+class FuelUsageByMonthView(views.APIView):
+    def get(self, request, *args, **kwargs):
+        return Response({})
 

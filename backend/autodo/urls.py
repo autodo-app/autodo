@@ -10,7 +10,10 @@ router.register(r'todos', TodosListViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('fuelefficiencystats/', FuelEfficiencyView.as_view())
+    path('fuelefficiencystats/', FuelEfficiencyView.as_view()),
+    path('fuelusagebycar/', FuelUsageByCarView.as_view()),
+    path('fuelusagebymonth/', FuelUsageByMonthView.as_view()),
+    path('drivingrate/', DrivingRateView.as_view()),
 ]
 
 searchRouter = DefaultRouter()

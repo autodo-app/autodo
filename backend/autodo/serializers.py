@@ -88,7 +88,7 @@ class OdomSnapshotSerializer(serializers.HyperlinkedModelSerializer):
 class RefuelingSerializer(serializers.HyperlinkedModelSerializer):
     """Translates the Refueling data into a view."""
     owner = serializers.ReadOnlyField(source='owner.username')
-    odomSnapshot = OdomSnapshotSerializer(read_only=True)
+    odomSnapshot = serializers.PrimaryKeyRelatedField(queryset=OdomSnapshot.objects.all(), allow_null=True)
 
     class Meta:
         model = Refueling
