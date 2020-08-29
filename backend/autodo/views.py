@@ -42,6 +42,7 @@ from .serializers import (
     TodoSerializer,
     CarDocumentSerializer,
     FuelEfficiencySerializer,
+    single_distance_rate,
 )
 from .permissions import IsOwner
 
@@ -243,7 +244,12 @@ class FuelUsageByCarView(views.APIView):
 
 class DrivingRateView(views.APIView):
     def get(self, request, *args, **kwargs):
-        return Response({})
+        data = {}
+        cars = Car.objects.filter(owner=request.user)
+        for c in cars:
+            odomSnaps = OdomSnapshot.objects.filter(car=c.id).order_by('mileage')
+            data[c.id] = [single_distance_rate(s, t) for s, t in zip(odomSnaps, odomSnaps[1:])]
+        return Response(data)
 
 class FuelUsageByMonthView(views.APIView):
     def get(self, request, *args, **kwargs):
