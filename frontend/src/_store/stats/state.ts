@@ -3,4 +3,6 @@ export interface StatsState {
   fuelUsageByCar: {};
   drivingRate: {};
   fuelUsageByMonth: {};
+  status: string;
+  error: string | null;
 }

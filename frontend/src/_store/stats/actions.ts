@@ -23,6 +23,8 @@ export const fetchStats = createAsyncThunk<types.FetchStatsAction, void>(
         fuelUsageByCar: fuelUsageByCar,
         drivingRate: drivingRate,
         fuelUsageByMonth: fuelUsageByMonth,
+        status: '',
+        error: null,
       },
     } as types.FetchStatsAction;
   },
