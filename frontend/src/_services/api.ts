@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { Car, OdomSnapshot, Refueling, Todo } from '../_models/data';
+import * as models from '../_models';
 
 const apiUrl = 'http://localhost:8000';
 const apiVersion = '/api/v1';
@@ -102,41 +102,41 @@ export const fetchUserToken = async (user: string, pass: string) => {
   return data.access;
 };
 
-export const fetchTodos = async (): Promise<Todo[]> => {
+export const fetchTodos = async (): Promise<models.Todo[]> => {
   const response = await _authenticatedGet('todos/');
   return response.results;
 };
 
-export const postTodo = async (todo: Todo): Promise<Todo> => {
+export const postTodo = async (todo: models.Todo): Promise<models.Todo> => {
   const response = await _authenticatedPost('todos/', todo);
   return response;
 };
 
-export const patchTodo = async (todo: Todo): Promise<Todo> => {
+export const patchTodo = async (todo: models.Todo): Promise<models.Todo> => {
   const response = await _authenticatedPatch(`todos/${todo.id}/`, todo);
   return response;
 };
 
-export const deleteTodo = async (todo: Todo): Promise<Todo> => {
+export const deleteTodo = async (todo: models.Todo): Promise<models.Todo> => {
   await _authenticatedDelete(`todos/${todo.id}/`, todo);
   return todo;
 };
 
-export const fetchRefuelings = async (): Promise<Refueling[]> => {
+export const fetchRefuelings = async (): Promise<models.Refueling[]> => {
   const response = await _authenticatedGet('refuelings/');
   return response.results;
 };
 
 export const postRefueling = async (
-  refueling: Refueling,
-): Promise<Refueling> => {
+  refueling: models.Refueling,
+): Promise<models.Refueling> => {
   const response = await _authenticatedPost('refuelings/', refueling);
   return response;
 };
 
 export const patchRefueling = async (
-  refueling: Refueling,
-): Promise<Refueling> => {
+  refueling: models.Refueling,
+): Promise<models.Refueling> => {
   const response = await _authenticatedPatch(
     `refuelings/${refueling.id}/`,
     refueling,
@@ -145,42 +145,57 @@ export const patchRefueling = async (
 };
 
 export const deleteRefueling = async (
-  refueling: Refueling,
-): Promise<Refueling> => {
+  refueling: models.Refueling,
+): Promise<models.Refueling> => {
   await _authenticatedDelete(`refuelings/${refueling.id}/`, refueling);
   return refueling;
 };
 
-export const fetchCars = async (): Promise<Car[]> => {
+export const fetchCars = async (): Promise<models.Car[]> => {
   const response = await _authenticatedGet('cars/');
   return response.results;
 };
 
-export const postCar = async (car: Car): Promise<Car> => {
+export const postCar = async (car: models.Car): Promise<models.Car> => {
   const response = await _authenticatedPost('cars/', car);
   return response;
 };
 
-export const patchCar = async (car: Car): Promise<Car> => {
+export const patchCar = async (car: models.Car): Promise<models.Car> => {
   const response = await _authenticatedPatch(`cars/${car.id}/`, car);
   return response;
 };
 
-export const deleteCar = async (car: Car): Promise<Car> => {
+export const deleteCar = async (car: models.Car): Promise<models.Car> => {
   await _authenticatedDelete(`cars/${car.id}/`, car);
   return car;
 };
 
 export const postOdomSnapshot = async (
-  snap: OdomSnapshot,
-): Promise<OdomSnapshot> => await _authenticatedPost('odomsnapshots/', snap);
+  snap: models.OdomSnapshot,
+): Promise<models.OdomSnapshot> =>
+  await _authenticatedPost('odomsnapshots/', snap);
 
 export const patchOdomSnapshot = async (
-  snap: OdomSnapshot,
-): Promise<OdomSnapshot> =>
+  snap: models.OdomSnapshot,
+): Promise<models.OdomSnapshot> =>
   await _authenticatedPatch(`odomsnapshots/${snap.id}`, snap);
 
 export const deleteOdomSnapshot = async (
   snapId: number,
-): Promise<OdomSnapshot> =>
+): Promise<models.OdomSnapshot> =>
   await _authenticatedDelete(`odomsnapshots/${snapId}/`, snapId);
+
+export const fetchFuelEfficiency = async (): Promise<
+  models.FuelEfficiencyData
+> => await _authenticatedGet('fuelefficiencystats/');
+
+export const fetchFuelUsageByCar = async (): Promise<models.FuelUsageCarData> =>
+  await _authenticatedGet('fuelusagebycar/');
+
+export const fetchDrivingRate = async (): Promise<models.DrivingRateData> =>
+  await _authenticatedGet('drivingrate/');
+
+export const fetchFuelUsageByMonth = async (): Promise<
+  models.FuelUsageMonthData
+> => await _authenticatedGet('fuelusagebymonth/');
