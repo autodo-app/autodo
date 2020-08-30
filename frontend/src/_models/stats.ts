@@ -1,6 +1,14 @@
-export type FuelUsageMonthData = Map<string, Map<string, number>>;
+interface FuelUsageMonth {
+  [monthId: string]: number;
+}
 
-export type FuelUsageCarData = Map<string, number>;
+export interface FuelUsageMonthData {
+  [carId: string]: FuelUsageMonth;
+}
+
+export interface FuelUsageCarData {
+  [carId: string]: number;
+}
 
 export interface FuelEfficiencyDataPoint {
   time: Date;
@@ -8,6 +16,10 @@ export interface FuelEfficiencyDataPoint {
   filtered: number;
 }
 
-export type FuelEfficiencyData = Map<string, FuelEfficiencyDataPoint[]>;
+export interface FuelEfficiencyData {
+  [carId: string]: FuelEfficiencyDataPoint[];
+}
 
-export type DrivingRateData = Map<string, number[]>;
+export interface DrivingRateData {
+  [carId: string]: number[];
+}

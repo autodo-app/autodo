@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+import { RootState } from '../../app/store';
 import * as actions from './actions';
 import { StatsState } from './state';
 
@@ -25,10 +26,10 @@ const statsSlice = createSlice({
         actions.fetchStats.fulfilled,
         (state: StatsState, { payload }) => {
           state.status = 'succeeded';
-          state.fuelEfficiency = payload.payload.fuelEfficiency;
-          state.drivingRate = payload.payload.drivingRate;
-          state.fuelUsageByCar = payload.payload.fuelUsageByCar;
-          state.fuelUsageByMonth = payload.payload.fuelUsageByMonth;
+          state.fuelEfficiency = { ...payload.payload.fuelEfficiency };
+          state.drivingRate = { ...payload.payload.drivingRate };
+          state.fuelUsageByCar = { ...payload.payload.fuelUsageByCar };
+          state.fuelUsageByMonth = { ...payload.payload.fuelUsageByMonth };
         },
       )
       .addCase(actions.fetchStats.rejected, (state: StatsState, action) => {
@@ -38,3 +39,5 @@ const statsSlice = createSlice({
 });
 
 export default statsSlice.reducer;
+export const selectFuelEfficiencyData = (state: RootState) =>
+  state.stats.fuelEfficiency;
