@@ -7,11 +7,17 @@ import Container from '@material-ui/core/Container';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { AUTODO_GREEN } from '../../theme';
+import { RootState } from '../../app/store';
+import { Refueling, Todo } from '../../_models';
 import { FuelEfficiencyChart } from './fuelefficiencygraph';
 import { FuelUsageByCar } from './fuelusagebycar';
 import { DrivingRateChart } from './drivingrate';
 import { FuelUsageChart } from './fuelusagebymonth';
-import { selectAllCompletedTodos, selectAllRefuelings } from '../../_store';
+import {
+  fetchData,
+  selectAllCompletedTodos,
+  selectAllRefuelings,
+} from '../../_store';
 
 interface StyleProps {
   root: React.CSSProperties;
@@ -75,10 +81,14 @@ const useStyles = makeStyles<Theme, StyleProps>(
     } as any),
 );
 
-const CompletedTodos = (): JSX.Element => {
+interface CompletedTodosProps {
+  todos: Todo[];
+}
+
+const CompletedTodos = (props: CompletedTodosProps): JSX.Element => {
+  const { todos } = props;
   const classes: StyleClasses = useStyles({} as StyleProps);
   const fixedHeightPaper = clsx(classes.paper, classes.textHeight);
-  const todos = useSelector(selectAllCompletedTodos);
 
   return (
     <Grid item xs={12} md={6} lg={6}>
@@ -92,10 +102,14 @@ const CompletedTodos = (): JSX.Element => {
   );
 };
 
-const LoggedRefuelings = (): JSX.Element => {
+interface LoggedRefuelingsProps {
+  refuelings: Refueling[];
+}
+
+const LoggedRefuelings = (props: LoggedRefuelingsProps): JSX.Element => {
+  const { refuelings } = props;
   const classes: StyleClasses = useStyles({} as StyleProps);
   const fixedHeightPaper = clsx(classes.paper, classes.textHeight);
-  const refuelings = useSelector(selectAllRefuelings);
 
   return (
     <Grid item xs={12} md={6} lg={6}>
@@ -111,7 +125,17 @@ const LoggedRefuelings = (): JSX.Element => {
 
 export const StatsPage = (): JSX.Element => {
   const classes: StyleClasses = useStyles({} as StyleProps);
-  // TODO: implement fuel efficiency, fuel usage, and driving rate on server side
+  const dispatch = useDispatch();
+
+  const dataStatus = useSelector((state: RootState) => state.data.status);
+  const refuelings = useSelector(selectAllRefuelings);
+  const todos = useSelector(selectAllCompletedTodos);
+
+  React.useEffect(() => {
+    if (dataStatus === 'idle') {
+      dispatch(fetchData());
+    }
+  }, [dataStatus, dispatch]);
 
   return (
     <div className={classes.root}>
@@ -120,8 +144,8 @@ export const StatsPage = (): JSX.Element => {
           <FuelEfficiencyChart />
           <Grid item xs={12} md={6} lg={6}>
             <Grid container spacing={3}>
-              <CompletedTodos />
-              <LoggedRefuelings />
+              <CompletedTodos todos={todos} />
+              <LoggedRefuelings refuelings={refuelings} />
               <FuelUsageByCar />
             </Grid>
           </Grid>
