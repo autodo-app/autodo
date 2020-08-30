@@ -240,9 +240,11 @@ class FuelEfficiencyView(views.APIView):
             mpgs = [
                 self.single_efficiency(s, t) for s, t in zip(refuelings, refuelings[1:])
             ]
-            data[c.id]["raw"] = mpgs
-            data[c.id]["averages"] = self.ema(mpgs)
-
+            emas = self.ema(mpgs)
+            data[c.id] = [
+                {"time": r.odomSnapshot.date, "raw": mpgs[i], "filtered": emas[i]}
+                for i, r in enumerate(refuelings[1:])
+            ]
         return Response(data)
 
 
