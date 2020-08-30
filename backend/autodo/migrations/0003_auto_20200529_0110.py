@@ -6,52 +6,52 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('autodo', '0002_auto_20200527_1951'),
+        ("autodo", "0002_auto_20200527_1951"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='car',
-            name='image',
+            model_name="car",
+            name="image",
         ),
         migrations.AddField(
-            model_name='car',
-            name='imageName',
+            model_name="car",
+            name="imageName",
             field=models.CharField(blank=True, max_length=255, null=True),
         ),
         migrations.AlterField(
-            model_name='car',
-            name='color',
+            model_name="car",
+            name="color",
             field=models.IntegerField(default=128),
         ),
         migrations.AlterField(
-            model_name='car',
-            name='make',
+            model_name="car",
+            name="make",
             field=models.CharField(blank=True, max_length=255, null=True),
         ),
         migrations.AlterField(
-            model_name='car',
-            name='model',
+            model_name="car",
+            name="model",
             field=models.CharField(blank=True, max_length=255, null=True),
         ),
         migrations.AlterField(
-            model_name='car',
-            name='plate',
+            model_name="car",
+            name="plate",
             field=models.CharField(blank=True, max_length=10, null=True),
         ),
         migrations.AlterField(
-            model_name='car',
-            name='vin',
+            model_name="car",
+            name="vin",
             field=models.CharField(blank=True, max_length=10, null=True),
         ),
         migrations.AlterField(
-            model_name='car',
-            name='year',
+            model_name="car",
+            name="year",
             field=models.IntegerField(blank=True, null=True),
         ),
         migrations.AlterField(
-            model_name='todo',
-            name='estimatedDueDate',
+            model_name="todo",
+            name="estimatedDueDate",
             field=models.BooleanField(blank=True, default=False, null=True),
         ),
     ]
