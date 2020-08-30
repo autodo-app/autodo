@@ -20,6 +20,10 @@ export interface FuelEfficiencyData {
   [carId: string]: FuelEfficiencyDataPoint[];
 }
 
+interface DrivingRatePoint {
+  time: Date;
+  rate: number;
+}
 export interface DrivingRateData {
-  [carId: string]: number[];
+  [carId: string]: DrivingRatePoint[];
 }

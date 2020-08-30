@@ -14,26 +14,23 @@ import {
 } from 'recharts';
 
 import theme from '../../theme';
+import { FuelEfficiencyData } from '../../_models';
 import { selectFuelEfficiencyData, fetchStats } from '../../_store';
 import { RootState } from '../../app/store';
 import { Title, StyleClasses, StyleProps, useBaseStyles } from './shared';
 import { EfficiencyDot } from './efficiencydot';
 
-export const FuelEfficiencyChart = (): JSX.Element => {
+export interface FuelEfficiencyChartProps {
+  data: FuelEfficiencyData;
+}
+export const FuelEfficiencyChart = (
+  props: FuelEfficiencyChartProps,
+): JSX.Element => {
   const classes: StyleClasses = useBaseStyles({} as StyleProps);
-  const dispatch = useDispatch();
 
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
-  const data = useSelector(selectFuelEfficiencyData);
-  const dataStatus = useSelector((state: RootState) => state.stats.status);
-  const error = useSelector((state: RootState) => state.stats.error);
-
-  useEffect(() => {
-    if (dataStatus === 'idle') {
-      dispatch(fetchStats());
-    }
-  }, [dataStatus, dispatch]);
+  const { data } = props;
 
   // TODO: Add some way to select which car is shown
   return (

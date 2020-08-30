@@ -273,9 +273,10 @@ class DrivingRateView(views.APIView):
         cars = Car.objects.filter(owner=request.user)
         for c in cars:
             odomSnaps = OdomSnapshot.objects.filter(car=c.id).order_by("mileage")
-            data[c.id] = [
+            rates = [
                 single_distance_rate(s, t) for s, t in zip(odomSnaps, odomSnaps[1:])
             ]
+            data[c.id] = [{'time': s.date, 'rate': rates[i]} for i, s in enumerate(odomSnaps[1:])]
         return Response(data)
 
 

@@ -13,12 +13,18 @@ import {
 } from 'recharts';
 
 import theme from '../../theme';
+import { DrivingRateData } from '../../_models';
 import { Title, StyleClasses, StyleProps, useBaseStyles } from './shared';
+import { useDispatch } from 'react-redux';
 
-const data = [{}];
+export interface DrivingRateChartProps {
+  data: DrivingRateData;
+}
 
-export const DrivingRateChart = (): JSX.Element => {
+export const DrivingRateChart = (props: DrivingRateChartProps): JSX.Element => {
+  const { data } = props;
   const classes: StyleClasses = useBaseStyles({} as StyleProps);
+  const dispatch = useDispatch();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
@@ -27,7 +33,7 @@ export const DrivingRateChart = (): JSX.Element => {
         <Title>Driving Rate</Title>
         <ResponsiveContainer>
           <LineChart
-            data={data}
+            data={data['1']}
             margin={{ top: 16, right: 16, bottom: 0, left: 24 }}
           >
             <XAxis dataKey="time" stroke={theme.palette.text.secondary} />
@@ -38,7 +44,7 @@ export const DrivingRateChart = (): JSX.Element => {
             </YAxis>
             <Line
               type="monotone"
-              dataKey="amount"
+              dataKey="rate"
               stroke={theme.palette.primary.main}
               dot={false}
             />

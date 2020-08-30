@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEffect } from 'react';
 import { Theme, makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Grid from '@material-ui/core/Grid';
@@ -15,6 +16,7 @@ import { DrivingRateChart } from './drivingrate';
 import { FuelUsageChart } from './fuelusagebymonth';
 import {
   fetchData,
+  fetchStats,
   selectAllCompletedTodos,
   selectAllRefuelings,
 } from '../../_store';
@@ -131,9 +133,19 @@ export const StatsPage = (): JSX.Element => {
   const refuelings = useSelector(selectAllRefuelings);
   const todos = useSelector(selectAllCompletedTodos);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (dataStatus === 'idle') {
       dispatch(fetchData());
+    }
+  }, [dataStatus, dispatch]);
+
+  const statsStatus = useSelector((state: RootState) => state.stats.status);
+  const error = useSelector((state: RootState) => state.stats.error);
+  const stats = useSelector((state: RootState) => state.stats);
+
+  useEffect(() => {
+    if (statsStatus === 'idle') {
+      dispatch(fetchStats());
     }
   }, [dataStatus, dispatch]);
 
@@ -141,7 +153,7 @@ export const StatsPage = (): JSX.Element => {
     <div className={classes.root}>
       <Container maxWidth="lg" className={classes.container}>
         <Grid container spacing={3}>
-          <FuelEfficiencyChart />
+          <FuelEfficiencyChart data={stats.fuelEfficiency} />
           <Grid item xs={12} md={6} lg={6}>
             <Grid container spacing={3}>
               <CompletedTodos todos={todos} />
@@ -149,7 +161,7 @@ export const StatsPage = (): JSX.Element => {
               <FuelUsageByCar />
             </Grid>
           </Grid>
-          <DrivingRateChart />
+          <DrivingRateChart data={stats.drivingRate} />
           <FuelUsageChart />
         </Grid>
       </Container>
