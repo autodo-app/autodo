@@ -164,7 +164,7 @@ export const StatsPage = (): JSX.Element => {
             </Grid>
           </Grid>
           <DrivingRateChart data={stats.drivingRate} />
-          <FuelUsageChart />
+          <FuelUsageChart data={stats.fuelUsageByMonth} />
         </Grid>
       </Container>
     </div>

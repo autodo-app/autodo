@@ -1,11 +1,10 @@
 import * as React from 'react';
-import { Theme, makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import {
-  LineChart,
-  Line,
+  BarChart,
+  Bar,
   XAxis,
   YAxis,
   Label,
@@ -13,11 +12,15 @@ import {
 } from 'recharts';
 
 import theme from '../../theme';
+import { FuelUsageMonthData } from '../../_models';
 import { Title, StyleClasses, StyleProps, useBaseStyles } from './shared';
 
-const data = [{}];
+export interface FuelUsageChartProps {
+  data: FuelUsageMonthData;
+}
 
-export const FuelUsageChart = (): JSX.Element => {
+export const FuelUsageChart = (props: FuelUsageChartProps): JSX.Element => {
+  const { data } = props;
   const classes: StyleClasses = useBaseStyles({} as StyleProps);
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
@@ -26,8 +29,24 @@ export const FuelUsageChart = (): JSX.Element => {
       <Paper className={fixedHeightPaper}>
         <Title>Fuel Usage Per Month</Title>
         <ResponsiveContainer>
-          <LineChart
-            data={data}
+          <BarChart
+            data={data['1']}
+            margin={{ top: 16, right: 16, bottom: 0, left: 24 }}
+          >
+            <XAxis dataKey="date" stroke={theme.palette.text.secondary} />
+            <YAxis stroke={theme.palette.text.secondary}>
+              <Label angle={270} position="left" className={classes.labelText}>
+                Gallons
+              </Label>
+            </YAxis>
+            <Bar
+              dataKey="amount"
+              fill={theme.palette.primary.main}
+              barSize={15}
+            />
+          </BarChart>
+          {/* <LineChart
+            data={[]}
             margin={{ top: 16, right: 16, bottom: 0, left: 24 }}
           >
             <XAxis dataKey="time" stroke={theme.palette.text.secondary} />
@@ -42,7 +61,7 @@ export const FuelUsageChart = (): JSX.Element => {
               stroke={theme.palette.primary.main}
               dot={false}
             />
-          </LineChart>
+          </LineChart> */}
         </ResponsiveContainer>
       </Paper>
     </Grid>

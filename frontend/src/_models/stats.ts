@@ -1,9 +1,10 @@
 interface FuelUsageMonth {
-  [monthId: string]: number;
+  date: Date;
+  amount: number;
 }
 
 export interface FuelUsageMonthData {
-  [carId: string]: FuelUsageMonth;
+  [carId: string]: FuelUsageMonth[];
 }
 
 export interface FuelUsageCarData {

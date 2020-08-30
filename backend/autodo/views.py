@@ -2,6 +2,7 @@
 from collections import defaultdict, Counter
 from statistics import mean
 from functools import reduce
+from itertools import groupby
 
 from django.contrib.auth import get_user_model
 from rest_framework import generics, viewsets, permissions, mixins, views
@@ -276,7 +277,9 @@ class DrivingRateView(views.APIView):
             rates = [
                 single_distance_rate(s, t) for s, t in zip(odomSnaps, odomSnaps[1:])
             ]
-            data[c.id] = [{'time': s.date, 'rate': rates[i]} for i, s in enumerate(odomSnaps[1:])]
+            data[c.id] = [
+                {"time": s.date, "rate": rates[i]} for i, s in enumerate(odomSnaps[1:])
+            ]
         return Response(data)
 
 
@@ -285,14 +288,28 @@ class FuelUsageByMonthView(views.APIView):
         data = {}
         cars = Car.objects.filter(owner=request.user)
         for c in cars:
+            data[
+                c.id
+            ] = (
+                []
+            )  # could use defaultdict but this ensures that we have an empty list when needed
             refuelings = Refueling.objects.filter(odomSnapshot__car=c.id).order_by(
                 "odomSnapshot__date"
             )
-            data[c.id] = Counter(
+            mapped = list(
                 map(
-                    lambda r: f"{r.odomSnapshot.date.month}/{r.odomSnapshot.date.year}",
+                    lambda r: {
+                        "date": f"{r.odomSnapshot.date.month}/{r.odomSnapshot.date.year}",
+                        "amount": r.amount,
+                    },
                     refuelings,
                 )
             )
+            groups = groupby(mapped, key=lambda e: e["date"])
+            for k, v in groups:
+                total = 0
+                for e in v:
+                    total += e["amount"]
+                data[c.id].append({"date": k, "amount": total})
 
         return Response(data)
