@@ -12,8 +12,7 @@ then
 fi
 
 python manage.py flush --no-input
-python manage.py makemigrations
-python manage.py migrate
+python manage.py migrate --noinput
 python manage.py shell -c "from autodo.models import User; User.objects.create_superuser('root', 'root@example.com', 'root1234')"
 
 exec "$@"
