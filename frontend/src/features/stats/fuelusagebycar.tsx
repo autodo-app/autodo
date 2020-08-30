@@ -8,6 +8,7 @@ import { ResponsiveContainer, PieChart, Pie, Sector } from 'recharts';
 
 import theme from '../../theme';
 import { Title } from './shared';
+import { FuelUsageCarData, Car } from '../../_models';
 
 interface StyleProps {
   paper: React.CSSProperties;
@@ -52,13 +53,6 @@ export interface PieData {
   name: string;
   value: number;
 }
-
-const pieData = [
-  { name: 'Group A', value: 400 },
-  { name: 'Group B', value: 300 },
-  { name: 'Group C', value: 300 },
-  { name: 'Group D', value: 200 },
-];
 
 interface RenderActiveShapeProps {
   cx: number;
@@ -140,12 +134,23 @@ const renderActiveShape = (props: RenderActiveShapeProps) => {
   );
 };
 
-export const FuelUsageByCar = (): JSX.Element => {
+export interface FuelUsageByCarProps {
+  data: FuelUsageCarData;
+  cars: Car[];
+}
+
+export const FuelUsageByCar = (props: FuelUsageByCarProps): JSX.Element => {
+  const { data, cars } = props;
   const classes: StyleClasses = useStyles({} as StyleProps);
   const fixedHeightPaper = clsx(classes.paper, classes.fuelUsageHeight);
   const [activeIndex, setActiveIndex] = useState(0);
 
   const onPieEnter = (data: any, index: any) => setActiveIndex(index);
+  const pieData: PieData[] = [];
+  for (const [k, v] of Object.entries(data)) {
+    const car = cars.find((c) => c.id === parseInt(k));
+    pieData.push({ name: car?.name ?? k, value: v });
+  }
 
   return (
     <Grid item xs={12} md={12} lg={12}>

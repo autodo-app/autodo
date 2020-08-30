@@ -19,6 +19,7 @@ import {
   fetchStats,
   selectAllCompletedTodos,
   selectAllRefuelings,
+  selectAllCars,
 } from '../../_store';
 
 interface StyleProps {
@@ -132,6 +133,7 @@ export const StatsPage = (): JSX.Element => {
   const dataStatus = useSelector((state: RootState) => state.data.status);
   const refuelings = useSelector(selectAllRefuelings);
   const todos = useSelector(selectAllCompletedTodos);
+  const cars = useSelector(selectAllCars);
 
   useEffect(() => {
     if (dataStatus === 'idle') {
@@ -158,7 +160,7 @@ export const StatsPage = (): JSX.Element => {
             <Grid container spacing={3}>
               <CompletedTodos todos={todos} />
               <LoggedRefuelings refuelings={refuelings} />
-              <FuelUsageByCar />
+              <FuelUsageByCar data={stats.fuelUsageByCar} cars={cars} />
             </Grid>
           </Grid>
           <DrivingRateChart data={stats.drivingRate} />
