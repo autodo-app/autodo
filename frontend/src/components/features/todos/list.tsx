@@ -68,6 +68,10 @@ export const TodoList: React.FC<{}> = (): JSX.Element => {
     }
   }, [todoStatus, dispatch]);
 
+  if (!todos) {
+    return <p>Cannot reach auToDo API</p>;
+  }
+
   const highPriorityTodos = todos
     .filter((t) => t.dueState === 'late' || t.dueState === 'dueSoon')
     .map((t) => <TodoItem key={t?.id} todo={t} />);

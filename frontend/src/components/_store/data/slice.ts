@@ -133,13 +133,13 @@ export const selectAllRefuelings = (state: RootState) => state.data.refuelings;
 export const selectAllCars = (state: RootState) => state.data.cars;
 
 export const selectTodoById = (state: RootState, todoId: Number) =>
-  state.data.todos.find((todo) => Number(todo.id) === todoId);
+  state.data.todos?.find((todo) => Number(todo.id) === todoId);
 
 export const selectAllCompletedTodos = (state: RootState) =>
-  state.data.todos.filter((t) => t.completionOdomSnapshot);
+  state.data.todos?.filter((t) => t.completionOdomSnapshot);
 
 export const selectRefuelingById = (state: RootState, refuelingId: Number) =>
-  state.data.refuelings.find((r) => Number(r.id) === refuelingId);
+  state.data.refuelings?.find((r) => Number(r.id) === refuelingId);
 
 export const selectCarById = (state: RootState, carId: Number) =>
-  state.data.cars.find((c) => Number(c.id) === carId);
+  state.data.cars?.find((c) => Number(c.id) === carId);

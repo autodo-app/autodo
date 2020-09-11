@@ -2,17 +2,22 @@ import { createSlice } from '@reduxjs/toolkit';
 import { AuthState } from './state';
 import { logInAsync } from './actions';
 
-let token = localStorage.getItem('token');
 const initialState: AuthState = {
-  token: token,
-  status: token ? 'loggedIn' : 'loggedOut',
+  token: null,
+  status: 'idle',
   error: null,
 };
 
 const authSlice = createSlice({
   name: 'auth',
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    fetchToken(state: AuthState) {
+      const token = localStorage.getItem('token');
+      state.token = token;
+      state.status = token ? 'loggedIn' : 'loggedOut';
+    },
+  },
   extraReducers: (builder) =>
     builder
       .addCase(logInAsync.pending, (state: AuthState) => {
@@ -29,3 +34,4 @@ const authSlice = createSlice({
 });
 
 export default authSlice.reducer;
+export const { fetchToken } = authSlice.actions;

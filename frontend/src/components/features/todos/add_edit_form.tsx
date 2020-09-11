@@ -206,7 +206,7 @@ export default function TodoAddEditForm(props: TodoAddEditFormProps) {
             helperText={carError ? 'This field is required.' : undefined}
             onChange={onCarChanged}
           >
-            {cars.map((c: Car) => (
+            {cars?.map((c: Car) => (
               <MenuItem key={c.id} value={c.id}>
                 {c.name}
               </MenuItem>

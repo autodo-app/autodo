@@ -151,6 +151,10 @@ export const StatsPage = (): JSX.Element => {
     }
   }, [dataStatus, dispatch]);
 
+  if (!todos) {
+    return <p>Cannot reach auToDo API</p>;
+  }
+
   return (
     <div className={classes.root}>
       <Container maxWidth="lg" className={classes.container}>
