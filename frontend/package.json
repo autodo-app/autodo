@@ -63,6 +63,7 @@
   "devDependencies": {
     "@types/classnames": "^2.2.10",
     "@types/recharts": "^1.8.14",
-    "@types/service_worker_api": "0.0.9"
+    "@types/service_worker_api": "0.0.9",
+    "gatsby-cli": ""
   }
 }

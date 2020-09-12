@@ -25,9 +25,10 @@ services:
       - POSTGRES_DB=autodo_dev
   frontend:
     build: ./frontend
-    command: npm start 
+    command: gatsby develop -p 8080
     volumes:
       - ./frontend/:/usr/src/frontend/
+      - /usr/src/frontend/node_modules
     ports: 
       - 8080:8080
     env_file:
