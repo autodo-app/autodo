@@ -1,17 +1,13 @@
-from node:10.19.0-alpine 
+FROM node:12-alpine as builder
+# Get the necessary build tools
+RUN apk update && apk add build-base autoconf automake libtool pkgconfig nasm
 
-WORKDIR /usr/src/frontend
+# Add the package.json file and build the node_modules folder
+WORKDIR /app
+COPY ./package*.json ./
+RUN mkdir node_modules && npm install
 
-COPY package.json .
-
-RUN \
-  apk add --no-cache python make g++ && \
-  apk add musl-dev zlib make gcc autoconf automake libtool tiff jpeg zlib-dev file pkgconf nasm vips-dev fftw-dev --update-cache \
-  --repository http://dl-3.alpinelinux.org/alpine/edge/community \
-  --repository http://dl-3.alpinelinux.org/alpine/edge/main \
-  && rm -fR /var/cache/apk/*
-
-RUN npm install -g gatsby-cli
-RUN npm install
-
-COPY . . 
+# Get a clean image with gatsby-cli and the pre-built node modules
+FROM node:12-alpine
+RUN npm install --global gatsby-cli && gatsby telemetry --disable && mkdir /save
+COPY --from=builder /app/node_modules /save/node_modules

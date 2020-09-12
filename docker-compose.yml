@@ -1,7 +1,7 @@
 version: '3.7'
 
 services:
-  web:
+  api:
     build: ./backend
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
@@ -24,17 +24,18 @@ services:
       - POSTGRES_PASSWORD=autodo
       - POSTGRES_DB=autodo_dev
   frontend:
-    build: ./frontend
-    command: gatsby develop -p 8080
+    build: 
+      context: ./frontend
+      dockerfile: ./Dockerfile
+    working_dir: /app
+    command: ./entrypoint.sh
+    ports:
+      - "8070:8070"
     volumes:
-      - ./frontend/:/usr/src/frontend/
-      - /usr/src/frontend/node_modules
-    ports: 
-      - 8080:8080
-    env_file:
-      - ./.env.dev 
+     - ./frontend/:/app
+     - /app/node_modules/
     depends_on:
-      - web
+      - api
   elasticsearch:
     build:
       context: .
