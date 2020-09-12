@@ -1,10 +1,40 @@
 .cta {
   background-color: $ctaBackgroundColor;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  flex-wrap: wrap;
   text-align: center;
   margin: 0 auto;
   padding: 1em;
+  max-width: 50vw;
   p {
     font-size: 1.5rem;
     font-weight: 500;
   }
+}
+
+.download-buttons {
+  // width: 40%;
+  margin: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.play-store {
+  background: url('../assets/playstore.png') no-repeat center;
+  background-size: contain;
+  flex: 0 0 calc(50% - 1rem);
+  height: 50px;
+  margin: auto 0.5rem;
+}
+
+.app-store {
+  background: url('../assets/appstore.png') no-repeat center;
+  background-size: contain;
+  flex: 0 0 calc(50% - 1rem);
+  height: 50px;
+  margin: auto 0.5rem;
 }

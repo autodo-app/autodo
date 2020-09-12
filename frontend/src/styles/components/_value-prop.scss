@@ -1,4 +1,11 @@
+.value-prop {
+  background: linear-gradient(rgba(#333, 0.3), rgba(#333, 0.3)),
+    url('../assets/header-image.png') no-repeat top;
+  background-size: cover;
+}
+
 .value-prop-content {
+  height: 80vh;
   display: grid;
   grid-template-columns: repeat(8, 1fr);
   grid-template-rows: repeat(8, 1fr);
@@ -20,9 +27,13 @@
   p {
     margin-top: 0;
   }
+  h1 {
+    color: $backgroundColor;
+  }
 }
 
 .main-subtitle {
+  color: $backgroundColor;
   font-size: 1.5rem;
   font-weight: 500;
 }
@@ -34,7 +45,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: url("../assets/main-photo.svg") no-repeat top;
+  background: url('../assets/undraw/undraw_task_list_6x9d.svg') no-repeat top;
   background-size: 100% 100%;
   height: 100%;
   padding: 0;
@@ -43,8 +54,9 @@
   margin: 0 auto;
 }
 
-@include breakpoint("from-tablet-l") {
+@include breakpoint('from-tablet-l') {
   .value-prop-content {
+    height: 50vh;
     margin: 2rem auto 3rem auto;
   }
 

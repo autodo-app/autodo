@@ -37,16 +37,16 @@ const Header: React.FC<HeaderProps> = (props) => {
           </div>
           <ul className={navClasses}>
             <li className={navItemClasses}>
-              <a href="#">About</a>
+              <a href="#about">About</a>
             </li>
             <li className={navItemClasses}>
-              <a href="#">Pricing</a>
+              <a href="blog">Blog</a>
             </li>
             <li className={navItemClasses}>
-              <a href="#">Login</a>
+              <a href="login">Login</a>
             </li>
             <li className={`${navItemClasses} nav-item-bold`}>
-              <a href="#">Sign Up</a>
+              <a href="signup">Sign Up</a>
             </li>
           </ul>
           <div className={burgerClass} onClick={toggle}>
