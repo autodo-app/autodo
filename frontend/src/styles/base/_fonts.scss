@@ -1,0 +1,15 @@
+@import url("https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600&display=swap");
+
+* {
+  font-family: Poppins, sans-serif;
+  color: $textColor;
+  line-height: 1.5;
+  p {
+    font-family: 'Source Sans Pro', sans-serif;
+  }
+  blockquote {
+    font-family: 'Source Sans Pro', sans-serif;
+    line-height: 1.5rem;
+  }  
+}

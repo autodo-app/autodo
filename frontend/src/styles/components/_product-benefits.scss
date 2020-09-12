@@ -1,0 +1,110 @@
+.product-benefits {
+  background-color: $productBenefitsColor;
+  padding: 1em 0;
+}
+
+.product-benefits-group {
+  max-width: $maxContainerWidth;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(6, minmax(10rem,1fr));
+  grid-gap: 2em;
+  align-items: center;
+  justify-items: center;
+  width: 90%;
+}
+
+.product-benefit-1-tagline {
+  grid-row: 1/2;
+  grid-column: span 8;
+  font-size: 2rem;
+  font-weight: 600;
+  width: 100%;
+}
+
+.product-benefit-1-image {
+  grid-row: 2/3;
+  grid-column: span 8;
+  background: url('../assets/product-benefits/ben1.svg') no-repeat center;
+  background-size: 100% 100%;
+  width: 100%;
+  height: 100%;
+}
+
+.product-benefit-2-tagline {
+  grid-row: 3/4;
+  grid-column: 1/9;
+  font-size: 2rem;
+  font-weight: 600;
+  width: 100%;
+}
+
+.product-benefit-2-image {
+  grid-row: 4/5;
+  grid-column: span 8;
+  background: url('../assets/product-benefits/ben2.svg') no-repeat center;
+  background-size: contain;
+  width: 100%;
+  height: 100%;
+}
+
+.product-benefit-3-tagline {
+  grid-row: 5/6;
+  grid-column: span 8;
+  font-size: 2rem;
+  font-weight: 600;
+  width: 100%
+}
+
+.product-benefit-3-image {
+  grid-row: 6/7;
+  grid-column: span 8;
+  background: url('../assets/product-benefits/ben3.svg') no-repeat center;
+  background-size: contain;
+  width: 100%;
+  height: 100%;
+}
+
+@include breakpoint('from-tablet-p') {
+  .product-benefits-group {
+    // row-gap: 4em;
+    // width: 100%;
+  }  
+
+  .product-benefit-1-tagline {
+    grid-row: 1/3;
+    grid-column: 1/4;
+  }
+
+  .product-benefit-1-image {
+    grid-row: 1/3;
+    grid-column: 5/9;
+  }
+
+  .product-benefit-2-tagline {
+    grid-row: 3/5;
+    grid-column: 5/9;
+  }
+
+  .product-benefit-2-image {
+    grid-row: 3/5;
+    grid-column: 1/4;
+  }
+  
+  .product-benefit-3-tagline {
+    grid-row: 5/7;
+    grid-column: 1/4;
+  }
+
+  .product-benefit-3-image {
+    grid-row: 5/7;
+    grid-column: 5/9;
+  }  
+}
+
+@include breakpoint('from-laptop') {
+  .product-benefits-group {
+    grid-template-rows: repeat(6, minmax(16rem,1fr));
+  }
+}

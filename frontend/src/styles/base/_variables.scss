@@ -1,0 +1,19 @@
+// layouts
+$maxContainerWidth: 75rem;
+
+// colors
+$mainColor: #675CE2;
+$secondaryColor: rgba(242,242,242, 0.4);
+$backgroundColor: #ffffff;
+$textColor: #1b262c;
+
+// can get more granular
+$containerBackgroundColor: $backgroundColor;
+$navColor: $backgroundColor;
+$navLabelsColor: $textColor;
+$socialProofBackgroundColor: #f4eeff;
+$productBenefitsColor: $secondaryColor;
+$productFeatureColor: $backgroundColor;
+$testimonialsBackgroundColor: $secondaryColor;
+$ctaBackgroundColor: $backgroundColor;
+$buttonColor: $mainColor;

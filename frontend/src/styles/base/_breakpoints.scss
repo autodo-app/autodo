@@ -1,0 +1,79 @@
+/*----------------------
+Responsive breakpoints
+Gratefully taken from this amazing repo: https://github.com/ovidiumihaibelciug/gatsby-firebase-starter/blob/master/src/styles/_helpers/_mixins.scss
+-----------------------*/
+@mixin breakpoint ($value, $min-value: false) {
+
+  @if $value == 'phone-small' {
+    @media only screen and (max-width : 330px) { @content; }
+  }
+
+  @if $value == 'phone-md' {
+    @media only screen and (max-width : 640px) { @content; }
+  }  
+
+  @if $value == 'from-phone-md' {
+    @media only screen and (min-width : 640px) { @content; }
+  }    
+
+  @if $value == 'phone' {
+    @media only screen and (max-width : 750px) { @content; }
+  }
+
+  @else if $value == 'from-tablet-p' {
+    @media only screen and (min-width: 751px) { @content }
+  }  
+
+  @else if $value == 'tablet-p' {
+    @media only screen and (min-width: 751px) and (max-width: 900px) { @content }
+  }
+
+  @else if $value == 'to-tablet-p' {
+    @media only screen and (max-width: 900px) { @content }
+  }
+
+  @else if $value == 'from-tablet-l' {
+    @media only screen and (min-width: 901px) { @content }
+  }
+
+  @else if $value == 'to-tablet-l' {
+    @media only screen and (max-width: 1199px) { @content }
+  }
+
+  @else if $value == 'tablet-l' {
+    @media only screen and (min-width: 901px) and (max-width: 1199px) { @content }
+  }
+
+  @else if $value == 'to-tablet' {
+    @media only screen and (max-width: 1199px) { @content }
+  }
+
+  @else if $value == 'from-tablet' {
+    @media only screen and (min-width: 751px) { @content }
+  }
+
+  @else if $value == 'tablet' {
+    @media only screen and (min-width: 751px) and (max-width: 1199px) { @content }
+  }
+
+  @else if $value == 'to-laptop' {
+    @media only screen and (max-width: 1600px){ @content }
+  }
+
+  @else if $value == 'from-laptop' {
+    @media only screen and (min-width: 1200px){ @content }
+  }
+
+  @else if $value == 'laptop' {
+    @media only screen and (min-width: 1200px) and (max-width: 1600px){ @content }
+  }
+
+  @else if $value == 'desktop' {
+    @media only screen and (min-width: 1601px) { @content }
+  }
+
+  @else {
+    @media only screen and (max-width: $value) { @content; }
+  }
+}
+

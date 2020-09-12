@@ -1,0 +1,83 @@
+.footer {
+  background-color: $textColor;
+}
+
+.footer-belt {
+  display: flex;
+  height: 6vh;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1em;
+  max-width: $maxContainerWidth;
+  margin: 0 auto;
+}
+
+.company-sign {
+  text-transform: uppercase;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: $backgroundColor;
+}
+
+.social-media {
+  display: flex;
+  justify-content: space-around;
+  min-width: 6rem;
+}
+
+.social-facebook {
+  background: url("../assets/social-media/social-facebook.svg") no-repeat center;
+  background-size: 100% 100%;
+  height: 1.5rem;
+  width: 1.5rem;
+  font-size: 0;
+  margin: 0 0.25em;
+}
+
+.social-twitter {
+  background: url("../assets/social-media/social-twitter.svg") no-repeat center;
+  background-size: 100% 100%;
+  height: 1.5rem;
+  width: 1.5rem;
+  font-size: 0;
+  margin: 0 0.25em;
+}
+
+.social-instagram {
+  background: url("../assets/social-media/social-instagram.svg") no-repeat center;
+  background-size: 100% 100%;
+  height: 1.5rem;
+  width: 1.5rem;
+  font-size: 0;
+  margin: 0 0.25em;
+}
+
+@include breakpoint("from-phone-md") {
+  .social-media {
+    min-width: 10rem;
+  }
+
+  .social-facebook {
+    background-size: 100% 100%;
+    height: 2rem;
+    width: 2rem;
+    font-size: 0;
+    margin: 0 0.75em;
+  }
+
+  .social-twitter {
+    background-size: 100% 100%;
+    height: 2rem;
+    width: 2rem;
+    font-size: 0;
+    margin: 0 0.75em;
+  }
+
+  .social-instagram {
+    background-size: 100% 100%;
+    height: 2rem;
+    width: 2rem;
+    font-size: 0;
+    margin: 0 0.75em;
+  }
+}

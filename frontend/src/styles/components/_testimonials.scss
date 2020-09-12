@@ -1,0 +1,125 @@
+.testimonials {
+  background-color: $testimonialsBackgroundColor;
+  text-align: center;
+  margin: 0 auto;
+  padding: 1em 0;
+  h1 {
+    padding: 1em;
+  }
+  p {
+    font-weight: 600;
+    margin: 0 auto;
+    width: 80%;
+  }
+  blockquote {
+    margin-top: 0.5em;
+    padding: 0.25em;
+    font-weight: 400;
+  }
+}
+
+.testimonial-group {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  max-width: $maxContainerWidth;
+}
+
+.testimonial-card-1,
+.testimonial-card-2,
+.testimonial-card-3  {
+  background-color: $backgroundColor;
+  max-width: 16rem;
+  height: 35rem;
+  margin: 1rem auto;
+  border-radius: 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0.25rem 0.5rem 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  &:hover {
+    box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.2);
+  }
+}
+
+.testimonial-1-photo {
+  background: url("../assets/testimonials/testimonial-photo-1.svg") no-repeat center;
+  background-size: cover;
+  height: 50%;
+  width: 100%;
+  border-radius: 4rem 4rem 0 0;
+}
+
+.testimonial-2-photo {
+  background: url("../assets/testimonials/testimonial-photo-2.svg") no-repeat center;
+  background-size:cover;
+  height: 50%;
+  width: 100%;
+  border-radius: 4rem 4rem 0 0;
+}
+
+.testimonial-3-photo {
+  background: url("../assets/testimonials/testimonial-photo-3.svg") no-repeat center;
+  background-size: cover;
+  height: 50%;
+  width: 100%;
+  border-radius: 4rem 4rem 0 0;
+}
+
+.testimonial-1-message,
+.testimonial-2-message,
+.testimonial-3-message {
+  height: 50%;
+}
+
+.testimonial-1-content,
+.testimonial-2-content,
+.testimonial-3-content {
+  margin: 2rem;
+  text-align: left;
+  content: '';
+}
+
+.testimonial-1-content::before,
+.testimonial-2-content::before,
+.testimonial-3-content::before {
+  content: open-quote;
+  display: inline;
+  color: $mainColor;
+  font-size: 1.5em;
+}
+
+.testimonial-1-content::after,
+.testimonial-2-content::after,
+.testimonial-3-content::after {
+  content: close-quote;
+  display: inline;
+  color: $mainColor;
+  font-size: 1.5em;
+}
+
+@include breakpoint('from-tablet-p') {
+  .testimonial-group {
+    margin: 0 auto;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: space-around;
+  }
+  .testimonial-card-1,
+  .testimonial-card-2,
+  .testimonial-card-3  {
+    max-width: 14rem;
+    height: 40rem;
+  }  
+}
+
+@include breakpoint('from-tablet-l') {
+  .testimonial-card-1,
+  .testimonial-card-2,
+  .testimonial-card-3  {
+    max-width: 16rem;
+    height: 35rem;
+  }    
+}
