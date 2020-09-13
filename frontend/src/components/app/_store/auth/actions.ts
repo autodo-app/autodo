@@ -8,6 +8,6 @@ export const logInAsync = createAsyncThunk<LoginAction, AuthRequest>(
   LOGIN,
   async (request) => {
     const token = await fetchUserToken(request.username, request.password);
-    return token;
+    return { type: LOGIN, payload: token };
   },
 );

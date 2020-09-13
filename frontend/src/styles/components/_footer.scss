@@ -25,34 +25,34 @@
   min-width: 6rem;
 }
 
-.social-facebook {
-  background: url("../assets/social-media/social-facebook.svg") no-repeat center;
-  background-size: 100% 100%;
-  height: 1.5rem;
-  width: 1.5rem;
-  font-size: 0;
-  margin: 0 0.25em;
-}
+// .social-facebook {
+//   background: url("../assets/social-media/social-facebook.svg") no-repeat center;
+//   background-size: 100% 100%;
+//   height: 1.5rem;
+//   width: 1.5rem;
+//   font-size: 0;
+//   margin: 0 0.25em;
+// }
 
-.social-twitter {
-  background: url("../assets/social-media/social-twitter.svg") no-repeat center;
-  background-size: 100% 100%;
-  height: 1.5rem;
-  width: 1.5rem;
-  font-size: 0;
-  margin: 0 0.25em;
-}
+// .social-twitter {
+//   background: url("../assets/social-media/social-twitter.svg") no-repeat center;
+//   background-size: 100% 100%;
+//   height: 1.5rem;
+//   width: 1.5rem;
+//   font-size: 0;
+//   margin: 0 0.25em;
+// }
 
-.social-instagram {
-  background: url("../assets/social-media/social-instagram.svg") no-repeat center;
-  background-size: 100% 100%;
-  height: 1.5rem;
-  width: 1.5rem;
-  font-size: 0;
-  margin: 0 0.25em;
-}
+// .social-instagram {
+//   background: url("../assets/social-media/social-instagram.svg") no-repeat center;
+//   background-size: 100% 100%;
+//   height: 1.5rem;
+//   width: 1.5rem;
+//   font-size: 0;
+//   margin: 0 0.25em;
+// }
 
-@include breakpoint("from-phone-md") {
+@include breakpoint('from-phone-md') {
   .social-media {
     min-width: 10rem;
   }
