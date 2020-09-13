@@ -17,6 +17,11 @@ const authSlice = createSlice({
       state.token = token;
       state.status = token ? 'loggedIn' : 'loggedOut';
     },
+    logOut(state: AuthState) {
+      localStorage.removeItem('token');
+      state.token = null;
+      state.status = 'loggedOut';
+    },
   },
   extraReducers: (builder) =>
     builder
@@ -34,4 +39,4 @@ const authSlice = createSlice({
 });
 
 export default authSlice.reducer;
-export const { fetchToken } = authSlice.actions;
+export const { fetchToken, logOut } = authSlice.actions;

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Theme, makeStyles } from '@material-ui/core';
+import { useDispatch } from 'react-redux';
 import Drawer from '@material-ui/core/Drawer';
 import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
@@ -15,9 +16,10 @@ import ShowChart from '@material-ui/icons/ShowChart';
 import DirectionsCar from '@material-ui/icons/DirectionsCar';
 import Settings from '@material-ui/icons/Settings';
 import ExitToApp from '@material-ui/icons/ExitToApp';
+import { deepOrange } from '@material-ui/core/colors';
 
 import { AUTODO_GREEN, BACKGROUND_LIGHT } from '../theme';
-import { deepOrange } from '@material-ui/core/colors';
+import { logOut } from '../_store';
 import { TabState } from './types';
 
 export const drawerWidth = 220;
@@ -194,6 +196,10 @@ const Tabs: React.FC<TabProps> = (props): JSX.Element => {
 };
 
 const Footer: React.FC<{}> = (): JSX.Element => {
+  const dispatch = useDispatch();
+  const onLogOutClick = () => {
+    dispatch(logOut());
+  };
   return (
     <div>
       <ListItem button>
@@ -202,7 +208,7 @@ const Footer: React.FC<{}> = (): JSX.Element => {
         </ListItemIcon>
         <ListItemText primary="Settings" />
       </ListItem>
-      <ListItem button>
+      <ListItem button onClick={onLogOutClick}>
         <ListItemIcon>
           <ExitToApp />
         </ListItemIcon>
