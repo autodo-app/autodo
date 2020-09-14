@@ -1,12 +1,117 @@
 import * as React from 'react';
+import { Theme, makeStyles } from '@material-ui/core';
+
+// @ts-ignore
+import Iphone from '../../assets/black.png';
+// @ts-ignore
+import Screenshot from '../../assets/homescreen_ios_hires.jpg';
+
+interface StyleProps {
+  productFeatures: React.CSSProperties;
+  coreFeatures: React.CSSProperties;
+  feature1: React.CSSProperties;
+  description1: React.CSSProperties;
+  iphonePreview: React.CSSProperties;
+  iphoneScreen: React.CSSProperties;
+}
+
+type StyleClasses = Record<keyof StyleProps, string>;
+
+const useStyles = makeStyles<Theme, StyleProps>(
+  (theme: Theme) =>
+    ({
+      productFeatures: {
+        backgroundColor: '#fff',
+        margin: '3rem auto',
+        textAlign: 'center',
+        '& h2': {
+          fontSize: '1.25rem',
+        },
+        '& p': {
+          fontSize: '1.25rem',
+        },
+      },
+      coreFeatures: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        '& p': {
+          lineHeight: '1.2',
+        },
+      },
+      feature1: {
+        display: 'grid',
+        maxWidth: '75rem',
+        margin: '0 auto',
+        gridTemplateColumns: 'repeat(8, 1fr)',
+        gridTemplateRows: 'repeat(2, 1fr)',
+        gridGap: '0.5rem',
+        width: '90%',
+      },
+      description1: {
+        gridRow: '1/3',
+        gridColumn: '5/9',
+        margin: '0 2rem',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        [theme.breakpoints.down('sm')]: {
+          gridRow: '2/3',
+          gridColumn: '1/9',
+        },
+      },
+      iphonePreview: {
+        gridRow: '1/3',
+        gridColumn: '1/4',
+        backgroundImage: `url(${Iphone})`,
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: '370px auto',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '370px',
+        backgroundPosition: 'center 0',
+        paddingBottom: '25px',
+        '& svg': {
+          position: 'absolute',
+        },
+        [theme.breakpoints.down('sm')]: {
+          margin: '1em auto',
+          gridRow: '1/2',
+          gridColumn: 'span 8',
+          width: '260px',
+          backgroundSize: '260px auto',
+        },
+      },
+      iphoneScreen: {
+        backgroundImage: `url(${Screenshot})`,
+        backgroundRepeat: 'no-repeat',
+        margin: 0,
+        marginTop: '18px',
+        width: '322px',
+        height: '700px',
+        backgroundSize: '322px 700px',
+        clipPath: `url(#screenMask)`,
+        [theme.breakpoints.down('sm')]: {
+          width: '226px',
+          height: '489px',
+          backgroundSize: '226px 489px',
+        },
+      },
+    } as any),
+);
 
 const ProductFeatures = (props: any) => {
+  const classes = useStyles({} as StyleProps);
   return (
-    <section className="product-features">
+    <section className={classes.productFeatures}>
       <h1>Features</h1>
-      <div className="core-features">
-        <div className="feature-1">
-          <div className="iphonePreview">
+      <div className={classes.coreFeatures}>
+        <div className={classes.feature1}>
+          <div className={classes.iphonePreview}>
             <svg version="1.1" viewBox="0 0 0 0">
               <clipPath
                 id="screenMask"
@@ -21,12 +126,12 @@ const ProductFeatures = (props: any) => {
             </svg>
 
             <img
-              className="iphoneScreen hidden"
+              className={classes.iphoneScreen}
               src="../assets/homescreen_ios_hires.jpg"
               alt=""
             />
           </div>
-          <div className="description-1">
+          <div className={classes.description1}>
             <h3>Create Recurring Tasks</h3>
             <p>Tasks can repeat by your car's mileage, time, or both.</p>
             <h3>Keep Track of Fuel Usage and Mileage</h3>
