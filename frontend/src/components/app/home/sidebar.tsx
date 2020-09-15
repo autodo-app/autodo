@@ -18,7 +18,7 @@ import Settings from '@material-ui/icons/Settings';
 import ExitToApp from '@material-ui/icons/ExitToApp';
 import { deepOrange } from '@material-ui/core/colors';
 
-import { AUTODO_GREEN, BACKGROUND_LIGHT } from '../theme';
+import { AUTODO_GREEN, BACKGROUND_LIGHT } from '../../theme';
 import { logOut } from '../_store';
 import { TabState } from './types';
 

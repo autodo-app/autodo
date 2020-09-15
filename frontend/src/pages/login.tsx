@@ -7,7 +7,7 @@ import { ThemeProvider, CssBaseline } from '@material-ui/core';
 import { LoginPage } from '../components/app/login';
 import store, { RootState } from '../components/app/store';
 import { fetchToken } from '../components/app/_store';
-import theme from '../components/app/theme';
+import theme from '../components/theme';
 
 const Login = () => {
   const dispatch = useDispatch();

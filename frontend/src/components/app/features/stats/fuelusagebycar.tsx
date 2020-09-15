@@ -6,7 +6,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { ResponsiveContainer, PieChart, Pie, Sector } from 'recharts';
 
-import theme from '../../theme';
+import theme from '../../../theme';
 import { Title } from './shared';
 import { FuelUsageCarData, Car } from '../../_models';
 

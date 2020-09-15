@@ -10,7 +10,7 @@ import { red } from '@material-ui/core/colors';
 import RefuelingAddEditForm from './add_edit_form';
 import { Refueling } from '../../_models';
 import { deleteRefueling } from '../../_store/data';
-import { AUTODO_GREEN, BACKGROUND_DARK, GRAY } from '../../theme';
+import { AUTODO_GREEN, BACKGROUND_DARK, GRAY } from '../../../theme';
 
 interface StyleProps {
   root: React.CSSProperties;

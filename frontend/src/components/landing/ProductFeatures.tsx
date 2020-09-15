@@ -24,6 +24,7 @@ const useStyles = makeStyles<Theme, StyleProps>(
         backgroundColor: '#fff',
         margin: '3rem auto',
         textAlign: 'center',
+        color: theme.palette.primary.contrastText,
         '& h2': {
           fontSize: '1.25rem',
         },

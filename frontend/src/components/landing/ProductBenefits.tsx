@@ -27,6 +27,7 @@ const useStyles = makeStyles<Theme, StyleProps>(
       productBenefits: {
         backgroundColor: '#eee',
         padding: '3em 0',
+        color: theme.palette.primary.contrastText,
       },
       productBenefitsGroup: {
         maxWidth: '75rem',

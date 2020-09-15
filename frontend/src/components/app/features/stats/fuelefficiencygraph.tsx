@@ -13,10 +13,10 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 
-import theme from '../../theme';
+import theme from '../../../theme';
 import { FuelEfficiencyData } from '../../_models';
 import { selectFuelEfficiencyData, fetchStats } from '../../_store';
-import { RootState } from '../../app/store';
+import { RootState } from '../../../app/store';
 import { Title, StyleClasses, StyleProps, useBaseStyles } from './shared';
 import { EfficiencyDot } from './efficiencydot';
 

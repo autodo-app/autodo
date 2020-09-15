@@ -6,8 +6,8 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import RefuelingItem from './item';
 import { selectAllRefuelings, fetchData } from '../../_store';
-import { RootState } from '../../app/store';
-import { GRAY } from '../../theme';
+import { RootState } from '../../../app/store';
+import { GRAY } from '../../../theme';
 import { WeekCalendar } from './week_calendar';
 
 interface StyleProps {

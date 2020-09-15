@@ -7,8 +7,8 @@ import Paper from '@material-ui/core/Paper';
 import Container from '@material-ui/core/Container';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { AUTODO_GREEN } from '../../theme';
-import { RootState } from '../../app/store';
+import { AUTODO_GREEN } from '../../../theme';
+import { RootState } from '../../../app/store';
 import { Refueling, Todo } from '../../_models';
 import { FuelEfficiencyChart } from './fuelefficiencygraph';
 import { FuelUsageByCar } from './fuelusagebycar';

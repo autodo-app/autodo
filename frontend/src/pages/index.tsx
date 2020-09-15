@@ -13,7 +13,7 @@ import CallToAction from '../components/landing/CallToAction';
 import Dashboard from '../components/app/home/dashboard';
 import store, { RootState } from '../components/app/store';
 import { fetchToken } from '../components/app/_store';
-import theme from '../components/app/theme';
+import theme from '../components/theme';
 
 const App = () => {
   const dispatch = useDispatch();

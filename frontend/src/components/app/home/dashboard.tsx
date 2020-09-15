@@ -9,7 +9,7 @@ import Link from '@material-ui/core/Link';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 
-import { BACKGROUND_LIGHT } from '../theme';
+import { BACKGROUND_LIGHT } from '../../theme';
 import SearchBar from './searchbar';
 import SideBar from './sidebar';
 import { TodoList, RefuelingList, StatsPage } from '../features';

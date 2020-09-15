@@ -11,7 +11,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 
-import theme from '../../theme';
+import theme from '../../../theme';
 import { FuelUsageMonthData } from '../../_models';
 import { Title, StyleClasses, StyleProps, useBaseStyles } from './shared';
 

@@ -14,7 +14,7 @@ const theme = createMuiTheme({
       main: AUTODO_GREEN,
     },
     secondary: {
-      main: '#19857b',
+      main: '#000',
     },
     error: {
       main: red.A400,
@@ -22,6 +22,7 @@ const theme = createMuiTheme({
     background: {
       default: BACKGROUND_DARK,
     },
+    tonalOffset: 0.1,
   },
 });
 

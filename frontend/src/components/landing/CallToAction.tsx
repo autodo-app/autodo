@@ -20,6 +20,7 @@ const useStyles = makeStyles<Theme, StyleProps>(
   (theme: Theme) =>
     ({
       cta: {
+        color: theme.palette.primary.contrastText,
         backgroundColor: '#fff',
         display: 'flex',
         flexDirection: 'column',

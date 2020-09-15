@@ -4,7 +4,7 @@ import { Theme, makeStyles } from '@material-ui/core';
 import { eachDayOfInterval, isSameDay } from 'date-fns/esm';
 
 import { Refueling } from '../../_models';
-import { AUTODO_GREEN, GRAY } from '../../theme';
+import { AUTODO_GREEN, GRAY } from '../../../theme';
 
 interface StyleProps {
   root: React.CSSProperties;

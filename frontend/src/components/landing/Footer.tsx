@@ -19,6 +19,7 @@ const useStyles = makeStyles<Theme, StyleProps>(
         backgroundColor: theme.typography.body1.color,
       },
       footerBelt: {
+        color: theme.palette.secondary.contrastText,
         display: 'flex',
         height: '6vh',
         justifyContent: 'space-between',
@@ -31,7 +32,7 @@ const useStyles = makeStyles<Theme, StyleProps>(
         textTransform: 'uppercase',
         fontSize: '1.25rem',
         fontWeight: 700,
-        color: '#fff',
+        color: theme.palette.secondary.contrastText,
       },
       socialMedia: {
         display: 'flex',
@@ -55,14 +56,14 @@ const Footer: React.FC<FooterProps> = (props) => {
     <footer className={classes.footer}>
       <div className={classes.footerBelt}>
         <div className={classes.companySign}>&copy; 2020 {siteTitle}</div>
-        <div className={classes.socialMedia}>
+        {/* <div className={classes.socialMedia}>
           <a href="https://www.twitter.com/auToDoApp">
             <div className={classes.socialTwitter}>Twitter</div>
           </a>
           <a href="https://www.instagram.com">
             <div className={classes.socialInstagram}>Instagram</div>
           </a>
-        </div>
+        </div> */}
       </div>
     </footer>
   );

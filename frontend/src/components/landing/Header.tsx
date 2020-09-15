@@ -44,7 +44,7 @@ const useStyles = makeStyles<Theme, StyleProps>(
         padding: '0 1em',
       },
       logo: {
-        color: theme.typography.body2.color,
+        color: theme.palette.primary.contrastText,
         letterSpacing: '0.2rem',
         fontSize: '1.5rem',
         textTransform: 'uppercase',
@@ -70,8 +70,8 @@ const useStyles = makeStyles<Theme, StyleProps>(
           textDecoration: 'none',
           letterSpacing: '0.1rem',
           fontSize: '0.9rem',
-          fontWeigth: 700,
-          color: theme.typography.body2.color,
+          fontWeight: 700,
+          color: theme.palette.primary.contrastText,
         },
         '& li': {
           listStyle: 'none',
@@ -95,14 +95,14 @@ const useStyles = makeStyles<Theme, StyleProps>(
       },
       navItemBold: {
         border: 'solid',
-        borderColor: theme.palette.primary.main,
+        borderColor: theme.palette.primary.dark,
         borderRadius: '1.5rem',
         padding: '0.25em 0.75em',
         '& a': {
-          color: theme.palette.primary.main,
+          color: theme.palette.primary.dark,
         },
         '&:hover': {
-          backgroundColor: theme.palette.primary.main,
+          backgroundColor: theme.palette.primary.dark,
           '& a': {
             color: '#fff',
           },
@@ -111,12 +111,12 @@ const useStyles = makeStyles<Theme, StyleProps>(
           border: 'none',
           padding: 0,
           '& a': {
-            color: theme.typography.body2.color,
+            color: theme.palette.primary.contrastText,
           },
           '&:hover': {
             backgroundColor: '#fff',
             '& a': {
-              color: theme.typography.body2.color,
+              color: theme.palette.primary.contrastText,
             },
           },
         },

@@ -12,7 +12,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 
-import theme from '../../theme';
+import theme from '../../../theme';
 import { DrivingRateData } from '../../_models';
 import { Title, StyleClasses, StyleProps, useBaseStyles } from './shared';
 import { useDispatch } from 'react-redux';
