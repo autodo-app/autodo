@@ -24,9 +24,7 @@ services:
       - POSTGRES_PASSWORD=autodo
       - POSTGRES_DB=autodo_dev
   frontend:
-    build: 
-      context: ./frontend
-      dockerfile: ./Dockerfile
+    build: ./frontend
     working_dir: /app
     command: ./entrypoint.sh
     ports:

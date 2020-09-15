@@ -23,9 +23,11 @@ services:
       - .env.staging.db
   frontend:
     build: ./frontend
-    command: npm start 
+    working_dir: /app
+    command: ./entrypoint.sh
     volumes:
-      - ./frontend/:/usr/src/frontend/
+      - ./frontend/:/app
+      - /app/node_modules/
     ports: 
       - 8080:8080
     env_file:
