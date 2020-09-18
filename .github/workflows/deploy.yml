@@ -4,7 +4,8 @@ on:
       - develop
 name: Deploy
 jobs:
-  - name: Deploy with Docker-Compose
+  deploy:
+    name: Deploy with docker-compose
     uses: wshihadeh/docker-deployment-action@v1
     with:
       remote_docker_host: root@206.189.179.107
