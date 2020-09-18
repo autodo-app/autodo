@@ -132,8 +132,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_URL = "/api-static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "api-static")
 
 # Media files (user images)
 MEDIA_URL = "/media/"
@@ -164,7 +164,7 @@ AUTH_USER_MODEL = "autodo.User"
 
 OAUTH2_PROVIDER = {
     "SCOPES": {
-        "read": "Read sccope",
+        "read": "Read scope",
         "write": "Write scope",
         "groups": "Access to your groups",
     },

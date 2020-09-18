@@ -128,7 +128,6 @@ const ProductFeatures = (props: any) => {
 
             <img
               className={classes.iphoneScreen}
-              src="../assets/homescreen_ios_hires.jpg"
               alt=""
             />
           </div>

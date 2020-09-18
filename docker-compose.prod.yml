@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile.prod
     command: gunicorn api.wsgi:application --bind 0.0.0.0:8000
     volumes:
-      - static_volume:/home/app/web/static
+      - static_volume:/home/app/web/api-static
       - media_volume:/home/app/web/media
     expose:
       - 8000
@@ -22,14 +22,15 @@ services:
     env_file:
       - .env.prod.db
   frontend:
-    build: 
-      context: ./frontend
-      dockerfile: Dockerfile.prod
-    command: serve -s ./public
+    build: ./frontend
+    working_dir: /app
+    command: ./entrypoint.prod.sh
     volumes:
-      - ./frontend/:/usr/src/frontend/
+      - ./frontend/:/app
+      - /app/node_modules
+      - frontend_static:/app/public/static
     expose: 
-      - 5000
+      - 8080
     env_file:
       - .env.prod.frontend
     depends_on:
@@ -42,11 +43,12 @@ services:
       - 443:443
       - 80:80
     volumes:
-      - static_volume:/home/app/web/static
+      - static_volume:/home/app/web/api-static
+      - frontend_static:/app/public/static
       - media_volume:/home/app/web/media
       - certs:/etc/nginx/certs
       - html:/usr/share/nginx/html
-      - vhost:/etc/nginx/vhost.d
+        #- vhost:/etc/nginx/vhost.d
       - /var/run/docker.sock:/tmp/docker.sock:ro
     depends_on:
       - web
@@ -81,6 +83,7 @@ services:
 volumes:
   postgres_data:
   static_volume:
+  frontend_static:
   media_volume:
   certs:
   html:

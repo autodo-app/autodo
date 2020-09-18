@@ -11,3 +11,4 @@ RUN mkdir node_modules && npm install
 FROM node:12-alpine
 RUN npm install --global gatsby-cli && gatsby telemetry --disable && mkdir /save
 COPY --from=builder /app/node_modules /save/node_modules
+

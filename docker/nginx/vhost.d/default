@@ -1,5 +1,10 @@
+location /api-static/ {
+  alias /home/app/web/api-static/;
+  add_header Access-Control-Allow-Origin *;
+}
+
 location /static/ {
-  alias /home/app/web/static/;
+  alias /app/public/static/;
   add_header Access-Control-Allow-Origin *;
 }
 
