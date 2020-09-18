@@ -15,4 +15,5 @@ jobs:
           ssh_public_key: ${{ secrets.DOCKER_SSH_PUBLIC_KEY }}
           stack_file_name: docker-compose.prod.yml
           deploy_path: /home/bayle/autodo
+          args: up --build
 
