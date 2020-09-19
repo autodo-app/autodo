@@ -28,6 +28,7 @@ const useStyles = makeStyles<Theme, StyleProps>(
         backgroundColor: '#eee',
         padding: '3em 0',
         color: theme.palette.primary.contrastText,
+        textAlign: 'center',
       },
       productBenefitsGroup: {
         maxWidth: '75rem',

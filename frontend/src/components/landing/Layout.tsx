@@ -26,6 +26,9 @@ const useStyles = makeStyles<Theme, StyleProps>(
       containerMain: {
         backgroundColor: 'inherit',
         margin: '0 auto',
+        [theme.breakpoints.down('sm')]: {
+          margin: '8vh 0 0 0',
+        },
       },
     } as any),
 );
