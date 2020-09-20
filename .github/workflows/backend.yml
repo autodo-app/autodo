@@ -18,7 +18,7 @@ jobs:
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
-      - run: echo ${{ secrets.ENV_DEV }} > .env.dev
+      - run: echo "${{ secrets.ENV_DEV }}" > .env.dev
       - name: start up docker image
         run: docker-compose up -d --build api
       - name: check the python version in the docker shell
