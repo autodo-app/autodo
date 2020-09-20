@@ -1,0 +1,24 @@
+on: push
+name: Backend Lint/Format/etc.
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          submodules: true
+      - name: Cache dependency # caching dependency will make our build faster.
+        uses: actions/cache@v2 # for more info checkout pip section documentation at https://github.com/actions/cache
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: start up docker image
+        run: docker-compose up -d --build api
+      - name: check the python version in the docker shell
+        run: docker exec -ti autodo_api_1 "python --version"
