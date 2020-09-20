@@ -4,9 +4,6 @@ jobs:
   lint:
     name: Lint
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./backend
     steps:
       - uses: actions/checkout@v1
         with:
