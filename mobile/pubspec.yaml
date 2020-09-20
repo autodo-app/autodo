@@ -59,7 +59,8 @@ dependency_overrides:
     git:
       url: git://github.com/baylessj/flutter-autocomplete-textfield.git
       ref: master
-  firebase_core: 0.4.4
+  platform: ^2.0.0
+  firebase_core: 0.4.5
   firebase_admob:
     git:
       url: git://github.com/autodo-app/flutterfire.git
