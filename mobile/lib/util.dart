@@ -247,7 +247,11 @@ RGB hsv2rgb(HSV hsv) {
 }
 
 num clamp(num input, num lo, num hi) {
-  return (input < lo) ? lo : (input > hi) ? hi : input;
+  return (input < lo)
+      ? lo
+      : (input > hi)
+          ? hi
+          : input;
 }
 
 /// This will always round down for now

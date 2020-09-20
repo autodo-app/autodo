@@ -80,7 +80,9 @@ class _CarFormState extends State<CarForm> {
       ),
       itemSorter: (a, b) => a.name.length == b.name.length
           ? 0
-          : a.name.length < b.name.length ? -1 : 1,
+          : a.name.length < b.name.length
+              ? -1
+              : 1,
       // returns a match anytime that the input is anywhere in the repeat name
       itemFilter: (suggestion, input) {
         return suggestion.name.toLowerCase().contains(input.toLowerCase());

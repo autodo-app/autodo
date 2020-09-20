@@ -1,5 +1,7 @@
 // This file is generated automatically, do not modify
 
+// ignore_for_file: public_member_api_docs
+
 class Pubspec {
   static const String name = 'autodo';
 
@@ -87,14 +89,7 @@ class Pubspec {
         'ref': 'master',
       },
     },
-    'firebase_core': '0.4.4',
-    'firebase_admob': <dynamic, dynamic>{
-      'git': <dynamic, dynamic>{
-        'url': 'git://github.com/autodo-app/flutterfire.git',
-        'ref': 'master',
-        'path': 'packages/firebase_admob/',
-      },
-    },
+    'platform': '^2.0.0',
     'mockito': '^4.0.0',
     'bloc_test': '^3.1.0',
   };
