@@ -22,7 +22,9 @@ services:
     env_file:
       - .env.prod.db
   frontend:
-    build: ./frontend
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile.prod
     working_dir: /app
     command: ./entrypoint.prod.sh
     volumes:

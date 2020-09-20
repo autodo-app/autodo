@@ -185,3 +185,4 @@ dmypy.json
 #-------------------------
 frontend/public/*
 !frontend/public/*.html
+!frontend/public/page-data/sq**
