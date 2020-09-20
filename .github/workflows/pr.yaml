@@ -1,5 +1,5 @@
 on: pull_request
-name: Dart Formatting
+name: Code Formatting
 jobs:
   dartfmt:
     name: Dart Format
@@ -23,6 +23,22 @@ jobs:
         commit_message: Apply automatic changes
         branch: ${{ github.head_ref }}
         repository: .
-
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  blackformat:
+    name: Python Format
+    defaults:
+      run:
+        working-directory: ./backend
+    runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2
+        - uses: actions/setup-python@v2
+        - uses: psf/black@stable
+        - uses: stefanzweifel/git-auto-commit-action@v2.5.0
+          with:
+            commit_message: Apply automatic changes
+            branch: ${{ github.head_ref }}
+            repository: .
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

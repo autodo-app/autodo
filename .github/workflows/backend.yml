@@ -1,8 +1,8 @@
 on: push
 name: Backend Lint/Format/etc.
 jobs:
-  lint:
-    name: Lint
+  docker:
+    name: Build Docker Container
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
