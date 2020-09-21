@@ -4,12 +4,42 @@ import { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { ThemeProvider, CssBaseline } from '@material-ui/core';
 
-import { LoginPage } from '../components/login';
 import store, { RootState } from '../components/app/store';
 import { fetchToken } from '../components/app/_store';
 import theme from '../components/theme';
 
-const Login = () => {
+import LoginForm from '../components/login/login-form';
+import { AuthRequest } from '../components/app/_models';
+import { signUpAsync } from '../components/app/_store';
+
+const SignUpPage = () => {
+  const dispatch = useDispatch();
+  const authStatus = useSelector((state: RootState) => state.auth.status);
+  useEffect(() => {
+    if (authStatus === 'loggedIn') {
+      window.location.replace('/');
+    }
+  }, [authStatus]);
+
+  const handle_signup = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+    data: AuthRequest,
+  ) => {
+    e.preventDefault();
+    await dispatch(signUpAsync(data));
+  };
+
+  return (
+    <>
+      <LoginForm
+        handle_login={(e, data) => handle_signup(e, data)}
+        initState="signup"
+      />
+    </>
+  );
+};
+
+const SignUp = () => {
   const dispatch = useDispatch();
   const authStatus = useSelector((state: RootState) => state.auth.status);
   useEffect(() => {
@@ -17,15 +47,16 @@ const Login = () => {
       dispatch(fetchToken());
     }
   }, [authStatus, dispatch]);
-  return <LoginPage />;
+  return <SignUpPage />;
 };
+
 function Main() {
   return (
     <React.StrictMode>
       <Provider store={store}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <Login />
+          <SignUp />
         </ThemeProvider>
       </Provider>
     </React.StrictMode>

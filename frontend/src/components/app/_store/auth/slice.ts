@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { AuthState } from './state';
-import { logInAsync } from './actions';
+import { logInAsync, signUpAsync } from './actions';
 
 const initialState: AuthState = {
   token: null,
@@ -13,12 +13,16 @@ const authSlice = createSlice({
   initialState: initialState,
   reducers: {
     fetchToken(state: AuthState) {
-      const token = localStorage.getItem('token');
+      if (state.token) {
+        state.status = 'loggedIn';
+      }
+      const token = localStorage.getItem('access');
       state.token = token;
       state.status = token ? 'loggedIn' : 'loggedOut';
     },
     logOut(state: AuthState) {
-      localStorage.removeItem('token');
+      localStorage.removeItem('access');
+      localStorage.removeItem('refresh');
       state.token = null;
       state.status = 'loggedOut';
     },
@@ -30,9 +34,20 @@ const authSlice = createSlice({
       })
       .addCase(logInAsync.fulfilled, (state: AuthState, { payload }) => {
         state.status = 'loggedIn';
-        state.token = payload.payload;
+        state.token = payload.token;
       })
       .addCase(logInAsync.rejected, (state: AuthState, action) => {
+        state.status = 'failed';
+        state.error = action.error as string;
+      })
+      .addCase(signUpAsync.pending, (state: AuthState) => {
+        state.status = 'loading';
+      })
+      .addCase(signUpAsync.fulfilled, (state: AuthState, { payload }) => {
+        state.status = 'loggedIn';
+        state.token = payload.token;
+      })
+      .addCase(signUpAsync.rejected, (state: AuthState, action) => {
         state.status = 'failed';
         state.error = action.error as string;
       }),

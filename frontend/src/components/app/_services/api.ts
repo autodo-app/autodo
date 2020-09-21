@@ -98,8 +98,17 @@ export const fetchUserToken = async (user: string, pass: string) => {
     username: user,
     password: pass,
   });
-  localStorage.setItem('token', data.access);
-  return data.access;
+  return data;
+};
+
+export const registerUser = async (user: string, pass: string) => {
+  const { data } = await axios.post(`${apiUrl}/accounts/register/`, {
+    username: user,
+    email: user,
+    password: pass,
+    password_confirm: pass,
+  });
+  return data;
 };
 
 export const fetchTodos = async (): Promise<models.Todo[]> => {
