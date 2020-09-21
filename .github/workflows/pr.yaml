@@ -22,7 +22,7 @@ jobs:
         with:
           commit_message: Apply automatic changes
           branch: ${{ github.head_ref }}
-          repository: .
+          repository: ../
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   blackformat:
@@ -40,6 +40,6 @@ jobs:
         with:
           commit_message: Apply automatic changes
           branch: ${{ github.head_ref }}
-          repository: .
+          repository: ../
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
