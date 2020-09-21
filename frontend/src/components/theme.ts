@@ -8,6 +8,11 @@ export const GRAY = '#999';
 
 // A custom theme for this app
 const theme = createMuiTheme({
+  typography: {
+    fontFamily: ['Ubuntu', 'sans-serif'].join(','),
+    fontWeightRegular: 400,
+    fontSize: 16,
+  },
   palette: {
     type: 'dark',
     primary: {

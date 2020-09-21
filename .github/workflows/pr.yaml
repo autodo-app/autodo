@@ -18,28 +18,23 @@ jobs:
       - run: flutter pub run json_intl -d lib/generated/localization.dart
       - run: flutter pub run pubspec_extract -d lib/generated/pubspec.dart
       - run: flutter format .
-      - uses: stefanzweifel/git-auto-commit-action@v2.5.0
+      - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Apply automatic changes
-          branch: ${{ github.head_ref }}
-          repository: .
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   blackformat:
     name: Python Format
-    defaults:
-      run:
-        working-directory: ./backend
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
       - uses: actions/setup-python@v2
       - run: pip install black
-      - run: black .
-      - uses: stefanzweifel/git-auto-commit-action@v2.5.0
+      - run: black ./backend
+      - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Apply automatic changes
-          branch: ${{ github.head_ref }}
-          repository: .
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

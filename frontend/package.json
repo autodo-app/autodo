@@ -24,6 +24,7 @@
     "gatsby-plugin-sass": "^2.3.12",
     "gatsby-plugin-sharp": "^2.6.35",
     "gatsby-plugin-sitemap": "^2.4.12",
+    "gatsby-plugin-web-font-loader": "^1.0.4",
     "gatsby-source-filesystem": "^2.3.29",
     "gatsby-transformer-sharp": "^2.5.14",
     "history": "^5.0.0",

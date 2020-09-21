@@ -4,13 +4,14 @@ import * as models from '../_models';
 
 const apiUrl = 'http://localhost:8000';
 const apiVersion = '/api/v1';
+const REGISTER_ADDRESS = 'http://localhost:8000/accounts/register/';
 
 axios.interceptors.request.use(
   (config) => {
     const { origin } = new URL(config.url ?? '');
     const allowedOrigins = [apiUrl];
-    const token = localStorage.getItem('token');
-    if (allowedOrigins.includes(origin)) {
+    const token = localStorage.getItem('access');
+    if (allowedOrigins.includes(origin) && config.url !== REGISTER_ADDRESS) {
       config.headers.authorization = `Bearer ${token}`;
     }
     return config;
@@ -98,8 +99,17 @@ export const fetchUserToken = async (user: string, pass: string) => {
     username: user,
     password: pass,
   });
-  localStorage.setItem('token', data.access);
-  return data.access;
+  return data;
+};
+
+export const registerUser = async (user: string, pass: string) => {
+  const { data } = await axios.post(REGISTER_ADDRESS, {
+    username: user,
+    email: user,
+    password: pass,
+    password_confirm: pass,
+  });
+  return data;
 };
 
 export const fetchTodos = async (): Promise<models.Todo[]> => {

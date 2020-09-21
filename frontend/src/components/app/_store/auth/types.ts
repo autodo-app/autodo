@@ -6,7 +6,7 @@ export const FETCH_TOKEN = 'FETCH_TOKEN';
 
 export interface LoginAction {
   type: typeof LOGIN;
-  payload: string;
+  token: string;
 }
 
 export interface FetchTokenAction {
@@ -19,7 +19,7 @@ export interface LogoutAction {
 
 export interface SignupAction {
   type: typeof SIGNUP;
-  payload: string;
+  token: string;
 }
 
 export interface ResetPasswordAction {
