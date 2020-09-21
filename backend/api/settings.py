@@ -152,23 +152,23 @@ REST_FRAMEWORK = {
         "user": "10000/day",
     },
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
-        "rest_framework.authentication.BasicAuthentication",
-        "rest_framework.authentication.SessionAuthentication",
+        # "rest_framework_simplejwt.authentication.JWTAuthentication",
+        # "rest_framework.authentication.BasicAuthentication",
+        # "rest_framework.authentication.SessionAuthentication",
     ),
-    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.AllowAny"],
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
 }
 
 AUTH_USER_MODEL = "autodo.User"
 
-OAUTH2_PROVIDER = {
-    "SCOPES": {
-        "read": "Read scope",
-        "write": "Write scope",
-        "groups": "Access to your groups",
-    },
-}
+# OAUTH2_PROVIDER = {
+#     "SCOPES": {
+#         "read": "Read scope",
+#         "write": "Write scope",
+#         "groups": "Access to your groups",
+#     },
+# }
 
 REST_REGISTRATION = {
     "REGISTER_VERIFICATION_ENABLED": False,
@@ -187,7 +187,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ORIGIN_WHITELIST = (
     "http://localhost:8000",
-    "http://localhost:3000",
+    "http://localhost:8080",
 )
 
 ELASTICSEARCH_DSL = {"default": {"hosts": "elasticsearch:9200"}}

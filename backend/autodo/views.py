@@ -6,7 +6,7 @@ from itertools import groupby
 
 from django.contrib.auth import get_user_model
 from rest_framework import generics, viewsets, permissions, mixins, views
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.response import Response
 from rest_registration.decorators import api_view_serializer_class_getter
 from rest_registration.settings import registration_settings
@@ -46,8 +46,11 @@ from .serializers import (
     single_distance_rate,
 )
 from .permissions import IsOwner
+import rest_framework.authentication as auth 
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 PERMS = [permissions.IsAuthenticated, IsOwner]
+AUTHS = [JWTAuthentication, auth.SessionAuthentication, auth.BasicAuthentication]
 
 
 class CarsListViewSet(viewsets.ModelViewSet):
@@ -56,6 +59,7 @@ class CarsListViewSet(viewsets.ModelViewSet):
     queryset = Car.objects.all()
     serializer_class = CarSerializer
     permission_classes = PERMS
+    authentication_classes = AUTHS
 
     def get_queryset(self):
         """Only returns objects that are owned by the user making the request."""
@@ -72,6 +76,7 @@ class OdomSnapshotsListViewSet(viewsets.ModelViewSet):
     queryset = OdomSnapshot.objects.all()
     serializer_class = OdomSnapshotSerializer
     permission_classes = PERMS
+    authentication_classes = AUTHS
 
     def get_queryset(self):
         """Only returns objects that are owned by the user making the request."""
@@ -88,6 +93,7 @@ class RefuelingsListViewSet(viewsets.ModelViewSet):
     queryset = Refueling.objects.all()
     serializer_class = RefuelingSerializer
     permission_classes = PERMS
+    authentication_classes = AUTHS
 
     def get_queryset(self):
         """Only returns objects that are owned by the user making the request."""
@@ -104,6 +110,7 @@ class TodosListViewSet(viewsets.ModelViewSet):
     queryset = Todo.objects.all()
     serializer_class = TodoSerializer
     permission_classes = PERMS
+    authentication_classes = AUTHS
 
     def get_queryset(self):
         """Only returns objects that are owned by the user making the request."""
@@ -128,6 +135,7 @@ class TodosListViewSet(viewsets.ModelViewSet):
     lambda: registration_settings.PROFILE_SERIALIZER_CLASS
 )
 @api_view(["GET", "POST", "PUT", "PATCH", "DELETE"])
+@authentication_classes(AUTHS)
 @permission_classes([permissions.IsAuthenticated])
 def profile(request):
     """Get or set user profile."""
@@ -213,6 +221,9 @@ EMA_CUTOFF = 3  # EMA works best with some averages in the history
 
 
 class FuelEfficiencyView(views.APIView):
+    authentication_classes = AUTHS
+    permission_classes = PERMS 
+
     def single_efficiency(self, i: Refueling, j: Refueling) -> float:
         dist_diff = j.odomSnapshot.mileage - i.odomSnapshot.mileage
         return dist_diff / j.amount
@@ -233,7 +244,7 @@ class FuelEfficiencyView(views.APIView):
 
     def get(self, request, *args, **kwargs):
         data = defaultdict(dict)
-        cars = Car.objects.filter(owner=request.user)
+        cars = Car.objects.filter(owner=request.user.id)
         for c in cars:
             refuelings = Refueling.objects.filter(odomSnapshot__car=c.id).order_by(
                 "odomSnapshot__mileage"
@@ -250,8 +261,11 @@ class FuelEfficiencyView(views.APIView):
 
 
 class FuelUsageByCarView(views.APIView):
+    authentication_classes = AUTHS
+    permission_classes = PERMS 
+
     def get(self, request, *args, **kwargs):
-        cars = Car.objects.filter(owner=request.user)
+        cars = Car.objects.filter(owner=request.user.id)
         gas_used = {}
         for c in cars:
             refuelings = Refueling.objects.filter(odomSnapshot__car=c.id)
@@ -269,9 +283,12 @@ class FuelUsageByCarView(views.APIView):
 
 
 class DrivingRateView(views.APIView):
+    authentication_classes = AUTHS
+    permission_classes = PERMS 
+
     def get(self, request, *args, **kwargs):
         data = {}
-        cars = Car.objects.filter(owner=request.user)
+        cars = Car.objects.filter(owner=request.user.id)
         for c in cars:
             odomSnaps = OdomSnapshot.objects.filter(car=c.id).order_by("mileage")
             rates = [
@@ -284,9 +301,12 @@ class DrivingRateView(views.APIView):
 
 
 class FuelUsageByMonthView(views.APIView):
+    authentication_classes = AUTHS
+    permission_classes = PERMS 
+    
     def get(self, request, *args, **kwargs):
         data = {}
-        cars = Car.objects.filter(owner=request.user)
+        cars = Car.objects.filter(owner=request.user.id)
         for c in cars:
             data[
                 c.id
