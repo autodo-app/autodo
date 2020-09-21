@@ -6,7 +6,11 @@ from itertools import groupby
 
 from django.contrib.auth import get_user_model
 from rest_framework import generics, viewsets, permissions, mixins, views
-from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.decorators import (
+    api_view,
+    permission_classes,
+    authentication_classes,
+)
 from rest_framework.response import Response
 from rest_registration.decorators import api_view_serializer_class_getter
 from rest_registration.settings import registration_settings
@@ -46,7 +50,7 @@ from .serializers import (
     single_distance_rate,
 )
 from .permissions import IsOwner
-import rest_framework.authentication as auth 
+import rest_framework.authentication as auth
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 PERMS = [permissions.IsAuthenticated, IsOwner]
@@ -222,7 +226,7 @@ EMA_CUTOFF = 3  # EMA works best with some averages in the history
 
 class FuelEfficiencyView(views.APIView):
     authentication_classes = AUTHS
-    permission_classes = PERMS 
+    permission_classes = PERMS
 
     def single_efficiency(self, i: Refueling, j: Refueling) -> float:
         dist_diff = j.odomSnapshot.mileage - i.odomSnapshot.mileage
@@ -262,7 +266,7 @@ class FuelEfficiencyView(views.APIView):
 
 class FuelUsageByCarView(views.APIView):
     authentication_classes = AUTHS
-    permission_classes = PERMS 
+    permission_classes = PERMS
 
     def get(self, request, *args, **kwargs):
         cars = Car.objects.filter(owner=request.user.id)
@@ -284,7 +288,7 @@ class FuelUsageByCarView(views.APIView):
 
 class DrivingRateView(views.APIView):
     authentication_classes = AUTHS
-    permission_classes = PERMS 
+    permission_classes = PERMS
 
     def get(self, request, *args, **kwargs):
         data = {}
@@ -302,8 +306,8 @@ class DrivingRateView(views.APIView):
 
 class FuelUsageByMonthView(views.APIView):
     authentication_classes = AUTHS
-    permission_classes = PERMS 
-    
+    permission_classes = PERMS
+
     def get(self, request, *args, **kwargs):
         data = {}
         cars = Car.objects.filter(owner=request.user.id)
