@@ -15,6 +15,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
 import { AuthRequest } from '../app/_models';
+import Copyright from '../copyright';
 
 type FormState = 'login' | 'signup';
 
@@ -42,19 +43,6 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
   },
 }));
-
-const Copyright = () => {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://autodo.app/">
-        auToDo
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-};
 
 export const LoginForm: React.FC<LoginFormProps> = (props) => {
   const classes = useStyles();
