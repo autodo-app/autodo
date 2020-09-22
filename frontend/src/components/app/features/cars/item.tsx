@@ -6,7 +6,11 @@ import {
   Theme,
   GridListTile,
   Card,
+  CardMedia,
   CardContent,
+  Typography,
+  CardActions,
+  Button,
 } from '@material-ui/core';
 
 import { Car } from '../../_models';
@@ -14,16 +18,23 @@ import { AUTODO_GREEN, BACKGROUND_DARK, GRAY } from '../../../theme';
 
 interface StyleProps {
   root: React.CSSProperties;
-  filler: React.CSSProperties;
+  media: React.CSSProperties;
 }
 
 const useStyles = makeStyles<Theme, StyleProps>(
   (theme: Theme) =>
     ({
-      filler: {
-        width: '200px',
-        height: '100px',
-        margin: '2rem',
+      root: {
+        width: 'inherit',
+        minWidth: 100,
+        maxWidth: 250,
+        marginTop: '3rem',
+        marginBottom: '3rem',
+        marginLeft: '0',
+        marginRight: '2rem',
+      },
+      media: {
+        height: '140px',
       },
     } as any),
 );
@@ -37,20 +48,29 @@ export const CarItem: React.FC<CarItemProps> = (props): JSX.Element => {
   const { car } = props;
   return (
     <GridListTile key={car.id}>
-      <Card className={classes.filler}>
+      <Card className={classes.root}>
+        <CardMedia
+          className={classes.media}
+          component="img"
+          image="https://cyfairanimalhospital.com/wp-content/uploads/2018/12/blog_dragon-1.jpg"
+          title="Contemplative Reptile"
+        />
         <CardContent>
-          <p>{car.name}</p>
-          {/* <img src="/" />
-            <GridListTileBar
-              title={c.name}
-              classes={{ root: classes.titleBar, title: classes.title }}
-              actionIcon={
-                <IconButton aria-label={`star ${c.name}`}>
-                  <StarBorderIcon className={classes.title} />
-                </IconButton>
-              }
-            ></GridListTileBar> */}
+          <Typography gutterBottom variant="h5" component="h2" align="center">
+            {car.name}
+          </Typography>
+          <Typography gutterBottom variant="body1" align="center">
+            License: {car?.plate}
+          </Typography>
+          <Typography gutterBottom variant="body1" align="center">
+            Odom: {car?.odom ?? '?'} mi
+          </Typography>
         </CardContent>
+        <CardActions>
+          <Button size="small" color="primary">
+            Edit
+          </Button>
+        </CardActions>
       </Card>
     </GridListTile>
   );
