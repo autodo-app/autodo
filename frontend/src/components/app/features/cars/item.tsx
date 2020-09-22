@@ -28,6 +28,7 @@ const useStyles = makeStyles<Theme, StyleProps>(
         width: 'inherit',
         minWidth: 100,
         maxWidth: 250,
+        height: 340,
         marginTop: '3rem',
         marginBottom: '3rem',
         marginLeft: '0',

@@ -14,6 +14,7 @@ import StarBorderIcon from '@material-ui/icons/StarBorder';
 import { selectAllCars, fetchData } from '../../_store';
 import { RootState } from '../../store';
 import { CarItem } from './item';
+import { NewCarItem } from './new_car_item';
 
 interface StyleProps {
   root: React.CSSProperties;
@@ -76,10 +77,11 @@ export const CarList = () => {
 
   return (
     <div className={classes.root}>
-      <GridList className={classes.gridList} cols={3}>
+      <GridList cellHeight={340} className={classes.gridList} cols={3}>
         {cars.map((c) => (
           <CarItem car={c} />
         ))}
+        <NewCarItem />
       </GridList>
     </div>
   );
