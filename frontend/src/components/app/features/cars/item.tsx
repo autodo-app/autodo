@@ -15,6 +15,7 @@ import {
 
 import { Car } from '../../_models';
 import { AUTODO_GREEN, BACKGROUND_DARK, GRAY } from '../../../theme';
+import CarAddEditForm from './add_edit_form';
 
 interface StyleProps {
   root: React.CSSProperties;
@@ -47,32 +48,40 @@ export interface CarItemProps {
 export const CarItem: React.FC<CarItemProps> = (props): JSX.Element => {
   const classes = useStyles({} as StyleProps);
   const { car } = props;
+
+  const [open, setOpen] = useState(false);
+  const onClick = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   return (
-    <GridListTile key={car.id}>
-      <Card className={classes.root}>
-        <CardMedia
-          className={classes.media}
-          component="img"
-          image="https://cyfairanimalhospital.com/wp-content/uploads/2018/12/blog_dragon-1.jpg"
-          title="Contemplative Reptile"
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="h2" align="center">
-            {car.name}
-          </Typography>
-          <Typography gutterBottom variant="body1" align="center">
-            License: {car?.plate}
-          </Typography>
-          <Typography gutterBottom variant="body1" align="center">
-            Odom: {car?.odom ?? '?'} mi
-          </Typography>
-        </CardContent>
-        <CardActions>
-          <Button size="small" color="primary">
-            Edit
-          </Button>
-        </CardActions>
-      </Card>
-    </GridListTile>
+    <>
+      <GridListTile key={car.id}>
+        <Card className={classes.root}>
+          <CardMedia
+            className={classes.media}
+            component="img"
+            image="https://cyfairanimalhospital.com/wp-content/uploads/2018/12/blog_dragon-1.jpg"
+            title="Contemplative Reptile"
+          />
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="h2" align="center">
+              {car.name}
+            </Typography>
+            <Typography gutterBottom variant="body1" align="center">
+              License: {car?.plate}
+            </Typography>
+            <Typography gutterBottom variant="body1" align="center">
+              Odom: {car?.odom ?? '?'} mi
+            </Typography>
+          </CardContent>
+          <CardActions>
+            <Button size="small" color="primary" onClick={onClick}>
+              Edit
+            </Button>
+          </CardActions>
+        </Card>
+      </GridListTile>
+      <CarAddEditForm car={car} open={open} handleClose={handleClose} />
+    </>
   );
 };
