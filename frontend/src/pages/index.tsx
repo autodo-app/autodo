@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { ThemeProvider, CssBaseline } from '@material-ui/core';
+import * as Sentry from '@sentry/react';
+import { Integrations } from '@sentry/tracing';
 
 import Layout from '../components/landing/Layout';
 import SEO from '../components/landing/SEO';
@@ -41,6 +43,13 @@ const App = () => {
 };
 
 const IndexPage = () => {
+  Sentry.init({
+    dsn:
+      'https://ab5fda67dca14d328cef7eaa6e4acfb0@o333089.ingest.sentry.io/5440666',
+    integrations: [new Integrations.BrowserTracing()],
+    tracesSampleRate: 0.5,
+  });
+
   return (
     <React.StrictMode>
       <Provider store={store}>
