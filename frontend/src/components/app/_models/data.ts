@@ -3,11 +3,11 @@ export interface Car {
   name: string;
   make?: string;
   model?: string;
-  year?: string;
+  year?: number;
   plate?: string;
   vin?: string;
   imageName?: string;
-  color: number | null;
+  color: number;
   readonly odom?: number;
 }
 

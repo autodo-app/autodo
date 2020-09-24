@@ -15,6 +15,7 @@ import SideBar from './sidebar';
 import { TodoList, RefuelingList, StatsPage } from '../features';
 import { TabState } from './types';
 import TodoAddEditForm from '../features/todos/add_edit_form';
+import { GaragePage } from '../features/garage';
 
 function Copyright() {
   return (
@@ -105,7 +106,7 @@ const useStyles = makeStyles<Theme, StyleProps>(
 export default function Dashboard(): JSX.Element {
   const classes: StyleClasses = useStyles({} as StyleProps);
   const [open, setOpen] = useState(false);
-  const [tab, setTab] = useState<TabState>('stats');
+  const [tab, setTab] = useState<TabState>('garage');
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -122,6 +123,8 @@ export default function Dashboard(): JSX.Element {
     tabContent = <RefuelingList />;
   } else if (tab === 'stats') {
     tabContent = <StatsPage />;
+  } else if (tab === 'garage') {
+    tabContent = <GaragePage />;
   }
 
   return (
