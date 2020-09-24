@@ -106,7 +106,7 @@ const useStyles = makeStyles<Theme, StyleProps>(
 export default function Dashboard(): JSX.Element {
   const classes: StyleClasses = useStyles({} as StyleProps);
   const [open, setOpen] = useState(false);
-  const [tab, setTab] = useState<TabState>('garage');
+  const [tab, setTab] = useState<TabState>('home');
 
   const handleClickOpen = () => {
     setOpen(true);
