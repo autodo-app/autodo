@@ -38,7 +38,7 @@ const useStyles = makeStyles<Theme, StyleProps>(
         alignItems: 'flex-start',
         // flexWrap: 'nowrap',
         // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
-        transform: 'translateZ(0)',
+        // transform: 'translateZ(0)',
         '& img': {
           width: '300px',
         },
@@ -57,13 +57,7 @@ export const CarList = () => {
   const classes = useStyles({} as any);
   const dispatch = useDispatch();
 
-  // const cars = useSelector(selectAllCars);
-  const cars = [
-    { id: 0, name: 'test1', color: 0, plate: 'L1C3NS3', odom: 2000 },
-    { id: 1, name: 'test2', color: 0 },
-    { id: 2, name: 'test2', color: 0 },
-    { id: 3, name: 'test2', color: 0 },
-  ];
+  const cars = useSelector(selectAllCars);
   const carStatus = useSelector((state: RootState) => state.data.status);
   const error = useSelector((state: RootState) => state.data.error);
 
@@ -73,14 +67,12 @@ export const CarList = () => {
     }
   }, [carStatus, dispatch]);
 
-  const carItems = cars.map((c) => CarItem({ car: c }));
+  const carItems = cars.map((c) => <CarItem car={c} />);
 
   return (
     <div className={classes.root}>
       <GridList cellHeight={340} className={classes.gridList} cols={3}>
-        {cars.map((c) => (
-          <CarItem car={c} />
-        ))}
+        {carItems}
         <NewCarItem />
       </GridList>
     </div>

@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import TodoItem from './item';
 import { selectAllTodos, fetchData } from '../../_store';
-import { RootState } from '../../app/store';
+import { RootState } from '../../store';
 
 interface StyleProps {
   header: React.CSSProperties;

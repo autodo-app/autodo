@@ -85,13 +85,24 @@ export default function CarAddEditForm(props: CarAddEditFormProps) {
 
   const canSave = [name].every(Boolean) && addRequestStatus === 'idle';
 
+  const clearAllFields = () => {
+    setName('');
+    setNameError(false);
+    setOdom(0);
+    setOdomError(false);
+    setMake('');
+    setModel('');
+    setYear('');
+    setPlate('');
+    setVin('');
+    setImageName('');
+    setColor(null);
+  };
+
   const onSaveCarClicked = async () => {
     if (canSave) {
       try {
         setAddRequestStatus('pending');
-        if (!color) {
-          setColor(0); // TODO: set a random color from palette
-        }
         if (car) {
           dispatch(
             updateCar({
@@ -99,11 +110,11 @@ export default function CarAddEditForm(props: CarAddEditFormProps) {
               name: name,
               make: make,
               model: model,
-              year: year,
+              year: typeof year === 'number' ? year : parseInt(year),
               plate: plate,
               vin: vin,
               imageName: imageName,
-              color: color,
+              color: color ?? 0,
             }),
           );
           if (odom !== car.odom) {
@@ -122,11 +133,11 @@ export default function CarAddEditForm(props: CarAddEditFormProps) {
                 name: name,
                 make: make,
                 model: model,
-                year: year,
+                year: typeof year === 'number' ? year : parseInt(year),
                 plate: plate,
                 vin: vin,
                 imageName: imageName,
-                color: color,
+                color: color ?? 0,
               },
               snap: {
                 date: new Date().toJSON(),
@@ -139,8 +150,9 @@ export default function CarAddEditForm(props: CarAddEditFormProps) {
         console.error('Failed to save the post: ', err);
       } finally {
         setAddRequestStatus('idle');
+        clearAllFields();
+        handleClose();
       }
-      handleClose();
     } else {
       if (!name) {
         setNameError(true);

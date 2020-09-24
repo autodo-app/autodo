@@ -46,8 +46,8 @@ export interface CarItemProps {
 }
 
 export const CarItem: React.FC<CarItemProps> = (props): JSX.Element => {
-  const classes = useStyles({} as StyleProps);
   const { car } = props;
+  const classes = useStyles({} as any);
 
   const [open, setOpen] = useState(false);
   const onClick = () => setOpen(true);
@@ -55,7 +55,7 @@ export const CarItem: React.FC<CarItemProps> = (props): JSX.Element => {
 
   return (
     <>
-      <GridListTile key={car.id}>
+      <GridListTile key={car?.id ?? 0}>
         <Card className={classes.root}>
           <CardMedia
             className={classes.media}
@@ -65,7 +65,7 @@ export const CarItem: React.FC<CarItemProps> = (props): JSX.Element => {
           />
           <CardContent>
             <Typography gutterBottom variant="h5" component="h2" align="center">
-              {car.name}
+              {car?.name ?? 'blank'}
             </Typography>
             <Typography gutterBottom variant="body1" align="center">
               License: {car?.plate}
