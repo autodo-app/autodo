@@ -60,8 +60,8 @@ export const CarItem: React.FC<CarItemProps> = (props): JSX.Element => {
           <CardMedia
             className={classes.media}
             component="img"
-            image="https://cyfairanimalhospital.com/wp-content/uploads/2018/12/blog_dragon-1.jpg"
-            title="Contemplative Reptile"
+            image="https://lh3.googleusercontent.com/proxy/ydK84wW8qtQnULtrCq1nd-tVmzffewOuR5txsdsB_Ro_C7tWgW-z5yY18jh2aCZmzLa33hqw7RFGp8Ye4Yt7af4lm2CMzaxWNH0SUX50FKjJEaDeWFqb18lnPwH3sEBNnd0Lzfvai5bCNYX2hL4rrw"
+            title="Car"
           />
           <CardContent>
             <Typography gutterBottom variant="h5" component="h2" align="center">
