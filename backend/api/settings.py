@@ -181,7 +181,7 @@ REST_REGISTRATION = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=10),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=10),
     # "ACCESS_TOKEN_LIFETIME": timedelta(days=100),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=10000),
 }
@@ -192,9 +192,12 @@ CORS_ALLOW_ALL_ORIGINS = True
 #     "http://localhost:8080"
 # ]
 
-CORS_ALLOW_HEADERS = list(default_headers) + ['Access-Control-Allow-Headers', 'sentry-trace']
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    "Access-Control-Allow-Headers",
+    "sentry-trace",
+]
 
-CORS_EXPOSE_HEADERS = ['Access-Control-Allow-Headers']
+CORS_EXPOSE_HEADERS = ["Access-Control-Allow-Headers"]
 
 CORS_ALLOW_CREDENTIALS = True
 
