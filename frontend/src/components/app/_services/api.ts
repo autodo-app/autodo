@@ -23,7 +23,7 @@ axios.interceptors.request.use(
 );
 
 const _refreshUserToken = async () => {
-  const { data, status } = await axios.post(`${apiUrl}/auth/token/refresh`, {
+  const { data, status } = await axios.post(`${apiUrl}/auth/token/refresh/`, {
     refresh: localStorage.getItem('refresh'),
   });
   if (status !== 200) {
@@ -31,75 +31,95 @@ const _refreshUserToken = async () => {
   }
   const newAccessToken = data['access'];
   localStorage.setItem('access', newAccessToken);
+  console.log('here');
 };
 
 const _authenticatedGet = async (url: string) => {
-  const { data, status } = await axios.get(`${apiUrl}${apiVersion}/${url}`);
-  if (status === 401) {
-    // Token has expired, need to refresh it
-    await _refreshUserToken();
-  }
+  let response;
+  try {
+    response = await axios.get(`${apiUrl}${apiVersion}/${url}`);
+    if (response.status === 401) {
+      // Token has expired, need to refresh it
+      console.log('401');
+      await _refreshUserToken();
+      response = await axios.get(`${apiUrl}${apiVersion}/${url}`);
+    }
 
-  if (status !== 200) {
-    // throw an error
+    if (response.status !== 200) {
+      console.log(`Not 200: ${response.status}`);
+    }
+
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    await _refreshUserToken();
+    response = await axios.get(`${apiUrl}${apiVersion}/${url}`);
+    return response.data;
   }
-  return data;
 };
 
 const _authenticatedPost = async (url: string, body: any): Promise<any> => {
+  let response;
   try {
-    const { data, status } = await axios.post(
-      `${apiUrl}${apiVersion}/${url}`,
-      body,
-    );
-    if (status === 401) {
+    response = await axios.post(`${apiUrl}${apiVersion}/${url}`, body);
+    if (response.status === 401) {
       // Token has expired, need to refresh it
       await _refreshUserToken();
+      response = await axios.post(`${apiUrl}${apiVersion}/${url}`, body);
     }
 
-    if (status !== 201) {
-      // throw an error
+    if (response.status !== 201) {
+      // error
     }
-    return data;
+    return response.data;
   } catch (e) {
     console.log(e.response);
+    await _refreshUserToken();
+    response = await axios.post(`${apiUrl}${apiVersion}/${url}`, body);
+    return response.data;
   }
 };
 
 const _authenticatedPatch = async (url: string, body: any): Promise<any> => {
+  let response;
   try {
-    const { data, status } = await axios.patch(
-      `${apiUrl}${apiVersion}/${url}`,
-      body,
-    );
-    if (status === 401) {
+    response = await axios.patch(`${apiUrl}${apiVersion}/${url}`, body);
+    if (response.status === 401) {
       // Token has expired, need to refresh it
       await _refreshUserToken();
+      response = await axios.patch(`${apiUrl}${apiVersion}/${url}`, body);
     }
 
-    if (status !== 201) {
+    if (response.status !== 201) {
       // throw an error
     }
-    return data;
+    return response.data;
   } catch (e) {
     console.log(e.response);
+    response = await axios.post(`${apiUrl}${apiVersion}/${url}`, body);
+    return response.data;
   }
 };
 
 const _authenticatedDelete = async (url: string, body: any): Promise<any> => {
-  const { data, status } = await axios.delete(
-    `${apiUrl}${apiVersion}/${url}`,
-    body,
-  );
-  if (status === 401) {
-    // Token has expired, need to refresh it
-    await _refreshUserToken();
-  }
+  let response;
+  try {
+    response = await axios.delete(`${apiUrl}${apiVersion}/${url}`, body);
+    if (response.status === 401) {
+      // Token has expired, need to refresh it
+      await _refreshUserToken();
+      response = await axios.delete(`${apiUrl}${apiVersion}/${url}`, body);
+    }
 
-  if (status !== 201) {
-    // throw an error
+    if (response.status !== 201) {
+      // throw an error
+    }
+    return response.data;
+  } catch (e) {
+    await _refreshUserToken();
+    response = await axios.delete(`${apiUrl}${apiVersion}/${url}`, body);
+    return response.data;
   }
-  return data;
 };
 
 export const fetchUserToken = async (user: string, pass: string) => {
