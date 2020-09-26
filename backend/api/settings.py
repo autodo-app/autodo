@@ -14,6 +14,7 @@ import os
 from datetime import timedelta
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
+from corsheaders.defaults import default_headers
 
 sentry_sdk.init(
     dsn="https://a89afcae131445f3aea9468d93c55060@o333089.ingest.sentry.io/5440682",
@@ -173,14 +174,6 @@ REST_FRAMEWORK = {
 
 AUTH_USER_MODEL = "autodo.User"
 
-# OAUTH2_PROVIDER = {
-#     "SCOPES": {
-#         "read": "Read scope",
-#         "write": "Write scope",
-#         "groups": "Access to your groups",
-#     },
-# }
-
 REST_REGISTRATION = {
     "REGISTER_VERIFICATION_ENABLED": False,
     "RESET_PASSWORD_VERIFICATION_ENABLED": False,
@@ -188,18 +181,25 @@ REST_REGISTRATION = {
 }
 
 SIMPLE_JWT = {
-    #    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=10),
-    "ACCESS_TOKEN_LIFETIME": timedelta(days=100),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=100),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=10),
+    # "ACCESS_TOKEN_LIFETIME": timedelta(days=100),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=10000),
 }
 
-# CORS_ORIGIN_ALLOW_ALL = False
-CORS_ORIGIN_ALLOW_ALL = True
 
-CORS_ORIGIN_WHITELIST = (
-    "http://localhost:8000",
-    "http://localhost:8080",
-)
+CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:8080"
+# ]
+
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    "Access-Control-Allow-Headers",
+    "sentry-trace",
+]
+
+CORS_EXPOSE_HEADERS = ["Access-Control-Allow-Headers"]
+
+CORS_ALLOW_CREDENTIALS = True
 
 ELASTICSEARCH_DSL = {"default": {"hosts": "elasticsearch:9200"}}
 
