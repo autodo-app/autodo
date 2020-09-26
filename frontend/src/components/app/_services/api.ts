@@ -4,7 +4,7 @@ import * as models from '../_models';
 
 const apiUrl = 'http://localhost:8000';
 const apiVersion = '/api/v1';
-const REGISTER_ADDRESS = 'http://localhost:8000/accounts/register/';
+const REGISTER_ADDRESS = `${apiUrl}/accounts/register/`;
 
 axios.interceptors.request.use(
   (config) => {
@@ -12,6 +12,7 @@ axios.interceptors.request.use(
     const allowedOrigins = [apiUrl];
     const token = localStorage.getItem('access');
     if (allowedOrigins.includes(origin) && config.url !== REGISTER_ADDRESS) {
+      // don't send the access token when we're trying to sign up a new user
       config.headers.authorization = `Bearer ${token}`;
     }
     return config;
@@ -22,7 +23,14 @@ axios.interceptors.request.use(
 );
 
 const _refreshUserToken = async () => {
-  // TODO: use the refresh token to get a new access token
+  const { data, status } = await axios.post(`${apiUrl}/auth/token/refresh`, {
+    refresh: localStorage.getItem('refresh'),
+  });
+  if (status !== 200) {
+    console.log('Failed to refresh access token');
+  }
+  const newAccessToken = data['access'];
+  localStorage.setItem('access', newAccessToken);
 };
 
 const _authenticatedGet = async (url: string) => {

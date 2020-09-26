@@ -173,14 +173,6 @@ REST_FRAMEWORK = {
 
 AUTH_USER_MODEL = "autodo.User"
 
-# OAUTH2_PROVIDER = {
-#     "SCOPES": {
-#         "read": "Read scope",
-#         "write": "Write scope",
-#         "groups": "Access to your groups",
-#     },
-# }
-
 REST_REGISTRATION = {
     "REGISTER_VERIFICATION_ENABLED": False,
     "RESET_PASSWORD_VERIFICATION_ENABLED": False,
@@ -188,9 +180,9 @@ REST_REGISTRATION = {
 }
 
 SIMPLE_JWT = {
-    #    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=10),
-    "ACCESS_TOKEN_LIFETIME": timedelta(days=100),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=100),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=10),
+    # "ACCESS_TOKEN_LIFETIME": timedelta(days=100),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=10000),
 }
 
 # CORS_ORIGIN_ALLOW_ALL = False
