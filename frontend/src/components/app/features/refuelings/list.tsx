@@ -102,17 +102,15 @@ export const RefuelingList: React.FC<{}> = (): JSX.Element => {
       idx === refuelings.length - 1 ? (
         <div />
       ) : (
-        <>
-          <div className={classes.separatorContainer}>
-            <div className={classes.separator} />
-          </div>
-        </>
+        <div className={classes.separatorContainer}>
+          <div className={classes.separator} />
+        </div>
       );
     return (
-      <>
+      <div key={r.id}>
         <RefuelingItem first={idx === 0} refueling={r} />
         {separator}
-      </>
+      </div>
     );
   });
 

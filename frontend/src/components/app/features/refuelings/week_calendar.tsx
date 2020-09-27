@@ -107,7 +107,7 @@ export const WeekCalendar = (props: WeekCalendarProps) => {
     }
 
     return (
-      <div className={itemClass}>
+      <div key={d.getDay()} className={itemClass}>
         <div className={classes.name}>{dayNames[d.getDay()]}</div>
         <div className={classes.number}>{d.getDate()}</div>
         <div className={classes.break} />
