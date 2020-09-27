@@ -40,7 +40,6 @@ const _authenticatedGet = async (url: string) => {
     response = await axios.get(`${apiUrl}${apiVersion}/${url}`);
     if (response.status === 401) {
       // Token has expired, need to refresh it
-      console.log('401');
       await _refreshUserToken();
       response = await axios.get(`${apiUrl}${apiVersion}/${url}`);
     }
@@ -140,10 +139,8 @@ export const registerUser = async (user: string, pass: string) => {
   return data;
 };
 
-export const fetchTodos = async (): Promise<models.Todo[]> => {
-  const response = await _authenticatedGet('todos/');
-  return response.results;
-};
+export const fetchTodos = async (): Promise<models.Todo[]> =>
+  await _authenticatedGet('todos/');
 
 export const postTodo = async (todo: models.Todo): Promise<models.Todo> => {
   const response = await _authenticatedPost('todos/', todo);
@@ -160,10 +157,8 @@ export const deleteTodo = async (todo: models.Todo): Promise<models.Todo> => {
   return todo;
 };
 
-export const fetchRefuelings = async (): Promise<models.Refueling[]> => {
-  const response = await _authenticatedGet('refuelings/');
-  return response.results;
-};
+export const fetchRefuelings = async (): Promise<models.Refueling[]> =>
+  await _authenticatedGet('refuelings/');
 
 export const postRefueling = async (
   refueling: models.Refueling,
@@ -189,10 +184,8 @@ export const deleteRefueling = async (
   return refueling;
 };
 
-export const fetchCars = async (): Promise<models.Car[]> => {
-  const response = await _authenticatedGet('cars/');
-  return response.results;
-};
+export const fetchCars = async (): Promise<models.Car[]> =>
+  await _authenticatedGet('cars/');
 
 export const postCar = async (car: models.Car): Promise<models.Car> => {
   const response = await _authenticatedPost('cars/', car);
