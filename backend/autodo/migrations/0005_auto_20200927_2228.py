@@ -7,13 +7,18 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('autodo', '0004_auto_20200913_1911'),
+        ("autodo", "0004_auto_20200913_1911"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='odomsnapshot',
-            name='car',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='snaps', to='autodo.Car'),
+            model_name="odomsnapshot",
+            name="car",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="snaps",
+                to="autodo.Car",
+            ),
         ),
     ]
