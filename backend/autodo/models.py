@@ -34,7 +34,6 @@ def find_odom(obj):
     odomSnaps = sortedOdomSnaps(obj.id)
     try:
         mileage = odomSnaps[0].mileage
-        print(f"here: {mileage}")
         return mileage
     except:
         return 0
@@ -65,8 +64,6 @@ class Todo(models.Model):
 
 def create_defaults(user, car):
     base_mileage = find_odom(car)
-    print(base_mileage)
-    print(OdomSnapshot.objects.filter(car=car.id))
 
     def get_due_mileage(interval):
         if interval > base_mileage:
