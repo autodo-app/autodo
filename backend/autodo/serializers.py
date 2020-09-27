@@ -5,7 +5,16 @@ from .documents import CarDocument
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django_elasticsearch_dsl_drf.serializers import DocumentSerializer
 
-from .models import Car, OdomSnapshot, Refueling, Todo, User, sortedOdomSnaps, find_odom
+from .models import (
+    Car,
+    OdomSnapshot,
+    Refueling,
+    Todo,
+    User,
+    sortedOdomSnaps,
+    find_odom,
+    create_defaults,
+)
 
 DUE_SOON_CUTOFF_DAYS = 14
 DUE_SOON_DEFAULT_DISTANCE_RATE = 10
@@ -27,8 +36,8 @@ def calc_distance_rate(carId):
 
     window_size = 3
     i = 0
-    
-    if (len(diffs) < 2):
+
+    if len(diffs) < 2:
         return diffs[-1]
 
     averages = []
@@ -61,7 +70,6 @@ class CustomJWTSerializer(TokenObtainPairSerializer):
         return super().validate(credentials)
 
 
-
 class OdomSnapshotSerializer(serializers.ModelSerializer):
     """Translates the Odom Snapshot data into a view."""
 
@@ -69,7 +77,8 @@ class OdomSnapshotSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = OdomSnapshot
-        fields = ["url", "id", 'car', "owner", "date", "mileage"]
+        fields = ["url", "id", "car", "owner", "date", "mileage"]
+
 
 class CarSerializer(serializers.ModelSerializer):
     """Translates the Car data into a view."""
@@ -85,12 +94,14 @@ class CarSerializer(serializers.ModelSerializer):
     def find_distance_rate(self, obj):
         return calc_distance_rate(obj.id)
 
-
     def create(self, validated_data):
-        odom_snapshot_data = validated_data.pop('snaps')
+        odom_snapshot_data = validated_data.pop("snaps")
         car = Car.objects.create(**validated_data)
         for each in odom_snapshot_data:
-            OdomSnapshot.objects.create(owner=validated_data['owner'], car=car, **each)
+            OdomSnapshot.objects.create(owner=validated_data["owner"], car=car, **each)
+        default_todos = create_defaults(validated_data["owner"], car)
+        for t in default_todos:
+            t.save()
         return car
 
     class Meta:
@@ -109,8 +120,9 @@ class CarSerializer(serializers.ModelSerializer):
             "color",
             "odom",
             "distanceRate",
-            "snaps"
+            "snaps",
         ]
+
 
 class RefuelingSerializer(serializers.ModelSerializer):
     """Translates the Refueling data into a view."""
@@ -138,7 +150,7 @@ class TodoSerializer(serializers.ModelSerializer):
             return "completed"
 
         odomSnaps = sortedOdomSnaps(obj.car.id)
-        if (len(odomSnaps) == 0):
+        if len(odomSnaps) == 0:
             return "upcoming"
 
         odom = odomSnaps[0].mileage
@@ -162,7 +174,9 @@ class TodoSerializer(serializers.ModelSerializer):
         )
         daysUntilDueDate = round((obj.dueMileage - odom) * distanceRate)
 
-        if daysUntilDueDate < DUE_SOON_CUTOFF_DAYS or (dateDiff is not None and dateDiff < DUE_SOON_CUTOFF_DAYS):
+        if daysUntilDueDate < DUE_SOON_CUTOFF_DAYS or (
+            dateDiff is not None and dateDiff < DUE_SOON_CUTOFF_DAYS
+        ):
             return "dueSoon"
         return "upcoming"
 
