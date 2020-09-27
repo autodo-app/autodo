@@ -1,17 +1,14 @@
 from datetime import date
 
 from rest_framework import serializers
-from .models import Car, OdomSnapshot, Refueling, Todo, User
 from .documents import CarDocument
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django_elasticsearch_dsl_drf.serializers import DocumentSerializer
 
+from .models import Car, OdomSnapshot, Refueling, Todo, User, sortedOdomSnaps, find_odom
+
 DUE_SOON_CUTOFF_DAYS = 14
 DUE_SOON_DEFAULT_DISTANCE_RATE = 10
-
-
-def sortedOdomSnaps(carId):
-    return OdomSnapshot.objects.filter(car=carId).order_by("-date", "-mileage")
 
 
 def single_distance_rate(i, j):
@@ -30,13 +27,16 @@ def calc_distance_rate(carId):
 
     window_size = 3
     i = 0
+    
+    if (len(diffs) < 2):
+        return diffs[-1]
+
     averages = []
     while i < len(diffs) - window_size + 1:
         window = diffs[i : i + window_size]
         window_average = sum(window) / window_size
         averages.append(window_average)
         i += 1
-    print(averages[-1])
     return averages[-1]
 
 
@@ -69,12 +69,7 @@ class CarSerializer(serializers.HyperlinkedModelSerializer):
     distanceRate = serializers.SerializerMethodField("find_distance_rate")
 
     def find_odom(self, obj):
-        odomSnaps = sortedOdomSnaps(obj.id)
-        try:
-            mileage = odomSnaps[0].mileage
-            return mileage
-        except:
-            return None
+        return find_odom(obj)
 
     def find_distance_rate(self, obj):
         return calc_distance_rate(obj.id)
@@ -133,10 +128,14 @@ class TodoSerializer(serializers.HyperlinkedModelSerializer):
     def calc_due_state(self, obj):
         if obj.completionOdomSnapshot is not None:
             return "completed"
+
         odomSnaps = sortedOdomSnaps(obj.car.id)
+        if (len(odomSnaps) == 0):
+            return "upcoming"
+
         odom = odomSnaps[0].mileage
         odomDiff = None
-        dayDiff = None
+        dateDiff = None
         if obj.dueMileage is not None:
             odomDiff = obj.dueMileage - odom
             if odomDiff < 0:
@@ -147,7 +146,6 @@ class TodoSerializer(serializers.HyperlinkedModelSerializer):
             dateDiff = (dueDate - curDate).days
             if dateDiff < 0:
                 return "late"
-        # distanceRate = Car.objects.get(id=obj.car.id).distanceRate
         distanceRate = calc_distance_rate(obj.car.id)
         distanceRate = (
             distanceRate
@@ -155,7 +153,8 @@ class TodoSerializer(serializers.HyperlinkedModelSerializer):
             else DUE_SOON_DEFAULT_DISTANCE_RATE
         )
         daysUntilDueDate = round((obj.dueMileage - odom) * distanceRate)
-        if daysUntilDueDate < DUE_SOON_CUTOFF_DAYS or dayDiff < DUE_SOON_CUTOFF_DAYS:
+
+        if daysUntilDueDate < DUE_SOON_CUTOFF_DAYS or (dateDiff is not None and dateDiff < DUE_SOON_CUTOFF_DAYS):
             return "dueSoon"
         return "upcoming"
 
