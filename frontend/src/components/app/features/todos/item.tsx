@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles, IconButton, ButtonBase, Theme } from '@material-ui/core';
 import Chip from '@material-ui/core/Chip';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -10,8 +10,14 @@ import { red } from '@material-ui/core/colors';
 
 import { LateChip, DueSoonChip } from '../../home/status-chips';
 import TodoAddEditForm from './add_edit_form';
-import { Todo } from '../../_models';
-import { deleteTodo, completeTodo, undoCompleteTodo } from '../../_store/data';
+import { Car, Todo } from '../../_models';
+import { RootState } from '../../store';
+import {
+  deleteTodo,
+  completeTodo,
+  undoCompleteTodo,
+  selectCarById,
+} from '../../_store/data';
 
 interface StyleProps {
   root: React.CSSProperties;
@@ -58,10 +64,14 @@ const useStyles = makeStyles<Theme, StyleProps>(
     } as any),
 );
 
-const CarTag: React.FC<{}> = (): JSX.Element => {
+interface CarTagProps {
+  car: Car;
+}
+const CarTag: React.FC<CarTagProps> = (props): JSX.Element => {
+  const { car } = props;
   return (
     <ButtonBase>
-      <Chip color="primary" label="2009 Passat" />
+      <Chip color="primary" label={car.name} />
     </ButtonBase>
   );
 };
@@ -106,6 +116,7 @@ export default function TodoItem(props: TodoItemProps): JSX.Element {
   const classes: StyleClasses = useStyles({} as StyleProps);
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
+  const car = useSelector((state: RootState) => selectCarById(state, todo.car));
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -145,7 +156,7 @@ export default function TodoItem(props: TodoItemProps): JSX.Element {
         <DueText todo={todo} />
       </div>
       <div className={classes.buttons}>
-        <CarTag />
+        <CarTag car={car} />
         <IconButton onClick={handleClickOpen}>
           <Create />
         </IconButton>

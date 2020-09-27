@@ -1,17 +1,23 @@
 from datetime import date
 
 from rest_framework import serializers
-from .models import Car, OdomSnapshot, Refueling, Todo, User
 from .documents import CarDocument
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django_elasticsearch_dsl_drf.serializers import DocumentSerializer
 
+from .models import (
+    Car,
+    OdomSnapshot,
+    Refueling,
+    Todo,
+    User,
+    sortedOdomSnaps,
+    find_odom,
+    create_defaults,
+)
+
 DUE_SOON_CUTOFF_DAYS = 14
 DUE_SOON_DEFAULT_DISTANCE_RATE = 10
-
-
-def sortedOdomSnaps(carId):
-    return OdomSnapshot.objects.filter(car=carId).order_by("-date", "-mileage")
 
 
 def single_distance_rate(i, j):
@@ -30,13 +36,16 @@ def calc_distance_rate(carId):
 
     window_size = 3
     i = 0
+
+    if len(diffs) < 2:
+        return diffs[-1]
+
     averages = []
     while i < len(diffs) - window_size + 1:
         window = diffs[i : i + window_size]
         window_average = sum(window) / window_size
         averages.append(window_average)
         i += 1
-    print(averages[-1])
     return averages[-1]
 
 
@@ -61,23 +70,39 @@ class CustomJWTSerializer(TokenObtainPairSerializer):
         return super().validate(credentials)
 
 
-class CarSerializer(serializers.HyperlinkedModelSerializer):
+class OdomSnapshotSerializer(serializers.ModelSerializer):
+    """Translates the Odom Snapshot data into a view."""
+
+    owner = serializers.ReadOnlyField(source="owner.username")
+
+    class Meta:
+        model = OdomSnapshot
+        fields = ["url", "id", "car", "owner", "date", "mileage"]
+
+
+class CarSerializer(serializers.ModelSerializer):
     """Translates the Car data into a view."""
 
     owner = serializers.ReadOnlyField(source="owner.username")
     odom = serializers.SerializerMethodField("find_odom")
     distanceRate = serializers.SerializerMethodField("find_distance_rate")
+    snaps = OdomSnapshotSerializer(many=True)
 
     def find_odom(self, obj):
-        odomSnaps = sortedOdomSnaps(obj.id)
-        try:
-            mileage = odomSnaps[0].mileage
-            return mileage
-        except:
-            return None
+        return find_odom(obj)
 
     def find_distance_rate(self, obj):
         return calc_distance_rate(obj.id)
+
+    def create(self, validated_data):
+        odom_snapshot_data = validated_data.pop("snaps")
+        car = Car.objects.create(**validated_data)
+        for each in odom_snapshot_data:
+            OdomSnapshot.objects.create(owner=validated_data["owner"], car=car, **each)
+        default_todos = create_defaults(validated_data["owner"], car)
+        for t in default_todos:
+            t.save()
+        return car
 
     class Meta:
         model = Car
@@ -95,21 +120,11 @@ class CarSerializer(serializers.HyperlinkedModelSerializer):
             "color",
             "odom",
             "distanceRate",
+            "snaps",
         ]
 
 
-class OdomSnapshotSerializer(serializers.HyperlinkedModelSerializer):
-    """Translates the Odom Snapshot data into a view."""
-
-    owner = serializers.ReadOnlyField(source="owner.username")
-    car = serializers.PrimaryKeyRelatedField(queryset=Car.objects.all())
-
-    class Meta:
-        model = OdomSnapshot
-        fields = ["url", "id", "owner", "car", "date", "mileage"]
-
-
-class RefuelingSerializer(serializers.HyperlinkedModelSerializer):
+class RefuelingSerializer(serializers.ModelSerializer):
     """Translates the Refueling data into a view."""
 
     owner = serializers.ReadOnlyField(source="owner.username")
@@ -120,7 +135,7 @@ class RefuelingSerializer(serializers.HyperlinkedModelSerializer):
         fields = ["url", "id", "owner", "odomSnapshot", "cost", "amount"]
 
 
-class TodoSerializer(serializers.HyperlinkedModelSerializer):
+class TodoSerializer(serializers.ModelSerializer):
     """Translates the Todo data into a view."""
 
     owner = serializers.ReadOnlyField(source="owner.username")
@@ -133,10 +148,14 @@ class TodoSerializer(serializers.HyperlinkedModelSerializer):
     def calc_due_state(self, obj):
         if obj.completionOdomSnapshot is not None:
             return "completed"
+
         odomSnaps = sortedOdomSnaps(obj.car.id)
+        if len(odomSnaps) == 0:
+            return "upcoming"
+
         odom = odomSnaps[0].mileage
         odomDiff = None
-        dayDiff = None
+        dateDiff = None
         if obj.dueMileage is not None:
             odomDiff = obj.dueMileage - odom
             if odomDiff < 0:
@@ -147,7 +166,6 @@ class TodoSerializer(serializers.HyperlinkedModelSerializer):
             dateDiff = (dueDate - curDate).days
             if dateDiff < 0:
                 return "late"
-        # distanceRate = Car.objects.get(id=obj.car.id).distanceRate
         distanceRate = calc_distance_rate(obj.car.id)
         distanceRate = (
             distanceRate
@@ -155,7 +173,10 @@ class TodoSerializer(serializers.HyperlinkedModelSerializer):
             else DUE_SOON_DEFAULT_DISTANCE_RATE
         )
         daysUntilDueDate = round((obj.dueMileage - odom) * distanceRate)
-        if daysUntilDueDate < DUE_SOON_CUTOFF_DAYS or dayDiff < DUE_SOON_CUTOFF_DAYS:
+
+        if daysUntilDueDate < DUE_SOON_CUTOFF_DAYS or (
+            dateDiff is not None and dateDiff < DUE_SOON_CUTOFF_DAYS
+        ):
             return "dueSoon"
         return "upcoming"
 
