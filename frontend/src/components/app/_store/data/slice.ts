@@ -106,7 +106,9 @@ const dataSlice = createSlice({
         },
       )
       .addCase(actions.createCar.fulfilled, (state: DataState, { payload }) => {
-        state.cars.push(payload.payload);
+        state.todos = payload.payload.todos;
+        state.refuelings = payload.payload.refuelings;
+        state.cars = payload.payload.cars;
       })
       .addCase(actions.updateCar.fulfilled, (state: DataState, { payload }) => {
         const carId = payload.payload.id;

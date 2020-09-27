@@ -61,18 +61,37 @@ class CustomJWTSerializer(TokenObtainPairSerializer):
         return super().validate(credentials)
 
 
-class CarSerializer(serializers.HyperlinkedModelSerializer):
+
+class OdomSnapshotSerializer(serializers.ModelSerializer):
+    """Translates the Odom Snapshot data into a view."""
+
+    owner = serializers.ReadOnlyField(source="owner.username")
+
+    class Meta:
+        model = OdomSnapshot
+        fields = ["url", "id", 'car', "owner", "date", "mileage"]
+
+class CarSerializer(serializers.ModelSerializer):
     """Translates the Car data into a view."""
 
     owner = serializers.ReadOnlyField(source="owner.username")
     odom = serializers.SerializerMethodField("find_odom")
     distanceRate = serializers.SerializerMethodField("find_distance_rate")
+    snaps = OdomSnapshotSerializer(many=True)
 
     def find_odom(self, obj):
         return find_odom(obj)
 
     def find_distance_rate(self, obj):
         return calc_distance_rate(obj.id)
+
+
+    def create(self, validated_data):
+        odom_snapshot_data = validated_data.pop('snaps')
+        car = Car.objects.create(**validated_data)
+        for each in odom_snapshot_data:
+            OdomSnapshot.objects.create(owner=validated_data['owner'], car=car, **each)
+        return car
 
     class Meta:
         model = Car
@@ -90,21 +109,10 @@ class CarSerializer(serializers.HyperlinkedModelSerializer):
             "color",
             "odom",
             "distanceRate",
+            "snaps"
         ]
 
-
-class OdomSnapshotSerializer(serializers.HyperlinkedModelSerializer):
-    """Translates the Odom Snapshot data into a view."""
-
-    owner = serializers.ReadOnlyField(source="owner.username")
-    car = serializers.PrimaryKeyRelatedField(queryset=Car.objects.all())
-
-    class Meta:
-        model = OdomSnapshot
-        fields = ["url", "id", "owner", "car", "date", "mileage"]
-
-
-class RefuelingSerializer(serializers.HyperlinkedModelSerializer):
+class RefuelingSerializer(serializers.ModelSerializer):
     """Translates the Refueling data into a view."""
 
     owner = serializers.ReadOnlyField(source="owner.username")
@@ -115,7 +123,7 @@ class RefuelingSerializer(serializers.HyperlinkedModelSerializer):
         fields = ["url", "id", "owner", "odomSnapshot", "cost", "amount"]
 
 
-class TodoSerializer(serializers.HyperlinkedModelSerializer):
+class TodoSerializer(serializers.ModelSerializer):
     """Translates the Todo data into a view."""
 
     owner = serializers.ReadOnlyField(source="owner.username")

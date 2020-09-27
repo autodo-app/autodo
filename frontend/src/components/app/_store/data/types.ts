@@ -63,7 +63,7 @@ export interface DeleteRefuelingAction {
 
 export interface CreateCarAction {
   type: typeof CREATE_CAR;
-  payload: Car;
+  payload: DataState;
 }
 
 export interface UpdateCarAction {

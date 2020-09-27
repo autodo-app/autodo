@@ -6,7 +6,7 @@ from datetime import datetime
 class OdomSnapshot(models.Model):
     """The relevant data for an update to a car's odometer reading."""
 
-    car = models.ForeignKey('Car', on_delete=models.CASCADE)
+    car = models.ForeignKey('Car', null=True, related_name="snaps", on_delete=models.CASCADE)
     owner = models.ForeignKey(
         'User', related_name="odomSnapshot", on_delete=models.CASCADE
     )
@@ -18,6 +18,10 @@ class OdomSnapshot(models.Model):
         return "Odometer Snapshot for car: {} on: {} at: {}".format(
             self.car, self.date, self.mileage
         )
+
+    class Meta:
+        ordering = ['-mileage']
+
 def sortedOdomSnaps(carId):
     return OdomSnapshot.objects.filter(car=carId).order_by("-date", "-mileage")
 
@@ -47,6 +51,9 @@ class Todo(models.Model):
     daysRepeatInterval = models.IntegerField(default=None, blank=True, null=True)
     monthsRepeatInterval = models.IntegerField(default=None, blank=True, null=True)
     yearsRepeatInterval = models.IntegerField(default=None, blank=True, null=True)
+
+    class Meta:
+        ordering = ['dueDate', 'dueMileage']
 
 def create_defaults(user, car):
   base_mileage = find_odom(car)
@@ -92,14 +99,9 @@ class Car(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        snap = OdomSnapshot(owner=self.owner, car=self, date=datetime.now(), mileage=0)
-        snap.save()
         default_todos = create_defaults(self.owner, self)
         for t in default_todos:
             t.save()
-
-
-
 
 
 class Refueling(models.Model):

@@ -151,16 +151,26 @@ export const createCar = createAsyncThunk<
   types.CreateCarAction,
   { car: Car; snap: OdomSnapshot }
 >(types.CREATE_CAR, async ({ car, snap }) => {
+  car['snaps'] = [snap];
   const response = await api.postCar(car);
-  if (response.id) {
-    snap.car = response.id;
-    await api.postOdomSnapshot(snap);
-  } else {
-    // TODO: throw an error of some sort?
+  if (!response.id) {
+    // throw an exception?
   }
+  const [todos, refuelings, cars] = await Promise.all([
+    api.fetchTodos(),
+    api.fetchRefuelings(),
+    api.fetchCars(),
+  ]);
   return {
     type: types.CREATE_CAR,
-    payload: response,
+    payload: {
+      todos: todos,
+      refuelings: refuelings,
+      cars: cars,
+      defaultTodos: [],
+      status: '',
+      error: '',
+    },
   } as types.CreateCarAction;
 });
 

@@ -1,3 +1,10 @@
+export interface OdomSnapshot {
+  id?: number;
+  car?: number;
+  date: string;
+  mileage: number;
+}
+
 export interface Car {
   id?: number;
   name: string;
@@ -9,13 +16,7 @@ export interface Car {
   imageName?: string;
   color: number;
   readonly odom?: number;
-}
-
-export interface OdomSnapshot {
-  id?: number;
-  car?: number;
-  date: string;
-  mileage: number;
+  snaps?: OdomSnapshot[];
 }
 
 export interface Refueling {
