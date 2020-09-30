@@ -16,20 +16,13 @@ export function LoginPage() {
     }
   }, [authStatus]);
 
-  const handle_login = async (
-    e: React.ChangeEvent<HTMLInputElement>,
-    data: AuthRequest,
-  ) => {
-    e.preventDefault();
+  const handle_login = async (data: AuthRequest) => {
     await dispatch(logInAsync(data));
   };
 
   return (
     <>
-      <LoginForm
-        handle_login={(e, data) => handle_login(e, data)}
-        initState="login"
-      />
+      <LoginForm handle_login={handle_login} initState="login" />
     </>
   );
 }

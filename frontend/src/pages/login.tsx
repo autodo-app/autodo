@@ -19,6 +19,7 @@ const Login = () => {
   }, [authStatus, dispatch]);
   return <LoginPage />;
 };
+
 function Main() {
   return (
     <React.StrictMode>

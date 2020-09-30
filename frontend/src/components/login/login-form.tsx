@@ -3,7 +3,6 @@ import { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
@@ -14,13 +13,17 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
+import { Formik, Form, Field } from 'formik';
+import { TextField, CheckboxWithLabel } from 'formik-material-ui';
+import { LinearProgress } from '@material-ui/core';
+
 import { AuthRequest } from '../app/_models';
 import Copyright from '../copyright';
 
 type FormState = 'login' | 'signup';
 
 type LoginFormProps = {
-  handle_login: (e: any, data: AuthRequest) => void;
+  handle_login: (data: AuthRequest) => void;
   initState: FormState;
 };
 
@@ -44,21 +47,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+interface FormFields {
+  email?: string;
+  password?: string;
+  rememberMe?: string | boolean;
+}
+
 export const LoginForm: React.FC<LoginFormProps> = (props) => {
   const classes = useStyles();
 
   const { handle_login, initState } = props;
   const [state, setState] = useState<FormState>(initState);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(false);
 
-  const onUsernameChanged = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setUsername(e.target.value);
-  const onPasswordChanged = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setPassword(e.target.value);
-  const onRememberMeChanged = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setRememberMe(e.target.checked);
   const switchState = () => setState(state === 'login' ? 'signup' : 'login');
 
   return (
@@ -71,57 +71,85 @@ export const LoginForm: React.FC<LoginFormProps> = (props) => {
         <Typography component="h1" variant="h5">
           {state === 'login' ? 'Sign in' : 'Sign up'}
         </Typography>
-        <form
-          className={classes.form}
-          noValidate
-          onSubmit={(e) =>
-            handle_login(e, {
-              username: username,
-              password: password,
-              rememberMe: rememberMe,
-            })
-          }
-        >
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            autoComplete="email"
-            autoFocus
-            name="username"
-            value={username}
-            onChange={onUsernameChanged}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            value={password}
-            onChange={onPasswordChanged}
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-            onChange={onRememberMeChanged}
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
+        <div className={classes.form}>
+          <Formik
+            initialValues={{
+              email: '',
+              password: '',
+              rememberMe: false,
+            }}
+            validate={(values) => {
+              const errors: FormFields = {};
+
+              if (!values.email) {
+                errors.email = 'Required';
+              } else if (
+                !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
+              ) {
+                errors.email = 'Invalid email address';
+              }
+
+              if (!values.password) {
+                errors.password = 'Required';
+              } else if (values.password.length < 6) {
+                errors.password = 'Password too short';
+              }
+
+              return errors;
+            }}
+            onSubmit={async (values, { setSubmitting }) => {
+              await handle_login({
+                username: values.email,
+                password: values.password,
+                rememberMe: values.rememberMe,
+              });
+              setSubmitting(false);
+            }}
           >
-            {state === 'login' ? 'Sign In' : 'Sign Up'}
-          </Button>
+            {({ submitForm, isSubmitting }) => (
+              <Form>
+                <Field
+                  component={TextField}
+                  name="email"
+                  type="email"
+                  label="Email"
+                  margin="normal"
+                  variant="outlined"
+                  required
+                  fullWidth
+                />
+                <Field
+                  component={TextField}
+                  name="password"
+                  type="password"
+                  label="Password"
+                  margin="normal"
+                  variant="outlined"
+                  required
+                  fullWidth
+                />
+                <Field
+                  component={CheckboxWithLabel}
+                  type="checkbox"
+                  name="rememberMe"
+                  color="primary"
+                  Label={{ label: 'Remember me' }}
+                />
+                {isSubmitting && <LinearProgress />}
+                <Button
+                  // type="submit"
+                  variant="contained"
+                  fullWidth
+                  className={classes.submit}
+                  color="primary"
+                  disabled={isSubmitting}
+                  onClick={submitForm}
+                >
+                  {state === 'login' ? 'Sign In' : 'Sign Up'}
+                </Button>
+              </Form>
+            )}
+          </Formik>
           <Grid justify="center" container>
             {state === 'login' ? (
               <Grid item xs>
@@ -140,11 +168,8 @@ export const LoginForm: React.FC<LoginFormProps> = (props) => {
               </Link>
             </Grid>
           </Grid>
-        </form>
+        </div>
       </div>
-      <Box mt={8}>
-        <Copyright />
-      </Box>
     </Container>
   );
 };

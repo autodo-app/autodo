@@ -1,8 +1,8 @@
 from autodo.models import User, Car, OdomSnapshot, Refueling
 from autodo.serializers import CarSerializer
 
-User.objects.create_superuser("root", "root@example.com", "root1234")
-u = User.objects.filter(username="root")[0]
+User.objects.create_superuser("root@example.com", "root@example.com", "root1234")
+u = User.objects.filter(username="root@example.com")[0]
 print(u)
 
 c1_snaps = [
