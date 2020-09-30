@@ -1,29 +1,27 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form, Field, useFormikContext } from 'formik';
 import { TextField, CheckboxWithLabel } from 'formik-material-ui';
-import { LinearProgress } from '@material-ui/core';
+import { LinearProgress, CssBaseline, Box } from '@material-ui/core';
 
+import { RootState } from '../app/store';
 import { AuthRequest } from '../app/_models';
 import Copyright from '../copyright';
 
 type FormState = 'login' | 'signup';
 
 type LoginFormProps = {
-  handle_login: (data: AuthRequest) => void;
+  handle_login: (data: AuthRequest) => Promise<any>;
   initState: FormState;
 };
 
@@ -52,6 +50,22 @@ interface FormFields {
   password?: string;
   rememberMe?: string | boolean;
 }
+
+const ErrorCatcher = () => {
+  const authStatus = useSelector((state: RootState) => state.auth.status);
+  const authError = useSelector((state: RootState) => state.auth.error);
+  const { setStatus } = useFormikContext();
+
+  useEffect(() => {
+    console.log(authStatus);
+    console.log('t');
+    if (authStatus === 'failed') {
+      setStatus(authError);
+    }
+  }, [authStatus, authError, setStatus]);
+
+  return null;
+};
 
 export const LoginForm: React.FC<LoginFormProps> = (props) => {
   const classes = useStyles();
@@ -147,6 +161,7 @@ export const LoginForm: React.FC<LoginFormProps> = (props) => {
                 >
                   {state === 'login' ? 'Sign In' : 'Sign Up'}
                 </Button>
+                <ErrorCatcher />
               </Form>
             )}
           </Formik>
@@ -170,6 +185,9 @@ export const LoginForm: React.FC<LoginFormProps> = (props) => {
           </Grid>
         </div>
       </div>
+      <Box mt={8}>
+        <Copyright />
+      </Box>
     </Container>
   );
 };

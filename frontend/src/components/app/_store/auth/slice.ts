@@ -36,10 +36,10 @@ const authSlice = createSlice({
         state.status = 'loggedIn';
         state.token = payload.token;
       })
-      .addCase(logInAsync.rejected, (state: AuthState, action) => {
-        state.status = 'failed';
-        state.error = action.error as string;
-      })
+      // .addCase(logInAsync.rejected, (state: AuthState, action) => {
+      //   state.status = 'failed';
+      //   state.error = action.error as string;
+      // })
       .addCase(signUpAsync.pending, (state: AuthState) => {
         state.status = 'loading';
       })

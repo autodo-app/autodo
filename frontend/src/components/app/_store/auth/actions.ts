@@ -8,6 +8,7 @@ export const logInAsync = createAsyncThunk<LoginAction, AuthRequest>(
   LOGIN,
   async (request) => {
     const tokens = await fetchUserToken(request.username, request.password);
+    console.log('post tokens');
     localStorage.setItem('access', tokens.access);
     if (request.rememberMe) {
       localStorage.setItem('refresh', tokens.refresh);

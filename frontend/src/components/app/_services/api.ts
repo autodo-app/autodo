@@ -1,3 +1,4 @@
+import { captureException } from '@sentry/react';
 import axios from 'axios';
 
 import * as models from '../_models';
@@ -122,11 +123,11 @@ const _authenticatedDelete = async (url: string, body: any): Promise<any> => {
 };
 
 export const fetchUserToken = async (user: string, pass: string) => {
-  const { data } = await axios.post(`${apiUrl}/auth/token/`, {
+  const response = await axios.post(`${apiUrl}/auth/token/`, {
     username: user,
     password: pass,
   });
-  return data;
+  return response.data;
 };
 
 export const registerUser = async (user: string, pass: string) => {
