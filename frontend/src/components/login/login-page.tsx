@@ -4,11 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import LoginForm from './login-form';
 import { RootState } from '../app/store';
-import { AuthRequest } from '../app/_models';
-import { logInAsync } from '../app/_store';
 
 export function LoginPage() {
-  const dispatch = useDispatch();
   const authStatus = useSelector((state: RootState) => state.auth.status);
   useEffect(() => {
     if (authStatus === 'loggedIn') {
@@ -16,13 +13,9 @@ export function LoginPage() {
     }
   }, [authStatus]);
 
-  const handle_login = async (data: AuthRequest) => {
-    await dispatch(logInAsync(data));
-  };
-
   return (
     <>
-      <LoginForm handle_login={handle_login} initState="login" />
+      <LoginForm initState="login" />
     </>
   );
 }

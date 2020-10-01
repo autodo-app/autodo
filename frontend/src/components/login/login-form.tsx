@@ -10,10 +10,11 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
-import { Formik, Form, Field, useFormikContext } from 'formik';
+import { Formik, Form, Field, useFormikContext, ErrorMessage } from 'formik';
 import { TextField, CheckboxWithLabel } from 'formik-material-ui';
 import { LinearProgress, CssBaseline, Box } from '@material-ui/core';
 
+import { loginBasic } from '../app/_store';
 import { RootState } from '../app/store';
 import { AuthRequest } from '../app/_models';
 import Copyright from '../copyright';
@@ -21,7 +22,6 @@ import Copyright from '../copyright';
 type FormState = 'login' | 'signup';
 
 type LoginFormProps = {
-  handle_login: (data: AuthRequest) => Promise<any>;
   initState: FormState;
 };
 
@@ -51,29 +51,25 @@ interface FormFields {
   rememberMe?: string | boolean;
 }
 
-const ErrorCatcher = () => {
-  const authStatus = useSelector((state: RootState) => state.auth.status);
-  const authError = useSelector((state: RootState) => state.auth.error);
-  const { setStatus } = useFormikContext();
-
-  useEffect(() => {
-    console.log(authStatus);
-    console.log('t');
-    if (authStatus === 'failed') {
-      setStatus(authError);
-    }
-  }, [authStatus, authError, setStatus]);
-
-  return null;
-};
-
 export const LoginForm: React.FC<LoginFormProps> = (props) => {
   const classes = useStyles();
 
-  const { handle_login, initState } = props;
+  const { initState } = props;
   const [state, setState] = useState<FormState>(initState);
 
   const switchState = () => setState(state === 'login' ? 'signup' : 'login');
+
+  const _handleSubmit = async (values: any, actions: any) => {
+    try {
+      await loginBasic({
+        username: values.email,
+        password: values.password,
+        rememberMe: values.rememberMe,
+      });
+    } catch (e) {
+      actions.setStatus(e);
+    }
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -111,16 +107,9 @@ export const LoginForm: React.FC<LoginFormProps> = (props) => {
 
               return errors;
             }}
-            onSubmit={async (values, { setSubmitting }) => {
-              await handle_login({
-                username: values.email,
-                password: values.password,
-                rememberMe: values.rememberMe,
-              });
-              setSubmitting(false);
-            }}
+            onSubmit={_handleSubmit}
           >
-            {({ submitForm, isSubmitting }) => (
+            {({ submitForm, isSubmitting, status }) => (
               <Form>
                 <Field
                   component={TextField}
@@ -150,6 +139,9 @@ export const LoginForm: React.FC<LoginFormProps> = (props) => {
                   Label={{ label: 'Remember me' }}
                 />
                 {isSubmitting && <LinearProgress />}
+                <Typography variant="body2" color="error">
+                  {status}
+                </Typography>
                 <Button
                   // type="submit"
                   variant="contained"
@@ -161,7 +153,7 @@ export const LoginForm: React.FC<LoginFormProps> = (props) => {
                 >
                   {state === 'login' ? 'Sign In' : 'Sign Up'}
                 </Button>
-                <ErrorCatcher />
+                {/* <ErrorCatcher setStatus={setErrors} /> */}
               </Form>
             )}
           </Formik>

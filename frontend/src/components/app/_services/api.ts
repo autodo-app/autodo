@@ -19,6 +19,7 @@ axios.interceptors.request.use(
     return config;
   },
   (error) => {
+    console.log(`intercept: ${error.response}`);
     return Promise.reject(error);
   },
 );
@@ -32,7 +33,6 @@ const _refreshUserToken = async () => {
   }
   const newAccessToken = data['access'];
   localStorage.setItem('access', newAccessToken);
-  console.log('here');
 };
 
 const _authenticatedGet = async (url: string) => {
@@ -123,11 +123,15 @@ const _authenticatedDelete = async (url: string, body: any): Promise<any> => {
 };
 
 export const fetchUserToken = async (user: string, pass: string) => {
-  const response = await axios.post(`${apiUrl}/auth/token/`, {
-    username: user,
-    password: pass,
-  });
-  return response.data;
+  try {
+    const response = await axios.post(`${apiUrl}/auth/token/`, {
+      username: user,
+      password: pass,
+    });
+    return response.data;
+  } catch (e) {
+    return Promise.reject(e.response.data.detail);
+  }
 };
 
 export const registerUser = async (user: string, pass: string) => {

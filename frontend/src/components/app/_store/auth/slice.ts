@@ -5,7 +5,6 @@ import { logInAsync, signUpAsync } from './actions';
 const initialState: AuthState = {
   token: null,
   status: 'idle',
-  error: null,
 };
 
 const authSlice = createSlice({
@@ -36,10 +35,10 @@ const authSlice = createSlice({
         state.status = 'loggedIn';
         state.token = payload.token;
       })
-      // .addCase(logInAsync.rejected, (state: AuthState, action) => {
-      //   state.status = 'failed';
-      //   state.error = action.error as string;
-      // })
+      .addCase(logInAsync.rejected, (state: AuthState, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
+      })
       .addCase(signUpAsync.pending, (state: AuthState) => {
         state.status = 'loading';
       })

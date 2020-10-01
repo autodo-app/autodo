@@ -4,15 +4,19 @@ import { LOGIN, SIGNUP, LoginAction, SignupAction } from './types';
 import { fetchUserToken, registerUser } from '../../_services';
 import { AuthRequest } from '../../_models';
 
+export const loginBasic = async (request: AuthRequest) => {
+  const tokens = await fetchUserToken(request.username, request.password);
+  localStorage.setItem('access', tokens.access);
+  if (request.rememberMe) {
+    localStorage.setItem('refresh', tokens.refresh);
+  }
+  return tokens;
+};
+
 export const logInAsync = createAsyncThunk<LoginAction, AuthRequest>(
   LOGIN,
   async (request) => {
-    const tokens = await fetchUserToken(request.username, request.password);
-    console.log('post tokens');
-    localStorage.setItem('access', tokens.access);
-    if (request.rememberMe) {
-      localStorage.setItem('refresh', tokens.refresh);
-    }
+    const tokens = await loginBasic(request);
     return {
       type: LOGIN,
       token: tokens.access,
