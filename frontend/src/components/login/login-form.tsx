@@ -14,7 +14,7 @@ import { Formik, Form, Field, useFormikContext, ErrorMessage } from 'formik';
 import { TextField, CheckboxWithLabel } from 'formik-material-ui';
 import { LinearProgress, CssBaseline, Box } from '@material-ui/core';
 
-import { loginBasic } from '../app/_store';
+import { loginBasic, signupBasic } from '../app/_store';
 import { RootState } from '../app/store';
 import { AuthRequest } from '../app/_models';
 import Copyright from '../copyright';
@@ -61,12 +61,27 @@ export const LoginForm: React.FC<LoginFormProps> = (props) => {
 
   const _handleSubmit = async (values: any, actions: any) => {
     try {
-      await loginBasic({
-        username: values.email,
-        password: values.password,
-        rememberMe: values.rememberMe,
-      });
+      if (state === 'login') {
+        await loginBasic({
+          username: values.email,
+          password: values.password,
+          rememberMe: values.rememberMe,
+        });
+      } else {
+        await signupBasic({
+          username: values.email,
+          password: values.password,
+          rememberMe: values.rememberMe,
+        });
+      }
     } catch (e) {
+      if (e.username) {
+        actions.setStatus(e.username);
+        return;
+      } else if (e.password) {
+        actions.setStatus(e.password);
+        return;
+      }
       actions.setStatus(e);
     }
   };

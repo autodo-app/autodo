@@ -135,13 +135,17 @@ export const fetchUserToken = async (user: string, pass: string) => {
 };
 
 export const registerUser = async (user: string, pass: string) => {
-  const { data } = await axios.post(REGISTER_ADDRESS, {
-    username: user,
-    email: user,
-    password: pass,
-    password_confirm: pass,
-  });
-  return data;
+  try {
+    const { data } = await axios.post(REGISTER_ADDRESS, {
+      username: user,
+      email: user,
+      password: pass,
+      password_confirm: pass,
+    });
+    return data;
+  } catch (e) {
+    return Promise.reject(e.response.data);
+  }
 };
 
 export const fetchTodos = async (): Promise<models.Todo[]> =>
