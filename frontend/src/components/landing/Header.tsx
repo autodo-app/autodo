@@ -236,7 +236,7 @@ const Header: React.FC<HeaderProps> = (props) => {
               <a href="login">Login</a>
             </li>
             <li className={navItemBold}>
-              <a href="signup">Sign Up</a>
+              <a href="signup">Start Tracking</a>
             </li>
           </ul>
           <div className={burgerClass} onClick={toggle}>
