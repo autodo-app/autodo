@@ -130,6 +130,15 @@ class RefuelingSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source="owner.username")
     odomSnapshot = OdomSnapshotSerializer(allow_null=True)
 
+    def update(self, instance, validated_data):
+        odom_snapshot = validated_data.pop("odomSnapshot")
+        odom_snapshot_serializer = OdomSnapshotSerializer()
+        super(self.__class__, self).update(instance, validated_data)
+        super(OdomSnapshotSerializer, odom_snapshot_serializer).update(
+            instance.odomSnapshot, odom_snapshot
+        )
+        return instance
+
     class Meta:
         model = Refueling
         fields = ["url", "id", "owner", "odomSnapshot", "cost", "amount"]

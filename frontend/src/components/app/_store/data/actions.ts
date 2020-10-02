@@ -127,8 +127,6 @@ export const updateRefueling = createAsyncThunk<
   types.UpdateRefuelingAction,
   { refueling: Refueling; snap: OdomSnapshot }
 >(types.UPDATE_REFUELING, async ({ refueling, snap }) => {
-  const odomSnapshot = await api.patchOdomSnapshot(snap);
-  refueling.odomSnapshot = odomSnapshot;
   const response = await api.patchRefueling(refueling);
   return {
     type: types.UPDATE_REFUELING,

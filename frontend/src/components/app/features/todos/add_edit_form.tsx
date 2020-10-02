@@ -20,7 +20,6 @@ import { TextField, Select } from 'formik-material-ui';
 import { selectAllCars } from '../../_store';
 import { Car, Todo } from '../../_models';
 import { createTodo, updateTodo } from '../../_store/data';
-import { ImportsNotUsedAsValues } from 'typescript';
 
 interface StyleProps {
   closeButton: React.CSSProperties;
@@ -83,40 +82,30 @@ export default function TodoAddEditForm(props: TodoAddEditFormProps) {
   }
 
   const _handleSubmit = async (values: any, actions: any) => {
+    const request = {
+      name: values.name,
+      car: values.car,
+      dueMileage: values.dueMileage,
+      dueDate: new Date(values.dueDate).toJSON(),
+      mileageRepeatInterval:
+        values.mileageRepeatInterval === ''
+          ? null
+          : values.mileageRepeatInterval,
+      completionOdomSnapshot: null, // we get an error if this isn't present
+      dateRepeatIntervalDays: 0,
+      dateRepeatIntervalMonths: 0,
+      dateRepeatIntervalYears: 0,
+    };
     try {
       if (todo) {
         await dispatch(
           updateTodo({
-            id: Number(todo.id),
-            name: name,
-            car: values.car,
-            dueMileage: Number(values.dueMileage),
-            dueDate: new Date(values.dueDate).toJSON(),
-            mileageRepeatInterval: values.mileageRepeatInterval,
             completionOdomSnapshot: todo.completionOdomSnapshot,
-            // TODO: below
-            dateRepeatIntervalDays: 0,
-            dateRepeatIntervalMonths: 0,
-            dateRepeatIntervalYears: 0,
+            ...request,
           }),
         );
       } else {
-        await dispatch(
-          createTodo({
-            name: values.name,
-            car: values.car,
-            dueMileage: values.dueMileage,
-            dueDate: new Date(values.dueDate).toJSON(),
-            mileageRepeatInterval:
-              values.mileageRepeatInterval === ''
-                ? null
-                : values.mileageRepeatInterval,
-            completionOdomSnapshot: null, // we get an error if this isn't present
-            dateRepeatIntervalDays: 0,
-            dateRepeatIntervalMonths: 0,
-            dateRepeatIntervalYears: 0,
-          }),
-        );
+        await dispatch(createTodo(request));
       }
       handleClose();
     } catch (err) {
@@ -183,7 +172,6 @@ export default function TodoAddEditForm(props: TodoAddEditFormProps) {
                     name="name"
                     type="text"
                     label="Todo Name"
-                    margin="normal"
                     variant="outlined"
                     required
                     fullWidth
@@ -193,7 +181,6 @@ export default function TodoAddEditForm(props: TodoAddEditFormProps) {
                     name="car"
                     type="text"
                     label="Car"
-                    margin="normal"
                     variant="outlined"
                     error={touched.car && Boolean(errors.car)}
                     required
@@ -215,7 +202,6 @@ export default function TodoAddEditForm(props: TodoAddEditFormProps) {
                     name="dueMileage"
                     type="number"
                     label="Due Mileage"
-                    margin="normal"
                     variant="outlined"
                     fullWidth
                   />
@@ -226,7 +212,6 @@ export default function TodoAddEditForm(props: TodoAddEditFormProps) {
                     name="dueDate"
                     type="date"
                     label="Due Date"
-                    margin="normal"
                     variant="outlined"
                     fullWidth
                     InputLabelProps={{ shrink: true }}
@@ -236,7 +221,6 @@ export default function TodoAddEditForm(props: TodoAddEditFormProps) {
                     name="mileageRepeatInterval"
                     type="number"
                     label="Mileage Repeat Interval"
-                    margin="normal"
                     variant="outlined"
                     fullWidth
                   />

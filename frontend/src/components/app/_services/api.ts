@@ -219,7 +219,7 @@ export const postOdomSnapshot = async (
 export const patchOdomSnapshot = async (
   snap: models.OdomSnapshot,
 ): Promise<models.OdomSnapshot> =>
-  await _authenticatedPatch(`odomsnapshots/${snap.id}`, snap);
+  await _authenticatedPatch(`odomsnapshots/${snap.id}/`, snap);
 
 export const deleteOdomSnapshot = async (
   snapId: number,
