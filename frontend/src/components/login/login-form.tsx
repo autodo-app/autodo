@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
@@ -10,13 +10,16 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
-import { Formik, Form, Field, useFormikContext, ErrorMessage } from 'formik';
+import { Formik, Form, Field } from 'formik';
 import { TextField, CheckboxWithLabel } from 'formik-material-ui';
 import { LinearProgress, CssBaseline, Box } from '@material-ui/core';
 
-import { loginBasic, signupBasic } from '../app/_store';
-import { RootState } from '../app/store';
-import { AuthRequest } from '../app/_models';
+import {
+  logInAsync,
+  loginBasic,
+  signUpAsync,
+  signupBasic,
+} from '../app/_store';
 import Copyright from '../copyright';
 
 type FormState = 'login' | 'signup';
@@ -53,6 +56,7 @@ interface FormFields {
 
 export const LoginForm: React.FC<LoginFormProps> = (props) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const { initState } = props;
   const [state, setState] = useState<FormState>(initState);
@@ -61,18 +65,19 @@ export const LoginForm: React.FC<LoginFormProps> = (props) => {
 
   const _handleSubmit = async (values: any, actions: any) => {
     try {
+      const request = {
+        username: values.email,
+        password: values.password,
+        rememberMe: values.rememberMe,
+      };
+      // split the two actions up so that we can catch any errors on the first attempt.
+      // this is a slow way to do it since we're repeating requests :/
       if (state === 'login') {
-        await loginBasic({
-          username: values.email,
-          password: values.password,
-          rememberMe: values.rememberMe,
-        });
+        await loginBasic(request);
+        await dispatch(logInAsync(request));
       } else {
-        await signupBasic({
-          username: values.email,
-          password: values.password,
-          rememberMe: values.rememberMe,
-        });
+        await signupBasic(request);
+        await dispatch(signUpAsync(request));
       }
     } catch (e) {
       if (e.username) {
@@ -168,7 +173,6 @@ export const LoginForm: React.FC<LoginFormProps> = (props) => {
                 >
                   {state === 'login' ? 'Sign In' : 'Sign Up'}
                 </Button>
-                {/* <ErrorCatcher setStatus={setErrors} /> */}
               </Form>
             )}
           </Formik>
