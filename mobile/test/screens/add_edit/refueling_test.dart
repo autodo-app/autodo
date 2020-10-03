@@ -71,7 +71,7 @@ void main() {
                   key: key,
                   isEditing: false,
                   onSave: (a, b, c, d, e) {},
-                  cars: [Car(name: '1'), Car(name: '2')]),
+                  cars: [Car(name: '1', odomSnapshot: null), Car(name: '2', odomSnapshot: null)]),
             ),
           ),
         ),

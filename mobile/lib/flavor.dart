@@ -38,7 +38,7 @@ class FlavorData {
     this.firebaseApiKey = Keys.firebaseProdKey,
     this.firebaseAppName = 'autodo-prod',
     this.firebaseStorageUri = 'gs://autodo-e93fc.appspot.com',
-    this.restApiUrl: 'http://d406058d0db1.ngrok.io',
+    this.restApiUrl = 'http://d406058d0db1.ngrok.io',
     this.populateDemoData = false,
   });
 

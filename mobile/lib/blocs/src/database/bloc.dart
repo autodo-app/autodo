@@ -5,10 +5,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../../../flavor.dart';
 import '../../../repositories/repositories.dart';
-import '../../../repositories/src/demo_data_repository.dart';
-import '../../../repositories/src/sembast_data_repository.dart';
 import '../auth/barrel.dart';
 import 'event.dart';
 import 'state.dart';

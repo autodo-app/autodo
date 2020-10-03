@@ -33,7 +33,7 @@ void main() {
     Todo(name: 'oil', mileageRepeatInterval: 3500),
     Todo(name: 'tire_rotation', mileageRepeatInterval: 7500)
   ], cars: [
-    Car(name: 'test')
+    Car(name: 'test', odomSnapshot: null)
   ]);
 
   setUp(() async {
@@ -95,7 +95,7 @@ void main() {
     });
     testWidgets('set repeats', (tester) async {
       final dataBloc = MockDataBloc();
-      when(dataBloc.state).thenReturn(DataLoaded(cars: [Car(name: 'test')]));
+      when(dataBloc.state).thenReturn(DataLoaded(cars: [Car(name: 'test', odomSnapshot: null)]));
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,
@@ -128,7 +128,7 @@ void main() {
       final dataBloc = MockDataBloc();
       when(dataBloc.state).thenReturn(DataLoaded(
           todos: [Todo(name: 'oil'), Todo(name: 'tire_rotation')],
-          cars: [Car(name: 'test')]));
+          cars: [Car(name: 'test', odomSnapshot: null)]));
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,

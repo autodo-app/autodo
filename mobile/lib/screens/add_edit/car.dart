@@ -115,16 +115,14 @@ class _HeaderWithImage extends StatelessWidget {
 }
 
 class CarAddEditHeaderNoImage extends StatelessWidget {
-  const CarAddEditHeaderNoImage({this.car, @required this.onSaved, imagePicker})
-      : imagePicker = imagePicker ?? ImagePicker.pickImage;
+  CarAddEditHeaderNoImage({this.car, @required this.onSaved, imagePicker});
 
   final Car car;
-
   final Function(String) onSaved;
 
   /// defaults to using the ImagePicker package, separated so it can be mocked
   /// in testing
-  final Function({ImageSource source}) imagePicker;
+  final Function({ImageSource source}) imagePicker = ImagePicker().getImage;
 
   @override
   Widget build(BuildContext context) => Container(

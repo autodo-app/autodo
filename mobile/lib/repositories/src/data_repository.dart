@@ -4,7 +4,6 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 import '../../models/models.dart';
-import '../../units/units.dart';
 import 'write_batch_wrapper.dart';
 
 abstract class DataRepository extends Equatable {

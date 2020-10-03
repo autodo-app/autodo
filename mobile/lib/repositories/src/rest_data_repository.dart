@@ -13,6 +13,7 @@ import 'http_status_codes.dart';
 import 'rest_write_batch.dart';
 import 'write_batch_wrapper.dart';
 
+// ignore: must_be_immutable
 class RestDataRepository extends DataRepository {
   RestDataRepository._(this.authRepo, this.token);
 
@@ -251,14 +252,14 @@ class RestDataRepository extends DataRepository {
   }
 
   @override
-  Stream<int> notificationID() {}
+  Stream<int> notificationID() { return Stream<int>.fromIterable([]); }
 
   @override
-  Future<bool> getPaidStatus() {}
+  Future<bool> getPaidStatus() async { return false; }
 
   @override
   @deprecated
-  Future<List<Map<String, dynamic>>> getRepeats() {}
+  Future<List<Map<String, dynamic>>> getRepeats() async {return [{}];}
 
   @override
   List<Object> get props => [];

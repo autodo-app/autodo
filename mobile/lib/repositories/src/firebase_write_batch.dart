@@ -32,8 +32,9 @@ class FirebaseWriteBatch<T extends WriteBatchDocument> extends Equatable
       print(e);
       if (e.code == 'Error performing commit' &&
           e.message ==
-              'PERMISSION_DENIED: Missing or insufficient permissions.')
+              'PERMISSION_DENIED: Missing or insufficient permissions.') {
         return {};
+      }
     }
     return {};
   }

@@ -39,19 +39,19 @@ class TabSelector extends StatelessWidget {
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.list, key: todosTabKey),
-              title: Text(JsonIntl.of(context).get(IntlKeys.todos)),
+              label: JsonIntl.of(context).get(IntlKeys.todos),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.local_gas_station, key: refuelingsTabKey),
-              title: Text(JsonIntl.of(context).get(IntlKeys.refuelings)),
+              label: JsonIntl.of(context).get(IntlKeys.refuelings),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.show_chart, key: statsTabKey),
-              title: Text(JsonIntl.of(context).get(IntlKeys.stats)),
+              label: JsonIntl.of(context).get(IntlKeys.stats),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.directions_car, key: garageTabKey),
-              title: Text(JsonIntl.of(context).get(IntlKeys.garage)),
+              label: JsonIntl.of(context).get(IntlKeys.garage),
             ),
           ],
         ));

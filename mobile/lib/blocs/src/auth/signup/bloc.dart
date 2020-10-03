@@ -124,15 +124,15 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
     }
   }
 
-  Future<void> _checkIfUserIsVerified(user) async {
-    bool verified = user.isEmailVerified;
-    while (!verified) {
-      await Future.delayed(const Duration(milliseconds: 100));
-      // final cur = await _authRepository.getCurrentUser();s
-      // await cur.reload();
-      // verified = cur.isEmailVerified;
-    }
-  }
+  // Future<void> _checkIfUserIsVerified(user) async {
+  //   bool verified = user.isEmailVerified;
+  //   while (!verified) {
+  //     await Future.delayed(const Duration(milliseconds: 100));
+  //     // final cur = await _authRepository.getCurrentUser();
+  //     // await cur.reload();
+  //     // verified = cur.isEmailVerified;
+  //   }
+  // }
 
   Stream<SignupState> _mapSignupWithCredentialsPressedToState({
     String email,
@@ -164,7 +164,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
       }
       yield SignupError(errorString);
     } on Exception catch (e) {
-      var errorString = e.toString();
+      final errorString = e.toString();
       yield SignupError(errorString);
     }
   }

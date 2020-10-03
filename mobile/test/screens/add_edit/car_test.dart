@@ -69,7 +69,7 @@ void main() {
             child: MaterialApp(
               home: Scaffold(
                 body: CarAddEditScreen(
-                    car: Car(name: 'test'), onSave: (a, b, c, d, e, f, g) {}),
+                    car: Car(name: 'test', odomSnapshot: null), onSave: (a, b, c, d, e, f, g) {}),
               ),
             ),
           ),
@@ -91,7 +91,7 @@ void main() {
             child: MaterialApp(
               home: Scaffold(
                 body: CarAddEditScreen(
-                    car: Car(name: 'test'),
+                    car: Car(name: 'test', odomSnapshot: null),
                     isEditing: true,
                     onSave: (a, b, c, d, e, f, g) {}),
               ),
@@ -116,7 +116,7 @@ void main() {
               child: MaterialApp(
                 home: Scaffold(
                   body: CarAddEditHeaderNoImage(
-                    car: Car(name: 'test'),
+                    car: Car(name: 'test', odomSnapshot: null),
                     onSaved: (_) {},
                     imagePicker: ({source}) async => File('test.jpg'),
                   ),
@@ -144,7 +144,7 @@ void main() {
               child: MaterialApp(
                 home: Scaffold(
                   body: CarAddEditHeaderNoImage(
-                    car: Car(name: 'test'),
+                    car: Car(name: 'test', odomSnapshot: null),
                     onSaved: (_) {},
                     imagePicker: ({source}) async => File('test.jpg'),
                   ),
@@ -173,7 +173,7 @@ void main() {
                 child: MaterialApp(
                   home: Scaffold(
                     body: CarAddEditScreen(
-                        car: Car(name: 'test'),
+                        car: Car(name: 'test', odomSnapshot: null),
                         onSave: (a, b, c, d, e, f, g) {}),
                   ),
                 ),
@@ -202,7 +202,7 @@ void main() {
                   home: Scaffold(
                     body: CarAddEditScreen(
                         key: key,
-                        car: Car(name: 'test'),
+                        car: Car(name: 'test', odomSnapshot: null),
                         onSave: (a, b, c, d, e, f, g) {}),
                   ),
                 ),
