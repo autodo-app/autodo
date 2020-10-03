@@ -14,11 +14,13 @@ const Login = () => {
   const authStatus = useSelector((state: RootState) => state.auth.status);
   useEffect(() => {
     if (authStatus === 'idle') {
+      console.log('fetch');
       dispatch(fetchToken());
     }
   }, [authStatus, dispatch]);
   return <LoginPage />;
 };
+
 function Main() {
   return (
     <React.StrictMode>

@@ -1,3 +1,4 @@
+import { captureException } from '@sentry/react';
 import axios from 'axios';
 
 import * as models from '../_models';
@@ -18,6 +19,7 @@ axios.interceptors.request.use(
     return config;
   },
   (error) => {
+    console.log(`intercept: ${error.response}`);
     return Promise.reject(error);
   },
 );
@@ -31,7 +33,6 @@ const _refreshUserToken = async () => {
   }
   const newAccessToken = data['access'];
   localStorage.setItem('access', newAccessToken);
-  console.log('here');
 };
 
 const _authenticatedGet = async (url: string) => {
@@ -95,7 +96,7 @@ const _authenticatedPatch = async (url: string, body: any): Promise<any> => {
     return response.data;
   } catch (e) {
     console.log(e.response);
-    response = await axios.post(`${apiUrl}${apiVersion}/${url}`, body);
+    response = await axios.patch(`${apiUrl}${apiVersion}/${url}`, body);
     return response.data;
   }
 };
@@ -122,21 +123,29 @@ const _authenticatedDelete = async (url: string, body: any): Promise<any> => {
 };
 
 export const fetchUserToken = async (user: string, pass: string) => {
-  const { data } = await axios.post(`${apiUrl}/auth/token/`, {
-    username: user,
-    password: pass,
-  });
-  return data;
+  try {
+    const response = await axios.post(`${apiUrl}/auth/token/`, {
+      username: user,
+      password: pass,
+    });
+    return response.data;
+  } catch (e) {
+    return Promise.reject(e.response.data.detail);
+  }
 };
 
 export const registerUser = async (user: string, pass: string) => {
-  const { data } = await axios.post(REGISTER_ADDRESS, {
-    username: user,
-    email: user,
-    password: pass,
-    password_confirm: pass,
-  });
-  return data;
+  try {
+    const { data } = await axios.post(REGISTER_ADDRESS, {
+      username: user,
+      email: user,
+      password: pass,
+      password_confirm: pass,
+    });
+    return data;
+  } catch (e) {
+    return Promise.reject(e.response.data);
+  }
 };
 
 export const fetchTodos = async (): Promise<models.Todo[]> =>
@@ -210,7 +219,7 @@ export const postOdomSnapshot = async (
 export const patchOdomSnapshot = async (
   snap: models.OdomSnapshot,
 ): Promise<models.OdomSnapshot> =>
-  await _authenticatedPatch(`odomsnapshots/${snap.id}`, snap);
+  await _authenticatedPatch(`odomsnapshots/${snap.id}/`, snap);
 
 export const deleteOdomSnapshot = async (
   snapId: number,

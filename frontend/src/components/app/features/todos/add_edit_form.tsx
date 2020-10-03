@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import Dialog from '@material-ui/core/Dialog';
 import Button from '@material-ui/core/Button';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import TextField from '@material-ui/core/TextField';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -14,6 +13,9 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import Radio from '@material-ui/core/Radio';
 import FormLabel from '@material-ui/core/FormLabel';
 import { grey } from '@material-ui/core/colors';
+import { Typography, LinearProgress, FormHelperText } from '@material-ui/core';
+import { Formik, Form, Field } from 'formik';
+import { TextField, Select } from 'formik-material-ui';
 
 import { selectAllCars } from '../../_store';
 import { Car, Todo } from '../../_models';
@@ -22,8 +24,7 @@ import { createTodo, updateTodo } from '../../_store/data';
 interface StyleProps {
   closeButton: React.CSSProperties;
   dateRepeatSpacer: React.CSSProperties;
-  errorText: React.CSSProperties;
-  errorHelpText: React.CSSProperties;
+  marginNormal: React.CSSProperties;
 }
 
 type StyleClasses = Record<keyof StyleProps, string>;
@@ -37,12 +38,9 @@ const useStyles = makeStyles<Theme, StyleProps>(
       dateRepeatSpacer: {
         height: '1rem',
       },
-      errorText: {
-        color: theme.palette.error.light,
-        marginBottom: 0,
-      },
-      errorHelpText: {
-        color: theme.palette.error.light,
+      marginNormal: {
+        marginTop: '16px',
+        marginBottom: '8px',
       },
     } as any),
 );
@@ -54,109 +52,23 @@ export interface TodoAddEditFormProps {
   open: boolean;
   handleClose: () => void;
 }
+
+interface FormFields {
+  name?: string;
+  car?: number | string;
+  dueMileage?: number | string;
+  dueDate?: Date | string;
+  mileageRepeatInterval?: number | string;
+  dateRepeatInterval?: string;
+}
+
 export default function TodoAddEditForm(props: TodoAddEditFormProps) {
   const { todo, open, handleClose } = props;
-  const [name, setName] = useState(todo?.name || '');
-  const [nameError, setNameError] = useState(false);
-  const [car, setCar] = useState(todo?.car || 0);
-  const [carError, setCarError] = useState(false);
-  const [dueMileage, setDueMileage] = useState(todo?.dueMileage || 0);
-  const [dueDate, setDueDate] = useState(todo?.dueDate || '');
-  const [mileageRepeatInterval, setMileageRepeatInterval] = useState(
-    todo?.mileageRepeatInterval || 0,
-  );
-  // TODO: translate data values to enum values here
-  const [dateRepeatInterval, setDateRepeatInterval] = useState('never');
-  const [addRequestStatus, setAddRequestStatus] = useState('idle');
-  const [generalError, setGeneralError] = useState('');
 
   const dispatch = useDispatch();
   const classes: StyleClasses = useStyles({} as StyleProps);
 
   const cars = useSelector(selectAllCars);
-
-  const onNameChanged = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setName(e.target.value);
-  const onDueMileageChanged = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setDueMileage(Number(e.target.value));
-  const onCarChanged = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setCar(Number(e.target.value));
-  const onDueDateChanged = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setDueDate(e.target.value);
-  const onMileageRepeatIntervalChanged = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => setMileageRepeatInterval(Number(e.target.value));
-  const onDateRepeatIntervalChanged = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => setDateRepeatInterval(e.target.value);
-
-  const canSave =
-    [name, car].every(Boolean) &&
-    (dueDate || dueMileage) &&
-    addRequestStatus === 'idle';
-
-  const onSaveTodoClicked = async () => {
-    if (canSave) {
-      try {
-        setAddRequestStatus('pending');
-        if (todo) {
-          await dispatch(
-            updateTodo({
-              id: Number(todo.id),
-              name: name,
-              car: car,
-              dueMileage: Number(dueMileage),
-              dueDate: new Date(dueDate).toJSON(),
-              mileageRepeatInterval: mileageRepeatInterval,
-              completionOdomSnapshot: todo.completionOdomSnapshot,
-              // TODO: below
-              dateRepeatIntervalDays: 0,
-              dateRepeatIntervalMonths: 0,
-              dateRepeatIntervalYears: 0,
-            }),
-          );
-        } else {
-          await dispatch(
-            createTodo({
-              name: name,
-              car: car,
-              dueMileage: dueMileage,
-              dueDate: new Date(dueDate).toJSON(),
-              mileageRepeatInterval: mileageRepeatInterval,
-              completionOdomSnapshot: null, // we get an error if this isn't present
-              dateRepeatIntervalDays: 0,
-              dateRepeatIntervalMonths: 0,
-              dateRepeatIntervalYears: 0,
-            }),
-          );
-        }
-      } catch (err) {
-        console.error('Failed to save the post: ', err);
-      } finally {
-        setAddRequestStatus('idle');
-      }
-      handleClose();
-    } else {
-      if (!name) {
-        setNameError(true);
-      }
-      if (!car) {
-        setCarError(true);
-      }
-      if (!(dueDate || dueMileage)) {
-        setGeneralError(
-          'Either a Due Mileage or Due Date needs to be specified.',
-        );
-      }
-    }
-  };
-
-  const onClose = () => {
-    setNameError(false);
-    setCarError(false);
-    setGeneralError('');
-    handleClose();
-  };
 
   let title = 'Create New Todo';
   let actionText = 'Create';
@@ -165,10 +77,37 @@ export default function TodoAddEditForm(props: TodoAddEditFormProps) {
     actionText = 'Save';
   }
 
-  let errorText = <></>;
-  if (generalError) {
-    errorText = <h4 className={classes.errorText}>{generalError}</h4>;
-  }
+  const _handleSubmit = async (values: any, actions: any) => {
+    const request = {
+      name: values.name,
+      car: values.car,
+      dueMileage: values.dueMileage,
+      dueDate: new Date(values.dueDate).toJSON(),
+      mileageRepeatInterval:
+        values.mileageRepeatInterval === ''
+          ? null
+          : values.mileageRepeatInterval,
+      completionOdomSnapshot: null, // we get an error if this isn't present
+      dateRepeatIntervalDays: 0,
+      dateRepeatIntervalMonths: 0,
+      dateRepeatIntervalYears: 0,
+    };
+    try {
+      if (todo) {
+        await dispatch(
+          updateTodo({
+            completionOdomSnapshot: todo.completionOdomSnapshot,
+            ...request,
+          }),
+        );
+      } else {
+        await dispatch(createTodo(request));
+      }
+      handleClose();
+    } catch (err) {
+      console.error('Failed to save the post: ', err);
+    }
+  };
 
   return (
     <div>
@@ -177,109 +116,161 @@ export default function TodoAddEditForm(props: TodoAddEditFormProps) {
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">{title}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Add the information about the Todo item here.
-          </DialogContentText>
-          <TextField
-            autoFocus
-            margin={margin}
-            id="name"
-            label="Todo Name *"
-            type="text"
-            fullWidth
-            value={name}
-            error={nameError ? true : undefined}
-            helperText={nameError ? 'This field is required.' : undefined}
-            onChange={onNameChanged}
-          />
-          <TextField
-            select
-            margin={margin}
-            id="car"
-            label="Car *"
-            type="text"
-            fullWidth
-            value={car}
-            error={carError ? true : undefined}
-            helperText={carError ? 'This field is required.' : undefined}
-            onChange={onCarChanged}
-          >
-            {cars?.map((c: Car) => (
-              <MenuItem key={c.id} value={c.id}>
-                {c.name}
-              </MenuItem>
-            ))}
-          </TextField>
-          <TextField
-            margin={margin}
-            id="dueMileage"
-            label="Due Mileage"
-            type="number"
-            fullWidth
-            value={dueMileage}
-            error={generalError ? true : undefined}
-            onChange={onDueMileageChanged}
-          />
-          <TextField
-            margin={margin}
-            id="dueDate"
-            label="Due Date"
-            type="date"
-            fullWidth
-            InputLabelProps={{ shrink: true }}
-            error={generalError ? true : undefined}
-            onChange={onDueDateChanged}
-          />
-          <TextField
-            margin={margin}
-            id="mileageRepeatInterval"
-            label="Mileage Repeat Interval"
-            type="number"
-            fullWidth
-            defaultValue={mileageRepeatInterval}
-            onChange={onMileageRepeatIntervalChanged}
-          />
-          <div className={classes.dateRepeatSpacer} />
-          <FormLabel component="legend">Date Repeat Interval</FormLabel>
-          <RadioGroup
-            aria-label="Date Repeat Interval"
-            name="dateRepeatInterval"
-            value={dateRepeatInterval}
-            onChange={onDateRepeatIntervalChanged}
-          >
-            <FormControlLabel
-              value="never"
-              control={<Radio size="small" />}
-              label="Never"
-            />
-            <FormControlLabel
-              value="weekly"
-              control={<Radio size="small" />}
-              label="Weekly"
-            />
-            <FormControlLabel
-              value="monthly"
-              control={<Radio size="small" />}
-              label="Monthly"
-            />
-            <FormControlLabel
-              value="yearly"
-              control={<Radio size="small" />}
-              label="Yearly"
-            />
-          </RadioGroup>
-          {errorText}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={onClose} className={classes.closeButton}>
-            Cancel
-          </Button>
-          <Button onClick={onSaveTodoClicked} color="primary">
-            {actionText}
-          </Button>
-        </DialogActions>
+        <Formik
+          initialValues={{
+            name: '',
+            car: '',
+            mileage: '',
+            date: '',
+            mileageRepeatInterval: '',
+            dateRepeatInterval: '',
+          }}
+          validate={(values) => {
+            const errors: FormFields = {};
+
+            if (!values.name) {
+              errors.name = 'Required';
+            }
+            if (!values.car) {
+              errors.car = 'Required';
+            }
+            if (!values.dueDate && !values.dueMileage) {
+              errors.dueDate = 'A Due Date OR a Due Mileage is Required';
+              errors.dueMileage = 'A Due Date OR a Due Mileage is Required';
+            }
+            if (values.dueMileage) {
+              const carMileage = cars.find((c) => c.id === values.car)?.odom;
+              if (carMileage && values.dueMileage < carMileage) {
+                errors.dueMileage = `Due Mileage must be greater than Car Mileage (${carMileage})`;
+              }
+            }
+            if (values.dueDate && values.dueDate < new Date()) {
+              errors.dueDate = 'Due Date must be in the future';
+            }
+            if (values.mileageRepeatInterval === 0) {
+              errors.mileageRepeatInterval =
+                'Mileage Repeat Interval cannot be zero';
+            }
+            return errors;
+          }}
+          onSubmit={_handleSubmit}
+        >
+          {({ submitForm, isSubmitting, status, errors, touched }) => (
+            <>
+              <DialogTitle id="form-dialog-title">{title}</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  Add the information about the Todo item here.
+                </DialogContentText>
+                <Form>
+                  <Field
+                    component={TextField}
+                    name="name"
+                    type="text"
+                    label="Todo Name"
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                  />
+                  <div className={classes.marginNormal}>
+                    <Field
+                      component={Select}
+                      name="car"
+                      type="text"
+                      label="Car"
+                      variant="outlined"
+                      error={touched.car && Boolean(errors.car)}
+                      required
+                      fullWidth
+                    >
+                      {cars?.map((c: Car) => (
+                        <MenuItem key={c.id} value={c.id}>
+                          {c.name}
+                        </MenuItem>
+                      ))}
+                    </Field>
+                    <FormHelperText error={Boolean(errors.car)}>
+                      {errors.car}
+                    </FormHelperText>
+                  </div>
+                  <Field
+                    component={TextField}
+                    error={Boolean(errors.dueMileage)}
+                    helperText={errors.dueMileage}
+                    name="dueMileage"
+                    type="number"
+                    label="Due Mileage"
+                    variant="outlined"
+                    margin="normal"
+                    fullWidth
+                  />
+                  <Field
+                    component={TextField}
+                    error={Boolean(errors.dueDate)}
+                    helperText={errors.dueDate}
+                    name="dueDate"
+                    type="date"
+                    label="Due Date"
+                    variant="outlined"
+                    margin="normal"
+                    fullWidth
+                    InputLabelProps={{ shrink: true }}
+                  />
+                  <Field
+                    component={TextField}
+                    name="mileageRepeatInterval"
+                    type="number"
+                    label="Mileage Repeat Interval"
+                    variant="outlined"
+                    margin="normal"
+                    fullWidth
+                  />
+                  <div className={classes.dateRepeatSpacer} />
+                  <FormLabel component="legend">Date Repeat Interval</FormLabel>
+                  <Field
+                    component={RadioGroup}
+                    aria-label="Date Repeat Interval"
+                    name="dateRepeatInterval"
+                  >
+                    <FormControlLabel
+                      value="never"
+                      control={<Radio size="small" />}
+                      label="Never"
+                    />
+                    <FormControlLabel
+                      value="weekly"
+                      control={<Radio size="small" />}
+                      label="Weekly"
+                    />
+                    <FormControlLabel
+                      value="monthly"
+                      control={<Radio size="small" />}
+                      label="Monthly"
+                    />
+                    <FormControlLabel
+                      value="yearly"
+                      control={<Radio size="small" />}
+                      label="Yearly"
+                    />
+                  </Field>
+                  {isSubmitting && <LinearProgress />}
+                  <Typography variant="body2" color="error">
+                    {status}
+                  </Typography>
+                </Form>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose} className={classes.closeButton}>
+                  Cancel
+                </Button>
+                <Button onClick={submitForm} color="primary">
+                  {actionText}
+                </Button>
+              </DialogActions>
+            </>
+          )}
+        </Formik>
       </Dialog>
     </div>
   );
