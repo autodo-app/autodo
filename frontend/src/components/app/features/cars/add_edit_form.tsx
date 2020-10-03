@@ -11,7 +11,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import { grey } from '@material-ui/core/colors';
 import { LinearProgress } from '@material-ui/core';
 import { Formik, Form, Field } from 'formik';
-import { TextField, Select } from 'formik-material-ui';
+import { TextField } from 'formik-material-ui';
 import * as Yup from 'yup';
 
 import { Car } from '../../_models';

@@ -11,6 +11,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
 import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
 import { TextField, CheckboxWithLabel } from 'formik-material-ui';
 import { LinearProgress, CssBaseline, Box } from '@material-ui/core';
 
@@ -63,6 +64,11 @@ export const LoginForm: React.FC<LoginFormProps> = (props) => {
 
   const switchState = () => setState(state === 'login' ? 'signup' : 'login');
 
+  const schema = Yup.object().shape({
+    email: Yup.string().email('Invalid email address').required('Required'),
+    password: Yup.string().min(6, 'Password too short').required('Required'),
+  });
+
   const _handleSubmit = async (values: any, actions: any) => {
     try {
       const request = {
@@ -108,25 +114,7 @@ export const LoginForm: React.FC<LoginFormProps> = (props) => {
               password: '',
               rememberMe: false,
             }}
-            validate={(values) => {
-              const errors: FormFields = {};
-
-              if (!values.email) {
-                errors.email = 'Required';
-              } else if (
-                !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-              ) {
-                errors.email = 'Invalid email address';
-              }
-
-              if (!values.password) {
-                errors.password = 'Required';
-              } else if (values.password.length < 6) {
-                errors.password = 'Password too short';
-              }
-
-              return errors;
-            }}
+            validationSchema={schema}
             onSubmit={_handleSubmit}
           >
             {({ submitForm, isSubmitting, status }) => (
