@@ -42,10 +42,9 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    # TODO: not sure what to put at the root but there should probably be something
-    # path('', include('autodo.urls')),
+    path("", include("autodo.urls")),
     path("admin/", admin.site.urls),
-    re_path("api/(?P<version>(v1|v2))/", include("autodo.urls")),
+    re_path("(?P<version>(v1|v2))/", include("autodo.urls")),
     path("search/", include(searchRouter.urls)),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
     path(
