@@ -60,15 +60,6 @@ dependency_overrides:
       url: git://github.com/baylessj/flutter-autocomplete-textfield.git
       ref: master
   platform: ^2.0.0
-  # firebase_core: 0.4.5
-  # firebase_analytics: 6.0.0
-  # firebase_admob:
-  #   git:
-  #     url: git://github.com/autodo-app/flutterfire.git
-  #     ref: master
-  #     path: packages/firebase_admob/
-  mockito: ^4.0.0
-  bloc_test: ^3.1.0
 
 dev_dependencies:
   flutter_test:
@@ -80,7 +71,7 @@ dev_dependencies:
   mockito:
   pedantic:
   pubspec_extract:
-  image_test_utils:
+  # image_test_utils:
 
 flutter:
   uses-material-design: true
