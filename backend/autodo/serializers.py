@@ -104,6 +104,19 @@ class CarSerializer(serializers.ModelSerializer):
             t.save()
         return car
 
+    def update(self, instance, validated_data):
+        snaps_data = validated_data.pop("snaps")
+        snap_serializers = list((instance.snaps).all())
+        odom_snapshot_serializer = OdomSnapshotSerializer()
+        super(self.__class__, self).update(instance, validated_data)
+
+        for snap_data in snaps_data:
+            snap = snap_serializers.pop(0)
+            super(OdomSnapshotSerializer, odom_snapshot_serializer).update(
+                snap, snap_data
+            )
+        return instance
+
     class Meta:
         model = Car
         fields = [

@@ -96,7 +96,7 @@ const _authenticatedPatch = async (url: string, body: any): Promise<any> => {
     return response.data;
   } catch (e) {
     console.log(e.response);
-    response = await axios.post(`${apiUrl}${apiVersion}/${url}`, body);
+    response = await axios.patch(`${apiUrl}${apiVersion}/${url}`, body);
     return response.data;
   }
 };

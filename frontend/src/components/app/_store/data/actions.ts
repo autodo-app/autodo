@@ -145,32 +145,31 @@ export const deleteRefueling = createAsyncThunk<
   } as types.DeleteRefuelingAction;
 });
 
-export const createCar = createAsyncThunk<
-  types.CreateCarAction,
-  { car: Car; snap: OdomSnapshot }
->(types.CREATE_CAR, async ({ car, snap }) => {
-  car['snaps'] = [snap];
-  const response = await api.postCar(car);
-  if (!response.id) {
-    // throw an exception?
-  }
-  const [todos, refuelings, cars] = await Promise.all([
-    api.fetchTodos(),
-    api.fetchRefuelings(),
-    api.fetchCars(),
-  ]);
-  return {
-    type: types.CREATE_CAR,
-    payload: {
-      todos: todos,
-      refuelings: refuelings,
-      cars: cars,
-      defaultTodos: [],
-      status: '',
-      error: '',
-    },
-  } as types.CreateCarAction;
-});
+export const createCar = createAsyncThunk<types.CreateCarAction, Car>(
+  types.CREATE_CAR,
+  async (car) => {
+    const response = await api.postCar(car);
+    if (!response.id) {
+      // throw an exception?
+    }
+    const [todos, refuelings, cars] = await Promise.all([
+      api.fetchTodos(),
+      api.fetchRefuelings(),
+      api.fetchCars(),
+    ]);
+    return {
+      type: types.CREATE_CAR,
+      payload: {
+        todos: todos,
+        refuelings: refuelings,
+        cars: cars,
+        defaultTodos: [],
+        status: '',
+        error: '',
+      },
+    } as types.CreateCarAction;
+  },
+);
 
 export const updateCar = createAsyncThunk<types.UpdateCarAction, Car>(
   types.UPDATE_CAR,

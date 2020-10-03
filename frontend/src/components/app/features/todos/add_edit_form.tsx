@@ -24,8 +24,7 @@ import { createTodo, updateTodo } from '../../_store/data';
 interface StyleProps {
   closeButton: React.CSSProperties;
   dateRepeatSpacer: React.CSSProperties;
-  errorText: React.CSSProperties;
-  errorHelpText: React.CSSProperties;
+  marginNormal: React.CSSProperties;
 }
 
 type StyleClasses = Record<keyof StyleProps, string>;
@@ -39,12 +38,9 @@ const useStyles = makeStyles<Theme, StyleProps>(
       dateRepeatSpacer: {
         height: '1rem',
       },
-      errorText: {
-        color: theme.palette.error.light,
-        marginBottom: 0,
-      },
-      errorHelpText: {
-        color: theme.palette.error.light,
+      marginNormal: {
+        marginTop: '16px',
+        marginBottom: '8px',
       },
     } as any),
 );
@@ -173,28 +169,31 @@ export default function TodoAddEditForm(props: TodoAddEditFormProps) {
                     type="text"
                     label="Todo Name"
                     variant="outlined"
+                    margin="normal"
                     required
                     fullWidth
                   />
-                  <Field
-                    component={Select}
-                    name="car"
-                    type="text"
-                    label="Car"
-                    variant="outlined"
-                    error={touched.car && Boolean(errors.car)}
-                    required
-                    fullWidth
-                  >
-                    {cars?.map((c: Car) => (
-                      <MenuItem key={c.id} value={c.id}>
-                        {c.name}
-                      </MenuItem>
-                    ))}
-                  </Field>
-                  <FormHelperText error={Boolean(errors.car)}>
-                    {errors.car}
-                  </FormHelperText>
+                  <div className={classes.marginNormal}>
+                    <Field
+                      component={Select}
+                      name="car"
+                      type="text"
+                      label="Car"
+                      variant="outlined"
+                      error={touched.car && Boolean(errors.car)}
+                      required
+                      fullWidth
+                    >
+                      {cars?.map((c: Car) => (
+                        <MenuItem key={c.id} value={c.id}>
+                          {c.name}
+                        </MenuItem>
+                      ))}
+                    </Field>
+                    <FormHelperText error={Boolean(errors.car)}>
+                      {errors.car}
+                    </FormHelperText>
+                  </div>
                   <Field
                     component={TextField}
                     error={Boolean(errors.dueMileage)}
@@ -203,6 +202,7 @@ export default function TodoAddEditForm(props: TodoAddEditFormProps) {
                     type="number"
                     label="Due Mileage"
                     variant="outlined"
+                    margin="normal"
                     fullWidth
                   />
                   <Field
@@ -213,6 +213,7 @@ export default function TodoAddEditForm(props: TodoAddEditFormProps) {
                     type="date"
                     label="Due Date"
                     variant="outlined"
+                    margin="normal"
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                   />
@@ -222,6 +223,7 @@ export default function TodoAddEditForm(props: TodoAddEditFormProps) {
                     type="number"
                     label="Mileage Repeat Interval"
                     variant="outlined"
+                    margin="normal"
                     fullWidth
                   />
                   <div className={classes.dateRepeatSpacer} />

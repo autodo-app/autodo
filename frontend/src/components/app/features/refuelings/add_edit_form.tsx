@@ -5,11 +5,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import Dialog from '@material-ui/core/Dialog';
 import Button from '@material-ui/core/Button';
 import DialogTitle from '@material-ui/core/DialogTitle';
-// import TextField from '@material-ui/core/TextField';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogActions from '@material-ui/core/DialogActions';
 import { grey } from '@material-ui/core/colors';
+import { LinearProgress } from '@material-ui/core';
 
 import { Formik, Form, Field } from 'formik';
 import { TextField, Select } from 'formik-material-ui';
@@ -21,9 +21,7 @@ import { createRefueling, updateRefueling } from '../../_store/data';
 
 interface StyleProps {
   closeButton: React.CSSProperties;
-  dateRepeatSpacer: React.CSSProperties;
-  errorText: React.CSSProperties;
-  errorHelpText: React.CSSProperties;
+  marginNormal: React.CSSProperties;
 }
 
 type StyleClasses = Record<keyof StyleProps, string>;
@@ -34,15 +32,9 @@ const useStyles = makeStyles<Theme, StyleProps>(
       closeButton: {
         color: grey[400],
       },
-      dateRepeatSpacer: {
-        height: '1rem',
-      },
-      errorText: {
-        color: theme.palette.error.light,
-        marginBottom: 0,
-      },
-      errorHelpText: {
-        color: theme.palette.error.light,
+      marginNormal: {
+        marginTop: '16px',
+        marginBottom: '8px',
       },
     } as any),
 );
@@ -79,7 +71,6 @@ export default function RefuelingAddEditForm(props: RefuelingAddEditFormProps) {
 
   const _handleSubmit = async (values: any) => {
     if (refueling) {
-      console.log('here');
       await dispatch(
         updateRefueling({
           refueling: {
@@ -144,59 +135,68 @@ export default function RefuelingAddEditForm(props: RefuelingAddEditFormProps) {
                 <DialogContentText>
                   Add the information about the Refueling item here.
                 </DialogContentText>
-                <Field
-                  component={Select}
-                  name="car"
-                  type="text"
-                  label="Car"
-                  variant="outlined"
-                  error={touched.car && Boolean(errors.car)}
-                  required
-                  fullWidth
-                >
-                  {cars?.map((c: Car) => (
-                    <MenuItem key={c.id} value={c.id}>
-                      {c.name}
-                    </MenuItem>
-                  ))}
-                </Field>
-                <Field
-                  component={TextField}
-                  name="mileage"
-                  type="text"
-                  label="Mileage"
-                  variant="outlined"
-                  required
-                  fullWidth
-                />
-                <Field
-                  component={TextField}
-                  name="date"
-                  type="date"
-                  label="Date"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  InputLabelProps={{ shrink: true }}
-                />
-                <Field
-                  component={TextField}
-                  name="cost"
-                  type="number"
-                  label="Cost"
-                  variant="outlined"
-                  required
-                  fullWidth
-                />
-                <Field
-                  component={TextField}
-                  name="amount"
-                  type="number"
-                  label="Fuel Amount"
-                  variant="outlined"
-                  required
-                  fullWidth
-                />
+                <Form>
+                  <div className={classes.marginNormal}>
+                    <Field
+                      component={Select}
+                      name="car"
+                      type="text"
+                      label="Car"
+                      variant="outlined"
+                      error={touched.car && Boolean(errors.car)}
+                      required
+                      fullWidth
+                    >
+                      {cars?.map((c: Car) => (
+                        <MenuItem key={c.id} value={c.id}>
+                          {c.name}
+                        </MenuItem>
+                      ))}
+                    </Field>
+                  </div>
+                  <Field
+                    component={TextField}
+                    name="mileage"
+                    type="text"
+                    label="Mileage"
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                  />
+                  <Field
+                    component={TextField}
+                    name="date"
+                    type="date"
+                    label="Date"
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    InputLabelProps={{ shrink: true }}
+                  />
+                  <Field
+                    component={TextField}
+                    name="cost"
+                    type="number"
+                    label="Cost"
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                  />
+                  <Field
+                    component={TextField}
+                    name="amount"
+                    type="number"
+                    label="Fuel Amount"
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                  />
+                </Form>
+                {isSubmitting && <LinearProgress />}
               </DialogContent>
               <DialogActions>
                 <Button onClick={handleClose} className={classes.closeButton}>
