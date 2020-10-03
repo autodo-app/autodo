@@ -95,7 +95,8 @@ void main() {
     });
     testWidgets('set repeats', (tester) async {
       final dataBloc = MockDataBloc();
-      when(dataBloc.state).thenReturn(DataLoaded(cars: [Car(name: 'test', odomSnapshot: null)]));
+      when(dataBloc.state).thenReturn(
+          DataLoaded(cars: [Car(name: 'test', odomSnapshot: null)]));
       await tester.pumpWidget(
         ChangeNotifierProvider<BasePrefService>.value(
           value: pref,

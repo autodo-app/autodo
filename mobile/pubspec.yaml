@@ -26,8 +26,6 @@ dependencies:
   url_launcher:
   charts_flutter:
   sliding_up_panel:
-  bloc:
-  flutter_bloc:
   google_sign_in:
   equatable:
   font_awesome_flutter:
@@ -49,6 +47,9 @@ dependencies:
   flutter_debug_drawer:
   http:
   flutter_secure_storage:
+  flutter_redux:
+  redux_logging:
+  device_info:
 
 dependency_overrides:
   flutter_debug_drawer:
@@ -67,11 +68,10 @@ dev_dependencies:
   flutter_driver:
     sdk: flutter
   test:
-  bloc_test:
   mockito:
   pedantic:
   pubspec_extract:
-  # image_test_utils:
+  image_test_utils:
 
 flutter:
   uses-material-design: true

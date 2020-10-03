@@ -252,14 +252,20 @@ class RestDataRepository extends DataRepository {
   }
 
   @override
-  Stream<int> notificationID() { return Stream<int>.fromIterable([]); }
+  Stream<int> notificationID() {
+    return Stream<int>.fromIterable([]);
+  }
 
   @override
-  Future<bool> getPaidStatus() async { return false; }
+  Future<bool> getPaidStatus() async {
+    return false;
+  }
 
   @override
   @deprecated
-  Future<List<Map<String, dynamic>>> getRepeats() async {return [{}];}
+  Future<List<Map<String, dynamic>>> getRepeats() async {
+    return [{}];
+  }
 
   @override
   List<Object> get props => [];

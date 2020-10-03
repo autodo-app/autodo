@@ -1,88 +1,71 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_analytics/observer.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:pref/pref.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:redux/redux.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:json_intl/json_intl.dart';
 import 'package:flutter_debug_drawer/flutter_debug_drawer.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:json_intl/json_intl.dart';
-import 'package:pref/pref.dart';
-import 'package:provider/provider.dart';
 import 'package:sentry/sentry.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:provider/provider.dart';
 
-import 'blocs/blocs.dart';
-import 'delegate.dart';
+import './redux/app/app_reducer.dart';
+import './redux/app/app_state.dart';
+import './repositories/repositories.dart';
 import 'flavor.dart';
 import 'generated/keys.dart';
 import 'generated/localization.dart';
-import 'repositories/repositories.dart';
 import 'screens/screens.dart';
 import 'theme.dart';
 import 'units/units.dart';
-import 'widgets/widgets.dart';
+import 'util.dart';
 
-SentryClient _sentry;
+class AutodoApp extends StatefulWidget {
+  const AutodoApp({Key key, this.store}) : super(key: key);
 
-Future<void> _reportError(
-  FlutterErrorDetails details, {
-  bool forceReport = false,
-}) async {
-  try {
-    // Send the Exception and Stacktrace to Sentry
-    await _sentry.captureException(
-      exception: details.exception,
-      stackTrace: details.stack,
-    );
-  } catch (e) {
-    print('Sending report to sentry.io failed: $e');
-  }
-
-  // Use Flutter's pretty error logging to the device's console.
-  FlutterError.dumpErrorToConsole(details, forceReport: forceReport);
-}
-
-Future<void> main() async {
-  if (kFlavor.useSentry) {
-    _sentry = SentryClient(dsn: Keys.sentryDsn);
-    FlutterError.onError = _reportError;
-  }
-
-  runApp(AppProvider(false));
-}
-
-class AppProvider extends StatefulWidget {
-  const AppProvider(this.integrationTest);
-
-  final bool integrationTest;
+  final Store<AppState> store;
 
   @override
-  AppProviderState createState() => AppProviderState();
+  AutodoAppState createState() => AutodoAppState();
 }
 
-class AppProviderState extends State<AppProvider> {
+class AutodoAppState extends State<AutodoApp> {
+  bool _authenticated = false;
+  bool _initialized = false;
+  ThemeData _theme;
   AuthRepository authRepository;
-  ThemeData theme;
   BasePrefService service;
   final analytics = kFlavor.hasAnalytics ? FirebaseAnalytics() : null;
-  var _initialized = false;
+
+  Future<Null> _authenticate() async {
+    final authenticated = true;
+    // final authenticated = LocalAuthentication().authenticate();
+    if (authenticated) {
+      setState(() => _authenticated = true);
+    }
+  }
 
   @override
   void didChangeDependencies() {
-    super.didChangeDependencies();
+    if (!_authenticated) {
+      _authenticate();
+    }
     _initMainWidget();
+    super.didChangeDependencies();
   }
 
   Future<void> _configureFirebase() async {
-    await FirebaseApp.configure(
+    await Firebase.initializeApp(
       name: kFlavor.firebaseAppName,
       options: FirebaseOptions(
-        googleAppID: kFlavor.googleAppID,
-        projectID: kFlavor.projectID,
+        appId: kFlavor.googleAppID,
+        projectId: kFlavor.projectID,
         apiKey: kFlavor.firebaseApiKey,
       ),
     );
@@ -97,11 +80,9 @@ class AppProviderState extends State<AppProvider> {
     await _configureFirebase();
     // required in init for Android
     InAppPurchaseConnection.enablePendingPurchases();
-    BlocSupervisor.delegate = AutodoBlocDelegate();
 
-    // authRepository = FirebaseAuthRepository();
     authRepository = JwtAuthRepository();
-    theme = createTheme();
+    _theme = createTheme();
 
     final locale = WidgetsBinding.instance.window.locale ?? Locale('en', 'US');
     service = await PrefServiceShared.init();
@@ -118,110 +99,63 @@ class AppProviderState extends State<AppProvider> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    if (!_initialized) {
-      return Container();
-    }
-
-    return Provider.value(
-      value: authRepository,
-      updateShouldNotify: (previous, current) => false,
+  Widget build(BuildContext context) => StoreProvider<AppState>(
+      store: widget.store,
       child: PrefService(
-        service: service,
-        child: ChangeNotifierProvider<BasePrefService>.value(
-          value: service,
-          child: BlocProvider<AuthenticationBloc>(
-            create: (context) =>
-                AuthenticationBloc(userRepository: authRepository)
-                  ..add(AppStarted(integrationTest: widget.integrationTest)),
-            child: BlocProvider<DatabaseBloc>(
-              create: (context) => DatabaseBloc(
-                authenticationBloc:
-                    BlocProvider.of<AuthenticationBloc>(context),
-              ),
-              child: Builder(
-                builder: (BuildContext context) => MultiBlocProvider(
-                  providers: [
-                    if (kFlavor.hasPaid)
-                      BlocProvider<PaidVersionBloc>(
-                        create: (context) => PaidVersionBloc(
-                            dbBloc: BlocProvider.of<DatabaseBloc>(context))
-                          ..add(LoadPaidVersion()),
-                      ),
-                    BlocProvider<NotificationsBloc>(
-                      create: (context) => NotificationsBloc(
-                        dbBloc: BlocProvider.of<DatabaseBloc>(context),
-                      )..add(LoadNotifications()),
-                    ),
-                    BlocProvider<DataBloc>(
-                      create: (context) => DataBloc(
-                          dbBloc: BlocProvider.of<DatabaseBloc>(context),
-                          notificationsBloc:
-                              BlocProvider.of<NotificationsBloc>(context))
-                        ..add(LoadData()),
-                    ),
-                  ],
-                  child: App(
-                      theme: theme,
-                      integrationTest: widget.integrationTest,
-                      analytics: analytics),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
+          service: service,
+          child: ChangeNotifierProvider<BasePrefService>.value(
+              value: service,
+              child: MaterialApp(
+                onGenerateTitle: (BuildContext context) =>
+                    JsonIntl.of(context).get(IntlKeys.appTitle),
+                localizationsDelegates: [
+                  const JsonIntlDelegate(),
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                ],
+                supportedLocales: [
+                  const Locale('en'),
+                  const Locale('fr'),
+                ],
+                builder: DebugDrawerBuilder.buildDefault(),
+                home: HomeScreen(),
+                theme: _theme,
+                debugShowCheckedModeBanner: false,
+                navigatorObservers: [
+                  // if (kFlavor.hasPaid) BlocProvider.of<PaidVersionBloc>(context).observer,
+                  // if (analytics != null) FirebaseAnalyticsObserver(analytics: analytics),
+                ],
+              ))));
+}
+
+SentryClient _sentry;
+
+Future<void> _reportError(
+    FlutterErrorDetails error, Store<AppState> store) async {
+  if (kDebugMode) {
+    print(error.stack);
+  } else {
+    final event = await getSentryEvent(
+      state: store.state,
+      exception: error.exception,
+      stackTrace: error.stack,
     );
+    await _sentry.capture(event: event);
   }
 }
 
-class App extends StatelessWidget {
-  const App({
-    @required ThemeData theme,
-    this.integrationTest,
-    this.analytics,
-  })  : assert(theme != null),
-        _theme = theme;
+Future<void> main({bool isTesting = false}) async {
+  final _sentry = kFlavor.useSentry
+      ? null
+      : SentryClient(
+          dsn: Keys.sentryDsn, environmentAttributes: await getSentryEvent());
+  final store =
+      Store<AppState>(appReducer, initialState: AppState(), middleware: []);
 
-  final ThemeData _theme;
-
-  final bool integrationTest;
-
-  final FirebaseAnalytics analytics;
-
-  @override
-  Widget build(context) {
-    return MaterialApp(
-      onGenerateTitle: (BuildContext context) =>
-          JsonIntl.of(context).get(IntlKeys.appTitle),
-      localizationsDelegates: [
-        const JsonIntlDelegate(),
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      supportedLocales: [
-        const Locale('en'),
-        const Locale('fr'),
-      ],
-      builder: DebugDrawerBuilder.buildDefault(),
-      home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-        // Just here as the splitter between home screen and login screen
-        builder: (context, state) {
-          if (state is Authenticated) {
-            return HomeScreen(integrationTest: integrationTest);
-          } else if (state is Uninitialized) {
-            return LoadingIndicator();
-          } else {
-            return WelcomeScreenProvider();
-          }
-        },
-      ),
-      theme: _theme,
-      debugShowCheckedModeBanner: false,
-      navigatorObservers: [
-        if (kFlavor.hasPaid) BlocProvider.of<PaidVersionBloc>(context).observer,
-        if (analytics != null) FirebaseAnalyticsObserver(analytics: analytics),
-      ],
-    );
+  if (_sentry != null) {
+    FlutterError.onError =
+        (FlutterErrorDetails details) => _reportError(details, store);
   }
+
+  runApp(AutodoApp(store: store));
 }

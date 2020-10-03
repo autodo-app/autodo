@@ -69,7 +69,8 @@ void main() {
             child: MaterialApp(
               home: Scaffold(
                 body: CarAddEditScreen(
-                    car: Car(name: 'test', odomSnapshot: null), onSave: (a, b, c, d, e, f, g) {}),
+                    car: Car(name: 'test', odomSnapshot: null),
+                    onSave: (a, b, c, d, e, f, g) {}),
               ),
             ),
           ),

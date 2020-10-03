@@ -52,20 +52,6 @@ packages:
       url: "git://github.com/baylessj/flutter-autocomplete-textfield.git"
     source: git
     version: "1.7.3"
-  bloc:
-    dependency: "direct main"
-    description:
-      name: bloc
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "6.0.3"
-  bloc_test:
-    dependency: "direct dev"
-    description:
-      name: bloc_test
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "7.0.4"
   boolean_selector:
     dependency: transitive
     description:
@@ -192,6 +178,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.7"
+  device_info:
+    dependency: "direct main"
+    description:
+      name: device_info
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.2+8"
+  device_info_platform_interface:
+    dependency: transitive
+    description:
+      name: device_info_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
   dotted_border:
     dependency: "direct main"
     description:
@@ -316,13 +316,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_bloc:
-    dependency: "direct main"
-    description:
-      name: flutter_bloc
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "6.0.5"
   flutter_blurhash:
     dependency: transitive
     description:
@@ -391,6 +384,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.11"
+  flutter_redux:
+    dependency: "direct main"
+    description:
+      name: flutter_redux
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.6.0"
   flutter_secure_storage:
     dependency: "direct main"
     description:
@@ -490,6 +490,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.1"
+  image_test_utils:
+    dependency: "direct dev"
+    description:
+      name: image_test_utils
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   in_app_purchase:
     dependency: "direct main"
     description:
@@ -580,7 +587,7 @@ packages:
       name: mockito
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.1.1"
+    version: "3.0.2"
   nested:
     dependency: transitive
     description:
@@ -756,6 +763,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.3"
+  redux:
+    dependency: transitive
+    description:
+      name: redux
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.0.0+3"
+  redux_logging:
+    dependency: "direct main"
+    description:
+      name: redux_logging
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.0"
   rxdart:
     dependency: transitive
     description:
