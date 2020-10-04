@@ -1,172 +1,108 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
-import '../../repositories/src/write_batch_wrapper.dart';
-import 'distanceratepoint.dart';
 import 'odom_snapshot.dart';
 
-@immutable
-class Car extends Equatable implements WriteBatchDocument {
-  const Car({
-    this.id,
-    @required this.name,
-    @required this.odomSnapshot,
-    this.numRefuelings = 0,
-    this.averageEfficiency = 0.0,
-    this.distanceRate = 0.0,
-    this.distanceRateHistory = const <DistanceRatePoint>[],
-    this.make,
-    this.model,
-    this.year,
-    this.plate,
-    this.vin,
-    this.imageName,
-    this.tagColor = Colors.blue,
-  })  : assert(name != null),
-        assert(odomSnapshot != null);
+class Car extends Equatable {
+  const Car(
+      {this.id,
+      @required this.name,
+      this.make,
+      this.model,
+      this.year,
+      this.plate,
+      this.vin,
+      this.imageName,
+      this.color,
+      this.odom,
+      this.snaps});
 
-  factory Car.fromMap(String id, Map<String, dynamic> value) {
-    return Car(
-      id: id,
-      name: value['name'] as String,
-      odomSnapshot: OdomSnapshot.fromMap(
-          value['odomSnapshot']['id'], value['odomSnapshot']),
-      numRefuelings: value['numRefuelings'] as int,
-      averageEfficiency: value['averageEfficiency'] as double,
-      distanceRate: value['distanceRate'] as double,
-      distanceRateHistory: value['distanceRateHistory']
-          ?.map((p) => DistanceRatePoint(
-                (p['date'] == null)
-                    ? null
-                    : DateTime.fromMillisecondsSinceEpoch(p['date']),
-                p['distanceRate'],
-              ))
-          ?.toList()
-          ?.cast<DistanceRatePoint>(),
-      make: value['make'] as String,
-      model: value['model'] as String,
-      year: value['year'] as int,
-      plate: value['plate'] as String,
-      vin: value['vin'] as String,
-      imageName: value['imageName'] as String,
-      tagColor: Color(value['color'] as int),
-    );
-  }
+  factory Car.fromMap(String id, Map<String, dynamic> value) => Car(
+        id: id,
+        name: value['name'] as String,
+        make: value['make'] as String,
+        model: value['model'] as String,
+        year: value['year'] as int,
+        plate: value['plate'] as String,
+        vin: value['vin'] as String,
+        imageName: value['imageName'] as String,
+        color: value['color'] as int,
+        odom: value['odom'] as int,
+        snaps: value['snaps'].map((s) => OdomSnapshot.fromMap(s['id'], s)),
+      );
 
+  /// The UID for the Car object on the server.
   final String id;
 
+  /// An arbitrary user-defined name used to identify the Car in the UI.
   final String name;
 
-  final OdomSnapshot odomSnapshot;
-
-  final int numRefuelings;
-
-  final double averageEfficiency;
-
-  final double distanceRate;
-
-  final List<DistanceRatePoint> distanceRateHistory;
-
-  /// The file name for the car's stored image. In theory, this could be generated
-  /// consistently from the car's name, i.e. a car named "car1" would always have
-  /// an image named "car1.jpg". This would require converting all photos to one
-  /// file type though, and would not easily allow for specifying that the user
-  /// has not uploaded a photo of the car.
-  /// In the current implementation, a null value for this field indicates that
-  /// the user has not uploaded a photo of the given car.
-  final String imageName;
-
+  /// The Manufacturer of the Car.
   final String make;
 
+  /// The model name of the Car.
   final String model;
 
+  /// The model year of the Car.
   final int year;
 
+  /// The license plate number of the Car.
   final String plate;
 
+  /// The official identification number for the Car.
   final String vin;
 
-  final Color tagColor;
+  /// The URI for an image of the Car.
+  final String imageName;
 
-  Car copyWith({
-    String id,
-    String name,
-    OdomSnapshot odomSnapshot,
-    int numRefuelings,
-    double averageEfficiency,
-    double distanceRate,
-    List<DistanceRatePoint> distanceRateHistory,
-    String make,
-    String model,
-    int year,
-    String plate,
-    String vin,
-    String imageName,
-    Color tagColor,
-  }) {
-    return Car(
-        id: id ?? this.id,
-        name: name ?? this.name,
-        odomSnapshot: odomSnapshot ?? this.odomSnapshot,
-        numRefuelings: numRefuelings ?? this.numRefuelings,
-        averageEfficiency: averageEfficiency ?? this.averageEfficiency,
-        distanceRate: distanceRate ?? this.distanceRate,
-        distanceRateHistory: distanceRateHistory ?? this.distanceRateHistory,
-        make: make ?? this.make,
-        model: model ?? this.model,
-        year: year ?? this.year,
-        plate: plate ?? this.plate,
-        vin: vin ?? this.vin,
-        imageName: imageName ?? this.imageName,
-        tagColor: tagColor ?? this.tagColor);
-  }
+  /// The hex code for a color identifying the Car in the UI.
+  final int color;
 
-  @override
-  List<Object> get props => [
-        id,
-        name,
-        odomSnapshot,
-        numRefuelings,
-        averageEfficiency,
-        distanceRate,
-        ...distanceRateHistory,
-        make,
-        model,
-        year,
-        plate,
-        vin,
-        imageName,
-        tagColor.value,
-      ];
+  /// The last recorded odometer reading for the Car.
+  /// Note: this field is read-only.
+  final int odom;
+
+  /// The full list of recorded odometer reading for the Car.
+  final List<OdomSnapshot> snaps;
+
+  Car copyWith(
+          {String id,
+          String name,
+          String make,
+          String model,
+          int year,
+          String plate,
+          String vin,
+          String imageName,
+          int color,
+          int odom,
+          List<OdomSnapshot> snaps}) =>
+      Car(
+          id: id ?? this.id,
+          name: name ?? this.name,
+          make: make ?? this.make,
+          model: model ?? this.model,
+          year: year ?? year,
+          plate: plate ?? plate,
+          vin: vin ?? vin,
+          imageName: imageName ?? this.imageName,
+          color: color ?? this.color,
+          odom: odom ?? this.odom,
+          snaps: snaps ?? this.snaps);
+
+  Map<String, dynamic> toDocument() => {
+        'name': name,
+        'make': make,
+        'model': model,
+        'year': year.toString(),
+        'plate': plate,
+        'vin': vin,
+        'imageName': imageName,
+        'color': color.toString(),
+        'snaps': snaps.map((s) => s.toDocument()).toList(),
+      };
 
   @override
-  String toString() {
-    return '$runtimeType { id: $id, name: $name, odomSnapshot: $odomSnapshot, numRefuelings: $numRefuelings, averageEfficiency: $averageEfficiency, distanceRate: $distanceRate, distanceRateHistory: $distanceRateHistory, make: $make, model: $model, year: $year, plate: $plate, vin: $vin, imageName: $imageName, tagColor: $tagColor }';
-  }
-
-  @override
-  Map<String, String> toDocument() {
-    return {
-      'name': name,
-      'odomSnapshot': odomSnapshot.id,
-      'numRefuelings': numRefuelings.toString(),
-      'averageEfficiency': averageEfficiency.toString(),
-      'distanceRate': distanceRate.toString(),
-      'distanceRateHistory': distanceRateHistory
-          ?.map((p) => <String, String>{}..addAll({
-              'date': p.date.millisecondsSinceEpoch.toString(),
-              'distanceRate': p.distanceRate.toString()
-            }))
-          ?.toList()
-          .toString(),
-      'make': make,
-      'model': model,
-      'year': year.toString(),
-      'plate': plate,
-      'vin': vin,
-      'imageName': imageName,
-      'color': tagColor.value.toString(),
-    };
-  }
+  List<Object> get props =>
+      [id, name, make, model, year, plate, vin, imageName, color, odom, snaps];
 }

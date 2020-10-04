@@ -2,21 +2,16 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
-import '../../repositories/src/write_batch_wrapper.dart';
 import 'odom_snapshot.dart';
 
 @immutable
-class Refueling extends Equatable implements WriteBatchDocument {
+class Refueling extends Equatable {
   const Refueling({
     @required this.odomSnapshot,
     @required this.amount,
     @required this.cost,
     this.id,
-    this.efficiency,
-    this.efficiencyColor,
-  })  : assert(odomSnapshot != null),
-        assert(cost != null),
-        assert(amount != null);
+  });
 
   factory Refueling.fromMap(String id, Map<String, dynamic> value) {
     return Refueling(
@@ -25,61 +20,50 @@ class Refueling extends Equatable implements WriteBatchDocument {
           value['odomSnapshot']['id'], value['odomSnapshot']),
       amount: value['amount'] as double,
       cost: value['cost'] as double,
-      efficiency: value['efficiency'] as double,
-      efficiencyColor: (value['efficiencyColor'] == null)
-          ? null
-          : Color(value['efficiencyColor'] as int),
     );
   }
 
+  /// The UID for the Refueling object on the server.
   final String id;
 
+  /// The contents of the odometer reading when this Refueling occurred.
   final OdomSnapshot odomSnapshot;
 
+  /// The amount of gasoline added to the tank in the Refueling.
   final double amount;
 
+  /// The price of the gasoline purchased in the Refueling.
   final double cost;
-
-  final double efficiency;
-
-  final Color efficiencyColor;
 
   String get carId => odomSnapshot?.car;
 
-  Refueling copyWith(
-      {String id,
-      OdomSnapshot odomSnapshot,
-      double amount,
-      double cost,
-      double efficiency,
-      Color efficiencyColor}) {
+  Refueling copyWith({
+    String id,
+    OdomSnapshot odomSnapshot,
+    double amount,
+    double cost,
+  }) {
     return Refueling(
       id: id ?? this.id,
       odomSnapshot: odomSnapshot ?? this.odomSnapshot,
       amount: amount ?? this.amount,
       cost: cost ?? this.cost,
-      efficiency: efficiency ?? this.efficiency,
-      efficiencyColor: efficiencyColor ?? this.efficiencyColor,
     );
   }
 
   @override
-  List<Object> get props =>
-      [id, odomSnapshot, amount, cost, efficiency, efficiencyColor?.value];
+  List<Object> get props => [id, odomSnapshot, amount, cost];
 
   @override
   String toString() {
-    return '$runtimeType { id: $id, odomSnapshot: $odomSnapshot, amount : $amount, cost: $cost, efficiency: $efficiency, efficiencyColor: $efficiencyColor }';
+    return '$runtimeType { id: $id, odomSnapshot: $odomSnapshot, amount : $amount, cost: $cost }';
   }
 
-  @override
-  Map<String, String> toDocument() {
+  Map<String, dynamic> toDocument() {
     return {
-      'odomSnapshot': odomSnapshot.id.toString(),
+      'odomSnapshot': odomSnapshot.toDocument(),
       'amount': amount.toString(),
       'cost': cost.toString(),
-      'efficiency': efficiency.toString(),
-      'efficiencyColor': efficiencyColor?.value.toString()
     };
   }
 }

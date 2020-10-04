@@ -2,17 +2,14 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
 
-import '../../repositories/src/write_batch_wrapper.dart';
-
 @immutable
-class OdomSnapshot extends Equatable implements WriteBatchDocument {
+class OdomSnapshot extends Equatable {
   const OdomSnapshot({
     this.id,
-    this.car,
+    @required this.car,
     @required this.date,
     @required this.mileage,
-  })  : assert(date != null),
-        assert(mileage != null);
+  });
 
   factory OdomSnapshot.fromMap(String id, Map<String, String> value) =>
       OdomSnapshot(
@@ -22,12 +19,16 @@ class OdomSnapshot extends Equatable implements WriteBatchDocument {
         mileage: double.parse(value['mileage']),
       );
 
+  /// The UID for the OdomSnapshot object on the server.
   final String id;
 
+  /// The UID for the associated Car object on the server.
   final String car;
 
+  /// The date and time when this odometer reading was logged.
   final DateTime date;
 
+  /// The odometer reading.
   final double mileage;
 
   OdomSnapshot copyWith({String id, int car, DateTime date, double mileage}) =>
@@ -37,7 +38,6 @@ class OdomSnapshot extends Equatable implements WriteBatchDocument {
           date: date ?? this.date,
           mileage: mileage ?? this.mileage);
 
-  @override
   Map<String, String> toDocument() => {
         'car': car,
         'date': date?.toUtc()?.toIso8601String(),
