@@ -14,14 +14,14 @@ class DataState extends Equatable {
   final List<Todo> todos;
   final List<Refueling> refuelings;
   final List<Car> cars;
-  final String status;
+  final DataStatus status;
   final String error;
 
   DataState copyWith(
           {List<Todo> todos,
           List<Refueling> refuelings,
           List<Car> cars,
-          String status,
+          DataStatus status,
           String error}) =>
       DataState(
           todos: todos ?? this.todos,
