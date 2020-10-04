@@ -2,13 +2,12 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:device_info/device_info.dart';
-import 'package:flutter/foundation.dart';
 import 'package:sentry/sentry.dart';
 import 'package:flutter/material.dart';
 import 'package:equatable/equatable.dart';
 
 import './generated/pubspec.dart';
-import './redux/app/app_state.dart';
+import './redux/app/state.dart';
 
 final RegExp lowerToUpper = RegExp('([a-z])([A-Z])');
 

@@ -16,7 +16,7 @@ import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:provider/provider.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
-import './redux/app/app_reducer.dart';
+import './redux/app/reducer.dart';
 import './redux/app/state.dart';
 import './repositories/repositories.dart';
 import 'flavor.dart';
