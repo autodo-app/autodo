@@ -14,6 +14,7 @@ export 'src/repeat_interval.dart';
 export 'src/stats.dart';
 export 'src/stats/driving_distance.dart';
 export 'src/stats/efficiency.dart';
+export 'src/stats_status.dart';
 export 'src/todo.dart';
 export 'src/todo_due_state.dart';
 export 'src/token_pair.dart';

@@ -16,7 +16,7 @@ class StatsState extends Equatable {
   final FuelUsageCarData fuelUsageByCar;
   final DrivingRateData drivingRate;
   final FuelUsageMonthData fuelUsageByMonth;
-  final String status;
+  final StatsStatus status;
   final String error;
 
   StatsState copyWith(
@@ -24,7 +24,7 @@ class StatsState extends Equatable {
           FuelUsageCarData fuelUsageByCar,
           DrivingRateData drivingRate,
           FuelUsageMonthData fuelUsageByMonth,
-          String status,
+          StatsStatus status,
           String error}) =>
       StatsState(
           fuelEfficiency: fuelEfficiency ?? this.fuelEfficiency,
