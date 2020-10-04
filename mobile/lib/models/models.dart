@@ -11,6 +11,7 @@ export 'src/fuel_mileage_point.dart';
 export 'src/odom_snapshot.dart';
 export 'src/refueling.dart';
 export 'src/repeat_interval.dart';
+export 'src/stats.dart';
 export 'src/stats/driving_distance.dart';
 export 'src/stats/efficiency.dart';
 export 'src/todo.dart';

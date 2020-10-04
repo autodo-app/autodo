@@ -47,8 +47,10 @@ dependencies:
   flutter_debug_drawer:
   http:
   flutter_secure_storage:
+  redux:
   flutter_redux:
   redux_logging:
+  redux_thunk:
   device_info:
 
 dependency_overrides:

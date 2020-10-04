@@ -14,9 +14,10 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:sentry/sentry.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:provider/provider.dart';
+import 'package:redux_thunk/redux_thunk.dart';
 
 import './redux/app/app_reducer.dart';
-import './redux/app/app_state.dart';
+import './redux/app/state.dart';
 import './repositories/repositories.dart';
 import 'flavor.dart';
 import 'generated/keys.dart';
@@ -149,8 +150,8 @@ Future<void> main({bool isTesting = false}) async {
       ? null
       : SentryClient(
           dsn: Keys.sentryDsn, environmentAttributes: await getSentryEvent());
-  final store =
-      Store<AppState>(appReducer, initialState: AppState(), middleware: []);
+  final store = Store<AppState>(appReducer,
+      initialState: AppState(), middleware: [thunkMiddleware]);
 
   if (_sentry != null) {
     FlutterError.onError =
