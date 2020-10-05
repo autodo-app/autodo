@@ -63,13 +63,14 @@ class _ViewModel extends Equatable {
           store.dispatch(ToggleAllTodosComplete());
         } else if (action == ExtraAction.toggleFilter) {
           store.dispatch(UpdateTodosFilter(
-              (store.filterState == VisibilityFilter.all)
+              (store.state.filterState.todosFilter == VisibilityFilter.all)
                   ? VisibilityFilter.active
                   : VisibilityFilter.all));
         }
       },
-      filterState: store.filterState,
-      allComplete: allCompleteSelector(todosSelector(store.state)));
+      filterState: store.state.filterState.todosFilter,
+      allComplete: store.state.dataState.todos
+          .every((t) => t.completedOdomSnapshot != null));
 
   @override
   List get props => [onActionSelected, allComplete];

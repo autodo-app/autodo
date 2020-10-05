@@ -18,7 +18,6 @@ import 'package:redux_thunk/redux_thunk.dart';
 
 import './redux/app/reducer.dart';
 import './redux/app/state.dart';
-import './repositories/repositories.dart';
 import 'flavor.dart';
 import 'generated/keys.dart';
 import 'generated/localization.dart';
@@ -40,7 +39,6 @@ class AutodoAppState extends State<AutodoApp> {
   bool _authenticated = false;
   bool _initialized = false;
   ThemeData _theme;
-  AuthRepository authRepository;
   BasePrefService service;
   final analytics = kFlavor.hasAnalytics ? FirebaseAnalytics() : null;
 
@@ -82,7 +80,6 @@ class AutodoAppState extends State<AutodoApp> {
     // required in init for Android
     InAppPurchaseConnection.enablePendingPurchases();
 
-    authRepository = JwtAuthRepository();
     _theme = createTheme();
 
     final locale = WidgetsBinding.instance.window.locale ?? Locale('en', 'US');
