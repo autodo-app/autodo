@@ -150,3 +150,17 @@ ThunkAction deleteCar(Car car) {
     }
   };
 }
+
+/// Stores an image of a given car on the server.
+ThunkAction saveCarImage(String imageName) {
+  return (Store store) async {
+    // eventually upload this file to the server.
+  };
+}
+
+/// Remove the car's image from the server.
+ThunkAction deleteCarImage(String imageName) {
+  return (Store store) async {
+    // tbd
+  };
+}

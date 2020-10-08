@@ -195,6 +195,10 @@ class AutodoApi extends Equatable {
     await logOut();
   }
 
+  /// Returns the URL where the image is stored for the car specified by [id].
+  String imageDownloadUrl(String id, String imageName) =>
+      '$baseUrl/cars/$id/$imageName';
+
   @override
   List<Object> get props => [version, baseUrl];
 }

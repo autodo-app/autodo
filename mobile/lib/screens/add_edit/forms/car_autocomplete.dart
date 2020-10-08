@@ -1,9 +1,7 @@
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_intl/json_intl.dart';
 
-import '../../../blocs/blocs.dart';
 import '../../../generated/localization.dart';
 import '../../../models/models.dart';
 import '../../../theme.dart';
@@ -67,14 +65,13 @@ class _CarFormState extends State<CarForm> {
       key: _autocompleteKey,
       focusNode: widget.node,
       textInputAction: TextInputAction.next,
-      suggestions:
-          (BlocProvider.of<DataBloc>(context).state as DataLoaded).cars,
+      suggestions: cars,
       itemBuilder: (context, suggestion) => Padding(
         child: ListTile(
             title: Text(suggestion.name),
             trailing: Text(
               // Todo: Improve this translation
-              '${JsonIntl.of(context).get(IntlKeys.mileage)}: ${suggestion.odomSnapshot.mileage}',
+              '${JsonIntl.of(context).get(IntlKeys.mileage)}: ${suggestion.odom}',
             )),
         padding: EdgeInsets.all(5.0),
       ),

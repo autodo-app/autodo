@@ -3,14 +3,16 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:redux/redux.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:json_intl/json_intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 
-import '../../blocs/blocs.dart';
 import '../../generated/localization.dart';
 import '../../models/models.dart';
+import '../../redux/app/state.dart';
+import '../../redux/data/thunks.dart';
 import '../../theme.dart';
 import '../../units/units.dart';
 import '../../util.dart';
@@ -38,7 +40,7 @@ class _HeaderWithImage extends StatelessWidget {
       this.onDelete});
 
   final String carId, carName;
-  final Future<String> imageUrl;
+  final String imageUrl;
   final Function onEdit, onDelete;
 
   @override
@@ -52,24 +54,16 @@ class _HeaderWithImage extends StatelessWidget {
           children: <Widget>[
             Align(
               alignment: Alignment.center,
-              child: FutureBuilder(
-                  future: imageUrl,
-                  builder: (context, snap) {
-                    if (snap.connectionState != ConnectionState.done) {
-                      return CircularProgressIndicator();
-                    }
-                    return ColorFiltered(
-                        colorFilter: ColorFilter.mode(
-                            Colors.black.withOpacity(.2), BlendMode.srcOver),
-                        child: CachedNetworkImage(
-                          fit: BoxFit.fill,
-                          placeholder: (context, url) =>
-                              CircularProgressIndicator(),
-                          errorWidget: (context, url, error) =>
-                              Icon(Icons.error),
-                          imageUrl: snap.data,
-                        ));
-                  }),
+              child: ColorFiltered(
+                colorFilter: ColorFilter.mode(
+                    Colors.black.withOpacity(.2), BlendMode.srcOver),
+                child: CachedNetworkImage(
+                  fit: BoxFit.fill,
+                  placeholder: (context, url) => CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                  imageUrl: imageUrl,
+                ),
+              ),
             ),
             Align(
               alignment: Alignment.bottomCenter,
@@ -115,10 +109,17 @@ class _HeaderWithImage extends StatelessWidget {
 }
 
 class CarAddEditHeaderNoImage extends StatelessWidget {
-  CarAddEditHeaderNoImage({this.car, @required this.onSaved, imagePicker});
+  CarAddEditHeaderNoImage(
+      {this.car,
+      @required this.onSaved,
+      @required this.storeImage,
+      @required this.updateCar,
+      imagePicker});
 
   final Car car;
   final Function(String) onSaved;
+  final Function(dynamic) storeImage;
+  final Function(Car) updateCar;
 
   /// defaults to using the ImagePicker package, separated so it can be mocked
   /// in testing
@@ -134,11 +135,8 @@ class CarAddEditHeaderNoImage extends StatelessWidget {
           GestureDetector(
             onTap: () async {
               final image = await imagePicker(source: ImageSource.gallery);
-              await (BlocProvider.of<DatabaseBloc>(context).state as DbLoaded)
-                  .storageRepo
-                  .storeAsset(image);
-              BlocProvider.of<DataBloc>(context).add(
-                  UpdateCar(car.copyWith(imageName: basename(image.path))));
+              await storeImage(image);
+              updateCar(car.copyWith(imageName: basename(image.path)));
             }, // add an upload feature here
             child: Container(
               padding: EdgeInsets.all(5),
@@ -289,35 +287,37 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
         body: Form(
           key: _formKey,
           child: Container(
-              padding: EdgeInsets.only(left: 15, right: 15),
-              child: ListView(
+            padding: EdgeInsets.only(left: 15, right: 15),
+            child: StoreConnector<AppState, _ViewModel>(
+              converter: (Store<AppState> store) =>
+                  _ViewModel.fromStore(store, widget.car),
+              builder: (context, vm) => ListView(
                 children: <Widget>[
                   (mode == CarDetailsMode.DETAILS ||
                           mode == CarDetailsMode.EDIT)
                       ? _HeaderWithImage(
                           carId: widget.car?.id,
                           carName: widget.car?.name,
-                          imageUrl: (BlocProvider.of<DatabaseBloc>(context)
-                                  .state as DbLoaded)
-                              .storageRepo
-                              .getDownloadUrl(widget.car.imageName),
+                          imageUrl: vm.imageDownloadUrl,
                           onEdit: () {
                             setState(() {
                               mode = CarDetailsMode.EDIT;
                             });
                           },
                           onDelete: () {
-                            BlocProvider.of<DataBloc>(context)
-                                .add(DeleteCar(widget.car));
+                            vm.onDeleteImage();
                             Navigator.pop(context);
                           },
                         )
                       : CarAddEditHeaderNoImage(
-                          car: widget.car, onSaved: (val) => _name = val),
+                          car: widget.car,
+                          onSaved: (val) => _name = val,
+                          storeImage: vm.onSaveImage,
+                          updateCar: vm.onUpdateCar,
+                        ),
                   (mode == CarDetailsMode.ADD || mode == CarDetailsMode.EDIT)
                       ? _TwoPartTextField(
-                          initialValue:
-                              widget.car?.odomSnapshot?.mileage?.toString(),
+                          initialValue: widget.car?.odom?.toString(),
                           fieldName: JsonIntl.of(context).get(IntlKeys.odom),
                           units: Distance.of(context)
                               .unitString(context, short: true),
@@ -332,22 +332,22 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
                       : _TwoPartNoEdit(
                           fieldName: JsonIntl.of(context).get(IntlKeys.odom),
                           value:
-                              '${Distance.of(context).format(widget.car?.odomSnapshot?.mileage)} ${Distance.of(context).unitString(context, short: true)}',
+                              '${Distance.of(context).format(widget.car?.odom)} ${Distance.of(context).unitString(context, short: true)}',
                         ),
-                  (mode == CarDetailsMode.DETAILS)
-                      ? _TwoPartNoEdit(
-                          fieldName:
-                              JsonIntl.of(context).get(IntlKeys.drivingRate),
-                          value:
-                              '${Distance.of(context).format(widget.car?.distanceRate)} ${Distance.of(context).unitString(context, short: true)}/${JsonIntl.of(context).get(IntlKeys.day)}')
-                      : Container(),
-                  (mode == CarDetailsMode.DETAILS)
-                      ? _TwoPartNoEdit(
-                          fieldName:
-                              JsonIntl.of(context).get(IntlKeys.fuelEfficiency),
-                          value:
-                              ' ${Efficiency.of(context).format(widget.car?.averageEfficiency)} ${Efficiency.of(context).unitString(context, short: true)}')
-                      : Container(),
+                  // (mode == CarDetailsMode.DETAILS)
+                  //     ? _TwoPartNoEdit(
+                  //         fieldName:
+                  //             JsonIntl.of(context).get(IntlKeys.drivingRate),
+                  //         value:
+                  //             '${Distance.of(context).format(widget.car?.distanceRate)} ${Distance.of(context).unitString(context, short: true)}/${JsonIntl.of(context).get(IntlKeys.day)}')
+                  //     : Container(),
+                  // (mode == CarDetailsMode.DETAILS)
+                  //     ? _TwoPartNoEdit(
+                  //         fieldName:
+                  //             JsonIntl.of(context).get(IntlKeys.fuelEfficiency),
+                  //         value:
+                  //             ' ${Efficiency.of(context).format(widget.car?.averageEfficiency)} ${Efficiency.of(context).unitString(context, short: true)}')
+                  //     : Container(),
                   Divider(),
                   (mode == CarDetailsMode.ADD || mode == CarDetailsMode.EDIT)
                       ? _TwoPartTextField(
@@ -434,7 +434,9 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
                           200 // provides enough of a buffer to scroll up past fab
                       ),
                 ],
-              )),
+              ),
+            ),
+          ),
         ), // Todo: Add content here
         floatingActionButton: (mode == CarDetailsMode.EDIT ||
                 mode == CarDetailsMode.ADD)
@@ -455,4 +457,44 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
               )
             : Container(),
       );
+}
+
+class _ViewModel {
+  const _ViewModel(
+      {@required this.car,
+      @required this.imageDownloadUrl,
+      @required this.onDeleteImage,
+      @required this.onSaveImage,
+      @required this.onUpdateCar});
+
+  /// Creates helpers for interacting with the Redux store. Needs the additional
+  /// car parameter to pass down UI-specific state.
+  static _ViewModel fromStore(Store<AppState> store, Car car) => _ViewModel(
+      car: car,
+      imageDownloadUrl: store.state.api.imageDownloadUrl(car.id, car.imageName),
+      onDeleteImage: () {
+        store.dispatch(deleteCarImage(car.imageName));
+      },
+      onSaveImage: (String fileName) {
+        store.dispatch(saveCarImage(fileName));
+      },
+      onUpdateCar: (Car updatedCar) {
+        store.dispatch(updateCar(updatedCar));
+      });
+
+  /// The car whose info is displayed in this screen. Will be null if we are
+  /// creating a new car.
+  final Car car;
+
+  /// The download URL for the car's image.
+  final String imageDownloadUrl;
+
+  /// Dispatches an action to delete the car's image.
+  final void Function() onDeleteImage;
+
+  /// Dispatches an action to upload an image to the server.
+  final void Function(String) onSaveImage;
+
+  /// Dispatches an action to update the car's info.
+  final void Function(Car) onUpdateCar;
 }

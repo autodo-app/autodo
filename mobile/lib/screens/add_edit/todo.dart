@@ -1,11 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:json_intl/json_intl.dart';
 
-import '../../blocs/blocs.dart';
 import '../../generated/localization.dart';
 import '../../integ_test_keys.dart';
 import '../../models/models.dart';
@@ -202,12 +200,13 @@ class _MileageForm extends StatelessWidget {
 }
 
 class TodoAddEditScreen extends StatefulWidget {
-  TodoAddEditScreen({
-    Key key = IntegrationTestKeys.addEditTodo,
-    @required this.onSave,
-    @required this.isEditing,
-    this.todo,
-  }) : super(key: key) {
+  TodoAddEditScreen(
+      {Key key = IntegrationTestKeys.addEditTodo,
+      @required this.onSave,
+      @required this.isEditing,
+      this.todo,
+      @required this.cars})
+      : super(key: key) {
     print(todo);
   }
 
@@ -216,6 +215,8 @@ class TodoAddEditScreen extends StatefulWidget {
   final _OnSaveCallback onSave;
 
   final Todo todo;
+
+  final List<Car> cars;
 
   @override
   TodoAddEditScreenState createState() => TodoAddEditScreenState();
@@ -380,37 +381,27 @@ class TodoAddEditScreenState extends State<TodoAddEditScreen> {
                     Padding(
                       padding: EdgeInsets.only(bottom: 15),
                     ),
-                    BlocBuilder<DataBloc, DataState>(
-                      builder: (context, state) {
-                        if (state is DataLoaded) {
-                          if (state.cars.length <= 1) {
-                            return Container();
-                          } else if (state.cars.length < 4) {
-                            return CarToggleForm(
-                              _carsToInitialState(state.cars),
-                              state.cars,
-                              (List<bool> isSelected) => _carId = state
-                                  .cars[isSelected.indexWhere((i) => i)].id,
-                            );
-                          } else {
-                            return CarForm(
+                    (widget.cars.length <= 1)
+                        ? Container()
+                        : (widget.cars.length < 4)
+                            ? CarToggleForm(
+                                _carsToInitialState(widget.cars),
+                                widget.cars,
+                                (List<bool> isSelected) => _carId = widget
+                                    .cars[isSelected.indexWhere((i) => i)].id,
+                              )
+                            : CarForm(
                                 key: ValueKey('__refueling_car_form__'),
                                 // initialValue: widget.todo?.carName,
-                                initialValue: state.cars
+                                initialValue: widget.cars
                                     .firstWhere(
                                         (c) => c.id == widget.todo?.carId)
                                     .name,
-                                onSaved: (val) => _carId = state.cars
+                                onSaved: (val) => _carId = widget.cars
                                     .firstWhere((c) => c.name == val)
                                     .id,
                                 node: _carNode,
-                                nextNode: null);
-                          }
-                        } else {
-                          return LoadingIndicator();
-                        }
-                      },
-                    ),
+                                nextNode: null),
                     // so there is some padding to fill the bottom of the screen
                     // when autoscrolling up
                     Container(
