@@ -6,7 +6,7 @@ import 'package:meta/meta.dart';
 class OdomSnapshot extends Equatable {
   const OdomSnapshot({
     this.id,
-    @required this.car,
+    this.car,
     @required this.date,
     @required this.mileage,
   });
