@@ -1,11 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:redux/redux.dart';
+
+import '../../../../redux/redux.dart';
 
 class WizardInfo {
-  WizardInfo(this._wizard);
+  WizardInfo(this._wizard, this.store);
 
   final WizardState _wizard;
+  final Store<AppState> store;
 
   void next() {
     _wizard._setPage(_wizard._page + 1);

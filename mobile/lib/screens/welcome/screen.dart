@@ -53,9 +53,9 @@ class WelcomeScreen extends StatelessWidget {
                             SignupButton(
                               buttonPadding: BUTTON_PADDING,
                             ),
-                            TrialButton(
-                              buttonPadding: BUTTON_PADDING,
-                            ),
+                            // TrialButton(
+                            //   buttonPadding: BUTTON_PADDING,
+                            // ),
                             LoginButton(
                               buttonPadding: BUTTON_PADDING,
                             ),

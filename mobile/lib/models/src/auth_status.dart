@@ -1,1 +1,0 @@
-enum AuthStatus { IDLE, LOADING, LOGGED_IN, LOGGED_OUT, FAILED }

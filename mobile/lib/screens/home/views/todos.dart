@@ -1,10 +1,13 @@
+import 'package:charts_flutter/flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_intl/json_intl.dart';
+import 'package:equatable/equatable.dart';
+import 'package:redux/redux.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 
-import '../../../blocs/blocs.dart';
 import '../../../generated/localization.dart';
 import '../../../models/models.dart';
+import '../../../redux/redux.dart';
 import '../../../theme.dart';
 import '../../../widgets/widgets.dart';
 import '../widgets/barrel.dart';
@@ -12,8 +15,8 @@ import 'constants.dart';
 
 const TODOS_SECTION_LIMIT = 5;
 
-class TodoListHeader extends StatelessWidget {
-  const TodoListHeader(this.dueState);
+class _TodoListHeader extends StatelessWidget {
+  const _TodoListHeader(this.dueState);
 
   final TodoDueState dueState;
 
@@ -47,8 +50,8 @@ class TodoListHeader extends StatelessWidget {
   }
 }
 
-class TodoListSection extends StatefulWidget {
-  const TodoListSection(
+class _TodoListSection extends StatefulWidget {
+  const _TodoListSection(
       {this.dueState, this.todos, this.cars, this.deleteTodo});
 
   final TodoDueState dueState;
@@ -57,10 +60,10 @@ class TodoListSection extends StatefulWidget {
   final Function(BuildContext, Todo) deleteTodo;
 
   @override
-  TodoListSectionState createState() => TodoListSectionState();
+  _TodoListSectionState createState() => _TodoListSectionState();
 }
 
-class TodoListSectionState extends State<TodoListSection> {
+class _TodoListSectionState extends State<_TodoListSection> {
   bool expanded = false;
 
   @override
@@ -80,7 +83,7 @@ class TodoListSectionState extends State<TodoListSection> {
     }
     return Column(
       children: [
-        TodoListHeader(widget.dueState),
+        _TodoListHeader(widget.dueState),
         ...List.generate(
           listLength,
           (index) {
@@ -128,28 +131,25 @@ class TodoListSectionState extends State<TodoListSection> {
   }
 }
 
-class TodosPanel extends StatefulWidget {
-  const TodosPanel({this.todos, this.cars});
+class _TodosPanel extends StatefulWidget {
+  const _TodosPanel(
+      {@required this.todos, @required this.cars, @required this.onDeleteTodo});
 
   final Map<TodoDueState, List<Todo>> todos;
   final List<Car> cars;
+  final Function(BuildContext, Todo) onDeleteTodo;
 
   @override
-  TodosPanelState createState() => TodosPanelState(todos);
+  _TodosPanelState createState() => _TodosPanelState(todos);
 }
 
-class TodosPanelState extends State<TodosPanel> {
-  TodosPanelState(this.todos);
+class _TodosPanelState extends State<_TodosPanel> {
+  _TodosPanelState(this.todos);
 
   Map<TodoDueState, List<Todo>> todos;
 
   void _deleteTodo(BuildContext context, Todo todo) {
-    BlocProvider.of<DataBloc>(context).add(DeleteTodo(todo));
-    Scaffold.of(context).showSnackBar(DeleteTodoSnackBar(
-      context: context,
-      todo: todo,
-      onUndo: () => BlocProvider.of<DataBloc>(context).add(AddTodo(todo)),
-    ));
+    widget.onDeleteTodo(context, todo);
     // removing the todo from our local list for a quicker response than waiting
     // on the Bloc to rebuild
     setState(() {
@@ -200,25 +200,25 @@ class TodosPanelState extends State<TodosPanel> {
             ],
           ),
           // Header above, actual ToDos below
-          TodoListSection(
+          _TodoListSection(
             todos: todos[TodoDueState.PAST_DUE],
             cars: widget.cars,
             dueState: TodoDueState.PAST_DUE,
             deleteTodo: _deleteTodo,
           ),
-          TodoListSection(
+          _TodoListSection(
             todos: todos[TodoDueState.DUE_SOON],
             cars: widget.cars,
             dueState: TodoDueState.DUE_SOON,
             deleteTodo: _deleteTodo,
           ),
-          TodoListSection(
+          _TodoListSection(
             todos: todos[TodoDueState.UPCOMING],
             cars: widget.cars,
             dueState: TodoDueState.UPCOMING,
             deleteTodo: _deleteTodo,
           ),
-          TodoListSection(
+          _TodoListSection(
             todos: todos[TodoDueState.COMPLETE],
             cars: widget.cars,
             dueState: TodoDueState.COMPLETE,
@@ -228,8 +228,8 @@ class TodosPanelState extends State<TodosPanel> {
       ));
 }
 
-class TodoAlert extends StatelessWidget {
-  const TodoAlert(this.todos);
+class _TodoAlert extends StatelessWidget {
+  const _TodoAlert(this.todos);
 
   final Map<TodoDueState, List<Todo>> todos;
 
@@ -284,46 +284,70 @@ class TodosScreen extends StatelessWidget {
   const TodosScreen({Key key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => BlocBuilder<DataBloc, DataState>(
-      builder: (context, carsState) =>
-          BlocBuilder<FilteredTodosBloc, FilteredTodosState>(
-              builder: (context, todosState) {
-            if (!(todosState is FilteredTodosLoaded) ||
-                !(carsState is DataLoaded)) {
-              return Container();
-            }
-
-            return Container(
-                decoration: headerDecoration,
-                child: CustomScrollView(
-                  slivers: [
-                    SliverAppBar(
-                      expandedHeight: HEADER_HEIGHT,
-                      flexibleSpace: FlexibleSpaceBar(
-                        title:
-                            Column(mainAxisSize: MainAxisSize.min, children: [
-                          Flexible(
-                            fit: FlexFit.loose,
-                            child: Text(
-                              JsonIntl.of(context).get(IntlKeys.todos),
-                              style:
-                                  Theme.of(context).accentTextTheme.headline1,
-                            ),
-                          ),
-                          TodoAlert((todosState as FilteredTodosLoaded)
-                              .filteredTodos),
-                        ]),
-                        titlePadding: EdgeInsets.all(15),
-                        centerTitle: true,
+  Widget build(BuildContext context) => StoreConnector(
+        converter: _ViewModel.fromStore,
+        builder: (BuildContext context, _ViewModel vm) => Container(
+          decoration: headerDecoration,
+          child: CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                expandedHeight: HEADER_HEIGHT,
+                flexibleSpace: FlexibleSpaceBar(
+                  title: Column(mainAxisSize: MainAxisSize.min, children: [
+                    Flexible(
+                      fit: FlexFit.loose,
+                      child: Text(
+                        JsonIntl.of(context).get(IntlKeys.todos),
+                        style: Theme.of(context).accentTextTheme.headline1,
                       ),
                     ),
-                    SliverToBoxAdapter(
-                      child: TodosPanel(
-                          todos:
-                              (todosState as FilteredTodosLoaded).filteredTodos,
-                          cars: (carsState as DataLoaded).cars),
-                    ),
-                  ],
-                ));
-          }));
+                    _TodoAlert(vm.filteredTodos),
+                  ]),
+                  titlePadding: EdgeInsets.all(15),
+                  centerTitle: true,
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: _TodosPanel(
+                  todos: vm.filteredTodos,
+                  cars: vm.cars,
+                  onDeleteTodo: vm.onDeleteTodo,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+}
+
+class _ViewModel extends Equatable {
+  const _ViewModel(
+      {@required this.filteredTodos,
+      @required this.cars,
+      @required this.onDeleteTodo});
+
+  // TODO: filter the todos
+  final Map<TodoDueState, List<Todo>> filteredTodos;
+  final List<Car> cars;
+  final Function(BuildContext, Todo) onDeleteTodo;
+
+  static _ViewModel fromStore(Store<AppState> store) {
+    if (store.state.dataState.status == DataStatus.IDLE) {
+      store.dispatch(fetchData());
+    }
+    return _ViewModel(
+        cars: store.state.dataState.cars,
+        // todos: store.state.dataState.todos,
+        onDeleteTodo: (context, todo) {
+          store.dispatch(deleteTodo(todo));
+          Scaffold.of(context).showSnackBar(DeleteTodoSnackBar(
+            context: context,
+            todo: todo,
+            onUndo: () => store.dispatch(createTodo(todo)),
+          ));
+        });
+  }
+
+  @override
+  List get props => [];
 }

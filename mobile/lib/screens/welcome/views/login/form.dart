@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_intl/json_intl.dart';
+import 'package:redux/redux.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 
-import '../../../../blocs/blocs.dart';
 import '../../../../generated/localization.dart';
+import '../../../../redux/redux.dart';
 import '../../widgets/barrel.dart';
 
 class LoginForm extends StatefulWidget {
@@ -32,8 +33,8 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   @override
-  Widget build(BuildContext context) => BlocListener<LoginBloc, LoginState>(
-        listener: (context, state) {
+  Widget build(BuildContext context) => StoreBuilder(
+        builder: (BuildContext context, Store<AppState> store) {
           if (state is LoginError) {
             Scaffold.of(context)
               ..hideCurrentSnackBar()
@@ -77,36 +78,38 @@ class _LoginFormState extends State<LoginForm> {
             // AutodoRoutes.home
             Navigator.pop(context);
           }
-        },
-        child: BlocBuilder<LoginBloc, LoginState>(
+          return BlocBuilder<LoginBloc, LoginState>(
             builder: (context, state) => Form(
-                key: _formKey,
-                child: Container(
-                    padding: EdgeInsets.all(15),
-                    child: ListView(
-                      children: <Widget>[
-                        EmailForm(
-                            onSaved: (val) => _email = val,
-                            node: _emailNode,
-                            nextNode: _passwordNode),
-                        PasswordForm(
-                            onSaved: (val) => _password = val,
-                            node: _passwordNode),
-                        (state is LoginError)
-                            ? ErrorMessage(state.errorMsg)
-                            : Container(),
-                        LegalNotice(),
-                        LoginSubmitButton(onPressed: () {
-                          if (_formKey.currentState.validate()) {
-                            _formKey.currentState.save();
-                            BlocProvider.of<LoginBloc>(context).add(
-                                LoginWithCredentialsPressed(
-                                    email: _email, password: _password));
-                          }
-                        }),
-                        PasswordResetButton(),
-                        LoginToSignupButton(),
-                      ],
-                    )))),
+              key: _formKey,
+              child: Container(
+                padding: EdgeInsets.all(15),
+                child: ListView(
+                  children: <Widget>[
+                    EmailForm(
+                        onSaved: (val) => _email = val,
+                        node: _emailNode,
+                        nextNode: _passwordNode),
+                    PasswordForm(
+                        onSaved: (val) => _password = val, node: _passwordNode),
+                    (state is LoginError)
+                        ? ErrorMessage(state.errorMsg)
+                        : Container(),
+                    LegalNotice(),
+                    LoginSubmitButton(onPressed: () {
+                      if (_formKey.currentState.validate()) {
+                        _formKey.currentState.save();
+                        BlocProvider.of<LoginBloc>(context).add(
+                            LoginWithCredentialsPressed(
+                                email: _email, password: _password));
+                      }
+                    }),
+                    PasswordResetButton(),
+                    LoginToSignupButton(),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
       );
 }

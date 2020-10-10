@@ -27,3 +27,5 @@ class SignupSuccessAction {
 
   final String token;
 }
+
+class LogOutSuccessAction {}

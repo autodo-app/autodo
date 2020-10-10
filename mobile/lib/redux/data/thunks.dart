@@ -30,6 +30,26 @@ ThunkAction fetchData() {
   };
 }
 
+/// Creates the cars and basic Todos for the new user
+ThunkAction setNewUserData({List<Car> cars, Map<String, List<Todo>> todos}) {
+  return (Store store) async {
+    try {
+      for (final c in cars) {
+        final res = await store.state.api.createCar(c);
+        for (final t in todos[c.name]) {
+          final todoRes =
+              await store.state.api.createTodo(t.copyWith(carId: res['id']));
+          store.dispatch(
+              CreateTodoAction(todo: Todo.fromMap(todoRes.id, todoRes)));
+        }
+        store.dispatch(CreateCarAction(car: Car.fromMap(res.id, res)));
+      }
+    } catch (e) {
+      store.dispatch(DataFailedAction(error: e));
+    }
+  };
+}
+
 /// Creates a new Todo object on the server.
 ThunkAction createTodo(Todo todo) {
   return (Store store) async {

@@ -28,3 +28,35 @@ ThunkAction signUpAsync(String username, String password, bool rememberMe) {
     }
   };
 }
+
+ThunkAction logOut() {
+  return (Store store) async {
+    try {
+      await store.state.api.logOut();
+      store.dispatch(LogOutSuccessAction());
+    } catch (e) {
+      print(e);
+    }
+  };
+}
+
+ThunkAction deleteAccount() {
+  return (Store store) async {
+    try {
+      await store.state.api.deleteAccount();
+      store.dispatch(LogOutSuccessAction());
+    } catch (e) {
+      print(e);
+    }
+  };
+}
+
+ThunkAction sendPasswordReset(String email) {
+  return (Store store) async {
+    try {
+      await store.state.api.sendPasswordReset(email);
+    } catch (e) {
+      print(e);
+    }
+  };
+}

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_intl/json_intl.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:redux/redux.dart';
 
-import '../../../../blocs/blocs.dart';
 import '../../../../generated/localization.dart';
+import '../../../../redux/redux.dart';
 import '../../widgets/barrel.dart';
 import '../new_user_setup/screen.dart';
 
@@ -33,9 +34,9 @@ class _SignupFormState extends State<SignupForm> {
   }
 
   @override
-  Widget build(BuildContext context) => BlocListener<SignupBloc, SignupState>(
-        listener: (context, state) {
-          if (state is SignupError) {
+  Widget build(BuildContext context) => StoreBuilder(
+        builder: (BuildContext context, Store<AppState> store) {
+          if (store.state.authState.status == AuthStatus.FAILED) {
             Scaffold.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(
@@ -54,7 +55,7 @@ class _SignupFormState extends State<SignupForm> {
                           1), // overkill to make sure that it never goes away
                 ),
               );
-          } else if (state is SignupLoading) {
+          } else if (store.state.authState.status == AuthStatus.LOADING) {
             Scaffold.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(
@@ -72,7 +73,8 @@ class _SignupFormState extends State<SignupForm> {
                           1), // overkill to make sure that it never goes away
                 ),
               );
-          } else if (state is VerificationSent) {
+          } else if (store.state.authState.status ==
+              AuthStatus.VERIFICATION_SENT) {
             Scaffold.of(context).hideCurrentSnackBar();
             showDialog(
               context: context,
@@ -92,9 +94,8 @@ class _SignupFormState extends State<SignupForm> {
                 ],
               ),
             );
-          } else if (state is SignupSuccess || state is UserVerified) {
+          } else if (store.state.authState.status == AuthStatus.LOGGED_IN) {
             Scaffold.of(context).hideCurrentSnackBar();
-            BlocProvider.of<AuthenticationBloc>(context).add(SignedUp());
             Navigator.pop(context);
             Navigator.push(
                 context,
@@ -102,38 +103,37 @@ class _SignupFormState extends State<SignupForm> {
                   builder: (context) => NewUserScreen(),
                 ));
           }
+          return Form(
+            key: _formKey,
+            child: Container(
+              padding: EdgeInsets.all(15),
+              child: ListView(
+                children: <Widget>[
+                  EmailForm(
+                      onSaved: (val) => _email = val,
+                      node: _emailNode,
+                      nextNode: _passwordNode,
+                      login: false),
+                  PasswordForm(
+                    onSaved: (val) => _password = val,
+                    node: _passwordNode,
+                    login: false,
+                  ),
+                  (store.state.authState.status == AuthStatus.FAILED)
+                      ? ErrorMessage(store.state.authState.error)
+                      : Container(),
+                  LegalNotice(),
+                  SignupSubmitButton(onPressed: () {
+                    if (_formKey.currentState.validate()) {
+                      _formKey.currentState.save();
+                      store.dispatch(signUpAsync(_email, _password, true));
+                    }
+                  }),
+                  SignupToLoginButton(),
+                ],
+              ),
+            ),
+          );
         },
-        child: BlocBuilder<SignupBloc, SignupState>(
-            builder: (context, state) => Form(
-                key: _formKey,
-                child: Container(
-                    padding: EdgeInsets.all(15),
-                    child: ListView(
-                      children: <Widget>[
-                        EmailForm(
-                            onSaved: (val) => _email = val,
-                            node: _emailNode,
-                            nextNode: _passwordNode,
-                            login: false),
-                        PasswordForm(
-                          onSaved: (val) => _password = val,
-                          node: _passwordNode,
-                          login: false,
-                        ),
-                        (state is SignupError)
-                            ? ErrorMessage(state.errorMsg)
-                            : Container(),
-                        LegalNotice(),
-                        SignupSubmitButton(onPressed: () {
-                          if (_formKey.currentState.validate()) {
-                            _formKey.currentState.save();
-                            BlocProvider.of<SignupBloc>(context).add(
-                                SignupWithCredentialsPressed(
-                                    email: _email, password: _password));
-                          }
-                        }),
-                        SignupToLoginButton(),
-                      ],
-                    )))),
       );
 }

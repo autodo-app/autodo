@@ -1,5 +1,6 @@
 export 'app/state.dart';
 export 'auth/state.dart';
+export 'auth/status.dart';
 export 'auth/thunks.dart';
 export 'data/state.dart';
 export 'data/thunks.dart';

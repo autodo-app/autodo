@@ -1,8 +1,8 @@
 import 'package:redux/redux.dart';
 
-import '../../models/models.dart';
 import '../app/state.dart';
 import 'actions.dart';
+import 'status.dart';
 
 final authReducer = combineReducers<AppState>([
   TypedReducer<AppState, LoginSuccessAction>(_loginSuccess),
@@ -11,6 +11,7 @@ final authReducer = combineReducers<AppState>([
   TypedReducer<AppState, SignupSuccessAction>(_signupSuccess),
   TypedReducer<AppState, SignupPendingAction>(_signupPending),
   TypedReducer<AppState, SignupFailedAction>(_signupFailure),
+  TypedReducer<AppState, LogOutSuccessAction>(_logOutSuccess),
 ]);
 
 AppState _loginPending(AppState state, LoginPendingAction action) {
@@ -45,4 +46,9 @@ AppState _signupFailure(AppState state, SignupFailedAction action) {
   return state.copyWith(
       authState: state.authState
           .copyWith(status: AuthStatus.FAILED, error: action.error));
+}
+
+AppState _logOutSuccess(AppState state, LogOutSuccessAction action) {
+  return state.copyWith(
+      authState: state.authState.copyWith(status: AuthStatus.LOGGED_OUT));
 }
