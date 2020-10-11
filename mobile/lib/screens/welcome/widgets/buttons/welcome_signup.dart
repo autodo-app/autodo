@@ -24,7 +24,7 @@ class SignupButton extends StatelessWidget {
               // AutodoRoutes.signupScreen
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (BuildContext context) => SignupScreenProvider(),
+                  builder: (BuildContext context) => SignupScreen(),
                 ),
               );
             },

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:json_intl/json_intl.dart';
+import 'package:equatable/equatable.dart';
+import 'package:redux/redux.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 
-import '../../../blocs/blocs.dart';
 import '../../../generated/localization.dart';
 import '../../../models/models.dart';
+import '../../../redux/redux.dart';
 import '../../../units/units.dart';
 import '../../../widgets/widgets.dart';
 import 'delete_button.dart';
@@ -50,20 +52,14 @@ class TodoListCard extends StatelessWidget {
             children: [
               Container(
                 padding: EdgeInsets.fromLTRB(0, 15, 15, 15),
-                child: RoundedCheckbox(
-                    initialValue: todo.completed,
-                    onTap: (completed) {
-                      BlocProvider.of<DataBloc>(context)
-                          .add(UpdateTodo(todo.copyWith(
-                        completed: completed,
-                        completedOdomSnapshot: completed
-                            ? OdomSnapshot(
-                                date: DateTime.now(),
-                                mileage: car.odomSnapshot.mileage,
-                              )
-                            : null,
-                      )));
-                    }),
+                child: StoreConnector(
+                  converter: _ViewModel.fromStore,
+                  builder: (BuildContext context, _ViewModel vm) =>
+                      RoundedCheckbox(
+                    initialValue: todo.completedOdomSnapshot != null,
+                    onTap: (completed) => vm.onCompleteTodo(todo, completed),
+                  ),
+                ),
               ),
               Expanded(
                 child: Column(
@@ -75,25 +71,39 @@ class TodoListCard extends StatelessWidget {
                       height: 10,
                     ),
                     if (todo.dueMileage != null && todo.dueDate == null)
-                      RichText(
-                          text: TextSpan(children: [
-                        // TODO: Improve this translation
-                        TextSpan(
-                            text:
-                                '${JsonIntl.of(context).get(IntlKeys.dueAt)} ',
-                            style:
-                                Theme.of(context).primaryTextTheme.bodyText2),
-                        TextSpan(
-                          text: Distance.of(context).format(todo.dueMileage),
-                          style: Theme.of(context).primaryTextTheme.subtitle2,
-                          children: [TextSpan(text: ' ')],
+                      StoreBuilder(
+                        builder:
+                            (BuildContext context, Store<AppState> store) =>
+                                RichText(
+                          text: TextSpan(
+                            children: [
+                              // TODO: Improve this translation
+                              TextSpan(
+                                  text:
+                                      '${JsonIntl.of(context).get(IntlKeys.dueAt)} ',
+                                  style: Theme.of(context)
+                                      .primaryTextTheme
+                                      .bodyText2),
+                              TextSpan(
+                                text: Distance.of(context)
+                                    .format(todo.dueMileage),
+                                style: Theme.of(context)
+                                    .primaryTextTheme
+                                    .subtitle2,
+                                children: [TextSpan(text: ' ')],
+                              ),
+                              TextSpan(
+                                text: store.state.unitsState.distance
+                                    .unitString(store.state.intlState.intl,
+                                        short: true),
+                                style: Theme.of(context)
+                                    .primaryTextTheme
+                                    .bodyText2,
+                              )
+                            ],
+                          ),
                         ),
-                        TextSpan(
-                          text: Distance.of(context)
-                              .unitString(context, short: true),
-                          style: Theme.of(context).primaryTextTheme.bodyText2,
-                        )
-                      ])),
+                      ),
                     if (todo.dueDate != null && todo.dueMileage == null)
                       RichText(
                           text: TextSpan(children: [
@@ -109,33 +119,50 @@ class TodoListCard extends StatelessWidget {
                         ),
                       ])),
                     if (todo.dueDate != null && todo.dueMileage != null)
-                      RichText(
-                          text: TextSpan(children: [
-                        TextSpan(
-                            text:
-                                '${JsonIntl.of(context).get(IntlKeys.dueBy)} ',
-                            style:
-                                Theme.of(context).primaryTextTheme.bodyText2),
-                        TextSpan(
-                          text: DateFormat.yMd().format(todo.dueDate),
-                          style: Theme.of(context).primaryTextTheme.subtitle2,
-                          children: [TextSpan(text: ' ')],
+                      StoreBuilder(
+                        builder:
+                            (BuildContext context, Store<AppState> store) =>
+                                RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                  text:
+                                      '${JsonIntl.of(context).get(IntlKeys.dueBy)} ',
+                                  style: Theme.of(context)
+                                      .primaryTextTheme
+                                      .bodyText2),
+                              TextSpan(
+                                text: DateFormat.yMd().format(todo.dueDate),
+                                style: Theme.of(context)
+                                    .primaryTextTheme
+                                    .subtitle2,
+                                children: [TextSpan(text: ' ')],
+                              ),
+                              TextSpan(
+                                  text:
+                                      '${JsonIntl.of(context).get(IntlKeys.or)} ',
+                                  style: Theme.of(context)
+                                      .primaryTextTheme
+                                      .bodyText2),
+                              TextSpan(
+                                text: Distance.of(context)
+                                    .format(todo.dueMileage),
+                                style: Theme.of(context)
+                                    .primaryTextTheme
+                                    .subtitle2,
+                                children: [TextSpan(text: ' ')],
+                              ),
+                              TextSpan(
+                                  text: store.state.unitsState.distance
+                                      .unitString(store.state.intlState.intl,
+                                          short: true),
+                                  style: Theme.of(context)
+                                      .primaryTextTheme
+                                      .bodyText2),
+                            ],
+                          ),
                         ),
-                        TextSpan(
-                            text: '${JsonIntl.of(context).get(IntlKeys.or)} ',
-                            style:
-                                Theme.of(context).primaryTextTheme.bodyText2),
-                        TextSpan(
-                          text: Distance.of(context).format(todo.dueMileage),
-                          style: Theme.of(context).primaryTextTheme.subtitle2,
-                          children: [TextSpan(text: ' ')],
-                        ),
-                        TextSpan(
-                            text: Distance.of(context)
-                                .unitString(context, short: true),
-                            style:
-                                Theme.of(context).primaryTextTheme.bodyText2),
-                      ])),
+                      ),
                   ],
                 ),
               ),
@@ -157,4 +184,22 @@ class TodoListCard extends StatelessWidget {
           ),
         ),
       );
+}
+
+class _ViewModel extends Equatable {
+  const _ViewModel({@required this.onCompleteTodo});
+
+  final Function(Todo, bool) onCompleteTodo;
+
+  static _ViewModel fromStore(Store<AppState> store) =>
+      _ViewModel(onCompleteTodo: (todo, completed) {
+        if (completed) {
+          store.dispatch(completeTodo(todo));
+        } else {
+          store.dispatch(unCompleteTodo(todo));
+        }
+      });
+
+  @override
+  List get props => [];
 }

@@ -1,11 +1,13 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_intl/json_intl.dart';
 import 'package:intl/intl.dart';
+import 'package:redux/redux.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 
-import '../../../blocs/blocs.dart';
 import '../../../generated/localization.dart';
 import '../../../models/models.dart';
+import '../../../redux/redux.dart';
 import '../../../theme.dart';
 import '../../../util.dart';
 import '../../../widgets/widgets.dart';
@@ -167,81 +169,94 @@ class _CalendarView extends StatelessWidget {
 class RefuelingsScreen extends StatelessWidget {
   const RefuelingsScreen({Key key}) : super(key: key);
 
-  void _deleteRefueling(BuildContext context, Refueling refueling) {
-    BlocProvider.of<DataBloc>(context).add(DeleteRefueling(refueling));
-    Scaffold.of(context).showSnackBar(DeleteRefuelingSnackBar(
-      context: context,
-      onUndo: () =>
-          BlocProvider.of<DataBloc>(context).add(AddRefueling(refueling)),
-    ));
+  @override
+  Widget build(BuildContext context) => StoreConnector(
+        converter: _ViewModel.fromStore,
+        builder: (context, vm) => Container(
+          decoration: headerDecoration,
+          child: CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                expandedHeight: HEADER_HEIGHT,
+                flexibleSpace: FlexibleSpaceBar(
+                  title: Text(
+                    JsonIntl.of(context).get(IntlKeys.refuelings),
+                    style: Theme.of(context).accentTextTheme.headline1,
+                  ),
+                  titlePadding: EdgeInsets.all(25),
+                  centerTitle: true,
+                ),
+              ),
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    if (index == 0) {
+                      return _PanelButtons();
+                    } else if (index == 1) {
+                      return _CalendarView(
+                        refuelings: vm.refuelings,
+                      );
+                    }
+
+                    final adjustedIndex = index - 2;
+                    return RefuelingCard(
+                      first: adjustedIndex == 0,
+                      last: adjustedIndex == (vm.refuelings.length - 1),
+                      refueling: vm.refuelings[adjustedIndex],
+                      car: vm.cars.firstWhere(
+                          (c) => c.id == vm.refuelings[adjustedIndex].carId),
+                      onDelete: () => vm.onDeleteRefueling(
+                          context, vm.refuelings[adjustedIndex]),
+                    );
+                  },
+                  childCount: vm.refuelings.length + 2,
+                ),
+              ),
+              SliverFillRemaining(
+                fillOverscroll: true,
+                hasScrollBody: false,
+                child: Container(
+                  color: Theme.of(context).cardColor,
+                  child: (vm.refuelings.isEmpty)
+                      ? Center(
+                          child: Text(
+                              JsonIntl.of(context).get(IntlKeys.noRefuelings)))
+                      : Container(),
+                ),
+              )
+            ],
+          ),
+        ),
+      );
+}
+
+class _ViewModel extends Equatable {
+  const _ViewModel(
+      {@required this.refuelings,
+      @required this.cars,
+      @required this.onDeleteRefueling});
+
+  final List<Refueling> refuelings;
+  final List<Car> cars;
+  final Function(BuildContext, Refueling) onDeleteRefueling;
+
+  static _ViewModel fromStore(Store<AppState> store) {
+    if (store.state.dataState.status == DataStatus.IDLE) {
+      store.dispatch(fetchData());
+    }
+    return _ViewModel(
+        // TODO: add filtering
+        refuelings: store.state.dataState.refuelings,
+        cars: store.state.dataState.cars,
+        onDeleteRefueling: (context, refueling) {
+          store.dispatch(deleteRefueling(refueling));
+          Scaffold.of(context).showSnackBar(DeleteRefuelingSnackBar(
+            context: context,
+            onUndo: () => store.dispatch(createRefueling(refueling)),
+          ));
+        });
   }
 
   @override
-  Widget build(BuildContext context) => BlocBuilder<DataBloc, DataState>(
-      builder: (context, carsState) =>
-          BlocBuilder<FilteredRefuelingsBloc, FilteredRefuelingsState>(
-              builder: (context, refuelingsState) {
-            if (!(refuelingsState is FilteredRefuelingsLoaded) ||
-                !(carsState is DataLoaded)) {
-              return Container();
-            }
-
-            final refuelings = (refuelingsState as FilteredRefuelingsLoaded)
-                .filteredRefuelings;
-            final cars = (carsState as DataLoaded).cars;
-            return Container(
-                decoration: headerDecoration,
-                child: CustomScrollView(
-                  slivers: [
-                    SliverAppBar(
-                      expandedHeight: HEADER_HEIGHT,
-                      flexibleSpace: FlexibleSpaceBar(
-                        title: Text(
-                          JsonIntl.of(context).get(IntlKeys.refuelings),
-                          style: Theme.of(context).accentTextTheme.headline1,
-                        ),
-                        titlePadding: EdgeInsets.all(25),
-                        centerTitle: true,
-                      ),
-                    ),
-                    SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          if (index == 0) {
-                            return _PanelButtons();
-                          } else if (index == 1) {
-                            return _CalendarView(
-                              refuelings: refuelings,
-                            );
-                          }
-
-                          final adjustedIndex = index - 2;
-                          return RefuelingCard(
-                            first: adjustedIndex == 0,
-                            last: adjustedIndex == (refuelings.length - 1),
-                            refueling: refuelings[adjustedIndex],
-                            car: cars.firstWhere(
-                                (c) => c.id == refuelings[adjustedIndex].carId),
-                            onDelete: () => _deleteRefueling(
-                                context, refuelings[adjustedIndex]),
-                          );
-                        },
-                        childCount: refuelings.length + 2,
-                      ),
-                    ),
-                    SliverFillRemaining(
-                      fillOverscroll: true,
-                      hasScrollBody: false,
-                      child: Container(
-                        color: Theme.of(context).cardColor,
-                        child: (refuelings.isEmpty)
-                            ? Center(
-                                child: Text(JsonIntl.of(context)
-                                    .get(IntlKeys.noRefuelings)))
-                            : Container(),
-                      ),
-                    )
-                  ],
-                ));
-          }));
+  List get props => [refuelings];
 }

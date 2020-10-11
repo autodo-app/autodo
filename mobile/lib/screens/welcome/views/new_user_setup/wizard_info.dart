@@ -1,12 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:json_intl/json_intl.dart';
+import 'package:redux/redux.dart';
 
-import '../../../../blocs/blocs.dart';
 import '../../../../models/models.dart';
-import '../../../../units/units.dart';
+import '../../../../redux/redux.dart';
 import 'wizard.dart';
 
 class NewUserCar {
@@ -17,9 +15,10 @@ class NewUserCar {
 }
 
 class NewUserScreenWizard extends WizardInfo {
-  NewUserScreenWizard(WizardState wizard) : super(wizard);
+  NewUserScreenWizard(WizardState wizard, this.store) : super(wizard);
 
   final cars = <NewUserCar>[];
+  final Store<AppState> store;
 
   double oilRepeatInterval;
   double tireRotationRepeatInterval;
@@ -31,7 +30,7 @@ class NewUserScreenWizard extends WizardInfo {
 
   @override
   FutureOr<void> didCancel(BuildContext context) {
-    BlocProvider.of<AuthenticationBloc>(context).add(LogOut());
+    store.dispatch(logOut());
   }
 
   @override
@@ -39,41 +38,37 @@ class NewUserScreenWizard extends WizardInfo {
     // TODO: Make this its own addition so that the cars are added first and ID vals are used right
 
     final newCars = <Car>[];
-    final newTodos = <String, Todo>{};
+    final newTodos = <String, List<Todo>>{};
     for (final car in cars) {
       final c = Car(
           name: car.name,
-          odomSnapshot:
-              OdomSnapshot(mileage: car.mileage, date: DateTime.now()));
+          snaps: [OdomSnapshot(mileage: car.mileage, date: DateTime.now())]);
       newCars.add(c);
+      newTodos[c.name] = [];
       if (car.oilChange != null) {
-        newTodos[c.name] = Todo(
+        newTodos[c.name].add(Todo(
           name: 'Oil',
-          completed: true,
           completedOdomSnapshot: OdomSnapshot(
             mileage: car.mileage,
             date: DateTime.now(),
           ),
           dueMileage: car.oilChange,
           mileageRepeatInterval: oilRepeatInterval,
-        );
+        ));
       }
       if (car.tireRotation != null) {
-        newTodos[c.name] = Todo(
+        newTodos[c.name].add(Todo(
           name: 'Tire Rotation',
-          completed: true,
           completedOdomSnapshot: OdomSnapshot(
             mileage: car.mileage,
             date: DateTime.now(),
           ),
           dueMileage: car.tireRotation,
           mileageRepeatInterval: tireRotationRepeatInterval,
-        );
+        ));
       }
     }
-    BlocProvider.of<DataBloc>(context).add(TranslateDefaults(
-        JsonIntl.of(context), Distance.of(context, listen: false).unit));
-    BlocProvider.of<DataBloc>(context)
-        .add(SetNewUserData(cars: newCars, todos: newTodos));
+
+    store.dispatch(setNewUserData(cars: newCars, todos: newTodos));
   }
 }

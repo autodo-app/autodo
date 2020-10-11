@@ -8,9 +8,10 @@ jobs:
       run:
         working-directory: ./mobile
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
         with:
           submodules: true
+          token: ${{ secrets.PAT }}
       - uses: subosito/flutter-action@v1
         with:
           channel: "dev"
@@ -19,10 +20,7 @@ jobs:
       - run: flutter pub run pubspec_extract -d lib/generated/pubspec.dart
       - run: flutter format .
       - uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: Apply automatic changes
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
   blackformat:
     name: Python Format
     runs-on: ubuntu-latest
@@ -30,11 +28,8 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.head_ref }}
+          token: ${{ secrets.PAT }}  
       - uses: actions/setup-python@v2
       - run: pip install black
       - run: black ./backend
       - uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: Apply automatic changes
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

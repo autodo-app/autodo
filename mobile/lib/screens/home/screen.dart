@@ -3,16 +3,15 @@ import 'dart:async';
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:redux/redux.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:json_intl/json_intl.dart';
 
-import '../../blocs/blocs.dart';
 import '../../flavor.dart';
 import '../../integ_test_keys.dart';
 import '../../models/models.dart';
+import '../../redux/redux.dart';
 import '../../screens/welcome/views/barrel.dart';
-import '../../units/units.dart';
 import '../../widgets/widgets.dart';
 import '../add_edit/barrel.dart';
 import 'views/barrel.dart';
@@ -32,8 +31,8 @@ class HomeScreen extends StatefulWidget {
   final AppTab tab;
 
   @override
-  HomeScreenState createState() =>
-      HomeScreenState(todosTabKey, integrationTest);
+  _HomeScreenState createState() =>
+      _HomeScreenState(todosTabKey, integrationTest);
 }
 
 class _ScreenWithBanner extends StatelessWidget {
@@ -57,8 +56,20 @@ class _ScreenWithBanner extends StatelessWidget {
       ));
 }
 
-class HomeScreenState extends State<HomeScreen> with RouteAware {
-  HomeScreenState(this.todosTabKey, this.integrationTest);
+class HomeScreenContent extends StatefulWidget {
+  const HomeScreenContent(this.vm, this.integrationTest);
+
+  final _ViewModel vm;
+  final bool integrationTest;
+
+  @override
+  _HomeScreenContentState createState() => _HomeScreenContentState();
+}
+
+class _HomeScreenContentState extends State<HomeScreenContent> {
+  _HomeScreenContentState();
+
+  AppTab _tab = AppTab.todos;
 
   final Map<AppTab, Widget> views = {
     AppTab.todos: TodosScreen(),
@@ -66,22 +77,6 @@ class HomeScreenState extends State<HomeScreen> with RouteAware {
     AppTab.stats: StatisticsScreen(),
     AppTab.garage: GarageScreen(),
   };
-
-  final Key todosTabKey;
-
-  final bool integrationTest;
-
-  BannerAd _bannerAd;
-
-  bool _bannerShown = false;
-
-  static bool _adMobInitialized = false;
-
-  AppTab _tab;
-
-  AppTab get tab => _tab;
-
-  StreamSubscription<DataState> dataSubscription;
 
   set tab(AppTab tab) {
     setState(() {
@@ -96,100 +91,78 @@ class HomeScreenState extends State<HomeScreen> with RouteAware {
           builder: (context) => _ScreenWithBanner(
             child: RefuelingAddEditScreen(
               isEditing: false,
-              onSave: (m, d, a, c, n) {
-                BlocProvider.of<DataBloc>(context).add(AddRefueling(Refueling(
-                  odomSnapshot: OdomSnapshot(
-                      car: n, // TODO: return Car ID here
-                      mileage:
-                          Distance.of(context, listen: false).unitToInternal(m),
-                      date: d),
-                  amount: Volume.of(context, listen: false).unitToInternal(a),
-                  cost: Currency.of(context, listen: false).unitToInternal(c),
-                )));
-              },
+              onSave: widget.vm.onRefuelingAdded,
               cars: cars,
             ),
           ),
         ),
         MaterialPageRoute(
-            builder: (context) => _ScreenWithBanner(
-                    child: TodoAddEditScreen(
-                  isEditing: false,
-                  onSave: (n, d, m, c, mR, dR) {
-                    // TODO: return Car ID here
-                    BlocProvider.of<DataBloc>(context).add(AddTodo(Todo(
-                        name: n,
-                        dueDate: d,
-                        dueMileage: m,
-                        carId: c,
-                        mileageRepeatInterval: mR,
-                        dateRepeatInterval: dR,
-                        completed: false)));
-                  },
-                ))),
+          builder: (context) => _ScreenWithBanner(
+            child: TodoAddEditScreen(
+              cars: widget.vm.cars,
+              isEditing: false,
+              onSave: widget.vm.onTodoAdded,
+            ),
+          ),
+        ),
         MaterialPageRoute(
-            builder: (context) => _ScreenWithBanner(
-                    child: CarAddEditScreen(
-                  isEditing: false,
-                  onSave: (name, odom, make, model, y, p, v) {
-                    BlocProvider.of<DataBloc>(context).add(TranslateDefaults(
-                        JsonIntl.of(context),
-                        Distance.of(context, listen: false).unit));
-                    BlocProvider.of<DataBloc>(context).add(AddCar(Car(
-                        name: name,
-                        odomSnapshot:
-                            OdomSnapshot(mileage: odom, date: DateTime.now()),
-                        make: make,
-                        model: model,
-                        year: y,
-                        plate: p,
-                        vin: v)));
-                  },
-                ))),
+          builder: (context) => _ScreenWithBanner(
+            child: CarAddEditScreen(
+                isEditing: false, onSave: widget.vm.onCarAdded),
+          ),
+        ),
       ];
 
-  Widget get actionButton =>
-      BlocBuilder<DataBloc, DataState>(builder: (context, state) {
-        if (!(state is DataLoaded)) {
-          print('Cannot show fab without cars');
-          return Container();
-        } else if (integrationTest) {
-          return AutodoActionButton(
-              miniButtonRoutes: fabRoutes((state as DataLoaded).cars),
-              ticker: TestVSync());
-        } else {
-          return AutodoActionButton(
-              miniButtonRoutes: fabRoutes((state as DataLoaded).cars));
-        }
-      });
+  Widget get actionButton {
+    if (widget.vm.cars.isEmpty) {
+      print('Cannot show fab without cars');
+      return Container();
+    } else if (widget.integrationTest) {
+      return AutodoActionButton(
+          miniButtonRoutes: fabRoutes(widget.vm.cars), ticker: TestVSync());
+    } else {
+      return AutodoActionButton(miniButtonRoutes: fabRoutes(widget.vm.cars));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: views[_tab],
+      floatingActionButton: actionButton,
+      bottomNavigationBar: TabSelector(
+        activeTab: _tab,
+        onTabSelected: (_tab) => tab = _tab,
+        todosTabKey: ValueKey('__todos_tab_button__'),
+        refuelingsTabKey: ValueKey('__refuelings_tab_button__'),
+        garageTabKey: ValueKey('__garage_tab_button__'),
+      ),
+    );
+  }
+}
+
+/// A wrapper around the actual home screen content for the banner ads
+class _HomeScreenState extends State<HomeScreen> with RouteAware {
+  _HomeScreenState(this.todosTabKey, this.integrationTest);
+
+  final Key todosTabKey;
+
+  final bool integrationTest;
+
+  BannerAd _bannerAd;
+
+  bool _bannerShown = false;
+
+  static bool _adMobInitialized = false;
+
+  bool get adsEnabled => kFlavor.hasAds && kFlavor.hasPaid;
+  bool removeAdsBanner(vm) => adsEnabled && !vm.isPaidVersion && _bannerShown;
 
   AutodoBannerAd _bannerAdConfig() => AutodoBannerAd(
         adUnitId: kReleaseMode
             ? 'ca-app-pub-6809809089648617/3864738913'
             : BannerAd.testAdUnitId,
       );
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    if (kFlavor.hasPaid) {
-      BlocProvider.of<PaidVersionBloc>(context)
-          .observer
-          .subscribe(this, ModalRoute.of(context));
-    }
-
-    dataSubscription ??= BlocProvider.of<DataBloc>(context).listen((a) {
-      setState(() {});
-    });
-  }
-
-  @override
-  void dispose() {
-    dataSubscription?.cancel();
-    dataSubscription = null;
-    super.dispose();
-  }
 
   @override
   Future<void> didPush() async {
@@ -225,7 +198,6 @@ class HomeScreenState extends State<HomeScreen> with RouteAware {
 
   @override
   void initState() {
-    _tab = widget.tab;
     if (kFlavor.hasAds && !_adMobInitialized) {
       FirebaseAdMob.instance.initialize(appId: BannerAd.testAdUnitId);
       _adMobInitialized = true;
@@ -234,60 +206,88 @@ class HomeScreenState extends State<HomeScreen> with RouteAware {
     super.initState();
   }
 
-  List<Widget> fakeBottomButtons = [Container(height: 50)];
-
-  Widget buildScreen(BuildContext context) {
-    return Scaffold(
-      body: views[_tab],
-      floatingActionButton: actionButton,
-      bottomNavigationBar: TabSelector(
-        activeTab: _tab,
-        onTabSelected: (_tab) => tab = _tab,
-        todosTabKey: todosTabKey,
-        refuelingsTabKey: ValueKey('__refuelings_tab_button__'),
-        garageTabKey: ValueKey('__garage_tab_button__'),
-      ),
-    );
-  }
-
   @override
-  Widget build(BuildContext context) {
-    final dataState = BlocProvider.of<DataBloc>(context).state;
-    if (dataState is DataLoaded) {
-      if (dataState.cars.isEmpty) {
-        return NewUserScreen();
-      }
-    } else {
-      return LoadingIndicator();
-    }
+  Widget build(BuildContext context) => StoreConnector<AppState, _ViewModel>(
+        converter: _ViewModel.fromStore,
+        builder: (context, vm) {
+          if (vm.cars.isEmpty) {
+            return NewUserScreen();
+          }
 
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<FilteredRefuelingsBloc>(
-            create: (context) => FilteredRefuelingsBloc(
-                dataBloc: BlocProvider.of<DataBloc>(context))),
-        BlocProvider<FilteredTodosBloc>(
-            create: (context) => FilteredTodosBloc(
-                dataBloc: BlocProvider.of<DataBloc>(context))),
-      ],
-      child: kFlavor.hasAds
-          ? (kFlavor.hasPaid
-              ? BlocBuilder<PaidVersionBloc, PaidVersionState>(
-                  builder: (context, paid) {
-                  if (paid is PaidVersion && _bannerShown) {
-                    _bannerAd?.dispose()?.then((_) {
-                      setState(() {
-                        _bannerShown = false;
-                      });
-                    });
-                  }
-                  return buildScreen(context);
-                })
-              : _ScreenWithBanner(
-                  bannerShown: _bannerShown,
-                  child: buildScreen(context),
-                ))
-          : buildScreen(context),
-    );
+          if (adsEnabled) {
+            if (removeAdsBanner(vm)) {
+              _bannerAd?.dispose()?.then((_) {
+                setState(() {
+                  _bannerShown = false;
+                });
+              });
+              return HomeScreenContent(vm, integrationTest);
+            }
+            return _ScreenWithBanner(
+                bannerShown: _bannerShown,
+                child: HomeScreenContent(vm, integrationTest));
+          }
+          return HomeScreenContent(vm, integrationTest);
+        },
+      );
+}
+
+class _ViewModel {
+  const _ViewModel(
+      {@required this.isPaidVersion,
+      @required this.cars,
+      @required this.onRefuelingAdded,
+      @required this.onTodoAdded,
+      @required this.onCarAdded});
+
+  final bool isPaidVersion;
+
+  final List<Car> cars;
+
+  final Function(double, DateTime, double, double, String) onRefuelingAdded;
+
+  final Function(String, DateTime, double, String, double, RepeatInterval)
+      onTodoAdded;
+
+  final Function(String, double, String, String, int, String, String)
+      onCarAdded;
+
+  static _ViewModel fromStore(Store<AppState> store) {
+    if (store.state.dataState.status == DataStatus.IDLE) {
+      store.dispatch(fetchData());
+    }
+    return _ViewModel(
+        isPaidVersion: store.state.paidVersionState.isPaid,
+        cars: store.state.dataState.cars,
+        onRefuelingAdded: (m, d, a, c, n) {
+          store.dispatch(createRefueling(Refueling(
+            odomSnapshot: OdomSnapshot(
+                car: n, // TODO: return Car ID here
+                mileage: store.state.unitsState.distance.unitToInternal(m),
+                date: d),
+            amount: store.state.unitsState.volume.unitToInternal(a),
+            cost: store.state.unitsState.currency.unitToInternal(c),
+          )));
+        },
+        onTodoAdded: (n, d, m, c, mR, dR) {
+          store.dispatch(createTodo(Todo(
+            name: n,
+            dueDate: d,
+            dueMileage: m,
+            carId: c,
+            mileageRepeatInterval: mR,
+            dateRepeatInterval: dR,
+          )));
+        },
+        onCarAdded: (name, odom, make, model, y, p, v) {
+          store.dispatch(createCar(Car(
+              name: name,
+              // odomSnapshot: OdomSnapshot(mileage: odom, date: DateTime.now()),
+              make: make,
+              model: model,
+              year: y,
+              plate: p,
+              vin: v)));
+        });
   }
 }

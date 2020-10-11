@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_intl/json_intl.dart';
 
-import '../../../../blocs/blocs.dart';
 import '../../../../generated/localization.dart';
 
 class EmailForm extends StatelessWidget {
@@ -30,15 +28,6 @@ class EmailForm extends StatelessWidget {
               color: Colors.grey[300],
             )),
         onSaved: (value) => onSaved(value.trim()),
-        onChanged: (val) {
-          if (login) {
-            return BlocProvider.of<LoginBloc>(context)
-                .add(LoginEmailChanged(email: val));
-          } else {
-            return BlocProvider.of<SignupBloc>(context)
-                .add(SignupEmailChanged(email: val));
-          }
-        },
         onFieldSubmitted: (_) {
           node.unfocus();
           nextNode.requestFocus();

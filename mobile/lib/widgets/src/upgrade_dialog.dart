@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_intl/json_intl.dart';
 
-import '../../blocs/blocs.dart';
 import '../../generated/localization.dart';
 
 class UpgradeDialog extends AlertDialog {
@@ -31,8 +29,8 @@ class UpgradeDialog extends AlertDialog {
                 : [
                     FlatButton(
                         onPressed: () {
-                          BlocProvider.of<PaidVersionBloc>(context)
-                              .add(PaidVersionUpgrade());
+                          // BlocProvider.of<PaidVersionBloc>(context)
+                          //     .add(PaidVersionUpgrade());
                         },
                         child: Text(
                             JsonIntl.of(context)

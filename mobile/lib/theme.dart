@@ -359,7 +359,10 @@ ThemeData createTheme() {
     ),
     toggleButtonsTheme: ThemeData.fallback().toggleButtonsTheme, // same
     secondaryHeaderColor: mainPallette.shade300,
-    textSelectionTheme: TextSelectionThemeData(cursorColor: mainPallette.shade300, selectionColor: mainPallette.shade400, selectionHandleColor: mainPallette.shade300),
+    textSelectionTheme: TextSelectionThemeData(
+        cursorColor: mainPallette.shade300,
+        selectionColor: mainPallette.shade400,
+        selectionHandleColor: mainPallette.shade300),
     backgroundColor: cardColor,
     dialogBackgroundColor: cardColor,
     indicatorColor: mainPallette.shade700,

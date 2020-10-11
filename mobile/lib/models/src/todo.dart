@@ -2,12 +2,11 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
-import '../../repositories/src/write_batch_wrapper.dart';
 import '../models.dart';
 import 'repeat_interval.dart';
 
 @immutable
-class Todo extends Equatable implements WriteBatchDocument {
+class Todo extends Equatable {
   const Todo(
       {this.id,
       this.name,
@@ -17,7 +16,6 @@ class Todo extends Equatable implements WriteBatchDocument {
       this.mileageRepeatInterval,
       this.dateRepeatInterval,
       this.notificationID,
-      this.completed,
       this.estimatedDueDate,
       this.completedOdomSnapshot,
       this.dueDate});
@@ -39,7 +37,6 @@ class Todo extends Equatable implements WriteBatchDocument {
         years: value['dateRepeatIntervalYears'],
       ),
       notificationID: value['notificationID'] as int,
-      completed: value['completed'] as bool,
       estimatedDueDate: value['estimatedDueDate'] as bool,
       completedOdomSnapshot: OdomSnapshot.fromMap(
           value['odomSnapshot']['id'], value['odomSnapshot']),
@@ -71,9 +68,6 @@ class Todo extends Equatable implements WriteBatchDocument {
 
   /// The id value for the local notification corresponding to this action.
   final int notificationID;
-
-  /// True if the ToDo action has been performed, False otherwise
-  final bool completed;
 
   /// True if the dueDate field of this ToDo is calculated from the car's
   /// average driving distance rate, False if the user specified the date
@@ -114,7 +108,6 @@ class Todo extends Equatable implements WriteBatchDocument {
             mileageRepeatInterval ?? this.mileageRepeatInterval,
         dateRepeatInterval: dateRepeatInterval ?? this.dateRepeatInterval,
         notificationID: notificationID ?? this.notificationID,
-        completed: completed ?? this.completed,
         estimatedDueDate: estimatedDueDate ?? this.estimatedDueDate,
         completedOdomSnapshot:
             completedOdomSnapshot ?? this.completedOdomSnapshot,
@@ -131,7 +124,6 @@ class Todo extends Equatable implements WriteBatchDocument {
         mileageRepeatInterval,
         dateRepeatInterval,
         notificationID,
-        completed,
         estimatedDueDate,
         completedOdomSnapshot,
         dueDate?.toUtc()
@@ -143,13 +135,11 @@ class Todo extends Equatable implements WriteBatchDocument {
         'dueState: $dueState, dueMileage: $dueMileage, '
         'mileageRepeatInterval: $mileageRepeatInterval, '
         'dateRepeatInterval: $dateRepeatInterval, '
-        'notificationID: $notificationID, completed: '
-        '$completed, estimatedDueDate: $estimatedDueDate, completedOdomSnapshot:'
+        'notificationID: $notificationID, estimatedDueDate: $estimatedDueDate, completedOdomSnapshot:'
         ' $completedOdomSnapshot'
         'dueDate: ${dueDate?.toUtc()} }';
   }
 
-  @override
   Map<String, String> toDocument() {
     return {
       'name': name,
@@ -161,7 +151,6 @@ class Todo extends Equatable implements WriteBatchDocument {
       'dateRepeatIntervalMonths': dateRepeatInterval?.months.toString(),
       'dateRepeatIntervalYears': dateRepeatInterval?.years.toString(),
       'notificationID': notificationID.toString(),
-      'completed': completed.toString(),
       'estimatedDueDate': estimatedDueDate.toString(),
       'odomSnapshot': completedOdomSnapshot.id,
       'dueDate': dueDate?.toUtc()?.toIso8601String() ?? '',

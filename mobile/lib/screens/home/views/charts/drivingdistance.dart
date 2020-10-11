@@ -1,9 +1,7 @@
 import 'package:charts_flutter/flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_intl/json_intl.dart';
 
-import '../../../../blocs/blocs.dart';
 import '../../../../generated/localization.dart';
 import '../../../../models/models.dart';
 import '../../../../units/units.dart';
@@ -12,25 +10,25 @@ import 'shared.dart';
 class DrivingDistanceChart extends StatelessWidget {
   const DrivingDistanceChart(this.seriesList, {this.animate});
 
-  final List<Series<DistanceRatePoint, DateTime>> seriesList;
+  final List<Series<DrivingRatePoint, DateTime>> seriesList;
 
   final bool animate;
 
   int lowerBound(Distance distance) {
     final minVal = seriesList[0]
         .data
-        .reduce((value, element) =>
-            (value.distanceRate < element.distanceRate) ? value : element)
-        .distanceRate;
+        .reduce(
+            (value, element) => (value.rate < element.rate) ? value : element)
+        .rate;
     return (0.75 * distance.internalToUnit(minVal)).round();
   }
 
   int upperBound(Distance distance) {
     final maxVal = seriesList[0]
         .data
-        .reduce((value, element) =>
-            (value.distanceRate > element.distanceRate) ? value : element)
-        .distanceRate;
+        .reduce(
+            (value, element) => (value.rate > element.rate) ? value : element)
+        .rate;
     return (1.25 * distance.internalToUnit(maxVal)).round();
   }
 
@@ -61,34 +59,21 @@ class DrivingDistanceChart extends StatelessWidget {
 }
 
 class DrivingDistanceHistory extends StatefulWidget {
-  const DrivingDistanceHistory();
+  const DrivingDistanceHistory(
+      {@required this.data, @required this.distanceUnit});
+
+  final List<Series> data;
+
+  final String distanceUnit;
 
   @override
   _DrivingDistanceHistoryState createState() => _DrivingDistanceHistoryState();
 }
 
 class _DrivingDistanceHistoryState extends State<DrivingDistanceHistory> {
-  List<Series> data;
   String error;
 
   static const _height = 300.0;
-
-  @override
-  void didChangeDependencies() {
-    final dataBloc = BlocProvider.of<DataBloc>(context);
-
-    DrivingDistanceStats.fetch(dataBloc, context).then((value) {
-      setState(() {
-        data = value;
-      });
-    }).catchError((e) {
-      setState(() {
-        error = e.toString();
-      });
-    });
-
-    super.didChangeDependencies();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +84,7 @@ class _DrivingDistanceHistoryState extends State<DrivingDistanceHistory> {
           child: Text(error));
     }
 
-    if (data == null) {
+    if (widget.data == null) {
       return Container(
         color: Theme.of(context).cardColor,
         height: _height,
@@ -117,13 +102,13 @@ class _DrivingDistanceHistoryState extends State<DrivingDistanceHistory> {
               ),
               Text(
                   JsonIntl.of(context).get(IntlKeys.drivingDistanceHistory, {
-                    'unit': Distance.of(context).unitString(context),
+                    'unit': widget.distanceUnit,
                   }),
                   style: Theme.of(context).primaryTextTheme.subtitle2),
               Container(
                 height: _height,
                 padding: EdgeInsets.all(15),
-                child: DrivingDistanceChart(data),
+                child: DrivingDistanceChart(widget.data),
               ),
               Text(
                 JsonIntl.of(context).get(IntlKeys.refuelingDate),

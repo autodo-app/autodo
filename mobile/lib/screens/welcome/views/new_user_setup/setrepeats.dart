@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:redux/redux.dart';
 import 'package:json_intl/json_intl.dart';
 
 import '../../../../generated/localization.dart';
 import '../../../../integ_test_keys.dart';
+import '../../../../redux/redux.dart';
 import '../../../../theme.dart';
 import '../../../../units/units.dart';
 import '../../../../util.dart';
@@ -18,38 +21,42 @@ class _OilInterval extends StatelessWidget {
   final FocusNode node, nextNode;
 
   @override
-  Widget build(BuildContext context) {
-    final distance = Distance.of(context);
-    final wizard = Wizard.of<NewUserScreenWizard>(context);
+  Widget build(BuildContext context) => StoreBuilder(
+        builder: (BuildContext context, Store<AppState> store) {
+          final distance = store.state.unitsState.distance;
+          final intl = store.state.intlState.intl;
+          final wizard = Wizard.of<NewUserScreenWizard>(context);
 
-    return TextFormField(
-      key: IntegrationTestKeys.setOilInterval,
-      maxLines: 1,
-      autofocus: false,
-      keyboardType: TextInputType.number,
-      initialValue: distance.format(
-        wizard.oilRepeatInterval,
-        textField: true,
-      ),
-      decoration: defaultInputDecoration(
-        context,
-        JsonIntl.of(context).get(IntlKeys.oilChangeInterval),
-        unit: distance.unitString(context, short: true),
-      ),
-      validator: (v) => formValidator<int>(
-        context,
-        v,
-        min: distance.internalToUnit(Limits.minTodoMileage),
-        max: distance.internalToUnit(Limits.maxTodoMileage),
-        required: true,
-      ),
-      onSaved: (value) => wizard.oilRepeatInterval =
-          value == '' ? null : distance.unitToInternal(double.parse(value)),
-      focusNode: node,
-      textInputAction: TextInputAction.next,
-      onFieldSubmitted: (_) => changeFocus(node, nextNode),
-    );
-  }
+          return TextFormField(
+            key: IntegrationTestKeys.setOilInterval,
+            maxLines: 1,
+            autofocus: false,
+            keyboardType: TextInputType.number,
+            initialValue: distance.format(
+              wizard.oilRepeatInterval,
+              textField: true,
+            ),
+            decoration: defaultInputDecoration(
+              context,
+              intl.get(IntlKeys.oilChangeInterval),
+              unit: distance.unitString(intl, short: true),
+            ),
+            validator: (v) => formValidator<int>(
+              context,
+              v,
+              min: distance.internalToUnit(Limits.minTodoMileage),
+              max: distance.internalToUnit(Limits.maxTodoMileage),
+              required: true,
+            ),
+            onSaved: (value) => wizard.oilRepeatInterval = value == ''
+                ? null
+                : distance.unitToInternal(double.parse(value)),
+            focusNode: node,
+            textInputAction: TextInputAction.next,
+            onFieldSubmitted: (_) => changeFocus(node, nextNode),
+          );
+        },
+      );
 }
 
 class _TireRotationInterval extends StatelessWidget {
@@ -58,35 +65,39 @@ class _TireRotationInterval extends StatelessWidget {
   final FocusNode node;
 
   @override
-  Widget build(BuildContext context) {
-    final distance = Distance.of(context);
-    final wizard = Wizard.of<NewUserScreenWizard>(context);
+  Widget build(BuildContext context) => StoreBuilder(
+        builder: (BuildContext context, Store<AppState> store) {
+          final distance = store.state.unitsState.distance;
+          final intl = store.state.intlState.intl;
+          final wizard = Wizard.of<NewUserScreenWizard>(context);
 
-    return TextFormField(
-      key: IntegrationTestKeys.setTireRotationInterval,
-      maxLines: 1,
-      autofocus: false,
-      keyboardType: TextInputType.number,
-      initialValue:
-          distance.format(wizard.tireRotationRepeatInterval, textField: true),
-      decoration: defaultInputDecoration(
-        context,
-        JsonIntl.of(context).get(IntlKeys.tireRotationInterval),
-        unit: distance.unitString(context, short: true),
-      ), // Todo: Translate
-      validator: (v) => formValidator<int>(
-        context,
-        v,
-        min: distance.internalToUnit(Limits.minTodoMileage),
-        max: distance.internalToUnit(Limits.maxTodoMileage),
-        required: true,
-      ),
-      onSaved: (value) => wizard.tireRotationRepeatInterval =
-          value == '' ? null : distance.unitToInternal(double.parse(value)),
-      focusNode: node,
-      textInputAction: TextInputAction.done,
-    );
-  }
+          return TextFormField(
+            key: IntegrationTestKeys.setTireRotationInterval,
+            maxLines: 1,
+            autofocus: false,
+            keyboardType: TextInputType.number,
+            initialValue: distance.format(wizard.tireRotationRepeatInterval,
+                textField: true),
+            decoration: defaultInputDecoration(
+              context,
+              intl.get(IntlKeys.tireRotationInterval),
+              unit: distance.unitString(intl, short: true),
+            ), // Todo: Translate
+            validator: (v) => formValidator<int>(
+              context,
+              v,
+              min: distance.internalToUnit(Limits.minTodoMileage),
+              max: distance.internalToUnit(Limits.maxTodoMileage),
+              required: true,
+            ),
+            onSaved: (value) => wizard.tireRotationRepeatInterval = value == ''
+                ? null
+                : distance.unitToInternal(double.parse(value)),
+            focusNode: node,
+            textInputAction: TextInputAction.done,
+          );
+        },
+      );
 }
 
 class _HeaderText extends StatelessWidget {

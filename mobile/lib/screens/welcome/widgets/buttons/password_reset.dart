@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_intl/json_intl.dart';
+import 'package:redux/redux.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 
-import '../../../../blocs/blocs.dart';
 import '../../../../generated/localization.dart';
-import '../../../../repositories/repositories.dart';
+import '../../../../redux/redux.dart';
 import '../../../../theme.dart';
 
 class _PasswordResetDialog extends StatefulWidget {
-  const _PasswordResetDialog(Key key, this.email, this.authRepository)
-      : super(key: key);
+  const _PasswordResetDialog(Key key, this.email) : super(key: key);
 
   final String email;
-
-  final AuthRepository authRepository;
 
   @override
   _PasswordResetDialogState createState() => _PasswordResetDialogState();
@@ -24,7 +21,8 @@ class _PasswordResetDialogState extends State<_PasswordResetDialog> {
   String _email;
 
   @override
-  Widget build(BuildContext context) => AlertDialog(
+  Widget build(BuildContext context) => StoreBuilder(
+        builder: (BuildContext context, Store<AppState> store) => AlertDialog(
           title: Text(JsonIntl.of(context).get(IntlKeys.sendPasswordReset),
               style: Theme.of(context).primaryTextTheme.headline6),
           content: Form(
@@ -73,19 +71,20 @@ class _PasswordResetDialogState extends State<_PasswordResetDialog> {
                   style: Theme.of(context).primaryTextTheme.button,
                 ),
                 onPressed: () {
-                  // BlocProvider.of<LoginBloc>(context)
-                  //     .add(SendPasswordResetPressed(email: _email));
                   _passwordResetKey.currentState.save();
-                  widget.authRepository.sendPasswordReset(_email);
+                  store.dispatch(sendPasswordReset(_email));
                   Navigator.pop(context); // dialog
                 })
-          ]);
+          ],
+        ),
+      );
 }
 
 class PasswordResetButton extends StatelessWidget {
-  const PasswordResetButton({this.dialogKey});
+  const PasswordResetButton({this.dialogKey, this.email});
 
   final Key dialogKey;
+  final String email;
 
   @override
   Widget build(BuildContext context) => FlatButton(
@@ -95,22 +94,9 @@ class PasswordResetButton extends StatelessWidget {
           style: linkStyle(),
         ),
         onPressed: () {
-          final bloc = BlocProvider.of<LoginBloc>(context);
-          final state = bloc.state;
-          String email;
-
-          if (state is LoginCredentialsValid) {
-            email = state.email;
-          } else if (state is LoginCredentialsInvalid) {
-            email = state.email;
-          }
-
-          email ??= '';
-
           showDialog(
             context: context,
-            builder: (context) =>
-                _PasswordResetDialog(dialogKey, email, bloc.authRepository),
+            builder: (context) => _PasswordResetDialog(dialogKey, email),
           );
         },
       );

@@ -4,7 +4,7 @@ import axios from 'axios';
 import * as models from '../_models';
 
 const apiUrl = 'http://localhost:8000';
-const apiVersion = '/api/v1';
+const apiVersion = '/v1';
 const REGISTER_ADDRESS = `${apiUrl}/accounts/register/`;
 
 axios.interceptors.request.use(

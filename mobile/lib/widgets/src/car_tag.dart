@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 
-import '../../blocs/blocs.dart';
 import '../../models/models.dart';
+import '../../redux/redux.dart';
 import '../../screens/add_edit/barrel.dart';
 
 class CarTag extends StatelessWidget {
@@ -25,25 +25,28 @@ class CarTag extends StatelessWidget {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => CarAddEditScreen(
-                    car: car,
-                    isEditing: false,
-                    onSave: (name, odom, make, model, year, plate, vin) {
-                      BlocProvider.of<DataBloc>(context).add(UpdateCar(
-                          car.copyWith(
-                              name: name,
-                              odomSnapshot: OdomSnapshot(
-                                  car: car.id,
-                                  mileage: odom,
-                                  date: DateTime.now()),
-                              make: make,
-                              model: model,
-                              year: year,
-                              plate: plate,
-                              vin: vin)));
-                    },
-                  ),
-                ));
+                    builder: (context) => StoreBuilder(
+                          builder: (context, store) => CarAddEditScreen(
+                            car: car,
+                            isEditing: false,
+                            onSave:
+                                (name, odom, make, model, year, plate, vin) {
+                              store.dispatch(updateCar(car.copyWith(
+                                  name: name,
+                                  snaps: [
+                                    OdomSnapshot(
+                                        car: car.id,
+                                        mileage: odom,
+                                        date: DateTime.now())
+                                  ],
+                                  make: make,
+                                  model: model,
+                                  year: year,
+                                  plate: plate,
+                                  vin: vin)));
+                            },
+                          ),
+                        )));
           }
         },
         child: Container(

@@ -19,7 +19,7 @@ class LoginToSignupButton extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (BuildContext context) => SignupScreenProvider(),
+                builder: (BuildContext context) => SignupScreen(),
               ),
             );
           },

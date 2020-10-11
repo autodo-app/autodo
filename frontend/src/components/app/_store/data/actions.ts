@@ -4,7 +4,6 @@ import * as api from '../../_services';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { RootState } from '../../store';
-import { AUTODO_GREEN } from '../../../theme';
 
 export const fetchData = createAsyncThunk<types.FetchDataAction, void>(
   types.FETCH_DATA,

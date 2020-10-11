@@ -26,8 +26,6 @@ dependencies:
   url_launcher:
   charts_flutter:
   sliding_up_panel:
-  bloc:
-  flutter_bloc:
   google_sign_in:
   equatable:
   font_awesome_flutter:
@@ -49,6 +47,11 @@ dependencies:
   flutter_debug_drawer:
   http:
   flutter_secure_storage:
+  redux:
+  flutter_redux:
+  redux_logging:
+  redux_thunk:
+  device_info:
 
 dependency_overrides:
   flutter_debug_drawer:
@@ -60,15 +63,6 @@ dependency_overrides:
       url: git://github.com/baylessj/flutter-autocomplete-textfield.git
       ref: master
   platform: ^2.0.0
-  # firebase_core: 0.4.5
-  # firebase_analytics: 6.0.0
-  # firebase_admob:
-  #   git:
-  #     url: git://github.com/autodo-app/flutterfire.git
-  #     ref: master
-  #     path: packages/firebase_admob/
-  mockito: ^4.0.0
-  bloc_test: ^3.1.0
 
 dev_dependencies:
   flutter_test:
@@ -76,7 +70,6 @@ dev_dependencies:
   flutter_driver:
     sdk: flutter
   test:
-  bloc_test:
   mockito:
   pedantic:
   pubspec_extract:

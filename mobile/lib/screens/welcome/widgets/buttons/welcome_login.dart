@@ -35,7 +35,7 @@ class LoginButton extends StatelessWidget {
                 Navigator.of(context)
                   ..push(
                     MaterialPageRoute(
-                      builder: (BuildContext context) => LoginScreenProvider(),
+                      builder: (BuildContext context) => LoginScreen(),
                     ),
                   );
               },

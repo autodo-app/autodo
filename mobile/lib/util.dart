@@ -1,7 +1,13 @@
+import 'dart:io';
 import 'dart:math';
 
+import 'package:device_info/device_info.dart';
+import 'package:sentry/sentry.dart';
 import 'package:flutter/material.dart';
 import 'package:equatable/equatable.dart';
+
+import './generated/pubspec.dart';
+import './redux/app/state.dart';
 
 final RegExp lowerToUpper = RegExp('([a-z])([A-Z])');
 
@@ -279,4 +285,56 @@ double roundToPrecision(double val, int places) {
 void changeFocus(FocusNode cur, FocusNode next) {
   cur.unfocus();
   next.requestFocus();
+}
+
+Future<Event> getSentryEvent(
+    {AppState state, dynamic exception, dynamic stackTrace}) async {
+  OperatingSystem os;
+  Device device;
+
+  final deviceInfo = DeviceInfoPlugin();
+
+  if (Platform.isAndroid) {
+    final androidInfo = await deviceInfo.androidInfo;
+    os = OperatingSystem(
+      name: 'Android',
+      version: androidInfo.version.release,
+    );
+    device = Device(
+      model: androidInfo.model,
+      manufacturer: androidInfo.manufacturer,
+      modelId: androidInfo.product,
+    );
+  } else if (Platform.isIOS) {
+    final iosInfo = await deviceInfo.iosInfo;
+    os = OperatingSystem(
+      name: iosInfo.systemName,
+      version: iosInfo.systemVersion,
+    );
+    device = Device(
+      model: iosInfo.utsname.machine,
+      manufacturer: 'Apple',
+      family: iosInfo.model,
+    );
+  }
+
+  return Event(
+    release: Pubspec.version,
+    // release: state?.appVersion,
+    // environment: state?.environment ?? 'Unknown',
+    stackTrace: stackTrace,
+    exception: exception,
+    extra: <String, dynamic>{
+      // 'server_version': state?.account?.currentVersion ?? 'Unknown',
+    },
+    contexts: Contexts(
+        operatingSystem: os,
+        device: device,
+        app: App(
+            //version: kClientVersion,
+            //name: packageInfo.appName,
+            //version: packageInfo.version,
+            //build: packageInfo.buildNumber,
+            )),
+  );
 }

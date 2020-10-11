@@ -1,12 +1,14 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:redux/redux.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:json_intl/json_intl.dart';
 
-import '../../blocs/blocs.dart';
 import '../../generated/localization.dart';
 import '../../models/models.dart';
+import '../../redux/redux.dart';
 
 class ExtraActions extends StatelessWidget {
   const ExtraActions(
@@ -16,57 +18,60 @@ class ExtraActions extends StatelessWidget {
   final Key toggleAllKey;
 
   @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<FilteredTodosBloc, FilteredTodosState>(
-      builder: (context, state) {
-        if (state is FilteredTodosLoaded) {
-          final allComplete =
-              (BlocProvider.of<DataBloc>(context).state as DataLoaded)
-                  .todos
-                  .every((todo) => todo.completed);
-          final filterState = (BlocProvider.of<FilteredTodosBloc>(context).state
-                  as FilteredTodosLoaded)
-              .activeFilter;
-          return PopupMenuButton<ExtraAction>(
-            onSelected: (action) {
-              switch (action) {
-                case ExtraAction.toggleAllComplete:
-                  BlocProvider.of<DataBloc>(context)
-                      .add(ToggleAllTodosComplete());
-                  break;
-                case ExtraAction.toggleFilter:
-                  final nextFilter = (filterState == VisibilityFilter.all)
-                      ? VisibilityFilter.active
-                      : VisibilityFilter.all;
-                  BlocProvider.of<FilteredTodosBloc>(context)
-                      .add(UpdateTodosFilter(nextFilter));
-                  break;
-                default:
-                  break;
-              }
-            },
-            itemBuilder: (BuildContext context) => <PopupMenuItem<ExtraAction>>[
-              PopupMenuItem<ExtraAction>(
-                key: toggleAllKey,
-                value: ExtraAction.toggleAllComplete,
-                child: Text(
-                  allComplete
-                      ? JsonIntl.of(context).get(IntlKeys.markAllIncomplete)
-                      : JsonIntl.of(context).get(IntlKeys.markAllComplete),
-                ),
+  Widget build(BuildContext context) => StoreConnector<AppState, _ViewModel>(
+        converter: _ViewModel.fromStore,
+        builder: (context, vm) => PopupMenuButton<ExtraAction>(
+          onSelected: (action) {
+            vm.onActionSelected(action);
+          },
+          itemBuilder: (BuildContext context) => <PopupMenuItem<ExtraAction>>[
+            PopupMenuItem<ExtraAction>(
+              key: toggleAllKey,
+              value: ExtraAction.toggleAllComplete,
+              child: Text(
+                vm.allComplete
+                    ? JsonIntl.of(context).get(IntlKeys.markAllIncomplete)
+                    : JsonIntl.of(context).get(IntlKeys.markAllComplete),
               ),
-              PopupMenuItem<ExtraAction>(
-                key: ValueKey('__filter_button__'),
-                value: ExtraAction.toggleFilter,
-                child: Text((filterState == VisibilityFilter.all)
-                    ? JsonIntl.of(context).get(IntlKeys.onlyShowActiveTodos)
-                    : JsonIntl.of(context).get(IntlKeys.showAllTodos)),
-              )
-            ],
-          );
+            ),
+            PopupMenuItem<ExtraAction>(
+              key: ValueKey('__filter_button__'),
+              value: ExtraAction.toggleFilter,
+              child: Text((vm.filterState == VisibilityFilter.all)
+                  ? JsonIntl.of(context).get(IntlKeys.onlyShowActiveTodos)
+                  : JsonIntl.of(context).get(IntlKeys.showAllTodos)),
+            )
+          ],
+        ),
+      );
+}
+
+class _ViewModel extends Equatable {
+  const _ViewModel(
+      {@required this.onActionSelected,
+      @required this.allComplete,
+      @required this.filterState});
+
+  final Function(ExtraAction) onActionSelected;
+  final bool allComplete;
+  final VisibilityFilter filterState;
+
+  static _ViewModel fromStore(Store<AppState> store) => _ViewModel(
+      onActionSelected: (action) {
+        if (action == ExtraAction.toggleAllComplete) {
+          // store.dispatch(ToggleAllTodosComplete()); // TODO
+        } else if (action == ExtraAction.toggleFilter) {
+          // TODO
+          // store.dispatch(UpdateTodosFilter(
+          //     (store.state.filterState.todosFilter == VisibilityFilter.all)
+          //         ? VisibilityFilter.active
+          //         : VisibilityFilter.all));
         }
-        return Container();
       },
-    );
-  }
+      filterState: store.state.filterState.todosFilter,
+      allComplete: store.state.dataState.todos
+          .every((t) => t.completedOdomSnapshot != null));
+
+  @override
+  List get props => [onActionSelected, allComplete];
 }

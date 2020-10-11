@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/widgets.dart';
+import 'package:json_intl/json_intl.dart';
 
 @immutable
 abstract class UnitConversion<U> {
@@ -16,7 +17,7 @@ abstract class UnitConversion<U> {
   String format(num value, {bool textField = false});
 
   String unitString(
-    BuildContext context, {
+    JsonIntl intl, {
     bool short = false,
   });
 

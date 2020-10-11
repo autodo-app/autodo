@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_intl/json_intl.dart';
 
-import '../../../../blocs/blocs.dart';
 import '../../../../generated/localization.dart';
 import '../../../../theme.dart';
 import 'form.dart';
@@ -26,9 +24,7 @@ class LoginScreen extends StatelessWidget {
             style: TextStyle(color: Colors.grey[300]),
           ),
         ),
-        body: BlocBuilder<LoginBloc, LoginState>(
-          builder: (context, state) => LoginForm(),
-        ),
+        body: LoginForm(),
         backgroundColor: Colors.transparent,
       ),
     );

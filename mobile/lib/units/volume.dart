@@ -54,9 +54,7 @@ class Volume extends UnitConversion<VolumeUnit> {
   }
 
   @override
-  String unitString(BuildContext context, {bool short = false}) {
-    final intl = JsonIntl.of(context);
-
+  String unitString(JsonIntl intl, {bool short = false}) {
     switch (unit) {
       case VolumeUnit.metric:
         if (short) {
