@@ -1,8 +1,8 @@
 import 'package:redux/redux.dart';
 
-import '../../models/models.dart';
 import '../app/state.dart';
 import 'actions.dart';
+import 'status.dart';
 
 final dataReducer = combineReducers<AppState>([
   TypedReducer<AppState, LoadingDataAction>(_dataLoading),

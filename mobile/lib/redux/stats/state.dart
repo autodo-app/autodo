@@ -2,6 +2,7 @@ import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../models/models.dart';
+import 'status.dart';
 
 class StatsState extends Equatable {
   const StatsState(

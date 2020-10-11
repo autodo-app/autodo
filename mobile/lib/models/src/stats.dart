@@ -32,8 +32,8 @@ class FuelUsageCarData extends Equatable {
   List<Object> get props => [data];
 }
 
-class _FuelEfficiencyDataPoint extends Equatable {
-  const _FuelEfficiencyDataPoint(
+class FuelEfficiencyDataPoint extends Equatable {
+  const FuelEfficiencyDataPoint(
       {@required this.time, @required this.raw, @required this.filtered});
 
   final DateTime time;
@@ -48,14 +48,14 @@ class FuelEfficiencyData extends Equatable {
   const FuelEfficiencyData(this.data);
 
   /// also used in place of a typedef
-  final Map<String, List<_FuelEfficiencyDataPoint>> data;
+  final Map<String, List<FuelEfficiencyDataPoint>> data;
 
   @override
   List<Object> get props => [data];
 }
 
-class _DrivingRatePoint extends Equatable {
-  const _DrivingRatePoint({@required this.time, @required this.rate});
+class DrivingRatePoint extends Equatable {
+  const DrivingRatePoint({@required this.time, @required this.rate});
 
   final DateTime time;
   final double rate;
@@ -68,7 +68,7 @@ class DrivingRateData extends Equatable {
   const DrivingRateData(this.data);
 
   /// also used in place of a typedef
-  final Map<String, List<_DrivingRatePoint>> data;
+  final Map<String, List<DrivingRatePoint>> data;
 
   @override
   List<Object> get props => [data];

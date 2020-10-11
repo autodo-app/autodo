@@ -16,11 +16,12 @@ import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:provider/provider.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
-import './redux/app/reducer.dart';
-import './redux/app/state.dart';
 import 'flavor.dart';
 import 'generated/keys.dart';
 import 'generated/localization.dart';
+import 'models/models.dart';
+import 'redux/redux.dart';
+import 'repositories/repositories.dart';
 import 'screens/screens.dart';
 import 'theme.dart';
 import 'units/units.dart';
@@ -43,6 +44,7 @@ class AutodoAppState extends State<AutodoApp> {
   final analytics = kFlavor.hasAnalytics ? FirebaseAnalytics() : null;
 
   Future<Null> _authenticate() async {
+    // TODO: what is this??
     final authenticated = true;
     // final authenticated = LocalAuthentication().authenticate();
     if (authenticated) {
@@ -147,13 +149,55 @@ Future<void> main({bool isTesting = false}) async {
       ? null
       : SentryClient(
           dsn: Keys.sentryDsn, environmentAttributes: await getSentryEvent());
-  final store = Store<AppState>(appReducer,
-      initialState: AppState(), middleware: [thunkMiddleware]);
+
+  final locale = WidgetsBinding.instance.window.locale ?? Locale('en', 'US');
+  final store = Store<AppState>(
+    appReducer,
+    initialState: AppState(
+      api: AutodoApi(),
+      authState: AuthState(
+        status: AuthStatus.IDLE,
+        error: null,
+        token: null,
+        isUserVerified: false,
+      ),
+      dataState: DataState(
+        status: DataStatus.IDLE,
+        refuelings: [],
+        cars: [],
+        todos: [],
+        error: null,
+      ),
+      filterState: FilterState(
+        refuelingsFilter: VisibilityFilter.all,
+        todosFilter: VisibilityFilter.all,
+      ),
+      paidVersionState: PaidVersionState(
+        isPaid: true,
+        status: PaidVersionStatus.IDLE,
+      ),
+      statsState: StatsState(
+        status: StatsStatus.IDLE,
+        fuelEfficiency: FuelEfficiencyData({}),
+        fuelUsageByCar: FuelUsageCarData({}),
+        drivingRate: DrivingRateData({}),
+        fuelUsageByMonth: FuelUsageMonthData({}),
+        error: null,
+      ),
+      unitsState: UnitsState(
+        distance: Distance(Distance.getDefault(locale), locale),
+        volume: Volume(Volume.getDefault(locale), locale),
+        efficiency: Efficiency(Efficiency.getDefault(locale), locale),
+        currency: Currency(Currency.getDefault(locale), locale),
+      ),
+    ),
+    middleware: [thunkMiddleware],
+  );
 
   if (_sentry != null) {
     FlutterError.onError =
         (FlutterErrorDetails details) => _reportError(details, store);
   }
 
-  runApp(AutodoApp(store: store));
+  runApp(AutodoApp());
 }

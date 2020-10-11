@@ -6,6 +6,7 @@ import 'package:redux/redux.dart';
 import '../../models/models.dart';
 import 'actions.dart';
 import 'state.dart';
+import 'status.dart';
 
 /// Retrieves all of the user's core data from the API.
 ThunkAction fetchData() {

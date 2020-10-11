@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:json_intl/json_intl.dart';
 import 'package:pref/pref.dart';
 import 'package:provider/provider.dart';
 
@@ -38,7 +39,7 @@ class Currency extends UnitConversion<String> {
   }
 
   @override
-  String unitString(BuildContext context, {bool short = false}) {
+  String unitString(JsonIntl intl, {bool short = false}) {
     if (short) {
       return unit;
     }

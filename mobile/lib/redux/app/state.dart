@@ -5,6 +5,7 @@ import '../../repositories/repositories.dart';
 import '../auth/state.dart';
 import '../data/state.dart';
 import '../filters/state.dart';
+import '../intl/state.dart';
 import '../paid_version/state.dart';
 import '../stats/state.dart';
 import '../units/state.dart';
@@ -15,6 +16,7 @@ class AppState extends Equatable {
       @required this.authState,
       @required this.filterState,
       @required this.dataState,
+      @required this.intlState,
       @required this.statsState,
       @required this.paidVersionState,
       @required this.unitsState});
@@ -22,6 +24,7 @@ class AppState extends Equatable {
   final AutodoApi api;
   final AuthState authState;
   final FilterState filterState;
+  final IntlState intlState;
   final DataState dataState;
   final StatsState statsState;
   final PaidVersionState paidVersionState;
@@ -32,6 +35,7 @@ class AppState extends Equatable {
       AuthState authState,
       FilterState filterState,
       DataState dataState,
+      IntlState intlState,
       StatsState statsState,
       PaidVersionState paidVersionState,
       UnitsState unitsState}) {
@@ -40,6 +44,7 @@ class AppState extends Equatable {
       authState: authState ?? this.authState,
       filterState: filterState ?? this.filterState,
       dataState: dataState ?? this.dataState,
+      intlState: intlState ?? this.intlState,
       statsState: statsState ?? this.statsState,
       paidVersionState: paidVersionState ?? this.paidVersionState,
       unitsState: unitsState ?? this.unitsState,
@@ -52,6 +57,7 @@ class AppState extends Equatable {
         authState,
         filterState,
         dataState,
+        intlState,
         statsState,
         paidVersionState,
         unitsState
@@ -59,5 +65,5 @@ class AppState extends Equatable {
 
   @override
   String toString() =>
-      'AppState { api: $api, authState: $authState, filterState: $filterState, dataState: $dataState, statsState: $statsState, paidVersionState: $paidVersionState }';
+      'AppState { api: $api, authState: $authState, filterState: $filterState, dataState: $dataState, intlState: $intlState, statsState: $statsState, paidVersionState: $paidVersionState }';
 }

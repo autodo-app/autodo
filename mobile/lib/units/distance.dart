@@ -49,9 +49,7 @@ class Distance extends UnitConversion<DistanceUnit> {
   }
 
   @override
-  String unitString(BuildContext context, {bool short = false}) {
-    final intl = JsonIntl.of(context);
-
+  String unitString(JsonIntl intl, {bool short = false}) {
     switch (unit) {
       case DistanceUnit.metric:
         if (short) {

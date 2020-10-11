@@ -1,9 +1,7 @@
 import 'package:charts_flutter/flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_intl/json_intl.dart';
 
-import '../../../../blocs/blocs.dart';
 import '../../../../generated/localization.dart';
 import '../../../../models/models.dart';
 import '../../../../units/units.dart';
@@ -12,7 +10,7 @@ import 'shared.dart';
 class FuelMileageChart extends StatelessWidget {
   const FuelMileageChart(this.seriesList, {this.animate});
 
-  final List<Series<FuelMileagePoint, DateTime>> seriesList;
+  final List<Series> seriesList;
 
   final bool animate;
 
@@ -76,34 +74,21 @@ class FuelMileageChart extends StatelessWidget {
 }
 
 class FuelMileageHistory extends StatefulWidget {
-  const FuelMileageHistory();
+  const FuelMileageHistory(
+      {@required this.data, @required this.efficiencyUnit});
+
+  final List<Series> data;
+
+  final String efficiencyUnit;
 
   @override
   _FuelMileageHistoryState createState() => _FuelMileageHistoryState();
 }
 
 class _FuelMileageHistoryState extends State<FuelMileageHistory> {
-  List<Series> data;
   String error;
 
   static const _height = 300.0;
-
-  @override
-  void didChangeDependencies() {
-    final dataBloc = BlocProvider.of<DataBloc>(context);
-
-    EfficiencyStats.fetch(dataBloc, context).then((value) {
-      setState(() {
-        data = value;
-      });
-    }).catchError((e) {
-      setState(() {
-        error = e.toString();
-      });
-    });
-
-    super.didChangeDependencies();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +99,7 @@ class _FuelMileageHistoryState extends State<FuelMileageHistory> {
           child: Text(error));
     }
 
-    if (data == null) {
+    if (widget.data == null) {
       return Container(
         color: Theme.of(context).cardColor,
         height: _height,
@@ -132,14 +117,13 @@ class _FuelMileageHistoryState extends State<FuelMileageHistory> {
               ),
               Text(
                   JsonIntl.of(context).get(IntlKeys.fuelEfficiencyHistory, {
-                    'unit':
-                        Efficiency.of(context).unitString(context, short: true),
+                    'unit': widget.efficiencyUnit,
                   }),
                   style: Theme.of(context).primaryTextTheme.subtitle2),
               Container(
                 height: _height,
                 padding: EdgeInsets.all(15),
-                child: FuelMileageChart(data),
+                child: FuelMileageChart(widget.data),
               ),
               Text(
                 JsonIntl.of(context).get(IntlKeys.refuelingDate),

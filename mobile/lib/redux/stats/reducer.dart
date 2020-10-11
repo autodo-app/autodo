@@ -1,8 +1,8 @@
 import 'package:redux/redux.dart';
 
-import '../../models/models.dart';
 import '../app/state.dart';
 import 'actions.dart';
+import 'status.dart';
 
 final statsReducer = combineReducers<AppState>([
   TypedReducer<AppState, FetchStatsLoadingAction>(_fetchStatsPending),

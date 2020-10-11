@@ -1,9 +1,9 @@
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:redux/redux.dart';
 
-import '../../models/models.dart';
 import 'actions.dart';
 import 'state.dart';
+import 'status.dart';
 
 ThunkAction fetchStats() {
   return (Store store) async {
