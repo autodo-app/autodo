@@ -113,8 +113,8 @@ class _ViewModel extends Equatable {
               snaps: [
                 OdomSnapshot(
                     car: car.id,
-                    mileage: Distance.of(context, listen: false)
-                        .unitToInternal(odom),
+                    mileage:
+                        store.state.unitsState.distance.unitToInternal(odom),
                     date: DateTime.now()),
               ],
               make: make,

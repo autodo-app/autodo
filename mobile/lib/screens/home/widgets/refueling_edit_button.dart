@@ -62,11 +62,11 @@ class _ViewModel extends Equatable {
           store.dispatch(updateRefueling(refueling.copyWith(
             odomSnapshot: OdomSnapshot(
               car: n,
-              mileage: Distance.of(context, listen: false).unitToInternal(m),
+              mileage: store.state.unitsState.distance.unitToInternal(m),
               date: d,
             ),
-            amount: Volume.of(context, listen: false).unitToInternal(a),
-            cost: Currency.of(context, listen: false).unitToInternal(c),
+            amount: store.state.unitsState.volume.unitToInternal(a),
+            cost: store.state.unitsState.currency.unitToInternal(c),
           )));
         },
         cars: store.state.dataState.cars);

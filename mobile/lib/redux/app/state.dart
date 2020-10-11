@@ -7,6 +7,7 @@ import '../data/state.dart';
 import '../filters/state.dart';
 import '../paid_version/state.dart';
 import '../stats/state.dart';
+import '../units/state.dart';
 
 class AppState extends Equatable {
   const AppState(
@@ -15,7 +16,8 @@ class AppState extends Equatable {
       @required this.filterState,
       @required this.dataState,
       @required this.statsState,
-      @required this.paidVersionState});
+      @required this.paidVersionState,
+      @required this.unitsState});
 
   final AutodoApi api;
   final AuthState authState;
@@ -23,6 +25,7 @@ class AppState extends Equatable {
   final DataState dataState;
   final StatsState statsState;
   final PaidVersionState paidVersionState;
+  final UnitsState unitsState;
 
   AppState copyWith(
       {AutodoApi api,
@@ -30,19 +33,29 @@ class AppState extends Equatable {
       FilterState filterState,
       DataState dataState,
       StatsState statsState,
-      PaidVersionState paidVersionState}) {
+      PaidVersionState paidVersionState,
+      UnitsState unitsState}) {
     return AppState(
-        api: api ?? this.api,
-        authState: authState ?? this.authState,
-        filterState: filterState ?? this.filterState,
-        dataState: dataState ?? this.dataState,
-        statsState: statsState ?? this.statsState,
-        paidVersionState: paidVersionState ?? this.paidVersionState);
+      api: api ?? this.api,
+      authState: authState ?? this.authState,
+      filterState: filterState ?? this.filterState,
+      dataState: dataState ?? this.dataState,
+      statsState: statsState ?? this.statsState,
+      paidVersionState: paidVersionState ?? this.paidVersionState,
+      unitsState: unitsState ?? this.unitsState,
+    );
   }
 
   @override
-  List<Object> get props =>
-      [api, authState, filterState, dataState, statsState, paidVersionState];
+  List<Object> get props => [
+        api,
+        authState,
+        filterState,
+        dataState,
+        statsState,
+        paidVersionState,
+        unitsState
+      ];
 
   @override
   String toString() =>
