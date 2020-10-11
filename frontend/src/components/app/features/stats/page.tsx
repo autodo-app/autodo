@@ -32,6 +32,7 @@ interface StyleProps {
   textStatContainer: React.CSSProperties;
   textStatText: React.CSSProperties;
   textStatNumber: React.CSSProperties;
+  statusMessage: React.CSSProperties;
 }
 
 type StyleClasses = Record<keyof StyleProps, string>;
@@ -80,6 +81,12 @@ const useStyles = makeStyles<Theme, StyleProps>(
         fontWeight: 800,
         color: AUTODO_GREEN,
         paddingLeft: theme.spacing(1),
+      },
+      statusMessage: {
+        display: 'flex',
+        margin: theme.spacing(2),
+        alignContent: 'center',
+        justifyContent: 'center',
       },
     } as any),
 );
@@ -151,8 +158,10 @@ export const StatsPage = (): JSX.Element => {
     }
   }, [dataStatus, dispatch]);
 
-  if (!todos) {
-    return <p>Cannot reach auToDo API</p>;
+  if (!cars?.length) {
+    return (
+      <div className={classes.statusMessage}>Cannot reach auToDo API.</div>
+    );
   }
 
   return (

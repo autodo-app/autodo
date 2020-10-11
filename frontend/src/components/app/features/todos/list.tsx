@@ -68,8 +68,10 @@ export const TodoList: React.FC<{}> = (): JSX.Element => {
     }
   }, [todoStatus, dispatch]);
 
-  if (!todos) {
-    return <p>Cannot reach auToDo API</p>;
+  if (!todos?.length) {
+    return (
+      <div className={classes.statusMessage}>Cannot reach auToDo API.</div>
+    );
   }
 
   const highPriorityTodos = todos

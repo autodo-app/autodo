@@ -91,6 +91,12 @@ export const RefuelingList: React.FC<{}> = (): JSX.Element => {
     }
   }, [refuelingStatus, dispatch]);
 
+  if (!refuelings?.length) {
+    return (
+      <div className={classes.statusMessage}>Cannot reach auToDo API.</div>
+    );
+  }
+
   if (refuelingStatus === 'loading') {
     return <div className={classes.statusMessage}>Loading...</div>;
   } else if (refuelingStatus === 'error') {

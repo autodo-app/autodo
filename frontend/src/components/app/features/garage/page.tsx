@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   makeStyles,
   Theme,
@@ -13,11 +14,14 @@ import {
 } from '@material-ui/core';
 import { Search, Build } from '@material-ui/icons';
 
+import { selectAllCars, fetchData } from '../../_store';
+import { RootState } from '../../store';
 import { CarList } from '../cars';
 import { GRAY } from '../../../theme';
 
 interface StyleProps {
   button: React.CSSProperties;
+  statusMessage: React.CSSProperties;
 }
 
 const useStyles = makeStyles<Theme, StyleProps>(
@@ -26,15 +30,37 @@ const useStyles = makeStyles<Theme, StyleProps>(
       button: {
         backgroundColor: GRAY,
       },
+      statusMessage: {
+        display: 'flex',
+        margin: theme.spacing(2),
+        alignContent: 'center',
+        justifyContent: 'center',
+      },
     } as any),
 );
 
 export const GaragePage = () => {
   const classes = useStyles({} as StyleProps);
   const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
+
+  const dataStatus = useSelector((state: RootState) => state.data.status);
 
   const onButtonPressed = () => setOpen(true);
   const onClose = () => setOpen(false);
+  const cars = useSelector(selectAllCars);
+
+  useEffect(() => {
+    if (dataStatus === 'idle') {
+      dispatch(fetchData());
+    }
+  }, [dataStatus, dispatch]);
+
+  if (!cars?.length) {
+    return (
+      <div className={classes.statusMessage}>Cannot reach auToDo API.</div>
+    );
+  }
 
   return (
     <>
