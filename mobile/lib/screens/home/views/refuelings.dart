@@ -169,15 +169,6 @@ class _CalendarView extends StatelessWidget {
 class RefuelingsScreen extends StatelessWidget {
   const RefuelingsScreen({Key key}) : super(key: key);
 
-  void _deleteRefueling(BuildContext context, Refueling refueling) {
-    BlocProvider.of<DataBloc>(context).add(DeleteRefueling(refueling));
-    Scaffold.of(context).showSnackBar(DeleteRefuelingSnackBar(
-      context: context,
-      onUndo: () =>
-          BlocProvider.of<DataBloc>(context).add(AddRefueling(refueling)),
-    ));
-  }
-
   @override
   Widget build(BuildContext context) => StoreConnector(
         converter: _ViewModel.fromStore,

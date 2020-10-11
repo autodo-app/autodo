@@ -71,8 +71,6 @@ class _PasswordResetDialogState extends State<_PasswordResetDialog> {
                   style: Theme.of(context).primaryTextTheme.button,
                 ),
                 onPressed: () {
-                  // BlocProvider.of<LoginBloc>(context)
-                  //     .add(SendPasswordResetPressed(email: _email));
                   _passwordResetKey.currentState.save();
                   store.dispatch(sendPasswordReset(_email));
                   Navigator.pop(context); // dialog
