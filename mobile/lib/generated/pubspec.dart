@@ -51,8 +51,6 @@ class Pubspec {
     'url_launcher': null,
     'charts_flutter': null,
     'sliding_up_panel': null,
-    'bloc': null,
-    'flutter_bloc': null,
     'google_sign_in': null,
     'equatable': null,
     'font_awesome_flutter': null,
@@ -74,6 +72,11 @@ class Pubspec {
     'flutter_debug_drawer': null,
     'http': null,
     'flutter_secure_storage': null,
+    'redux': null,
+    'flutter_redux': null,
+    'redux_logging': null,
+    'redux_thunk': null,
+    'device_info': null,
   };
 
   static const Map<dynamic, dynamic> dependency_overrides = <dynamic, dynamic>{
@@ -90,8 +93,6 @@ class Pubspec {
       },
     },
     'platform': '^2.0.0',
-    'mockito': '^4.0.0',
-    'bloc_test': '^3.1.0',
   };
 
   static const Map<dynamic, dynamic> dev_dependencies = <dynamic, dynamic>{
@@ -102,7 +103,6 @@ class Pubspec {
       'sdk': 'flutter',
     },
     'test': null,
-    'bloc_test': null,
     'mockito': null,
     'pedantic': null,
     'pubspec_extract': null,
