@@ -44,6 +44,7 @@ const App = () => {
 
 const IndexPage = () => {
   Sentry.init({
+    release: `autodo-frontend@${process.env.npm_package_version}`,
     dsn:
       'https://ab5fda67dca14d328cef7eaa6e4acfb0@o333089.ingest.sentry.io/5440666',
     integrations: [new Integrations.BrowserTracing()],
