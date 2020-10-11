@@ -20,7 +20,7 @@ jobs:
       - run: flutter format .
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          token: {{ secrets.PAT }}
+          token: ${{ secrets.PAT }}
   blackformat:
     name: Python Format
     runs-on: ubuntu-latest
