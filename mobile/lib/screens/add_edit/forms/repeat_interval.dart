@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:json_intl/json_intl.dart';
+import 'package:redux/redux.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 
 import '../../../generated/localization.dart';
 import '../../../models/models.dart';
+import '../../../redux/redux.dart';
 import '../../../theme.dart';
-import '../../../units/units.dart';
 import '../../../util.dart';
 
 enum DateRepeatInterval { NEVER, WEEKLY, MONTHLY, YEARLY, CUSTOM }
@@ -54,17 +56,21 @@ class _MileageRepeatSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        child: TextFormField(
-          decoration: defaultInputDecoration(
-            context,
-            JsonIntl.of(context).get(IntlKeys.mileageInterval),
-            unit: Distance.of(context).unitString(context, short: true),
+        child: StoreBuilder(
+          builder: (BuildContext context, Store<AppState> store) =>
+              TextFormField(
+            decoration: defaultInputDecoration(
+              context,
+              JsonIntl.of(context).get(IntlKeys.mileageInterval),
+              unit: store.state.unitsState.distance
+                  .unitString(store.state.intlState.intl, short: true),
+            ),
+            keyboardType: TextInputType.number,
+            initialValue: initial == null ? '' : '$initial',
+            validator: doubleNoRequire,
+            onSaved: (val) =>
+                onSaved((val == null || val == '') ? null : double.parse(val)),
           ),
-          keyboardType: TextInputType.number,
-          initialValue: initial == null ? '' : '$initial',
-          validator: doubleNoRequire,
-          onSaved: (val) =>
-              onSaved((val == null || val == '') ? null : double.parse(val)),
         ),
         padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
       );

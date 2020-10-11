@@ -60,77 +60,77 @@ class AutodoApi extends Equatable {
     return newAccessToken;
   }
 
-  /// Sends a GET request to the API using the user's access JWT. Refreshes the
-  /// token and retries the request with a new access JWT if needed.
-  Future<Map<String, dynamic>> _authenticatedGet(String url) async {
-    final token = FlutterSecureStorage().read(key: 'access');
-    var response = await get(url, headers: {'Authorization': 'Bearer $token'});
-    if (response.statusCode == HTTP_401_UNAUTHORIZED) {
-      // Token has expired, refresh it and try again
-      final newToken = await _refreshAccessToken();
-      if (newToken == null) {
-        throw Exception('Could not refresh access token');
-      }
-      await FlutterSecureStorage().write(key: 'access', value: newToken);
-      response = await get(url, headers: {'Authorization': 'Bearer $newToken'});
-    }
+  // /// Sends a GET request to the API using the user's access JWT. Refreshes the
+  // /// token and retries the request with a new access JWT if needed.
+  // Future<Map<String, dynamic>> _authenticatedGet(String url) async {
+  //   final token = FlutterSecureStorage().read(key: 'access');
+  //   var response = await get(url, headers: {'Authorization': 'Bearer $token'});
+  //   if (response.statusCode == HTTP_401_UNAUTHORIZED) {
+  //     // Token has expired, refresh it and try again
+  //     final newToken = await _refreshAccessToken();
+  //     if (newToken == null) {
+  //       throw Exception('Could not refresh access token');
+  //     }
+  //     await FlutterSecureStorage().write(key: 'access', value: newToken);
+  //     response = await get(url, headers: {'Authorization': 'Bearer $newToken'});
+  //   }
 
-    if (response.statusCode != HTTP_200_OK) {
-      throw Exception('Failed to access API');
-    }
-    final data = await json.decode(response.body);
-    return data;
-  }
+  //   if (response.statusCode != HTTP_200_OK) {
+  //     throw Exception('Failed to access API');
+  //   }
+  //   final data = await json.decode(response.body);
+  //   return data;
+  // }
 
-  /// Sends a POST request to the API using the user's access JWT. Refreshes the
-  /// token and retries the request with a new access JWT if needed.
-  Future<Map<String, dynamic>> _authenticatedPost(
-      String url, Map<String, dynamic> body) async {
-    final token = FlutterSecureStorage().read(key: 'access');
-    var response = await post(url,
-        headers: {'Authorization': 'Bearer $token'}, body: body);
-    if (response.statusCode == HTTP_401_UNAUTHORIZED) {
-      // Token has expired, refresh it and try again
-      final newToken = await _refreshAccessToken();
-      if (newToken == null) {
-        throw Exception('Could not refresh access token');
-      }
-      await FlutterSecureStorage().write(key: 'access', value: newToken);
-      response = await post(url,
-          headers: {'Authorization': 'Bearer $newToken'}, body: body);
-    }
+  // /// Sends a POST request to the API using the user's access JWT. Refreshes the
+  // /// token and retries the request with a new access JWT if needed.
+  // Future<Map<String, dynamic>> _authenticatedPost(
+  //     String url, Map<String, dynamic> body) async {
+  //   final token = FlutterSecureStorage().read(key: 'access');
+  //   var response = await post(url,
+  //       headers: {'Authorization': 'Bearer $token'}, body: body);
+  //   if (response.statusCode == HTTP_401_UNAUTHORIZED) {
+  //     // Token has expired, refresh it and try again
+  //     final newToken = await _refreshAccessToken();
+  //     if (newToken == null) {
+  //       throw Exception('Could not refresh access token');
+  //     }
+  //     await FlutterSecureStorage().write(key: 'access', value: newToken);
+  //     response = await post(url,
+  //         headers: {'Authorization': 'Bearer $newToken'}, body: body);
+  //   }
 
-    if (response.statusCode != HTTP_201_CREATED) {
-      throw Exception('Failed to access API');
-    }
-    final data = await json.decode(response.body);
-    return data;
-  }
+  //   if (response.statusCode != HTTP_201_CREATED) {
+  //     throw Exception('Failed to access API');
+  //   }
+  //   final data = await json.decode(response.body);
+  //   return data;
+  // }
 
-  /// Sends a PATCH request to the API using the user's access JWT. Refreshes
-  /// the token and retries the request with a new access JWT if needed.
-  Future<Map<String, dynamic>> _authenticatedPatch(
-      String url, Map<String, dynamic> body) async {
-    final token = await FlutterSecureStorage().read(key: 'access');
-    var response = await patch(url,
-        headers: {'Authorization': 'Bearer $token'}, body: body);
-    if (response.statusCode == HTTP_401_UNAUTHORIZED) {
-      // Token has expired, refresh it and try again
-      final newToken = await _refreshAccessToken();
-      if (newToken == null) {
-        throw Exception('Could not refresh access token');
-      }
-      await FlutterSecureStorage().write(key: 'access', value: newToken);
-      response = await patch(url,
-          headers: {'Authorization': 'Bearer $newToken'}, body: body);
-    }
+  // /// Sends a PATCH request to the API using the user's access JWT. Refreshes
+  // /// the token and retries the request with a new access JWT if needed.
+  // Future<Map<String, dynamic>> _authenticatedPatch(
+  //     String url, Map<String, dynamic> body) async {
+  //   final token = await FlutterSecureStorage().read(key: 'access');
+  //   var response = await patch(url,
+  //       headers: {'Authorization': 'Bearer $token'}, body: body);
+  //   if (response.statusCode == HTTP_401_UNAUTHORIZED) {
+  //     // Token has expired, refresh it and try again
+  //     final newToken = await _refreshAccessToken();
+  //     if (newToken == null) {
+  //       throw Exception('Could not refresh access token');
+  //     }
+  //     await FlutterSecureStorage().write(key: 'access', value: newToken);
+  //     response = await patch(url,
+  //         headers: {'Authorization': 'Bearer $newToken'}, body: body);
+  //   }
 
-    if (response.statusCode != HTTP_200_OK) {
-      throw Exception('Failed to access API');
-    }
-    final data = await json.decode(response.body);
-    return data;
-  }
+  //   if (response.statusCode != HTTP_200_OK) {
+  //     throw Exception('Failed to access API');
+  //   }
+  //   final data = await json.decode(response.body);
+  //   return data;
+  // }
 
   /// Sends a DELETE request to the API using the user's access JWT. Refreshes
   /// the token and retries the request with a new access JWT if needed.

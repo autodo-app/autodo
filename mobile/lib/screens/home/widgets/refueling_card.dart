@@ -2,8 +2,11 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:redux/redux.dart';
 
 import '../../../models/models.dart';
+import '../../../redux/redux.dart';
 import '../../../units/units.dart';
 import '../../../widgets/widgets.dart';
 import 'delete_button.dart';
@@ -88,12 +91,16 @@ class _Content extends StatelessWidget {
                 children: [
                   Text(DateFormat.yMd().format(refueling.odomSnapshot.date),
                       style: Theme.of(context).primaryTextTheme.headline5),
-                  Text(
-                      '${Distance.of(context).format(refueling.odomSnapshot.mileage)} ${Distance.of(context).unitString(context, short: true)}',
+                  StoreBuilder(
+                    builder: (BuildContext context, Store<AppState> store) =>
+                        Text(
+                      '${store.state.unitsState.distance.format(refueling.odomSnapshot.mileage)} ${store.state.unitsState.distance.unitString(store.state.intlState.intl, short: true)}',
                       style: Theme.of(context)
                           .primaryTextTheme
                           .subtitle2
-                          .copyWith(color: Colors.grey))
+                          .copyWith(color: Colors.grey),
+                    ),
+                  ),
                 ],
               ),
               Container(
@@ -111,20 +118,27 @@ class _Content extends StatelessWidget {
                       '  |  ',
                       style: Theme.of(context).primaryTextTheme.bodyText2,
                     ),
-                    RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: Volume.of(context).format(refueling.amount),
-                            style: Theme.of(context).primaryTextTheme.subtitle2,
-                            children: [TextSpan(text: ' ')],
-                          ),
-                          TextSpan(
-                            text: Volume.of(context)
-                                .unitString(context, short: true),
-                            style: Theme.of(context).primaryTextTheme.bodyText2,
-                          )
-                        ],
+                    StoreBuilder(
+                      builder: (BuildContext context, Store<AppState> store) =>
+                          RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: store.state.unitsState.volume
+                                  .format(refueling.amount),
+                              style:
+                                  Theme.of(context).primaryTextTheme.subtitle2,
+                              children: [TextSpan(text: ' ')],
+                            ),
+                            TextSpan(
+                              text: store.state.unitsState.volume.unitString(
+                                  store.state.intlState.intl,
+                                  short: true),
+                              style:
+                                  Theme.of(context).primaryTextTheme.bodyText2,
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ],

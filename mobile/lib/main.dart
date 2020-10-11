@@ -172,6 +172,9 @@ Future<void> main({bool isTesting = false}) async {
         refuelingsFilter: VisibilityFilter.all,
         todosFilter: VisibilityFilter.all,
       ),
+      intlState: IntlState(
+        intl: null, // will need to load this at run-time
+      ),
       paidVersionState: PaidVersionState(
         isPaid: true,
         status: PaidVersionStatus.IDLE,

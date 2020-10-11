@@ -12,7 +12,6 @@ import '../../integ_test_keys.dart';
 import '../../models/models.dart';
 import '../../redux/redux.dart';
 import '../../screens/welcome/views/barrel.dart';
-import '../../units/units.dart';
 import '../../widgets/widgets.dart';
 import '../add_edit/barrel.dart';
 import 'views/barrel.dart';

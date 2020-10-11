@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:json_intl/json_intl.dart';
+import 'package:redux/redux.dart';
 
 import '../../../../generated/localization.dart';
 import '../../../../integ_test_keys.dart';
+import '../../../../redux/redux.dart';
 import '../../../../theme.dart';
-import '../../../../units/units.dart';
 import '../../../../util.dart';
 import 'base.dart';
 import 'wizard.dart';
@@ -19,6 +21,78 @@ class _TodoFields extends StatefulWidget {
 
   @override
   _TodoFieldsState createState() => _TodoFieldsState();
+}
+
+class _OilMileage extends StatelessWidget {
+  const _OilMileage(
+      {@required this.car, @required this.oilNode, @required this.tiresNode});
+
+  final NewUserCar car;
+  final FocusNode oilNode, tiresNode;
+
+  @override
+  Widget build(BuildContext context) => StoreBuilder(
+        builder: (BuildContext context, Store<AppState> store) {
+          final distance = store.state.unitsState.distance;
+          final intl = store.state.intlState.intl;
+
+          return TextFormField(
+            key: IntegrationTestKeys.latestOilChangeField,
+            maxLines: 1,
+            autofocus: false,
+            decoration: defaultInputDecoration(
+              context,
+              intl.get(IntlKeys.oilChange),
+              unit: distance.unitString(intl, short: true),
+            ),
+            validator: (v) =>
+                formValidator<int>(context, v, min: 0, max: car.mileage),
+            keyboardType: TextInputType.number,
+            initialValue: distance.format(car.oilChange, textField: true),
+            onSaved: (value) => car.oilChange = value == ''
+                ? null
+                : distance.unitToInternal(double.parse(value)),
+            focusNode: oilNode,
+            textInputAction: TextInputAction.next,
+            onFieldSubmitted: (_) => changeFocus(oilNode, tiresNode),
+          );
+        },
+      );
+}
+
+class _TireRotationMileage extends StatelessWidget {
+  const _TireRotationMileage(
+      {@required this.car, @required this.oilNode, @required this.tiresNode});
+
+  final NewUserCar car;
+  final FocusNode oilNode, tiresNode;
+
+  @override
+  Widget build(BuildContext context) => StoreBuilder(
+        builder: (BuildContext context, Store<AppState> store) {
+          final distance = store.state.unitsState.distance;
+          final intl = store.state.intlState.intl;
+
+          return TextFormField(
+            key: IntegrationTestKeys.latestTireRotationField,
+            maxLines: 1,
+            decoration: defaultInputDecoration(
+              context,
+              intl.get(IntlKeys.repeatTireRotation),
+              unit: distance.unitString(intl, short: true),
+            ),
+            validator: (v) =>
+                formValidator<int>(context, v, min: 0, max: car.mileage),
+            keyboardType: TextInputType.number,
+            initialValue: distance.format(car.tireRotation, textField: true),
+            onSaved: (value) => car.tireRotation = value == ''
+                ? null
+                : distance.unitToInternal(double.parse(value)),
+            focusNode: tiresNode,
+            textInputAction: TextInputAction.done,
+          );
+        },
+      );
 }
 
 class _TodoFieldsState extends State<_TodoFields> {
@@ -36,52 +110,6 @@ class _TodoFieldsState extends State<_TodoFields> {
     _oilNode.dispose();
     _tiresNode.dispose();
     super.dispose();
-  }
-
-  Widget oilMileage() {
-    final distance = Distance.of(context);
-
-    return TextFormField(
-      key: IntegrationTestKeys.latestOilChangeField,
-      maxLines: 1,
-      autofocus: false,
-      decoration: defaultInputDecoration(
-        context,
-        JsonIntl.of(context).get(IntlKeys.oilChange),
-        unit: Distance.of(context).unitString(context, short: true),
-      ),
-      validator: (v) =>
-          formValidator<int>(context, v, min: 0, max: widget.car.mileage),
-      keyboardType: TextInputType.number,
-      initialValue: distance.format(widget.car.oilChange, textField: true),
-      onSaved: (value) => widget.car.oilChange =
-          value == '' ? null : distance.unitToInternal(double.parse(value)),
-      focusNode: _oilNode,
-      textInputAction: TextInputAction.next,
-      onFieldSubmitted: (_) => changeFocus(_oilNode, _tiresNode),
-    );
-  }
-
-  Widget tireRotationMileage() {
-    final distance = Distance.of(context);
-
-    return TextFormField(
-      key: IntegrationTestKeys.latestTireRotationField,
-      maxLines: 1,
-      decoration: defaultInputDecoration(
-        context,
-        JsonIntl.of(context).get(IntlKeys.repeatTireRotation),
-        unit: Distance.of(context).unitString(context, short: true),
-      ),
-      validator: (v) =>
-          formValidator<int>(context, v, min: 0, max: widget.car.mileage),
-      keyboardType: TextInputType.number,
-      initialValue: distance.format(widget.car.tireRotation, textField: true),
-      onSaved: (value) => widget.car.tireRotation =
-          value == '' ? null : distance.unitToInternal(double.parse(value)),
-      focusNode: _tiresNode,
-      textInputAction: TextInputAction.done,
-    );
   }
 
   @override
@@ -105,11 +133,19 @@ class _TodoFieldsState extends State<_TodoFields> {
                 namePadding,
                 Padding(
                   padding: EdgeInsets.fromLTRB(5, 0, 5, 10),
-                  child: oilMileage(),
+                  child: _OilMileage(
+                    car: widget.car,
+                    tiresNode: _tiresNode,
+                    oilNode: _oilNode,
+                  ),
                 ),
                 Padding(
                   padding: EdgeInsets.fromLTRB(5, 0, 5, 10),
-                  child: tireRotationMileage(),
+                  child: _TireRotationMileage(
+                    car: widget.car,
+                    tiresNode: _tiresNode,
+                    oilNode: _oilNode,
+                  ),
                 ),
                 Padding(padding: EdgeInsets.only(bottom: 10)),
               ],

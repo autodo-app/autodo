@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:json_intl/json_intl.dart';
+import 'package:redux/redux.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 
 import '../../generated/localization.dart';
 import '../../models/models.dart';
-import '../../units/units.dart';
+import '../../redux/redux.dart';
 import '../../util.dart';
 import 'forms/barrel.dart';
 
@@ -34,32 +36,35 @@ class _MileageForm extends StatelessWidget {
   final FocusNode node, nextNode;
 
   @override
-  Widget build(BuildContext context) {
-    final distance = Distance.of(context);
+  Widget build(BuildContext context) => StoreBuilder(
+        builder: (BuildContext context, Store<AppState> store) {
+          final distance = store.state.unitsState.distance;
+          final intl = store.state.intlState.intl;
 
-    return TextFormField(
-      decoration: InputDecoration(
-        hintText: JsonIntl.of(context).get(IntlKeys.requiredLiteral),
-        border: OutlineInputBorder(
-          borderSide: BorderSide(color: Theme.of(context).primaryColor),
-        ),
-        labelText:
-            // Todo: Improve this translation
-            '${JsonIntl.of(context).get(IntlKeys.odomReading)} (${distance.unitString(context, short: true)})',
-        contentPadding:
-            EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
-      ),
-      autofocus: true,
-      initialValue:
-          distance.format(refueling?.odomSnapshot?.mileage, textField: true),
-      keyboardType: TextInputType.numberWithOptions(decimal: false),
-      validator: intValidator,
-      onSaved: onSaved,
-      textInputAction: TextInputAction.next,
-      focusNode: node,
-      onFieldSubmitted: (_) => changeFocus(node, nextNode),
-    );
-  }
+          return TextFormField(
+            decoration: InputDecoration(
+              hintText: intl.get(IntlKeys.requiredLiteral),
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: Theme.of(context).primaryColor),
+              ),
+              labelText:
+                  // Todo: Improve this translation
+                  '${intl.get(IntlKeys.odomReading)} (${distance.unitString(intl, short: true)})',
+              contentPadding: EdgeInsets.only(
+                  left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
+            ),
+            autofocus: true,
+            initialValue: distance.format(refueling?.odomSnapshot?.mileage,
+                textField: true),
+            keyboardType: TextInputType.numberWithOptions(decimal: false),
+            validator: intValidator,
+            onSaved: onSaved,
+            textInputAction: TextInputAction.next,
+            focusNode: node,
+            onFieldSubmitted: (_) => changeFocus(node, nextNode),
+          );
+        },
+      );
 }
 
 class _AmountForm extends StatelessWidget {
@@ -78,31 +83,34 @@ class _AmountForm extends StatelessWidget {
   final FocusNode node, nextNode;
 
   @override
-  Widget build(BuildContext context) {
-    final volume = Volume.of(context);
+  Widget build(BuildContext context) => StoreBuilder(
+        builder: (BuildContext context, Store<AppState> store) {
+          final intl = store.state.intlState.intl;
+          final volume = store.state.unitsState.volume;
 
-    return TextFormField(
-      decoration: InputDecoration(
-        hintText: JsonIntl.of(context).get(IntlKeys.requiredLiteral),
-        border: OutlineInputBorder(
-          borderSide: BorderSide(color: Theme.of(context).primaryColor),
-        ),
-        labelText:
-            // Todo: Improve this translation
-            '${JsonIntl.of(context).get(IntlKeys.refuelingAmount)} (${volume.unitString(context, short: true)})',
-        contentPadding:
-            EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
-      ),
-      autofocus: true,
-      initialValue: volume.format(refueling?.amount, textField: true),
-      keyboardType: TextInputType.numberWithOptions(decimal: true),
-      validator: doubleValidator,
-      onSaved: onSaved,
-      textInputAction: TextInputAction.next,
-      focusNode: node,
-      onFieldSubmitted: (_) => changeFocus(node, nextNode),
-    );
-  }
+          return TextFormField(
+            decoration: InputDecoration(
+              hintText: intl.get(IntlKeys.requiredLiteral),
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: Theme.of(context).primaryColor),
+              ),
+              labelText:
+                  // Todo: Improve this translation
+                  '${intl.get(IntlKeys.refuelingAmount)} (${volume.unitString(intl, short: true)})',
+              contentPadding: EdgeInsets.only(
+                  left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
+            ),
+            autofocus: true,
+            initialValue: volume.format(refueling?.amount, textField: true),
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
+            validator: doubleValidator,
+            onSaved: onSaved,
+            textInputAction: TextInputAction.next,
+            focusNode: node,
+            onFieldSubmitted: (_) => changeFocus(node, nextNode),
+          );
+        },
+      );
 }
 
 class _CostForm extends StatelessWidget {
@@ -121,31 +129,34 @@ class _CostForm extends StatelessWidget {
   final FocusNode node, nextNode;
 
   @override
-  Widget build(BuildContext context) {
-    final currency = Currency.of(context);
+  Widget build(BuildContext context) => StoreBuilder(
+        builder: (BuildContext context, Store<AppState> store) {
+          final intl = store.state.intlState.intl;
+          final currency = store.state.unitsState.currency;
 
-    return TextFormField(
-      decoration: InputDecoration(
-        hintText: JsonIntl.of(context).get(IntlKeys.requiredLiteral),
-        border: OutlineInputBorder(
-          borderSide: BorderSide(color: Theme.of(context).primaryColor),
-        ),
-        labelText:
-            // Todo: Improve this translation
-            '${JsonIntl.of(context).get(IntlKeys.totalPrice)} (${currency.unitString(context, short: true)})',
-        contentPadding:
-            EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
-      ),
-      autofocus: true,
-      initialValue: currency.format(refueling?.cost, textField: true),
-      keyboardType: TextInputType.numberWithOptions(decimal: true),
-      validator: doubleValidator,
-      onSaved: onSaved,
-      textInputAction: TextInputAction.next,
-      focusNode: node,
-      onFieldSubmitted: (_) => changeFocus(node, nextNode),
-    );
-  }
+          return TextFormField(
+            decoration: InputDecoration(
+              hintText: intl.get(IntlKeys.requiredLiteral),
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: Theme.of(context).primaryColor),
+              ),
+              labelText:
+                  // Todo: Improve this translation
+                  '${intl.get(IntlKeys.totalPrice)} (${currency.unitString(intl, short: true)})',
+              contentPadding: EdgeInsets.only(
+                  left: 16.0, top: 20.0, right: 16.0, bottom: 5.0),
+            ),
+            autofocus: true,
+            initialValue: currency.format(refueling?.cost, textField: true),
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
+            validator: doubleValidator,
+            onSaved: onSaved,
+            textInputAction: TextInputAction.next,
+            focusNode: node,
+            onFieldSubmitted: (_) => changeFocus(node, nextNode),
+          );
+        },
+      );
 }
 
 class _DateForm extends StatefulWidget {

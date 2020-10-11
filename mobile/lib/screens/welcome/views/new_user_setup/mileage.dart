@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:json_intl/json_intl.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:redux/redux.dart';
 
 import '../../../../generated/localization.dart';
 import '../../../../integ_test_keys.dart';
+import '../../../../redux/redux.dart';
 import '../../../../theme.dart';
-import '../../../../units/units.dart';
 import '../../../../util.dart';
 import 'base.dart';
 import 'wizard.dart';
@@ -19,6 +21,67 @@ class CarEntryField extends StatefulWidget {
 
   @override
   State<CarEntryField> createState() => CarEntryFieldState();
+}
+
+class _NameField extends StatelessWidget {
+  const _NameField(
+      {@required this.nameNode,
+      @required this.mileageNode,
+      @required this.car});
+
+  final FocusNode nameNode, mileageNode;
+  final NewUserCar car;
+
+  @override
+  Widget build(BuildContext context) => TextFormField(
+        key: IntegrationTestKeys.mileageNameField,
+        maxLines: 1,
+        autofocus: true,
+        decoration: defaultInputDecoration(
+          context,
+          JsonIntl.of(context).get(IntlKeys.carName),
+        ),
+        validator: (v) => formValidator<String>(context, v, required: true),
+        initialValue: car.name,
+        onSaved: (value) => car.name = value,
+        focusNode: nameNode,
+        textInputAction: TextInputAction.next,
+        onFieldSubmitted: (_) => changeFocus(nameNode, mileageNode),
+      );
+}
+
+class _MileageField extends StatelessWidget {
+  const _MileageField(
+      {@required this.nameNode,
+      @required this.mileageNode,
+      @required this.car});
+
+  final FocusNode nameNode, mileageNode;
+  final NewUserCar car;
+
+  @override
+  Widget build(BuildContext context) => StoreBuilder(
+        builder: (BuildContext context, Store<AppState> store) => TextFormField(
+          key: IntegrationTestKeys.mileageMileageField,
+          maxLines: 1,
+          autofocus: false,
+          decoration: defaultInputDecoration(
+            context,
+            JsonIntl.of(context).get(IntlKeys.mileage),
+            unit: store.state.unitsState.distance
+                .unitString(store.state.intlState.intl, short: true),
+          ),
+          validator: (v) =>
+              formValidator<int>(context, v, min: 0, required: true),
+          keyboardType: TextInputType.number,
+          initialValue: store.state.unitsState.distance
+              .format(car.mileage, textField: true),
+          onSaved: (value) => car.mileage = store.state.unitsState.distance
+              .unitToInternal(double.parse(value)),
+          focusNode: mileageNode,
+          textInputAction: TextInputAction.done,
+        ),
+      );
 }
 
 class CarEntryFieldState extends State<CarEntryField> {
@@ -43,65 +106,34 @@ class CarEntryFieldState extends State<CarEntryField> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final distance = Distance.of(context);
-
-    TextFormField nameField() => TextFormField(
-          key: IntegrationTestKeys.mileageNameField,
-          maxLines: 1,
-          autofocus: true,
-          decoration: defaultInputDecoration(
-            context,
-            JsonIntl.of(context).get(IntlKeys.carName),
+  Widget build(BuildContext context) => Container(
+        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+        child: Form(
+          key: widget.formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.fromLTRB(5, 0, 5, 10),
+                child: _NameField(
+                  car: widget.car,
+                  nameNode: _nameNode,
+                  mileageNode: _mileageNode,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(5, 0, 5, 10),
+                child: _MileageField(
+                  car: widget.car,
+                  nameNode: _nameNode,
+                  mileageNode: _mileageNode,
+                ),
+              ),
+              Padding(padding: EdgeInsets.only(bottom: 10)),
+            ],
           ),
-          validator: (v) => formValidator<String>(context, v, required: true),
-          initialValue: widget.car.name,
-          onSaved: (value) => widget.car.name = value,
-          focusNode: _nameNode,
-          textInputAction: TextInputAction.next,
-          onFieldSubmitted: (_) => changeFocus(_nameNode, _mileageNode),
-        );
-
-    TextFormField mileageField() => TextFormField(
-          key: IntegrationTestKeys.mileageMileageField,
-          maxLines: 1,
-          autofocus: false,
-          decoration: defaultInputDecoration(
-            context,
-            JsonIntl.of(context).get(IntlKeys.mileage),
-            unit: Distance.of(context).unitString(context, short: true),
-          ),
-          validator: (v) =>
-              formValidator<int>(context, v, min: 0, required: true),
-          keyboardType: TextInputType.number,
-          initialValue: distance.format(widget.car.mileage, textField: true),
-          onSaved: (value) =>
-              widget.car.mileage = distance.unitToInternal(double.parse(value)),
-          focusNode: _mileageNode,
-          textInputAction: TextInputAction.done,
-        );
-
-    return Container(
-      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-      child: Form(
-        key: widget.formKey,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.fromLTRB(5, 0, 5, 10),
-              child: nameField(),
-            ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(5, 0, 5, 10),
-              child: mileageField(),
-            ),
-            Padding(padding: EdgeInsets.only(bottom: 10)),
-          ],
         ),
-      ),
-    );
-  }
+      );
 }
 
 class MileageScreen extends StatefulWidget {

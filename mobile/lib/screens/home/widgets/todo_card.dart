@@ -71,25 +71,39 @@ class TodoListCard extends StatelessWidget {
                       height: 10,
                     ),
                     if (todo.dueMileage != null && todo.dueDate == null)
-                      RichText(
-                          text: TextSpan(children: [
-                        // TODO: Improve this translation
-                        TextSpan(
-                            text:
-                                '${JsonIntl.of(context).get(IntlKeys.dueAt)} ',
-                            style:
-                                Theme.of(context).primaryTextTheme.bodyText2),
-                        TextSpan(
-                          text: Distance.of(context).format(todo.dueMileage),
-                          style: Theme.of(context).primaryTextTheme.subtitle2,
-                          children: [TextSpan(text: ' ')],
+                      StoreBuilder(
+                        builder:
+                            (BuildContext context, Store<AppState> store) =>
+                                RichText(
+                          text: TextSpan(
+                            children: [
+                              // TODO: Improve this translation
+                              TextSpan(
+                                  text:
+                                      '${JsonIntl.of(context).get(IntlKeys.dueAt)} ',
+                                  style: Theme.of(context)
+                                      .primaryTextTheme
+                                      .bodyText2),
+                              TextSpan(
+                                text: Distance.of(context)
+                                    .format(todo.dueMileage),
+                                style: Theme.of(context)
+                                    .primaryTextTheme
+                                    .subtitle2,
+                                children: [TextSpan(text: ' ')],
+                              ),
+                              TextSpan(
+                                text: store.state.unitsState.distance
+                                    .unitString(store.state.intlState.intl,
+                                        short: true),
+                                style: Theme.of(context)
+                                    .primaryTextTheme
+                                    .bodyText2,
+                              )
+                            ],
+                          ),
                         ),
-                        TextSpan(
-                          text: Distance.of(context)
-                              .unitString(context, short: true),
-                          style: Theme.of(context).primaryTextTheme.bodyText2,
-                        )
-                      ])),
+                      ),
                     if (todo.dueDate != null && todo.dueMileage == null)
                       RichText(
                           text: TextSpan(children: [
@@ -105,33 +119,50 @@ class TodoListCard extends StatelessWidget {
                         ),
                       ])),
                     if (todo.dueDate != null && todo.dueMileage != null)
-                      RichText(
-                          text: TextSpan(children: [
-                        TextSpan(
-                            text:
-                                '${JsonIntl.of(context).get(IntlKeys.dueBy)} ',
-                            style:
-                                Theme.of(context).primaryTextTheme.bodyText2),
-                        TextSpan(
-                          text: DateFormat.yMd().format(todo.dueDate),
-                          style: Theme.of(context).primaryTextTheme.subtitle2,
-                          children: [TextSpan(text: ' ')],
+                      StoreBuilder(
+                        builder:
+                            (BuildContext context, Store<AppState> store) =>
+                                RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                  text:
+                                      '${JsonIntl.of(context).get(IntlKeys.dueBy)} ',
+                                  style: Theme.of(context)
+                                      .primaryTextTheme
+                                      .bodyText2),
+                              TextSpan(
+                                text: DateFormat.yMd().format(todo.dueDate),
+                                style: Theme.of(context)
+                                    .primaryTextTheme
+                                    .subtitle2,
+                                children: [TextSpan(text: ' ')],
+                              ),
+                              TextSpan(
+                                  text:
+                                      '${JsonIntl.of(context).get(IntlKeys.or)} ',
+                                  style: Theme.of(context)
+                                      .primaryTextTheme
+                                      .bodyText2),
+                              TextSpan(
+                                text: Distance.of(context)
+                                    .format(todo.dueMileage),
+                                style: Theme.of(context)
+                                    .primaryTextTheme
+                                    .subtitle2,
+                                children: [TextSpan(text: ' ')],
+                              ),
+                              TextSpan(
+                                  text: store.state.unitsState.distance
+                                      .unitString(store.state.intlState.intl,
+                                          short: true),
+                                  style: Theme.of(context)
+                                      .primaryTextTheme
+                                      .bodyText2),
+                            ],
+                          ),
                         ),
-                        TextSpan(
-                            text: '${JsonIntl.of(context).get(IntlKeys.or)} ',
-                            style:
-                                Theme.of(context).primaryTextTheme.bodyText2),
-                        TextSpan(
-                          text: Distance.of(context).format(todo.dueMileage),
-                          style: Theme.of(context).primaryTextTheme.subtitle2,
-                          children: [TextSpan(text: ' ')],
-                        ),
-                        TextSpan(
-                            text: Distance.of(context)
-                                .unitString(context, short: true),
-                            style:
-                                Theme.of(context).primaryTextTheme.bodyText2),
-                      ])),
+                      ),
                   ],
                 ),
               ),

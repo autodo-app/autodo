@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
-import '../../blocs/blocs.dart';
 import '../../models/models.dart';
+import '../../redux/redux.dart';
 import '../../screens/add_edit/barrel.dart';
 
 class CarTag extends StatelessWidget {
@@ -31,7 +31,7 @@ class CarTag extends StatelessWidget {
                             isEditing: false,
                             onSave:
                                 (name, odom, make, model, year, plate, vin) {
-                              store.dispatch(UpdateCar(car.copyWith(
+                              store.dispatch(updateCar(car.copyWith(
                                   name: name,
                                   snaps: [
                                     OdomSnapshot(

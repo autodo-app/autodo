@@ -1,4 +1,3 @@
-import 'package:charts_flutter/flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:json_intl/json_intl.dart';
 import 'package:equatable/equatable.dart';
@@ -338,6 +337,7 @@ class _ViewModel extends Equatable {
     return _ViewModel(
         cars: store.state.dataState.cars,
         // todos: store.state.dataState.todos,
+        filteredTodos: {}, // TODO
         onDeleteTodo: (context, todo) {
           store.dispatch(deleteTodo(todo));
           Scaffold.of(context).showSnackBar(DeleteTodoSnackBar(

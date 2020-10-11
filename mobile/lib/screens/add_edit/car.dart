@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -318,9 +317,8 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
                   (mode == CarDetailsMode.ADD || mode == CarDetailsMode.EDIT)
                       ? _TwoPartTextField(
                           initialValue: widget.car?.odom?.toString(),
-                          fieldName: JsonIntl.of(context).get(IntlKeys.odom),
-                          units: Distance.of(context)
-                              .unitString(context, short: true),
+                          fieldName: vm.intl.get(IntlKeys.odom),
+                          units: vm.distance.unitString(vm.intl, short: true),
                           node: _odomNode,
                           nextNode: _makeNode,
                           validator: doubleValidator,
@@ -330,9 +328,9 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
                           keyboardType: TextInputType.number,
                         )
                       : _TwoPartNoEdit(
-                          fieldName: JsonIntl.of(context).get(IntlKeys.odom),
+                          fieldName: vm.intl.get(IntlKeys.odom),
                           value:
-                              '${Distance.of(context).format(widget.car?.odom)} ${Distance.of(context).unitString(context, short: true)}',
+                              '${vm.distance.format(widget.car?.odom)} ${vm.distance.unitString(vm.intl, short: true)}',
                         ),
                   // (mode == CarDetailsMode.DETAILS)
                   //     ? _TwoPartNoEdit(
@@ -352,7 +350,7 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
                   (mode == CarDetailsMode.ADD || mode == CarDetailsMode.EDIT)
                       ? _TwoPartTextField(
                           initialValue: widget.car?.make,
-                          fieldName: JsonIntl.of(context).get(IntlKeys.make),
+                          fieldName: vm.intl.get(IntlKeys.make),
                           units: '',
                           node: _makeNode,
                           nextNode: _modelNode,
@@ -363,12 +361,12 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
                           keyboardType: TextInputType.text,
                         )
                       : _TwoPartNoEdit(
-                          fieldName: JsonIntl.of(context).get(IntlKeys.make),
+                          fieldName: vm.intl.get(IntlKeys.make),
                           value: widget.car?.make),
                   (mode == CarDetailsMode.ADD || mode == CarDetailsMode.EDIT)
                       ? _TwoPartTextField(
                           initialValue: widget.car?.model,
-                          fieldName: JsonIntl.of(context).get(IntlKeys.model),
+                          fieldName: vm.intl.get(IntlKeys.model),
                           units: '',
                           node: _modelNode,
                           nextNode: _yearNode,
@@ -379,12 +377,12 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
                           keyboardType: TextInputType.text,
                         )
                       : _TwoPartNoEdit(
-                          fieldName: JsonIntl.of(context).get(IntlKeys.model),
+                          fieldName: vm.intl.get(IntlKeys.model),
                           value: widget.car?.model),
                   (mode == CarDetailsMode.ADD || mode == CarDetailsMode.EDIT)
                       ? _TwoPartTextField(
                           initialValue: widget.car?.year?.toString(),
-                          fieldName: JsonIntl.of(context).get(IntlKeys.year),
+                          fieldName: vm.intl.get(IntlKeys.year),
                           units: '',
                           node: _yearNode,
                           nextNode: _plateNode,
@@ -395,13 +393,13 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
                           keyboardType: TextInputType.number,
                         )
                       : _TwoPartNoEdit(
-                          fieldName: JsonIntl.of(context).get(IntlKeys.year),
+                          fieldName: vm.intl.get(IntlKeys.year),
                           value: widget.car?.year?.toString()),
                   Divider(),
                   (mode == CarDetailsMode.ADD || mode == CarDetailsMode.EDIT)
                       ? _TwoPartTextField(
                           initialValue: widget.car?.plate,
-                          fieldName: JsonIntl.of(context).get(IntlKeys.plate),
+                          fieldName: vm.intl.get(IntlKeys.plate),
                           units: '',
                           node: _plateNode,
                           nextNode: _vinNode,
@@ -412,12 +410,12 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
                           keyboardType: TextInputType.text,
                         )
                       : _TwoPartNoEdit(
-                          fieldName: JsonIntl.of(context).get(IntlKeys.plate),
+                          fieldName: vm.intl.get(IntlKeys.plate),
                           value: widget.car?.plate),
                   (mode == CarDetailsMode.ADD || mode == CarDetailsMode.EDIT)
                       ? _TwoPartTextField(
                           initialValue: widget.car?.vin,
-                          fieldName: JsonIntl.of(context).get(IntlKeys.vin),
+                          fieldName: vm.intl.get(IntlKeys.vin),
                           units: '',
                           node: _vinNode,
                           validator: requiredValidator,
@@ -427,7 +425,7 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
                           keyboardType: TextInputType.text,
                         )
                       : _TwoPartNoEdit(
-                          fieldName: JsonIntl.of(context).get(IntlKeys.vin),
+                          fieldName: vm.intl.get(IntlKeys.vin),
                           value: widget.car?.vin),
                   Container(
                       height:
@@ -460,27 +458,34 @@ class CarAddEditScreenState extends State<CarAddEditScreen> {
 }
 
 class _ViewModel {
-  const _ViewModel(
-      {@required this.car,
-      @required this.imageDownloadUrl,
-      @required this.onDeleteImage,
-      @required this.onSaveImage,
-      @required this.onUpdateCar});
+  const _ViewModel({
+    @required this.car,
+    @required this.imageDownloadUrl,
+    @required this.onDeleteImage,
+    @required this.onSaveImage,
+    @required this.onUpdateCar,
+    @required this.intl,
+    @required this.distance,
+  });
 
   /// Creates helpers for interacting with the Redux store. Needs the additional
   /// car parameter to pass down UI-specific state.
   static _ViewModel fromStore(Store<AppState> store, Car car) => _ViewModel(
-      car: car,
-      imageDownloadUrl: store.state.api.imageDownloadUrl(car.id, car.imageName),
-      onDeleteImage: () {
-        store.dispatch(deleteCarImage(car.imageName));
-      },
-      onSaveImage: (String fileName) {
-        store.dispatch(saveCarImage(fileName));
-      },
-      onUpdateCar: (Car updatedCar) {
-        store.dispatch(updateCar(updatedCar));
-      });
+        car: car,
+        imageDownloadUrl:
+            store.state.api.imageDownloadUrl(car.id, car.imageName),
+        onDeleteImage: () {
+          store.dispatch(deleteCarImage(car.imageName));
+        },
+        onSaveImage: (String fileName) {
+          store.dispatch(saveCarImage(fileName));
+        },
+        onUpdateCar: (Car updatedCar) {
+          store.dispatch(updateCar(updatedCar));
+        },
+        intl: store.state.intlState.intl,
+        distance: store.state.unitsState.distance,
+      );
 
   /// The car whose info is displayed in this screen. Will be null if we are
   /// creating a new car.
@@ -497,4 +502,8 @@ class _ViewModel {
 
   /// Dispatches an action to update the car's info.
   final void Function(Car) onUpdateCar;
+
+  final JsonIntl intl;
+
+  final Distance distance;
 }

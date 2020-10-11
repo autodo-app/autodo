@@ -8,7 +8,6 @@ import 'package:flutter_redux/flutter_redux.dart';
 import '../../../generated/localization.dart';
 import '../../../models/models.dart';
 import '../../../redux/redux.dart';
-import '../../../units/units.dart';
 import '../../add_edit/barrel.dart';
 
 class NewCarCard extends StatelessWidget {

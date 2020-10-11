@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:json_intl/json_intl.dart';
 
 import '../../../../generated/localization.dart';
-import '../../../../models/models.dart';
-import '../../../../units/units.dart';
 import 'shared.dart';
 
 class FuelMileageChart extends StatelessWidget {

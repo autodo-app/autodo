@@ -6,10 +6,9 @@ import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:json_intl/json_intl.dart';
 
-import '../../blocs/blocs.dart';
 import '../../generated/localization.dart';
 import '../../models/models.dart';
-import '../../redux/app/state.dart';
+import '../../redux/redux.dart';
 
 class ExtraActions extends StatelessWidget {
   const ExtraActions(
@@ -60,12 +59,13 @@ class _ViewModel extends Equatable {
   static _ViewModel fromStore(Store<AppState> store) => _ViewModel(
       onActionSelected: (action) {
         if (action == ExtraAction.toggleAllComplete) {
-          store.dispatch(ToggleAllTodosComplete());
+          // store.dispatch(ToggleAllTodosComplete()); // TODO
         } else if (action == ExtraAction.toggleFilter) {
-          store.dispatch(UpdateTodosFilter(
-              (store.state.filterState.todosFilter == VisibilityFilter.all)
-                  ? VisibilityFilter.active
-                  : VisibilityFilter.all));
+          // TODO
+          // store.dispatch(UpdateTodosFilter(
+          //     (store.state.filterState.todosFilter == VisibilityFilter.all)
+          //         ? VisibilityFilter.active
+          //         : VisibilityFilter.all));
         }
       },
       filterState: store.state.filterState.todosFilter,

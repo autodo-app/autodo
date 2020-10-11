@@ -8,7 +8,6 @@ export 'src/odom_snapshot.dart';
 export 'src/refueling.dart';
 export 'src/repeat_interval.dart';
 export 'src/stats.dart';
-export 'src/stats/efficiency.dart';
 export 'src/todo.dart';
 export 'src/todo_due_state.dart';
 export 'src/token_pair.dart';
