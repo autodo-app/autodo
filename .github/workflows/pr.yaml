@@ -20,7 +20,7 @@ jobs:
       - run: flutter format .
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: Apply automatic changes
+          push_options: '--force'
   blackformat:
     name: Python Format
     runs-on: ubuntu-latest
