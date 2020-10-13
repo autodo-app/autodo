@@ -5,6 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.56",
     "@reduxjs/toolkit": "^1.4.0",
     "@sentry/react": "^5.24.2",
     "@sentry/tracing": "^5.24.2",
@@ -22,6 +23,7 @@
     "date-fns": "^2.15.0",
     "formik": "^2.1.6",
     "formik-material-ui": "^3.0.0",
+    "fuse.js": "^6.4.1",
     "gatsby": "^2.24.57",
     "gatsby-plugin-manifest": "^2.4.28",
     "gatsby-plugin-offline": "^3.2.27",

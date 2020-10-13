@@ -1,13 +1,17 @@
 import * as React from 'react';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Theme, makeStyles, Paper, Input, IconButton } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear';
 import SearchIcon from '@material-ui/icons/Search';
 import MoreVert from '@material-ui/icons/MoreVert';
-import Button from '@material-ui/core/Button';
+import { Button, TextField } from '@material-ui/core';
+import { Autocomplete } from '@material-ui/lab';
+import Fuse, { FuseResult } from 'fuse.js';
 
 import { grey } from '@material-ui/core/colors';
 import classNames from 'classnames';
+import { selectAllTodos } from '../_store';
 
 interface StyleProps {
   root: React.CSSProperties;
@@ -31,7 +35,7 @@ const useStyles = makeStyles<Theme, StyleProps>(
         display: 'flex',
       },
       paper: {
-        height: 48,
+        // height: 48,
         width: '100%',
         display: 'flex',
         justifyContent: 'space-between',
@@ -74,27 +78,36 @@ const useStyles = makeStyles<Theme, StyleProps>(
 
 export const SearchBar: React.FC<{}> = (): JSX.Element => {
   const classes: StyleClasses = useStyles({} as StyleProps);
-  const [value, setValue] = useState('');
-
-  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
-    // setFocus(true);
+  const [state, setState] = useState({
+    value: '',
+    suggestions: Array<FuseResult>(),
+  });
+  const list = useSelector(selectAllTodos);
+  const options = {
+    minMatchCarLength: 2,
+    keys: ['name'],
   };
+  const fuse = new Fuse(list, options);
+
+  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {};
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    // setFocus(false);
-    if (value.trim().length === 0) {
-      setValue('');
+    if (state.value.trim().length === 0) {
+      setState({ value: '', suggestions: [] });
     }
-    // any specific blurring logic here
   };
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
+    if (e.target.value.length < 1) {
+      setState({ value: e.target.value, suggestions: Array<FuseResult>() });
+    } else {
+      const res = fuse.search(e.target.value);
+      setState({ value: e.target.value, suggestions: res });
+    }
   };
 
   const handleCancel = () => {
-    // setActive(false);
-    setValue('');
+    setState({ value: '', suggestions: [] });
   };
 
   const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -106,32 +119,47 @@ export const SearchBar: React.FC<{}> = (): JSX.Element => {
   };
 
   const handleRequestSearch = () => {
-    // if (this.props.onRequestSearch) {
-    //   this.props.onRequestSearch(this.state.value);
-    // }
+    console.log();
   };
 
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
         <div className={classes.searchContainer}>
-          <Input
-            placeholder="Looking for..."
+          <Autocomplete
+            freeSolo
             onBlur={handleBlur}
-            value={value}
-            onChange={handleInput}
+            value={state.value}
+            onInputChange={handleInput}
             onKeyUp={handleKeyUp}
             onFocus={handleFocus}
             fullWidth
-            disableUnderline
             className={classes.input}
+            disableClearable
+            options={state.suggestions.map(
+              (option) => `${option.item.name} (${option.item.dueMileage} mi)`,
+            )}
+            renderInput={(params: any) => (
+              <TextField
+                {...params}
+                className={classes.input}
+                placeholder="Looking for..."
+                fullWidth
+                margin="none"
+                InputProps={{
+                  ...params.InputProps,
+                  disableUnderline: true,
+                  type: 'search',
+                }}
+              />
+            )}
           />
         </div>
         <IconButton
           onClick={handleRequestSearch}
           classes={{
             root: classNames(classes.iconButton, classes.searchIconButton, {
-              [classes.iconButtonShifted]: value !== '',
+              [classes.iconButtonShifted]: state.value !== '',
             }),
           }}
         >
@@ -141,7 +169,7 @@ export const SearchBar: React.FC<{}> = (): JSX.Element => {
           onClick={handleCancel}
           classes={{
             root: classNames(classes.iconButton, {
-              [classes.iconButtonHidden]: value === '',
+              [classes.iconButtonHidden]: state.value === '',
             }),
           }}
         >
