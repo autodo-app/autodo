@@ -44,7 +44,7 @@ class Pubspec {
     'json_intl': null,
     'cloud_firestore': null,
     'firebase_analytics': null,
-    'firebase_auth': null,
+    'firebase_core': null,
     'shared_preferences': null,
     'flutter_typeahead': null,
     'flutter_local_notifications': null,
@@ -92,7 +92,6 @@ class Pubspec {
         'ref': 'master',
       },
     },
-    'platform': '^2.0.0',
   };
 
   static const Map<dynamic, dynamic> dev_dependencies = <dynamic, dynamic>{

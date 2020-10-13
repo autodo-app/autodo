@@ -19,7 +19,7 @@ dependencies:
   json_intl:
   cloud_firestore:
   firebase_analytics:
-  firebase_auth:
+  firebase_core:
   shared_preferences:
   flutter_typeahead:
   flutter_local_notifications:

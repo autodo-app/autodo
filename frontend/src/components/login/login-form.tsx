@@ -148,7 +148,7 @@ export const LoginForm: React.FC<LoginFormProps> = (props) => {
                 />
                 {isSubmitting && <LinearProgress />}
                 <Typography variant="body2" color="error">
-                  {status}
+                  {status ? JSON.stringify(status) : ''}
                 </Typography>
                 <Button
                   // type="submit"

@@ -65,13 +65,13 @@ const useStyles = makeStyles<Theme, StyleProps>(
 );
 
 interface CarTagProps {
-  car: Car;
+  car?: Car;
 }
 const CarTag: React.FC<CarTagProps> = (props): JSX.Element => {
   const { car } = props;
   return (
     <ButtonBase>
-      <Chip color="primary" label={car.name} />
+      <Chip color="primary" label={car?.name} />
     </ButtonBase>
   );
 };
