@@ -6,16 +6,16 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('autodo', '0005_auto_20200927_2228'),
+        ("autodo", "0005_auto_20200927_2228"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='odomsnapshot',
-            options={'ordering': ['-mileage']},
+            name="odomsnapshot",
+            options={"ordering": ["-mileage"]},
         ),
         migrations.AlterModelOptions(
-            name='todo',
-            options={'ordering': ['dueDate', 'dueMileage']},
+            name="todo",
+            options={"ordering": ["dueDate", "dueMileage"]},
         ),
     ]
