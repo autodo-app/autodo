@@ -8,6 +8,7 @@ export 'data/status.dart';
 export 'data/thunks.dart';
 export 'filters/actions.dart';
 export 'filters/state.dart';
+export 'intl/actions.dart';
 export 'intl/state.dart';
 export 'paid_version/actions.dart';
 export 'paid_version/state.dart';

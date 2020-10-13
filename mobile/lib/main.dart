@@ -3,9 +3,8 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:pref/pref.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_core/firebase_core.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:json_intl/json_intl.dart';
@@ -13,7 +12,6 @@ import 'package:flutter_debug_drawer/flutter_debug_drawer.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:sentry/sentry.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:provider/provider.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
 import 'flavor.dart';
@@ -28,7 +26,7 @@ import 'units/units.dart';
 import 'util.dart';
 
 class AutodoApp extends StatefulWidget {
-  const AutodoApp({Key key, this.store}) : super(key: key);
+  const AutodoApp({Key key, @required this.store}) : super(key: key);
 
   final Store<AppState> store;
 
@@ -40,7 +38,6 @@ class AutodoAppState extends State<AutodoApp> {
   bool _authenticated = false;
   bool _initialized = false;
   ThemeData _theme;
-  BasePrefService service;
   final analytics = kFlavor.hasAnalytics ? FirebaseAnalytics() : null;
 
   Future<Null> _authenticate() async {
@@ -62,14 +59,14 @@ class AutodoAppState extends State<AutodoApp> {
   }
 
   Future<void> _configureFirebase() async {
-    await Firebase.initializeApp(
-      name: kFlavor.firebaseAppName,
-      options: FirebaseOptions(
-        appId: kFlavor.googleAppID,
-        projectId: kFlavor.projectID,
-        apiKey: kFlavor.firebaseApiKey,
-      ),
-    );
+    // await Firebase.initializeApp(
+    //   name: kFlavor.firebaseAppName,
+    //   options: FirebaseOptions(
+    //     appId: kFlavor.googleAppID,
+    //     projectId: kFlavor.projectID,
+    //     apiKey: kFlavor.firebaseApiKey,
+    //   ),
+    // );
   }
 
   Future<void> _initMainWidget() async {
@@ -77,21 +74,11 @@ class AutodoAppState extends State<AutodoApp> {
       return;
     }
 
-    WidgetsFlutterBinding.ensureInitialized();
     await _configureFirebase();
     // required in init for Android
     InAppPurchaseConnection.enablePendingPurchases();
 
     _theme = createTheme();
-
-    final locale = WidgetsBinding.instance.window.locale ?? Locale('en', 'US');
-    service = await PrefServiceShared.init();
-    await service.setDefaultValues({
-      'length_unit': Distance.getDefault(locale).index,
-      'volume_unit': Volume.getDefault(locale).index,
-      'efficiency_unit': Efficiency.getDefault(locale).index,
-      'currency': Currency.getDefault(locale),
-    });
 
     setState(() {
       _initialized = true;
@@ -101,31 +88,30 @@ class AutodoAppState extends State<AutodoApp> {
   @override
   Widget build(BuildContext context) => StoreProvider<AppState>(
       store: widget.store,
-      child: PrefService(
-          service: service,
-          child: ChangeNotifierProvider<BasePrefService>.value(
-              value: service,
-              child: MaterialApp(
-                onGenerateTitle: (BuildContext context) =>
-                    JsonIntl.of(context).get(IntlKeys.appTitle),
-                localizationsDelegates: [
-                  const JsonIntlDelegate(),
-                  GlobalMaterialLocalizations.delegate,
-                  GlobalWidgetsLocalizations.delegate,
-                ],
-                supportedLocales: [
-                  const Locale('en'),
-                  const Locale('fr'),
-                ],
-                builder: DebugDrawerBuilder.buildDefault(),
-                home: HomeScreen(),
-                theme: _theme,
-                debugShowCheckedModeBanner: false,
-                navigatorObservers: [
-                  // if (kFlavor.hasPaid) BlocProvider.of<PaidVersionBloc>(context).observer,
-                  // if (analytics != null) FirebaseAnalyticsObserver(analytics: analytics),
-                ],
-              ))));
+      child: MaterialApp(
+        onGenerateTitle: (BuildContext context) {
+          // Write the json intl localization to the redux store
+          widget.store.dispatch(SetIntlAction(JsonIntl.of(context)));
+          return JsonIntl.of(context).get(IntlKeys.appTitle);
+        },
+        localizationsDelegates: [
+          const JsonIntlDelegate(),
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        supportedLocales: [
+          const Locale('en'),
+          const Locale('fr'),
+        ],
+        builder: DebugDrawerBuilder.buildDefault(),
+        home: HomeScreen(),
+        theme: _theme,
+        debugShowCheckedModeBanner: false,
+        navigatorObservers: [
+          // if (kFlavor.hasPaid) BlocProvider.of<PaidVersionBloc>(context).observer,
+          // if (analytics != null) FirebaseAnalyticsObserver(analytics: analytics),
+        ],
+      ));
 }
 
 SentryClient _sentry;
@@ -145,12 +131,10 @@ Future<void> _reportError(
 }
 
 Future<void> main({bool isTesting = false}) async {
-  final _sentry = kFlavor.useSentry
-      ? null
-      : SentryClient(
-          dsn: Keys.sentryDsn, environmentAttributes: await getSentryEvent());
+  WidgetsFlutterBinding.ensureInitialized();
 
   final locale = WidgetsBinding.instance.window.locale ?? Locale('en', 'US');
+
   final store = Store<AppState>(
     appReducer,
     initialState: AppState(
@@ -197,10 +181,16 @@ Future<void> main({bool isTesting = false}) async {
     middleware: [thunkMiddleware],
   );
 
+  final _sentry = kFlavor.useSentry
+      ? null
+      : SentryClient(
+          dsn: Keys.sentryDsn, environmentAttributes: await getSentryEvent());
   if (_sentry != null) {
     FlutterError.onError =
         (FlutterErrorDetails details) => _reportError(details, store);
   }
 
-  runApp(AutodoApp());
+  runApp(AutodoApp(
+    store: store,
+  ));
 }

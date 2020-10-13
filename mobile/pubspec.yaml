@@ -62,7 +62,6 @@ dependency_overrides:
     git:
       url: git://github.com/baylessj/flutter-autocomplete-textfield.git
       ref: master
-  platform: ^2.0.0
 
 dev_dependencies:
   flutter_test:

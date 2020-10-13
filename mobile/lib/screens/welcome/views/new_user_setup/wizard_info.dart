@@ -70,5 +70,6 @@ class NewUserScreenWizard extends WizardInfo {
     }
 
     store.dispatch(setNewUserData(cars: newCars, todos: newTodos));
+    // Navigator.of(context).pop();
   }
 }

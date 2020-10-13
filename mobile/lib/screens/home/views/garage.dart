@@ -231,7 +231,7 @@ class _ViewModel extends Equatable {
 
   static _ViewModel fromStore(Store<AppState> store) {
     if (store.state.dataState.status == DataStatus.IDLE) {
-      store.dispatch(fetchData());
+      store.dispatch(fetchData);
     }
     if (store.state.paidVersionState.status == PaidVersionStatus.IDLE) {
       store.dispatch(fetchPaidVersionStatus());

@@ -20,6 +20,7 @@ final dataReducer = combineReducers<AppState>([
 ]);
 
 AppState _dataLoading(AppState state, LoadingDataAction action) {
+  print('loading');
   return state.copyWith(
       dataState: state.dataState.copyWith(status: DataStatus.LOADING));
 }

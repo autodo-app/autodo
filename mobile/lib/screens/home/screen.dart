@@ -11,6 +11,7 @@ import '../../flavor.dart';
 import '../../integ_test_keys.dart';
 import '../../models/models.dart';
 import '../../redux/redux.dart';
+import '../../screens/welcome/screen.dart';
 import '../../screens/welcome/views/barrel.dart';
 import '../../widgets/widgets.dart';
 import '../add_edit/barrel.dart';
@@ -210,8 +211,19 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
   Widget build(BuildContext context) => StoreConnector<AppState, _ViewModel>(
         converter: _ViewModel.fromStore,
         builder: (context, vm) {
-          if (vm.cars.isEmpty) {
+          print('${vm.authStatus}  ${vm.dataStatus}');
+          if (vm.authStatus == AuthStatus.IDLE) {
+            return LoadingIndicator();
+          } else if (vm.authStatus == AuthStatus.LOGGED_OUT) {
+            return WelcomeScreen();
+          }
+
+          if (vm.dataStatus == DataStatus.IDLE) {
+            return LoadingIndicator();
+          } else if (vm.cars.isEmpty) {
             return NewUserScreen();
+            // Navigator.of(context)
+            //     .push(MaterialPageRoute(builder: (context) => NewUserScreen()));
           }
 
           if (adsEnabled) {
@@ -235,12 +247,18 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
 class _ViewModel {
   const _ViewModel(
       {@required this.isPaidVersion,
+      @required this.authStatus,
+      @required this.dataStatus,
       @required this.cars,
       @required this.onRefuelingAdded,
       @required this.onTodoAdded,
       @required this.onCarAdded});
 
   final bool isPaidVersion;
+
+  final AuthStatus authStatus;
+
+  final DataStatus dataStatus;
 
   final List<Car> cars;
 
@@ -253,11 +271,19 @@ class _ViewModel {
       onCarAdded;
 
   static _ViewModel fromStore(Store<AppState> store) {
-    if (store.state.dataState.status == DataStatus.IDLE) {
-      store.dispatch(fetchData());
+    final authStatus = store.state.authState.status;
+    final dataStatus = store.state.dataState.status;
+    if (authStatus == AuthStatus.IDLE) {
+      store.dispatch(checkLoginStatus);
     }
+    if (authStatus == AuthStatus.LOGGED_IN && dataStatus == DataStatus.IDLE) {
+      store.dispatch(fetchData);
+    }
+
     return _ViewModel(
         isPaidVersion: store.state.paidVersionState.isPaid,
+        authStatus: store.state.authState.status,
+        dataStatus: store.state.dataState.status,
         cars: store.state.dataState.cars,
         onRefuelingAdded: (m, d, a, c, n) {
           store.dispatch(createRefueling(Refueling(

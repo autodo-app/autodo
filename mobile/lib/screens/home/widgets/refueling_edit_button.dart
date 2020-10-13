@@ -54,7 +54,7 @@ class _ViewModel extends Equatable {
 
   static _ViewModel fromStore(Store<AppState> store) {
     if (store.state.dataState.status == DataStatus.IDLE) {
-      store.dispatch(fetchData());
+      store.dispatch(fetchData);
     }
     return _ViewModel(
         onUpdateRefueling: (refueling, m, d, a, c, n) {

@@ -9,31 +9,30 @@ import 'state.dart';
 import 'status.dart';
 
 /// Retrieves all of the user's core data from the API.
-ThunkAction fetchData() {
-  return (Store store) async {
-    store.dispatch(LoadingDataAction());
-    try {
-      final data = await Future.wait(<Future>[
-        store.state.api.fetchTodos(),
-        store.state.api.fetchRefuelings(),
-        store.state.api.fetchCars()
-      ]);
-      store.dispatch(FetchDataSuccessAction(
-          data: DataState(
-              todos: data[0],
-              refuelings: data[1],
-              cars: data[2],
-              status: DataStatus.LOADED,
-              error: null)));
-    } catch (e) {
-      store.dispatch(DataFailedAction(error: e));
-    }
-  };
-}
+ThunkAction fetchData = (Store store) async {
+  store.dispatch(LoadingDataAction());
+  try {
+    final data = await Future.wait(<Future>[
+      store.state.api.fetchTodos(),
+      store.state.api.fetchRefuelings(),
+      store.state.api.fetchCars()
+    ], eagerError: true);
+    store.dispatch(FetchDataSuccessAction(
+        data: DataState(
+            todos: data[0],
+            refuelings: data[1],
+            cars: data[2],
+            status: DataStatus.LOADED,
+            error: null)));
+  } catch (e) {
+    store.dispatch(DataFailedAction(error: e.toString()));
+  }
+};
 
 /// Creates the cars and basic Todos for the new user
 ThunkAction setNewUserData({List<Car> cars, Map<String, List<Todo>> todos}) {
   return (Store store) async {
+    print('action $cars');
     try {
       for (final c in cars) {
         final res = await store.state.api.createCar(c);
@@ -46,7 +45,8 @@ ThunkAction setNewUserData({List<Car> cars, Map<String, List<Todo>> todos}) {
         store.dispatch(CreateCarAction(car: Car.fromMap(res.id, res)));
       }
     } catch (e) {
-      store.dispatch(DataFailedAction(error: e));
+      print(e);
+      store.dispatch(DataFailedAction(error: e.toString()));
     }
   };
 }

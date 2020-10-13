@@ -1,3 +1,4 @@
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:redux/redux.dart';
 
@@ -60,3 +61,19 @@ ThunkAction sendPasswordReset(String email) {
     }
   };
 }
+
+ThunkAction checkLoginStatus = (Store store) async {
+  try {
+    store.dispatch(LoginPendingAction());
+    final refresh = await FlutterSecureStorage().read(key: 'refresh');
+    if (refresh ?? false) {
+      final token = await FlutterSecureStorage().read(key: 'access');
+      store.dispatch(LoginSuccessAction(token: token));
+    } else {
+      store.dispatch(LogOutSuccessAction());
+    }
+  } catch (e) {
+    print(e);
+    store.dispatch(LogOutSuccessAction());
+  }
+};
