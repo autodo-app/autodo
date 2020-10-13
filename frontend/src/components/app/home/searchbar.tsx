@@ -17,9 +17,10 @@ import Fuse from 'fuse.js';
 
 import { grey } from '@material-ui/core/colors';
 import classNames from 'classnames';
-import { Todo } from '../_models';
-import { selectAllTodos } from '../_store';
+import { Car, Todo } from '../_models';
+import { selectAllCars, selectAllTodos } from '../_store';
 import TodoAddEditForm from '../features/todos/add_edit_form';
+import CarAddEditForm from '../features/cars/add_edit_form';
 
 interface StyleProps {
   root: React.CSSProperties;
@@ -105,12 +106,14 @@ const useStyles = makeStyles<Theme, StyleProps>(
 
 interface SearchbarState {
   value: string;
-  suggestions: Array<Fuse.FuseResult<Todo>>;
+  suggestions: Array<Fuse.FuseResult<any>>;
 }
 
 interface AddEditState {
-  open: boolean;
+  todoOpen: boolean;
+  carOpen: boolean;
   todo?: Todo;
+  car?: Car;
 }
 
 export const SearchBar: React.FC<{}> = (): JSX.Element => {
@@ -120,10 +123,13 @@ export const SearchBar: React.FC<{}> = (): JSX.Element => {
     suggestions: [],
   });
   const [addEditState, setAddEditState] = useState<AddEditState>({
-    open: false,
+    todoOpen: false,
+    carOpen: false,
   });
 
-  const list = useSelector(selectAllTodos);
+  const todos: Array<any> = useSelector(selectAllTodos);
+  const cars: Array<any> = useSelector(selectAllCars);
+  const list: Array<any> = todos.concat(cars);
   const options = {
     minMatchCarLength: 2,
     threshold: 0.3,
@@ -169,16 +175,27 @@ export const SearchBar: React.FC<{}> = (): JSX.Element => {
   const handleRequestSearch = () => {};
 
   const handleClickOpen = (option: string, e: any) => {
-    const todo = list.find((t) => t.id === parseInt(option.split('/')[1]));
-    setAddEditState({
-      open: true,
-      todo: todo,
-    });
+    if (option.split('/')[1] === 'todo') {
+      const todo = todos.find((t) => t.id === parseInt(option.split('/')[2]));
+      setAddEditState({
+        todoOpen: true,
+        carOpen: false,
+        todo: todo,
+      });
+    } else {
+      const car = cars.find((t) => t.id === parseInt(option.split('/')[2]));
+      setAddEditState({
+        todoOpen: false,
+        carOpen: true,
+        car: car,
+      });
+    }
+
     setState({ value: '', suggestions: [] });
   };
 
   const handleClose = () => {
-    setAddEditState({ open: false });
+    setAddEditState({ todoOpen: false, carOpen: false });
   };
 
   return (
@@ -199,12 +216,13 @@ export const SearchBar: React.FC<{}> = (): JSX.Element => {
               root: classes.input,
               option: classes.option,
             }}
-            options={state.suggestions
-              .slice(0, 5)
-              .map(
-                (option) =>
-                  `${option.item.name} (${option.item.dueMileage} mi)/${option.item.id}`,
-              )}
+            options={state.suggestions.slice(0, 5).map((option) => {
+              if (option.item.dueMileage) {
+                return `TODO: ${option.item.name} (due at ${option.item.dueMileage} mi)/todo/${option.item.id}`;
+              } else {
+                return `CAR: ${option.item.name} (${option.item.odom} mi)/car/${option.item.id}`;
+              }
+            })}
             renderOption={(option, { selected }) => {
               return (
                 <Button
@@ -261,7 +279,12 @@ export const SearchBar: React.FC<{}> = (): JSX.Element => {
       <Button color="primary">Upgrade!</Button>
       <TodoAddEditForm
         todo={addEditState.todo}
-        open={addEditState.open}
+        open={addEditState.todoOpen}
+        handleClose={handleClose}
+      />
+      <CarAddEditForm
+        car={addEditState.car}
+        open={addEditState.carOpen}
         handleClose={handleClose}
       />
     </div>
