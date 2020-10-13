@@ -15,6 +15,3 @@ urlpatterns = [
     path("fuelusagebymonth/", FuelUsageByMonthView.as_view()),
     path("drivingrate/", DrivingRateView.as_view()),
 ]
-
-searchRouter = DefaultRouter()
-searchRouter.register(r"cars", CarDocumentViewSet, basename="cardocument")

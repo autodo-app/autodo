@@ -14,38 +14,13 @@ from rest_framework.decorators import (
 from rest_framework.response import Response
 from rest_registration.decorators import api_view_serializer_class_getter
 from rest_registration.settings import registration_settings
-from django_elasticsearch_dsl_drf.constants import (
-    LOOKUP_FILTER_RANGE,
-    LOOKUP_QUERY_GT,
-    LOOKUP_QUERY_GTE,
-    LOOKUP_QUERY_IN,
-    LOOKUP_QUERY_LT,
-    LOOKUP_QUERY_LTE,
-    SUGGESTER_COMPLETION,
-    SUGGESTER_PHRASE,
-    SUGGESTER_TERM,
-    FUNCTIONAL_SUGGESTER_COMPLETION_PREFIX,
-    FUNCTIONAL_SUGGESTER_COMPLETION_MATCH,
-)
-from django_elasticsearch_dsl_drf.filter_backends import (
-    DefaultOrderingFilterBackend,
-    FilteringFilterBackend,
-    SearchFilterBackend,
-    OrderingFilterBackend,
-    IdsFilterBackend,
-    SuggesterFilterBackend,
-    FunctionalSuggesterFilterBackend,
-)
-from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 
 from .models import Car, OdomSnapshot, Refueling, Todo
-from .documents import CarDocument
 from .serializers import (
     CarSerializer,
     OdomSnapshotSerializer,
     RefuelingSerializer,
     TodoSerializer,
-    CarDocumentSerializer,
     FuelEfficiencySerializer,
     single_distance_rate,
 )
@@ -167,57 +142,6 @@ def profile(request):
         )
 
     return Response(serializer.data)
-
-
-class CarDocumentViewSet(DocumentViewSet):
-    document = CarDocument
-    serializer_class = CarDocumentSerializer
-    lookup_field = "id"
-
-    filter_backends = [
-        FilteringFilterBackend,
-        OrderingFilterBackend,
-        DefaultOrderingFilterBackend,
-        SearchFilterBackend,
-        SuggesterFilterBackend,
-        FunctionalSuggesterFilterBackend,
-    ]
-
-    search_fields = (
-        "id",
-        "name",
-    )
-
-    filter_fields = {"id": None, "name": "name.raw"}
-
-    ordering_fields = {"id": "id", "name": "name.raw"}
-
-    suggester_fields = {
-        "name_suggest": {
-            "field": "name.suggest",
-            "suggesters": [
-                SUGGESTER_TERM,
-                SUGGESTER_PHRASE,
-                SUGGESTER_COMPLETION,
-            ],
-            "default_suggester": SUGGESTER_COMPLETION,
-        }
-    }
-
-    functional_suggester_fields = {
-        "name_suggest": {
-            "field": "name.raw",
-            "suggesters": [
-                FUNCTIONAL_SUGGESTER_COMPLETION_PREFIX,
-            ],
-            "default_suggester": FUNCTIONAL_SUGGESTER_COMPLETION_PREFIX,
-        }
-    }
-
-    ordering = (
-        "name.raw",
-        "id",
-    )
 
 
 ALPHA = 0.3

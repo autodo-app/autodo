@@ -118,11 +118,11 @@ export default function TodoAddEditForm(props: TodoAddEditFormProps) {
       >
         <Formik
           initialValues={{
-            name: '',
-            car: '',
-            mileage: '',
-            date: '',
-            mileageRepeatInterval: '',
+            name: todo?.name ?? '',
+            car: todo?.car ?? '',
+            dueMileage: todo?.dueMileage ?? '',
+            date: todo?.dueDate ?? '',
+            mileageRepeatInterval: todo?.mileageRepeatInterval ?? '',
             dateRepeatInterval: '',
           }}
           validate={(values) => {

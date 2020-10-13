@@ -7,11 +7,8 @@ then
     while ! nc -z $SQL_HOST $SQL_PORT; do
       sleep 0.1
     done
-    while ! nc -z $ELASTICSEARCH_HOST $ELASTICSEARCH_PORT; do
-      sleep 0.1
-    done
 
-    echo "PostgreSQL and Elasticsearch started"
+    echo "PostgreSQL started"
 fi
 
 python manage.py flush --no-input

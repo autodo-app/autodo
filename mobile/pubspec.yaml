@@ -19,7 +19,7 @@ dependencies:
   json_intl:
   cloud_firestore:
   firebase_analytics:
-  firebase_auth:
+  firebase_core:
   shared_preferences:
   flutter_typeahead:
   flutter_local_notifications:
@@ -62,7 +62,6 @@ dependency_overrides:
     git:
       url: git://github.com/baylessj/flutter-autocomplete-textfield.git
       ref: master
-  platform: ^2.0.0
 
 dev_dependencies:
   flutter_test:
