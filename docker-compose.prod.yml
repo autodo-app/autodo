@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 
 services:
   web:
@@ -22,7 +22,7 @@ services:
     env_file:
       - .env.prod.db
   frontend:
-    build: 
+    build:
       context: ./frontend
       dockerfile: Dockerfile.prod
     working_dir: /app
@@ -31,7 +31,7 @@ services:
       - ./frontend/:/app
       - /app/node_modules
       - frontend_static:/app/public/static
-    expose: 
+    expose:
       - 8080
     env_file:
       - .env.prod.frontend
@@ -50,7 +50,6 @@ services:
       - media_volume:/home/app/web/media
       - certs:/etc/nginx/certs
       - html:/usr/share/nginx/html
-        #- vhost:/etc/nginx/vhost.d
       - /var/run/docker.sock:/tmp/docker.sock:ro
     depends_on:
       - web
@@ -65,22 +64,6 @@ services:
       - vhost:/etc/nginx/vhost.d
     depends_on:
       - nginx-proxy
-  elasticsearch:
-    build:
-      context: .
-      dockerfile: ./docker/elasticsearch/Dockerfile
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.5.1
-    volumes:
-      - elasticsearch-data:/usr/share/elasticsearch/data 
-    expose:
-      - 9200
-      - 9300
-    environment:
-      - discovery.type=single-node
-      - xpack.security.enabled=false
-      - cluster.routing.allocation.disk.watermark.low=97%
-      - cluster.routing.allocation.disk.watermark.high=98%
-      - cluster.routing.allocation.disk.watermark.flood_stage=99%
 
 volumes:
   postgres_data:
@@ -90,4 +73,3 @@ volumes:
   certs:
   html:
   vhost:
-  elasticsearch-data:

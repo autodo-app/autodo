@@ -1,9 +1,7 @@
 from datetime import date
 
 from rest_framework import serializers
-from .documents import CarDocument
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from django_elasticsearch_dsl_drf.serializers import DocumentSerializer
 
 from .models import (
     Car,
@@ -220,18 +218,6 @@ class TodoSerializer(serializers.ModelSerializer):
             "yearsRepeatInterval",
             "dueState",
         ]
-
-
-class CarDocumentSerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
-    name = serializers.CharField(read_only=True)
-
-    class Meta:
-        document = CarDocument
-        fields = (
-            "id",
-            "name",
-        )
 
 
 class FuelEfficiencySerializer(serializers.Serializer):

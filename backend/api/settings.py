@@ -56,8 +56,6 @@ INSTALLED_APPS = [
     "rest_registration",
     "drf_yasg",
     "corsheaders",
-    "django_elasticsearch_dsl",
-    "django_elasticsearch_dsl_drf",
     "autodo",
 ]
 
@@ -193,7 +191,5 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
 CORS_EXPOSE_HEADERS = ["Access-Control-Allow-Headers"]
 
 CORS_ALLOW_CREDENTIALS = True
-
-ELASTICSEARCH_DSL = {"default": {"hosts": "elasticsearch:9200"}}
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
