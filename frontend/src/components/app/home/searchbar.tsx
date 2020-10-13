@@ -1,17 +1,25 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Theme, makeStyles, Paper, Input, IconButton } from '@material-ui/core';
+import {
+  Theme,
+  makeStyles,
+  Paper,
+  Button,
+  IconButton,
+  TextField,
+} from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear';
 import SearchIcon from '@material-ui/icons/Search';
 import MoreVert from '@material-ui/icons/MoreVert';
-import { Button, TextField } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
-import Fuse, { FuseResult } from 'fuse.js';
+import Fuse from 'fuse.js';
 
 import { grey } from '@material-ui/core/colors';
 import classNames from 'classnames';
+import { Todo } from '../_models';
 import { selectAllTodos } from '../_store';
+import TodoAddEditForm from '../features/todos/add_edit_form';
 
 interface StyleProps {
   root: React.CSSProperties;
@@ -24,6 +32,9 @@ interface StyleProps {
   icon: React.CSSProperties;
   input: React.CSSProperties;
   searchContainer: React.CSSProperties;
+  optionButton: React.CSSProperties;
+  option: React.CSSProperties;
+  optionLabel: React.CSSProperties;
 }
 
 type StyleClasses = Record<keyof StyleProps, string>;
@@ -73,18 +84,49 @@ const useStyles = makeStyles<Theme, StyleProps>(
         margin: 'auto 16px',
         width: 'calc(100% - 48px - 32px)', // 48px button + 32px margin
       },
+      optionButton: {
+        width: '100%',
+        margin: 0,
+        padding: theme.spacing(1.5),
+      },
+      option: {
+        padding: 0,
+      },
+      optionLabel: {
+        paddingLeft: theme.spacing(1),
+        paddingRight: theme.spacing(1),
+        textTransform: 'none',
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        justifyContent: 'flex-start',
+      },
     } as any),
 );
 
+interface SearchbarState {
+  value: string;
+  suggestions: Array<Fuse.FuseResult<Todo>>;
+}
+
+interface AddEditState {
+  open: boolean;
+  todo?: Todo;
+}
+
 export const SearchBar: React.FC<{}> = (): JSX.Element => {
   const classes: StyleClasses = useStyles({} as StyleProps);
-  const [state, setState] = useState({
+  const [state, setState] = useState<SearchbarState>({
     value: '',
-    suggestions: Array<FuseResult>(),
+    suggestions: [],
   });
+  const [addEditState, setAddEditState] = useState<AddEditState>({
+    open: false,
+  });
+
   const list = useSelector(selectAllTodos);
   const options = {
     minMatchCarLength: 2,
+    threshold: 0.3,
     keys: ['name'],
   };
   const fuse = new Fuse(list, options);
@@ -92,17 +134,23 @@ export const SearchBar: React.FC<{}> = (): JSX.Element => {
   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {};
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    if (state.value.trim().length === 0) {
-      setState({ value: '', suggestions: [] });
-    }
+    setState({ value: '', suggestions: [] });
   };
 
-  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value.length < 1) {
-      setState({ value: e.target.value, suggestions: Array<FuseResult>() });
+  const handleInput = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    value: string,
+  ) => {
+    if (value.length < 1) {
+      setState({
+        value: value ?? '',
+        suggestions: [],
+      });
     } else {
-      const res = fuse.search(e.target.value);
-      setState({ value: e.target.value, suggestions: res });
+      setState({
+        value: value ?? '',
+        suggestions: fuse.search(value),
+      });
     }
   };
 
@@ -118,8 +166,19 @@ export const SearchBar: React.FC<{}> = (): JSX.Element => {
     }
   };
 
-  const handleRequestSearch = () => {
-    console.log();
+  const handleRequestSearch = () => {};
+
+  const handleClickOpen = (option: string, e: any) => {
+    const todo = list.find((t) => t.id === parseInt(option.split('/')[1]));
+    setAddEditState({
+      open: true,
+      todo: todo,
+    });
+    setState({ value: '', suggestions: [] });
+  };
+
+  const handleClose = () => {
+    setAddEditState({ open: false });
   };
 
   return (
@@ -128,17 +187,37 @@ export const SearchBar: React.FC<{}> = (): JSX.Element => {
         <div className={classes.searchContainer}>
           <Autocomplete
             freeSolo
+            clearOnBlur
             onBlur={handleBlur}
             value={state.value}
             onInputChange={handleInput}
             onKeyUp={handleKeyUp}
             onFocus={handleFocus}
             fullWidth
-            className={classes.input}
             disableClearable
-            options={state.suggestions.map(
-              (option) => `${option.item.name} (${option.item.dueMileage} mi)`,
-            )}
+            classes={{
+              root: classes.input,
+              option: classes.option,
+            }}
+            options={state.suggestions
+              .slice(0, 5)
+              .map(
+                (option) =>
+                  `${option.item.name} (${option.item.dueMileage} mi)/${option.item.id}`,
+              )}
+            renderOption={(option, { selected }) => {
+              return (
+                <Button
+                  classes={{
+                    root: classes.optionButton,
+                    label: classes.optionLabel,
+                  }}
+                  onClick={(e) => handleClickOpen(option, e)}
+                >
+                  {option.split('/')[0]}
+                </Button>
+              );
+            }}
             renderInput={(params: any) => (
               <TextField
                 {...params}
@@ -159,7 +238,7 @@ export const SearchBar: React.FC<{}> = (): JSX.Element => {
           onClick={handleRequestSearch}
           classes={{
             root: classNames(classes.iconButton, classes.searchIconButton, {
-              [classes.iconButtonShifted]: state.value !== '',
+              [classes.iconButtonHidden]: state.value !== '',
             }),
           }}
         >
@@ -180,6 +259,11 @@ export const SearchBar: React.FC<{}> = (): JSX.Element => {
         <MoreVert />
       </IconButton>
       <Button color="primary">Upgrade!</Button>
+      <TodoAddEditForm
+        todo={addEditState.todo}
+        open={addEditState.open}
+        handleClose={handleClose}
+      />
     </div>
   );
 };
