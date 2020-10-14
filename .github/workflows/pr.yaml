@@ -1,25 +1,35 @@
 on: pull_request
-name: Dart Formatting
+name: Code Formatting
 jobs:
   dartfmt:
     name: Dart Format
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./mobile
     steps:
-    - uses: actions/checkout@v1
-      with:
-        submodules: true
-    - uses: subosito/flutter-action@v1
-      with:
-        channel: 'dev'
-    - run: flutter pub get
-    - run: flutter pub run json_intl -d lib/generated/localization.dart
-    - run: flutter pub run pubspec_extract -d lib/generated/pubspec.dart
-    - run: flutter format .
-    - uses: stefanzweifel/git-auto-commit-action@v2.5.0
-      with:
-        commit_message: Apply automatic changes
-        branch: ${{ github.head_ref }}
-        repository: .
-
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+          token: ${{ secrets.PAT }}
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: "dev"
+      - run: flutter pub get
+      - run: flutter pub run json_intl -d lib/generated/localization.dart
+      - run: flutter pub run pubspec_extract -d lib/generated/pubspec.dart
+      - run: flutter format .
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        
+  blackformat:
+    name: Python Format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.PAT }}  
+      - uses: actions/setup-python@v2
+      - run: pip install black
+      - run: black ./backend
+      - uses: stefanzweifel/git-auto-commit-action@v4

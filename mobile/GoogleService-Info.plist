@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>356275435347-p3rfu1vuep2hejba433j6qrfpvlalbin.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.356275435347-p3rfu1vuep2hejba433j6qrfpvlalbin</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDcIHnd2k8kUvtferDmd7_iXOfKFckZgIM</string>
+	<key>GCM_SENDER_ID</key>
+	<string>356275435347</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.jonathanbayless.autodo</string>
+	<key>PROJECT_ID</key>
+	<string>autodo-e93fc</string>
+	<key>STORAGE_BUCKET</key>
+	<string>autodo-e93fc.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:356275435347:ios:4e46f5fa8de51c6faad3a6</string>
+	<key>DATABASE_URL</key>
+	<string>https://autodo-e93fc.firebaseio.com</string>
+</dict>
+</plist>

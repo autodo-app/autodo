@@ -1,0 +1,33 @@
+on:
+  push:
+    branches:
+      - develop
+name: Deploy
+jobs:
+  #deploy:
+  #  name: Deploy with docker-compose
+  #  runs-on: ubuntu-latest
+  #  steps:
+  #    - uses: wshihadeh/docker-deployment-action@v1
+  #      with:
+  #        remote_docker_host: root@206.189.179.107
+  #        ssh_private_key: ${{ secrets.DOCKER_SSH_PRIVATE_KEY }}
+  #        ssh_public_key: ${{ secrets.DOCKER_SSH_PUBLIC_KEY }}
+  #        stack_file_name: docker-compose.prod.yml
+  #        deploy_path: /home/bayle/autodo
+  #        args: up --build
+  deploy:
+    name: pull and update docker
+    runs-on: ubuntu-latest
+    steps:
+      - uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.DOCKER_SSH_PRIVATE_KEY }}
+          script: |
+            cd /home/bayle/autodo
+            git pull
+            docker-compose -f docker-compose.prod.yml down
+            docker-compose -f docker-compose.prod.yml up -d --build
+
