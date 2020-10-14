@@ -40,19 +40,6 @@ services:
     environment:
       NGROK_PORT: api:8000
       NGROK_PROTOCOL: http
-  flutter:
-    build: ./mobile
-    working_dir: /mobile
-    command: ./entrypoint.sh
-    volumes:
-      - ./mobile/:/mobile
-    privileged: true
-    devices:
-      - "/dev/ttyACM0:/dev/ttyACM0"
-      - /dev/bus/usb:/dev/bus/usb
-    depends_on:
-      - api
-      - ngrok
 
 volumes:
   postgres_data:
