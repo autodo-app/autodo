@@ -1,1 +1,0 @@
-const HEADER_HEIGHT = 130.0;

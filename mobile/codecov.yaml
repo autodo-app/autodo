@@ -1,7 +1,0 @@
-coverage:
-  status:
-    patch:
-      default:
-        target: 50%
-        base: auto
-
