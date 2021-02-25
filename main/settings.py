@@ -19,7 +19,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 BACKEND_DIR = BASE_DIR
 FRONTEND_DIR = os.path.abspath(
-    os.path.join(BACKEND_DIR, '..', 'frontend'))
+    os.path.join(BACKEND_DIR, 'frontend'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
