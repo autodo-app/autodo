@@ -1,9 +1,12 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
+from django.views.generic import TemplateView
 import requests 
 
-from .models import Greeting, Car
+from autodo.models import Greeting, Car
+
+catchall = TemplateView.as_view(template_name='index.html')
 
 # Create your views here.
 def index(request):
