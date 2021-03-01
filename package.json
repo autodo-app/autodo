@@ -3,6 +3,9 @@
     "postinstall": "npm upgrade && npm install",
     "build": "tailwindcss build frontend/site.css -c frontend/tailwind.config.js -o staticfiles/site.css"
   },
+  "engines": {
+    "node": "15.10.0"
+  },
   "dependencies": {
     "tailwindcss": "^2.0.3"
   }
