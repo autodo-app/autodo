@@ -1,5 +1,8 @@
 {
   "scripts": {
-    "postinstall": "cd frontend && npm install && npm run build"
+    "build": "tailwindcss build frontend/site.css -c frontend/tailwind.config.js -o staticfiles/site.css"
+  },
+  "dependencies": {
+    "tailwindcss": "^2.0.3"
   }
 }

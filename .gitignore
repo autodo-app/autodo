@@ -186,3 +186,5 @@ frontend/public/*
 !frontend/public/page-data/sq**
 
 staticfiles
+node_modules
+cars
