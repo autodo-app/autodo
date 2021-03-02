@@ -28,6 +28,13 @@ def rename(request, car_id):
         })
     else:
         car.name = request.POST['name']
+        car.make = request.POST['make']
+        car.model = request.POST['model']
+        if request.POST['year'] != "":
+            car.year = int(request.POST['year']) 
+        car.plate = request.POST['plate']
+        car.vin = request.POST['vin']
+        car.color = request.POST['color']
         car.save()
         # Always return an HttpResponseRedirect after successfully dealing
         # with POST data. This prevents data from being posted twice if a

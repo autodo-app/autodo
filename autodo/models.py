@@ -63,8 +63,8 @@ class Car(models.Model):
     year = models.IntegerField(blank=True, null=True)
     plate = models.CharField(max_length=10, blank=True, null=True)
     vin = models.CharField(max_length=10, blank=True, null=True)
-    image = models.ImageField(upload_to="cars", null=True)
-    color = models.IntegerField(default=128)  # TODO: autodo green to int maybe?
+    # image = models.ImageField(upload_to="cars", null=True)
+    color = models.CharField(max_length=7)  # TODO: autodo green to int maybe?
 
     def __str__(self):
         return "Car named: {}".format(self.name)
