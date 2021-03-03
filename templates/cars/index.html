@@ -1,9 +1,14 @@
-{% if cars_list %}
+{% load static %}
+<link href="{% static 'site.css' %}" rel="stylesheet">
+
+{% block content %}
+{% if object_list %}
     <ul>
-    {% for car in cars_list %}
+    {% for car in object_list %}
         <li><a href="{% url 'cars/detail' car.id %}">{{ car }}</a></li>
     {% endfor %}
     </ul>
 {% else %}
     <p>No cars are available.</p>
 {% endif %}
+{% endblock %}

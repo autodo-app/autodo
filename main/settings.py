@@ -100,6 +100,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTH_USER_MODEL = "autodo.User"
 
+# Go to the home page after logging in rather than the account profile page
+LOGIN_REDIRECT_URL = '/'
+
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 

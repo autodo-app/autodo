@@ -1,12 +1,12 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
-from django.views.generic import TemplateView
+from django.views import generic
 import requests 
 
 from autodo.models import Greeting, Car
 
-catchall = TemplateView.as_view(template_name='index.html')
+catchall = generic.TemplateView.as_view(template_name='index.html')
 
 # Create your views here.
 def index(request):
@@ -14,9 +14,14 @@ def index(request):
     return render(request, "cars/index.html", {"cars_list": cars_list})
     # return render(request, "index.html")
 
-def detail(request, car_id):
-    car = get_object_or_404(Car, pk=car_id)
-    return render(request, "cars/detail.html", {"car": car})
+class ListView(generic.ListView):
+    model = Car
+    template_name = "cars/index.html"
+    # queryset = Car.objects.filter(owner=self.request.user)
+
+class DetailView(generic.DetailView):
+    model = Car 
+    template_name = "cars/detail.html"
 
 def rename(request, car_id):
     car = get_object_or_404(Car, pk=car_id)
