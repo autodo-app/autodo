@@ -2,9 +2,11 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.views import generic
+from django.contrib.auth import mixins
 import requests 
 
 from autodo.models import Greeting, Car
+from autodo.forms import AddCarForm
 
 catchall = generic.TemplateView.as_view(template_name='index.html')
 
@@ -14,14 +16,37 @@ def index(request):
     return render(request, "cars/index.html", {"cars_list": cars_list})
     # return render(request, "index.html")
 
-class ListView(generic.ListView):
+# Order matters here, mixin needs to be first
+class ListView(mixins.LoginRequiredMixin, generic.ListView):
     model = Car
     template_name = "cars/index.html"
-    # queryset = Car.objects.filter(owner=self.request.user)
 
-class DetailView(generic.DetailView):
+    def get_queryset(self):
+        return Car.objects.filter(owner=self.request.user)
+
+class DetailView(mixins.LoginRequiredMixin, generic.DetailView):
     model = Car 
     template_name = "cars/detail.html"
+
+class CarCreate(generic.CreateView):
+    model = Car 
+    form_class = AddCarForm
+    # fields = ['name', 'make', 'model', 'year', 'plate', 'vin', 'color']
+    initial = {'year': '2020'}
+    template_name = "cars/car_form.html"
+
+# class AuthorCreate(CreateView):
+#     model = Author
+#     fields = ['first_name', 'last_name', 'date_of_birth', 'date_of_death']
+#     initial = {'date_of_death': '11/06/2020'}
+
+# class AuthorUpdate(UpdateView):
+#     model = Author
+#     fields = '__all__' # Not recommended (potential security issue if more fields added)
+
+# class AuthorDelete(DeleteView):
+#     model = Author
+#     success_url = reverse_lazy('authors')
 
 def rename(request, car_id):
     car = get_object_or_404(Car, pk=car_id)
