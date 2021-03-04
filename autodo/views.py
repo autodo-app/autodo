@@ -26,14 +26,11 @@ class ListView(mixins.LoginRequiredMixin, generic.ListView):
 
 class DetailView(mixins.LoginRequiredMixin, generic.DetailView):
     model = Car 
-    template_name = "cars/detail.html"
 
 class CarCreate(generic.CreateView):
     model = Car 
     form_class = AddCarForm
-    # fields = ['name', 'make', 'model', 'year', 'plate', 'vin', 'color']
     initial = {'year': '2020'}
-    template_name = "cars/car_form.html"
 
 # class AuthorCreate(CreateView):
 #     model = Author
