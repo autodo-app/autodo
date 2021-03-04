@@ -1,22 +1,24 @@
-{% extends "base_generic.html" %}
+{% extends "base_generic.html" %} {% block content %}
+<div class="container p-8 mx-auto max-w-lg">
+  {% if form.instance.id %}
+  <div class="text-2xl">Edit: <b>{{ car.name }}</b></div>
+  {% else %}
+  <div class="text-2xl">Create a Car</div>
+  {% endif %}
 
-{% block content %}
-  <div class="container p-8 mx-auto max-w-lg">
-
-    {% if form.instance.id %}
-      <div class="text-2xl">Edit: <b>{{ car.name }}</b></div>
-    {% else %}
-      <div class="text-2xl">Create a Car</div>
-    {% endif %}
-
-    <form action="" method="post">
-      {% csrf_token %}
-      {% for field in form %}
-        {{ field }}
-        <label class="m-4 text-sm text-gray-700" for="{{ field.auto_id }}">{{ field.label }}</label>    
-        <br>
-      {% endfor %}
-      <button type="submit">Submit</button>
-    </form>
-  </div>
+  <form action="" method="post">
+    {% csrf_token %} {% for field in form %} {{ field }}
+    <label class="m-4 text-sm text-gray-700" for="{{ field.auto_id }}"
+      >{{ field.label }}</label
+    >
+    <br />
+    {% endfor %}
+    <button
+      type="submit"
+      class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 rounded shadow-md"
+    >
+      {% if form.instance.id %}Edit{% else %}Create{% endif %}
+    </button>
+  </form>
+</div>
 {% endblock %}

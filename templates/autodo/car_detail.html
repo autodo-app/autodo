@@ -1,76 +1,25 @@
 {% load static %}
-<link href="{% static 'site.css' %}" rel="stylesheet">
+<link href="{% static 'site.css' %}" rel="stylesheet" />
 
 {% block content %}
 
 <div class="container p-8 mx-auto max-w-lg">
-  
-<div class="text-2xl">Edit: <b>{{ car.name }}</b></div>
-
-{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-
-<form action="{% url 'cars/rename' car.id %}" method="post">
-{% csrf_token %}
-<input placeholder="{{ car.name }}" type="text" name="name" id="name" class="bg-gray-50 my-2 py-1 px-4 border border-gray-400 rounded focus:outline-none focus:border-blue-500 placeholder-gray-500" />
-<label class="m-4 text-sm text-gray-700">Name</label>
-<br>
-<input
-  {% if car.make %}placeholder="{{ car.make }}"{% endif %}
-  type="text"
-  name="make"
-  id="make"
-  class="bg-gray-50 my-2 py-1 px-4 border border-gray-400 rounded focus:outline-none focus:border-blue-500 placeholder-gray-500"
-/>
-<label class="m-4 text-sm text-gray-700">Make</label>
-<br>
-<input
-  {% if car.model %}placeholder="{{ car.model }}"{% endif %}
-  type="text"
-  name="model"
-  id="model"
-  class="bg-gray-50 my-2 py-1 px-4 border border-gray-400 rounded focus:outline-none focus:border-blue-500 placeholder-gray-500"
-/>
-<label class="m-4 text-sm text-gray-700">Model</label>
-<br>
-<input
-  value="{% if car.year %}{{ car.year }}{% else %}2020{% endif %}"
-  type="number"
-  name="year"
-  id="year"
-  class="bg-gray-50 my-2 py-1 px-4 border border-gray-400 rounded focus:outline-none focus:border-blue-500 placeholder-gray-500"
-/>
-<label class="m-4 text-sm text-gray-700">Year</label>
-<br>
-<input
-  {% if car.plate %}placeholder="{{ car.plate }}"{% endif %}
-  type="text"
-  name="plate"
-  id="plate"
-  class="bg-gray-50 my-2 py-1 px-4 border border-gray-400 rounded focus:outline-none focus:border-blue-500 placeholder-gray-500"
-/>
-<label class="m-4 text-sm text-gray-700">Plate</label>
-<br>
-<input
-  {% if car.vin %}placeholder="{{ car.vin }}"{% endif %}
-  type="text"
-  name="vin"
-  id="vin"
-  class="bg-gray-50 my-2 py-1 px-4 border border-gray-400 rounded focus:outline-none focus:border-blue-500 placeholder-gray-500"
-/>
-<label class="m-4 text-sm text-gray-700">VIN</label>
-<br>
-<input
-  {% if car.color %}value="{{ car.color }}"{% endif %}
-  type="color"
-  name="color"
-  id="color"
-  class="bg-gray-50 w-12 my-2 py-1 px-4 border border-gray-400 rounded focus:outline-none focus:border-blue-500 placeholder-gray-500"
-/>
-<label class="m-4 text-sm text-gray-700">Color</label>
-<br>
-<button class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 rounded shadow-md">Edit</button>
-</form>
+  <div class="text-2xl">Car: <b>{{ car.name }}</b></div>
 </div>
 
+{{ car }}
+
+<a
+  href="{% url 'cars/update' car.id %}"
+  class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 rounded shadow-md"
+  >Edit
+</a>
+
+<a
+  href="{% url 'cars/delete' car.id %}"
+  class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 rounded shadow-md"
+>
+  Delete
+</a>
 
 {% endblock %}

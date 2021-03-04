@@ -8,7 +8,6 @@ default_form_class = ' '.join(default_form_classes)
 class AddCarForm(forms.ModelForm):
   def clean_year(self):
     return self.cleaned_data['year']
-
   class Meta:
     model = Car
     exclude = ['owner']
