@@ -1,0 +1,6 @@
+{% extends "base_generic.html" %}
+{% block content %}
+{% for car in car_list %}
+<a href="{% url 'cars/detail' car.id %}">{{ car.name }}</a>
+{% endfor %}
+{% endblock %}

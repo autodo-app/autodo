@@ -21,7 +21,7 @@ class ListView(mixins.LoginRequiredMixin, generic.ListView):
 class DetailView(mixins.LoginRequiredMixin, generic.DetailView):
     model = Car 
 
-class CarCreate(generic.CreateView):
+class CarCreate(mixins.LoginRequiredMixin, generic.CreateView):
     model = Car 
     form_class = AddCarForm
     initial = {'year': '2020'}
@@ -31,19 +31,10 @@ class CarCreate(generic.CreateView):
         form.instance.owner = self.request.user 
         return super(CarCreate, self).form_valid(form)
 
-class CarUpdate(generic.UpdateView):
+class CarUpdate(mixins.LoginRequiredMixin, generic.UpdateView):
     model = Car
     form_class = AddCarForm
 
-class CarDelete(generic.DeleteView):
+class CarDelete(mixins.LoginRequiredMixin, generic.DeleteView):
     model = Car
     success_url = reverse_lazy('cars')
-
-def db(request):
-
-    greeting = Greeting()
-    greeting.save()
-
-    greetings = Greeting.objects.all()
-
-    return render(request, "db.html", {"greetings": greetings})
