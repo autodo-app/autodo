@@ -90,8 +90,8 @@
               From: "transform opacity-100 scale-100"
               To: "transform opacity-0 scale-95"
           -->
-          <div id="profile-menu" style="transition: opacity 0.2s ease-in"
-            class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 opacity-0"
+          <div id="profile-menu"
+            class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 opacity-0 transition ease-out duration-100"
             role="menu" aria-orientation="vertical" aria-labelledby="user-menu">
             <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Your Profile</a>
             <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Settings</a>
@@ -151,12 +151,26 @@
       document.querySelector('#user-menu').onclick = function () {
         if (document.querySelector('#profile-menu').classList.contains('opacity-0')) {
           // open menu
-          // document.querySelector('#profile-menu').classList.remove('hidden')
+          document.querySelector('#profile-menu').classList.remove('ease-out')
+          document.querySelector('#profile-menu').classList.remove('duration-75')
+          document.querySelector('#profile-menu').classList.add('ease-in')
+          document.querySelector('#profile-menu').classList.add('duration-100')
+
+          document.querySelector('#profile-menu').classList.remove('scale-95')
+          document.querySelector('#profile-menu').classList.add('scale-100')
+
           document.querySelector('#profile-menu').classList.remove('opacity-0')
           document.querySelector('#profile-menu').classList.add('opacity-100')
         } else {
           // close menu
-          // document.querySelector('#profile-menu').classList.add('hidden')
+          document.querySelector('#profile-menu').classList.remove('ease-in')
+          document.querySelector('#profile-menu').classList.remove('duration-100')
+          document.querySelector('#profile-menu').classList.add('ease-out')
+          document.querySelector('#profile-menu').classList.add('duration-75')
+
+          document.querySelector('#profile-menu').classList.remove('scale-100')
+          document.querySelector('#profile-menu').classList.add('scale-95')
+
           document.querySelector('#profile-menu').classList.remove('opacity-100')
           document.querySelector('#profile-menu').classList.add('opacity-0')
         }
