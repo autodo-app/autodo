@@ -18,8 +18,7 @@ import django_heroku
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 BACKEND_DIR = BASE_DIR
-FRONTEND_DIR = os.path.abspath(
-    os.path.join(BACKEND_DIR, 'frontend'))
+FRONTEND_DIR = os.path.abspath(os.path.join(BACKEND_DIR, "frontend"))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
@@ -42,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "extra_views",
     "autodo",
 ]
 
@@ -81,8 +81,8 @@ WSGI_APPLICATION = "main.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE" : "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, '..', "db.sqlite3")
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": os.path.join(BASE_DIR, "..", "db.sqlite3"),
     }
 }
 
@@ -101,7 +101,7 @@ AUTH_PASSWORD_VALIDATORS = [
 AUTH_USER_MODEL = "autodo.User"
 
 # Go to the home page after logging in rather than the account profile page
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = "/"
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
@@ -120,8 +120,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR, '..', 'staticfiles')]
-STATIC_ROOT = os.path.join(BACKEND_DIR, '..', 'staticfiles')
-STATIC_URL = '/static/'  # already declared in the default settings
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "..", "staticfiles")]
+STATIC_ROOT = os.path.join(BACKEND_DIR, "..", "staticfiles")
+STATIC_URL = "/static/"  # already declared in the default settings
 
 django_heroku.settings(locals())

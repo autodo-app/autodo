@@ -1,6 +1,15 @@
 {% extends "base_generic.html" %}
 {% block content %}
-{% for car in car_list %}
-<a href="{% url 'cars/detail' car.id %}">{{ car.name }}</a>
-{% endfor %}
+<div class="container px-4">
+  {% for car in car_list %}
+  <div class="bg-gray-50 rounded-lg shadow-sm hover:shadow-lg duration-100 px-2 py-4 my-4">
+    <a class="text-blue-600 text-lg font-semibold hover:text-blue-400" href="{% url 'cars/detail' car.id %}">
+      {{ car.name}}
+    </a>
+    <div>
+      {{ odomsnapshots }}
+    </div>
+  </div>
+  {% endfor %}
+</div>
 {% endblock %}

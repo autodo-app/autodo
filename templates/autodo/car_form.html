@@ -7,16 +7,25 @@
   {% endif %}
 
   <form action="" method="post">
-    {% csrf_token %} {% for field in form %} {{ field }}
-    <label class="m-4 text-sm text-gray-700" for="{{ field.auto_id }}"
-      >{{ field.label }}</label
-    >
-    <br />
+    {% csrf_token %}
+
+    <!-- {{ form.as_p }} -->
+    {% for field in form %}
+    {{ field }}
+    <label class="m-4 text-sm text-gray-700" for="{{ field.auto_id }}">{{ field.label }}</label>
+    <br>
     {% endfor %}
-    <button
-      type="submit"
-      class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 rounded shadow-md"
-    >
+
+    {% for formset in inlines %}
+    {{ formset.as_p }}
+    <!-- {% for field in formset %}
+    {{ field }}
+    <label class="m-4 text-sm text-gray-700" for="{{ field.auto_id }}">{{ field.label }}</label>
+    <br>
+    {% endfor %} -->
+    {% endfor %}
+
+    <button type="submit" class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 rounded shadow-md">
       {% if form.instance.id %}Edit{% else %}Create{% endif %}
     </button>
   </form>

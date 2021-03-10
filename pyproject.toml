@@ -11,6 +11,7 @@ gunicorn = "^20.0.4"
 Django = "^3.1.7"
 requests = "^2.25.1"
 Pillow = "^8.1.0"
+django-extra-views = "^0.13.0"
 
 [tool.poetry.dev-dependencies]
 
