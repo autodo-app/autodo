@@ -43,6 +43,12 @@ class ListView(mixins.LoginRequiredMixin, generic.ListView):
 class DetailView(mixins.LoginRequiredMixin, generic.DetailView):
     model = Car
 
+    def get_object(self):
+        snaps = OdomSnapshot.objects.filter(owner=self.request.user)
+        car = get_object_or_404(Car, pk=self.kwargs["pk"])
+        add_odom(car, snaps)
+        return car
+
 
 class CarCreate(CreateWithInlinesView, NamedFormsetsMixin):
     model = Car

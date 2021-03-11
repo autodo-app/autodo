@@ -1,6 +1,6 @@
 {% extends "base_generic.html" %}
 {% block content %}
-<div class="container px-4">
+<div class="container p-4">
   {% for car in car_list %}
   <div class="bg-gray-50 rounded-lg shadow-sm hover:shadow-lg duration-100 px-2 py-4 my-4"
     onclick="location.href=`{% url 'cars/detail' car.id %}`">
