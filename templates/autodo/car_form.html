@@ -9,20 +9,25 @@
   <form action="" method="post">
     {% csrf_token %}
 
-    <!-- {{ form.as_p }} -->
     {% for field in form %}
     {{ field }}
-    <label class="m-4 text-sm text-gray-700" for="{{ field.auto_id }}">{{ field.label }}</label>
+    <label class="m-4 text-sm text-gray-700" for="{{ field.auto_id }}">
+      {{ field.label }}{% if field.field.required %}*{% endif %}
+    </label>
     <br>
     {% endfor %}
 
     {% for formset in inlines %}
-    {{ formset.as_p }}
-    <!-- {% for field in formset %}
+    {{ formset.management_form }}
+    {% for form in formset.forms %}
+    {% for field in form.visible_fields %}
     {{ field }}
-    <label class="m-4 text-sm text-gray-700" for="{{ field.auto_id }}">{{ field.label }}</label>
+    <label class="m-4 text-sm text-gray-700" for="{{ field.auto_id }}">
+      {{ field.label }}{% if field.field.required %}*{% endif %}
+    </label>
     <br>
-    {% endfor %} -->
+    {% endfor %}
+    {% endfor %}
     {% endfor %}
 
     <button type="submit" class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 rounded shadow-md">

@@ -43,17 +43,15 @@ class AddCarForm(forms.ModelForm):
         }
 
 
-# ChildFormset = inlineformset_factory(
-#     Car,
-#     OdomSnapshot,
-#     extra=1,
-#     can_delete=False,
-#     fields=("mileage",),
-#     widgets={
-#         "mileage": forms.TextInput(attrs={"class": default_form_class}),
-#     },
-# )
 class ChildFormset(InlineFormSetFactory):
     model = OdomSnapshot
     fields = ["mileage"]
-    factory_kwargs = {"extra": 1, "can_delete": False}
+    factory_kwargs = {
+        "extra": 1,
+        "can_delete": False,
+        "widgets": {
+            "mileage": forms.NumberInput(
+                attrs={"class": default_form_class, "required": True}
+            ),
+        },
+    }

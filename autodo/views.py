@@ -30,17 +30,6 @@ class DetailView(mixins.LoginRequiredMixin, generic.DetailView):
     model = Car
 
 
-# class CarCreate(mixins.LoginRequiredMixin, generic.CreateView):
-#     model = Car
-#     form_class = AddCarForm
-#     initial = {'year': '2020'}
-#     success_url = reverse_lazy('cars')
-
-#     def form_valid(self, form):
-#         form.instance.owner = self.request.user
-#         return super(CarCreate, self).form_valid(form)
-
-
 class CarCreate(CreateWithInlinesView, NamedFormsetsMixin):
     model = Car
     inlines = [ChildFormset]
@@ -50,8 +39,6 @@ class CarCreate(CreateWithInlinesView, NamedFormsetsMixin):
     success_url = reverse_lazy("cars")
 
     def forms_valid(self, form, inlines):
-        print(vars(inlines[0].forms[0]))
-        sys.stdout.flush()
         form.instance.owner = self.request.user
         # Access the ome form on the first inline
         inlines[0].forms[0].instance.owner = self.request.user
