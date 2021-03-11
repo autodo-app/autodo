@@ -14,12 +14,26 @@ from autodo.forms import AddCarForm, ChildFormset
 
 catchall = generic.TemplateView.as_view(template_name="index.html")
 
+
+def add_odom(car, snaps):
+    car_snaps = snaps.filter(car=car.id).order_by("-date", "-mileage")
+    if len(car_snaps) == 0:
+        print("We really shouldn't have cars without mileage")
+        return car
+    car.mileage = car_snaps[0].mileage
+    return car
+
+
 # Order matters here, mixin needs to be first
 class ListView(mixins.LoginRequiredMixin, generic.ListView):
     model = Car
 
     def get_queryset(self):
-        return Car.objects.filter(owner=self.request.user)
+        snaps = OdomSnapshot.objects.filter(owner=self.request.user)
+        cars = Car.objects.filter(owner=self.request.user)
+        for car in cars:
+            add_odom(car, snaps)
+        return cars
 
     def get_context_data(self, **kwargs):
         context = super(ListView, self).get_context_data(**kwargs)

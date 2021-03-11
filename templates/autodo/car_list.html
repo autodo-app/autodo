@@ -2,12 +2,30 @@
 {% block content %}
 <div class="container px-4">
   {% for car in car_list %}
-  <div class="bg-gray-50 rounded-lg shadow-sm hover:shadow-lg duration-100 px-2 py-4 my-4">
-    <a class="text-blue-600 text-lg font-semibold hover:text-blue-400" href="{% url 'cars/detail' car.id %}">
-      {{ car.name}}
-    </a>
-    <div>
-      {{ odomsnapshots }}
+  <div class="bg-gray-50 rounded-lg shadow-sm hover:shadow-lg duration-100 px-2 py-4 my-4"
+    onclick="location.href=`{% url 'cars/detail' car.id %}`">
+    <div class="flex flex-wrap justify-between">
+      <div class="flex flex-col">
+        <div class="text-blue-600 text-lg font-semibold mx-2">
+          {{ car.name}}
+        </div>
+        <div class="mx-2">
+          Mileage: <span class="font-bold">{{ car.mileage }}</span> mi
+        </div>
+      </div>
+      <div class="flex flex-col content-end">
+        <div class="m-2 flex-grow-0">
+          <a href="{% url 'cars/update' car.id %}"
+            class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 rounded shadow-md">Edit
+          </a>
+        </div>
+        <div class="m-2">
+          <a href="{% url 'cars/delete' car.id %}"
+            class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 rounded shadow-md">
+            Delete
+          </a>
+        </div>
+      </div>
     </div>
   </div>
   {% endfor %}
