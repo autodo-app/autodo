@@ -1,12 +1,21 @@
 from django.urls import path, include
 
-from autodo.views import ListView, DetailView, CarCreate, CarUpdate, CarDelete, catchall
+from autodo.views import (
+    ListView,
+    DetailView,
+    CarCreate,
+    CarUpdate,
+    CarDelete,
+    catchall,
+    register,
+)
 
 urlpatterns = [
     path("", catchall),
     path("accounts/", include("django.contrib.auth.urls")),
+    path("accounts/register/", register, name="register"),
     path("accounts/profile/", catchall, name="profile"),
-    path("settings", catchall, name="settings"),
+    path("settings/", catchall, name="settings"),
     path("cars/", ListView.as_view(), name="cars"),
     path("cars/create/", CarCreate.as_view(), name="cars/create"),
     path("cars/<int:pk>/", DetailView.as_view(), name="cars/detail"),

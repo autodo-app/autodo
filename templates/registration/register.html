@@ -1,0 +1,96 @@
+{% extends 'base_minimal.html' %}
+
+{% block title %}
+Create User - {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
+<div class="min-h-screen flex justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full space-y-8">
+    <div>
+      <img class="mx-auto h-12 w-auto" src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
+        alt="Workflow">
+      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        Create an account
+      </h2>
+      <div class="mt-4 text-center text-red-700">
+        {% if form.errors %}
+        {% for field in form %}
+        {% for error in field.errors %}
+        {% if field != '__all__' %}
+        <strong>{{ field.label }}:</strong>
+        {% endif %}
+        {{ error }}
+        {% endfor %}
+        {% endfor %}
+        {% endif %}
+      </div>
+    </div>
+    <form class="mt-8 space-y-6" action="#" method="POST">
+      {% csrf_token %}
+      <input type="hidden" name="remember" value="true">
+      <div class="rounded-md shadow-sm -space-y-px">
+        <div>
+          <label for="{{ form.username.id_for_label }}" class="sr-only">Email address</label>
+          <input
+            class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"" id="
+            {{ form.username.id_for_label }}" maxlength="150" name="{{ form.username.html_name }}"
+            placeholder="Email address" type="text">
+        </div>
+        <div>
+          <label for="{{ form.password1.id_for_label }}" class="sr-only">Password</label>
+          <input id="{{ form.password1.id_for_label }}" name="{{ form.password1.html_name }}" type="password"
+            autocomplete="current-password" required
+            class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+            placeholder="Password">
+        </div>
+        <div>
+          <label for="{{ form.password2.id_for_label }}" class="sr-only">Password</label>
+          <input id="{{ form.password2.id_for_label }}" name="{{ form.password2.html_name }}" type="password"
+            autocomplete="current-password" required
+            class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+            placeholder="Password Confirm">
+        </div>
+      </div>
+
+      <div>
+        <button type="submit"
+          class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+          Sign up
+        </button>
+      </div>
+      <input type="hidden" name="next" value="{{ next }}" />
+    </form>
+  </div>
+</div>
+
+<!-- <div class="container p-8 mx-auto max-w-lg text-center">
+
+  {% if messages %}
+  <ul>
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  <h1 class="text-2xl py-2">Create account</h1>
+
+  <form method="post">
+    {% csrf_token %}
+    {% for field in form %}
+
+    {{ field }}
+    {% endfor %}
+    <table>
+      {{ form.as_table }}
+      <tr>
+        <td></td>
+        <td><input type="submit" name="submit" value="Register" /></td>
+      </tr>
+    </table>
+  </form>
+</div> -->
+
+{% endblock %}

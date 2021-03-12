@@ -1,9 +1,10 @@
 from django import forms
 from django.forms.models import inlineformset_factory
+from django.contrib.auth.forms import UserCreationForm
 from extra_views import InlineFormSetFactory
 import sys
 
-from autodo.models import Car, OdomSnapshot
+from autodo.models import Car, OdomSnapshot, User
 
 default_form_classes = [
     "bg-gray-50",
@@ -55,3 +56,9 @@ class ChildFormset(InlineFormSetFactory):
             ),
         },
     }
+
+
+class RegisterForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ("username", "password1", "password2")

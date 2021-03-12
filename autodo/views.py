@@ -1,16 +1,18 @@
 import sys
 
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.views import generic
-from django.contrib.auth import mixins
+from django.contrib.auth import mixins, authenticate, login
 from django.utils import timezone
+from django.contrib import messages
+
 import requests
 from extra_views import CreateWithInlinesView, NamedFormsetsMixin
 
 from autodo.models import Car, OdomSnapshot
-from autodo.forms import AddCarForm, ChildFormset
+from autodo.forms import AddCarForm, ChildFormset, RegisterForm
 
 catchall = generic.TemplateView.as_view(template_name="index.html")
 
@@ -75,3 +77,21 @@ class CarUpdate(mixins.LoginRequiredMixin, generic.UpdateView):
 class CarDelete(mixins.LoginRequiredMixin, generic.DeleteView):
     model = Car
     success_url = reverse_lazy("cars")
+
+
+def register(request):
+    if request.method == "POST":
+        f = RegisterForm(request.POST)
+        if f.is_valid():
+            f.save()
+            new_user = authenticate(
+                username=f.cleaned_data["username"],
+                password=f.cleaned_data["password1"],
+            )
+            login(request, new_user)
+            return redirect("cars")
+
+    else:
+        f = RegisterForm()
+
+    return render(request, "registration/register.html", {"form": f})
