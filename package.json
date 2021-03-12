@@ -6,6 +6,7 @@
     "node": "15.10.0"
   },
   "dependencies": {
+    "@tailwindcss/forms": "^0.2.1",
     "tailwindcss": "^2.0.3"
   }
 }
