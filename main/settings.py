@@ -103,15 +103,15 @@ AUTH_USER_MODEL = "autodo.User"
 # Go to the home page after logging in rather than the account profile page
 LOGIN_REDIRECT_URL = "/"
 
-EMAIL_HOST = os.environ.get("MAILGUN_SMTP_SERVER", "")
-EMAIL_PORT = int(os.environ.get("MAILGUN_SMTP_PORT", ""))
-EMAIL_HOST_USER = os.environ.get("MAILGUN_SMTP_LOGIN", "")
-EMAIL_HOST_PASSWORD = os.environ.get("MAILGUN_SMTP_PASSWORD", "")
-# EMAIL_HOST_USER = os.environ["SENDGRID_USERNAME"]
-# EMAIL_HOST = "smtp.sendgrid.net"
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_HOST_PASSWORD = os.environ["SENDGRID_PASSWORD"]
+EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
+SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
+# Toggle sandbox mode (when running in DEBUG mode)
+SENDGRID_SANDBOX_MODE_IN_DEBUG = False
+# echo to stdout or any other file-like object that is passed to the backend via the stream kwarg.
+SENDGRID_ECHO_TO_STDOUT = True
+DEFAULT_FROM_EMAIL = "noreply@autodo.app"
+SERVER_EMAIL = "noreply@autodo.app"
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/

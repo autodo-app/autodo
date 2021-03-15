@@ -188,3 +188,4 @@ frontend/public/*
 staticfiles
 node_modules
 /cars/
+sendgrid.env
