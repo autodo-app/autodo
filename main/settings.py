@@ -103,11 +103,15 @@ AUTH_USER_MODEL = "autodo.User"
 # Go to the home page after logging in rather than the account profile page
 LOGIN_REDIRECT_URL = "/"
 
-EMAIL_HOST_USER = os.environ["SENDGRID_USERNAME"]
-EMAIL_HOST = "smtp.sendgrid.net"
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_PASSWORD = os.environ["SENDGRID_PASSWORD"]
+EMAIL_HOST = os.environ.get("MAILGUN_SMTP_SERVER", "")
+EMAIL_PORT = int(os.environ.get("MAILGUN_SMTP_PORT", ""))
+EMAIL_HOST_USER = os.environ.get("MAILGUN_SMTP_LOGIN", "")
+EMAIL_HOST_PASSWORD = os.environ.get("MAILGUN_SMTP_PASSWORD", "")
+# EMAIL_HOST_USER = os.environ["SENDGRID_USERNAME"]
+# EMAIL_HOST = "smtp.sendgrid.net"
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_PASSWORD = os.environ["SENDGRID_PASSWORD"]
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
