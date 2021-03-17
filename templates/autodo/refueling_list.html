@@ -1,0 +1,51 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<div class="container p-4">
+  {% if object_list|length < 1 %} <div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 text-center">
+    <p>No refuelings, would you like to add one?</p>
+    <div class="my-8">
+      <a href="{% url 'refuelings/create' %}"
+        class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 rounded shadow-md">
+        Create Refueling
+      </a>
+    </div>
+</div>
+{% endif %}
+
+{% for refueling in object_list %} <div
+  class="bg-gray-50 rounded-lg shadow-sm hover:shadow-lg duration-100 px-2 py-4 my-4"
+  onclick="location.href=`{% url 'refuelings/detail' refueling.id %}`">
+  <div class="flex flex-wrap justify-between">
+    <div class="flex flex-col">
+      <div class="text-blue-600 text-lg font-semibold mx-2">
+        Refueling on {{ refueling.odomSnapshot.date|date:"D d M Y" }}
+      </div>
+      <div class="mx-2 text-lg">
+        At <span class="font-bold">{{ refueling.odomSnapshot.mileage }}</span> miles
+      </div>
+      <div class="mx-2">
+        Cost: $<span class="font-bold">{{ refueling.cost }}</span>
+      </div>
+      <div class="mx-2">
+        Amount: <span class="font-bold">{{ refueling.amount }}</span> gallons
+      </div>
+    </div>
+    <div class="flex flex-col self-center">
+      <div class="m-2">
+        <a href="{% url 'refuelings/update' refueling.id %}"
+          class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 rounded shadow-md">Edit
+        </a>
+      </div>
+      <div class="m-2">
+        <a href="{% url 'refuelings/delete' refueling.odomSnapshot.id %}"
+          class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 rounded shadow-md">
+          Delete
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+</div>
+{% endblock %}

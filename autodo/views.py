@@ -9,10 +9,18 @@ from django.utils import timezone
 from django.contrib import messages
 
 import requests
-from extra_views import CreateWithInlinesView, NamedFormsetsMixin
+from extra_views import CreateWithInlinesView, UpdateWithInlinesView, NamedFormsetsMixin
 
-from autodo.models import Car, OdomSnapshot
-from autodo.forms import AddCarForm, ChildFormset, RegisterForm
+from autodo.models import Car, OdomSnapshot, Refueling
+from autodo.forms import (
+    AddCarForm,
+    AddOdomSnapshotForm,
+    OdomMileageOnlyFormset,
+    RefuelingFormset,
+    RefuelingCreateFormset,
+    RefuelingEditFormset,
+    RegisterForm,
+)
 
 catchall = generic.TemplateView.as_view(template_name="index.html")
 
@@ -27,7 +35,7 @@ def add_odom(car, snaps):
 
 
 # Order matters here, mixin needs to be first
-class ListView(mixins.LoginRequiredMixin, generic.ListView):
+class CarListView(mixins.LoginRequiredMixin, generic.ListView):
     model = Car
 
     def get_queryset(self):
@@ -42,7 +50,7 @@ class ListView(mixins.LoginRequiredMixin, generic.ListView):
         return context
 
 
-class DetailView(mixins.LoginRequiredMixin, generic.DetailView):
+class CarDetailView(mixins.LoginRequiredMixin, generic.DetailView):
     model = Car
 
     def get_object(self):
@@ -54,15 +62,15 @@ class DetailView(mixins.LoginRequiredMixin, generic.DetailView):
 
 class CarCreate(CreateWithInlinesView, NamedFormsetsMixin):
     model = Car
-    inlines = [ChildFormset]
-    inline_names = ["ChildFormset"]
+    inlines = [OdomMileageOnlyFormset]
+    inline_names = ["OdomMileageOnlyFormset"]
     form_class = AddCarForm
     initial = {"year": "2020"}
     success_url = reverse_lazy("cars")
 
     def forms_valid(self, form, inlines):
         form.instance.owner = self.request.user
-        # Access the ome form on the first inline
+        # Access the one form on the first inline
         inlines[0].forms[0].instance.owner = self.request.user
         inlines[0].forms[0].instance.date = timezone.now()
 
@@ -77,6 +85,88 @@ class CarUpdate(mixins.LoginRequiredMixin, generic.UpdateView):
 class CarDelete(mixins.LoginRequiredMixin, generic.DeleteView):
     model = Car
     success_url = reverse_lazy("cars")
+
+
+class RefuelingListView(mixins.LoginRequiredMixin, generic.ListView):
+    model = Refueling
+
+    def get_queryset(self):
+        return Refueling.objects.filter(owner=self.request.user).order_by(
+            "-odomSnapshot__date"
+        )
+
+
+class RefuelingDetailView(mixins.LoginRequiredMixin, generic.DetailView):
+    model = Refueling
+
+    # def get_object(self):
+    #     snaps = OdomSnapshot.objects.filter(owner=self.request.user)
+    #     car = get_object_or_404(Car, pk=self.kwargs["pk"])
+    #     add_odom(car, snaps)
+    #     return car
+
+
+class RefuelingCreate(mixins.LoginRequiredMixin, generic.CreateView):
+    model = OdomSnapshot
+    form_class = AddOdomSnapshotForm
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        if self.request.POST:
+            data["refueling"] = RefuelingCreateFormset(self.request.POST)
+        else:
+            data["refueling"] = RefuelingCreateFormset()
+        return data
+
+    def form_valid(self, form):
+        context = self.get_context_data(form=form)
+        refueling = context["refueling"]
+        form.instance.owner = self.request.user
+        self.object = form.save()
+
+        if refueling.is_valid():
+            refueling.instance = self.object
+            # refueling.instance.owner = self.request.user
+            r = refueling.save(commit=False)[0]
+            r.owner = self.request.user
+            r.save()
+
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse("refuelings")
+
+
+class RefuelingUpdate(mixins.LoginRequiredMixin, generic.UpdateView):
+    model = OdomSnapshot
+    form_class = AddOdomSnapshotForm
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        if self.request.POST:
+            data["refueling"] = RefuelingEditFormset(
+                self.request.POST, instance=self.object
+            )
+        else:
+            data["refueling"] = RefuelingEditFormset(instance=self.object)
+        return data
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        refueling = context["refueling"]
+        self.object = form.save()
+        if refueling.is_valid():
+            refueling.instance = self.object
+            refueling.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse("refuelings")
+
+
+class OdomSnapshotDelete(mixins.LoginRequiredMixin, generic.DeleteView):
+    model = OdomSnapshot
+    success_url = reverse_lazy("refuelings")
 
 
 def register(request):

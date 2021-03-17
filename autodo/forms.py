@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from extra_views import InlineFormSetFactory
 import sys
 
-from autodo.models import Car, OdomSnapshot, User
+from autodo.models import Car, OdomSnapshot, User, Refueling
 
 default_form_classes = [
     "bg-gray-50",
@@ -17,6 +17,7 @@ default_form_classes = [
     "focus:outline-none",
     "focus:border-blue-500",
     "placeholder-gray-500",
+    "w-9/12",
 ]
 default_form_class = " ".join(default_form_classes)
 
@@ -44,18 +45,62 @@ class AddCarForm(forms.ModelForm):
         }
 
 
-class ChildFormset(InlineFormSetFactory):
+class AddOdomSnapshotForm(forms.ModelForm):
+    """Use this to create a refueling because the foreign key needs to point in this direction."""
+
+    # def clean_year(self):
+    #   return self.cleaned_data['year']
+
+    class Meta:
+        model = OdomSnapshot
+        exclude = ["owner"]
+        widgets = {
+            "car": forms.Select(attrs={"class": default_form_class, "required": True}),
+            "date": forms.DateInput(
+                attrs={"class": default_form_class, "type": "date"}
+            ),
+            "mileage": forms.NumberInput(attrs={"class": default_form_class}),
+        }
+
+
+class OdomMileageOnlyFormset(InlineFormSetFactory):
     model = OdomSnapshot
     fields = ["mileage"]
     factory_kwargs = {
         "extra": 1,
         "can_delete": False,
+        ""
         "widgets": {
             "mileage": forms.NumberInput(
                 attrs={"class": default_form_class, "required": True}
             ),
         },
     }
+
+
+class RefuelingFormset(InlineFormSetFactory):
+    model = Refueling
+    fields = ["cost", "amount"]
+    factory_kwargs = {
+        "extra": 1,
+        "can_delete": False,
+        "widgets": {
+            "cost": forms.NumberInput(
+                attrs={"class": default_form_class, "required": True}
+            ),
+            "amount": forms.NumberInput(
+                attrs={"class": default_form_class, "required": True}
+            ),
+        },
+    }
+
+
+RefuelingCreateFormset = inlineformset_factory(
+    OdomSnapshot, Refueling, fields=("cost", "amount"), extra=1, can_delete=False
+)
+RefuelingEditFormset = inlineformset_factory(
+    OdomSnapshot, Refueling, fields=("cost", "amount"), extra=0, can_delete=False
+)
 
 
 class RegisterForm(UserCreationForm):
