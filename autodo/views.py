@@ -46,7 +46,7 @@ class CarListView(mixins.LoginRequiredMixin, generic.ListView):
         return cars
 
     def get_context_data(self, **kwargs):
-        context = super(ListView, self).get_context_data(**kwargs)
+        context = super(generic.ListView, self).get_context_data(**kwargs)
         return context
 
 
