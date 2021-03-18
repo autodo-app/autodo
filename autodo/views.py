@@ -25,6 +25,12 @@ from autodo.forms import (
 catchall = generic.TemplateView.as_view(template_name="index.html")
 
 
+def landing_page(request):
+    if request.user.is_authenticated:
+        return HttpResponseRedirect("cars/")
+    return render(request, template_name="index.html")
+
+
 def add_odom(car, snaps):
     car_snaps = snaps.filter(car=car.id).order_by("-date", "-mileage")
     if len(car_snaps) == 0:

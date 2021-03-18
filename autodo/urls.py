@@ -1,4 +1,5 @@
 from django.urls import path, include
+from django.contrib.auth import views as auth_views
 
 from autodo.views import (
     CarListView,
@@ -12,11 +13,18 @@ from autodo.views import (
     RefuelingUpdate,
     OdomSnapshotDelete,
     catchall,
+    landing_page,
     register,
 )
 
 urlpatterns = [
-    path("", catchall),
+    path("", landing_page),
+    # override the login view to redirect if the user is logged in
+    path(
+        "accounts/login/",
+        auth_views.LoginView.as_view(redirect_authenticated_user=True),
+        name="login",
+    ),
     path("accounts/", include("django.contrib.auth.urls")),
     path("accounts/register/", register, name="register"),
     path("accounts/profile/", catchall, name="profile"),
