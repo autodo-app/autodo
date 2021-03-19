@@ -25,6 +25,11 @@ module.exports = {
         code: {
           DEFAULT: '#f9fcfd',
         },
+        autodo: {
+          light: '47daaf',
+          DEFAULT: '#45c9a7',
+          dark: '#30b08f',
+        },
       },
       linearBorderGradients: {
         colors: gradients,
@@ -50,7 +55,10 @@ module.exports = {
         l: 'to left',
         tl: 'to top left',
       },
-    
+      boxShadow: {
+        'lg-soft': '0 10px 20px rgba(91,107,174,.2)',
+        'xl-cards': '0 20px 25px -5px rgba(67, 152, 238, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+      },
     },
   },
   variants: {
