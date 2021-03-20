@@ -50,4 +50,6 @@ urlpatterns = [
         OdomSnapshotDelete.as_view(),
         name="refuelings/delete",
     ),
+    path("stats/", catchall, name="stats"),
+    path("home/", catchall, name="home"),
 ]
