@@ -2,22 +2,19 @@
 {% block content %}
 
 <div class="container p-8 mx-auto max-w-lg">
-  <div class="text-2xl">Car: <b>{{ car.name }}</b></div>
+  <div class="text-2xl">Todo: <b>{{ todo.name }}</b></div>
   <div class="py-2">
-    <div class="py-1">Mileage: <b>{{ car.mileage }}</b></div>
-    <div class="py-1">Make: <b>{{ car.make }}</b></div>
-    <div class="py-1">Model: <b>{{ car.model }}</b></div>
-    <div class="py-1">Year: <b>{{ car.year }}</b></div>
-    <div class="py-1">Plate: <b>{{ car.plate }}</b></div>
-    <div class="py-1">VIN: <b>{{ car.vin }}</b></div>
+    <div class="py-1">Car: <b>{{ todo.car.name }}</b></div>
+    <div class="py-1">Due Mileage: <b>{{ todo.dueMileage }}</b></div>
+    <div class="py-1">Due Date: <b>{{ todo.dueDate }}</b></div>
   </div>
 
   <div class="my-2">
-    <a href="{% url 'cars/update' car.id %}"
+    <a href="{% url 'todos/update' todo.id %}"
       class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 mr-4 rounded shadow-md">Edit
     </a>
 
-    <a href="{% url 'cars/delete' car.id %}"
+    <a href="{% url 'todos/delete' todo.id %}"
       class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 mx-4 rounded shadow-md">
       Delete
     </a>
