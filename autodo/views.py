@@ -1,4 +1,5 @@
 import sys
+import json
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
@@ -7,11 +8,12 @@ from django.views import generic
 from django.contrib.auth import mixins, authenticate, login
 from django.utils import timezone
 from django.contrib import messages
+from django.core.serializers import serialize
 
 import requests
 from extra_views import CreateWithInlinesView, UpdateWithInlinesView, NamedFormsetsMixin
 
-from autodo.models import Car, OdomSnapshot, Refueling
+from autodo.models import Car, OdomSnapshot, Refueling, Todo
 from autodo.forms import (
     AddCarForm,
     AddOdomSnapshotForm,
@@ -20,6 +22,7 @@ from autodo.forms import (
     RefuelingCreateFormset,
     RefuelingEditFormset,
     RegisterForm,
+    AddTodoForm,
 )
 
 catchall = generic.TemplateView.as_view(template_name="index.html")
@@ -32,7 +35,7 @@ def landing_page(request):
 
 
 def add_odom(car, snaps):
-    car_snaps = snaps.filter(car=car.id).order_by("-date", "-mileage")
+    car_snaps = snaps.filter(car=car.id).order_by("-mileage")
     if len(car_snaps) == 0:
         print("We really shouldn't have cars without mileage")
         return car
@@ -173,6 +176,55 @@ class RefuelingUpdate(mixins.LoginRequiredMixin, generic.UpdateView):
 class OdomSnapshotDelete(mixins.LoginRequiredMixin, generic.DeleteView):
     model = OdomSnapshot
     success_url = reverse_lazy("refuelings")
+
+
+class TodoListView(mixins.LoginRequiredMixin, generic.ListView):
+    model = Todo
+
+    def get_queryset(self):
+        return Todo.objects.filter(owner=self.request.user)
+
+
+class TodoDetailView(mixins.LoginRequiredMixin, generic.DetailView):
+    model = Todo
+
+    # def get_object(self):
+    #     snaps = OdomSnapshot.objects.filter(owner=self.request.user)
+    #     car = get_object_or_404(Car, pk=self.kwargs["pk"])
+    #     add_odom(car, snaps)
+    #     return car
+
+
+class TodoCreate(mixins.LoginRequiredMixin, generic.CreateView):
+    model = Todo
+    form_class = AddTodoForm
+    success_url = reverse_lazy("todos")
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        snaps = OdomSnapshot.objects.filter(owner=self.request.user)
+        cars = Car.objects.filter(owner=self.request.user)
+        data["cars"] = serialize("json", cars)
+        data["snaps"] = serialize("json", snaps)
+        # todo: add the data manually onto the json here
+        return data
+
+    def get_form_kwargs(self):
+        kwargs = super(TodoCreate, self).get_form_kwargs()
+        if kwargs["instance"] is None:
+            kwargs["instance"] = Todo()
+        kwargs["instance"].owner = self.request.user
+        return kwargs
+
+
+class TodoUpdate(mixins.LoginRequiredMixin, generic.UpdateView):
+    model = Todo
+    form_class = AddTodoForm
+
+
+class TodoDelete(mixins.LoginRequiredMixin, generic.DeleteView):
+    model = Todo
+    success_url = reverse_lazy("todos")
 
 
 def register(request):

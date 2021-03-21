@@ -5,9 +5,11 @@ from django.contrib.auth.models import AbstractUser
 class Greeting(models.Model):
     when = models.DateTimeField("date created", auto_now_add=True)
 
+
 class User(AbstractUser):
     class Meta:
         db_table = "auth_user"
+
 
 class OdomSnapshot(models.Model):
     """The relevant data for an update to a car's odometer reading."""
@@ -30,6 +32,7 @@ class OdomSnapshot(models.Model):
     class Meta:
         ordering = ["-mileage"]
 
+
 class Todo(models.Model):
     """A task or action to perform on a car."""
 
@@ -49,8 +52,12 @@ class Todo(models.Model):
     monthsRepeatInterval = models.IntegerField(default=None, blank=True, null=True)
     yearsRepeatInterval = models.IntegerField(default=None, blank=True, null=True)
 
+    def __str__(self):
+        return f"Todo named: {self.name} due at {self.dueMileage} miles"
+
     class Meta:
         ordering = ["dueDate", "dueMileage"]
+
 
 class Car(models.Model):
     """Represents the data for a Car type."""

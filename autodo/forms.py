@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from extra_views import InlineFormSetFactory
 import sys
 
-from autodo.models import Car, OdomSnapshot, User, Refueling
+from autodo.models import Car, OdomSnapshot, User, Refueling, Todo
 
 default_form_classes = [
     "bg-gray-50",
@@ -101,6 +101,24 @@ RefuelingCreateFormset = inlineformset_factory(
 RefuelingEditFormset = inlineformset_factory(
     OdomSnapshot, Refueling, fields=("cost", "amount"), extra=0, can_delete=False
 )
+
+
+class AddTodoForm(forms.ModelForm):
+    # def clean_year(self):
+    #   return self.cleaned_data['year']
+
+    class Meta:
+        model = Todo
+        # exclude = ["owner"]
+        fields = ["car", "name", "dueMileage", "dueDate"]
+        widgets = {
+            "car": forms.Select(attrs={"class": default_form_class, "required": True}),
+            "name": forms.TextInput(attrs={"class": default_form_class}),
+            "dueMileage": forms.NumberInput(attrs={"class": default_form_class}),
+            "dueDate": forms.DateInput(
+                attrs={"class": default_form_class, "type": "date"}
+            ),
+        }
 
 
 class RegisterForm(UserCreationForm):
