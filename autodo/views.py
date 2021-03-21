@@ -89,6 +89,7 @@ class CarCreate(CreateWithInlinesView, NamedFormsetsMixin):
 class CarUpdate(mixins.LoginRequiredMixin, generic.UpdateView):
     model = Car
     form_class = AddCarForm
+    success_url = reverse_lazy("cars")
 
 
 class CarDelete(mixins.LoginRequiredMixin, generic.DeleteView):
@@ -107,12 +108,6 @@ class RefuelingListView(mixins.LoginRequiredMixin, generic.ListView):
 
 class RefuelingDetailView(mixins.LoginRequiredMixin, generic.DetailView):
     model = Refueling
-
-    # def get_object(self):
-    #     snaps = OdomSnapshot.objects.filter(owner=self.request.user)
-    #     car = get_object_or_404(Car, pk=self.kwargs["pk"])
-    #     add_odom(car, snaps)
-    #     return car
 
 
 class RefuelingCreate(mixins.LoginRequiredMixin, generic.CreateView):
@@ -188,12 +183,6 @@ class TodoListView(mixins.LoginRequiredMixin, generic.ListView):
 class TodoDetailView(mixins.LoginRequiredMixin, generic.DetailView):
     model = Todo
 
-    # def get_object(self):
-    #     snaps = OdomSnapshot.objects.filter(owner=self.request.user)
-    #     car = get_object_or_404(Car, pk=self.kwargs["pk"])
-    #     add_odom(car, snaps)
-    #     return car
-
 
 class TodoCreate(mixins.LoginRequiredMixin, generic.CreateView):
     model = Todo
@@ -206,7 +195,6 @@ class TodoCreate(mixins.LoginRequiredMixin, generic.CreateView):
         cars = Car.objects.filter(owner=self.request.user)
         data["cars"] = serialize("json", cars)
         data["snaps"] = serialize("json", snaps)
-        # todo: add the data manually onto the json here
         return data
 
     def get_form_kwargs(self):
@@ -220,6 +208,7 @@ class TodoCreate(mixins.LoginRequiredMixin, generic.CreateView):
 class TodoUpdate(mixins.LoginRequiredMixin, generic.UpdateView):
     model = Todo
     form_class = AddTodoForm
+    success_url = reverse_lazy("todos")
 
 
 class TodoDelete(mixins.LoginRequiredMixin, generic.DeleteView):

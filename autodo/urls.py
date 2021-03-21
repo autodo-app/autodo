@@ -55,7 +55,7 @@ urlpatterns = [
         OdomSnapshotDelete.as_view(),
         name="refuelings/delete",
     ),
-    path("todos/", TodoListView.as_view(), name="todos"),
+    path("home/", TodoListView.as_view(), name="todos"),
     path("todos/create/", TodoCreate.as_view(), name="todos/create"),
     path("todos/<int:pk>/", TodoDetailView.as_view(), name="todos/detail"),
     path("todos/<int:pk>/update/", TodoUpdate.as_view(), name="todos/update"),

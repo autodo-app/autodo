@@ -73,6 +73,14 @@ class Car(models.Model):
     # image = models.ImageField(upload_to="cars", null=True)
     color = models.CharField(max_length=7)  # TODO: autodo green to int maybe?
 
+    @property
+    def light_color(self):
+        r = int(self.color[1:3], base=16)
+        g = int(self.color[3:5], base=16)
+        b = int(self.color[5:7], base=16)
+        luma = 0.2126 * r + 0.7152 * g + 0.0722 * b
+        return luma > 150
+
     def __str__(self):
         return "Car named: {}".format(self.name)
 
