@@ -23,9 +23,8 @@ Create Refueling - {{ block.super }}
     <br>
     {% endfor %}
 
-    {% for formset in inlines %}
-    {{ formset.management_form }}
-    {% for form in formset.forms %}
+    {{ refueling.management_form }}
+    {% for form in refueling.forms %}
     {% for field in form.visible_fields %}
     {{ field }}
     <label class="m-4 text-sm text-gray-700" for="{{ field.auto_id }}">
@@ -34,9 +33,6 @@ Create Refueling - {{ block.super }}
     <br>
     {% endfor %}
     {% endfor %}
-    {% endfor %}
-
-    {{ refueling.as_p }}
 
     <button type="submit" class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 rounded shadow-md">
       {% if form.instance.id %}Edit{% else %}Create{% endif %}
