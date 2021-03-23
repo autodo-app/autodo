@@ -91,6 +91,14 @@ python-http-client = ">=3.0.0"
 django = ">=1.8"
 
 [[package]]
+name = "django-shapeshifter"
+version = "18.9.23"
+description = "Class-based views for simultaneously handling multiple forms in Django"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "future"
 version = "0.18.2"
 description = "Clean single-source support for Python 3 and 2"
@@ -233,7 +241,7 @@ brotli = ["brotli"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "8325c96c50f85707d41f080b3e5f8351d1205f5030f7bd6117e7e4d6a1e99253"
+content-hash = "b905ccc73734cbb2b8e5690d0462212e1c6f3b4c163e12284aff2b8b5d885002"
 
 [metadata.files]
 asgiref = [
@@ -266,6 +274,10 @@ django-heroku = [
 django-sendgrid-v5 = [
     {file = "django-sendgrid-v5-0.9.1.tar.gz", hash = "sha256:378e3bf8997b5c338ae934be2c894196037a45427d1ededa33f1234baf110731"},
     {file = "django_sendgrid_v5-0.9.1-py2.py3-none-any.whl", hash = "sha256:869fb75f9e216a58f94f37cfad6990c6691e8c79994f0d7287ad37412d6b717d"},
+]
+django-shapeshifter = [
+    {file = "django-shapeshifter-18.9.23.tar.gz", hash = "sha256:7e127f00f155eb5c01acb2bcaeb46f7919451d4956b1b14ecde0a485d9f8339d"},
+    {file = "django_shapeshifter-18.9.23-py2.py3-none-any.whl", hash = "sha256:e9a829587610a40a7d03fb19436413bc92450c1bf00e90927836a8717b130bc7"},
 ]
 future = [
     {file = "future-0.18.2.tar.gz", hash = "sha256:b1bead90b70cf6ec3f0710ae53a525360fa360d306a86583adc6bf83a4db537d"},

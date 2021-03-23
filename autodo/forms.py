@@ -78,6 +78,21 @@ class OdomMileageOnlyFormset(InlineFormSetFactory):
     }
 
 
+class RefuelingForm(forms.ModelForm):
+    """Use this to create a refueling because the foreign key needs to point in this direction."""
+
+    # def clean_year(self):
+    #   return self.cleaned_data['year']
+
+    class Meta:
+        model = Refueling
+        fields = ["cost", "amount"]
+        widgets = {
+            "cost": forms.NumberInput(attrs={"class": default_form_class}),
+            "amount": forms.NumberInput(attrs={"class": default_form_class}),
+        }
+
+
 class RefuelingFormset(InlineFormSetFactory):
     model = Refueling
     fields = ["cost", "amount"]
@@ -111,7 +126,19 @@ RefuelingCreateFormset = inlineformset_factory(
     can_delete=False,
 )
 RefuelingEditFormset = inlineformset_factory(
-    OdomSnapshot, Refueling, fields=("cost", "amount"), extra=0, can_delete=False
+    OdomSnapshot,
+    Refueling,
+    fields=("cost", "amount"),
+    widgets={
+        "cost": forms.NumberInput(
+            attrs={"class": default_form_class, "required": True}
+        ),
+        "amount": forms.NumberInput(
+            attrs={"class": default_form_class, "required": True}
+        ),
+    },
+    extra=0,
+    can_delete=False,
 )
 
 

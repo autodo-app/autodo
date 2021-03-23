@@ -95,4 +95,4 @@ class Refueling(models.Model):
     amount = models.FloatField()
 
     def __str__(self):
-        return "Refueling for cost: {} and amount: {}".format(self.cost, self.amount)
+        return f"Refueling {self.id} for cost: {self.cost} and amount: {self.amount} with snap: {self.odomSnapshot.id}"

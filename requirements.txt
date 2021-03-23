@@ -18,6 +18,9 @@ django-heroku==0.3.1 \
 django-sendgrid-v5==0.9.1 \
     --hash=sha256:378e3bf8997b5c338ae934be2c894196037a45427d1ededa33f1234baf110731 \
     --hash=sha256:869fb75f9e216a58f94f37cfad6990c6691e8c79994f0d7287ad37412d6b717d
+django-shapeshifter==18.9.23 \
+    --hash=sha256:7e127f00f155eb5c01acb2bcaeb46f7919451d4956b1b14ecde0a485d9f8339d \
+    --hash=sha256:e9a829587610a40a7d03fb19436413bc92450c1bf00e90927836a8717b130bc7
 django==3.1.7; python_version >= "3.6" \
     --hash=sha256:baf099db36ad31f970775d0be5587cc58a6256a6771a44eb795b554d45f211b8 \
     --hash=sha256:32ce792ee9b6a0cbbec340123e229ac9f765dff8c2a4ae9247a14b2ba3a365a7
