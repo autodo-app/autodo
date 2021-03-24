@@ -146,7 +146,7 @@ class RefuelingCreate(mixins.LoginRequiredMixin, generic.CreateView):
         return reverse("refuelings")
 
 
-class RefuelingUpdate(MultiModelFormView):
+class RefuelingUpdate(mixins.LoginRequiredMixin, MultiModelFormView):
     form_classes = (AddOdomSnapshotForm, RefuelingForm)
     template_name = "autodo/odomsnapshot_edit.html"
     success_url = reverse_lazy("refuelings")
