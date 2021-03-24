@@ -39,4 +39,26 @@ Create Refueling - {{ block.super }}
     </button>
   </form>
 </div>
+<script>
+  var mileage = document.getElementById("id_mileage");
+  var car = document.getElementById("id_car");
+  console.log(car)
+  car.addEventListener('change', function (event) {
+    var carstr = '{{ cars }}'.replaceAll('&quot;', '\"');
+    var cardata = JSON.parse(carstr);
+    var snapstr = '{{ snaps }}'.replaceAll('&quot;', '\"');
+    var snapdata = JSON.parse(snapstr);
+    for (var c in cardata) {
+      if (parseInt(cardata[c].pk) === parseInt(car.value)) {
+        var m = 0;
+        for (var s in snapdata) {
+          if (parseInt(snapdata[s].fields.car) === parseInt(car.value) && snapdata[s].fields.mileage > m) {
+            m = snapdata[s].fields.mileage;
+          }
+        }
+        mileage.value = m;
+      }
+    }
+  }, false);
+</script>
 {% endblock %}

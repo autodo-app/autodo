@@ -38,7 +38,6 @@
 <script>
   var dueMileage = document.getElementById("id_dueMileage");
   var car = document.getElementById("id_car");
-  console.log(car);
   car.addEventListener('change', function (event) {
     var carstr = '{{ cars }}'.replaceAll('&quot;', '\"');
     var cardata = JSON.parse(carstr);
@@ -52,7 +51,6 @@
             mileage = snapdata[s].fields.mileage;
           }
         }
-        console.log(mileage)
         dueMileage.value = mileage;
       }
     }

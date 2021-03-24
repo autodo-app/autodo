@@ -118,9 +118,14 @@ class RefuelingDetailView(mixins.LoginRequiredMixin, generic.DetailView):
 class RefuelingCreate(mixins.LoginRequiredMixin, generic.CreateView):
     model = OdomSnapshot
     form_class = AddOdomSnapshotForm
+    initial = {"date": timezone.now()}
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
+        snaps = OdomSnapshot.objects.filter(owner=self.request.user)
+        cars = Car.objects.filter(owner=self.request.user)
+        data["cars"] = serialize("json", cars)
+        data["snaps"] = serialize("json", snaps)
         if self.request.POST:
             data["refueling"] = RefuelingCreateFormset(self.request.POST)
         else:
