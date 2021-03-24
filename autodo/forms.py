@@ -59,7 +59,9 @@ class AddOdomSnapshotForm(forms.ModelForm):
             "date": forms.DateInput(
                 attrs={"class": default_form_class, "type": "date"}
             ),
-            "mileage": forms.NumberInput(attrs={"class": default_form_class}),
+            "mileage": forms.NumberInput(
+                attrs={"class": default_form_class, "inputmode": "decimal"}
+            ),
         }
 
 
@@ -72,7 +74,11 @@ class OdomMileageOnlyFormset(InlineFormSetFactory):
         ""
         "widgets": {
             "mileage": forms.NumberInput(
-                attrs={"class": default_form_class, "required": True}
+                attrs={
+                    "class": default_form_class,
+                    "required": True,
+                    "inputmode": "decimal",
+                }
             ),
         },
     }
@@ -88,8 +94,12 @@ class RefuelingForm(forms.ModelForm):
         model = Refueling
         fields = ["cost", "amount"]
         widgets = {
-            "cost": forms.NumberInput(attrs={"class": default_form_class}),
-            "amount": forms.NumberInput(attrs={"class": default_form_class}),
+            "cost": forms.NumberInput(
+                attrs={"class": default_form_class, "inputmode": "decimal"}
+            ),
+            "amount": forms.NumberInput(
+                attrs={"class": default_form_class, "inputmode": "decimal"}
+            ),
         }
 
 
@@ -99,10 +109,18 @@ RefuelingCreateFormset = inlineformset_factory(
     fields=("cost", "amount"),
     widgets={
         "cost": forms.NumberInput(
-            attrs={"class": default_form_class, "required": True}
+            attrs={
+                "class": default_form_class,
+                "required": True,
+                "inputmode": "decimal",
+            }
         ),
         "amount": forms.NumberInput(
-            attrs={"class": default_form_class, "required": True}
+            attrs={
+                "class": default_form_class,
+                "required": True,
+                "inputmode": "decimal",
+            }
         ),
     },
     extra=1,

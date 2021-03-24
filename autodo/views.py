@@ -140,7 +140,6 @@ class RefuelingCreate(mixins.LoginRequiredMixin, generic.CreateView):
 
         if refueling.is_valid():
             refueling.instance = self.object
-            # refueling.instance.owner = self.request.user
             r = refueling.save(commit=False)[0]
             r.owner = self.request.user
             r.save()
