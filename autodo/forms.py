@@ -93,23 +93,6 @@ class RefuelingForm(forms.ModelForm):
         }
 
 
-class RefuelingFormset(InlineFormSetFactory):
-    model = Refueling
-    fields = ["cost", "amount"]
-    factory_kwargs = {
-        "extra": 1,
-        "can_delete": False,
-        "widgets": {
-            "cost": forms.NumberInput(
-                attrs={"class": default_form_class, "required": True}
-            ),
-            "amount": forms.NumberInput(
-                attrs={"class": default_form_class, "required": True}
-            ),
-        },
-    }
-
-
 RefuelingCreateFormset = inlineformset_factory(
     OdomSnapshot,
     Refueling,
@@ -123,21 +106,6 @@ RefuelingCreateFormset = inlineformset_factory(
         ),
     },
     extra=1,
-    can_delete=False,
-)
-RefuelingEditFormset = inlineformset_factory(
-    OdomSnapshot,
-    Refueling,
-    fields=("cost", "amount"),
-    widgets={
-        "cost": forms.NumberInput(
-            attrs={"class": default_form_class, "required": True}
-        ),
-        "amount": forms.NumberInput(
-            attrs={"class": default_form_class, "required": True}
-        ),
-    },
-    extra=0,
     can_delete=False,
 )
 

@@ -24,9 +24,7 @@ from autodo.forms import (
     AddCarForm,
     AddOdomSnapshotForm,
     OdomMileageOnlyFormset,
-    RefuelingFormset,
     RefuelingCreateFormset,
-    RefuelingEditFormset,
     RegisterForm,
     AddTodoForm,
     RefuelingForm,
@@ -148,80 +146,12 @@ class RefuelingCreate(mixins.LoginRequiredMixin, generic.CreateView):
         return reverse("refuelings")
 
 
-# class RefuelingInline(InlineFormSetFactory):
-#     model = Refueling
-#     fields = ["cost", "amount"]
-
-
-# class RefuelingUpdate(mixins.LoginRequiredMixin, UpdateWithInlinesView):
-#     model = OdomSnapshot
-#     inlines = [RefuelingInline]
-#     fields = ["car", "date", "mileage"]
-#     template_name = "autodo/odomsnapshot_form.html"
-
-
-# def RefuelingUpdate(request):
-#     if request.method == "POST":
-#         snap_form = forms.AddOdomSnapshotForm(request.POST)
-#         ref_form = forms.RefuelingEditForm(request.POST)
-#         if snap_form.is_valid and ref_form.is_valid:
-#             snap_form.save()
-#             ref_form.save()
-
-#     snap_form = forms.AddOdomSnapshotForm(request.POST)
-#         ref_form = forms.RefuelingEditForm(request.POST)
-#     address_form = forms.AddressCreateForm()
-#     context = {
-#         "farm_form": farm_form,
-#         "phone_form": phone_form,
-#         "address_form": address_form,
-#     }
-#     return render(request, "livestock/farm_name.html", context)
-
-
-# class RefuelingUpdate(mixins.LoginRequiredMixin, generic.UpdateView):
-#     model = OdomSnapshot
-#     form_class = AddOdomSnapshotForm
-
-#     def get_context_data(self, **kwargs):
-#         data = super().get_context_data(**kwargs)
-#         r = Refueling.objects.get(pk=self.object.id)
-#         if self.request.POST:
-#             data["refueling"] = RefuelingEditFormset(
-#                 self.request.POST,
-#                 instance=self.object,
-#                 queryset=Refueling.objects.filter(owner=self.request.user),
-#             )
-#         else:
-#             data["refueling"] = RefuelingEditFormset(
-#                 instance=self.object,
-#                 queryset=Refueling.objects.filter(owner=self.request.user),
-#             )
-#         return data
-
-#     def form_valid(self, form):
-#         context = self.get_context_data()
-#         refueling = context["refueling"]
-#         self.object = form.save()
-#         if refueling.is_valid():
-#             refueling.instance = self.object
-#             refueling.save()
-#         return super().form_valid(form)
-
-#     def get_success_url(self):
-#         return reverse("refuelings")
-
-
 class RefuelingUpdate(MultiModelFormView):
     form_classes = (AddOdomSnapshotForm, RefuelingForm)
     template_name = "autodo/odomsnapshot_edit.html"
     success_url = reverse_lazy("refuelings")
 
     def get_instances(self):
-        # print(self.kwargs["pk"])
-        # r = Refueling.objects.filter(owner=self.request.user).first()
-        # print(r.odomSnapshot)
-
         r = Refueling.objects.get(pk=self.kwargs["pk"])
         snap = OdomSnapshot.objects.get(pk=r.odomSnapshot.id)
         sys.stdout.flush()
