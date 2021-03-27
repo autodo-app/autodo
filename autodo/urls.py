@@ -17,7 +17,6 @@ from autodo.views import (
     TodoCreate,
     TodoUpdate,
     TodoDelete,
-    catchall,
     landing_page,
     register,
 )
@@ -32,8 +31,8 @@ urlpatterns = [
     ),
     path("accounts/", include("django.contrib.auth.urls")),
     path("accounts/register/", register, name="register"),
-    path("accounts/profile/", catchall, name="profile"),
-    path("settings/", catchall, name="settings"),
+    path("accounts/profile/", landing_page, name="profile"),
+    path("settings/", landing_page, name="settings"),
     path("cars/", CarListView.as_view(), name="cars"),
     path("cars/create/", CarCreate.as_view(), name="cars/create"),
     path("cars/<int:pk>/", CarDetailView.as_view(), name="cars/detail"),
@@ -60,6 +59,6 @@ urlpatterns = [
     path("todos/<int:pk>/", TodoDetailView.as_view(), name="todos/detail"),
     path("todos/<int:pk>/update/", TodoUpdate.as_view(), name="todos/update"),
     path("todos/<int:pk>/delete/", TodoDelete.as_view(), name="todos/delete"),
-    path("stats/", catchall, name="stats"),
-    path("home/", catchall, name="home"),
+    path("stats/", landing_page, name="stats"),
+    path("home/", landing_page, name="home"),
 ]

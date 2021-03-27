@@ -29,8 +29,7 @@ from autodo.forms import (
     AddTodoForm,
     RefuelingForm,
 )
-
-catchall = generic.TemplateView.as_view(template_name="index.html")
+from autodo.utils import find_odom, create_defaults
 
 
 def landing_page(request):
@@ -40,11 +39,7 @@ def landing_page(request):
 
 
 def add_odom(car, snaps):
-    car_snaps = snaps.filter(car=car.id).order_by("-mileage")
-    if len(car_snaps) == 0:
-        print("We really shouldn't have cars without mileage")
-        return car
-    car.mileage = car_snaps[0].mileage
+    car.mileage = find_odom(car, snaps)
     return car
 
 
@@ -88,7 +83,12 @@ class CarCreate(CreateWithInlinesView, NamedFormsetsMixin):
         inlines[0].forms[0].instance.owner = self.request.user
         inlines[0].forms[0].instance.date = timezone.now()
 
-        return super().forms_valid(form, inlines)
+        # save the form and use the newly created car to create the default todos
+        response = super().forms_valid(form, inlines)
+        create_defaults(
+            self.request.user, self.object, OdomSnapshot.objects.filter(car=self.object)
+        )
+        return response
 
 
 class CarUpdate(mixins.LoginRequiredMixin, generic.UpdateView):
