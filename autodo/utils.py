@@ -9,6 +9,11 @@ def find_odom(car, snaps):
     return car_snaps[0].mileage
 
 
+def add_mileage_to_due(todo, car, snaps):
+    cur_mileage = find_odom(car, snaps)
+    todo.delta_due_mileage = todo.dueMileage - cur_mileage
+
+
 def create_defaults(user, car, snaps):
     base_mileage = find_odom(car, snaps)
 

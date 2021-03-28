@@ -29,7 +29,7 @@ from autodo.forms import (
     AddTodoForm,
     RefuelingForm,
 )
-from autodo.utils import find_odom, create_defaults
+from autodo.utils import find_odom, create_defaults, add_mileage_to_due
 
 
 def landing_page(request):
@@ -176,7 +176,11 @@ class TodoListView(mixins.LoginRequiredMixin, generic.ListView):
     model = Todo
 
     def get_queryset(self):
-        return Todo.objects.filter(owner=self.request.user)
+        snaps = OdomSnapshot.objects.filter(owner=self.request.user)
+        todos = Todo.objects.filter(owner=self.request.user)
+        for t in todos:
+            add_mileage_to_due(t, t.car, snaps)
+        return todos
 
 
 class TodoDetailView(mixins.LoginRequiredMixin, generic.DetailView):

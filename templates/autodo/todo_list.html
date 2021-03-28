@@ -21,7 +21,8 @@
         {{ todo.name }}
       </div>
       <div class="mx-2">
-        Mileage: <span class="font-bold">{{ todo.dueMileage }}</span> mi
+        Due at: <span class="font-bold">{{ todo.dueMileage }}</span> mi
+        (<span class="font-bold">{{ todo.delta_due_mileage }}</span> mi from now)
       </div>
       <div style="background-color: {{ todo.car.color }};"
         class="my-1 mx-2 rounded-lg w-min px-2 {% if todo.car.light_color %}text-black{% else %}text-white{% endif %}">
