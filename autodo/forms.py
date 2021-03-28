@@ -135,7 +135,7 @@ class AddTodoForm(forms.ModelForm):
     class Meta:
         model = Todo
         # exclude = ["owner"]
-        fields = ["car", "name", "dueMileage", "dueDate"]
+        fields = ["car", "name", "dueMileage", "dueDate", "notes"]
         widgets = {
             "car": forms.Select(attrs={"class": default_form_class, "required": True}),
             "name": forms.TextInput(attrs={"class": default_form_class}),
@@ -143,6 +143,7 @@ class AddTodoForm(forms.ModelForm):
             "dueDate": forms.DateInput(
                 attrs={"class": default_form_class, "type": "date"}
             ),
+            "notes": forms.Textarea(attrs={"class": default_form_class + " h-24"}),
         }
 
 

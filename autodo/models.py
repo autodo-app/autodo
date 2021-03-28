@@ -45,6 +45,7 @@ class Todo(models.Model):
     name = models.CharField(max_length=32, null=False)
     dueMileage = models.FloatField(default=None, blank=True, null=True)
     dueDate = models.DateTimeField(default=None, blank=True, null=True)
+    notes = models.TextField(default=None, blank=True, null=True)
     # TODO: calculate this on POST
     estimatedDueDate = models.BooleanField(default=False, blank=True, null=True)
     mileageRepeatInterval = models.FloatField(default=None, blank=True, null=True)
