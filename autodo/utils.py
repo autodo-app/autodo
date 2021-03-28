@@ -134,3 +134,15 @@ def create_defaults(user, car, snaps):
 
     for t in defaults:
         t.save()
+
+
+car_color_palette = [
+    "#e06c75",
+    "#98c379",
+    "#e5c07b",
+    "#61afef",
+    "#c678dd",
+    "#56b6c2",
+    "#abbcbf",
+    "#282c34",
+]

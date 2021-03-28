@@ -29,7 +29,12 @@ from autodo.forms import (
     AddTodoForm,
     RefuelingForm,
 )
-from autodo.utils import find_odom, create_defaults, add_mileage_to_due
+from autodo.utils import (
+    find_odom,
+    create_defaults,
+    add_mileage_to_due,
+    car_color_palette,
+)
 
 
 def landing_page(request):
@@ -74,8 +79,12 @@ class CarCreate(CreateWithInlinesView, NamedFormsetsMixin):
     inlines = [OdomMileageOnlyFormset]
     inline_names = ["OdomMileageOnlyFormset"]
     form_class = AddCarForm
-    initial = {"year": "2020"}
     success_url = reverse_lazy("cars")
+
+    def get_initial(self):
+        car_count = Car.objects.filter(owner=self.request.user).count()
+        color_idx = car_count % len(car_color_palette)
+        return {"year": "2020", "color": car_color_palette[color_idx]}
 
     def forms_valid(self, form, inlines):
         form.instance.owner = self.request.user
