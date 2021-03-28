@@ -22,7 +22,9 @@
       </div>
       <div class="mx-2">
         Due at: <span class="font-bold">{{ todo.dueMileage }}</span> mi
-        (<span class="font-bold">{{ todo.delta_due_mileage }}</span> mi from now)
+        (<span class="{% if todo.delta_due_mileage <= 0 %}text-red-700{% endif %}">
+          <span class="font-bold">{{ todo.delta_due_mileage }}</span> mi from now
+        </span>)
       </div>
       <div style="background-color: {{ todo.car.color }};"
         class="my-1 mx-2 rounded-lg w-min px-2 {% if todo.car.light_color %}text-black{% else %}text-white{% endif %}">
@@ -48,7 +50,7 @@
 {% endfor %}
 </div>
 <button
-  class="fixed right-0 bottom-0 m-12 p-0 w-16 h-16 bg-autodo rounded-full hover:bg-autodo-dark shadow-xl mouse transition ease-in duration-200 focus:outline-none"
+  class="fixed right-0 bottom-0 m-12 p-0 w-16 h-16 bg-autodo rounded-full hover:bg-autodo-dark shadow-xl mouse transition ease-in duration-200 focus:outline-none z-10"
   onclick="location.href=`{% url 'todos/create' %}`">
   <svg viewBox="0 0 20 20" enable-background="new 0 0 20 20" class="w-6 h-6 inline-block">
     <path fill="#FFFFFF" d="M16,10c0,0.553-0.048,1-0.601,1H11v4.399C11,15.951,10.553,16,10,16c-0.553,0-1-0.049-1-0.601V11H4.601
