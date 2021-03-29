@@ -1,4 +1,6 @@
-from .models import Todo
+from collections import defaultdict
+
+from .models import Todo, OdomSnapshot
 
 
 def find_odom(car, snaps):
@@ -146,3 +148,30 @@ car_color_palette = [
     "#abbcbf",
     "#282c34",
 ]
+
+
+def find_todos_needing_emails():
+    queued_emails = defaultdict(list)
+    for t in Todo.objects.all():
+        # todo: filter out completed todos
+        cur_mileage = find_odom(t.car, OdomSnapshot.objects.filter(owner=t.owner))
+        delta_due_mileage = t.dueMileage - cur_mileage
+        if delta_due_mileage <= 0:
+            queued_emails[t.owner.email].append(
+                (
+                    t.name,
+                    delta_due_mileage,
+                    t.car.name,
+                    "PAST_DUE",
+                )
+            )
+        elif delta_due_mileage <= 10000:
+            queued_emails[t.owner.email].append(
+                (
+                    t.name,
+                    delta_due_mileage,
+                    t.car.name,
+                    "DUE_SOON",
+                )
+            )
+    return queued_emails
