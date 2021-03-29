@@ -1,0 +1,27 @@
+<p class="text-align: center;">
+  <img src="https://autodo-app.herokuapp.com/static/icons/icon-48x48.png?v=dec44f98b636b180cee9fb8274ba0287" />
+<h2>auToDo</h2>
+</p>
+{% if past_due %}
+<h1>The following todos are <b>past due</b>:</h1>
+<ul>
+  {% for t in past_due %}
+  <li><a href="https://autodo-app.herokuapp.com/todos/{{ t.id }}/">{{ t.name }}</a> is due in
+    <b>{{ t.delta_due_mileage }}</b> miles for your car named <b>{{ t.car.name }}</b>
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+{% if due_soon %}
+<h1>The following todos are <b>due soon</b>:</h1>
+<ul>
+  {% for t in due_soon %}
+  <li><a href="https://autodo-app.herokuapp.com/todos/{{ t.id }}/">{{ t.name }}</a> is due in
+    <b>{{ t.delta_due_mileage }}</b> miles for your car named <b>{{ t.car.name }}</b>
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+You can view all of your todos here: https://autodo-app.herokuapp.com/home/
