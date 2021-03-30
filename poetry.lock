@@ -42,9 +42,9 @@ optional = false
 python-versions = ">=3.6"
 
 [package.dependencies]
-sqlparse = ">=0.2.2"
-pytz = "*"
 asgiref = ">=3.2.10,<4"
+pytz = "*"
+sqlparse = ">=0.2.2"
 
 [package.extras]
 argon2 = ["argon2-cffi (>=16.1.0)"]
@@ -59,8 +59,8 @@ optional = false
 python-versions = "*"
 
 [package.dependencies]
-six = ">=1.5.2"
 Django = ">=1.11"
+six = ">=1.5.2"
 
 [[package]]
 name = "django-heroku"
@@ -71,10 +71,10 @@ optional = false
 python-versions = "*"
 
 [package.dependencies]
-psycopg2 = "*"
-django = "*"
-whitenoise = "*"
 dj-database-url = ">=0.5.0"
+django = "*"
+psycopg2 = "*"
+whitenoise = "*"
 
 [[package]]
 name = "django-sendgrid-v5"
@@ -85,10 +85,10 @@ optional = false
 python-versions = "*"
 
 [package.dependencies]
-sendgrid = ">=5.0.0"
+django = ">=1.8"
 future = "*"
 python-http-client = ">=3.0.0"
-django = ">=1.8"
+sendgrid = ">=5.0.0"
 
 [[package]]
 name = "django-shapeshifter"
@@ -115,10 +115,10 @@ optional = false
 python-versions = ">=3.4"
 
 [package.extras]
-tornado = ["tornado (>=0.2)"]
+eventlet = ["eventlet (>=0.9.7)"]
 gevent = ["gevent (>=0.13)"]
 setproctitle = ["setproctitle"]
-eventlet = ["eventlet (>=0.9.7)"]
+tornado = ["tornado (>=0.2)"]
 
 [[package]]
 name = "idna"
@@ -145,6 +145,14 @@ optional = false
 python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*"
 
 [[package]]
+name = "pylibmc"
+version = "1.6.1"
+description = "Quick and small memcached client for Python"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "python-http-client"
 version = "3.3.2"
 description = "HTTP REST client, simplified for Python"
@@ -169,9 +177,9 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [package.dependencies]
-idna = ">=2.5,<3"
 certifi = ">=2017.4.17"
 chardet = ">=3.0.2,<5"
+idna = ">=2.5,<3"
 urllib3 = ">=1.21.1,<1.27"
 
 [package.extras]
@@ -187,8 +195,8 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [package.dependencies]
-starkbank-ecdsa = ">=1.0.0"
 python-http-client = ">=3.2.1"
+starkbank-ecdsa = ">=1.0.0"
 
 [[package]]
 name = "six"
@@ -241,7 +249,7 @@ brotli = ["brotli"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "b905ccc73734cbb2b8e5690d0462212e1c6f3b4c163e12284aff2b8b5d885002"
+content-hash = "57f4ed7815debcb07e630c94f8d7c0534c210c296c1d53e9a34c52635c95fd6b"
 
 [metadata.files]
 asgiref = [
@@ -341,6 +349,13 @@ psycopg2 = [
     {file = "psycopg2-2.8.6-cp39-cp39-win32.whl", hash = "sha256:2c93d4d16933fea5bbacbe1aaf8fa8c1348740b2e50b3735d1b0bf8154cbf0f3"},
     {file = "psycopg2-2.8.6-cp39-cp39-win_amd64.whl", hash = "sha256:d5062ae50b222da28253059880a871dc87e099c25cb68acf613d9d227413d6f7"},
     {file = "psycopg2-2.8.6.tar.gz", hash = "sha256:fb23f6c71107c37fd667cb4ea363ddeb936b348bbd6449278eb92c189699f543"},
+]
+pylibmc = [
+    {file = "pylibmc-1.6.1-cp27-cp27mu-manylinux1_x86_64.whl", hash = "sha256:01a7e2e3fa9fcd7a791c7818a80a07e7a381aee988a5d810a1c1e6f7a9a288fd"},
+    {file = "pylibmc-1.6.1-cp35-cp35m-manylinux1_x86_64.whl", hash = "sha256:6fff384e3c30af029bbac87f88b3fab14ae87b50103d389341d9b3e633349a3f"},
+    {file = "pylibmc-1.6.1-cp36-cp36m-manylinux1_x86_64.whl", hash = "sha256:c749b4251c1137837d00542b62992b96cd2aed639877407f66291120dd6de2ff"},
+    {file = "pylibmc-1.6.1-cp37-cp37m-manylinux1_x86_64.whl", hash = "sha256:e6c0c452336db0868d0de521d48872c2a359b1233b974c6b32c36ce68abc4820"},
+    {file = "pylibmc-1.6.1.tar.gz", hash = "sha256:8a8dd406487d419d58c6d944efd91e8189b360a0c4d9e8c6ebe3990d646ae7e9"},
 ]
 python-http-client = [
     {file = "python_http_client-3.3.2.tar.gz", hash = "sha256:67e6a7bea19b03e14dc971480d3531b80becfc203d6c69478561bf7844d52661"},

@@ -1,4 +1,7 @@
-from .models import Todo
+from collections import defaultdict
+import datetime
+
+from .models import Todo, OdomSnapshot
 
 
 def find_odom(car, snaps):
@@ -146,3 +149,29 @@ car_color_palette = [
     "#abbcbf",
     "#282c34",
 ]
+
+
+def determine_email_type(t):
+    if t.delta_due_mileage <= 0:
+        return (
+            t,
+            "PAST_DUE",
+        )
+    elif t.delta_due_mileage <= 500:
+        return (
+            t,
+            "DUE_SOON",
+        )
+
+
+def find_todos_needing_emails():
+    if datetime.datetime.today().weekday() != 5:
+        return  # only send our emails on Saturdays
+    queued_emails = defaultdict(list)
+    for t in Todo.objects.all():
+        # todo: filter out completed todos
+        cur_mileage = find_odom(t.car, OdomSnapshot.objects.filter(owner=t.owner))
+        t.delta_due_mileage = t.dueMileage - cur_mileage
+        if email := determine_email_type(t):
+            queued_emails[t.owner.email].append(email)
+    return queued_emails
