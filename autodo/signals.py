@@ -40,9 +40,13 @@ def send_email_notice_if_needed(sender, instance, **kwargs):
         elif e[1] == "DUE_SOON":
             due_soon.append(e[0])
 
-    subject = "auToDo: Todos are Due Soon"
-    if len(past_due) > 0:
+    subject = "auToDo: A Todo is Due Soon"
+    if len(past_due) > 1:
         subject = "auToDo: Todos are PAST DUE"
+    elif len(past_due) > 0:
+        subject = "auToDo: A Todo is PAST DUE"
+    elif len(due_soon) > 1:
+        subject = "auToDO: Todos are Due Soon"
 
     context = {}
     if len(past_due) > 0:

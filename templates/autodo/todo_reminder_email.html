@@ -2,7 +2,7 @@
   <img src="https://autodo-app.herokuapp.com/static/icons/icon-48x48.png?v=dec44f98b636b180cee9fb8274ba0287" />
 </div>
 {% if past_due %}
-<h1>The following todos are <b>past due</b>:</h1>
+<h1>The following todo(s) are <b>past due</b>:</h1>
 <ul>
   {% for t in past_due %}
   <li><a href="https://autodo-app.herokuapp.com/todos/{{ t.id }}/">{{ t.name }}</a> was due
@@ -14,7 +14,7 @@
 {% endif %}
 
 {% if due_soon %}
-<h1>The following todos are <b>due soon</b>:</h1>
+<h1>The following todo(s) are <b>due soon</b>:</h1>
 <ul>
   {% for t in due_soon %}
   <li><a href="https://autodo-app.herokuapp.com/todos/{{ t.id }}/">{{ t.name }}</a> is due in
