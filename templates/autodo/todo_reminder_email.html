@@ -1,14 +1,14 @@
-<p class="text-align: center;">
+<div class="text-align: center;">
   <img src="https://autodo-app.herokuapp.com/static/icons/icon-48x48.png?v=dec44f98b636b180cee9fb8274ba0287" />
-<h2>auToDo</h2>
-</p>
+</div>
 {% if past_due %}
 <h1>The following todos are <b>past due</b>:</h1>
 <ul>
   {% for t in past_due %}
-  <li><a href="https://autodo-app.herokuapp.com/todos/{{ t.id }}/">{{ t.name }}</a> is due in
-    <b>{{ t.delta_due_mileage }}</b> miles for your car named <b>{{ t.car.name }}</b>
+  <li><a href="https://autodo-app.herokuapp.com/todos/{{ t.id }}/">{{ t.name }}</a> was due
+    <b>{% widthratio t.delta_due_mileage 1 -1 %}</b> miles ago for your car named <b>{{ t.car.name }}</b>
   </li>
+  <!-- Hack above with widthratio is used to act as multiplication, see https://stackoverflow.com/questions/18350630/multiplication-in-django-template-without-using-manually-created-template-tag -->
   {% endfor %}
 </ul>
 {% endif %}

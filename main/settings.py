@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "extra_views",
-    "autodo",
+    "autodo.apps.AutodoConfig",
 ]
 
 MIDDLEWARE = [
