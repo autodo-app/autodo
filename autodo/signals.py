@@ -5,16 +5,21 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.dispatch import receiver
+from django.core.cache import cache
 
 
 from autodo.models import OdomSnapshot, Refueling, Todo
 from autodo.utils import determine_email_type
 
+EMAIL_RATE_LIMIT_KEY = "email_rate_limit"
 
-# @receiver(post_save, sender=Refueling)
+
 def send_email_notice_if_needed(sender, instance, **kwargs):
-    print("here")
-    sys.stdout.flush()
+    can_send = cache.get(EMAIL_RATE_LIMIT_KEY)
+    if can_send:
+        # don't send another email if the cache is still valid, meaning we
+        # recently sent an email
+        return
     snap = instance
     car = snap.car
     todos = Todo.objects.filter(car=car.id)
@@ -55,6 +60,7 @@ def send_email_notice_if_needed(sender, instance, **kwargs):
         [snap.owner.email],
         html_message=html_message,
     )
+    cache.set(EMAIL_RATE_LIMIT_KEY, True, 30 * 60)  # set timeout of 30min
 
 
 # trigger an email about upcoming todos when an odomsnapshot is created or updated
