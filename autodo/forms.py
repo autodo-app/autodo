@@ -1,8 +1,11 @@
+import sys
+
 from django import forms
 from django.forms.models import inlineformset_factory
 from django.contrib.auth.forms import UserCreationForm
 from extra_views import InlineFormSetFactory
-import sys
+from djmoney.forms.fields import MoneyField, MoneyWidget
+from djmoney.settings import CURRENCY_CHOICES
 
 from autodo.models import Car, OdomSnapshot, User, Refueling, Todo
 
@@ -17,7 +20,7 @@ default_form_classes = [
     "focus:outline-none",
     "focus:border-blue-500",
     "placeholder-gray-500",
-    "w-9/12",
+    "w-full",
 ]
 default_form_class = " ".join(default_form_classes)
 
@@ -87,16 +90,55 @@ class OdomMileageOnlyFormset(InlineFormSetFactory):
 class RefuelingForm(forms.ModelForm):
     """Use this to create a refueling because the foreign key needs to point in this direction."""
 
-    # def clean_year(self):
-    #   return self.cleaned_data['year']
+    cost = MoneyField(
+        widget=MoneyWidget(
+            amount_widget=forms.TextInput(
+                attrs={
+                    "class": " ".join(
+                        [
+                            "bg-gray-50",
+                            "my-2",
+                            "py-1",
+                            "px-4",
+                            "border",
+                            "border-gray-400",
+                            "rounded",
+                            "focus:outline-none",
+                            "focus:border-blue-500",
+                            "placeholder-gray-500",
+                            "w-7/12",
+                        ]
+                    ),
+                    "inputmode": "decimal",
+                }
+            ),
+            currency_widget=forms.Select(
+                choices=CURRENCY_CHOICES,
+                attrs={
+                    "class": " ".join(
+                        [
+                            "bg-gray-50",
+                            "my-2",
+                            "py-1",
+                            "px-4",
+                            "border",
+                            "border-gray-400",
+                            "rounded",
+                            "focus:outline-none",
+                            "focus:border-blue-500",
+                            "placeholder-gray-500",
+                            "w-5/12",
+                        ]
+                    ),
+                },
+            ),
+        )
+    )
 
     class Meta:
         model = Refueling
         fields = ["cost", "amount"]
         widgets = {
-            "cost": forms.NumberInput(
-                attrs={"class": default_form_class, "inputmode": "decimal"}
-            ),
             "amount": forms.NumberInput(
                 attrs={"class": default_form_class, "inputmode": "decimal"}
             ),

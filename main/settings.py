@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "extra_views",
+    "djmoney",
     "autodo.apps.AutodoConfig",
 ]
 
@@ -179,5 +180,7 @@ def get_cache():
 
 
 CACHES = get_cache()
+
+CURRENCIES = ("USD",)
 
 django_heroku.settings(locals())
