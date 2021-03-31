@@ -124,10 +124,46 @@ class RefuelingDetailView(mixins.LoginRequiredMixin, generic.DetailView):
     model = Refueling
 
 
-class RefuelingCreate(mixins.LoginRequiredMixin, generic.CreateView):
-    model = OdomSnapshot
-    form_class = AddOdomSnapshotForm
+# class RefuelingCreate(mixins.LoginRequiredMixin, generic.CreateView):
+#     model = OdomSnapshot
+#     form_class = AddOdomSnapshotForm
+#     initial = {"date": timezone.now()}
+
+#     def get_context_data(self, **kwargs):
+#         data = super().get_context_data(**kwargs)
+#         snaps = OdomSnapshot.objects.filter(owner=self.request.user)
+#         cars = Car.objects.filter(owner=self.request.user)
+#         data["cars"] = serialize("json", cars)
+#         data["snaps"] = serialize("json", snaps)
+#         if self.request.POST:
+#             data["refueling"] = RefuelingCreateFormset(self.request.POST)
+#         else:
+#             data["refueling"] = RefuelingCreateFormset()
+#         return data
+
+#     def form_valid(self, form):
+#         context = self.get_context_data(form=form)
+#         refueling = context["refueling"]
+#         form.instance.owner = self.request.user
+#         self.object = form.save()
+
+#         if refueling.is_valid():
+#             refueling.instance = self.object
+#             r = refueling.save(commit=False)[0]
+#             r.owner = self.request.user
+#             r.save()
+
+#         return super().form_valid(form)
+
+#     def get_success_url(self):
+#         return reverse("refuelings")
+
+
+class RefuelingCreate(mixins.LoginRequiredMixin, MultiModelFormView):
+    form_classes = (AddOdomSnapshotForm, RefuelingForm)
+    template_name = "autodo/odomsnapshot_edit.html"
     initial = {"date": timezone.now()}
+    success_url = reverse_lazy("refuelings")
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
@@ -141,22 +177,20 @@ class RefuelingCreate(mixins.LoginRequiredMixin, generic.CreateView):
             data["refueling"] = RefuelingCreateFormset()
         return data
 
-    def form_valid(self, form):
-        context = self.get_context_data(form=form)
-        refueling = context["refueling"]
-        form.instance.owner = self.request.user
-        self.object = form.save()
+    def forms_valid(self):
+        forms = self.get_forms()
+        snapshot_form = forms["addodomsnapshotform"]
+        refueling_form = forms["refuelingform"]
 
-        if refueling.is_valid():
-            refueling.instance = self.object
-            r = refueling.save(commit=False)[0]
-            r.owner = self.request.user
-            r.save()
+        s = snapshot_form.save(commit=False)
+        s.owner = self.request.user
+        s.save()
 
-        return super().form_valid(form)
+        r.owner = self.request.user
+        r.odomSnapshot = s
+        r.save()
 
-    def get_success_url(self):
-        return reverse("refuelings")
+        return HttpResponseRedirect(self.success_url)
 
 
 class RefuelingUpdate(mixins.LoginRequiredMixin, MultiModelFormView):

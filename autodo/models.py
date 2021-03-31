@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from djmoney.models.fields import MoneyField
 
 # Create your models here.
 class Greeting(models.Model):
@@ -25,9 +26,7 @@ class OdomSnapshot(models.Model):
     mileage = models.FloatField()
 
     def __str__(self):
-        return "Odometer Snapshot for car: {} on: {} at: {}".format(
-            self.car, self.date, self.mileage
-        )
+        return f"{self.owner}'s Odometer Snapshot for car: {self.car} on: {self.date} at: {self.mileage}"
 
     class Meta:
         ordering = ["-mileage"]
@@ -92,7 +91,7 @@ class Refueling(models.Model):
     owner = models.ForeignKey(User, related_name="refueling", on_delete=models.CASCADE)
     odomSnapshot = models.ForeignKey(OdomSnapshot, on_delete=models.CASCADE)
 
-    cost = models.IntegerField()  # For USD, scale this up by x100 to get an int
+    cost = MoneyField(max_digits=6, decimal_places=2, default_currency="USD")
     amount = models.FloatField()
 
     def __str__(self):

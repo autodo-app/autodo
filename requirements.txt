@@ -15,6 +15,9 @@ django-extra-views==0.13.0 \
 django-heroku==0.3.1 \
     --hash=sha256:6af4bc3ae4a9b55eaad6dbe5164918982d2762661aebc9f83d9fa49f6009514e \
     --hash=sha256:2bc690aab89eedbe01311752320a9a12e7548e3b0ed102681acc5736a41a4762
+django-money==1.3.1; python_version >= "3.5" \
+    --hash=sha256:a363ce16a23e403befdafa9895b2f538a10f9d390b160f12140094a6dfd55246 \
+    --hash=sha256:3b8fc751c8ae27cf877b8f3770ade1b63af97ee49a32ac08a6a1bc6d8d59f089
 django-sendgrid-v5==0.9.1 \
     --hash=sha256:378e3bf8997b5c338ae934be2c894196037a45427d1ededa33f1234baf110731 \
     --hash=sha256:869fb75f9e216a58f94f37cfad6990c6691e8c79994f0d7287ad37412d6b717d
@@ -82,6 +85,9 @@ psycopg2==2.8.6; python_version >= "2.7" and python_full_version < "3.0.0" or py
     --hash=sha256:2c93d4d16933fea5bbacbe1aaf8fa8c1348740b2e50b3735d1b0bf8154cbf0f3 \
     --hash=sha256:d5062ae50b222da28253059880a871dc87e099c25cb68acf613d9d227413d6f7 \
     --hash=sha256:fb23f6c71107c37fd667cb4ea363ddeb936b348bbd6449278eb92c189699f543
+py-moneyed==0.8.0 \
+    --hash=sha256:ec73795171919d537880a33c44d07fcdf0a5225e8368684fe02f0e75a6404742 \
+    --hash=sha256:c6691b914a5e4b5b2335cf113620479a52cc82988c0e143435a7c5c7d60cd4ad
 pylibmc==1.6.1 \
     --hash=sha256:01a7e2e3fa9fcd7a791c7818a80a07e7a381aee988a5d810a1c1e6f7a9a288fd \
     --hash=sha256:6fff384e3c30af029bbac87f88b3fab14ae87b50103d389341d9b3e633349a3f \

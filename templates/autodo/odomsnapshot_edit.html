@@ -13,11 +13,15 @@ Edit Refueling - {{ block.super }}
 
     {% for form in forms %}
     {% for field in form %}
-    {{ field }}
-    <label class="m-4 text-sm text-gray-700" for="{{ field.auto_id }}">
-      {{ field.label }}{% if field.field.required %}*{% endif %}
-    </label>
-    <br>
+    <div class="flex content-start">
+      <div class="flex w-9/12 space-x-2">
+        {{ field }}
+      </div>
+      <label class="m-4 text-sm text-gray-700 w-3/12" for="{{ field.auto_id }}">
+        {{ field.label }}{% if field.field.required %}*{% endif %}
+      </label>
+      <br>
+    </div>
     {% endfor %}
     {% endfor %}
 
