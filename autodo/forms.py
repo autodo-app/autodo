@@ -51,9 +51,6 @@ class AddCarForm(forms.ModelForm):
 class AddOdomSnapshotForm(forms.ModelForm):
     """Use this to create a refueling because the foreign key needs to point in this direction."""
 
-    # def clean_year(self):
-    #   return self.cleaned_data['year']
-
     class Meta:
         model = OdomSnapshot
         exclude = ["owner"]
@@ -74,7 +71,6 @@ class OdomMileageOnlyFormset(InlineFormSetFactory):
     factory_kwargs = {
         "extra": 1,
         "can_delete": False,
-        ""
         "widgets": {
             "mileage": forms.NumberInput(
                 attrs={

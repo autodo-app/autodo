@@ -124,46 +124,20 @@ class RefuelingDetailView(mixins.LoginRequiredMixin, generic.DetailView):
     model = Refueling
 
 
-# class RefuelingCreate(mixins.LoginRequiredMixin, generic.CreateView):
-#     model = OdomSnapshot
-#     form_class = AddOdomSnapshotForm
-#     initial = {"date": timezone.now()}
-
-#     def get_context_data(self, **kwargs):
-#         data = super().get_context_data(**kwargs)
-#         snaps = OdomSnapshot.objects.filter(owner=self.request.user)
-#         cars = Car.objects.filter(owner=self.request.user)
-#         data["cars"] = serialize("json", cars)
-#         data["snaps"] = serialize("json", snaps)
-#         if self.request.POST:
-#             data["refueling"] = RefuelingCreateFormset(self.request.POST)
-#         else:
-#             data["refueling"] = RefuelingCreateFormset()
-#         return data
-
-#     def form_valid(self, form):
-#         context = self.get_context_data(form=form)
-#         refueling = context["refueling"]
-#         form.instance.owner = self.request.user
-#         self.object = form.save()
-
-#         if refueling.is_valid():
-#             refueling.instance = self.object
-#             r = refueling.save(commit=False)[0]
-#             r.owner = self.request.user
-#             r.save()
-
-#         return super().form_valid(form)
-
-#     def get_success_url(self):
-#         return reverse("refuelings")
-
-
 class RefuelingCreate(mixins.LoginRequiredMixin, MultiModelFormView):
     form_classes = (AddOdomSnapshotForm, RefuelingForm)
     template_name = "autodo/odomsnapshot_edit.html"
     initial = {"date": timezone.now()}
     success_url = reverse_lazy("refuelings")
+
+    def get_forms(self):
+        # override the form class instantiation to specify the car queryset
+        form = AddOdomSnapshotForm()
+        form.fields["car"].queryset = Car.objects.filter(owner=self.request.user)
+        return {
+            "addodomsnapshotform": form,
+            "refuelingform": RefuelingForm(),
+        }
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
@@ -186,6 +160,7 @@ class RefuelingCreate(mixins.LoginRequiredMixin, MultiModelFormView):
         s.owner = self.request.user
         s.save()
 
+        r = refueling_form.save(commit=False)
         r.owner = self.request.user
         r.odomSnapshot = s
         r.save()
@@ -197,6 +172,15 @@ class RefuelingUpdate(mixins.LoginRequiredMixin, MultiModelFormView):
     form_classes = (AddOdomSnapshotForm, RefuelingForm)
     template_name = "autodo/odomsnapshot_edit.html"
     success_url = reverse_lazy("refuelings")
+
+    def get_forms(self):
+        # override the form class instantiation to specify the car queryset
+        form = AddOdomSnapshotForm(**self.get_form_kwargs(AddOdomSnapshotForm))
+        form.fields["car"].queryset = Car.objects.filter(owner=self.request.user)
+        return {
+            "addodomsnapshotform": form,
+            "refuelingform": RefuelingForm(**self.get_form_kwargs(RefuelingForm)),
+        }
 
     def get_instances(self):
         r = Refueling.objects.get(pk=self.kwargs["pk"])
@@ -242,6 +226,11 @@ class TodoCreate(mixins.LoginRequiredMixin, generic.CreateView):
     form_class = AddTodoForm
     success_url = reverse_lazy("todos")
 
+    def get_form(self):
+        form = AddTodoForm()
+        form.fields["car"].queryset = Car.objects.filter(owner=self.request.user)
+        return form
+
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
         snaps = OdomSnapshot.objects.filter(owner=self.request.user)
@@ -262,6 +251,11 @@ class TodoUpdate(mixins.LoginRequiredMixin, generic.UpdateView):
     model = Todo
     form_class = AddTodoForm
     success_url = reverse_lazy("todos")
+
+    def get_form(self):
+        form = AddTodoForm(**self.get_form_kwargs())
+        form.fields["car"].queryset = Car.objects.filter(owner=self.request.user)
+        return form
 
 
 class TodoDelete(mixins.LoginRequiredMixin, generic.DeleteView):

@@ -31,7 +31,6 @@ class Command(BaseCommand):
                 context["past_due"] = past_due
             if len(due_soon) > 0:
                 context["due_soon"] = due_soon
-            # self.stdout.write(str(context["past_due"][0].id))
             html_message = render_to_string("autodo/todo_reminder_email.html", context)
             plain_message = strip_tags(html_message)
             from_email = "noreply@autodo.app"
