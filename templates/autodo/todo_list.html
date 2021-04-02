@@ -23,7 +23,11 @@
       <div class="mx-2">
         Due at: <span class="font-bold">{{ todo.dueMileage }}</span> mi
         (<span class="{% if todo.delta_due_mileage <= 0 %}text-red-700{% endif %}">
+          {% if todo.delta_due_mileage > -1 %}
           <span class="font-bold">{{ todo.delta_due_mileage }}</span> mi from now
+          {% else %}
+          <span class="font-bold">{% widthratio todo.delta_due_mileage 1 -1 %} mi ago</span>
+          {% endif %}
         </span>)
       </div>
       <div style="background-color: {{ todo.car.color }};"
