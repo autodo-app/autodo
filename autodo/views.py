@@ -126,17 +126,17 @@ class RefuelingDetailView(mixins.LoginRequiredMixin, generic.DetailView):
 
 class RefuelingCreate(mixins.LoginRequiredMixin, MultiModelFormView):
     form_classes = (AddOdomSnapshotForm, RefuelingForm)
-    template_name = "autodo/odomsnapshot_edit.html"
-    initial = {"date": timezone.now()}
+    template_name = "autodo/odomsnapshot_form.html"
+    initial = {"addodomsnapshotform": {"date": timezone.now()}}
     success_url = reverse_lazy("refuelings")
 
     def get_forms(self):
         # override the form class instantiation to specify the car queryset
-        form = AddOdomSnapshotForm()
+        form = AddOdomSnapshotForm(**self.get_form_kwargs(AddOdomSnapshotForm))
         form.fields["car"].queryset = Car.objects.filter(owner=self.request.user)
         return {
             "addodomsnapshotform": form,
-            "refuelingform": RefuelingForm(),
+            "refuelingform": RefuelingForm(**self.get_form_kwargs(RefuelingForm)),
         }
 
     def get_context_data(self, **kwargs):
@@ -170,7 +170,7 @@ class RefuelingCreate(mixins.LoginRequiredMixin, MultiModelFormView):
 
 class RefuelingUpdate(mixins.LoginRequiredMixin, MultiModelFormView):
     form_classes = (AddOdomSnapshotForm, RefuelingForm)
-    template_name = "autodo/odomsnapshot_edit.html"
+    template_name = "autodo/odomsnapshot_form.html"
     success_url = reverse_lazy("refuelings")
 
     def get_forms(self):
