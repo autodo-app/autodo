@@ -27,15 +27,13 @@
               class="text-blue-600 hover:text-blue-400 text-lg font-semibold mx-2">
               {{ todo.name }}
             </a>
-            {% if todo.complete %}
-            <div class="mx-2">
+            <div id="comp_mil_{{ todo.id }}" class="mx-2 {% if not todo.complete %}hidden{% endif %}">
               <label for="comp_id_{{ todo.id }}">Completed at: </label>
               <input type="number" id="comp_id_{{ todo.id }}" name="{{ todo.id }}" data-id="{{ todo.id }}"
                 class="bg-gray-50 py-1 px-4 border border-gray-400 rounded focus:outline-none focus:border-blue-500 todo-complete-mileage"
                 {% if todo.completionOdomSnapshot%} value="{{ todo.completionOdomSnapshot.mileage }}" {% endif %} />
             </div>
-            {% else %}
-            <div class="mx-2">
+            <div id="due_mil_{{ todo.id }}" class="mx-2 {% if todo.complete %}hidden{% endif %}">
               Due at: <span class="font-bold">{{ todo.dueMileage }}</span> mi
               (<span class="{% if todo.delta_due_mileage <= 0 %}text-red-700{% endif %}">
                 {% if todo.delta_due_mileage > -1 %}
@@ -45,7 +43,6 @@
                 {% endif %}
               </span>)
             </div>
-            {% endif %}
             <div style="background-color: {{ todo.car.color }};"
               class="my-1 mx-2 rounded-lg w-min px-2 {% if todo.car.light_color %}text-black{% else %}text-white{% endif %}">
               {{ todo.car.name }}
@@ -122,15 +119,17 @@
         console.log('Response received', response.statusText, response.data);
         checkbox.disabled = false;
 
-        // enable/disable the textbox
-
-        // var listItem = checkbox.closest('li.list-group-item');
-
-        // if (listItem && checked) {
-        //   listItem.classList.add('completed')
-        // } else if (listItem) {
-        //   listItem.classList.remove('completed')
-        // }
+        // enable/disable the textbox for setting the mileage
+        var input = document.getElementById(`comp_mil_${todoId}`);
+        var dueMileage = document.getElementById(`due_mil_${todoId}`);
+        console.log(dueMileage);
+        if (checked) {
+          input.classList.remove('hidden');
+          dueMileage.classList.add('hidden');
+        } else {
+          input.classList.add('hidden');
+          dueMileage.classList.remove('hidden');
+        }
       })
       .catch(function () {
         checkbox.disabled = false;

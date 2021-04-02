@@ -167,6 +167,9 @@ RefuelingCreateFormset = inlineformset_factory(
 
 
 class AddTodoForm(forms.ModelForm):
+    # TODO: allow the user to change all of the completion details here
+    # if applicable
+
     # def clean_year(self):
     #   return self.cleaned_data['year']
 
