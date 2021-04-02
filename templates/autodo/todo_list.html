@@ -9,59 +9,67 @@
         Create Todo
       </a>
     </div>
-</div>
-{% endif %}
+  </div>
+  {% endif %}
 
-<form method="post" action="" class="todo-form">
-  <input type="text" id="test">
-  {% csrf_token %}
-  {% for todo in object_list %}
-  <div class="bg-gray-50 rounded-lg shadow-sm hover:shadow-lg duration-100 px-2 py-4 my-4">
-    <div class="flex flex-wrap justify-between">
-      <div class="flex flex-row">
-        <div class="my-auto">
-          <input type="checkbox" {% if todo.complete %}checked{% endif %} data-id="{{ todo.id }}"
-            class="todo-complete-check w-6 h-6 mx-4 rounded border-2 border-gray-700 focus:ring-transparent" />
-        </div>
-        <div class="flex flex-col">
-          <a href="{% url 'todos/detail' todo.id %}"
-            class="text-blue-600 hover:text-blue-400 text-lg font-semibold mx-2">
-            {{ todo.name }}
-          </a>
-          <div class="mx-2">
-            Due at: <span class="font-bold">{{ todo.dueMileage }}</span> mi
-            (<span class="{% if todo.delta_due_mileage <= 0 %}text-red-700{% endif %}">
-              {% if todo.delta_due_mileage > -1 %}
-              <span class="font-bold">{{ todo.delta_due_mileage }}</span> mi from now
-              {% else %}
-              <span class="font-bold">{% widthratio todo.delta_due_mileage 1 -1 %} mi ago</span>
-              {% endif %}
-            </span>)
+  <form method="post" action="" class="todo-form">
+    {% csrf_token %}
+    {% for todo in object_list %}
+    <div class="bg-gray-50 rounded-lg shadow-sm hover:shadow-lg duration-100 px-2 py-4 my-4">
+      <div class="flex flex-wrap justify-between">
+        <div class="flex flex-row">
+          <div class="my-auto">
+            <input type="checkbox" {% if todo.complete %}checked{% endif %} data-id="{{ todo.id }}"
+              class="todo-complete-check w-6 h-6 mx-4 rounded border-2 border-gray-700 focus:ring-transparent" />
           </div>
-          <div style="background-color: {{ todo.car.color }};"
-            class="my-1 mx-2 rounded-lg w-min px-2 {% if todo.car.light_color %}text-black{% else %}text-white{% endif %}">
-            {{ todo.car.name }}
+          <div class="flex flex-col">
+            <a href="{% url 'todos/detail' todo.id %}"
+              class="text-blue-600 hover:text-blue-400 text-lg font-semibold mx-2">
+              {{ todo.name }}
+            </a>
+            {% if todo.complete %}
+            <div class="mx-2">
+              <label for="comp_id_{{ todo.id }}">Completed at: </label>
+              <input type="number" id="comp_id_{{ todo.id }}" name="{{ todo.id }}" data-id="{{ todo.id }}"
+                class="bg-gray-50 py-1 px-4 border border-gray-400 rounded focus:outline-none focus:border-blue-500 todo-complete-mileage"
+                {% if todo.completionOdomSnapshot%} value="{{ todo.completionOdomSnapshot.mileage }}" {% endif %} />
+            </div>
+            {% else %}
+            <div class="mx-2">
+              Due at: <span class="font-bold">{{ todo.dueMileage }}</span> mi
+              (<span class="{% if todo.delta_due_mileage <= 0 %}text-red-700{% endif %}">
+                {% if todo.delta_due_mileage > -1 %}
+                <span class="font-bold">{{ todo.delta_due_mileage }}</span> mi from now
+                {% else %}
+                <span class="font-bold">{% widthratio todo.delta_due_mileage 1 -1 %} mi ago</span>
+                {% endif %}
+              </span>)
+            </div>
+            {% endif %}
+            <div style="background-color: {{ todo.car.color }};"
+              class="my-1 mx-2 rounded-lg w-min px-2 {% if todo.car.light_color %}text-black{% else %}text-white{% endif %}">
+              {{ todo.car.name }}
+            </div>
           </div>
         </div>
-      </div>
-      <div class="flex flex-col content-end">
-        <div class="m-2 flex-grow-0">
-          <a href="{% url 'todos/update' todo.id %}"
-            class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 rounded shadow-md">Edit
-          </a>
-        </div>
-        <div class="m-2">
-          <a href="{% url 'todos/delete' todo.id %}"
-            class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 rounded shadow-md">
-            Delete
-          </a>
+        <div class="flex flex-col content-end">
+          <div class="m-2 flex-grow-0">
+            <a href="{% url 'todos/update' todo.id %}"
+              class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 rounded shadow-md">Edit
+            </a>
+          </div>
+          <div class="m-2">
+            <a href="{% url 'todos/delete' todo.id %}"
+              class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 rounded shadow-md">
+              Delete
+            </a>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  {% endfor %}
-</form>
-<div class="h-36 w-full" />
+    {% endfor %}
+  </form>
+  <div class="h-36 w-full" />
 </div>
 <button
   class="fixed right-0 bottom-0 m-12 p-0 w-16 h-16 bg-autodo rounded-full hover:bg-autodo-dark shadow-xl mouse transition ease-in duration-200 focus:outline-none z-10"
@@ -91,6 +99,14 @@
         checkboxes[i].addEventListener('change', handleTodoCheckChange);
       }
     }
+
+    var textBoxes = document.querySelectorAll('.todo-complete-mileage');
+    console.log(textBoxes);
+    if (textBoxes) {
+      for (var i = 0; i < textBoxes.length; i++) {
+        textBoxes[i].addEventListener('focusout', handleTodoMileageChange);
+      }
+    }
   }
 
   function handleTodoCheckChange(e) {
@@ -106,6 +122,8 @@
         console.log('Response received', response.statusText, response.data);
         checkbox.disabled = false;
 
+        // enable/disable the textbox
+
         // var listItem = checkbox.closest('li.list-group-item');
 
         // if (listItem && checked) {
@@ -117,6 +135,22 @@
       .catch(function () {
         checkbox.disabled = false;
       });
+    e.preventDefault();
+  }
+
+  function handleTodoMileageChange(e) {
+    var textbox = e.target;
+    var todoId = textbox.getAttribute('data-id');
+    var mileage = textbox.value;
+    var body = { "mileage": mileage };
+
+    axios.patch(`/api/todos/${todoId}/`, body)
+      .then(function (response) {
+        console.log('Response received', response.statusText, response.data);
+      })
+      .catch(function () {
+      });
+
     e.preventDefault();
   }
 </script>

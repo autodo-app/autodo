@@ -205,13 +205,6 @@ class OdomSnapshotDelete(mixins.LoginRequiredMixin, generic.DeleteView):
 class TodoListView(mixins.LoginRequiredMixin, generic.ListView):
     model = Todo
 
-    def post(self, request, *args, **kwargs):
-        from pprint import pprint
-
-        pprint(vars(request.POST))
-        sys.stdout.flush()
-        return self.get(request, *args, **kwargs)
-
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
         # sort the todo list items here so we still return a proper queryset below
@@ -233,15 +226,38 @@ def todoComplete(request, pk):
     # Get the params from the payload.
     data = json.loads(request.body.decode("utf-8"))
 
-    print("Received update API request for todo id: ", pk)
-    print("Completed: ", data["completed"])
+    todo = Todo.objects.get(pk=pk)
 
     # Update the model
-    todo = Todo.objects.get(pk=pk)
-    todo.complete = data["completed"]
+    if "completed" in data:
+        todo.complete = data["completed"]
+        if todo.complete and todo.completionOdomSnapshot is None:
+            # create the snapshot for this todo
+            snap = OdomSnapshot()
+            snap.owner = request.user
+            snap.car = todo.car
+            snap.date = timezone.now()
+            snap.mileage = (
+                OdomSnapshot.objects.filter(car=todo.car)
+                .order_by("-mileage")[0]
+                .mileage
+            )
+            snap.save()
+
+            todo.completionOdomSnapshot = snap
+        elif not todo.complete and todo.completionOdomSnapshot is not None:
+            # delete the snapshot
+            todo.completionOdomSnapshot.delete()
+            todo.completionOdomSnapshot = None
+    elif "mileage" in data:
+        if todo.completionOdomSnapshot is None:
+            print("this should not happen")
+        todo.completionOdomSnapshot.mileage = float(data["mileage"])
+        todo.completionOdomSnapshot.save()
+
     todo.save()
 
-    print("Todo item updated")
+    # debugging
     sys.stdout.flush()
 
     return JsonResponse({})
