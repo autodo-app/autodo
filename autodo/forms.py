@@ -173,10 +173,29 @@ class AddTodoForm(forms.ModelForm):
     class Meta:
         model = Todo
         # exclude = ["owner"]
-        fields = ["car", "name", "dueMileage", "dueDate", "notes"]
+        fields = ["car", "name", "complete", "dueMileage", "dueDate", "notes"]
         widgets = {
             "car": forms.Select(attrs={"class": default_form_class, "required": True}),
             "name": forms.TextInput(attrs={"class": default_form_class}),
+            "complete": forms.CheckboxInput(
+                attrs={
+                    "class": " ".join(
+                        [
+                            "bg-gray-50",
+                            "my-auto",
+                            "mx-0",
+                            "ml-auto",
+                            "p-3",
+                            "right-0",
+                            "border",
+                            "border-gray-400",
+                            "rounded",
+                            "focus:ring-transparent",
+                            "focus:border-blue-500",
+                        ]
+                    )
+                }
+            ),
             "dueMileage": forms.NumberInput(attrs={"class": default_form_class}),
             "dueDate": forms.DateInput(
                 attrs={"class": default_form_class, "type": "date"}

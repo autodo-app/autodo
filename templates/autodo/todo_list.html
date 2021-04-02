@@ -12,15 +12,16 @@
 </div>
 {% endif %}
 
-<form action="" method="post">
+<form method="post" action="" class="todo-form">
+  <input type="text" id="test">
   {% csrf_token %}
   {% for todo in object_list %}
   <div class="bg-gray-50 rounded-lg shadow-sm hover:shadow-lg duration-100 px-2 py-4 my-4">
     <div class="flex flex-wrap justify-between">
       <div class="flex flex-row">
         <div class="my-auto">
-          <input id="c{{ todo.id }}" type="checkbox" onclick="this.form.submit();"
-            class="w-6 h-6 mx-4 rounded border-2 border-gray-700 focus:ring-transparent" />
+          <input type="checkbox" {% if todo.complete %}checked{% endif %} data-id="{{ todo.id }}"
+            class="todo-complete-check w-6 h-6 mx-4 rounded border-2 border-gray-700 focus:ring-transparent" />
         </div>
         <div class="flex flex-col">
           <a href="{% url 'todos/detail' todo.id %}"
@@ -71,4 +72,52 @@
                                       C15.952,9,16,9.447,16,10z" />
   </svg>
 </button>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script type="text/javascript">
+  if (window.addEventListener) { // Mozilla, Netscape, Firefox
+    window.addEventListener('load', handleLoad, false);
+  } else if (window.attachEvent) { // IE
+    window.attachEvent('onload', handleLoad);
+  }
+
+  function handleLoad(e) {
+    // var form = document.querySelector('.todo-form');
+    // var messages = document.querySelector('.messages');
+    var checkboxes = document.querySelectorAll('.todo-complete-check');
+
+    if (checkboxes) {
+      // Register check event handler for each checkbox
+      for (var i = 0; i < checkboxes.length; i++) {
+        checkboxes[i].addEventListener('change', handleTodoCheckChange);
+      }
+    }
+  }
+
+  function handleTodoCheckChange(e) {
+    var checkbox = e.target;
+    var checked = checkbox.checked;
+    var todoId = checkbox.getAttribute('data-id');
+    var body = { 'completed': checked };
+
+    console.log('todo: ', todoId, checked);
+
+    axios.patch(`/api/todos/${todoId}/`, body)
+      .then(function (response) {
+        console.log('Response received', response.statusText, response.data);
+        checkbox.disabled = false;
+
+        // var listItem = checkbox.closest('li.list-group-item');
+
+        // if (listItem && checked) {
+        //   listItem.classList.add('completed')
+        // } else if (listItem) {
+        //   listItem.classList.remove('completed')
+        // }
+      })
+      .catch(function () {
+        checkbox.disabled = false;
+      });
+    e.preventDefault();
+  }
+</script>
 {% endblock %}

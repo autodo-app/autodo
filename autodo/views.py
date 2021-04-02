@@ -9,6 +9,9 @@ from django.contrib.auth import mixins, authenticate, login
 from django.utils import timezone
 from django.contrib import messages
 from django.core.serializers import serialize
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
 
 import requests
 from extra_views import (
@@ -203,7 +206,9 @@ class TodoListView(mixins.LoginRequiredMixin, generic.ListView):
     model = Todo
 
     def post(self, request, *args, **kwargs):
-        print("here")
+        from pprint import pprint
+
+        pprint(vars(request.POST))
         sys.stdout.flush()
         return self.get(request, *args, **kwargs)
 
@@ -220,6 +225,26 @@ class TodoListView(mixins.LoginRequiredMixin, generic.ListView):
         for t in todos:
             add_mileage_to_due(t, t.car, snaps)
         return todos
+
+
+@csrf_exempt
+@require_http_methods(["PATCH"])
+def todoComplete(request, pk):
+    # Get the params from the payload.
+    data = json.loads(request.body.decode("utf-8"))
+
+    print("Received update API request for todo id: ", pk)
+    print("Completed: ", data["completed"])
+
+    # Update the model
+    todo = Todo.objects.get(pk=pk)
+    todo.complete = data["completed"]
+    todo.save()
+
+    print("Todo item updated")
+    sys.stdout.flush()
+
+    return JsonResponse({})
 
 
 class TodoDetailView(mixins.LoginRequiredMixin, generic.DetailView):
