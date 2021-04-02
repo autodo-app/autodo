@@ -202,6 +202,11 @@ class OdomSnapshotDelete(mixins.LoginRequiredMixin, generic.DeleteView):
 class TodoListView(mixins.LoginRequiredMixin, generic.ListView):
     model = Todo
 
+    def post(self, request, *args, **kwargs):
+        print("here")
+        sys.stdout.flush()
+        return self.get(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
         # sort the todo list items here so we still return a proper queryset below
