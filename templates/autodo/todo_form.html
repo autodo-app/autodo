@@ -1,5 +1,5 @@
 {% extends "base_generic.html" %} {% block content %}
-<div class="container p-8 mx-auto max-w-lg">
+<div class="container max-w-full mx-auto p-4 md:p-8 md:max-w-lg">
   {% if form.instance.id %}
   <div class="text-2xl">Edit: <b>{{ todo.name }}</b></div>
   {% else %}
@@ -9,16 +9,18 @@
   <form action="" method="post">
     {% csrf_token %}
 
+    {% for form in forms %}
     {% for field in form %}
     <div class="flex content-start">
-      <div class="flex w-9/12 space-x-2">
+      <div class="flex w-8/12 space-x-2">
         {{ field }}
       </div>
-      <label class="m-4 text-sm text-gray-700 w-3/12" for="{{ field.auto_id }}">
+      <label class="m-4 text-sm text-gray-700 w-4/12" for="{{ field.auto_id }}">
         {{ field.label }}{% if field.field.required %}*{% endif %}
       </label>
       <br>
     </div>
+    {% endfor %}
     {% endfor %}
 
     <button type="submit" class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 rounded shadow-md">
