@@ -65,6 +65,23 @@ class AddOdomSnapshotForm(forms.ModelForm):
         }
 
 
+class CompletionOdomSnapshotForm(forms.ModelForm):
+    """Use this to modify a Todo's completion info"""
+
+    class Meta:
+        model = OdomSnapshot
+        exclude = ["owner", "car"]
+        labels = {"mileage": "Completion Mileage", "date": "Completion Date"}
+        widgets = {
+            "date": forms.DateInput(
+                attrs={"class": default_form_class, "type": "date"}
+            ),
+            "mileage": forms.NumberInput(
+                attrs={"class": default_form_class, "inputmode": "decimal"}
+            ),
+        }
+
+
 class OdomMileageOnlyFormset(InlineFormSetFactory):
     model = OdomSnapshot
     fields = ["mileage"]
@@ -167,16 +184,44 @@ RefuelingCreateFormset = inlineformset_factory(
 
 
 class AddTodoForm(forms.ModelForm):
+    # TODO: allow the user to change all of the completion details here
+    # if applicable
+
     # def clean_year(self):
     #   return self.cleaned_data['year']
 
     class Meta:
         model = Todo
-        # exclude = ["owner"]
-        fields = ["car", "name", "dueMileage", "dueDate", "notes"]
+        fields = [
+            "car",
+            "name",
+            "dueMileage",
+            "dueDate",
+            "notes",
+            "complete",
+        ]
         widgets = {
             "car": forms.Select(attrs={"class": default_form_class, "required": True}),
             "name": forms.TextInput(attrs={"class": default_form_class}),
+            "complete": forms.CheckboxInput(
+                attrs={
+                    "class": " ".join(
+                        [
+                            "bg-gray-50",
+                            "my-auto",
+                            "mx-0",
+                            "ml-auto",
+                            "p-3",
+                            "right-0",
+                            "border",
+                            "border-gray-400",
+                            "rounded",
+                            "focus:ring-transparent",
+                            "focus:border-blue-500",
+                        ]
+                    )
+                }
+            ),
             "dueMileage": forms.NumberInput(attrs={"class": default_form_class}),
             "dueDate": forms.DateInput(
                 attrs={"class": default_form_class, "type": "date"}

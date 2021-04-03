@@ -42,6 +42,7 @@ class Todo(models.Model):
     )
 
     name = models.CharField(max_length=32, null=False)
+    complete = models.BooleanField(default=False)
     dueMileage = models.FloatField(default=None, blank=True, null=True)
     dueDate = models.DateTimeField(default=None, blank=True, null=True)
     notes = models.TextField(default=None, blank=True, null=True)
@@ -53,7 +54,7 @@ class Todo(models.Model):
     yearsRepeatInterval = models.IntegerField(default=None, blank=True, null=True)
 
     def __str__(self):
-        return f"Todo named: {self.name} due at {self.dueMileage} miles"
+        return f"Todo {self.id} named: {self.name} due at {self.dueMileage} miles"
 
     class Meta:
         ordering = ["dueDate", "dueMileage"]

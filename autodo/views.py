@@ -9,6 +9,9 @@ from django.contrib.auth import mixins, authenticate, login
 from django.utils import timezone
 from django.contrib import messages
 from django.core.serializers import serialize
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
 
 import requests
 from extra_views import (
@@ -28,6 +31,7 @@ from autodo.forms import (
     RegisterForm,
     AddTodoForm,
     RefuelingForm,
+    CompletionOdomSnapshotForm,
 )
 from autodo.utils import (
     find_odom,
@@ -185,7 +189,6 @@ class RefuelingUpdate(mixins.LoginRequiredMixin, MultiModelFormView):
     def get_instances(self):
         r = Refueling.objects.get(pk=self.kwargs["pk"])
         snap = OdomSnapshot.objects.get(pk=r.odomSnapshot.id)
-        sys.stdout.flush()
 
         instances = {
             "addodomsnapshotform": snap,
@@ -207,6 +210,9 @@ class TodoListView(mixins.LoginRequiredMixin, generic.ListView):
         # sort the todo list items here so we still return a proper queryset below
         todo_list = list(data["object_list"])
         data["object_list"] = sorted(todo_list, key=lambda t: t.delta_due_mileage)
+        snaps = OdomSnapshot.objects.filter(owner=self.request.user)
+        for t in data["object_list"]:
+            t.car.mileage = find_odom(t.car, snaps)
         return data
 
     def get_queryset(self):
@@ -215,6 +221,52 @@ class TodoListView(mixins.LoginRequiredMixin, generic.ListView):
         for t in todos:
             add_mileage_to_due(t, t.car, snaps)
         return todos
+
+
+@csrf_exempt
+@require_http_methods(["PATCH"])
+def todoComplete(request, pk):
+    # Get the params from the payload.
+    data = json.loads(request.body.decode("utf-8"))
+
+    todo = Todo.objects.get(pk=pk)
+
+    # Update the model
+    if "completed" in data:
+        todo.complete = data["completed"]
+        if todo.complete and todo.completionOdomSnapshot is None:
+            # create the snapshot for this todo
+            snap = OdomSnapshot()
+            snap.owner = request.user
+            snap.car = todo.car
+            snap.date = timezone.now()
+            snap.mileage = (
+                OdomSnapshot.objects.filter(car=todo.car)
+                .order_by("-mileage")[0]
+                .mileage
+            )
+            snap.save()
+
+            todo.completionOdomSnapshot = snap
+        elif not todo.complete and todo.completionOdomSnapshot is not None:
+            # delete the snapshot
+            todo.completionOdomSnapshot.delete()
+            todo.completionOdomSnapshot = None
+    elif "mileage" in data:
+        if todo.completionOdomSnapshot is None:
+            print("this should not happen")
+        try:
+            todo.completionOdomSnapshot.mileage = float(data["mileage"])
+        except e:
+            pass
+        todo.completionOdomSnapshot.save()
+
+    todo.save()
+
+    # debugging
+    sys.stdout.flush()
+
+    return JsonResponse({})
 
 
 class TodoDetailView(mixins.LoginRequiredMixin, generic.DetailView):
@@ -247,15 +299,48 @@ class TodoCreate(mixins.LoginRequiredMixin, generic.CreateView):
         return kwargs
 
 
-class TodoUpdate(mixins.LoginRequiredMixin, generic.UpdateView):
-    model = Todo
-    form_class = AddTodoForm
-    success_url = reverse_lazy("todos")
+class TodoUpdate(mixins.LoginRequiredMixin, MultiModelFormView):
+    form_classes = (
+        AddTodoForm,
+        CompletionOdomSnapshotForm,
+    )
+    template_name = "autodo/todo_form.html"
+    success_url = reverse_lazy("refuelings")
 
-    def get_form(self):
-        form = AddTodoForm(**self.get_form_kwargs())
-        form.fields["car"].queryset = Car.objects.filter(owner=self.request.user)
-        return form
+    def get_forms(self):
+        snapForm = None
+        if self.get_instances()["addtodoform"].complete:
+            snapForm = CompletionOdomSnapshotForm(
+                **self.get_form_kwargs(CompletionOdomSnapshotForm)
+            )
+        todoForm = AddTodoForm(**self.get_form_kwargs(AddTodoForm))
+        todoForm.fields["car"].queryset = Car.objects.filter(owner=self.request.user)
+        return {
+            "addtodoform": todoForm,
+            "completionodomsnapshotform": snapForm,
+        }
+
+    def get_instances(self):
+        t = Todo.objects.get(pk=self.kwargs["pk"])
+        snap = None
+        if t.completionOdomSnapshot:
+            snap = OdomSnapshot.objects.get(pk=t.completionOdomSnapshot.id)
+
+        return {
+            "addtodoform": t,
+            "completionodomsnapshotform": snap,
+        }
+
+
+# class TodoUpdate(mixins.LoginRequiredMixin, generic.UpdateView):
+#     model = Todo
+#     form_class = AddTodoForm
+#     success_url = reverse_lazy("todos")
+
+#     def get_form(self):
+#         form = AddTodoForm(**self.get_form_kwargs())
+#         form.fields["car"].queryset = Car.objects.filter(owner=self.request.user)
+#         return form
 
 
 class TodoDelete(mixins.LoginRequiredMixin, generic.DeleteView):

@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.contrib.auth import views as auth_views
 
 from autodo.views import (
@@ -19,6 +19,7 @@ from autodo.views import (
     TodoDelete,
     landing_page,
     register,
+    todoComplete,
 )
 
 urlpatterns = [
@@ -59,6 +60,7 @@ urlpatterns = [
     path("todos/<int:pk>/", TodoDetailView.as_view(), name="todos/detail"),
     path("todos/<int:pk>/update/", TodoUpdate.as_view(), name="todos/update"),
     path("todos/<int:pk>/delete/", TodoDelete.as_view(), name="todos/delete"),
+    path("api/todos/<int:pk>/", todoComplete, name="api_update_todo"),
     path("stats/", landing_page, name="stats"),
     path("home/", landing_page, name="home"),
 ]
