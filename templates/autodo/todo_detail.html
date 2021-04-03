@@ -4,7 +4,8 @@
 <div class="container p-8 mx-auto max-w-lg">
   <div class="text-2xl">Todo: <b>{{ todo.name }}</b></div>
   <div class="py-2">
-    <div class="py-1">Car: <b>{{ todo.car.name }}</b></div>
+    <div class="py-1">Car: <a href="{% url 'cars/detail' todo.car.id %}"
+        class="text-blue-600 font-bold hover:text-blue-400">{{ todo.car.name }}</a></div>
     <div class="py-1">Due Mileage: <b>{{ todo.dueMileage }}</b></div>
     <div class="py-1">Due Date: <b>{{ todo.dueDate }}</b></div>
   </div>
