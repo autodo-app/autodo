@@ -1,6 +1,40 @@
 {% extends "base_generic.html" %} {% block content %}
+<style>
+  .radio-toolbar {
+    margin: 10px;
+  }
+
+  .radio-toolbar input[type="radio"] {
+    opacity: 0;
+    position: fixed;
+    width: 0;
+  }
+
+  .radio-toolbar label {
+    display: inline-block;
+    background-color: #ddd;
+    padding: 10px 20px;
+    font-family: sans-serif, Arial;
+    font-size: 16px;
+    border: 2px solid #444;
+    border-radius: 4px;
+  }
+
+  .radio-toolbar label:hover {
+    background-color: #dfd;
+  }
+
+  .radio-toolbar input[type="radio"]:focus+label {
+    border: 2px dashed #444;
+  }
+
+  .radio-toolbar input[type="radio"]:checked+label {
+    background-color: #bfb;
+    border-color: #4c4;
+  }
+</style>
 <div class="container max-w-full mx-auto p-4 md:p-8 md:max-w-lg">
-  {% if form.instance.id %}
+  {% if forms %}
   <div class="text-2xl">Edit: <b>{{ todo.name }}</b></div>
   {% else %}
   <div class="text-2xl">Create a Todo</div>
@@ -23,8 +57,30 @@
     {% endfor %}
     {% endfor %}
 
+    <!-- Used by the Create view -->
+    {% for field in form %}
+    {% if field.html_name == "repeat_day" %}
+    <div class="radio-toolbar">
+      {% for radio in field %}
+      <input type="radio" id="{{ radio.id_for_label }}" name="{{ field.html_name }}" value="{{ radio.data.value }}">
+      <label for="{{ radio.id_for_label }}">{{ radio.choice_label }}</label>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="flex content-start">
+      <div class="flex w-9/12 space-x-2">
+        {{ field }}
+      </div>
+      <label class="m-4 text-sm text-gray-700 w-3/12" for="{{ field.auto_id }}">
+        {{ field.label }}{% if field.field.required %}*{% endif %}
+      </label>
+      <br>
+    </div>
+    {% endif %}
+    {% endfor %}
+
     <button type="submit" class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 rounded shadow-md">
-      {% if form.instance.id %}Edit{% else %}Create{% endif %}
+      {% if forms %}Edit{% else %}Create{% endif %}
     </button>
   </form>
 </div>

@@ -332,17 +332,6 @@ class TodoUpdate(mixins.LoginRequiredMixin, MultiModelFormView):
         }
 
 
-# class TodoUpdate(mixins.LoginRequiredMixin, generic.UpdateView):
-#     model = Todo
-#     form_class = AddTodoForm
-#     success_url = reverse_lazy("todos")
-
-#     def get_form(self):
-#         form = AddTodoForm(**self.get_form_kwargs())
-#         form.fields["car"].queryset = Car.objects.filter(owner=self.request.user)
-#         return form
-
-
 class TodoDelete(mixins.LoginRequiredMixin, generic.DeleteView):
     model = Todo
     success_url = reverse_lazy("todos")
