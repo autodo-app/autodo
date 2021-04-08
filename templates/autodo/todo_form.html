@@ -1,36 +1,20 @@
 {% extends "base_generic.html" %} {% block content %}
 <style>
-  .radio-toolbar {
-    margin: 10px;
-  }
-
-  .radio-toolbar input[type="radio"] {
-    opacity: 0;
-    position: fixed;
-    width: 0;
-  }
-
+  /* complicated mess used to center label in its equal sized padding */
   .radio-toolbar label {
-    display: inline-block;
-    background-color: #ddd;
-    padding: 10px 20px;
-    font-family: sans-serif, Arial;
-    font-size: 16px;
-    border: 2px solid #444;
-    border-radius: 4px;
-  }
-
-  .radio-toolbar label:hover {
-    background-color: #dfd;
-  }
-
-  .radio-toolbar input[type="radio"]:focus+label {
-    border: 2px dashed #444;
+    width: 100%;
+    height: 0;
+    line-height: 0;
+    padding-left: 25%;
+    padding-right: 50%;
+    padding-top: 50%;
+    padding-bottom: 50%;
+    box-sizing: border-box;
   }
 
   .radio-toolbar input[type="radio"]:checked+label {
-    background-color: #bfb;
-    border-color: #4c4;
+    background-color: rgb(37, 99, 235);
+    color: #fff;
   }
 </style>
 <div class="container max-w-full mx-auto p-4 md:p-8 md:max-w-lg">
@@ -60,10 +44,14 @@
     <!-- Used by the Create view -->
     {% for field in form %}
     {% if field.html_name == "repeat_day" %}
-    <div class="radio-toolbar">
+    <div class="m-2 flex flex-row space-x-2 radio-toolbar">
       {% for radio in field %}
-      <input type="radio" id="{{ radio.id_for_label }}" name="{{ field.html_name }}" value="{{ radio.data.value }}">
-      <label for="{{ radio.id_for_label }}">{{ radio.choice_label }}</label>
+      <div class="h-12 w-12">
+        <input type="radio" id="{{ radio.id_for_label }}" name="{{ field.html_name }}" value="{{ radio.data.value }}"
+          class="opacity-0 fixed w-0">
+        <label for="{{ radio.id_for_label }}"
+          class="block border border-gray-400 rounded-full bg-gray-50 hover:bg-blue-400 hover:text-white">{{ radio.choice_label }}</label>
+      </div>
       {% endfor %}
     </div>
     {% else %}
