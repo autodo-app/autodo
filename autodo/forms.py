@@ -184,32 +184,28 @@ RefuelingCreateFormset = inlineformset_factory(
 
 
 class AddTodoForm(forms.ModelForm):
-    repeat_num = forms.IntegerField()
+    repeat_num = forms.IntegerField(
+        initial=0,
+        widget=forms.NumberInput(
+            attrs={"class": default_form_class, "inputmode": "decimal"}
+        ),
+    )
     repeat_choice = forms.ChoiceField(
         choices=[
             ("DAY", "Days"),
             ("WEEK", "Weeks"),
             ("MNTH", "Months"),
             ("YEAR", "Years"),
+            ("MILE", "Miles"),
         ],
-        initial="MNTH",
-    )
-    repeat_day = forms.ChoiceField(
-        choices=[
-            ("Su", "Su"),
-            ("Mo", "Mo"),
-            ("Tu", "Tu"),
-            ("We", "We"),
-            ("Th", "Th"),
-            ("Fr", "Fr"),
-            ("Sa", "Sa"),
-        ],
-        widget=forms.RadioSelect,
+        initial="MILE",
+        widget=forms.Select(attrs={"class": default_form_class}),
     )
     # set the default to repeat forever
 
     def save(self, commit=True):
         t = super().save(commit=False)
+        # TODO:
         t.daysRepeatInterval = self.cleaned_data["repeat_day"]
         t.save(commit=True)
 
@@ -221,7 +217,6 @@ class AddTodoForm(forms.ModelForm):
             "dueMileage",
             "dueDate",
             "notes",
-            "mileageRepeatInterval",
             "complete",
         ]
         widgets = {
@@ -249,9 +244,6 @@ class AddTodoForm(forms.ModelForm):
             "dueMileage": forms.NumberInput(attrs={"class": default_form_class}),
             "dueDate": forms.DateInput(
                 attrs={"class": default_form_class, "type": "date"}
-            ),
-            "mileageRepeatInterval": forms.NumberInput(
-                attrs={"class": default_form_class}
             ),
             "notes": forms.Textarea(attrs={"class": default_form_class + " h-24"}),
         }
