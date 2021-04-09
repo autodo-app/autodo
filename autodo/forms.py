@@ -205,8 +205,17 @@ class AddTodoForm(forms.ModelForm):
 
     def save(self, commit=True):
         t = super().save(commit=False)
-        # TODO:
-        t.daysRepeatInterval = self.cleaned_data["repeat_day"]
+        if self.cleaned_data["repeat_num"] != 0:
+            if self.cleaned_data["repeat_choice"] == "MILE":
+                t.mileageRepeatInterval = self.cleaned_data["repeat_num"]
+            elif self.cleaned_data["repeat_choice"] == "DAY":
+                t.daysRepeatInterval = self.cleaned_data["repeat_num"]
+            elif self.cleaned_data["repeat_choice"] == "WEEK":
+                t.daysRepeatInterval = self.cleaned_data["repeat_num"] * 7
+            elif self.cleaned_data["repeat_choice"] == "MNTH":
+                t.monthsRepeatInterval = self.cleaned_data["repeat_num"]
+            else:
+                t.yearsRepeatInterval = self.cleaned_data["repeat_num"]
         t.save(commit=True)
 
     class Meta:

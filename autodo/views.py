@@ -252,6 +252,7 @@ def todoComplete(request, pk):
             # delete the snapshot
             todo.completionOdomSnapshot.delete()
             todo.completionOdomSnapshot = None
+        # TODO: check if there is a repeat interval stored on the todo, create a new one if so
     elif "mileage" in data:
         if todo.completionOdomSnapshot is None:
             print("this should not happen")
