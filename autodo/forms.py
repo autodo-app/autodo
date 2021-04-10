@@ -184,11 +184,37 @@ RefuelingCreateFormset = inlineformset_factory(
 
 
 class AddTodoForm(forms.ModelForm):
-    # TODO: allow the user to change all of the completion details here
-    # if applicable
+    repeat_num = forms.IntegerField(
+        widget=forms.NumberInput(
+            attrs={"class": default_form_class, "inputmode": "decimal"}
+        ),
+    )
+    repeat_choice = forms.ChoiceField(
+        choices=[
+            ("DAY", "Days"),
+            ("WEEK", "Weeks"),
+            ("MNTH", "Months"),
+            ("YEAR", "Years"),
+            ("MILE", "Miles"),
+        ],
+        widget=forms.Select(attrs={"class": default_form_class}),
+    )
+    # set the default to repeat forever
 
-    # def clean_year(self):
-    #   return self.cleaned_data['year']
+    def save(self, commit=True):
+        t = super().save(commit=False)
+        if self.cleaned_data["repeat_num"] != 0:
+            if self.cleaned_data["repeat_choice"] == "MILE":
+                t.mileageRepeatInterval = self.cleaned_data["repeat_num"]
+            elif self.cleaned_data["repeat_choice"] == "DAY":
+                t.daysRepeatInterval = self.cleaned_data["repeat_num"]
+            elif self.cleaned_data["repeat_choice"] == "WEEK":
+                t.daysRepeatInterval = self.cleaned_data["repeat_num"] * 7
+            elif self.cleaned_data["repeat_choice"] == "MNTH":
+                t.monthsRepeatInterval = self.cleaned_data["repeat_num"]
+            else:
+                t.yearsRepeatInterval = self.cleaned_data["repeat_num"]
+        return super().save(commit)
 
     class Meta:
         model = Todo
@@ -200,6 +226,17 @@ class AddTodoForm(forms.ModelForm):
             "notes",
             "complete",
         ]
+        field_order = [
+            "car",
+            "name",
+            "dueMileage",
+            "dueDate",
+            "notes",
+            "repeatNum",
+            "repeatChoice",
+            "complete",
+        ]
+
         widgets = {
             "car": forms.Select(attrs={"class": default_form_class, "required": True}),
             "name": forms.TextInput(attrs={"class": default_form_class}),

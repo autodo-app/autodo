@@ -14,7 +14,8 @@ def find_odom(car, snaps):
 
 def add_mileage_to_due(todo, car, snaps):
     cur_mileage = find_odom(car, snaps)
-    todo.delta_due_mileage = todo.dueMileage - cur_mileage
+    if todo.dueMileage:
+        todo.delta_due_mileage = todo.dueMileage - cur_mileage
 
 
 def create_defaults(user, car, snaps):
@@ -152,16 +153,19 @@ car_color_palette = [
 
 
 def determine_email_type(t):
-    if t.delta_due_mileage <= 0:
-        return (
-            t,
-            "PAST_DUE",
-        )
-    elif t.delta_due_mileage <= 500:
-        return (
-            t,
-            "DUE_SOON",
-        )
+    if t.delta_due_mileage:
+        if t.delta_due_mileage <= 0:
+            return (
+                t,
+                "PAST_DUE",
+            )
+        elif t.delta_due_mileage <= 500:
+            return (
+                t,
+                "DUE_SOON",
+            )
+    else:
+        pass  # todo: use due date for emails
 
 
 def find_todos_needing_emails():
