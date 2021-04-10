@@ -185,7 +185,6 @@ RefuelingCreateFormset = inlineformset_factory(
 
 class AddTodoForm(forms.ModelForm):
     repeat_num = forms.IntegerField(
-        initial=0,
         widget=forms.NumberInput(
             attrs={"class": default_form_class, "inputmode": "decimal"}
         ),
@@ -198,7 +197,6 @@ class AddTodoForm(forms.ModelForm):
             ("YEAR", "Years"),
             ("MILE", "Miles"),
         ],
-        initial="MILE",
         widget=forms.Select(attrs={"class": default_form_class}),
     )
     # set the default to repeat forever
@@ -216,7 +214,7 @@ class AddTodoForm(forms.ModelForm):
                 t.monthsRepeatInterval = self.cleaned_data["repeat_num"]
             else:
                 t.yearsRepeatInterval = self.cleaned_data["repeat_num"]
-        t.save(commit=True)
+        return super().save(commit)
 
     class Meta:
         model = Todo

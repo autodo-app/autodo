@@ -248,11 +248,21 @@ def todoComplete(request, pk):
             snap.save()
 
             todo.completionOdomSnapshot = snap
+
+            if todo.mileageRepeatInterval:
+                newTodo = Todo(
+                    car=todo.car,
+                    owner=todo.owner,
+                    name=todo.name,
+                    dueMileage=(snap.mileage + todo.mileageRepeatInterval),
+                    notes=todo.notes,
+                    mileageRepeatInterval=todo.mileageRepeatInterval,
+                )
+                newTodo.save()
         elif not todo.complete and todo.completionOdomSnapshot is not None:
             # delete the snapshot
             todo.completionOdomSnapshot.delete()
             todo.completionOdomSnapshot = None
-        # TODO: check if there is a repeat interval stored on the todo, create a new one if so
     elif "mileage" in data:
         if todo.completionOdomSnapshot is None:
             print("this should not happen")
@@ -274,30 +284,94 @@ class TodoDetailView(mixins.LoginRequiredMixin, generic.DetailView):
     model = Todo
 
 
-class TodoCreate(mixins.LoginRequiredMixin, generic.CreateView):
-    model = Todo
-    form_class = AddTodoForm
-    success_url = reverse_lazy("todos")
+# class TodoCreate(mixins.LoginRequiredMixin, generic.CreateView):
+#     model = Todo
+#     form_class = AddTodoForm
+#     success_url = reverse_lazy("home")
 
-    def get_form(self):
-        form = AddTodoForm()
-        form.fields["car"].queryset = Car.objects.filter(owner=self.request.user)
-        return form
+#     def get_form(self):
+#         form = AddTodoForm()
+#         form.fields["car"].queryset = Car.objects.filter(owner=self.request.user)
+#         return form
 
-    def get_context_data(self, **kwargs):
-        data = super().get_context_data(**kwargs)
-        snaps = OdomSnapshot.objects.filter(owner=self.request.user)
-        cars = Car.objects.filter(owner=self.request.user)
-        data["cars"] = serialize("json", cars)
-        data["snaps"] = serialize("json", snaps)
-        return data
+#     def get_context_data(self, **kwargs):
+#         data = super().get_context_data(**kwargs)
+#         snaps = OdomSnapshot.objects.filter(owner=self.request.user)
+#         cars = Car.objects.filter(owner=self.request.user)
+#         data["cars"] = serialize("json", cars)
+#         data["snaps"] = serialize("json", snaps)
+#         return data
 
-    def get_form_kwargs(self):
-        kwargs = super(TodoCreate, self).get_form_kwargs()
-        if kwargs["instance"] is None:
-            kwargs["instance"] = Todo()
-        kwargs["instance"].owner = self.request.user
-        return kwargs
+#     def get_form_kwargs(self):
+#         kwargs = super(TodoCreate, self).get_form_kwargs()
+#         if kwargs["instance"] is None:
+#             kwargs["instance"] = Todo()
+#         kwargs["instance"].owner = self.request.user
+#         return kwargs
+
+#     def form_valid(self, form):
+#         print("here")
+#         sys.stdout.flush()
+#         t = form.save()
+#         t.owner = self.request.user
+#         return super().form_valid(form)
+
+
+class TodoCreate(mixins.LoginRequiredMixin, MultiModelFormView):
+    form_classes = (
+        AddTodoForm,
+        CompletionOdomSnapshotForm,
+    )
+    template_name = "autodo/todo_form.html"
+    success_url = reverse_lazy("home")
+    initial = {
+        "addtodoform": {
+            "repeat_num": 0,
+            "repeat_choice": "MNTH",
+        }
+    }
+
+    def get_forms(self):
+        snapForm = None
+        # TODO: dynamically show/hide snapshot based on checkbox
+
+        # if self.get_instances()["addtodoform"].complete:
+        #     snapForm = CompletionOdomSnapshotForm(
+        #         **self.get_form_kwargs(CompletionOdomSnapshotForm)
+        #     )
+        todoForm = AddTodoForm(**self.get_form_kwargs(AddTodoForm))
+        todoForm.fields["car"].queryset = Car.objects.filter(owner=self.request.user)
+        return {
+            "addtodoform": todoForm,
+            "completionodomsnapshotform": snapForm,
+        }
+
+    def validate_forms(self):
+        forms = self.get_forms()
+        todo_valid = forms["addtodoform"].is_valid()
+        snap_valid = True
+        if forms["completionodomsnapshotform"]:
+            snap_valid = forms["completionodomsnapshotform"].is_valid()
+        return todo_valid and snap_valid
+
+    def forms_valid(self):
+        forms = self.get_forms()
+        todo_form = forms["addtodoform"]
+        snap_form = forms["completionodomsnapshotform"]
+
+        t = todo_form.save(commit=False)
+        t.owner = self.request.user
+        sys.stdout.flush()
+
+        if snap_form:
+            s = snap_form.save(commit=False)
+            s.owner = self.request.user
+            s.save()
+            t.completionOdomSnapshot = s
+
+        t.save()
+
+        return HttpResponseRedirect(self.success_url)
 
 
 class TodoUpdate(mixins.LoginRequiredMixin, MultiModelFormView):
@@ -306,7 +380,36 @@ class TodoUpdate(mixins.LoginRequiredMixin, MultiModelFormView):
         CompletionOdomSnapshotForm,
     )
     template_name = "autodo/todo_form.html"
-    success_url = reverse_lazy("refuelings")
+    success_url = reverse_lazy("home")
+
+    def get_initial(self):
+        instances = self.get_instances()
+        t = instances["addtodoform"]
+
+        repeat_num = None
+        repeat_choice = None
+        if t.mileageRepeatInterval:
+            repeat_num = t.mileageRepeatInterval
+            repeat_choice = "MILE"
+        elif t.yearsRepeatInterval:
+            repeat_num = t.yearsRepeatInterval
+            repeat_choice = "YEAR"
+        elif t.monthsRepeatInterval:
+            repeat_num = t.monthsRepeatInterval
+            repeat_choice = "MNTH"
+        elif t.daysRepeatInterval and not t.daysRepeatInterval % 7:
+            repeat_num = t.daysRepeatInterval / 7
+            repeat_choice = "WEEK"
+        elif t.daysRepeatInterval:
+            repeat_num = t.daysRepeatInterval
+            repeat_choice = "DAY"
+
+        return {
+            "addtodoform": {
+                "repeat_num": repeat_num,
+                "repeat_choice": repeat_choice,
+            },
+        }
 
     def get_forms(self):
         snapForm = None
@@ -331,6 +434,31 @@ class TodoUpdate(mixins.LoginRequiredMixin, MultiModelFormView):
             "addtodoform": t,
             "completionodomsnapshotform": snap,
         }
+
+    def validate_forms(self):
+        forms = self.get_forms()
+        todo_valid = forms["addtodoform"].is_valid()
+        snap_valid = True
+        if forms["completionodomsnapshotform"]:
+            snap_valid = forms["completionodomsnapshotform"].is_valid()
+        return todo_valid and snap_valid
+
+    def forms_valid(self):
+        forms = self.get_forms()
+        todo_form = forms["addtodoform"]
+        snap_form = forms["completionodomsnapshotform"]
+
+        t = todo_form.save(commit=False)
+        sys.stdout.flush()
+
+        if snap_form:
+            s = snap_form.save(commit=False)
+            s.save()
+            t.completionOdomSnapshot = s
+
+        t.save()
+
+        return HttpResponseRedirect(self.success_url)
 
 
 class TodoDelete(mixins.LoginRequiredMixin, generic.DeleteView):
