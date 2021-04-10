@@ -62,5 +62,4 @@ urlpatterns = [
     path("todos/<int:pk>/delete/", TodoDelete.as_view(), name="todos/delete"),
     path("api/todos/<int:pk>/", todoComplete, name="api_update_todo"),
     path("stats/", landing_page, name="stats"),
-    path("home/", landing_page, name="home"),
 ]
