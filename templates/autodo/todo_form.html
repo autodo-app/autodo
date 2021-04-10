@@ -29,15 +29,31 @@
 
     {% for form in forms %}
     {% for field in form %}
-    <div class="flex content-start">
-      <div class="flex w-8/12 space-x-2">
+    {% if field.html_name == "addtodoform-repeat_num" %}
+    <div class="flex flex-row justify-start align-center">
+      <label class="block my-auto text-sm text-gray-700 mr-2" for="{{ field.auto_id }}">
+        Repeat every:
+      </label>
+      <div class="mx-2 w-3/12">
         {{ field }}
       </div>
-      <label class="m-4 text-sm text-gray-700 w-4/12" for="{{ field.auto_id }}">
+      {% elif field.html_name == "addtodoform-repeat_choice" %}
+      <!-- Leave the div tag open here assuming that these two fields are in order-->
+      <div class="mx-2 w-3/12">
+        {{ field }}
+      </div>
+    </div>
+    {% else %}
+    <div class="flex content-start">
+      <div class="flex w-9/12 space-x-2">
+        {{ field }}
+      </div>
+      <label class="m-4 text-sm text-gray-700 w-3/12" for="{{ field.auto_id }}">
         {{ field.label }}{% if field.field.required %}*{% endif %}
       </label>
       <br>
     </div>
+    {% endif %}
     {% endfor %}
     {% endfor %}
 

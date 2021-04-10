@@ -228,6 +228,17 @@ class AddTodoForm(forms.ModelForm):
             "notes",
             "complete",
         ]
+        field_order = [
+            "car",
+            "name",
+            "dueMileage",
+            "dueDate",
+            "notes",
+            "repeatNum",
+            "repeatChoice",
+            "complete",
+        ]
+
         widgets = {
             "car": forms.Select(attrs={"class": default_form_class, "required": True}),
             "name": forms.TextInput(attrs={"class": default_form_class}),
