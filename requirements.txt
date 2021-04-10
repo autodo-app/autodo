@@ -1,3 +1,4 @@
+Warning: The lock file is not up to date with the latest changes in pyproject.toml. You may be getting outdated dependencies. Run update to update them.
 asgiref==3.3.1; python_version >= "3.5" \
     --hash=sha256:5ee950735509d04eb673bd7f7120f8fa1c9e2df495394992c73234d526907e17 \
     --hash=sha256:7162a3cb30ab0609f1a4c95938fd73e8604f63bdba516a7f7d64b83ff09478f0
@@ -24,9 +25,9 @@ django-sendgrid-v5==0.9.1 \
 django-shapeshifter==18.9.23 \
     --hash=sha256:7e127f00f155eb5c01acb2bcaeb46f7919451d4956b1b14ecde0a485d9f8339d \
     --hash=sha256:e9a829587610a40a7d03fb19436413bc92450c1bf00e90927836a8717b130bc7
-django==3.1.7; python_version >= "3.6" \
-    --hash=sha256:baf099db36ad31f970775d0be5587cc58a6256a6771a44eb795b554d45f211b8 \
-    --hash=sha256:32ce792ee9b6a0cbbec340123e229ac9f765dff8c2a4ae9247a14b2ba3a365a7
+django==3.1.8; python_version >= "3.6" \
+    --hash=sha256:c348b3ddc452bf4b62361f0752f71a339140c777ebea3cdaaaa8fdb7f417a862 \
+    --hash=sha256:f8393103e15ec2d2d313ccbb95a3f1da092f9f58d74ac1c61ca2ac0436ae1eac
 future==0.18.2; python_version >= "2.6" and python_full_version < "3.0.0" or python_full_version >= "3.3.0" \
     --hash=sha256:b1bead90b70cf6ec3f0710ae53a525360fa360d306a86583adc6bf83a4db537d
 gunicorn==20.0.4; python_version >= "3.4" \
