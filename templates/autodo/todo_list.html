@@ -34,14 +34,18 @@
                 value="{% if todo.completionOdomSnapshot %}{{ todo.completionOdomSnapshot.mileage }}{% else %}{{ todo.car.mileage }}{% endif %}" />
             </div>
             <div id="due_mil_{{ todo.id }}" class="mx-2 {% if todo.complete %}hidden{% endif %}">
+              {% if todo.dueMileage %}
               Due at: <span class="font-bold">{{ todo.dueMileage }}</span> mi
               (<span class="{% if todo.delta_due_mileage <= 0 %}text-red-700{% endif %}">
                 {% if todo.delta_due_mileage > -1 %}
                 <span class="font-bold">{{ todo.delta_due_mileage }}</span> mi from now
-                {% elif todo.delta_due_mileage %}
+                {% else %}
                 <span class="font-bold">{% widthratio todo.delta_due_mileage 1 -1 %} mi ago</span>
                 {% endif %}
               </span>)
+              {% else %}
+              Due on: <span class="font-bold">{{ todo.dueDate|date:"D, M d, Y" }}</span>
+              {% endif %}
             </div>
             <a style="background-color: {{ todo.car.color }};" href="{% url 'cars/detail' todo.car.id %}"
               class="my-1 mx-2 rounded-lg w-min px-2 {% if todo.car.light_color %}text-black{% else %}text-white{% endif %} hover:shadow-md">
