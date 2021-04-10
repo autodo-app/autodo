@@ -38,7 +38,7 @@
               (<span class="{% if todo.delta_due_mileage <= 0 %}text-red-700{% endif %}">
                 {% if todo.delta_due_mileage > -1 %}
                 <span class="font-bold">{{ todo.delta_due_mileage }}</span> mi from now
-                {% else %}
+                {% elif todo.delta_due_mileage %}
                 <span class="font-bold">{% widthratio todo.delta_due_mileage 1 -1 %} mi ago</span>
                 {% endif %}
               </span>)

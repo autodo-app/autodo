@@ -12,6 +12,7 @@ from django.core.serializers import serialize
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+from dateutil import relativedelta
 
 import requests
 from extra_views import (
@@ -202,6 +203,13 @@ class OdomSnapshotDelete(mixins.LoginRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy("refuelings")
 
 
+def sort_fn(t):
+    try:
+        return t.delta_due_mileage
+    except:
+        return t.id
+
+
 class TodoListView(mixins.LoginRequiredMixin, generic.ListView):
     model = Todo
 
@@ -209,7 +217,7 @@ class TodoListView(mixins.LoginRequiredMixin, generic.ListView):
         data = super().get_context_data(**kwargs)
         # sort the todo list items here so we still return a proper queryset below
         todo_list = list(data["object_list"])
-        data["object_list"] = sorted(todo_list, key=lambda t: t.delta_due_mileage)
+        data["object_list"] = sorted(todo_list, key=sort_fn)
         snaps = OdomSnapshot.objects.filter(owner=self.request.user)
         for t in data["object_list"]:
             t.car.mileage = find_odom(t.car, snaps)
@@ -259,6 +267,39 @@ def todoComplete(request, pk):
                     mileageRepeatInterval=todo.mileageRepeatInterval,
                 )
                 newTodo.save()
+            elif todo.daysRepeatInterval:
+                newTodo = Todo(
+                    car=todo.car,
+                    owner=todo.owner,
+                    name=todo.name,
+                    dueDate=timezone.now()
+                    + timezone.timedelta(days=todo.daysRepeatInterval),
+                    notes=todo.notes,
+                    mileageRepeatInterval=todo.mileageRepeatInterval,
+                )
+                newTodo.save()
+            elif todo.monthsRepeatInterval:
+                newTodo = Todo(
+                    car=todo.car,
+                    owner=todo.owner,
+                    name=todo.name,
+                    dueDate=timezone.now()
+                    + relativedelta.relativedelta(months=+todo.monthsRepeatInterval),
+                    notes=todo.notes,
+                    mileageRepeatInterval=todo.mileageRepeatInterval,
+                )
+                newTodo.save()
+            elif todo.yearsRepeatInterval:
+                newTodo = Todo(
+                    car=todo.car,
+                    owner=todo.owner,
+                    name=todo.name,
+                    dueDate=timezone.now()
+                    + timezone.timedelta(years=todo.yearsRepeatInterval),
+                    notes=todo.notes,
+                    mileageRepeatInterval=todo.mileageRepeatInterval,
+                )
+                newTodo.save()
         elif not todo.complete and todo.completionOdomSnapshot is not None:
             # delete the snapshot
             todo.completionOdomSnapshot.delete()
@@ -274,47 +315,11 @@ def todoComplete(request, pk):
 
     todo.save()
 
-    # debugging
-    sys.stdout.flush()
-
     return JsonResponse({})
 
 
 class TodoDetailView(mixins.LoginRequiredMixin, generic.DetailView):
     model = Todo
-
-
-# class TodoCreate(mixins.LoginRequiredMixin, generic.CreateView):
-#     model = Todo
-#     form_class = AddTodoForm
-#     success_url = reverse_lazy("home")
-
-#     def get_form(self):
-#         form = AddTodoForm()
-#         form.fields["car"].queryset = Car.objects.filter(owner=self.request.user)
-#         return form
-
-#     def get_context_data(self, **kwargs):
-#         data = super().get_context_data(**kwargs)
-#         snaps = OdomSnapshot.objects.filter(owner=self.request.user)
-#         cars = Car.objects.filter(owner=self.request.user)
-#         data["cars"] = serialize("json", cars)
-#         data["snaps"] = serialize("json", snaps)
-#         return data
-
-#     def get_form_kwargs(self):
-#         kwargs = super(TodoCreate, self).get_form_kwargs()
-#         if kwargs["instance"] is None:
-#             kwargs["instance"] = Todo()
-#         kwargs["instance"].owner = self.request.user
-#         return kwargs
-
-#     def form_valid(self, form):
-#         print("here")
-#         sys.stdout.flush()
-#         t = form.save()
-#         t.owner = self.request.user
-#         return super().form_valid(form)
 
 
 class TodoCreate(mixins.LoginRequiredMixin, MultiModelFormView):

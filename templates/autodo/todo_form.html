@@ -1,4 +1,16 @@
-{% extends "base_generic.html" %} {% block content %}
+{% extends "base_generic.html" %}
+
+{% load filters %}
+
+{% block title %}
+{% if forms|check_if_todo_update %}
+Edit Todo - {{ block.super }}
+{% else %}
+Create Todo - {{ block.super }}
+{% endif %}
+{% endblock %}
+
+{% block content %}
 <style>
   /* complicated mess used to center label in its equal sized padding */
   .radio-toolbar label {
@@ -18,7 +30,7 @@
   }
 </style>
 <div class="container max-w-full mx-auto p-4 md:p-8 md:max-w-xl">
-  {% if forms %}
+  {% if forms|check_if_todo_update %}
   <div class="text-2xl">Edit: <b>{{ todo.name }}</b></div>
   {% else %}
   <div class="text-2xl">Create a Todo</div>
@@ -94,7 +106,7 @@
     {% endfor %}
 
     <button type="submit" class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 rounded shadow-md">
-      {% if forms %}Edit{% else %}Create{% endif %}
+      {% if forms|check_if_todo_update %}Edit{% else %}Create{% endif %}
     </button>
   </form>
 </div>

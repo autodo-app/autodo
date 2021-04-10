@@ -25,7 +25,10 @@ def send_email_notice_if_needed(sender, instance, **kwargs):
     todos = Todo.objects.filter(car=car.id)
     emails = []
     for t in todos:
-        t.delta_due_mileage = t.dueMileage - snap.mileage
+        try:
+            t.delta_due_mileage = t.dueMileage - snap.mileage
+        except:
+            t.delta_due_mileage = None
         if email := determine_email_type(t):
             emails.append(email)
 
