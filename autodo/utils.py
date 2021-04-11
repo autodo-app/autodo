@@ -1,6 +1,8 @@
 from collections import defaultdict
 import datetime
 
+from django.utils import timezone
+
 from .models import Todo, OdomSnapshot
 
 
@@ -16,6 +18,12 @@ def add_mileage_to_due(todo, car, snaps):
     cur_mileage = find_odom(car, snaps)
     if todo.dueMileage:
         todo.delta_due_mileage = todo.dueMileage - cur_mileage
+
+
+def add_delta_time(todo):
+    if todo.dueDate:
+        delta = todo.dueDate - timezone.now()
+        todo.delta_due_date = delta.days
 
 
 def create_defaults(user, car, snaps):

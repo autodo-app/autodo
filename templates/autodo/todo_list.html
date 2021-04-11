@@ -32,6 +32,7 @@
               <input type="number" id="comp_id_{{ todo.id }}" name="{{ todo.id }}" data-id="{{ todo.id }}"
                 class="bg-gray-50 py-1 px-4 border border-gray-400 rounded focus:outline-none focus:border-blue-500 todo-complete-mileage"
                 value="{% if todo.completionOdomSnapshot %}{{ todo.completionOdomSnapshot.mileage }}{% else %}{{ todo.car.mileage }}{% endif %}" />
+              mi
             </div>
             <div id="due_mil_{{ todo.id }}" class="mx-2 {% if todo.complete %}hidden{% endif %}">
               {% if todo.dueMileage %}
@@ -45,6 +46,13 @@
               </span>)
               {% else %}
               Due on: <span class="font-bold">{{ todo.dueDate|date:"D, M d, Y" }}</span>
+              (<span class="{% if todo.delta_due_date <= 0 %}text-red-700{% endif %}">
+                {% if todo.delta_due_date > -1 %}
+                <span class="font-bold">{{ todo.delta_due_date }}</span> days from now
+                {% else %}
+                <span class="font-bold">{% widthratio todo.delta_due_date 1 -1 %} days ago</span>
+                {% endif %}
+              </span>)
               {% endif %}
             </div>
             <a style="background-color: {{ todo.car.color }};" href="{% url 'cars/detail' todo.car.id %}"

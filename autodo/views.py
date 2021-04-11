@@ -39,6 +39,7 @@ from autodo.utils import (
     create_defaults,
     add_mileage_to_due,
     car_color_palette,
+    add_delta_time,
 )
 
 
@@ -228,6 +229,7 @@ class TodoListView(mixins.LoginRequiredMixin, generic.ListView):
         todos = Todo.objects.filter(owner=self.request.user)
         for t in todos:
             add_mileage_to_due(t, t.car, snaps)
+            add_delta_time(t)
         return todos
 
 
