@@ -114,8 +114,9 @@ Create Todo - {{ block.super }}
   </form>
 </div>
 <script>
-  var dueMileage = document.getElementById("id_dueMileage");
-  var car = document.getElementById("id_car");
+  var dueMileage = document.getElementById("id_addtodoform-dueMileage");
+  var completionMileage = document.getElementById("id_completionodomsnapshotform-mileage");
+  var car = document.getElementById("id_addtodoform-car");
   car.addEventListener('change', function (event) {
     var carstr = '{{ cars }}'.replaceAll('&quot;', '\"');
     var cardata = JSON.parse(carstr);
@@ -130,8 +131,39 @@ Create Todo - {{ block.super }}
           }
         }
         dueMileage.value = mileage;
+        completionMileage.value = mileage;
       }
     }
   }, false);
+
+  // Link labels to their inputs
+  var labels = document.getElementsByTagName('LABEL');
+  for (var i = 0; i < labels.length; i++) {
+    if (labels[i].htmlFor != '') {
+      var elem = document.getElementById(labels[i].htmlFor);
+      if (elem)
+        elem.label = labels[i];
+    }
+  }
+
+  var completed = document.getElementById("id_addtodoform-complete");
+  var completionDate = document.getElementById("id_completionodomsnapshotform-date");
+  completionDate.classList.add("hidden");
+  completionDate.label.classList.add("hidden");
+  completionMileage.classList.add("hidden");
+  completionMileage.label.classList.add("hidden");
+  completed.addEventListener('change', function (event) {
+    if (event.target.checked) {
+      completionDate.classList.remove("hidden");
+      completionDate.label.classList.remove("hidden");
+      completionMileage.classList.remove("hidden");
+      completionMileage.label.classList.remove("hidden");
+    } else {
+      completionDate.classList.add("hidden");
+      completionDate.label.classList.add("hidden");
+      completionMileage.classList.add("hidden");
+      completionMileage.label.classList.add("hidden");
+    }
+  })
 </script>
 {% endblock %}

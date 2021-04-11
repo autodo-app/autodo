@@ -334,9 +334,20 @@ class TodoCreate(mixins.LoginRequiredMixin, MultiModelFormView):
     initial = {
         "addtodoform": {
             "repeat_num": 0,
-            "repeat_choice": "MNTH",
-        }
+            "repeat_choice": "MILE",
+        },
+        "completionodomsnapshotform": {
+            "date": timezone.now(),
+        },
     }
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        snaps = OdomSnapshot.objects.filter(owner=self.request.user)
+        cars = Car.objects.filter(owner=self.request.user)
+        data["cars"] = serialize("json", cars)
+        data["snaps"] = serialize("json", snaps)
+        return data
 
     def get_forms(self):
         # TODO: dynamically show/hide snapshot based on checkbox
