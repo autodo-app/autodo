@@ -200,6 +200,16 @@ class AddTodoForm(forms.ModelForm):
         widget=forms.Select(attrs={"class": default_form_class}),
     )
     # set the default to repeat forever
+    field_order = [
+        "car",
+        "name",
+        "dueMileage",
+        "dueDate",
+        "notes",
+        "repeat_num",
+        "repeat_choice",
+        "complete",
+    ]
 
     def save(self, commit=True):
         t = super().save(commit=False)
@@ -224,16 +234,6 @@ class AddTodoForm(forms.ModelForm):
             "dueMileage",
             "dueDate",
             "notes",
-            "complete",
-        ]
-        field_order = [
-            "car",
-            "name",
-            "dueMileage",
-            "dueDate",
-            "notes",
-            "repeatNum",
-            "repeatChoice",
             "complete",
         ]
 

@@ -339,13 +339,11 @@ class TodoCreate(mixins.LoginRequiredMixin, MultiModelFormView):
     }
 
     def get_forms(self):
-        snapForm = None
         # TODO: dynamically show/hide snapshot based on checkbox
 
-        # if self.get_instances()["addtodoform"].complete:
-        #     snapForm = CompletionOdomSnapshotForm(
-        #         **self.get_form_kwargs(CompletionOdomSnapshotForm)
-        #     )
+        snapForm = CompletionOdomSnapshotForm(
+            **self.get_form_kwargs(CompletionOdomSnapshotForm)
+        )
         todoForm = AddTodoForm(**self.get_form_kwargs(AddTodoForm))
         todoForm.fields["car"].queryset = Car.objects.filter(owner=self.request.user)
         return {

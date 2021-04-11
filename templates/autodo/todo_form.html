@@ -45,19 +45,22 @@ Create Todo - {{ block.super }}
     {{ form.non_field_errors }}
     {% for field in form %}
     {% if field.html_name == "addtodoform-repeat_num" %}
-    <div class="flex flex-row justify-start align-center">
-      <label class="block my-auto text-sm text-gray-700 mr-2" for="{{ field.auto_id }}">
-        Repeat every:
-      </label>
-      <div class="mx-2 w-3/12">
-        {{ field }}
+    <div class="flex content-start">
+      <div class="flex flex-wrap md:flex-nowrap flex-row justify-between align-center w-9/12">
+        <label class="block my-auto text-sm text-gray-700 mr-2" for="{{ field.auto_id }}">
+          Repeat every:
+        </label>
+        <div class="md:mx-2 min-w-full md:min-w-0 w-4/12">
+          {{ field }}
+        </div>
+        {% elif field.html_name == "addtodoform-repeat_choice" %}
+        <!-- Leave the div tag open here assuming that these two fields are in order-->
+        <label class="hidden" for="{{ field.auto_id }}"></label>
+        <div class="md:ml-2 min-w-full md:min-w-0 w-4/12">
+          {{ field }}
+        </div>
       </div>
-      {% elif field.html_name == "addtodoform-repeat_choice" %}
-      <!-- Leave the div tag open here assuming that these two fields are in order-->
-      <label class="hidden" for="{{ field.auto_id }}"></label>
-      <div class="mx-2 w-3/12">
-        {{ field }}
-      </div>
+      <div class="m-4 w-3/12"></div>
     </div>
     {% else %}
     <div class="flex content-start">
