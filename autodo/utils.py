@@ -1,5 +1,6 @@
 from collections import defaultdict
 import datetime
+import logging
 
 from django.utils import timezone
 
@@ -179,6 +180,9 @@ def determine_email_type(t):
 def find_todos_needing_emails():
     if datetime.datetime.today().weekday() != 5:
         return  # only send our emails on Saturdays
+
+    logging.info("Preparing automated emails")
+
     queued_emails = defaultdict(list)
     for t in Todo.objects.all():
         # todo: filter out completed todos
