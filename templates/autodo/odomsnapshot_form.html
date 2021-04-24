@@ -11,6 +11,10 @@ Create Refueling - {{ block.super }}
 {% endblock %}
 
 {% block content %}
+<!-- Hidden element is here just to prevent purgecss from taking out the classes from the form generation -->
+<div
+  class="hidden bg-gray-50 my-2 py-1 px-4 border border-gray rounded focus:outline-none focus:border-blue-500 placeholder-gray-500 w-7/12 w-5/12">
+</div>
 <div class="container max-w-full mx-auto p-4 md:p-8 md:max-w-lg">
   {% if forms|check_if_car_update %}
   <div class="text-2xl">Edit Refueling</div>
