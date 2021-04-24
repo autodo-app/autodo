@@ -1,7 +1,8 @@
 {% extends "base_generic.html" %}
 {% block content %}
-<div class="container p-4">
-  {% if car_list|length < 1 %} <div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 text-center">
+<div class="container mx-auto p-4 max-w-3xl">
+  {% if car_list|length < 1 %}
+  <div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 text-center">
     <p>No cars, would you like to add one?</p>
     <div class="my-8">
       <a href="{% url 'cars/create' %}"
@@ -9,37 +10,38 @@
         Create Car
       </a>
     </div>
-</div>
-{% endif %}
+  </div>
+  {% endif %}
 
-{% for car in car_list %} <div class="bg-gray-50 rounded-lg shadow-sm hover:shadow-lg duration-100 px-2 py-4 my-4"
-  onclick="location.href=`{% url 'cars/detail' car.id %}`">
-  <div class="flex flex-wrap justify-between">
-    <div class="flex flex-col">
-      <div class="text-blue-600 text-lg font-semibold mx-2">
-        {{ car.name}}
+  {% for car in car_list %}
+  <div class="bg-gray-50 rounded-lg shadow-sm hover:shadow-lg duration-100 px-2 py-4 my-4"
+    onclick="location.href=`{% url 'cars/detail' car.id %}`">
+    <div class="flex flex-wrap justify-between">
+      <div class="flex flex-col">
+        <div class="text-blue-600 text-lg font-semibold mx-2">
+          {{ car.name}}
+        </div>
+        <div class="mx-2">
+          Mileage: <span class="font-bold">{{ car.mileage }}</span> mi
+        </div>
       </div>
-      <div class="mx-2">
-        Mileage: <span class="font-bold">{{ car.mileage }}</span> mi
-      </div>
-    </div>
-    <div class="flex flex-col content-end">
-      <div class="m-2 flex-grow-0">
-        <a href="{% url 'cars/update' car.id %}"
-          class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 rounded shadow-md">Edit
-        </a>
-      </div>
-      <div class="m-2">
-        <a href="{% url 'cars/delete' car.id %}"
-          class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 rounded shadow-md">
-          Delete
-        </a>
+      <div class="flex flex-col content-end">
+        <div class="m-2 flex-grow-0">
+          <a href="{% url 'cars/update' car.id %}"
+            class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 rounded shadow-md">Edit
+          </a>
+        </div>
+        <div class="m-2">
+          <a href="{% url 'cars/delete' car.id %}"
+            class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 rounded shadow-md">
+            Delete
+          </a>
+        </div>
       </div>
     </div>
   </div>
-</div>
-<div class="h-36 w-full" />
-{% endfor %}
+  <div class="h-36 w-full" />
+  {% endfor %}
 </div>
 <button
   class="fixed right-0 bottom-0 m-12 p-0 w-16 h-16 bg-autodo rounded-full hover:bg-autodo-dark shadow-xl mouse transition ease-in duration-200 focus:outline-none"
