@@ -24,7 +24,7 @@ def gravatar(user):
 
 @register.filter
 def check_if_car_update(values):
-    return list(values)[0].initial["car"]
+    return list(values)[0].initial.get("car")
 
 
 @register.filter
