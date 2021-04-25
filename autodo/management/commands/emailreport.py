@@ -44,10 +44,15 @@ class Command(BaseCommand):
 
             logging.info(f"Sending email to {owner}")
             send_mail(
-                subject, plain_message, from_email, [owner], html_message=html_message
+                subject,
+                plain_message,
+                from_email,
+                [owner],
+                html_message=html_message,
+                fail_silently=False,
             )
             logging.info("Email successfully sent")
-            self.stdout.write(self.style.SUCCESS("Sent an email"))
+            self.stdout.write(self.style.SUCCESS(f"Sent an email to {owner}"))
 
         self.stdout.write(self.style.SUCCESS("Done sending emails"))
         return
