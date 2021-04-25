@@ -490,6 +490,7 @@ def register(request):
             new_user = authenticate(
                 username=f.cleaned_data["username"],
                 password=f.cleaned_data["password1"],
+                email=f.cleaned_data["username"],
             )
             login(request, new_user)
             return redirect("cars")
