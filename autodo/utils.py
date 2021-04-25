@@ -1,6 +1,7 @@
 from collections import defaultdict
 import datetime
 import logging
+import sys
 
 from django.utils import timezone
 
@@ -186,10 +187,14 @@ def find_todos_needing_emails(force):
 
     queued_emails = defaultdict(list)
     for t in Todo.objects.all():
+        print(vars(t.owner))
+        sys.stdout.flush()
+
         # todo: filter out completed todos
         cur_mileage = find_odom(t.car, OdomSnapshot.objects.filter(owner=t.owner))
         if t.dueMileage is not None:
             t.delta_due_mileage = t.dueMileage - cur_mileage
         if email := determine_email_type(t):
             queued_emails[t.owner.email].append(email)
+
     return queued_emails
