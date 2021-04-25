@@ -1,3 +1,5 @@
+import logging
+
 from django.core.management.base import BaseCommand
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
@@ -15,7 +17,6 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        self.stdout.write(self.style.SUCCESS(options))
         queued_emails = find_todos_needing_emails(options["force"])
 
         for owner, emails in queued_emails.items():
@@ -41,9 +42,12 @@ class Command(BaseCommand):
             plain_message = strip_tags(html_message)
             from_email = "noreply@autodo.app"
 
+            logging.info(f"Sending email to {owner}")
             send_mail(
                 subject, plain_message, from_email, [owner], html_message=html_message
             )
+            logging.info("Email successfully sent")
+            self.stdout.write(self.style.SUCCESS("Sent an email"))
 
-        self.stdout.write(self.style.SUCCESS("Successfully sent email"))
+        self.stdout.write(self.style.SUCCESS("Done sending emails"))
         return
