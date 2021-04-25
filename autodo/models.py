@@ -8,6 +8,8 @@ class Greeting(models.Model):
 
 
 class User(AbstractUser):
+    email_notifications = models.BooleanField(default=True)
+
     class Meta:
         db_table = "auth_user"
 

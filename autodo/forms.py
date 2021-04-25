@@ -271,3 +271,29 @@ class RegisterForm(UserCreationForm):
     class Meta:
         model = User
         fields = ("username", "password1", "password2")
+
+
+class SettingsForm(forms.Form):
+    email_notifications = forms.BooleanField(
+        label="Receive notifications about Todos",
+        required=False,
+        widget=forms.CheckboxInput(
+            attrs={
+                "class": " ".join(
+                    [
+                        "bg-gray-50",
+                        "my-auto",
+                        "mx-0",
+                        "ml-auto",
+                        "p-3",
+                        "right-0",
+                        "border",
+                        "border-gray-400",
+                        "rounded",
+                        "focus:ring-transparent",
+                        "focus:border-blue-500",
+                    ]
+                )
+            }
+        ),
+    )

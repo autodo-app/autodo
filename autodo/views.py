@@ -34,6 +34,7 @@ from autodo.forms import (
     AddTodoForm,
     RefuelingForm,
     CompletionOdomSnapshotForm,
+    SettingsForm,
 )
 from autodo.utils import (
     find_odom,
@@ -515,3 +516,19 @@ class ProfileScreen(mixins.LoginRequiredMixin, generic.DetailView):
 class UserDelete(mixins.LoginRequiredMixin, generic.DeleteView):
     model = User
     success_url = "/"
+
+
+class Settings(mixins.LoginRequiredMixin, views.View):
+    def get(self, request):
+        form = SettingsForm(
+            initial={"email_notifications": request.user.email_notifications}
+        )
+        return render(request, "autodo/settings.html", {"form": form})
+
+    def post(self, request):
+        form = SettingsForm(request.POST)
+        if form.is_valid():
+            request.user.email_notifications = form.cleaned_data["email_notifications"]
+            request.user.save()
+            return HttpResponseRedirect("/settings")
+        return render(request, "autodo/settings.html", {"form": form})

@@ -1,0 +1,49 @@
+{% extends "base_generic.html" %}
+
+{% block title %}
+Settings - {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
+<div class="container p-8 mx-auto max-w-lg">
+  <div class="text-2xl">Account Settings</div>
+  <form action="" method="post">
+    {% csrf_token %}
+
+    {{ form.non_field_errors }}
+
+    {% for field in form %}
+    <div class="flex content-start">
+      {{ field.errors }}
+      <div class="flex space-x-2">
+        {{ field }}
+      </div>
+      <label class="m-4 text-sm text-gray-700" for="{{ field.auto_id }}">
+        {{ field.label }}
+      </label>
+      <br>
+    </div>
+    {% endfor %}
+
+    <div class="text-gray-700">TBD: Set units and currency</div>
+
+    <button type="submit" class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 rounded shadow-md">
+      Save
+    </button>
+  </form>
+
+  <hr class="my-6 py-2">
+
+  <a href="{% url 'password_change' %}"
+    class="my-2 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 rounded shadow-md">Change Password</a>
+
+  <div class="my-8">
+    <a href="{% url 'user_confirm_delete' user.id %}"
+      class="bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 rounded shadow-md">
+      Delete Account
+    </a>
+  </div>
+</div>
+
+{% endblock %}

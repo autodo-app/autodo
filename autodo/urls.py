@@ -23,6 +23,7 @@ from autodo.views import (
     todoComplete,
     ProfileScreen,
     UserDelete,
+    Settings,
 )
 
 urlpatterns = [
@@ -41,7 +42,6 @@ urlpatterns = [
         UserDelete.as_view(),
         name="user_confirm_delete",
     ),
-    path("settings/", landing_page, name="settings"),
     path("cars/", CarListView.as_view(), name="cars"),
     path("cars/create/", CarCreate.as_view(), name="cars/create"),
     path("cars/<int:pk>/", CarDetailView.as_view(), name="cars/detail"),
@@ -70,4 +70,5 @@ urlpatterns = [
     path("todos/<int:pk>/delete/", TodoDelete.as_view(), name="todos/delete"),
     path("api/todos/<int:pk>/", todoComplete, name="api_update_todo"),
     path("stats/", Stats.as_view(), name="stats"),
+    path("settings/", Settings.as_view(), name="settings"),
 ]
