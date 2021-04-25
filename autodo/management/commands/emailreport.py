@@ -1,3 +1,5 @@
+import logging
+
 from django.core.management.base import BaseCommand
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
@@ -9,8 +11,13 @@ from autodo.utils import find_todos_needing_emails
 class Command(BaseCommand):
     help = "Sends out emails for all todos that are due soon"
 
+    def add_arguments(self, parser):
+        parser.add_argument(
+            "--force", action="store_true", help="Ignore day of the week requirement"
+        )
+
     def handle(self, *args, **options):
-        queued_emails = find_todos_needing_emails()
+        queued_emails = find_todos_needing_emails(options["force"])
 
         for owner, emails in queued_emails.items():
             # todo: change subject for singular case
@@ -35,9 +42,20 @@ class Command(BaseCommand):
             plain_message = strip_tags(html_message)
             from_email = "noreply@autodo.app"
 
+            logging.info(f"Sending email to {owner}")
             send_mail(
-                subject, plain_message, from_email, [owner], html_message=html_message
+                subject,
+                plain_message,
+                from_email,
+                [owner],
+                html_message=html_message,
+                fail_silently=False,
+            )
+            logging.info("Email successfully sent")
+            # owner is currently None
+            self.stdout.write(
+                self.style.SUCCESS(f"Sent an email to {owner} about {emails}")
             )
 
-        self.stdout.write(self.style.SUCCESS("Successfully sent email"))
+        self.stdout.write(self.style.SUCCESS("Done sending emails"))
         return

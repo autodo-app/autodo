@@ -1,4 +1,5 @@
 import sys
+import logging
 
 from django.db.models.signals import post_save
 from django.core.mail import send_mail
@@ -19,6 +20,7 @@ def send_email_notice_if_needed(sender, instance, **kwargs):
     if can_send:
         # don't send another email if the cache is still valid, meaning we
         # recently sent an email
+        logging.info("Recently sent an email, not sending another")
         return
     snap = instance
     car = snap.car
@@ -60,6 +62,7 @@ def send_email_notice_if_needed(sender, instance, **kwargs):
     plain_message = strip_tags(html_message)
     from_email = "noreply@autodo.app"
 
+    logging.info(f"Sending email to {snap.owner.email}")
     send_mail(
         subject,
         plain_message,
