@@ -109,7 +109,7 @@ AUTH_USER_MODEL = "autodo.User"
 LOGIN_REDIRECT_URL = "/"
 
 EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
-SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
+SENDGRID_API_KEY = os.environ["SENDGRID_API_KEY"]
 # Toggle sandbox mode (when running in DEBUG mode)
 SENDGRID_SANDBOX_MODE_IN_DEBUG = False
 # echo to stdout or any other file-like object that is passed to the backend via the stream kwarg.

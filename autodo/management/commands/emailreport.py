@@ -52,7 +52,9 @@ class Command(BaseCommand):
                 fail_silently=False,
             )
             logging.info("Email successfully sent")
-            self.stdout.write(self.style.SUCCESS(f"Sent an email to {owner}"))
+            self.stdout.write(
+                self.style.SUCCESS(f"Sent an email to {owner} about {emails}")
+            )
 
         self.stdout.write(self.style.SUCCESS("Done sending emails"))
         return
