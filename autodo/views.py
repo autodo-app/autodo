@@ -4,6 +4,7 @@ import json
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
+from django import views
 from django.views import generic
 from django.contrib.auth import mixins, authenticate, login
 from django.utils import timezone
@@ -499,3 +500,8 @@ def register(request):
         f = RegisterForm()
 
     return render(request, "registration/register.html", {"form": f})
+
+
+class Stats(mixins.LoginRequiredMixin, views.View):
+    def get(self, request):
+        return render(request, "autodo/stats.html")

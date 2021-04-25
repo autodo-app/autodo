@@ -12,6 +12,7 @@ from autodo.views import (
     RefuelingCreate,
     RefuelingUpdate,
     OdomSnapshotDelete,
+    Stats,
     TodoListView,
     TodoDetailView,
     TodoCreate,
@@ -61,5 +62,5 @@ urlpatterns = [
     path("todos/<int:pk>/update/", TodoUpdate.as_view(), name="todos/update"),
     path("todos/<int:pk>/delete/", TodoDelete.as_view(), name="todos/delete"),
     path("api/todos/<int:pk>/", todoComplete, name="api_update_todo"),
-    path("stats/", landing_page, name="stats"),
+    path("stats/", Stats.as_view(), name="stats"),
 ]
