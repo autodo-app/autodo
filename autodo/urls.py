@@ -21,6 +21,8 @@ from autodo.views import (
     landing_page,
     register,
     todoComplete,
+    ProfileScreen,
+    UserDelete,
 )
 
 urlpatterns = [
@@ -33,7 +35,12 @@ urlpatterns = [
     ),
     path("accounts/", include("django.contrib.auth.urls")),
     path("accounts/register/", register, name="register"),
-    path("accounts/profile/", landing_page, name="profile"),
+    path("accounts/profile/<int:pk>/", ProfileScreen.as_view(), name="profile"),
+    path(
+        "accounts/profile/<int:pk>/delete",
+        UserDelete.as_view(),
+        name="user_confirm_delete",
+    ),
     path("settings/", landing_page, name="settings"),
     path("cars/", CarListView.as_view(), name="cars"),
     path("cars/create/", CarCreate.as_view(), name="cars/create"),

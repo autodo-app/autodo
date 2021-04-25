@@ -24,7 +24,7 @@ from extra_views import (
 )
 from shapeshifter.views import MultiModelFormView
 
-from autodo.models import Car, OdomSnapshot, Refueling, Todo
+from autodo.models import Car, OdomSnapshot, Refueling, Todo, User
 from autodo.forms import (
     AddCarForm,
     AddOdomSnapshotForm,
@@ -505,3 +505,13 @@ def register(request):
 class Stats(mixins.LoginRequiredMixin, views.View):
     def get(self, request):
         return render(request, "autodo/stats.html")
+
+
+class ProfileScreen(mixins.LoginRequiredMixin, generic.DetailView):
+    model = User
+    context_object_name = "user_object"
+
+
+class UserDelete(mixins.LoginRequiredMixin, generic.DeleteView):
+    model = User
+    success_url = "/"

@@ -1,0 +1,26 @@
+{% extends "base_generic.html" %}
+
+{% load filters %}
+
+{% block title %}
+User Profile - {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
+<div class="container p-8 mx-auto max-w-lg">
+  <div class="text-2xl">User: <b>{{ user.username }}</b></div>
+  <div class="py-2">
+    <div class="py-1">Email: <b>{{ user.email }}</b></div>
+    <div class="py-1">User since: <b>{{ user.date_joined }}</b></div>
+  </div>
+
+  <div class="my-2">
+    <a href="{% url 'user_confirm_delete' user.id %}"
+      class="bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 rounded shadow-md">
+      Delete Account
+    </a>
+  </div>
+</div>
+
+{% endblock %}
