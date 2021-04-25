@@ -162,7 +162,8 @@ car_color_palette = [
 
 
 def determine_email_type(t):
-    if t.delta_due_mileage:
+    try:
+        # not sure if this field will exist on the todo
         if t.delta_due_mileage <= 0:
             return (
                 t,
@@ -173,13 +174,13 @@ def determine_email_type(t):
                 t,
                 "DUE_SOON",
             )
-    else:
+    except:
         pass  # todo: use due date for emails
 
 
-def find_todos_needing_emails():
-    if datetime.datetime.today().weekday() != 5:
-        return  # only send our emails on Saturdays
+def find_todos_needing_emails(force):
+    if datetime.datetime.today().weekday() != 5 and not force:
+        return {}  # only send our emails on Saturdays
 
     logging.info("Preparing automated emails")
 
@@ -187,7 +188,8 @@ def find_todos_needing_emails():
     for t in Todo.objects.all():
         # todo: filter out completed todos
         cur_mileage = find_odom(t.car, OdomSnapshot.objects.filter(owner=t.owner))
-        t.delta_due_mileage = t.dueMileage - cur_mileage
+        if t.dueMileage is not None:
+            t.delta_due_mileage = t.dueMileage - cur_mileage
         if email := determine_email_type(t):
             queued_emails[t.owner.email].append(email)
     return queued_emails

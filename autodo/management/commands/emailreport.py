@@ -9,8 +9,14 @@ from autodo.utils import find_todos_needing_emails
 class Command(BaseCommand):
     help = "Sends out emails for all todos that are due soon"
 
+    def add_arguments(self, parser):
+        parser.add_argument(
+            "--force", action="store_true", help="Ignore day of the week requirement"
+        )
+
     def handle(self, *args, **options):
-        queued_emails = find_todos_needing_emails()
+        self.stdout.write(self.style.SUCCESS(options))
+        queued_emails = find_todos_needing_emails(options["force"])
 
         for owner, emails in queued_emails.items():
             # todo: change subject for singular case
