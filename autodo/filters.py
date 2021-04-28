@@ -1,10 +1,21 @@
 import django_filters
+from django import forms
 
 from autodo.models import Todo
 
 
 class TodoFilter(django_filters.FilterSet):
-    complete = django_filters.BooleanFilter(field_name="complete")
+    complete = django_filters.BooleanFilter(
+        field_name="complete",
+        widget=forms.Select(
+            choices=[
+                ("", "Unknown"),
+                (True, "Yes"),
+                (False, "No"),
+            ],
+            attrs={"onchange": "this.form.submit()"},
+        ),
+    )
     # due_date = django_filters.DateTimeFilter(field_name="dueDate", lookup_expr="lt")
     # due_mileage = django_filters.NumberField(field_name="dueMileage", lookup_expr="lt")
 
