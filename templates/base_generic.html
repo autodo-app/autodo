@@ -88,6 +88,11 @@
           </div>
         </div>
       </div>
+      {% if filter %}
+      <form method="get">
+        {{ filter.form.as_p }}
+      </form>
+      {% endif %}
       <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
         <button
           class="bg-code p-1 rounded-full text-gray-900 hover:text-autodo focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
