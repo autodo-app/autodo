@@ -1,7 +1,8 @@
 {% extends "base_generic.html" %}
 {% block content %}
 <div class="container mx-auto p-4 max-w-3xl">
-  {% if object_list|length < 1 %} <div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 text-center">
+  {% if filter.qs|length < 1 %}
+  <div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 text-center">
     <p>No todos, would you like to add one?</p>
     <div class="my-8">
       <a href="{% url 'todos/create' %}"

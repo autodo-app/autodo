@@ -43,6 +43,7 @@ from autodo.utils import (
     car_color_palette,
     add_delta_time,
 )
+from autodo.filters import TodoFilter
 
 
 def landing_page(request):
@@ -213,26 +214,17 @@ def sort_fn(t):
         return t.id
 
 
-class TodoListView(mixins.LoginRequiredMixin, generic.ListView):
-    model = Todo
-
-    def get_context_data(self, **kwargs):
-        data = super().get_context_data(**kwargs)
-        # sort the todo list items here so we still return a proper queryset below
-        todo_list = list(data["object_list"])
-        data["object_list"] = sorted(todo_list, key=sort_fn)
-        snaps = OdomSnapshot.objects.filter(owner=self.request.user)
-        for t in data["object_list"]:
-            t.car.mileage = find_odom(t.car, snaps)
-        return data
-
-    def get_queryset(self):
-        snaps = OdomSnapshot.objects.filter(owner=self.request.user)
-        todos = Todo.objects.filter(owner=self.request.user)
-        for t in todos:
-            add_mileage_to_due(t, t.car, snaps)
-            add_delta_time(t)
-        return todos
+class TodoListView(mixins.LoginRequiredMixin, views.View):
+    def get(self, request, *args, **kwargs):
+        f = TodoFilter(
+            request.GET,
+            queryset=Todo.objects.filter(owner=request.user),
+            request=request,
+        )
+        object_list = sorted(list(f.qs), key=sort_fn)
+        return render(
+            request, "autodo/todo_list.html", {"filter": f, "object_list": object_list}
+        )
 
 
 @csrf_exempt
