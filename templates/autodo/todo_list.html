@@ -15,7 +15,7 @@
 
   <form method="post" action="" class="todo-form">
     {% csrf_token %}
-    {% for todo in filter.qs %}
+    {% for todo in object_list %}
     <div class="bg-gray-50 rounded-lg shadow-sm duration-100 px-2 py-4 my-4">
       <div class="flex flex-wrap justify-between">
         <div class="flex flex-row">

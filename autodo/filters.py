@@ -1,7 +1,10 @@
+import sys
+
 import django_filters
 from django import forms
 
-from autodo.models import Todo
+from autodo.utils import find_odom, add_delta_time, add_mileage_to_due
+from autodo.models import Todo, OdomSnapshot
 
 default_form_classes = [
     "bg-gray-50",
@@ -33,9 +36,21 @@ class TodoFilter(django_filters.FilterSet):
             attrs={"onchange": "this.form.submit()", "class": default_form_class},
         ),
     )
-    # due_date = django_filters.DateTimeFilter(field_name="dueDate", lookup_expr="lt")
-    # due_mileage = django_filters.NumberField(field_name="dueMileage", lookup_expr="lt")
 
     class Meta:
         model = Todo
         fields = ["complete"]
+
+    @property
+    def qs(self):
+        parent = super().qs
+        owner = getattr(self.request, "user", None)
+        # print(vars(self))
+        # sys.stdout.flush()
+        snaps = OdomSnapshot.objects.filter(owner=owner)
+        for t in parent:
+            t.car.mileage = find_odom(t.car, snaps)
+            add_mileage_to_due(t, t.car, snaps)
+            add_delta_time(t)
+
+        return parent
