@@ -36,7 +36,7 @@ DEBUG = os.environ.get("DEBUG", "True") == "True"
 print(DEBUG)
 sys.stdout.flush()
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["autodo-app.herokuapp.com"]
 
 
 # Application definition
