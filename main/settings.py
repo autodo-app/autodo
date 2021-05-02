@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+import sys
 import django_heroku
 import logging
 import sentry_sdk
@@ -32,6 +33,8 @@ SECRET_KEY = "CHANGE_ME!!!! (P.S. the SECRET_KEY environment variable will be us
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", True)
+print(DEBUG)
+sys.stdout.flush()
 
 ALLOWED_HOSTS = []
 
