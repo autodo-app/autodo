@@ -1,29 +1,35 @@
 from django.urls import path, include, re_path
 from django.contrib.auth import views as auth_views
 
-from autodo.views import (
+from autodo.views.cars import (
     CarListView,
     CarDetailView,
     CarCreate,
     CarUpdate,
     CarDelete,
+)
+from autodo.views.refuelings import (
     RefuelingListView,
     RefuelingDetailView,
     RefuelingCreate,
     RefuelingUpdate,
     OdomSnapshotDelete,
+)
+from autodo.views.views import (
     Stats,
+    landing_page,
+    register,
+    ProfileScreen,
+    UserDelete,
+    Settings,
+)
+from autodo.views.todos import (
     TodoListView,
     TodoDetailView,
     TodoCreate,
     TodoUpdate,
     TodoDelete,
-    landing_page,
-    register,
     todoComplete,
-    ProfileScreen,
-    UserDelete,
-    Settings,
 )
 
 urlpatterns = [
