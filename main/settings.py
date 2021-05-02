@@ -33,8 +33,7 @@ SECRET_KEY = "CHANGE_ME!!!! (P.S. the SECRET_KEY environment variable will be us
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", "True") == "True"
-print(DEBUG)
-sys.stdout.flush()
+DEBUG_PROPAGATE_EXCEPTIONS = True
 
 ALLOWED_HOSTS = ["autodo-app.herokuapp.com"]
 
@@ -137,7 +136,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
-
+STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "..", "staticfiles")]
 STATIC_ROOT = os.path.join(BACKEND_DIR, "..", "staticfiles")
 STATIC_URL = "/static/"  # already declared in the default settings
