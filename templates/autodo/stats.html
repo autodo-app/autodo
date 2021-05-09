@@ -6,7 +6,7 @@ Stats - {{ block.super }}
 
 {% block content %}
 
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.2.0/chart.min.js"
   integrity="sha512-VMsZqo0ar06BMtg0tPsdgRADvl0kDHpTbugCBBrL55KmucH6hP9zWdLIWY//OTfMnzz6xWQRxQqsUFefwHuHyg=="
   crossorigin="anonymous"></script>
@@ -45,7 +45,6 @@ Stats - {{ block.super }}
 
 <script type="text/javascript">
   const autodoColor = "#45c9a7";
-  console.log(Chart.defaults.scales);
   let canvas1 = document.getElementById("chart").getContext("2d");
 
   let chart1 = new Chart(canvas1, {
@@ -118,8 +117,6 @@ Stats - {{ block.super }}
       }
     }
   });
-
-  console.log(fuelEfficiencyChart.options.scales.x);
 
   let canvas3 = document.getElementById("canvas3").getContext("2d");
 
@@ -207,56 +204,75 @@ Stats - {{ block.super }}
     }
   });
 
+  $(document).ready(function () {
+    $.ajax({
+      url: "/stats/fuelEfficiency",
+      type: "GET",
+      dataType: "json",
+      success: (jsonResponse) => {
+        console.log(jsonResponse);
+        // // Load all the options
+        // jsonResponse.options.forEach(option => {
+        //   $("#year").append(new Option(option, option));
+        // });
+        // // Load data for the first option
+        // loadAllCharts($("#year").children().first().val());
+      },
+      error: () => console.log("Failed to fetch chart filter options!")
+    });
 
-</script>
+    $.ajax({
+      url: "/stats/fuelUsageByCar",
+      type: "GET",
+      dataType: "json",
+      success: (jsonResponse) => console.log(jsonResponse),
+      error: () => console.log("Failed to fetch chart filter options!")
+    });
 
-<script>
-  // $(document).ready(function () {
-  //   axios.get("/shop/chart/filter-options/").then(function (response) { // Load all the options
-  //     response.options.forEach(option => {
-  //       $("#year").append(new Option(option, option));
-  //     });
-  //     // Load data for the first option
-  //     loadAllCharts($("#year").children().first().val());
-  //   }).catch(function () {
-  //     console.log("Failed to fetch chart filter options!")
-  //   });
-  // });
+    $.ajax({
+      url: "/stats/drivingRate",
+      type: "GET",
+      dataType: "json",
+      success: (jsonResponse) => console.log(jsonResponse),
+      error: () => console.log("Failed to fetch chart filter options!")
+    });
 
-  // $("#filterForm").on("submit", (event) => {
-  //   event.preventDefault();
+    $.ajax({
+      url: "/stats/fuelUsageByMonth",
+      type: "GET",
+      dataType: "json",
+      success: (jsonResponse) => console.log(jsonResponse),
+      error: () => console.log("Failed to fetch chart filter options!")
+    });
+  });
 
-  //   const year = $("#year").val();
-  //   loadAllCharts(year)
-  // });
+  function loadChart(chart, endpoint) {
+    $.ajax({
+      url: endpoint,
+      type: "GET",
+      dataType: "json",
+      success: (jsonResponse) => {
+        // Extract data from the response
+        const title = jsonResponse.title;
+        const labels = jsonResponse.data.labels;
+        const datasets = jsonResponse.data.datasets;
 
-  // function loadChart(chart, endpoint) {
-  //   $.ajax({
-  //     url: endpoint,
-  //     type: "GET",
-  //     dataType: "json",
-  //     success: (jsonResponse) => {
-  //       // Extract data from the response
-  //       const title = jsonResponse.title;
-  //       const labels = jsonResponse.data.labels;
-  //       const datasets = jsonResponse.data.datasets;
+        // Reset the current chart
+        chart.data.datasets = [];
+        chart.data.labels = [];
 
-  //       // Reset the current chart
-  //       chart.data.datasets = [];
-  //       chart.data.labels = [];
-
-  //       // Load new data into the chart
-  //       chart.options.title.text = title;
-  //       chart.options.title.display = true;
-  //       chart.data.labels = labels;
-  //       datasets.forEach(dataset => {
-  //         chart.data.datasets.push(dataset);
-  //       });
-  //       chart.update();
-  //     },
-  //     error: () => console.log("Failed to fetch chart data from " + endpoint + "!")
-  //   });
-  // }
+        // Load new data into the chart
+        chart.options.title.text = title;
+        chart.options.title.display = true;
+        chart.data.labels = labels;
+        datasets.forEach(dataset => {
+          chart.data.datasets.push(dataset);
+        });
+        chart.update();
+      },
+      error: () => console.log("Failed to fetch chart data from " + endpoint + "!")
+    });
+  }
 
   // function loadAllCharts(year) {
   //   loadChart(salesChart, `/shop/chart/sales/${year}/`);

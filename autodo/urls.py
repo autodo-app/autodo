@@ -32,6 +32,13 @@ from autodo.views.todos import (
     todoComplete,
 )
 
+from autodo.views.stats import (
+    fuelEfficiencyStats,
+    fuelUsageByCarStats,
+    drivingRateStats,
+    fuelUsageByMonthStats,
+)
+
 urlpatterns = [
     path("", landing_page),
     # override the login view to redirect if the user is logged in
@@ -76,5 +83,15 @@ urlpatterns = [
     path("todos/<int:pk>/delete/", TodoDelete.as_view(), name="todos/delete"),
     path("api/todos/<int:pk>/", todoComplete, name="api_update_todo"),
     path("stats/", Stats.as_view(), name="stats"),
+    path("stats/fuelEfficiency", fuelEfficiencyStats, name="stats/fuelEfficiency"),
+    path(
+        "stats/fuelUsageByCar",
+        fuelUsageByCarStats,
+        name="stats/fuelUsageByCar",
+    ),
+    path("stats/drivingRate", drivingRateStats, name="stats/drivingRate"),
+    path(
+        "stats/fuelUsageByMonth", fuelUsageByMonthStats, name="stats/fuelUsageByMonth"
+    ),
     path("settings/", Settings.as_view(), name="settings"),
 ]
