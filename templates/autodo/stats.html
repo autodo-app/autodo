@@ -7,43 +7,45 @@ Stats - {{ block.super }}
 {% block content %}
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4"></script>
-
-<!-- <canvas id="chart" class="h-24 w-9/12 mx-auto"></canvas> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.2.0/chart.min.js"
+  integrity="sha512-VMsZqo0ar06BMtg0tPsdgRADvl0kDHpTbugCBBrL55KmucH6hP9zWdLIWY//OTfMnzz6xWQRxQqsUFefwHuHyg=="
+  crossorigin="anonymous"></script>
 
 <div class="container p-4 w-full mx-auto md:grid grid-cols-12 grid-rows-12 gap-4">
-  <div
-    class="col-span-6 row-span-6 grid grid-cols-3 justify-items-center items-center bg-gray-100 rounded-lg shadow-sm p-4">
-    <div class="col-span-1">Fuel Efficiency</div>
-    <div class="col-span-2"><canvas id="canvas2"></canvas></div>
+  <div class="col-span-6 row-span-6 grid justify-items-center items-center bg-gray-100 rounded-lg shadow-sm p-4">
+    Fuel Efficiency
+    <canvas id="fuelEfficiency"></canvas>
   </div>
-  <div class="col-span-3 row-span-2 grid justify-items-center items-center bg-gray-100 rounded-lg shadow-sm p-4">Total
-    ToDos
-    Completed: 0
+  <div class="col-span-3 row-span-2 grid justify-items-center items-center bg-gray-100 rounded-lg shadow-sm p-4">
+    <div>
+      Total ToDos Completed:
+      <span class="font-bold text-autodo text-3xl pl-2">0</span>
+    </div>
   </div>
-  <div class="col-span-3 row-span-2 grid justify-items-center items-center bg-gray-100 rounded-lg shadow-sm p-4">Total
-    Refuelings
-    Logged:
-    0</div>
+  <div class="col-span-3 row-span-2 grid justify-items-center items-center bg-gray-100 rounded-lg shadow-sm p-4">
+    <div>
+      Total Refuelings Logged: <span class="font-bold text-autodo text-3xl pl-2">0</span>
+    </div>
+  </div>
   <div
     class="col-span-6 row-span-4 grid grid-cols-3 justify-items-center items-center bg-gray-100 rounded-lg shadow-sm p-4">
     <div class="col-span-1">Fuel Usage by Car</div>
     <div class="col-span-2"><canvas id="chart"></canvas></div>
   </div>
 
-  <div
-    class="col-span-7 row-span-6 grid grid-cols-4 justify-items-center items-center bg-gray-100 rounded-lg shadow-sm p-4">
-    <div class="col-span-1">Driving Rate</div>
-    <div class="col-span-3"><canvas id="canvas3"></canvas></div>
+  <div class="col-span-7 row-span-6 grid justify-items-center items-center bg-gray-100 rounded-lg shadow-sm p-4">
+    Driving Rate
+    <canvas id="canvas3"></canvas>
   </div>
-  <div
-    class="col-span-5 row-span-6 grid grid-cols-3 gap-2 justify-items-center items-center bg-gray-100 rounded-lg shadow-sm p-4">
-    <div class="col-span-1">Fuel Usage per Month</div>
-    <div class="col-span-2"><canvas id="canvas4"></canvas></div>
+  <div class="col-span-5 row-span-6 grid justify-items-center items-center bg-gray-100 rounded-lg shadow-sm p-4">
+    Fuel Usage per Month
+    <canvas id="canvas4"></canvas>
   </div>
 </div>
 
 <script type="text/javascript">
+  const autodoColor = "#45c9a7";
+  console.log(Chart.defaults.scales);
   let canvas1 = document.getElementById("chart").getContext("2d");
 
   let chart1 = new Chart(canvas1, {
@@ -67,21 +69,57 @@ Stats - {{ block.super }}
     },
   });
 
-  let canvas2 = document.getElementById("canvas2").getContext("2d");
+  let fuelEfficiency = document.getElementById("fuelEfficiency").getContext('2d');
 
-  let chart2 = new Chart(canvas2, {
+  // Create a linear gradient
+  var gradient = fuelEfficiency.createLinearGradient(0, 0, 0, 400);
+  gradient.addColorStop(0, autodoColor);
+  gradient.addColorStop(1, 'rgba(255, 255, 255, 0.1)');
+
+  let fuelEfficiencyChart = new Chart(fuelEfficiency, {
     type: "line",
     data: {
       labels: ["Jan", "Feb", "March", "April", "May", "June", "July"],
       datasets: [{
         label: 'My First Dataset',
         data: [65, 59, 80, 81, 56, 55, 40],
-        fill: false,
-        borderColor: 'rgb(75, 192, 192)',
+        backgroundColor: gradient,
+        fill: true,
+        pointBackgroundColor: autodoColor,
+        pointBorderWidth: 0,
+        pointRadius: 5,
+        borderColor: autodoColor,
         tension: 0.1
       }]
     },
+    options: {
+      scales: {
+        x: {
+          grid: {
+            display: false,
+          },
+          title: {
+            display: true,
+            text: "Time",
+          }
+        },
+        y: {
+          grid: {
+            display: false,
+          },
+          title: {
+            display: true,
+            text: "Efficiency (MPG)",
+          }
+        }
+      },
+      plugins: {
+        legend: false
+      }
+    }
   });
+
+  console.log(fuelEfficiencyChart.options.scales.x);
 
   let canvas3 = document.getElementById("canvas3").getContext("2d");
 
@@ -92,87 +130,140 @@ Stats - {{ block.super }}
       datasets: [{
         label: 'My First Dataset',
         data: [65, 59, 80, 81, 56, 55, 40],
-        fill: false,
-        borderColor: 'rgb(75, 192, 192)',
+        backgroundColor: gradient,
+        fill: true,
+        pointBackgroundColor: autodoColor,
+        pointBorderWidth: 0,
+        pointRadius: 5,
+        borderColor: autodoColor,
         tension: 0.1
       }]
     },
+    options: {
+      scales: {
+        x: {
+          grid: {
+            display: false,
+          },
+          title: {
+            display: true,
+            text: "Time",
+          }
+        },
+        y: {
+          grid: {
+            display: false,
+          },
+          title: {
+            display: true,
+            text: "Efficiency (MPG)",
+          }
+        }
+      },
+      plugins: {
+        legend: false
+      }
+    }
   });
 
   let canvas4 = document.getElementById("canvas4").getContext("2d");
 
-  let chart4 = new Chart(canvas4, {
-    type: "bar",
+  var myChart = new Chart(canvas4, {
+    type: 'bar',
     data: {
-      labels: ["2020/Q1", "2020/Q2", "2020/Q3", "2020/Q4"],
-      datasets: [
-        {
-          label: "Gross volume ($)",
-          backgroundColor: "#79AEC8",
-          borderColor: "#417690",
-          data: [26900, 28700, 27300, 29200]
-        }
-      ]
+      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+      datasets: [{
+        label: '# of Votes',
+        data: [12, 19, 3, 5, 2, 3],
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)'
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)'
+        ],
+        borderWidth: 1
+      }]
     },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: "here",
+          }
+        }
+      }
+    }
   });
 
 
 </script>
 
 <script>
-  $(document).ready(function () {
-    axios.get("/shop/chart/filter-options/").then(function (response) { // Load all the options
-      response.options.forEach(option => {
-        $("#year").append(new Option(option, option));
-      });
-      // Load data for the first option
-      loadAllCharts($("#year").children().first().val());
-    }).catch(function () {
-      console.log("Failed to fetch chart filter options!")
-    });
-  });
+  // $(document).ready(function () {
+  //   axios.get("/shop/chart/filter-options/").then(function (response) { // Load all the options
+  //     response.options.forEach(option => {
+  //       $("#year").append(new Option(option, option));
+  //     });
+  //     // Load data for the first option
+  //     loadAllCharts($("#year").children().first().val());
+  //   }).catch(function () {
+  //     console.log("Failed to fetch chart filter options!")
+  //   });
+  // });
 
-  $("#filterForm").on("submit", (event) => {
-    event.preventDefault();
+  // $("#filterForm").on("submit", (event) => {
+  //   event.preventDefault();
 
-    const year = $("#year").val();
-    loadAllCharts(year)
-  });
+  //   const year = $("#year").val();
+  //   loadAllCharts(year)
+  // });
 
-  function loadChart(chart, endpoint) {
-    $.ajax({
-      url: endpoint,
-      type: "GET",
-      dataType: "json",
-      success: (jsonResponse) => {
-        // Extract data from the response
-        const title = jsonResponse.title;
-        const labels = jsonResponse.data.labels;
-        const datasets = jsonResponse.data.datasets;
+  // function loadChart(chart, endpoint) {
+  //   $.ajax({
+  //     url: endpoint,
+  //     type: "GET",
+  //     dataType: "json",
+  //     success: (jsonResponse) => {
+  //       // Extract data from the response
+  //       const title = jsonResponse.title;
+  //       const labels = jsonResponse.data.labels;
+  //       const datasets = jsonResponse.data.datasets;
 
-        // Reset the current chart
-        chart.data.datasets = [];
-        chart.data.labels = [];
+  //       // Reset the current chart
+  //       chart.data.datasets = [];
+  //       chart.data.labels = [];
 
-        // Load new data into the chart
-        chart.options.title.text = title;
-        chart.options.title.display = true;
-        chart.data.labels = labels;
-        datasets.forEach(dataset => {
-          chart.data.datasets.push(dataset);
-        });
-        chart.update();
-      },
-      error: () => console.log("Failed to fetch chart data from " + endpoint + "!")
-    });
-  }
+  //       // Load new data into the chart
+  //       chart.options.title.text = title;
+  //       chart.options.title.display = true;
+  //       chart.data.labels = labels;
+  //       datasets.forEach(dataset => {
+  //         chart.data.datasets.push(dataset);
+  //       });
+  //       chart.update();
+  //     },
+  //     error: () => console.log("Failed to fetch chart data from " + endpoint + "!")
+  //   });
+  // }
 
-  function loadAllCharts(year) {
-    loadChart(salesChart, `/shop/chart/sales/${year}/`);
-    loadChart(spendPerCustomerChart, `/shop/chart/spend-per-customer/${year}/`);
-    loadChart(paymentSuccessChart, `/shop/chart/payment-success/${year}/`);
-    loadChart(paymentMethodChart, `/shop/chart/payment-method/${year}/`);
-  }
+  // function loadAllCharts(year) {
+  //   loadChart(salesChart, `/shop/chart/sales/${year}/`);
+  //   loadChart(spendPerCustomerChart, `/shop/chart/spend-per-customer/${year}/`);
+  //   loadChart(paymentSuccessChart, `/shop/chart/payment-success/${year}/`);
+  //   loadChart(paymentMethodChart, `/shop/chart/payment-method/${year}/`);
+  // }
 </script>
 
 {% endblock %}
