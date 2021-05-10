@@ -78,7 +78,7 @@ Stats - {{ block.super }}
   let fuelEfficiencyChart = new Chart(fuelEfficiency, {
     type: "line",
     data: {
-      labels: ["Jan", "Feb", "March", "April", "May", "June", "July"],
+      // labels: ["Jan", "Feb", "March", "April", "May", "June", "July"],
       datasets: [{
         label: 'My First Dataset',
         data: [65, 59, 80, 81, 56, 55, 40],
@@ -88,7 +88,7 @@ Stats - {{ block.super }}
         pointBorderWidth: 0,
         pointRadius: 5,
         borderColor: autodoColor,
-        tension: 0.1
+        tension: 0.3
       }]
     },
     options: {
@@ -205,45 +205,7 @@ Stats - {{ block.super }}
   });
 
   $(document).ready(function () {
-    $.ajax({
-      url: "/stats/fuelEfficiency",
-      type: "GET",
-      dataType: "json",
-      success: (jsonResponse) => {
-        console.log(jsonResponse);
-        // // Load all the options
-        // jsonResponse.options.forEach(option => {
-        //   $("#year").append(new Option(option, option));
-        // });
-        // // Load data for the first option
-        // loadAllCharts($("#year").children().first().val());
-      },
-      error: () => console.log("Failed to fetch chart filter options!")
-    });
-
-    $.ajax({
-      url: "/stats/fuelUsageByCar",
-      type: "GET",
-      dataType: "json",
-      success: (jsonResponse) => console.log(jsonResponse),
-      error: () => console.log("Failed to fetch chart filter options!")
-    });
-
-    $.ajax({
-      url: "/stats/drivingRate",
-      type: "GET",
-      dataType: "json",
-      success: (jsonResponse) => console.log(jsonResponse),
-      error: () => console.log("Failed to fetch chart filter options!")
-    });
-
-    $.ajax({
-      url: "/stats/fuelUsageByMonth",
-      type: "GET",
-      dataType: "json",
-      success: (jsonResponse) => console.log(jsonResponse),
-      error: () => console.log("Failed to fetch chart filter options!")
-    });
+    loadAllCharts();
   });
 
   function loadChart(chart, endpoint) {
@@ -252,34 +214,29 @@ Stats - {{ block.super }}
       type: "GET",
       dataType: "json",
       success: (jsonResponse) => {
-        // Extract data from the response
-        const title = jsonResponse.title;
-        const labels = jsonResponse.data.labels;
-        const datasets = jsonResponse.data.datasets;
-
-        // Reset the current chart
-        chart.data.datasets = [];
-        chart.data.labels = [];
-
-        // Load new data into the chart
-        chart.options.title.text = title;
-        chart.options.title.display = true;
-        chart.data.labels = labels;
-        datasets.forEach(dataset => {
-          chart.data.datasets.push(dataset);
-        });
+        data = [];
+        for (var car in jsonResponse) {
+          // Only supporting one car currently
+          if (jsonResponse[car].length < 2) {
+            continue;
+          }
+          jsonResponse[car].forEach(point => {
+            data.push({ x: point.time, y: point.raw });
+          });
+        }
+        chart.data.datasets[0].data = data;
         chart.update();
       },
       error: () => console.log("Failed to fetch chart data from " + endpoint + "!")
     });
   }
 
-  // function loadAllCharts(year) {
-  //   loadChart(salesChart, `/shop/chart/sales/${year}/`);
-  //   loadChart(spendPerCustomerChart, `/shop/chart/spend-per-customer/${year}/`);
-  //   loadChart(paymentSuccessChart, `/shop/chart/payment-success/${year}/`);
-  //   loadChart(paymentMethodChart, `/shop/chart/payment-method/${year}/`);
-  // }
+  function loadAllCharts() {
+    loadChart(fuelEfficiencyChart, "/stats/fuelEfficiency");
+    // loadChart(fuelEfficiencyChart, "/stats/fuelUsageByCar");
+    // loadChart(fuelEfficiencyChart, "/stats/drivingRate");
+    // loadChart(fuelEfficiencyChart, "/stats/fuelUsageByMonth");
+  }
 </script>
 
 {% endblock %}

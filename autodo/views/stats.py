@@ -1,6 +1,7 @@
 from collections import defaultdict
 from functools import reduce
 from itertools import groupby
+from statistics import mean
 
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -44,7 +45,11 @@ def fuelEfficiencyStats(request):
         mpgs = [single_efficiency(s, t) for s, t in zip(refuelings, refuelings[1:])]
         emas = ema(mpgs)
         data[c.id] = [
-            {"time": r.odomSnapshot.date, "raw": mpgs[i], "filtered": emas[i]}
+            {
+                "time": r.odomSnapshot.date.strftime("%b %d, %Y"),
+                "raw": mpgs[i],
+                "filtered": emas[i],
+            }
             for i, r in enumerate(refuelings[1:])
         ]
     return JsonResponse(data)
