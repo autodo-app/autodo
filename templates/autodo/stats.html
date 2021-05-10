@@ -19,12 +19,12 @@ Stats - {{ block.super }}
   <div class="col-span-3 row-span-2 grid justify-items-center items-center bg-gray-100 rounded-lg shadow-sm p-4">
     <div>
       Total ToDos Completed:
-      <span class="font-bold text-autodo text-3xl pl-2">0</span>
+      <span id="completedTodos" class="font-bold text-autodo text-3xl pl-2">0</span>
     </div>
   </div>
   <div class="col-span-3 row-span-2 grid justify-items-center items-center bg-gray-100 rounded-lg shadow-sm p-4">
     <div>
-      Total Refuelings Logged: <span class="font-bold text-autodo text-3xl pl-2">0</span>
+      Total Refuelings Logged: <span id="refuelingsLogged" class="font-bold text-autodo text-3xl pl-2">0</span>
     </div>
   </div>
   <div
@@ -184,6 +184,7 @@ Stats - {{ block.super }}
   });
 
   function loadChart(chart, endpoint) {
+    // TODO: refactor
     $.ajax({
       url: endpoint,
       type: "GET",
@@ -232,7 +233,6 @@ Stats - {{ block.super }}
               data: data[idx],
               label: labels[idx],
               backgroundColor: backgroundColor[idx],
-              // backgroundColor: gradient,
             });
           }
         } else {
@@ -262,6 +262,24 @@ Stats - {{ block.super }}
     loadChart(fuelUsageByCarChart, "/stats/fuelUsageByCar");
     loadChart(drivingRateChart, "/stats/drivingRate");
     loadChart(fuelUsageByMonthChart, "/stats/fuelUsageByMonth");
+    $.ajax({
+      url: "/stats/completedTodos",
+      type: "GET",
+      dataType: "json",
+      success: jsonResponse => {
+        $("#completedTodos").text(jsonResponse.count);
+      },
+      error: () => console.log("Failed to fetch chart data from completedTodos!")
+    });
+    $.ajax({
+      url: "/stats/refuelingsLogged",
+      type: "GET",
+      dataType: "json",
+      success: jsonResponse => {
+        $("#refuelingsLogged").text(jsonResponse.count);
+      },
+      error: () => console.log("Failed to fetch chart data from refuelingsLogged!")
+    });
   }
 </script>
 

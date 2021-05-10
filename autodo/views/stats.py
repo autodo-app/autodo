@@ -90,11 +90,6 @@ def drivingRateStats(request):
     cars = Car.objects.filter(owner=request.user.id)
     for c in cars:
         odomSnaps = OdomSnapshot.objects.filter(car=c.id).order_by("date")
-        if c.id == 36:
-            print(list(odomSnaps))
-            import sys
-
-            sys.stdout.flush()
 
         rates = [single_distance_rate(s, t) for s, t in zip(odomSnaps, odomSnaps[1:])]
         data[c.id] = [
@@ -104,11 +99,7 @@ def drivingRateStats(request):
         data[c.id] = [
             rate for rate in data[c.id] if rate["raw"] > 0
         ]  # eliminate bad data
-        if c.id == 36:
-            print(data[c.id])
-            import sys
 
-            sys.stdout.flush()
     return JsonResponse(data)
 
 
@@ -142,3 +133,23 @@ def fuelUsageByMonthStats(request):
         data[c.id] = {"name": c.name, "amounts": amounts, "color": c.color}
 
     return JsonResponse(data)
+
+
+@csrf_exempt
+@require_http_methods(["GET"])
+def completedTodosStats(request):
+    return JsonResponse(
+        {
+            "count": Todo.objects.filter(owner=request.user.id)
+            .filter(complete=True)
+            .count()
+        }
+    )
+
+
+@csrf_exempt
+@require_http_methods(["GET"])
+def refuelingsLoggedStats(request):
+    return JsonResponse(
+        {"count": Refueling.objects.filter(owner=request.user.id).count()}
+    )

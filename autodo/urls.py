@@ -37,6 +37,8 @@ from autodo.views.stats import (
     fuelUsageByCarStats,
     drivingRateStats,
     fuelUsageByMonthStats,
+    completedTodosStats,
+    refuelingsLoggedStats,
 )
 
 urlpatterns = [
@@ -92,6 +94,10 @@ urlpatterns = [
     path("stats/drivingRate", drivingRateStats, name="stats/drivingRate"),
     path(
         "stats/fuelUsageByMonth", fuelUsageByMonthStats, name="stats/fuelUsageByMonth"
+    ),
+    path("stats/completedTodos", completedTodosStats, name="stats/completedTodos"),
+    path(
+        "stats/refuelingsLogged", refuelingsLoggedStats, name="stats/refuelingsLogged"
     ),
     path("settings/", Settings.as_view(), name="settings"),
 ]
