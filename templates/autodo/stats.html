@@ -29,40 +29,31 @@ Stats - {{ block.super }}
   </div>
   <div
     class="col-span-6 row-span-4 grid grid-cols-3 justify-items-center items-center bg-gray-100 rounded-lg shadow-sm p-4">
-    <div class="col-span-1">Fuel Usage by Car</div>
-    <div class="col-span-2"><canvas id="chart"></canvas></div>
+    <div class="col-span-1">Fuel Usage by Car (gal)</div>
+    <div class="col-span-2"><canvas id="fuelUsageByCar"></canvas></div>
   </div>
 
   <div class="col-span-7 row-span-6 grid justify-items-center items-center bg-gray-100 rounded-lg shadow-sm p-4">
     Driving Rate
-    <canvas id="canvas3"></canvas>
+    <canvas id="drivingRate"></canvas>
   </div>
   <div class="col-span-5 row-span-6 grid justify-items-center items-center bg-gray-100 rounded-lg shadow-sm p-4">
     Fuel Usage per Month
-    <canvas id="canvas4"></canvas>
+    <canvas id="fuelUsageByMonth"></canvas>
   </div>
 </div>
 
 <script type="text/javascript">
   const autodoColor = "#45c9a7";
-  let canvas1 = document.getElementById("chart").getContext("2d");
+  let fuelUsageByCar = document.getElementById("fuelUsageByCar").getContext("2d");
 
-  let chart1 = new Chart(canvas1, {
+  let fuelUsageByCarChart = new Chart(fuelUsageByCar, {
     type: "doughnut",
     data: {
-      labels: [
-        'Red',
-        'Blue',
-        'Yellow'
-      ],
+      labels: [],
       datasets: [{
-        label: 'My First Dataset',
-        data: [300, 50, 100],
-        backgroundColor: [
-          'rgb(255, 99, 132)',
-          'rgb(54, 162, 235)',
-          'rgb(255, 205, 86)'
-        ],
+        data: [],
+        backgroundColor: [],
         hoverOffset: 4
       }]
     },
@@ -78,10 +69,8 @@ Stats - {{ block.super }}
   let fuelEfficiencyChart = new Chart(fuelEfficiency, {
     type: "line",
     data: {
-      // labels: ["Jan", "Feb", "March", "April", "May", "June", "July"],
       datasets: [{
-        label: 'My First Dataset',
-        data: [65, 59, 80, 81, 56, 55, 40],
+        data: [],
         backgroundColor: gradient,
         fill: true,
         pointBackgroundColor: autodoColor,
@@ -118,15 +107,14 @@ Stats - {{ block.super }}
     }
   });
 
-  let canvas3 = document.getElementById("canvas3").getContext("2d");
+  let drivingRate = document.getElementById("drivingRate").getContext("2d");
 
-  let chart3 = new Chart(canvas3, {
+  let drivingRateChart = new Chart(drivingRate, {
     type: "line",
     data: {
-      labels: ["Jan", "Feb", "March", "April", "May", "June", "July"],
+      labels: [],
       datasets: [{
-        label: 'My First Dataset',
-        data: [65, 59, 80, 81, 56, 55, 40],
+        data: [],
         backgroundColor: gradient,
         fill: true,
         pointBackgroundColor: autodoColor,
@@ -153,7 +141,7 @@ Stats - {{ block.super }}
           },
           title: {
             display: true,
-            text: "Efficiency (MPG)",
+            text: "Miles per Day",
           }
         }
       },
@@ -163,41 +151,28 @@ Stats - {{ block.super }}
     }
   });
 
-  let canvas4 = document.getElementById("canvas4").getContext("2d");
+  let fuelUsageByMonth = document.getElementById("fuelUsageByMonth").getContext("2d");
 
-  var myChart = new Chart(canvas4, {
+  var fuelUsageByMonthChart = new Chart(fuelUsageByMonth, {
     type: 'bar',
     data: {
-      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-      datasets: [{
-        label: '# of Votes',
-        data: [12, 19, 3, 5, 2, 3],
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-          'rgba(255, 206, 86, 0.2)',
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(153, 102, 255, 0.2)',
-          'rgba(255, 159, 64, 0.2)'
-        ],
-        borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)'
-        ],
-        borderWidth: 1
-      }]
+      datasets: []
     },
     options: {
       scales: {
-        y: {
-          beginAtZero: true,
+        x: {
+          stacked: true,
           title: {
             display: true,
-            text: "here",
+            text: "Month"
+          }
+        },
+        y: {
+          beginAtZero: true,
+          stacked: true,
+          title: {
+            display: true,
+            text: "Fuel Usage (gal)",
           }
         }
       }
@@ -214,17 +189,68 @@ Stats - {{ block.super }}
       type: "GET",
       dataType: "json",
       success: (jsonResponse) => {
+        backgroundColor = [];
+        labels = [];
         data = [];
+        console.log(jsonResponse);
         for (var car in jsonResponse) {
-          // Only supporting one car currently
-          if (jsonResponse[car].length < 2) {
-            continue;
+          if (endpoint === "/stats/fuelEfficiency" || endpoint === "/stats/drivingRate") {
+            // Only supporting one car currently
+            if (jsonResponse[car].length < 2) {
+              continue;
+            }
+            if (endpoint === "/stats/drivingRate") {
+              console.log(car);
+            }
+            carData = [];
+            jsonResponse[car].forEach(point => {
+              carData.push({ x: point.time, y: point.raw });
+            });
+            data.push(carData);
+          } else if (endpoint === "/stats/fuelUsageByCar") {
+            labels.push(jsonResponse[car].name);
+            data.push(jsonResponse[car].amount);
+            backgroundColor.push(jsonResponse[car].color);
+          } else if (endpoint === "/stats/fuelUsageByMonth") {
+            labels.push(jsonResponse[car].name);
+            backgroundColor.push(jsonResponse[car].color);
+            carData = [];
+            jsonResponse[car].amounts.forEach(point => {
+              carData.push({ x: point.date, y: point.amount });
+            });
+            data.push(carData);
           }
-          jsonResponse[car].forEach(point => {
-            data.push({ x: point.time, y: point.raw });
-          });
         }
-        chart.data.datasets[0].data = data;
+        if (endpoint === "/stats/fuelUsageByCar") {
+          chart.data.labels = labels;
+          chart.data.datasets[0].backgroundColor = backgroundColor;
+          chart.data.datasets[0].data = data;
+        } else if (endpoint === "/stats/fuelUsageByMonth") {
+          chart.datasets = [];
+          for (var idx in data) {
+            chart.data.datasets.push({
+              data: data[idx],
+              label: labels[idx],
+              backgroundColor: backgroundColor[idx],
+              // backgroundColor: gradient,
+            });
+          }
+        } else {
+          chart.datasets = [];
+          for (var idx in data) {
+            chart.data.datasets.push({
+              data: data[idx],
+              backgroundColor: gradient,
+              fill: true,
+              pointBackgroundColor: idx == 0 ? autodoColor : "red",
+              pointBorderWidth: 0,
+              pointRadius: 5,
+              borderColor: autodoColor,
+              tension: 0.1
+            });
+          }
+        }
+
         chart.update();
       },
       error: () => console.log("Failed to fetch chart data from " + endpoint + "!")
@@ -233,9 +259,9 @@ Stats - {{ block.super }}
 
   function loadAllCharts() {
     loadChart(fuelEfficiencyChart, "/stats/fuelEfficiency");
-    // loadChart(fuelEfficiencyChart, "/stats/fuelUsageByCar");
-    // loadChart(fuelEfficiencyChart, "/stats/drivingRate");
-    // loadChart(fuelEfficiencyChart, "/stats/fuelUsageByMonth");
+    loadChart(fuelUsageByCarChart, "/stats/fuelUsageByCar");
+    loadChart(drivingRateChart, "/stats/drivingRate");
+    loadChart(fuelUsageByMonthChart, "/stats/fuelUsageByMonth");
   }
 </script>
 

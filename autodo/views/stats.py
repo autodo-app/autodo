@@ -55,9 +55,6 @@ def fuelEfficiencyStats(request):
     return JsonResponse(data)
 
 
-# TODO
-
-
 @csrf_exempt
 @require_http_methods(["GET"])
 def fuelUsageByCarStats(request):
@@ -66,22 +63,23 @@ def fuelUsageByCarStats(request):
     for c in cars:
         refuelings = Refueling.objects.filter(odomSnapshot__car=c.id)
         if len(refuelings) == 0:
-            gas_used[c.id] = 0
+            amount = 0
         else:
-            gas_used[c.id] = reduce(
+            amount = reduce(
                 lambda i, j: i + j,
                 map(
                     lambda x: x.amount,
                     Refueling.objects.filter(odomSnapshot__car=c.id),
                 ),
             )
+        gas_used[c.id] = {"name": c.name, "amount": amount, "color": c.color}
     return JsonResponse(gas_used)
 
 
 def single_distance_rate(i, j):
     dayDiff = (j.date - i.date).days
     # if both snapshots are in the same day then multiply the rate by two
-    dayDiff = dayDiff if (dayDiff > 1) else 0.5
+    dayDiff = dayDiff if (dayDiff >= 1) else 0.5
     return (j.mileage - i.mileage) / dayDiff
 
 
@@ -91,11 +89,26 @@ def drivingRateStats(request):
     data = {}
     cars = Car.objects.filter(owner=request.user.id)
     for c in cars:
-        odomSnaps = OdomSnapshot.objects.filter(car=c.id).order_by("mileage")
+        odomSnaps = OdomSnapshot.objects.filter(car=c.id).order_by("date")
+        if c.id == 36:
+            print(list(odomSnaps))
+            import sys
+
+            sys.stdout.flush()
+
         rates = [single_distance_rate(s, t) for s, t in zip(odomSnaps, odomSnaps[1:])]
         data[c.id] = [
-            {"time": s.date, "rate": rates[i]} for i, s in enumerate(odomSnaps[1:])
+            {"time": s.date.strftime("%b %d, %Y"), "raw": rates[i]}
+            for i, s in enumerate(odomSnaps[1:])
         ]
+        data[c.id] = [
+            rate for rate in data[c.id] if rate["raw"] > 0
+        ]  # eliminate bad data
+        if c.id == 36:
+            print(data[c.id])
+            import sys
+
+            sys.stdout.flush()
     return JsonResponse(data)
 
 
@@ -105,11 +118,8 @@ def fuelUsageByMonthStats(request):
     data = {}
     cars = Car.objects.filter(owner=request.user.id)
     for c in cars:
-        data[
-            c.id
-        ] = (
-            []
-        )  # could use defaultdict but this ensures that we have an empty list when needed
+        # could use defaultdict but this ensures that we have an empty list when needed
+        # data[c.id] = []
         refuelings = Refueling.objects.filter(odomSnapshot__car=c.id).order_by(
             "odomSnapshot__date"
         )
@@ -123,10 +133,12 @@ def fuelUsageByMonthStats(request):
             )
         )
         groups = groupby(mapped, key=lambda e: e["date"])
+        amounts = []
         for k, v in groups:
             total = 0
             for e in v:
                 total += e["amount"]
-            data[c.id].append({"date": k, "amount": total})
+            amounts.append({"date": k, "amount": total})
+        data[c.id] = {"name": c.name, "amounts": amounts, "color": c.color}
 
     return JsonResponse(data)
