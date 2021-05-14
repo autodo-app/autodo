@@ -2,6 +2,7 @@ from collections import defaultdict
 from functools import reduce
 from itertools import groupby
 from statistics import mean
+from datetime import timezone
 
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -44,9 +45,11 @@ def fuelEfficiencyStats(request):
         )
         mpgs = [single_efficiency(s, t) for s, t in zip(refuelings, refuelings[1:])]
         emas = ema(mpgs)
-        data[c.id] = [
+        data[c.id] = {"name": c.name, "color": c.color}
+        data[c.id]["data"] = [
             {
-                "time": r.odomSnapshot.date.strftime("%b %d, %Y"),
+                "time": r.odomSnapshot.date.replace(tzinfo=timezone.utc).timestamp()
+                * 1000,
                 "raw": mpgs[i],
                 "filtered": emas[i],
             }
@@ -92,12 +95,16 @@ def drivingRateStats(request):
         odomSnaps = OdomSnapshot.objects.filter(car=c.id).order_by("date")
 
         rates = [single_distance_rate(s, t) for s, t in zip(odomSnaps, odomSnaps[1:])]
-        data[c.id] = [
-            {"time": s.date.strftime("%b %d, %Y"), "raw": rates[i]}
+        data[c.id] = {"name": c.name, "color": c.color}
+        data[c.id]["data"] = [
+            {
+                "time": s.date.replace(tzinfo=timezone.utc).timestamp() * 1000,
+                "raw": rates[i],
+            }
             for i, s in enumerate(odomSnaps[1:])
         ]
-        data[c.id] = [
-            rate for rate in data[c.id] if rate["raw"] > 0
+        data[c.id]["data"] = [
+            rate for rate in data[c.id]["data"] if rate["raw"] > 0
         ]  # eliminate bad data
 
     return JsonResponse(data)
@@ -109,15 +116,14 @@ def fuelUsageByMonthStats(request):
     data = {}
     cars = Car.objects.filter(owner=request.user.id)
     for c in cars:
-        # could use defaultdict but this ensures that we have an empty list when needed
-        # data[c.id] = []
         refuelings = Refueling.objects.filter(odomSnapshot__car=c.id).order_by(
             "odomSnapshot__date"
         )
         mapped = list(
             map(
                 lambda r: {
-                    "date": f"{r.odomSnapshot.date.month}/{r.odomSnapshot.date.year}",
+                    # Use replace to set the day to a value in the middle of the month so that the charts library can round it properly
+                    "date": r.odomSnapshot.date.replace(day=3).timestamp() * 1000,
                     "amount": r.amount,
                 },
                 refuelings,

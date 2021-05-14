@@ -10,6 +10,8 @@ Stats - {{ block.super }}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.2.0/chart.min.js"
   integrity="sha512-VMsZqo0ar06BMtg0tPsdgRADvl0kDHpTbugCBBrL55KmucH6hP9zWdLIWY//OTfMnzz6xWQRxQqsUFefwHuHyg=="
   crossorigin="anonymous"></script>
+<script
+  src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@next/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
 
 <div class="container p-4 w-full mx-auto md:grid grid-cols-12 grid-rows-12 gap-4">
   <div class="col-span-6 row-span-6 grid justify-items-center items-center bg-gray-100 rounded-lg shadow-sm p-4">
@@ -69,22 +71,17 @@ Stats - {{ block.super }}
   let fuelEfficiencyChart = new Chart(fuelEfficiency, {
     type: "line",
     data: {
-      datasets: [{
-        data: [],
-        backgroundColor: gradient,
-        fill: true,
-        pointBackgroundColor: autodoColor,
-        pointBorderWidth: 0,
-        pointRadius: 5,
-        borderColor: autodoColor,
-        tension: 0.3
-      }]
+      datasets: []
     },
     options: {
       scales: {
         x: {
           grid: {
             display: false,
+          },
+          type: 'time',
+          time: {
+            unit: 'day',
           },
           title: {
             display: true,
@@ -101,9 +98,6 @@ Stats - {{ block.super }}
           }
         }
       },
-      plugins: {
-        legend: false
-      }
     }
   });
 
@@ -113,22 +107,17 @@ Stats - {{ block.super }}
     type: "line",
     data: {
       labels: [],
-      datasets: [{
-        data: [],
-        backgroundColor: gradient,
-        fill: true,
-        pointBackgroundColor: autodoColor,
-        pointBorderWidth: 0,
-        pointRadius: 5,
-        borderColor: autodoColor,
-        tension: 0.1
-      }]
+      datasets: [],
     },
     options: {
       scales: {
         x: {
           grid: {
             display: false,
+          },
+          type: 'time',
+          time: {
+            unit: 'day',
           },
           title: {
             display: true,
@@ -145,9 +134,6 @@ Stats - {{ block.super }}
           }
         }
       },
-      plugins: {
-        legend: false
-      }
     }
   });
 
@@ -161,13 +147,30 @@ Stats - {{ block.super }}
     options: {
       scales: {
         x: {
+          grid: {
+            display: false,
+          },
           stacked: true,
           title: {
             display: true,
             text: "Month"
-          }
+          },
+          type: 'time',
+          time: {
+            unit: "month",
+            round: "month",
+            displayFormat: {
+              month: "MMM YYYY",
+            },
+            ticks: {
+              source: "data",
+            },
+          },
         },
         y: {
+          grid: {
+            display: false,
+          },
           beginAtZero: true,
           stacked: true,
           title: {
@@ -193,18 +196,22 @@ Stats - {{ block.super }}
         backgroundColor = [];
         labels = [];
         data = [];
-        console.log(jsonResponse);
+        gradients = [];
         for (var car in jsonResponse) {
           if (endpoint === "/stats/fuelEfficiency" || endpoint === "/stats/drivingRate") {
             // Only supporting one car currently
             if (jsonResponse[car].length < 2) {
               continue;
             }
-            if (endpoint === "/stats/drivingRate") {
-              console.log(car);
-            }
+            console.log(jsonResponse[car]);
+            labels.push(jsonResponse[car]['name']);
+            backgroundColor.push(jsonResponse[car]['color']);
+            var gradient = fuelEfficiency.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, jsonResponse[car]['color']);
+            gradient.addColorStop(1, 'rgba(255, 255, 255, 0.1)');
+            gradients.push(gradient);
             carData = [];
-            jsonResponse[car].forEach(point => {
+            jsonResponse[car]['data'].forEach(point => {
               carData.push({ x: point.time, y: point.raw });
             });
             data.push(carData);
@@ -239,14 +246,15 @@ Stats - {{ block.super }}
           chart.datasets = [];
           for (var idx in data) {
             chart.data.datasets.push({
+              label: labels[idx],
               data: data[idx],
-              backgroundColor: gradient,
+              backgroundColor: gradients[idx],
               fill: true,
-              pointBackgroundColor: idx == 0 ? autodoColor : "red",
+              pointBackgroundColor: backgroundColor[idx], // todo: make this the car color
               pointBorderWidth: 0,
               pointRadius: 5,
-              borderColor: autodoColor,
-              tension: 0.1
+              borderColor: backgroundColor[idx],
+              tension: 0.3
             });
           }
         }
