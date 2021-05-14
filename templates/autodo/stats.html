@@ -89,9 +89,6 @@ Stats - {{ block.super }}
           }
         },
         y: {
-          grid: {
-            display: false,
-          },
           title: {
             display: true,
             text: "Efficiency (MPG)",
@@ -125,9 +122,6 @@ Stats - {{ block.super }}
           }
         },
         y: {
-          grid: {
-            display: false,
-          },
           title: {
             display: true,
             text: "Miles per Day",
@@ -250,7 +244,7 @@ Stats - {{ block.super }}
               data: data[idx],
               backgroundColor: gradients[idx],
               fill: true,
-              pointBackgroundColor: backgroundColor[idx], // todo: make this the car color
+              pointBackgroundColor: backgroundColor[idx],
               pointBorderWidth: 0,
               pointRadius: 5,
               borderColor: backgroundColor[idx],

@@ -3,6 +3,7 @@ from functools import reduce
 from itertools import groupby
 from statistics import mean
 from datetime import timezone
+import sys
 
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -80,6 +81,9 @@ def fuelUsageByCarStats(request):
 
 
 def single_distance_rate(i, j):
+    print(f"{i} | {j}")
+    sys.stdout.flush()
+
     dayDiff = (j.date - i.date).days
     # if both snapshots are in the same day then multiply the rate by two
     dayDiff = dayDiff if (dayDiff >= 1) else 0.5
@@ -93,6 +97,8 @@ def drivingRateStats(request):
     cars = Car.objects.filter(owner=request.user.id)
     for c in cars:
         odomSnaps = OdomSnapshot.objects.filter(car=c.id).order_by("date")
+
+        # TODO: the first data point is way high
 
         rates = [single_distance_rate(s, t) for s, t in zip(odomSnaps, odomSnaps[1:])]
         data[c.id] = {"name": c.name, "color": c.color}
