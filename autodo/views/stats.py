@@ -81,9 +81,6 @@ def fuelUsageByCarStats(request):
 
 
 def single_distance_rate(i, j):
-    print(f"{i} | {j}")
-    sys.stdout.flush()
-
     dayDiff = (j.date - i.date).days
     # if both snapshots are in the same day then multiply the rate by two
     dayDiff = dayDiff if (dayDiff >= 1) else 0.5
@@ -112,6 +109,8 @@ def drivingRateStats(request):
         data[c.id]["data"] = [
             rate for rate in data[c.id]["data"] if rate["raw"] > 0
         ]  # eliminate bad data
+        if (len(data[c.id]["data"]) < 2):
+            data[c.id]["data"] = []
 
     return JsonResponse(data)
 
