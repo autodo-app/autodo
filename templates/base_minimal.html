@@ -1,25 +1,56 @@
 <!DOCTYPE html>
+<!-- <html class="dark"> -->
 <html>
+  <head>
+    {% load static %}
+    <title>{% block title %}auToDo{% endblock %}</title>
+    <link rel="icon" href="{% static 'favicon.svg' %}" type="image/svg+xml" />
+    <link rel="icon" href="{% static 'favicon-32x32.png' %}" type="image/png" />
+    <link
+      rel="apple-touch-icon"
+      sizes="48x48"
+      href="/icons/icon-48x48.png?v=dec44f98b636b180cee9fb8274ba0287"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="72x72"
+      href="/icons/icon-72x72.png?v=dec44f98b636b180cee9fb8274ba0287"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="96x96"
+      href="/icons/icon-96x96.png?v=dec44f98b636b180cee9fb8274ba0287"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="144x144"
+      href="/icons/icon-144x144.png?v=dec44f98b636b180cee9fb8274ba0287"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="192x192"
+      href="/icons/icon-192x192.png?v=dec44f98b636b180cee9fb8274ba0287"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="256x256"
+      href="/icons/icon-256x256.png?v=dec44f98b636b180cee9fb8274ba0287"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="384x384"
+      href="/icons/icon-384x384.png?v=dec44f98b636b180cee9fb8274ba0287"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="512x512"
+      href="/icons/icon-512x512.png?v=dec44f98b636b180cee9fb8274ba0287"
+    />
 
-<head>
-  {% load static %}
-  <title>{% block title %}auToDo{% endblock %}</title>
-  <link rel="icon" href="{% static 'favicon.svg' %}" type="image/svg+xml" />
-  <link rel="icon" href="{% static 'favicon-32x32.png' %}" type="image/png" />
-  <link rel="apple-touch-icon" sizes="48x48" href="/icons/icon-48x48.png?v=dec44f98b636b180cee9fb8274ba0287" />
-  <link rel="apple-touch-icon" sizes="72x72" href="/icons/icon-72x72.png?v=dec44f98b636b180cee9fb8274ba0287" />
-  <link rel="apple-touch-icon" sizes="96x96" href="/icons/icon-96x96.png?v=dec44f98b636b180cee9fb8274ba0287" />
-  <link rel="apple-touch-icon" sizes="144x144" href="/icons/icon-144x144.png?v=dec44f98b636b180cee9fb8274ba0287" />
-  <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png?v=dec44f98b636b180cee9fb8274ba0287" />
-  <link rel="apple-touch-icon" sizes="256x256" href="/icons/icon-256x256.png?v=dec44f98b636b180cee9fb8274ba0287" />
-  <link rel="apple-touch-icon" sizes="384x384" href="/icons/icon-384x384.png?v=dec44f98b636b180cee9fb8274ba0287" />
-  <link rel="apple-touch-icon" sizes="512x512" href="/icons/icon-512x512.png?v=dec44f98b636b180cee9fb8274ba0287" />
+    <link href="{% static 'site.css' %}" rel="stylesheet" />
+  </head>
 
-  <link href="{% static 'site.css' %}" rel="stylesheet">
-</head>
-
-<body>
-  {% block content %}{% endblock %}
-</body>
-
+  <body>
+    {% block content %}{% endblock %}
+  </body>
 </html>
