@@ -27,9 +27,9 @@ django-sendgrid-v5==0.9.1 \
 django-shapeshifter==18.9.23 \
     --hash=sha256:7e127f00f155eb5c01acb2bcaeb46f7919451d4956b1b14ecde0a485d9f8339d \
     --hash=sha256:e9a829587610a40a7d03fb19436413bc92450c1bf00e90927836a8717b130bc7
-django==3.2.1; python_version >= "3.6" \
-    --hash=sha256:e2f73790c60188d3f94f08f644de249d956b3789161e7604509d128a13fb2fcc \
-    --hash=sha256:95c13c750f1f214abadec92b82c2768a5e795e6c2ebd0b4126f895ce9efffcdd
+django==3.2.4; python_version >= "3.6" \
+    --hash=sha256:ea735cbbbb3b2fba6d4da4784a0043d84c67c92f1fdf15ad6db69900e792c10f \
+    --hash=sha256:66c9d8db8cc6fe938a28b7887c1596e42d522e27618562517cc8929eb7e7f296
 future==0.18.2; python_version >= "2.6" and python_full_version < "3.0.0" or python_full_version >= "3.3.0" \
     --hash=sha256:b1bead90b70cf6ec3f0710ae53a525360fa360d306a86583adc6bf83a4db537d
 gunicorn==20.1.0; python_version >= "3.5" \
