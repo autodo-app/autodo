@@ -35,7 +35,7 @@ python-versions = "*"
 
 [[package]]
 name = "django"
-version = "3.2.2"
+version = "3.2.4"
 description = "A high-level Python Web framework that encourages rapid development and clean, pragmatic design."
 category = "main"
 optional = false
@@ -326,7 +326,7 @@ brotli = ["brotli"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "62530d719038841b972cd05f2eb0d2ab09b473396dd3047798dc2d440575bfbd"
+content-hash = "5ba5c0a725562c3135724453f56ef4b9f91e354e810cd0aa738297122465c531"
 
 [metadata.files]
 asgiref = [
@@ -346,8 +346,8 @@ dj-database-url = [
     {file = "dj_database_url-0.5.0-py2.py3-none-any.whl", hash = "sha256:851785365761ebe4994a921b433062309eb882fedd318e1b0fcecc607ed02da9"},
 ]
 django = [
-    {file = "Django-3.2.2-py3-none-any.whl", hash = "sha256:18dd3145ddbd04bf189ff79b9954d08fda5171ea7b57bf705789fea766a07d50"},
-    {file = "Django-3.2.2.tar.gz", hash = "sha256:0a1d195ad65c52bf275b8277b3d49680bd1137a5f55039a806f25f6b9752ce3d"},
+    {file = "Django-3.2.4-py3-none-any.whl", hash = "sha256:ea735cbbbb3b2fba6d4da4784a0043d84c67c92f1fdf15ad6db69900e792c10f"},
+    {file = "Django-3.2.4.tar.gz", hash = "sha256:66c9d8db8cc6fe938a28b7887c1596e42d522e27618562517cc8929eb7e7f296"},
 ]
 django-extra-views = [
     {file = "django-extra-views-0.13.0.tar.gz", hash = "sha256:3c88f1e6714ec174142b6e76605fa1d5d1615c6ae2eb00568c095da778cc1245"},
