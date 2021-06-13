@@ -34,6 +34,9 @@ module.exports = {
         background_med: "#444",
         background_dark: "#333",
       },
+      height: {
+        dashboard: "calc(100vh - 4rem)",
+      },
       linearBorderGradients: {
         colors: gradients,
         directions: {

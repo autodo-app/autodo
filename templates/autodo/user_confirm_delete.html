@@ -2,17 +2,19 @@
 
 {% block content %}
 
-<div class="container p-8 mx-auto max-w-lg">
-  <div class="text-2xl">Deleting Account</div>
-  <div class="my-2 text-lg">Are you sure you want to delete your account?</div>
+<div class="w-full h-dashboard dark:bg-background_dark dark:text-gray-200">
+  <div class="container p-8 mx-auto max-w-lg">
+    <div class="text-2xl">Deleting Account</div>
+    <div class="my-2 text-lg">Are you sure you want to delete your account?</div>
 
-  <div class="my-4 text-lg text-red-500 font-bold">This action is not reversible.</div>
+    <div class="my-4 text-lg text-red-500 font-bold">This action is not reversible.</div>
 
-  <form action="" method="POST">
-    {% csrf_token %}
-    <input type="submit" value="Yes, delete."
-      class="bg-red-600 hover:bg-red-400 text-white font-bold py-2 px-4 my-2 rounded shadow-md">
-  </form>
+    <form action="" method="POST">
+      {% csrf_token %}
+      <input type="submit" value="Yes, delete."
+        class="bg-red-600 hover:bg-red-400 text-white font-bold py-2 px-4 my-2 rounded shadow-md">
+    </form>
+  </div>
 </div>
 
 {% endblock %}

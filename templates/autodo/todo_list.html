@@ -1,95 +1,98 @@
 {% extends "base_generic.html" %}
 {% block content %}
-<div class="container mx-auto p-4 max-w-3xl">
-  {% if filter.qs|length < 1 %}
-  <div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 text-center">
-    <p>No todos, would you like to add one?</p>
-    <div class="my-8">
-      <a href="{% url 'todos/create' %}"
-        class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 rounded shadow-md">
-        Create Todo
-      </a>
+<div class="w-full h-dashboard overflow-auto dark:bg-background_dark">
+  <div class="container mx-auto p-4 max-w-3xl">
+    {% if filter.qs|length < 1 %}
+    <div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 text-center">
+      <p>No todos, would you like to add one?</p>
+      <div class="my-8">
+        <a href="{% url 'todos/create' %}"
+          class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 rounded shadow-md">
+          Create Todo
+        </a>
+      </div>
     </div>
-  </div>
-  {% endif %}
+    {% endif %}
 
-  <form method="post" action="" class="todo-form">
-    {% csrf_token %}
-    {% for todo in object_list %}
-    <div class="bg-gray-50 rounded-lg shadow-sm duration-100 px-2 py-4 my-4">
-      <div class="flex flex-wrap justify-between">
-        <div class="flex flex-row">
-          <div class="my-auto">
-            <input type="checkbox" {% if todo.complete %}checked{% endif %} data-id="{{ todo.id }}"
-              class="todo-complete-check w-6 h-6 mx-4 rounded border-2 border-gray-700 focus:ring-transparent" />
-          </div>
-          <div class="flex flex-col">
-            <a href="{% url 'todos/detail' todo.id %}"
-              class="text-blue-600 hover:text-blue-400 text-lg font-semibold mx-2">
-              {{ todo.name }}
-            </a>
-            <div id="comp_mil_{{ todo.id }}" class="mx-2 {% if not todo.complete %}hidden{% endif %}">
-              <label for="comp_id_{{ todo.id }}">Completed at: </label>
-              <input type="number" id="comp_id_{{ todo.id }}" name="{{ todo.id }}" data-id="{{ todo.id }}"
-                class="bg-gray-50 py-1 px-4 border border-gray-400 rounded focus:outline-none focus:border-blue-500 todo-complete-mileage"
-                value="{% if todo.completionOdomSnapshot %}{{ todo.completionOdomSnapshot.mileage }}{% else %}{{ todo.car.mileage }}{% endif %}" />
-              mi
+    <form method="post" action="" class="todo-form">
+      {% csrf_token %}
+      {% for todo in object_list %}
+      <div
+        class="bg-gray-50 dark:bg-background_med dark:text-gray-200 rounded-lg shadow-sm duration-100 px-2 py-4 my-4">
+        <div class="flex flex-wrap justify-between">
+          <div class="flex flex-row">
+            <div class="my-auto">
+              <input type="checkbox" {% if todo.complete %}checked{% endif %} data-id="{{ todo.id }}"
+                class="todo-complete-check w-6 h-6 mx-4 rounded border-2 border-gray-700 dark:bg-background_light focus:ring-transparent" />
             </div>
-            <div id="due_mil_{{ todo.id }}" class="mx-2 {% if todo.complete %}hidden{% endif %}">
-              {% if todo.dueMileage %}
-              Due at: <span class="font-bold">{{ todo.dueMileage }}</span> mi
-              (<span class="{% if todo.delta_due_mileage <= 0 %}text-red-700{% endif %}">
-                {% if todo.delta_due_mileage > -1 %}
-                <span class="font-bold">{{ todo.delta_due_mileage }}</span> mi from now
+            <div class="flex flex-col">
+              <a href="{% url 'todos/detail' todo.id %}"
+                class="text-blue-600 dark:text-blue-500 hover:text-blue-400 text-lg font-semibold mx-2">
+                {{ todo.name }}
+              </a>
+              <div id="comp_mil_{{ todo.id }}" class="mx-2 {% if not todo.complete %}hidden{% endif %}">
+                <label for="comp_id_{{ todo.id }}">Completed at: </label>
+                <input type="number" id="comp_id_{{ todo.id }}" name="{{ todo.id }}" data-id="{{ todo.id }}"
+                  class="bg-gray-50 dark:bg-background_light py-1 px-4 border border-gray-400 dark:border-gray-700 rounded focus:outline-none focus:border-blue-500 todo-complete-mileage"
+                  value="{% if todo.completionOdomSnapshot %}{{ todo.completionOdomSnapshot.mileage }}{% else %}{{ todo.car.mileage }}{% endif %}" />
+                mi
+              </div>
+              <div id="due_mil_{{ todo.id }}" class="mx-2 {% if todo.complete %}hidden{% endif %}">
+                {% if todo.dueMileage %}
+                Due at: <span class="font-bold">{{ todo.dueMileage }}</span> mi
+                (<span class="{% if todo.delta_due_mileage <= 0 %}text-red-700 dark:text-red-500{% endif %}">
+                  {% if todo.delta_due_mileage > -1 %}
+                  <span class="font-bold">{{ todo.delta_due_mileage }}</span> mi from now
+                  {% else %}
+                  <span class="font-bold">{% widthratio todo.delta_due_mileage 1 -1 %} mi ago</span>
+                  {% endif %}
+                </span>)
                 {% else %}
-                <span class="font-bold">{% widthratio todo.delta_due_mileage 1 -1 %} mi ago</span>
+                Due on: <span class="font-bold">{{ todo.dueDate|date:"D, M d, Y" }}</span>
+                (<span class="{% if todo.delta_due_date <= 0 %}text-red-700 dark:text-red-500{% endif %}">
+                  {% if todo.delta_due_date > -1 %}
+                  <span class="font-bold">{{ todo.delta_due_date }}</span> days from now
+                  {% else %}
+                  <span class="font-bold">{% widthratio todo.delta_due_date 1 -1 %} days ago</span>
+                  {% endif %}
+                </span>)
                 {% endif %}
-              </span>)
-              {% else %}
-              Due on: <span class="font-bold">{{ todo.dueDate|date:"D, M d, Y" }}</span>
-              (<span class="{% if todo.delta_due_date <= 0 %}text-red-700{% endif %}">
-                {% if todo.delta_due_date > -1 %}
-                <span class="font-bold">{{ todo.delta_due_date }}</span> days from now
-                {% else %}
-                <span class="font-bold">{% widthratio todo.delta_due_date 1 -1 %} days ago</span>
-                {% endif %}
-              </span>)
-              {% endif %}
+              </div>
+              <a style="background-color: {{ todo.car.color }};" href="{% url 'cars/detail' todo.car.id %}"
+                class="my-1 mx-2 rounded-lg w-min px-2 {% if todo.car.light_color %}text-black{% else %}text-white{% endif %} hover:shadow-md">
+                {{ todo.car.name }}
+              </a>
             </div>
-            <a style="background-color: {{ todo.car.color }};" href="{% url 'cars/detail' todo.car.id %}"
-              class="my-1 mx-2 rounded-lg w-min px-2 {% if todo.car.light_color %}text-black{% else %}text-white{% endif %} hover:shadow-md">
-              {{ todo.car.name }}
-            </a>
           </div>
-        </div>
-        <div class="flex flex-col content-end">
-          <div class="m-2 flex-grow-0">
-            <a href="{% url 'todos/update' todo.id %}"
-              class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 rounded shadow-md">Edit
-            </a>
-          </div>
-          <div class="m-2">
-            <a href="{% url 'todos/delete' todo.id %}"
-              class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 rounded shadow-md">
-              Delete
-            </a>
+          <div class="flex flex-col content-end">
+            <div class="m-2 flex-grow-0">
+              <a href="{% url 'todos/update' todo.id %}"
+                class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 rounded shadow-md">Edit
+              </a>
+            </div>
+            <div class="m-2">
+              <a href="{% url 'todos/delete' todo.id %}"
+                class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 rounded shadow-md">
+                Delete
+              </a>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    {% endfor %}
-  </form>
-  <div class="h-36 w-full" />
-</div>
-<button
-  class="fixed right-0 bottom-0 m-12 p-0 w-16 h-16 bg-autodo rounded-full hover:bg-autodo-dark shadow-xl mouse transition ease-in duration-200 focus:outline-none z-10"
-  onclick="location.href=`{% url 'todos/create' %}`">
-  <svg viewBox="0 0 20 20" enable-background="new 0 0 20 20" class="w-6 h-6 inline-block">
-    <path fill="#FFFFFF" d="M16,10c0,0.553-0.048,1-0.601,1H11v4.399C11,15.951,10.553,16,10,16c-0.553,0-1-0.049-1-0.601V11H4.601
+      {% endfor %}
+    </form>
+    <div class="h-36 w-full" />
+  </div>
+  <button
+    class="fixed right-0 bottom-0 m-12 p-0 w-16 h-16 bg-autodo rounded-full hover:bg-autodo-dark shadow-xl mouse transition ease-in duration-200 focus:outline-none z-10"
+    onclick="location.href=`{% url 'todos/create' %}`">
+    <svg viewBox="0 0 20 20" enable-background="new 0 0 20 20" class="w-6 h-6 inline-block">
+      <path fill="#FFFFFF" d="M16,10c0,0.553-0.048,1-0.601,1H11v4.399C11,15.951,10.553,16,10,16c-0.553,0-1-0.049-1-0.601V11H4.601
                                       C4.049,11,4,10.553,4,10c0-0.553,0.049-1,0.601-1H9V4.601C9,4.048,9.447,4,10,4c0.553,0,1,0.048,1,0.601V9h4.399
                                       C15.952,9,16,9.447,16,10z" />
-  </svg>
-</button>
+    </svg>
+  </button>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script type="text/javascript">
   if (window.addEventListener) { // Mozilla, Netscape, Firefox

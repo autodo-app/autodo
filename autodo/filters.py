@@ -8,12 +8,15 @@ from autodo.models import Todo, OdomSnapshot
 
 default_form_classes = [
     "bg-gray-50",
+    "dark:bg-background_light",
     "my-2",
     "py-1",
     "pl-2",
     "pr-6",
     "border",
     "border-gray-400",
+    "dark:border-gray-700",
+    "dark:text-gray-200",
     "rounded",
     "focus:outline-none",
     "focus:border-blue-500",

@@ -1,24 +1,26 @@
 {% extends "base_generic.html" %}
 {% block content %}
 
-<div class="container p-8 mx-auto max-w-lg">
-  <div class="text-2xl">Todo: <b>{{ todo.name }}</b></div>
-  <div class="py-2">
-    <div class="py-1">Car: <a href="{% url 'cars/detail' todo.car.id %}"
-        class="text-blue-600 font-bold hover:text-blue-400">{{ todo.car.name }}</a></div>
-    <div class="py-1">Due Mileage: <b>{{ todo.dueMileage }}</b></div>
-    <div class="py-1">Due Date: <b>{{ todo.dueDate }}</b></div>
-  </div>
+<div class="w-full h-dashboard dark:bg-background_dark">
+  <div class="container p-8 mx-auto max-w-lg dark:text-gray-200">
+    <div class="text-2xl">Todo: <b>{{ todo.name }}</b></div>
+    <div class="py-2">
+      <div class="py-1">Car: <a href="{% url 'cars/detail' todo.car.id %}"
+          class="text-blue-600 font-bold hover:text-blue-400">{{ todo.car.name }}</a></div>
+      <div class="py-1">Due Mileage: <b>{{ todo.dueMileage }}</b></div>
+      <div class="py-1">Due Date: <b>{{ todo.dueDate }}</b></div>
+    </div>
 
-  <div class="my-2">
-    <a href="{% url 'todos/update' todo.id %}"
-      class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 mr-4 rounded shadow-md">Edit
-    </a>
+    <div class="my-2">
+      <a href="{% url 'todos/update' todo.id %}"
+        class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 mr-4 rounded shadow-md">Edit
+      </a>
 
-    <a href="{% url 'todos/delete' todo.id %}"
-      class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 mx-4 rounded shadow-md">
-      Delete
-    </a>
+      <a href="{% url 'todos/delete' todo.id %}"
+        class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 mx-4 rounded shadow-md">
+        Delete
+      </a>
+    </div>
   </div>
 </div>
 

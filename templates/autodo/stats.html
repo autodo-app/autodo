@@ -13,35 +13,42 @@ Stats - {{ block.super }}
 <script
   src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@next/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
 
-<div class="container p-4 w-full mx-auto md:grid grid-cols-12 grid-rows-12 gap-4">
-  <div class="col-span-6 row-span-6 grid justify-items-center items-center bg-gray-100 rounded-lg shadow-sm p-4">
-    Fuel Efficiency
-    <canvas id="fuelEfficiency"></canvas>
-  </div>
-  <div class="col-span-3 row-span-2 grid justify-items-center items-center bg-gray-100 rounded-lg shadow-sm p-4">
-    <div>
-      Total ToDos Completed:
-      <span id="completedTodos" class="font-bold text-autodo text-3xl pl-2">0</span>
+<div class="w-full h-dashboard dark:bg-background_dark dark:text-gray-200">
+  <div class="container p-4 w-full mx-auto md:grid grid-cols-12 grid-rows-12 gap-4">
+    <div
+      class="col-span-6 row-span-6 grid justify-items-center items-center bg-gray-100 dark:bg-background_med rounded-lg shadow-sm p-4">
+      Fuel Efficiency
+      <canvas id="fuelEfficiency"></canvas>
     </div>
-  </div>
-  <div class="col-span-3 row-span-2 grid justify-items-center items-center bg-gray-100 rounded-lg shadow-sm p-4">
-    <div>
-      Total Refuelings Logged: <span id="refuelingsLogged" class="font-bold text-autodo text-3xl pl-2">0</span>
+    <div
+      class="col-span-3 row-span-2 grid justify-items-center items-center bg-gray-100 dark:bg-background_med rounded-lg shadow-sm p-4">
+      <div>
+        Total ToDos Completed:
+        <span id="completedTodos" class="font-bold text-autodo text-3xl pl-2">0</span>
+      </div>
     </div>
-  </div>
-  <div
-    class="col-span-6 row-span-4 grid grid-cols-3 justify-items-center items-center bg-gray-100 rounded-lg shadow-sm p-4">
-    <div class="col-span-1">Fuel Usage by Car (gal)</div>
-    <div class="col-span-2"><canvas id="fuelUsageByCar"></canvas></div>
-  </div>
+    <div
+      class="col-span-3 row-span-2 grid justify-items-center items-center bg-gray-100 dark:bg-background_med rounded-lg shadow-sm p-4">
+      <div>
+        Total Refuelings Logged: <span id="refuelingsLogged" class="font-bold text-autodo text-3xl pl-2">0</span>
+      </div>
+    </div>
+    <div
+      class="col-span-6 row-span-4 grid grid-cols-3 justify-items-center items-center bg-gray-100 dark:bg-background_med rounded-lg shadow-sm p-4">
+      <div class="col-span-1">Fuel Usage by Car (gal)</div>
+      <div class="col-span-2"><canvas id="fuelUsageByCar"></canvas></div>
+    </div>
 
-  <div class="col-span-7 row-span-6 grid justify-items-center items-center bg-gray-100 rounded-lg shadow-sm p-4">
-    Driving Rate
-    <canvas id="drivingRate"></canvas>
-  </div>
-  <div class="col-span-5 row-span-6 grid justify-items-center items-center bg-gray-100 rounded-lg shadow-sm p-4">
-    Fuel Usage per Month
-    <canvas id="fuelUsageByMonth"></canvas>
+    <div
+      class="col-span-7 row-span-6 grid justify-items-center items-center bg-gray-100 dark:bg-background_med rounded-lg shadow-sm p-4">
+      Driving Rate
+      <canvas id="drivingRate"></canvas>
+    </div>
+    <div
+      class="col-span-5 row-span-6 grid justify-items-center items-center bg-gray-100 dark:bg-background_med rounded-lg shadow-sm p-4">
+      Fuel Usage per Month
+      <canvas id="fuelUsageByMonth"></canvas>
+    </div>
   </div>
 </div>
 
