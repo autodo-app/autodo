@@ -22,19 +22,29 @@
   <link rel="apple-touch-icon" sizes="512x512"
     href="{% static 'icons/icon-512x512.png?v=dec44f98b636b180cee9fb8274ba0287' %}" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <link href="{% static 'site.css' %}" rel="stylesheet">
+  <link href="{% static 'site.css' %}" rel="stylesheet" />
 </head>
 <html>
-<nav class="bg-code shadow-md">
+<nav class="bg-code dark:bg-background_med shadow-md">
   <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
     <div class="relative flex items-center justify-between h-16">
       <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
         <!-- Mobile menu button-->
-        <button type="button" id="mobile-menu-button"
-          class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
-          aria-controls="mobile-menu" aria-expanded="false">
+        <button type="button" id="mobile-menu-button" class="
+              inline-flex
+              items-center
+              justify-center
+              p-2
+              rounded-md
+              text-gray-400
+              dark:text-gray-300
+              hover:text-white
+              hover:bg-gray-700
+              focus:outline-none
+              focus:ring-2 focus:ring-inset focus:ring-white
+            " aria-controls="mobile-menu" aria-expanded="false">
           <span class="sr-only">Open main menu</span>
           <!-- Icon when menu is closed. -->
           <!--
@@ -58,10 +68,23 @@
           </svg>
         </button>
       </div>
-      <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
+      <div class="
+            flex-1 flex
+            items-center
+            justify-center
+            sm:items-stretch
+            sm:justify-start
+          ">
         <div class="flex-shrink-0 flex items-center">
-          <svg class="block h-8 w-auto w-auto h-10 text-cool-gray-800 fill-current" viewBox="0 0 512 512"
-            aria-labelledby="title" role="img" xmlns="http://www.w3.org/2000/svg">
+          <svg class="
+                block
+                h-8
+                w-auto w-auto
+                h-10
+                text-cool-gray-800
+                dark:text-gray-200
+                fill-current
+              " viewBox="0 0 512 512" aria-labelledby="title" role="img" xmlns="http://www.w3.org/2000/svg">
             <title id="title">auToDo</title>
             <defs id="defs14">
               <clipPath clipPathUnits="userSpaceOnUse" id="clipPath28">
@@ -70,32 +93,126 @@
             </defs>
             <path clip-path="url(#clipPath28)"
               d="M 169.085 368.339 C 167.769 369.879 166.438 371.894 165.222 374.3 Z M 242.576 422.009 L 226.046 403.67 L 233.192 394.617 L 198.272 355.934 L 191.08 364.99 L 174.55 346.647 C 171.024 342.739 165.498 342.883 162.307 346.935 C 159.066 350.981 159.304 357.462 162.833 361.367 L 169.118 368.321 L 169.071 368.321 C 165.404 375.611 163.021 395.046 165.119 397.62 L 146.585 420.96 L 35.972 341.168 L 4.437 381.801 L 155.782 493.132 L 187.269 452.448 L 199.274 437.349 C 201.275 439.826 215.231 431.394 219.662 424.345 L 230.856 436.729 C 234.382 440.634 239.908 440.493 243.146 436.444 C 246.34 432.395 246.102 425.867 242.576 422.009 M 169.085 368.339 C 169.088 368.333 169.088 368.33 169.094 368.327 C 169.094 368.324 169.094 368.321 169.097 368.318 Z M 253.1 369.614 L 260.278 360.585 L 225.335 321.894 L 218.157 330.922 L 201.604 312.595 C 198.084 308.699 192.57 308.825 189.352 312.88 L 189.349 312.88 C 186.129 316.931 186.37 323.436 189.887 327.329 L 257.939 402.682 C 261.456 406.575 266.971 406.449 270.194 402.395 C 273.414 398.343 273.173 391.841 269.656 387.945 Z M 280.163 335.568 L 287.338 326.542 L 252.398 287.85 L 245.22 296.879 L 228.667 278.548 C 225.147 274.652 219.635 274.781 216.412 278.836 C 213.192 282.888 213.433 289.392 216.953 293.285 L 285.002 368.639 C 288.519 372.532 294.034 372.405 297.257 368.351 C 300.477 364.296 300.236 357.794 296.716 353.901 Z M 307.226 301.524 L 314.401 292.495 L 279.461 253.806 L 272.283 262.832 L 255.727 244.504 C 252.213 240.608 246.698 240.738 243.478 244.789 C 240.255 248.844 240.496 255.346 244.013 259.242 L 312.065 334.592 C 315.582 338.488 321.096 338.359 324.317 334.307 C 327.54 330.253 327.299 323.751 323.779 319.855 Z M 334.289 267.477 L 341.463 258.451 L 306.524 219.76 L 299.346 228.788 L 282.79 210.458 C 279.273 206.562 273.758 206.691 270.538 210.746 L 270.538 210.746 C 267.315 214.797 267.559 221.302 271.075 225.198 L 339.128 300.548 C 342.644 304.441 348.159 304.315 351.379 300.26 C 354.603 296.206 354.362 289.704 350.842 285.808 Z M 361.348 233.434 L 368.526 224.405 L 333.583 185.716 L 326.409 194.745 L 309.852 176.414 C 306.335 172.518 300.821 172.647 297.601 176.702 C 294.377 180.753 294.621 187.255 298.138 191.151 L 366.187 266.502 C 369.707 270.398 375.219 270.271 378.442 266.217 C 381.665 262.162 381.424 255.66 377.905 251.767 Z M 482.374 73.234 C 475.249 82.195 462.16 83.691 453.199 76.566 C 444.235 69.441 442.739 56.355 449.864 47.39 C 456.989 38.429 470.078 36.931 479.04 44.056 C 488.001 51.181 489.499 64.27 482.374 73.234 M 491.917 27.855 C 474.024 13.629 447.89 16.617 433.664 34.51 C 423.439 47.376 422.149 64.475 428.857 78.373 C 426.791 78.437 424.72 78.64 422.672 78.966 C 407.894 81.322 394.675 89.52 385.364 101.234 L 379.374 108.77 L 368.453 100.088 C 362.447 95.317 353.624 96.324 348.85 102.33 C 344.075 108.335 345.083 117.158 351.089 121.933 L 371.432 138.104 L 353.471 160.701 L 336.915 142.367 C 333.398 138.474 327.883 138.601 324.663 142.655 C 321.44 146.71 321.681 153.212 325.201 157.105 L 393.253 232.458 C 396.77 236.354 402.285 236.225 405.505 232.17 C 408.728 228.118 408.484 221.614 404.967 217.721 L 388.414 199.39 L 411.69 170.106 L 432.036 186.277 C 438.041 191.051 446.862 190.044 451.636 184.038 C 456.413 178.03 455.403 169.21 449.397 164.432 L 438.476 155.753 L 444.467 148.217 C 453.778 136.5 458.781 121.774 457.744 106.846 C 457.6 104.777 457.333 102.712 456.93 100.687 C 471.979 104.087 488.35 98.975 498.575 86.109 C 512.801 68.216 509.813 42.081 491.917 27.855"
-              style="fill: rgb(69, 201, 167);" id="path64" />
+              style="fill: rgb(69, 201, 167)" id="path64" />
           </svg>
-          <h2 class="hidden lg:block text-gray-900 ml-2 text-lg">auToDo</h2>
+          <h2 class="
+                hidden
+                lg:block
+                text-gray-900
+                dark:text-gray-200
+                ml-2
+                text-lg
+              ">
+            auToDo
+          </h2>
         </div>
         <div class="hidden sm:block sm:ml-8">
           <div class="flex space-x-4">
             <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-            <a href="{% url 'home' %}" class="{% if request.path == '/home/' %}bg-gray-900 text-white{% else %}text-gray-900 hover:bg-gray-700 hover:text-white{% endif %} px-3 py-2 rounded-md text-sm
-              font-medium">Dashboard</a>
-            <a href="{% url 'refuelings' %}"
-              class="{% if request.path == '/refuelings/' %}bg-gray-900 text-white{% else %}text-gray-900 hover:bg-gray-700 hover:text-white{% endif %} px-3 py-2 rounded-md text-sm font-medium">Refuelings</a>
-            <a href="{% url 'stats' %}"
-              class="{% if request.path == '/stats/' %}bg-gray-900 text-white{% else %}text-gray-900 hover:bg-gray-700 hover:text-white{% endif %} px-3 py-2 rounded-md text-sm font-medium">Stats</a>
-            <a href="{% url 'cars' %}"
-              class="{% if request.path == '/cars/' %}bg-gray-900 text-white{% else %}text-gray-900 hover:bg-gray-700 hover:text-white{% endif %} px-3 py-2 rounded-md text-sm font-medium">Cars</a>
+            <!-- prettier-ignore-attribute -->
+            <a href="{% url 'home' %}" class="
+                  {% if request.path == '/home/' %}
+                    bg-gray-900
+                    text-white
+                  {% else %}
+                    text-gray-900
+                    dark:text-gray-200
+                    hover:bg-gray-700
+                    hover:text-white
+                  {% endif %}
+                  px-3
+                  py-2
+                  rounded-md
+                  text-sm
+                  font-medium
+                ">Dashboard</a>
+            <!-- prettier-ignore-attribute -->
+            <a href="{% url 'refuelings' %}" class="
+                  {% if  request.path == '/refuelings/' %}
+                    bg-gray-900
+                    text-white
+                  {% else %}
+                    text-gray-900
+                    dark:text-gray-200
+                    hover:bg-gray-700
+                    hover:text-white
+                  {% endif %}
+                  px-3
+                  py-2
+                  rounded-md
+                  text-sm
+                  font-medium
+                ">Refuelings</a>
+            <a href="{% url 'stats' %}" class="
+                  {% if request.path == '/stats/' %}
+                    bg-gray-900
+                    text-white
+                  {% else %}
+                    text-gray-900
+                    dark:text-gray-200
+                    hover:bg-gray-700
+                    hover:text-white
+                  {% endif %}
+                  px-3
+                  py-2
+                  rounded-md
+                  text-sm
+                  font-medium
+                ">Stats</a>
+            <a href="{% url 'cars' %}" class="
+                  {% if request.path == '/cars/' %}
+                    bg-gray-900
+                    text-white
+                  {% else %}
+                    text-gray-900
+                    dark:text-gray-200
+                    hover:bg-gray-700
+                    hover:text-white
+                  {% endif %}
+                  px-3
+                  py-2
+                  rounded-md
+                  text-sm
+                  font-medium
+                ">Cars</a>
           </div>
         </div>
       </div>
       {% if filter %}
+      <!-- <form method="get">{{ filter.form.as_p }}</form> -->
       <form method="get">
-        {{ filter.form.as_p }}
+        {% for field in filter.form %}
+        <label class="dark:text-gray-200" for="{{ field.auto_id }}">{{ field.label }}:</label>
+        {{ field }}
+        {% endfor %}
       </form>
       {% endif %}
-      <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-        <button
-          class="bg-code p-1 rounded-full text-gray-900 hover:text-autodo focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+      <div class="
+            absolute
+            inset-y-0
+            right-0
+            flex
+            items-center
+            pr-2
+            sm:static
+            sm:inset-auto
+            sm:ml-6
+            sm:pr-0
+          ">
+        <button class="
+              bg-code
+              dark:bg-background_light
+              p-1
+              rounded-full
+              text-gray-900
+              dark:text-gray-200
+              hover:text-autodo
+              focus:outline-none
+              focus:ring-2
+              focus:ring-offset-2
+              focus:ring-offset-gray-800
+              focus:ring-white
+            ">
           <span class="sr-only">View notifications</span>
           <!-- Heroicon name: outline/bell -->
           <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
@@ -109,11 +226,19 @@
         {% load filters %}
         <div class="ml-3 relative">
           <div>
-            <button
-              class="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
-              id="user-menu" aria-haspopup="true">
+            <button class="
+                  bg-gray-800
+                  flex
+                  text-sm
+                  rounded-full
+                  focus:outline-none
+                  focus:ring-2
+                  focus:ring-offset-2
+                  focus:ring-offset-gray-800
+                  focus:ring-white
+                " id="user-menu" aria-haspopup="true">
               <span class="sr-only">Open user menu</span>
-              <img class="h-8 w-8 rounded-full" src="{{ user | gravatar }}" alt="">
+              <img class="h-8 w-8 rounded-full" src="{{ user | gravatar }}" alt="" />
             </button>
           </div>
           <!--
@@ -126,15 +251,34 @@
               From: "transform opacity-100 scale-100"
               To: "transform opacity-0 scale-95"
           -->
-          <div id="profile-menu"
-            class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 opacity-0 transition ease-out duration-100 hidden"
-            role="menu" aria-orientation="vertical" aria-labelledby="user-menu">
-            <a href="{% url 'profile' user.id %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              role="menuitem">Your Profile</a>
-            <a href="{% url 'settings' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              role="menuitem">Settings</a>
-            <a href="{% url 'logout' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              role="menuitem">Sign out</a>
+          <div id="profile-menu" class="
+                origin-top-right
+                absolute
+                right-0
+                mt-2
+                w-48
+                rounded-md
+                shadow-lg
+                py-1
+                bg-white
+                dark:bg-background_light
+                ring-1 ring-black ring-opacity-5
+                opacity-0
+                transition
+                ease-out
+                duration-100
+                hidden
+              " role="menu" aria-orientation="vertical" aria-labelledby="user-menu">
+            <a href="{% url 'profile' user.id %}"
+              class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-background_med"
+              role="menuitem">Your
+              Profile</a>
+            <a href="{% url 'settings' %}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-background_med
+              role=" menuitem">Settings</a>
+            <a href="{% url 'logout' %}"
+              class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-background_med"
+              role="menuitem">Sign
+              out</a>
           </div>
         </div>
       </div>
@@ -145,14 +289,90 @@
   <div class="hidden md:hidden" id="mobile-menu">
     <div class="px-2 pt-2 pb-3 space-y-1">
       <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-      <a href="{% url 'home' %}"
-        class="{% if request.path == '/home/' %}bg-gray-900 text-white{% else %}text-gray-900 hover:bg-gray-700 hover:text-white{% endif %} block px-3 py-2 rounded-md text-base font-medium">Dashboard</a>
-      <a href="{% url 'refuelings' %}"
-        class="{% if request.path == '/refuelings/' %}bg-gray-900 text-white{% else %}text-gray-900 hover:bg-gray-700 hover:text-white{% endif %} block px-3 py-2 rounded-md text-base font-medium">Refuelings</a>
-      <a href="{% url 'stats' %}"
-        class="{% if request.path == '/stats/' %}bg-gray-900 text-white{% else %}text-gray-900 hover:bg-gray-700 hover:text-white{% endif %} block px-3 py-2 rounded-md text-base font-medium">Stats</a>
-      <a href="{% url 'cars' %}"
-        class="{% if request.path == '/cars/' %}bg-gray-900 text-white{% else %}text-gray-900 hover:bg-gray-700 hover:text-white{% endif %} block px-3 py-2 rounded-md text-base font-medium">Cars</a>
+      <a href="{% url 'home' %}" class="
+            {%
+            if
+            request.path
+            ==
+            '/home/'
+            %}bg-gray-900
+            text-white{%
+            else
+            %}text-gray-900
+            hover:bg-gray-700
+            hover:text-white{%
+            endif
+            %}
+            block
+            px-3
+            py-2
+            rounded-md
+            text-base
+            font-medium
+          ">Dashboard</a>
+      <a href="{% url 'refuelings' %}" class="
+            {%
+            if
+            request.path
+            ==
+            '/refuelings/'
+            %}bg-gray-900
+            text-white{%
+            else
+            %}text-gray-900
+            hover:bg-gray-700
+            hover:text-white{%
+            endif
+            %}
+            block
+            px-3
+            py-2
+            rounded-md
+            text-base
+            font-medium
+          ">Refuelings</a>
+      <a href="{% url 'stats' %}" class="
+            {%
+            if
+            request.path
+            ==
+            '/stats/'
+            %}bg-gray-900
+            text-white{%
+            else
+            %}text-gray-900
+            hover:bg-gray-700
+            hover:text-white{%
+            endif
+            %}
+            block
+            px-3
+            py-2
+            rounded-md
+            text-base
+            font-medium
+          ">Stats</a>
+      <a href="{% url 'cars' %}" class="
+            {%
+            if
+            request.path
+            ==
+            '/cars/'
+            %}bg-gray-900
+            text-white{%
+            else
+            %}text-gray-900
+            hover:bg-gray-700
+            hover:text-white{%
+            endif
+            %}
+            block
+            px-3
+            py-2
+            rounded-md
+            text-base
+            font-medium
+          ">Cars</a>
     </div>
   </div>
 </nav>
@@ -163,63 +383,89 @@
 <footer>
   <script>
     window.onload = function () {
-      document.querySelector('#mobile-menu-button').onclick = function () {
-        if (document.querySelector('#outline-menu').classList.contains('block')) {
+      document.querySelector("#mobile-menu-button").onclick = function () {
+        if (
+          document.querySelector("#outline-menu").classList.contains("block")
+        ) {
           // open menu
-          document.querySelector('#outline-menu').classList.remove('block');
-          document.querySelector('#outline-menu').classList.add('hidden');
+          document.querySelector("#outline-menu").classList.remove("block");
+          document.querySelector("#outline-menu").classList.add("hidden");
 
-          document.querySelector('#outline-x').classList.add('block');
-          document.querySelector('#outline-x').classList.remove('hidden');
+          document.querySelector("#outline-x").classList.add("block");
+          document.querySelector("#outline-x").classList.remove("hidden");
 
-          document.querySelector('#mobile-menu').classList.add('block');
-          document.querySelector('#mobile-menu').classList.remove('hidden');
+          document.querySelector("#mobile-menu").classList.add("block");
+          document.querySelector("#mobile-menu").classList.remove("hidden");
         } else {
           // close menu
-          document.querySelector('#outline-menu').classList.add('block');
-          document.querySelector('#outline-menu').classList.remove('hidden');
+          document.querySelector("#outline-menu").classList.add("block");
+          document.querySelector("#outline-menu").classList.remove("hidden");
 
-          document.querySelector('#outline-x').classList.remove('block');
-          document.querySelector('#outline-x').classList.add('hidden');
+          document.querySelector("#outline-x").classList.remove("block");
+          document.querySelector("#outline-x").classList.add("hidden");
 
-          document.querySelector('#mobile-menu').classList.remove('block');
-          document.querySelector('#mobile-menu').classList.add('hidden');
+          document.querySelector("#mobile-menu").classList.remove("block");
+          document.querySelector("#mobile-menu").classList.add("hidden");
         }
-      }
+      };
 
       // profile menu
-      document.querySelector('#user-menu').onclick = function () {
-        if (document.querySelector('#profile-menu').classList.contains('opacity-0')) {
+      document.querySelector("#user-menu").onclick = function () {
+        if (
+          document
+            .querySelector("#profile-menu")
+            .classList.contains("opacity-0")
+        ) {
           // open menu
-          document.querySelector('#profile-menu').classList.remove('ease-out')
-          document.querySelector('#profile-menu').classList.remove('duration-75')
-          document.querySelector('#profile-menu').classList.add('ease-in')
-          document.querySelector('#profile-menu').classList.add('duration-100')
+          document
+            .querySelector("#profile-menu")
+            .classList.remove("ease-out");
+          document
+            .querySelector("#profile-menu")
+            .classList.remove("duration-75");
+          document.querySelector("#profile-menu").classList.add("ease-in");
+          document
+            .querySelector("#profile-menu")
+            .classList.add("duration-100");
 
-          document.querySelector('#profile-menu').classList.remove('scale-95')
-          document.querySelector('#profile-menu').classList.add('scale-100')
+          document
+            .querySelector("#profile-menu")
+            .classList.remove("scale-95");
+          document.querySelector("#profile-menu").classList.add("scale-100");
 
-          document.querySelector('#profile-menu').classList.remove('opacity-0')
-          document.querySelector('#profile-menu').classList.add('opacity-100')
+          document
+            .querySelector("#profile-menu")
+            .classList.remove("opacity-0");
+          document
+            .querySelector("#profile-menu")
+            .classList.add("opacity-100");
 
-          document.querySelector('#profile-menu').classList.remove('hidden')
+          document.querySelector("#profile-menu").classList.remove("hidden");
         } else {
           // close menu
-          document.querySelector('#profile-menu').classList.remove('ease-in')
-          document.querySelector('#profile-menu').classList.remove('duration-100')
-          document.querySelector('#profile-menu').classList.add('ease-out')
-          document.querySelector('#profile-menu').classList.add('duration-75')
+          document.querySelector("#profile-menu").classList.remove("ease-in");
+          document
+            .querySelector("#profile-menu")
+            .classList.remove("duration-100");
+          document.querySelector("#profile-menu").classList.add("ease-out");
+          document
+            .querySelector("#profile-menu")
+            .classList.add("duration-75");
 
-          document.querySelector('#profile-menu').classList.remove('scale-100')
-          document.querySelector('#profile-menu').classList.add('scale-95')
+          document
+            .querySelector("#profile-menu")
+            .classList.remove("scale-100");
+          document.querySelector("#profile-menu").classList.add("scale-95");
 
-          document.querySelector('#profile-menu').classList.remove('opacity-100')
-          document.querySelector('#profile-menu').classList.add('opacity-0')
+          document
+            .querySelector("#profile-menu")
+            .classList.remove("opacity-100");
+          document.querySelector("#profile-menu").classList.add("opacity-0");
 
-          document.querySelector('#profile-menu').classList.add('hidden')
+          document.querySelector("#profile-menu").classList.add("hidden");
         }
-      }
-    }
+      };
+    };
   </script>
 </footer>
 

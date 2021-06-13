@@ -1,17 +1,29 @@
-{% extends "base_generic.html" %}
+{% extends "base_generic.html" %} {% block content %}
 
-{% block content %}
+<div class="w-full h-dashboard dark:bg-background_dark">
+  <div class="container p-8 mx-auto max-w-lg">
+    <div class="text-2xl font-semibold dark:text-gray-200">Deleting Car</div>
+    <div class="text-lg dark:text-gray-200">
+      Are you sure you want to delete the car: <b>{{ car.name }}</b>?
+    </div>
+    <p class="text-sm text-gray-700 dark:text-gray-200">
+      This will also delete all todos and refuelings associated with the car.
+    </p>
 
-<div class="container p-8 mx-auto max-w-lg">
-  <div class="text-2xl font-semibold">Deleting Car</div>
-  <div class="text-lg">Are you sure you want to delete the car: <b>{{ car.name }}</b>?</div>
-  <p class="text-sm text-gray-700">This will also delete all todos and refuelings associated with the car.</p>
-
-  <form action="" method="POST">
-    {% csrf_token %}
-    <input type="submit" value="Yes, delete."
-      class="bg-red-600 hover:bg-red-400 text-white font-bold py-2 px-4 my-2 rounded shadow-md">
-  </form>
+    <form action="" method="POST">
+      {% csrf_token %}
+      <input type="submit" value="Yes, delete." class="
+          bg-red-600
+          hover:bg-red-400
+          text-white
+          font-bold
+          py-2
+          px-4
+          my-2
+          rounded
+          shadow-md
+        " />
+    </form>
+  </div>
 </div>
-
 {% endblock %}

@@ -29,89 +29,91 @@ Create Todo - {{ block.super }}
     color: #fff;
   }
 </style>
-<div class="container max-w-full mx-auto p-4 md:p-8 md:max-w-xl">
-  {% if forms|check_if_todo_update %}
-  <div class="text-2xl">Edit: <b>{{ todo.name }}</b></div>
-  {% else %}
-  <div class="text-2xl">Create a Todo</div>
-  {% endif %}
+<div class="w-full h-dashboard dark:bg-background_dark dark:text-gray-200">
+  <div class="container max-w-full mx-auto p-4 md:p-8 md:max-w-xl">
+    {% if forms|check_if_todo_update %}
+    <div class="text-2xl">Edit: <b>{{ todo.name }}</b></div>
+    {% else %}
+    <div class="text-2xl">Create a Todo</div>
+    {% endif %}
 
-  <form action="" method="post">
-    {% csrf_token %}
+    <form action="" method="post">
+      {% csrf_token %}
 
-    {{ form.non_field_errors }}
+      {{ form.non_field_errors }}
 
-    {% for form in forms %}
-    {{ form.non_field_errors }}
-    {% for field in form %}
-    {% if field.html_name == "addtodoform-repeat_num" %}
-    <div class="flex content-start">
-      <div class="flex flex-wrap md:flex-nowrap flex-row justify-between align-center w-9/12">
+      {% for form in forms %}
+      {{ form.non_field_errors }}
+      {% for field in form %}
+      {% if field.html_name == "addtodoform-repeat_num" %}
+      <div class="flex content-start">
+        <div class="flex flex-wrap md:flex-nowrap flex-row justify-between align-center w-9/12">
+          <label class="block my-auto text-sm text-gray-700 dark:text-gray-300 mr-2" for="{{ field.auto_id }}">
+            Repeat every:
+          </label>
+          <div class="md:mx-2 min-w-full md:min-w-0 w-4/12">
+            {{ field }}
+          </div>
+          {% elif field.html_name == "addtodoform-repeat_choice" %}
+          <!-- Leave the div tag open here assuming that these two fields are in order-->
+          <label class="hidden" for="{{ field.auto_id }}"></label>
+          <div class="md:ml-2 min-w-full md:min-w-0 w-4/12">
+            {{ field }}
+          </div>
+        </div>
+        <div class="m-4 w-3/12"></div>
+      </div>
+      {% else %}
+      <div class="flex content-start">
+        <div class="flex w-9/12 space-x-2">
+          {{ field }}
+        </div>
+        <label class="m-4 text-sm text-gray-700 dark:text-gray-300 w-3/12" for="{{ field.auto_id }}">
+          {{ field.label }}{% if field.field.required %}*{% endif %}
+        </label>
+        <br>
+      </div>
+      {% endif %}
+      {% endfor %}
+      {% endfor %}
+
+      <!-- Used by the Create view -->
+      {% for field in form %}
+      {% if field.html_name == "repeat_num" %}
+      <div class="flex flex-row justify-start align-center">
         <label class="block my-auto text-sm text-gray-700 mr-2" for="{{ field.auto_id }}">
           Repeat every:
         </label>
-        <div class="md:mx-2 min-w-full md:min-w-0 w-4/12">
+        {{ field.errors }}
+        <div class="mx-2 w-3/12">
           {{ field }}
         </div>
-        {% elif field.html_name == "addtodoform-repeat_choice" %}
-        <!-- Leave the div tag open here assuming that these two fields are in order-->
+        {% elif field.html_name == "repeat_choice" %}
         <label class="hidden" for="{{ field.auto_id }}"></label>
-        <div class="md:ml-2 min-w-full md:min-w-0 w-4/12">
+        <div class="mx-2 w-3/12">
           {{ field }}
         </div>
+        {{ field.errors }}
       </div>
-      <div class="m-4 w-3/12"></div>
-    </div>
-    {% else %}
-    <div class="flex content-start">
-      <div class="flex w-9/12 space-x-2">
-        {{ field }}
+      {% else %}
+      <div class="flex content-start">
+        {{ field.errors }}
+        <div class="flex w-9/12 space-x-2">
+          {{ field }}
+        </div>
+        <label class="m-4 text-sm text-gray-700 w-3/12" for="{{ field.auto_id }}">
+          {{ field.label }}{% if field.field.required %}*{% endif %}
+        </label>
+        <br>
       </div>
-      <label class="m-4 text-sm text-gray-700 w-3/12" for="{{ field.auto_id }}">
-        {{ field.label }}{% if field.field.required %}*{% endif %}
-      </label>
-      <br>
-    </div>
-    {% endif %}
-    {% endfor %}
-    {% endfor %}
+      {% endif %}
+      {% endfor %}
 
-    <!-- Used by the Create view -->
-    {% for field in form %}
-    {% if field.html_name == "repeat_num" %}
-    <div class="flex flex-row justify-start align-center">
-      <label class="block my-auto text-sm text-gray-700 mr-2" for="{{ field.auto_id }}">
-        Repeat every:
-      </label>
-      {{ field.errors }}
-      <div class="mx-2 w-3/12">
-        {{ field }}
-      </div>
-      {% elif field.html_name == "repeat_choice" %}
-      <label class="hidden" for="{{ field.auto_id }}"></label>
-      <div class="mx-2 w-3/12">
-        {{ field }}
-      </div>
-      {{ field.errors }}
-    </div>
-    {% else %}
-    <div class="flex content-start">
-      {{ field.errors }}
-      <div class="flex w-9/12 space-x-2">
-        {{ field }}
-      </div>
-      <label class="m-4 text-sm text-gray-700 w-3/12" for="{{ field.auto_id }}">
-        {{ field.label }}{% if field.field.required %}*{% endif %}
-      </label>
-      <br>
-    </div>
-    {% endif %}
-    {% endfor %}
-
-    <button type="submit" class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 rounded shadow-md">
-      {% if forms|check_if_todo_update %}Edit{% else %}Create{% endif %}
-    </button>
-  </form>
+      <button type="submit" class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 rounded shadow-md">
+        {% if forms|check_if_todo_update %}Edit{% else %}Create{% endif %}
+      </button>
+    </form>
+  </div>
 </div>
 <script>
   var dueMileage = document.getElementById("id_addtodoform-dueMileage");

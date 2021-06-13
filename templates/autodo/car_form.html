@@ -1,42 +1,44 @@
 {% extends "base_generic.html" %} {% block content %}
-<div class="container p-8 mx-auto max-w-lg">
-  {% if form.instance.id %}
-  <div class="text-2xl">Edit: <b>{{ car.name }}</b></div>
-  {% else %}
-  <div class="text-2xl">Create a Car</div>
-  {% endif %}
+<div class="w-full h-dashboard dark:bg-background_dark">
+  <div class="container p-8 mx-auto max-w-lg dark:text-gray-200">
+    {% if form.instance.id %}
+    <div class="text-2xl">Edit: <b>{{ car.name }}</b></div>
+    {% else %}
+    <div class="text-2xl">Create a Car</div>
+    {% endif %}
 
-  <form action="" method="post">
-    {% csrf_token %}
+    <form action="" method="post">
+      {% csrf_token %}
 
-    {% for field in form %}
-    <div class="flex content-start">
-      <div class="flex w-9/12 space-x-2">
-        {{ field }}
+      {% for field in form %}
+      <div class="flex content-start">
+        <div class="flex w-9/12 space-x-2">
+          {{ field }}
+        </div>
+        <label class="m-4 text-sm text-gray-700 dark:text-gray-200 w-3/12" for="{{ field.auto_id }}">
+          {{ field.label }}{% if field.field.required %}*{% endif %}
+        </label>
+        <br>
       </div>
-      <label class="m-4 text-sm text-gray-700 w-3/12" for="{{ field.auto_id }}">
+      {% endfor %}
+
+      {% for formset in inlines %}
+      {{ formset.management_form }}
+      {% for form in formset.forms %}
+      {% for field in form.visible_fields %}
+      {{ field }}
+      <label class="m-4 text-sm text-gray-700 dark:text-gray-200 " for="{{ field.auto_id }}">
         {{ field.label }}{% if field.field.required %}*{% endif %}
       </label>
       <br>
-    </div>
-    {% endfor %}
+      {% endfor %}
+      {% endfor %}
+      {% endfor %}
 
-    {% for formset in inlines %}
-    {{ formset.management_form }}
-    {% for form in formset.forms %}
-    {% for field in form.visible_fields %}
-    {{ field }}
-    <label class="m-4 text-sm text-gray-700" for="{{ field.auto_id }}">
-      {{ field.label }}{% if field.field.required %}*{% endif %}
-    </label>
-    <br>
-    {% endfor %}
-    {% endfor %}
-    {% endfor %}
-
-    <button type="submit" class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 rounded shadow-md">
-      {% if form.instance.id %}Edit{% else %}Create{% endif %}
-    </button>
-  </form>
+      <button type="submit" class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 rounded shadow-md">
+        {% if form.instance.id %}Edit{% else %}Create{% endif %}
+      </button>
+    </form>
+  </div>
 </div>
 {% endblock %}

@@ -11,16 +11,19 @@ from autodo.models import Car, OdomSnapshot, User, Refueling, Todo
 
 default_form_classes = [
     "bg-gray-50",
+    "dark:bg-background_med",
     "my-2",
     "py-1",
     "px-4",
     "border",
     "border-gray-400",
+    "dark:border-gray-800",
     "rounded",
     "focus:outline-none",
     "focus:border-blue-500",
     "placeholder-gray-500",
-    "w-full",
+    "dark:placeholder-gray-300",
+    "w-full"
 ]
 default_form_class = " ".join(default_form_classes)
 
@@ -42,7 +45,7 @@ class AddCarForm(forms.ModelForm):
             "color": forms.TextInput(
                 attrs={
                     "type": "color",
-                    "class": "bg-gray-50 w-12 my-2 py-1 px-4 border border-gray-400 rounded focus:outline-none focus:border-blue-500 placeholder-gray-500",
+                    "class": "bg-gray-50 dark:bg-background_med w-12 my-2 py-1 px-4 border border-gray-400 dark:border-gray-800 rounded focus:outline-none focus:border-blue-500 placeholder-gray-500",
                 }
             ),
         }
@@ -110,15 +113,18 @@ class RefuelingForm(forms.ModelForm):
                     "class": " ".join(
                         [
                             "bg-gray-50",
+                            "dark:bg-background_med",
                             "my-2",
                             "py-1",
                             "px-4",
                             "border",
                             "border-gray-400",
+                            "dark:border-gray-800",
                             "rounded",
                             "focus:outline-none",
                             "focus:border-blue-500",
                             "placeholder-gray-500",
+                            "dark:placeholder-gray-300",
                             "w-7/12",
                         ]
                     ),
@@ -131,15 +137,18 @@ class RefuelingForm(forms.ModelForm):
                     "class": " ".join(
                         [
                             "bg-gray-50",
+                            "dark:bg-background_med",
                             "my-2",
                             "py-1",
                             "px-4",
                             "border",
                             "border-gray-400",
+                            "dark:border-gray-800",
                             "rounded",
                             "focus:outline-none",
                             "focus:border-blue-500",
                             "placeholder-gray-500",
+                            "dark:placeholder-gray-300",
                             "w-5/12",
                         ]
                     ),
@@ -245,6 +254,7 @@ class AddTodoForm(forms.ModelForm):
                     "class": " ".join(
                         [
                             "bg-gray-50",
+                            "dark:bg-background_light",
                             "my-auto",
                             "mx-0",
                             "ml-auto",
@@ -252,6 +262,7 @@ class AddTodoForm(forms.ModelForm):
                             "right-0",
                             "border",
                             "border-gray-400",
+                            "dark:border-gray-700",
                             "rounded",
                             "focus:ring-transparent",
                             "focus:border-blue-500",
@@ -282,6 +293,7 @@ class SettingsForm(forms.Form):
                 "class": " ".join(
                     [
                         "bg-gray-50",
+                        "dark:bg-background_light",
                         "my-auto",
                         "mx-0",
                         "ml-auto",
@@ -289,6 +301,7 @@ class SettingsForm(forms.Form):
                         "right-0",
                         "border",
                         "border-gray-400",
+                        "dark:border-gray-700",
                         "rounded",
                         "focus:ring-transparent",
                         "focus:border-blue-500",
