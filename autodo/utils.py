@@ -187,11 +187,11 @@ def find_todos_needing_emails(force):
 
     queued_emails = defaultdict(list)
     for t in Todo.objects.all():
-        if not t.owner.email_notifications:
+        if (not t.owner.email_notifications) or t.complete:
             # don't send emails to people who don't want them
+            # and don't remind people about completed todos
             continue
 
-        # todo: filter out completed todos
         cur_mileage = find_odom(t.car, OdomSnapshot.objects.filter(owner=t.owner))
         if t.dueMileage is not None:
             t.delta_due_mileage = t.dueMileage - cur_mileage
