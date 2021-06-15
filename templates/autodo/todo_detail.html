@@ -9,6 +9,7 @@
           class="text-blue-600 font-bold hover:text-blue-400">{{ todo.car.name }}</a></div>
       <div class="py-1">Due Mileage: <b>{{ todo.dueMileage }}</b></div>
       <div class="py-1">Due Date: <b>{{ todo.dueDate }}</b></div>
+      <div class="py-1">Completed? <b>{% if todo.complete %}Yes{% else %}No{% endif %}</b></div>
     </div>
 
     <div class="my-2">
