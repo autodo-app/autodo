@@ -61,6 +61,9 @@ class Todo(models.Model):
     class Meta:
         ordering = ["dueDate", "dueMileage"]
 
+class TodoPart(models.Model):
+    name = models.TextField()
+    todo = models.ForeignKey("Todo", on_delete=models.CASCADE)
 
 class Car(models.Model):
     """Represents the data for a Car type."""

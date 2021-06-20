@@ -13,10 +13,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from shapeshifter.views import MultiModelFormView
 
-from autodo.models import Car, OdomSnapshot, Todo
-from autodo.forms import CompletionOdomSnapshotForm, AddTodoForm
+from autodo.models import Car, OdomSnapshot, Todo, TodoPart
+from autodo.forms import CompletionOdomSnapshotForm, AddTodoForm, AddPartForm
 from autodo.filters import TodoFilter
-from autodo.utils import add_mileage_to_due
 
 
 def sort_fn(t):
@@ -134,6 +133,7 @@ class TodoCreate(mixins.LoginRequiredMixin, MultiModelFormView):
     form_classes = (
         AddTodoForm,
         CompletionOdomSnapshotForm,
+        AddPartForm,
     )
     template_name = "autodo/todo_form.html"
     success_url = reverse_lazy("home")
@@ -153,11 +153,14 @@ class TodoCreate(mixins.LoginRequiredMixin, MultiModelFormView):
         cars = Car.objects.filter(owner=self.request.user)
         data["cars"] = serialize("json", cars)
         data["snaps"] = serialize("json", snaps)
+        
+        if self.request.POST:
+            data['addpartform'] = AddPartForm(self.request.POST)
+        else:
+            data['addpartform'] = AddPartForm()
         return data
 
     def get_forms(self):
-        # TODO: dynamically show/hide snapshot based on checkbox
-
         snapForm = CompletionOdomSnapshotForm(
             **self.get_form_kwargs(CompletionOdomSnapshotForm)
         )
@@ -180,16 +183,21 @@ class TodoCreate(mixins.LoginRequiredMixin, MultiModelFormView):
         forms = self.get_forms()
         todo_form = forms["addtodoform"]
         snap_form = forms["completionodomsnapshotform"]
+        part_form = self.get_context_data()["addpartform"]
 
         t = todo_form.save(commit=False)
         t.owner = self.request.user
-        sys.stdout.flush()
 
         if snap_form:
             s = snap_form.save(commit=False)
             s.owner = self.request.user
             s.save()
             t.completionOdomSnapshot = s
+
+        if part_form:
+            p = part_form.save(commit=False)
+            p.todo = t
+            p.save()
 
         t.save()
 

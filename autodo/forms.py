@@ -7,7 +7,7 @@ from extra_views import InlineFormSetFactory
 from djmoney.forms.fields import MoneyField, MoneyWidget
 from djmoney.settings import CURRENCY_CHOICES
 
-from autodo.models import Car, OdomSnapshot, User, Refueling, Todo
+from autodo.models import Car, OdomSnapshot, User, Refueling, Todo, TodoPart
 
 default_form_classes = [
     "bg-gray-50",
@@ -191,6 +191,39 @@ RefuelingCreateFormset = inlineformset_factory(
     can_delete=False,
 )
 
+# class AddPartForm(InlineFormSetFactory):
+#     model = TodoPart
+#     fields = ["name"]
+#     factory_kwargs = {
+#         "extra": 1,
+#         "can_delete": True,
+#         "widgets": {
+#             "name": forms.NumberInput(
+#                 attrs={
+#                     "class": default_form_class,
+#                     "required": True,
+#                 }
+#             ),
+#         },
+#     }
+
+
+
+class AddPartModelForm(forms.ModelForm):
+    """Use this to modify a Todo's required parts"""
+
+    class Meta:
+        model = TodoPart
+        exclude = ["todo"]
+        labels = {"name": "Part Needed"}
+        widgets = {
+            "name": forms.TextInput(
+                attrs={"class": default_form_class}
+            ),
+        }
+
+# We want an inline formset to have add/remove, even though this needs to be handled differently
+AddPartForm = inlineformset_factory(Todo, TodoPart, form=AddPartModelForm, extra=1)
 
 class AddTodoForm(forms.ModelForm):
     repeat_num = forms.IntegerField(
