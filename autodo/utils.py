@@ -190,9 +190,6 @@ def find_todos_needing_emails(force):
         if (not t.owner.email_notifications) or t.complete:
             # don't send emails to people who don't want them
             # and don't remind people about completed todos
-            import sys 
-            print(f"skipping {t}")
-            sys.stdout.flush()
             continue
 
         cur_mileage = find_odom(t.car, OdomSnapshot.objects.filter(owner=t.owner))
