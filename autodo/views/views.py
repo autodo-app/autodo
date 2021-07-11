@@ -13,7 +13,7 @@ from autodo.filters import TodoFilter
 
 def landing_page(request):
     if request.user.is_authenticated:
-        return HttpResponseRedirect("cars/")
+        return HttpResponseRedirect("home/?complete=False")
     return render(request, template_name="index.html")
 
 
