@@ -6,6 +6,7 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 
 from autodo.utils import find_todos_needing_emails
+from autodo.models import Todo
 
 
 class Command(BaseCommand):
@@ -17,7 +18,7 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        queued_emails = find_todos_needing_emails(options["force"])
+        queued_emails = find_todos_needing_emails(options["force"], Todo.objects.all())
 
         for owner, emails in queued_emails.items():
             # todo: change subject for singular case
