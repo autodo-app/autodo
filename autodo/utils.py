@@ -179,14 +179,14 @@ def determine_email_type(t):
         pass  # todo: use due date for emails
 
 
-def find_todos_needing_emails(force):
+def find_todos_needing_emails(force, todos):
     if datetime.datetime.today().weekday() != 5 and not force:
         return {}  # only send our emails on Saturdays
 
     logging.info("Preparing automated emails")
 
     queued_emails = defaultdict(list)
-    for t in Todo.objects.all():
+    for t in todos:
         if (not t.owner.email_notifications) or t.complete:
             # don't send emails to people who don't want them
             # and don't remind people about completed todos
