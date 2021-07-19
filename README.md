@@ -4,7 +4,7 @@
 
 A flexible, intuitive ToDo list app for keeping track of your cars' maintenance needs.
 
-Currently in alpha development for [Web](https://github.com/baylessj/autodo/projects/10).
+Currently in alpha development for [Web](https://github.com/baylessj/autodo/projects/10) at https://autodo-app.herokuapp.com
 
 ## Overview
 
