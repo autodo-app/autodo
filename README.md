@@ -4,11 +4,11 @@
 
 A flexible, intuitive ToDo list app for keeping track of your cars' maintenance needs.
 
-Currently in alpha development for [Android](https://github.com/baylessj/autodo/projects/1) and support for iOS is [coming soon](https://github.com/baylessj/autodo/projects/3).
+Currently in alpha development for [Web](https://github.com/baylessj/autodo/projects/10).
 
 ## Overview
 
-sCreate recurring maintenance tasks that will remind you to keep your vehicle in top shape and track your car's fuel usage and expenses. Maintenance task reminders can be on a time based interval, such as switching from all-season to winter tires each year, or the reminders can be based on your car's mileage. You don't even have to log every refueling to get timely maintenance reminders for mileage based intervals -- auToDo will learn the typical rate of driving for your car based on the refuelings that you do log so that reminders are on time.
+Create recurring maintenance tasks that will remind you to keep your vehicle in top shape and track your car's fuel usage and expenses. Maintenance task reminders can be on a time based interval, such as switching from all-season to winter tires each year, or the reminders can be based on your car's mileage. You don't even have to log every refueling to get timely maintenance reminders for mileage based intervals -- auToDo will learn the typical rate of driving for your car based on the refuelings that you do log so that reminders are on time.
 
 ## License
 
