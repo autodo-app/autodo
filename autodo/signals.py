@@ -54,12 +54,12 @@ def send_email_notice_if_needed(sender, instance, **kwargs):
         plain_message = strip_tags(html_message)
         from_email = "noreply@autodo.app"
 
-        logging.info(f"Sending email to {owner.email}")
+        logging.info(f"Sending email to {owner}")
         send_mail(
             subject,
             plain_message,
             from_email,
-            [owner.email],
+            [owner],
             html_message=html_message,
         )
         cache.set(EMAIL_RATE_LIMIT_KEY, True, 30 * 60)  # set timeout of 30min
