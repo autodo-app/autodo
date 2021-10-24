@@ -285,4 +285,4 @@ class TodoUpdate(mixins.LoginRequiredMixin, MultiModelFormView):
 
 class TodoDelete(mixins.LoginRequiredMixin, generic.DeleteView):
     model = Todo
-    success_url = reverse_lazy("todos")
+    success_url = reverse_lazy("home")
