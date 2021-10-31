@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib.auth import mixins
 from django.views import generic
 from django.shortcuts import get_object_or_404
@@ -51,7 +53,7 @@ class CarCreate(CreateWithInlinesView, NamedFormsetsMixin):
     def get_initial(self):
         car_count = Car.objects.filter(owner=self.request.user).count()
         color_idx = car_count % len(car_color_palette)
-        return {"year": "2020", "color": car_color_palette[color_idx]}
+        return {"year": f"{datetime.now().year}", "color": car_color_palette[color_idx]}
 
     def forms_valid(self, form, inlines):
         form.instance.owner = self.request.user
