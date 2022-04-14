@@ -183,7 +183,6 @@ class TodoCreate(mixins.LoginRequiredMixin, MultiModelFormView):
 
         t = todo_form.save(commit=False)
         t.owner = self.request.user
-        sys.stdout.flush()
 
         if snap_form:
             s = snap_form.save(commit=False)
