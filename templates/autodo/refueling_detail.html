@@ -1,12 +1,18 @@
-{% extends "base_generic.html" %}
-{% block content %}
+{% extends "base_generic.html" %} {% block content %}
 
 <div class="w-full h-dashboard dark:bg-background_dark">
   <div class="container p-8 mx-auto max-w-lg dark:text-gray-200">
-    <div class="text-2xl">Refueling on <b>{{ refueling.odomSnapshot.date|date:"D d M Y" }}</b></div>
+    <div class="text-2xl">
+      Refueling on <b>{{ refueling.odomSnapshot.date|date:"D d M Y" }}</b>
+    </div>
     <div class="py-2">
-      <div class="py-1">Car: <a href="{% url 'cars/detail' refueling.odomSnapshot.car.id %}"
-          class="text-blue-600 dark:text-blue-500 font-bold hover:text-blue-400">{{ refueling.odomSnapshot.car.name }}</a>
+      <div class="py-1">
+        Car:
+        <a
+          href="{% url 'cars/detail' refueling.odomSnapshot.car.id %}"
+          class="text-blue-600 dark:text-blue-500 font-bold hover:text-blue-400"
+          >{{ refueling.odomSnapshot.car.name }}</a
+        >
       </div>
       <div class="py-1">Odom: <b>{{ refueling.odomSnapshot.mileage }}</b></div>
       <div class="py-1">Cost: <b>{{ refueling.cost }}</b></div>
@@ -14,12 +20,16 @@
     </div>
 
     <div class="my-2">
-      <a href="{% url 'refuelings/update' refueling.odomSnapshot.id %}"
-        class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 mr-4 rounded shadow-md">Edit
+      <a
+        href="{% url 'refuelings/update' refueling.id %}"
+        class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 mr-4 rounded shadow-md"
+        >Edit
       </a>
 
-      <a href="{% url 'refuelings/delete' refueling.id %}"
-        class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 mx-4 rounded shadow-md">
+      <a
+        href="{% url 'refuelings/delete' refueling.id %}"
+        class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 mx-4 rounded shadow-md"
+      >
         Delete
       </a>
     </div>
