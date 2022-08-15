@@ -38,7 +38,7 @@ python-versions = "*"
 
 [[package]]
 name = "django"
-version = "3.2.14"
+version = "3.2.15"
 description = "A high-level Python Web framework that encourages rapid development and clean, pragmatic design."
 category = "main"
 optional = false
@@ -50,8 +50,8 @@ pytz = "*"
 sqlparse = ">=0.2.2"
 
 [package.extras]
-argon2 = ["argon2-cffi (>=19.1.0)"]
 bcrypt = ["bcrypt"]
+argon2 = ["argon2-cffi (>=19.1.0)"]
 
 [[package]]
 name = "django-extra-views"
@@ -103,8 +103,8 @@ Django = ">=1.11"
 py-moneyed = ">=0.8,<1.0"
 
 [package.extras]
+test = ["mixer", "pytest-cov", "pytest-pythonpath", "pytest-django", "pytest (>=3.1.0)"]
 exchange = ["certifi"]
-test = ["pytest (>=3.1.0)", "pytest-django", "pytest-pythonpath", "pytest-cov", "mixer"]
 
 [[package]]
 name = "django-sendgrid-v5"
@@ -183,7 +183,7 @@ optional = false
 python-versions = "*"
 
 [package.extras]
-tests = ["pytest (>=2.3.0)", "tox (>=1.6.0)"]
+tests = ["tox (>=1.6.0)", "pytest (>=2.3.0)"]
 
 [[package]]
 name = "pylibmc"
@@ -330,7 +330,7 @@ brotli = ["brotli"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "75fde749b111076f22e71d7a4968b909158a3b306c7aa59f9252c4f0f40a9689"
+content-hash = "9791e7746990d18fbd84f635d852449c156e93737b5c7c87b1aaa1eaa0bf5cff"
 
 [metadata.files]
 asgiref = [
@@ -350,8 +350,8 @@ dj-database-url = [
     {file = "dj_database_url-0.5.0-py2.py3-none-any.whl", hash = "sha256:851785365761ebe4994a921b433062309eb882fedd318e1b0fcecc607ed02da9"},
 ]
 django = [
-    {file = "Django-3.2.14-py3-none-any.whl", hash = "sha256:a8681e098fa60f7c33a4b628d6fcd3fe983a0939ff1301ecacac21d0b38bad56"},
-    {file = "Django-3.2.14.tar.gz", hash = "sha256:677182ba8b5b285a4e072f3ac17ceee6aff1b5ce77fd173cc5b6a2d3dc022fcf"},
+    {file = "Django-3.2.15-py3-none-any.whl", hash = "sha256:115baf5049d5cf4163e43492cdc7139c306ed6d451e7d3571fe9612903903713"},
+    {file = "Django-3.2.15.tar.gz", hash = "sha256:f71934b1a822f14a86c9ac9634053689279cd04ae69cb6ade4a59471b886582b"},
 ]
 django-extra-views = [
     {file = "django-extra-views-0.13.0.tar.gz", hash = "sha256:3c88f1e6714ec174142b6e76605fa1d5d1615c6ae2eb00568c095da778cc1245"},
