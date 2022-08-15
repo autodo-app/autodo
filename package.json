@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "@tailwindcss/forms": "^0.2.1",
-    "tailwindcss": "^2.0.3",
+    "tailwindcss": "^2.2.19",
     "tailwindcss-border-gradients": "^2.0.3",
     "tailwindcss-gradients": "^3.0.0"
   }
