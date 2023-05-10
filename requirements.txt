@@ -121,8 +121,8 @@ six==1.15.0; python_version >= "2.7" and python_full_version < "3.0.0" or python
 sqlparse==0.4.4; python_version >= "3.5" \
     --hash=sha256:5430a4fe2ac7d0f93e66f1efc6e1338a41884b7ddf2a350cedd20ccc4d9d28f3 \
     --hash=sha256:d446183e84b8349fa3061f0fe7f06ca94ba65b426946ffebe6e3e8295332420c
-starkbank-ecdsa==1.1.0 \
-    --hash=sha256:423f81bb55c896a3c85ee98ac7da98826721eaee918f5c0c1dfff99e1972da0c
+starkbank-ecdsa==2.0.1 \
+    --hash=sha256:fe7e36b580da097cc8c0a120e3b7ba335e3901b970a484fd5ce856c026ef7714
 urllib3==1.26.5; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" and python_version < "4" \
     --hash=sha256:753a0374df26658f99d826cfe40394a686d05985786d946fbe4165b5148f5a7c \
     --hash=sha256:a7acd0977125325f516bda9735fa7142b909a8d01e8b2e4c8108d0984e6e0098
